@@ -39,7 +39,7 @@ export default function RootLayout({ children }: Props) {
   return (
     <html lang="en" >
       <body>
-      <Header />
+        <Header />
         {children}
       </body>
     </html>
