@@ -1,0 +1,33 @@
+{
+  "home": {
+    "category_section": {
+      "title": "快速入口",
+      "cards": [
+        {
+          "icon": "/assets/images/solve problems.png",
+          "title": "解決麻煩事"
+        },
+        {
+          "icon": "/assets/images/financial quick screen.png",
+          "title": "財務快篩"
+        },
+        {
+          "icon": "/assets/images/knowledge base.png",
+          "title": "知識庫" 
+        },
+        {
+          "icon": "/assets/images/toolbox.png",
+          "title": "工具箱"
+        },
+        {
+          "icon": "/assets/images/fever zone.png",
+          "title": "發燒區"
+        },
+        {
+          "icon": "/assets/images/event announcement.png",
+          "title": "活動公告"
+        }
+      ]
+    }
+  }
+}
