@@ -40,3 +40,10 @@ a {
     color-scheme: dark;
   }
 }
+
+body {
+  background-color: white;
+  background-size: 60px 100%;
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+}
