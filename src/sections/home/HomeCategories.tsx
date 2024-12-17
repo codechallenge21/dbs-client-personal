@@ -18,8 +18,8 @@ export default function HomeCategories() {
         sx={{
           width: "100%",
           boxSizing: "border-box",
-          paddingTop: { xs: "32px", sm: "80px" },
-          paddingBottom: { xs: "32px", sm: "80px" },
+          paddingTop: { xs: "24px", sm: "40px" },
+          paddingBottom: { xs: "24px", sm: "40px" },
           display: "grid",
           gap: { xs: "30px", sm: "3rem" },
           rowGap: { xs: "30px", sm: "100px" },
@@ -27,8 +27,8 @@ export default function HomeCategories() {
       >
         <Container
           sx={{
-            marginTop: "60px",
-            marginBottom: "60px",
+            marginTop: "30px",
+            marginBottom: "30px",
             maxWidth: "1200px",
             textAlign: "center",
           }}
