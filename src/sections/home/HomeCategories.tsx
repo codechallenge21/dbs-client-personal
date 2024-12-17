@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import data from "@/data/data.json";
-import { CategoryCard } from "@/components/cards";
+import { CategoryCard } from "@/components/category-card";
 import { Typography } from "@mui/material";
 
 export default function HomeCategories() {

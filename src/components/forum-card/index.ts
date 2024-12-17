@@ -1,1 +1,1 @@
-export { default } from './forum-card';
+export { default } from './ForumCard';
