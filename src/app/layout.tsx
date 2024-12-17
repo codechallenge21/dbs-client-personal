@@ -1,8 +1,8 @@
-import Header from "@/components/header";
-import type { Metadata } from "next";
+// import Header from "@/components/header";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ThemeProvider from "@/theme";
+import HomeNavBar from "@/components/homeHeader";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,32 +15,32 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: 'BDS Client',
-  description: 'BDS Client Official WebSite',
-  keywords: 'react,material,kit,application,dashboard,admin,template',
-  themeColor: '#000000',
-  manifest: '/manifest.json',
+  title: "BDS Client",
+  description: "BDS Client Official WebSite",
+  keywords: "react,material,kit,application,dashboard,admin,template",
+  themeColor: "#000000",
+  manifest: "/manifest.json",
   icons: [
     {
-      rel: 'icon',
-      url: '/favicon/favicon.svg',
+      rel: "icon",
+      url: "/favicon/favicon.svg",
     },
     {
-      rel: 'icon',
-      type: 'image/svg',
-      sizes: '16x16',
-      url: '/favicon/favicon.svg',
+      rel: "icon",
+      type: "image/svg",
+      sizes: "16x16",
+      url: "/favicon/favicon.svg",
     },
     {
-      rel: 'icon',
-      type: 'image/svg',
-      sizes: '32x32',
-      url: '/favicon/favicon.svg',
+      rel: "icon",
+      type: "image/svg",
+      sizes: "32x32",
+      url: "/favicon/favicon.svg",
     },
     {
-      rel: 'apple-touch-icon',
-      sizes: '180x180',
-      url: '/favicon/favicon.svg',
+      rel: "apple-touch-icon",
+      sizes: "180x180",
+      url: "/favicon/favicon.svg",
     },
   ],
 };
@@ -53,7 +53,7 @@ export default function RootLayout({ children }: Props) {
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-      <Header />
+        <HomeNavBar />
 
         <ThemeProvider>{children}</ThemeProvider>
       </body>
