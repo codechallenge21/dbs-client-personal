@@ -22,7 +22,7 @@ const TextInput = () => {
         maxWidth: "760px",
         position: isMobile ? "absolute" : "relative",
         bottom: isMobile ? 0 : "auto",
-        bgcolor: "#F5F5F5",
+        backgroundColor: '#F5F5F5',
         borderRadius: 2,
         overflow: "hidden",
         margin: isMobile ? 3 : 0,
