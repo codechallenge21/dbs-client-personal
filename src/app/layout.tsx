@@ -1,8 +1,8 @@
 import Header from "@/components/header";
 
 export const metadata = {
-  title: 'BDS Client',
-  description: 'BDS Client Official WebSite',
+  title: 'DBS Client',
+  description: 'DBS Client Official WebSite',
   keywords: 'react,material,kit,application,dashboard,admin,template',
   themeColor: '#000000',
   manifest: '/manifest.json',

@@ -78,9 +78,9 @@ export default function Header() {
   )
 
   return (
-    <Box sx={{ bgcolor: '#4b4b4b' }}>
+    <Box sx={{ bgcolor: '#4b4b4b', boxShadow: '0px 1px 1px 0px rgba(0, 0, 0, 0.32)' }}>
       <AppBar position="static" sx={{ bgcolor: 'white', boxShadow: 'none' }}>
-        <Container maxWidth="xl">
+        <Container  maxWidth="xl">
           <Toolbar disableGutters>
             <Typography
               variant="h6"
