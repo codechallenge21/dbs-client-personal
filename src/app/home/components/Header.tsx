@@ -1,13 +1,19 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import DropdownMenu from "./DropdownMenu";
 import { Box, IconButton, useMediaQuery, useTheme } from "@mui/material";
 import { EditRounded, MenuRounded } from "@mui/icons-material";
+import Toolbox from "@/components/toolbox/page";
 
 export default function Header() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const [open, setOpen] = useState(false);
+
+  const toggleDrawer = (newOpen: boolean) => {
+    setOpen(newOpen);
+  };
   return (
     <>
       {isMobile && (
@@ -20,9 +26,12 @@ export default function Header() {
             justifyContent: "space-between",
           }}
         >
-          <IconButton>
-            <MenuRounded sx={{ color: "black" }} />
-          </IconButton>
+          <Box>
+            <IconButton onClick={() => toggleDrawer(true)}>
+              <MenuRounded sx={{ color: "black" }} />
+            </IconButton>
+            <Toolbox open={open} toggleDrawer={toggleDrawer} />
+          </Box>
 
           <DropdownMenu />
 
@@ -34,21 +43,30 @@ export default function Header() {
       {!isMobile && (
         <Box
           sx={{
-            width: "100%",
+            width: "54%",
             display: "flex",
             padding: "8px 16px",
             alignItems: "flex-start",
+            justifyContent: open ? "space-between" : "flex-start",
           }}
         >
-          <IconButton>
-            <MenuRounded sx={{ color: "black" }} />
-          </IconButton>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "flex-start",
+            }}
+          >
+            <IconButton onClick={() => toggleDrawer(true)}>
+              <MenuRounded sx={{ color: "black" }} />
+            </IconButton>
 
-          <IconButton>
-            <EditRounded sx={{ color: "black" }} />
-          </IconButton>
-
+            <IconButton>
+              <EditRounded sx={{ color: "black" }} />
+            </IconButton>
+          </Box>
           <DropdownMenu />
+          <Toolbox open={open} toggleDrawer={toggleDrawer} />
         </Box>
       )}
     </>

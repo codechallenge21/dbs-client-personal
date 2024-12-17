@@ -10,15 +10,18 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Add from "@mui/icons-material/Add";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
-export default function Toolbox() {
-  const [open, setOpen] = React.useState(false);
+interface ToolboxProps {
+  open: boolean;
+  toggleDrawer: (open: boolean) => void;
+}
 
-  const toggleDrawer = (newOpen: boolean) => () => {
-    setOpen(newOpen);
-  };
-
+const Toolbox: React.FC<ToolboxProps> = ({ open, toggleDrawer }) => {
   const DrawerList = (
-    <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
+    <Box
+      sx={{ width: 250 }}
+      role="presentation"
+      onClick={() => toggleDrawer(false)}
+    >
       <List>
         <ListItemButton
           sx={{
@@ -44,33 +47,24 @@ export default function Toolbox() {
   );
 
   return (
-    <>
-      <Box
-        sx={{
-          padding: "8px 16px",
-          boxSizing: "border-box",
-        }}
-      >
-        <MenuIcon onClick={toggleDrawer(!open)} />
-        <Add onClick={toggleDrawer(!open)} />
-      </Box>
-      <Drawer
-        open={open}
-        sx={{
+    <Drawer
+      open={open}
+      sx={{
+        width: 250,
+        flexShrink: 0,
+        "& .MuiDrawer-paper": {
           width: 250,
-          flexShrink: 0,
-          "& .MuiDrawer-paper": {
-            width: 250,
-            boxSizing: "border-box",
-            top: "74px",
-            height: "calc(100% - 64px)",
-          },
-        }}
-        onClose={toggleDrawer(false)}
-        variant="persistent"
-      >
-        {DrawerList}
-      </Drawer>
-    </>
+          boxSizing: "border-box",
+          top: "74px",
+          height: "calc(100% - 64px)",
+        },
+      }}
+      onClose={() => toggleDrawer(false)}
+      variant="persistent"
+    >
+      {DrawerList}
+    </Drawer>
   );
-}
+};
+
+export default Toolbox;
