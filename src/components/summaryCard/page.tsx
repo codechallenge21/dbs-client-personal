@@ -9,13 +9,12 @@ import {
   Button,
 } from "@mui/material";
 import SmsSharpIcon from "@mui/icons-material/SmsSharp";
-import LoopSharpIcon from '@mui/icons-material/LoopSharp';
+import LoopSharpIcon from "@mui/icons-material/LoopSharp";
 
 export default function SummaryCard() {
   return (
     <Box
       sx={{
-        width: "100%",
         display: "flex",
         justifyContent: "center",
         padding: "24px",
@@ -38,7 +37,10 @@ export default function SummaryCard() {
               bgcolor: "#f8f8f8",
               p: 2,
               borderRadius: "4px",
-              padding: "32px 98px 52px 98px",
+              padding: {
+                xs: "32px 15px 52px 15px",
+                sm: "32px 98px 52px 98px",
+              },
             }}
           >
             <Box
@@ -59,8 +61,11 @@ export default function SummaryCard() {
                 摘要
               </Typography>
               <IconButton size="small">
-                <Button variant="contained" sx={{ bgcolor: "#000", borderRadius: 2 }}>
-                  <LoopSharpIcon sx={{mr: 2}}/> 重新生成
+                <Button
+                  variant="contained"
+                  sx={{ bgcolor: "#000", borderRadius: 2 }}
+                >
+                  <LoopSharpIcon sx={{ mr: 2 }} /> 重新生成
                 </Button>
               </IconButton>
             </Box>
@@ -99,7 +104,10 @@ export default function SummaryCard() {
 
           <Box
             sx={{
-              padding: "32px 98px 52px 98px",
+              padding: {
+                xs: "32px 15px 52px 15px",
+                sm: "32px 98px 52px 98px",
+              },
             }}
           >
             <Box

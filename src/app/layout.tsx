@@ -1,4 +1,5 @@
 import Header from "@/components/header";
+import SummaryCard from "@/components/summaryCard/page";
 
 export const metadata = {
   title: 'DBS Client',
@@ -40,6 +41,7 @@ export default function RootLayout({ children }: Props) {
     <html lang="en" >
       <body>
         <Header />
+        <SummaryCard />
         {children}
       </body>
     </html>
