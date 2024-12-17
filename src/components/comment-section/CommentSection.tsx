@@ -39,7 +39,7 @@ export default function CommentSection() {
       ],
     },
     {
-      id: 1,
+      id: 2,
       user: "王大明",
       role: "使用者",
       comment: "希望增加更多的財務管理工具",

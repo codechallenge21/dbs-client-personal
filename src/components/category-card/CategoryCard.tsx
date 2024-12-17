@@ -1,4 +1,5 @@
 import { Box, Typography } from "@mui/material";
+import Link from "next/link";
 
 interface CategoryCardProps {
   readonly icon: string;
@@ -20,36 +21,38 @@ export default function CategoryCard({ icon, title }: CategoryCardProps) {
       overflow="hidden"
       border="1.5px solid transparent"
     >
-      <Typography
-        variant="h6"
-        component="div"
-        fontFamily="'Roboto Serif', Helvetica"
-        fontWeight="bold"
-        color="#e4d9d7"
-        textAlign="center"
-        sx={{
-          width: "352px",
-          mt: "-1.5px",
-          overflow: "hidden",
-          textOverflow: "ellipsis",
-          display: "-webkit-box",
-          WebkitLineClamp: 1,
-          WebkitBoxOrient: "vertical",
-        }}
-      >
-        {title}
-      </Typography>
+      <Link href="/toolbox">
+        <Typography
+          variant="h6"
+          component="div"
+          fontFamily="'Roboto Serif', Helvetica"
+          fontWeight="bold"
+          color="#e4d9d7"
+          textAlign="center"
+          sx={{
+            width: "352px",
+            mt: "-1.5px",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            display: "-webkit-box",
+            WebkitLineClamp: 1,
+            WebkitBoxOrient: "vertical",
+          }}
+        >
+          {title}
+        </Typography>
 
-      <Box
-        component="img"
-        src={icon}
-        alt="Frame"
-        sx={{
-          width: "100%",
-          height: "auto",
-          position: "relative",
-        }}
-      />
+        <Box
+          component="img"
+          src={icon}
+          alt="Frame"
+          sx={{
+            width: "100%",
+            height: "auto",
+            position: "relative",
+          }}
+        />
+      </Link>
     </Box>
   );
 }

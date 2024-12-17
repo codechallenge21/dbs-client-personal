@@ -3,7 +3,6 @@ import Container from "@mui/material/Container";
 import data from "@/data/data.json";
 import { CategoryCard } from "@/components/category-card";
 import { Typography } from "@mui/material";
-import Link from "next/link";
 
 export default function HomeCategories() {
   const cards = data.home.category_section.cards;
@@ -60,9 +59,7 @@ export default function HomeCategories() {
             }}
           >
             {cards.map((card) => (
-              <Link href="/toolbox" key={card.title} >
-                <CategoryCard {...card} />
-              </Link>
+              <CategoryCard key={card.title} {...card} />
             ))}
           </Box>
         </Container>

@@ -1,7 +1,7 @@
 import ForumCard from "@/components/forum-card";
 import HomeCategories from "./HomeCategories";
 import { Container } from "@mui/material";
-import { CommentSection } from "@/components/comment";
+import { CommentSection } from "@/components/comment-section";
 
 export default function HomeView() {
   return (
