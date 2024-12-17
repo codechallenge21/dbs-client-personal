@@ -1,34 +1,34 @@
-import { Grid2, Typography } from "@mui/material";
-import InputBox from "./InputBox";
+import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
+import TextInput from "./TextInput";
 
 export default function MainContent() {
-  return (
-    <Grid2
-      container
-      direction="column"
-      alignItems="center"
-      justifyContent="center"
-      sx={{ height: "70vh", textAlign: "center" }}
-    >
-      <Grid2>
-        <Typography
-          sx={{
-            color: "#000",
-            fontFamily: "DFPHeiBold-B5",
-            fontSize: "32px",
-            fontStyle: "normal",
-            fontWeight: "400",
-            lineHeight: "normal",
-          }}
-          mb={5}
-        >
-          嘿！我能為你做些什麼？
-        </Typography>
-      </Grid2>
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-      <Grid2>
-        <InputBox />
-      </Grid2>
-    </Grid2>
+  return (
+    <Box
+      sx={{
+        height: "80vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: isMobile ? "flex-end" : "center",
+        alignItems: "center",
+        textAlign: "center",
+      }}
+    >
+      <Typography
+        sx={{
+          color: "#000",
+          fontFamily: "DFPHeiBold-B5",
+          fontSize: "32px",
+          fontWeight: "400",
+          mb: isMobile ? 50 : 5,
+        }}
+      >
+        嘿！我能為你做些什麼？
+      </Typography>
+
+      <TextInput />
+    </Box>
   );
 }

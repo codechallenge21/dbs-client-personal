@@ -8,6 +8,8 @@ import {
   Button,
   Menu,
   MenuItem,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import {
   AccountBalanceWalletRounded,
@@ -53,6 +55,8 @@ const listItems = [
 ];
 
 export default function DropdownMenu() {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [toolsAnchor, setToolsAnchor] = useState<null | HTMLElement>(null);
 
   return (
@@ -67,14 +71,23 @@ export default function DropdownMenu() {
           padding: "4px 12px 4px 16px",
           color: toolsAnchor ? "#0066cc" : "black",
           backgroundColor: toolsAnchor ? "#F5F5F5" : "white",
+          borderRadius: toolsAnchor ? "10px" : "0px",
         }}
       >
-        債務顧問
+        <Typography sx={{ fontSize: "16px", fontFamily: "DFPHeiBold-B5" }}>
+          債務事件顧問
+        </Typography>
       </Button>
       <Menu
         anchorEl={toolsAnchor}
         open={Boolean(toolsAnchor)}
         onClose={() => setToolsAnchor(null)}
+        sx={{
+          position: "absolute",
+          justifyContent: "center",
+          alignItems: "center",
+          width: { xs: "100%", sm: "390px" },
+        }}
       >
         {listItems.map((item, index) => (
           <MenuItem
@@ -93,9 +106,34 @@ export default function DropdownMenu() {
           >
             <ListItemIcon sx={{ color: "black" }}>{item.icon}</ListItemIcon>
             <ListItemText
-              primary={<Typography fontWeight="bold">{item.title}</Typography>}
+              primary={
+                <Typography
+                  sx={{
+                    overflow: "hidden",
+                    color: "var(--Primary-Black, #000)",
+                    textOverflow: "ellipsis",
+                    fontFamily: "DFPHeiBold-B5",
+                    fontSize: "16px",
+                    fontStyle: "normal",
+                    fontWeight: "400",
+                    lineHeight: "normal",
+                  }}
+                >
+                  {item.title}
+                </Typography>
+              }
               secondary={
-                <Typography variant="body2" color="textSecondary">
+                <Typography
+                  sx={{
+                    color: "var(--Text-Secondary, #637381)",
+                    fontFamily: "DFPHeiBold-B5",
+                    fontSize: isMobile ? "13px" : "14px",
+                    fontStyle: "normal",
+                    fontWeight: "400",
+                    lineHeight: "normal",
+                    marginTop: "8px",
+                  }}
+                >
                   {item.description}
                 </Typography>
               }
