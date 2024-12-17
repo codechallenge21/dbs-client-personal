@@ -38,7 +38,7 @@ export default function LoadingScreen() {
 
       <LinearProgress 
         variant="determinate"
-      value={Math.floor(Math.random() * 100)}
+      value={100}
         sx={{
           width: '100%',
           maxWidth: '600px',
