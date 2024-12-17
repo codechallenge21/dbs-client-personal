@@ -4,6 +4,7 @@ import {
   Container,
   Typography,
 } from '@mui/material'
+import FileUploadIcon from '@mui/icons-material/FileUpload';
 
 export default function AudioTranscription() {
   return (
@@ -94,6 +95,7 @@ export default function AudioTranscription() {
               '&:hover': { bgcolor: '#0052a3' },
               mb: 3,
               px: { xs: 2, sm: 4 },
+              width: '50%',
               color: 'var(--Primary-White, #FFF)',
               fontFamily: 'DFPHeiBold-B5',
               fontSize: '16px',
@@ -102,7 +104,7 @@ export default function AudioTranscription() {
               lineHeight: 'normal',
               }}
             >
-              選擇檔案
+            <FileUploadIcon  sx={{marginRight: 3}}/>  選擇檔案
             </Button>
             <Typography
               sx={{
