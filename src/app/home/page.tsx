@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import { Box } from "@mui/material";
 import Header from "./components/Header";
 import MainContent from "./components/MainContent";
 import SwitchDialog from "./components/SwitchDialog";
@@ -16,7 +15,7 @@ export default function Home() {
     setIsOpen(false);
   };
   return (
-    <Box>
+    <>
       <Header />
       <MainContent />
       <SwitchDialog
@@ -24,6 +23,6 @@ export default function Home() {
         onClose={handleClose}
         onConfirm={handleConfirm}
       />
-    </Box>
+    </>
   );
 }

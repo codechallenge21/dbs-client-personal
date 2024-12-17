@@ -17,28 +17,28 @@ export default function Header() {
   return (
     <>
       {isMobile && (
-        <Box
-          sx={{
-            width: "100%",
-            display: "flex",
-            padding: "8px 16px",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <Box>
+        <>
+          <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              padding: "4px 8px",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
             <IconButton onClick={() => toggleDrawer(true)}>
               <MenuRounded sx={{ color: "black" }} />
             </IconButton>
-            <Toolbox open={open} toggleDrawer={toggleDrawer} />
+
+            <DropdownMenu />
+
+            <IconButton>
+              <EditRounded sx={{ color: "black" }} />
+            </IconButton>
           </Box>
-
-          <DropdownMenu />
-
-          <IconButton>
-            <EditRounded sx={{ color: "black" }} />
-          </IconButton>
-        </Box>
+          <Toolbox open={open} toggleDrawer={toggleDrawer} />
+        </>
       )}
       {!isMobile && (
         <Box
