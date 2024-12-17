@@ -1,8 +1,8 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { Header } from "../header";
-import { HomeNavbar } from "../home-header";
+import { Header } from "../components/header";
+import { HomeNavbar } from "../components/home-header";
 
 export default function NavBarSwitcher() {
   const pathname = usePathname();
