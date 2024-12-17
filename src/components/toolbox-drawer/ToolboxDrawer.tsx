@@ -10,7 +10,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Add from "@mui/icons-material/Add";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
-export default function Toolbox() {
+export default function ToolboxDrawer() {
   const [open, setOpen] = React.useState(false);
 
   const toggleDrawer = (newOpen: boolean) => () => {

@@ -6,7 +6,7 @@ import {
 } from '@mui/material'
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 
-export default function AudioTranscription() {
+export default function Toolbox() {
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: '#4b4b4b' }}>
       <Container maxWidth="xl" sx={{ pt: { xs: 8, md: 20 }, color: 'white' }}>
