@@ -104,7 +104,7 @@ export default function AudioTranscription() {
               lineHeight: 'normal',
               }}
             >
-            <FileUploadIcon  sx={{marginRight: 3}}/>  選擇檔案
+            <FileUploadIcon  sx={{marginRight: 2}}/>  選擇檔案
             </Button>
             <Typography
               sx={{
