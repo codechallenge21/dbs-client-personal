@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ThemeProvider from "@/theme";
 import NavBarSwitcher from "@/client-components/NavBarSwitcher";
+import { Box } from "@mui/material";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -53,7 +54,9 @@ export default function RootLayout({ children }: Props) {
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <NavBarSwitcher />
+        <Box>
+          <NavBarSwitcher />
+        </Box>
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>

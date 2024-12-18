@@ -1,0 +1,146 @@
+"use client";
+
+import { useState } from "react";
+import {
+  Typography,
+  ListItemIcon,
+  ListItemText,
+  Button,
+  Menu,
+  MenuItem,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
+import {
+  AccountBalanceWalletRounded,
+  BusinessCenterRounded,
+  KeyboardArrowDown,
+  LocalHospitalRounded,
+  MoneyOffRounded,
+  PhishingRounded,
+  WorkRounded,
+} from "@mui/icons-material";
+
+const listItems = [
+  {
+    title: "債務事件顧問",
+    description: "提供債務管理與還款建議，幫助改善財務壓力。",
+    icon: <MoneyOffRounded />,
+  },
+  {
+    title: "意外事件顧問",
+    description: "快速提供應急策略與風險評估。",
+    icon: <BusinessCenterRounded />,
+  },
+  {
+    title: "詐騙事件顧問",
+    description: "快速辨識詐騙風險，提供建議與後續行動指引。",
+    icon: <PhishingRounded />,
+  },
+  {
+    title: "醫療事件顧問",
+    description: "提供您醫療事件應對策略與資源連結。",
+    icon: <LocalHospitalRounded />,
+  },
+  {
+    title: "就業協助顧問",
+    description: "支援您求職與職涯規劃。",
+    icon: <WorkRounded />,
+  },
+  {
+    title: "財務事件顧問",
+    description: "提供儲蓄、投資與債務建議。",
+    icon: <AccountBalanceWalletRounded />,
+  },
+];
+
+export default function DropdownMenu({title}: {title: string}) {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const [toolsAnchor, setToolsAnchor] = useState<null | HTMLElement>(null);
+
+  return (
+    <>
+      <Button
+        endIcon={<KeyboardArrowDown />}
+        onClick={(e) => setToolsAnchor(e.currentTarget)}
+        sx={{
+          height: "40px",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "4px 12px 4px 16px",
+          color: toolsAnchor ? "#0066cc" : "black",
+          backgroundColor: toolsAnchor ? "#F5F5F5" : "white",
+          borderRadius: toolsAnchor ? "10px" : "0px",
+        }}
+      >
+        <Typography sx={{ fontSize: "16px", fontFamily: "DFPHeiBold-B5" }}>
+          {title}
+        </Typography>
+      </Button>
+      <Menu
+        anchorEl={toolsAnchor}
+        open={Boolean(toolsAnchor)}
+        onClose={() => setToolsAnchor(null)}
+        sx={{
+          position: "absolute",
+          justifyContent: "center",
+          alignItems: "center",
+          width: { xs: "100%", sm: "390px" },
+        }}
+      >
+        {listItems.map((item, index) => (
+          <MenuItem
+            key={index}
+            sx={{
+              alignItems: "flex-start",
+              padding: "8px",
+              margin: "0px 4px",
+              borderRadius: "8px",
+              "&:hover": {
+                backgroundColor: "#F5F5F5",
+                borderRadius: "8px",
+                margin: "0px 4px",
+              },
+            }}
+          >
+            <ListItemIcon sx={{ color: "black" }}>{item.icon}</ListItemIcon>
+            <ListItemText
+              primary={
+                <Typography
+                  sx={{
+                    overflow: "hidden",
+                    color: "var(--Primary-Black, #000)",
+                    textOverflow: "ellipsis",
+                    fontFamily: "DFPHeiBold-B5",
+                    fontSize: "16px",
+                    fontStyle: "normal",
+                    fontWeight: "400",
+                    lineHeight: "normal",
+                  }}
+                >
+                  {item.title}
+                </Typography>
+              }
+              secondary={
+                <Typography
+                  sx={{
+                    color: "var(--Text-Secondary, #637381)",
+                    fontFamily: "DFPHeiBold-B5",
+                    fontSize: isMobile ? "13px" : "14px",
+                    fontStyle: "normal",
+                    fontWeight: "400",
+                    lineHeight: "normal",
+                    marginTop: "8px",
+                  }}
+                >
+                  {item.description}
+                </Typography>
+              }
+            />
+          </MenuItem>
+        ))}
+      </Menu>
+    </>
+  );
+}

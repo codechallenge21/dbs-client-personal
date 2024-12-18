@@ -5,27 +5,33 @@
       "cards": [
         {
           "icon": "/assets/images/solve problems.png",
-          "title": "解決麻煩事"
+          "title": "解決麻煩事",
+          "link": "/chat"
         },
         {
           "icon": "/assets/images/financial quick screen.png",
-          "title": "財務快篩"
+          "title": "財務快篩",
+          "link": "/"
         },
         {
           "icon": "/assets/images/knowledge base.png",
-          "title": "知識庫" 
+          "title": "知識庫",
+          "link": "/"
         },
         {
           "icon": "/assets/images/toolbox.png",
-          "title": "工具箱"
+          "title": "工具箱",
+          "link": "/toolbox"
         },
         {
           "icon": "/assets/images/fever zone.png",
-          "title": "發燒區"
+          "title": "發燒區",
+          "link": "/"
         },
         {
           "icon": "/assets/images/event announcement.png",
-          "title": "活動公告"
+          "title": "活動公告",
+          "link": "/"
         }
       ]
     }
