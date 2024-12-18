@@ -45,7 +45,7 @@ export default function CategoryCard({ icon, title }: CategoryCardProps) {
         <Box
           component="img"
           src={icon}
-          alt="Frame"
+          alt={title}
           sx={{
             width: "100%",
             height: "auto",
