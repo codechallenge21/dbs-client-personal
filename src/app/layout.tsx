@@ -1,4 +1,19 @@
-import Header from "@/components/header";
+// import Header from "@/components/header";
+import { Geist, Geist_Mono } from "next/font/google";
+import "./globals.css";
+import ThemeProvider from "@/theme";
+import NavBarSwitcher from "@/client-components/NavBarSwitcher";
+import { Box } from "@mui/material";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
 
 export const metadata = {
   title: "DBS Client",
@@ -37,10 +52,12 @@ type Props = {
 
 export default function RootLayout({ children }: Props) {
   return (
-    <html lang="en" style={{ overflow: "hidden" }}>
-      <body style={{ overflow: "hidden" }}>
-        <Header />
-        {children}
+    <html lang="en">
+      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        <Box>
+          <NavBarSwitcher />
+        </Box>
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   );

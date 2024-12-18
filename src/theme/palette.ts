@@ -136,7 +136,7 @@ export function palette(mode: 'light' | 'dark') {
     },
     background: {
       paper: GREY[800],
-      default: GREY[900],
+      default: "#0D0402",
       neutral: alpha(GREY[500], 0.12),
     },
     action: {

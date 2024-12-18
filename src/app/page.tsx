@@ -1,9 +1,7 @@
-import { HomeView } from '@/components/home';
+import HomeView from "@/sections/home/HomeView";
 
-export const metadata = {
-  title: 'DBS Client',
-};
-
-export default function HomePage() {
-  return <HomeView />;
+export default function Home() {
+  return (
+    <HomeView />
+  );
 }

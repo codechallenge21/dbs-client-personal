@@ -1,11 +1,15 @@
+'use client';
 import {
   Box,
   Button,
   Container,
   Typography,
 } from '@mui/material'
+import FileUploadIcon from '@mui/icons-material/FileUpload';
+import { useRouter } from 'next/navigation';
 
-export default function AudioTranscription() {
+export default function Toolbox() {
+  const router = useRouter();
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: '#4b4b4b' }}>
       <Container maxWidth="xl" sx={{ pt: { xs: 8, md: 20 }, color: 'white' }}>
@@ -94,6 +98,7 @@ export default function AudioTranscription() {
               '&:hover': { bgcolor: '#0052a3' },
               mb: 3,
               px: { xs: 2, sm: 4 },
+              width: '50%',
               color: 'var(--Primary-White, #FFF)',
               fontFamily: 'DFPHeiBold-B5',
               fontSize: '16px',
@@ -101,8 +106,11 @@ export default function AudioTranscription() {
               fontWeight: 400,
               lineHeight: 'normal',
               }}
+              onClick={() => {
+                router.push('/summary');
+              }}
             >
-              選擇檔案
+            <FileUploadIcon  sx={{marginRight: 2}}/>  選擇檔案
             </Button>
             <Typography
               sx={{
