@@ -1,3 +1,4 @@
+'use client';
 import {
   Box,
   Button,
@@ -5,8 +6,10 @@ import {
   Typography,
 } from '@mui/material'
 import FileUploadIcon from '@mui/icons-material/FileUpload';
+import { useRouter } from 'next/navigation';
 
 export default function Toolbox() {
+  const router = useRouter();
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: '#4b4b4b' }}>
       <Container maxWidth="xl" sx={{ pt: { xs: 8, md: 20 }, color: 'white' }}>
@@ -102,6 +105,9 @@ export default function Toolbox() {
               fontStyle: 'normal',
               fontWeight: 400,
               lineHeight: 'normal',
+              }}
+              onClick={() => {
+                router.push('/summary');
               }}
             >
             <FileUploadIcon  sx={{marginRight: 2}}/>  選擇檔案

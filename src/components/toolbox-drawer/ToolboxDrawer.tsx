@@ -10,7 +10,11 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Add from "@mui/icons-material/Add";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
-export default function ToolboxDrawer() {
+interface ToolboxDrawerProps {
+  children: React.ReactNode;
+}
+
+export default function ToolboxDrawer({ children }: ToolboxDrawerProps) {
   const [open, setOpen] = React.useState(false);
 
   const toggleDrawer = (newOpen: boolean) => () => {
@@ -71,6 +75,16 @@ export default function ToolboxDrawer() {
       >
         {DrawerList}
       </Drawer>
+      <Box
+        sx={{
+          marginLeft: open ? "250px" : "0",
+          transition: "margin-left 0.3s",
+          height: "calc(100vh - 64px)",
+          overflow: "auto",
+        }}
+      >
+        {children}
+      </Box>
     </>
   );
 }

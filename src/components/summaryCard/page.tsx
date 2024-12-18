@@ -1,11 +1,8 @@
-"use client";
-
 import {
   Card,
   CardContent,
   Typography,
   Box,
-  IconButton,
   Button,
 } from "@mui/material";
 import SmsSharpIcon from "@mui/icons-material/SmsSharp";
@@ -60,14 +57,12 @@ export default function SummaryCard() {
               >
                 摘要
               </Typography>
-              <IconButton size="small">
                 <Button
                   variant="contained"
                   sx={{ bgcolor: "#000", borderRadius: 2 }}
                 >
                   <LoopSharpIcon sx={{ mr: 2 }} /> 重新生成
                 </Button>
-              </IconButton>
             </Box>
             <Typography
               sx={{
