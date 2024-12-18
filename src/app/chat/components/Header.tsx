@@ -1,19 +1,21 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import DropdownMenu from "./DropdownMenu";
 import { Box, IconButton, useMediaQuery, useTheme } from "@mui/material";
 import { EditRounded, MenuRounded } from "@mui/icons-material";
-import Toolbox from "@/components/toolbox/page";
 
-export default function Header() {
+interface HeaderProps {
+  open?: boolean;
+  setIsopen?: boolean;
+  title: string;
+  toggleDrawer?: (open: boolean) => void;
+}
+
+export default function Header({ open, toggleDrawer = () => {} , title }: HeaderProps) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const [open, setOpen] = useState(false);
 
-  const toggleDrawer = (newOpen: boolean) => {
-    setOpen(newOpen);
-  };
   return (
     <>
       {isMobile && (
@@ -31,13 +33,12 @@ export default function Header() {
               <MenuRounded sx={{ color: "black" }} />
             </IconButton>
 
-            <DropdownMenu />
+            <DropdownMenu title={title}/>
 
             <IconButton>
               <EditRounded sx={{ color: "black" }} />
             </IconButton>
           </Box>
-          <Toolbox open={open} toggleDrawer={toggleDrawer} />
         </>
       )}
       {!isMobile && (
@@ -45,28 +46,29 @@ export default function Header() {
           sx={{
             width: "54%",
             display: "flex",
-            padding: "8px 16px",
+            padding: "16px 16px",
             alignItems: "flex-start",
             justifyContent: open ? "space-between" : "flex-start",
           }}
         >
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "flex-start",
-            }}
-          >
-            <IconButton onClick={() => toggleDrawer(true)}>
-              <MenuRounded sx={{ color: "black" }} />
-            </IconButton>
+          {!open && (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "flex-start",
+              }}
+            >
+              <IconButton onClick={() => toggleDrawer(true)}>
+                <MenuRounded sx={{ color: "black" }} />
+              </IconButton>
 
-            <IconButton>
-              <EditRounded sx={{ color: "black" }} />
-            </IconButton>
-          </Box>
-          <DropdownMenu />
-          <Toolbox open={open} toggleDrawer={toggleDrawer} />
+              <IconButton>
+                <EditRounded sx={{ color: "black" }} />
+              </IconButton>
+            </Box>
+          )}
+          <DropdownMenu title={title} />
         </Box>
       )}
     </>

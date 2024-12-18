@@ -54,7 +54,7 @@ const listItems = [
   },
 ];
 
-export default function DropdownMenu() {
+export default function DropdownMenu({title}: {title: string}) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [toolsAnchor, setToolsAnchor] = useState<null | HTMLElement>(null);
@@ -75,7 +75,7 @@ export default function DropdownMenu() {
         }}
       >
         <Typography sx={{ fontSize: "16px", fontFamily: "DFPHeiBold-B5" }}>
-          債務事件顧問
+          {title}
         </Typography>
       </Button>
       <Menu
