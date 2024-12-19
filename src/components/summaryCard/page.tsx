@@ -1,20 +1,20 @@
-import {
-  Card,
-  CardContent,
-  Typography,
-  Box,
-  Button,
-} from "@mui/material";
+import { useContext } from "react";
+import { Card, CardContent, Typography, Box, Button } from "@mui/material";
 import SmsSharpIcon from "@mui/icons-material/SmsSharp";
 import LoopSharpIcon from "@mui/icons-material/LoopSharp";
+import ChannelContentContext from "@/app/chat/components/ChannelContentContext";
 
 export default function SummaryCard() {
+  const { selectedChannel } = useContext(ChannelContentContext);
+
+  console.log("selectedChannel", selectedChannel);
+
   return (
     <Box
       sx={{
         display: "flex",
         justifyContent: "center",
-        padding: "24px",
+        padding: "24px 16px",
         bgcolor: "#fff",
       }}
     >
@@ -57,12 +57,12 @@ export default function SummaryCard() {
               >
                 摘要
               </Typography>
-                <Button
-                  variant="contained"
-                  sx={{ bgcolor: "#000", borderRadius: 2 }}
-                >
-                  <LoopSharpIcon sx={{ mr: 2 }} /> 重新生成
-                </Button>
+              <Button
+                variant="contained"
+                sx={{ bgcolor: "#000", borderRadius: 2 }}
+              >
+                <LoopSharpIcon sx={{ mr: 2 }} /> 重新生成
+              </Button>
             </Box>
             <Typography
               sx={{
@@ -88,12 +88,14 @@ export default function SummaryCard() {
                 },
               }}
             >
-              這段錄音記錄了團隊關於一個針對XXX的XXX狀況改善的XXX開發會議。會議主要討論XXX的三階段開發計劃：第一階段是針對XXX的XXX頁面；第二階段是XXX專區；第三階段是面向XXX。
+              {selectedChannel?.organizationChannelTranscriptList?.[0]
+                ?.organizationChannelTranscriptContent ??
+                `這段錄音記錄了團隊關於一個針對XXX的XXX狀況改善的XXX開發會議。會議主要討論XXX的三階段開發計劃：第一階段是針對XXX的XXX頁面；第二階段是XXX專區；第三階段是面向XXX。
               核心目標是透過XXX，結合XXX和XXX功能，提供XXXX的內容，最終協助XXXXXXXX，並達成與XXX（XXX）的合作目標。會議也強調XXX的重要性，以及未來XXX如何持續發展和擴展功能，以達到XXX的宏大願景。
               這段錄音記錄了團隊關於一個針對XXX的XXX狀況改善的XXX開發會議。會議主要討論XXX的三階段開發計劃：第一階段是針對XXX的XXX頁面；第二階段是XXX專區；第三階段是面向XXX。
               核心目標是透過XXX，結合XXX和XXX功能，提供XXXX的內容，最終協助XXXXXXXX，並達成與XXX（XXX）的合作目標。會議也強調XXX的重要性，以及未來XXX如何持續發展和擴展功能，以達到XXX的宏大願景。這段錄音記錄了團隊關於一個針對XXX的XXX狀況改善的XXX開發會議。會議主要討論XXX的三階段開發計劃：第一階段是針對XXX的XXX頁面；第二階段是XXX專區；第三階段是面向XXX。
               核心目標是透過XXX，結合XXX和XXX功能，提供XXXX的內容，最終協助XXXXXXXX，並達成與XXX（XXX）的合作目標。會議也強調XXX的重要性，以及未來XXX如何持續發展和擴展功能，以達到XXX的宏大願景。這段錄音記錄了團隊關於一個針對XXX的XXX狀況改善的XXX開發會議。會議主要討論XXX的三階段開發計劃：第一階段是針對XXX的XXX頁面；第二階段是XXX專區；第三階段是面向XXX。
-              核心目標是透過XXX，結合XXX和XXX功能，提供XXXX的內容，最終協助XXXXXXXX，並達成與XXX（XXX）的合作目標。會議也強調XXX的重要性，以及未來XXX如何持續發展和擴展功能，以達到XXX的宏大願景。
+              核心目標是透過XXX，結合XXX和XXX功能，提供XXXX的內容，最終協助XXXXXXXX，並達成與XXX（XXX）的合作目標。會議也強調XXX的重要性，以及未來XXX如何持續發展和擴展功能，以達到XXX的宏大願景。`}
             </Typography>
           </Box>
 
@@ -147,6 +149,9 @@ export default function SummaryCard() {
                 },
               }}
             >
+              {selectedChannel?.organizationChannelTranscriptList?.[0]
+                ?.organizationChannelTranscriptContent ??
+                `
               這段錄音記錄了團隊關於一個針對XXX的XXX狀況改善的XXX開發會議。會議主要討論XXX的三階段開發計劃：第一階段是針對XXX的XXX頁面；第二階段是XXX專區；第三階段是面向XXX。
               核心目標是透過XXX，結合XXX和XXX功能，提供XXXX的內容，最終協助XXXXXXXX，並達成與XXX（XXX）的合作目標。會議也強調XXX的重要性，以及未來XXX如何持續發展和擴展功能，以達到XXX的宏大願景。
               這段錄音記錄了團隊關於一個針對XXX的XXX狀況改善的XXX開發會議。會議主要討論XXX的三階段開發計劃：第一階段是針對XXX的XXX頁面；第二階段是XXX專區；第三階段是面向XXX。
@@ -168,7 +173,7 @@ export default function SummaryCard() {
               這段錄音記錄了團隊關於一個針對XXX的XXX狀況改善的XXX開發會議。會議主要討論XXX的三階段開發計劃：第一階段是針對XXX的XXX頁面；第二階段是XXX專區；第三階段是面向XXX。
               核心目標是透過XXX，結合XXX和XXX功能，提供XXXX的內容，最終協助XXXXXXXX，並達成與XXX（XXX）的合作目標。會議也強調XXX的重要性，以及未來XXX如何持續發展和擴展功能，以達到XXX的宏大願景。
               這段錄音記錄了團隊關於一個針對XXX的XXX狀況改善的XXX開發會議。會議主要討論XXX的三階段開發計劃：第一階段是針對XXX的XXX頁面；第二階段是XXX專區；第三階段是面向XXX。
-              核心目標是透過XXX，結合XXX和XXX功能，提供XXXX的內容，最終協助XXXXXXXX，並達成與XXX（XXX）的合作目標。會議也強調XXX的重要性，以及未來XXX如何持續發展和擴展功能，以達到XXX的宏大願景。
+              核心目標是透過XXX，結合XXX和XXX功能，提供XXXX的內容，最終協助XXXXXXXX，並達成與XXX（XXX）的合作目標。會議也強調XXX的重要性，以及未來XXX如何持續發展和擴展功能，以達到XXX的宏大願景。`}
             </Typography>
           </Box>
         </CardContent>

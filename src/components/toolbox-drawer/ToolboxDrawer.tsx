@@ -1,34 +1,48 @@
 "use client";
-import * as React from "react";
-import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
+
+import { useState, useCallback, useEffect, useContext } from "react";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import {
   AddRounded,
+  CloseRounded,
   DeleteRounded,
   EditRounded,
   MenuRounded,
   SearchRounded,
 } from "@mui/icons-material";
 import {
-  IconButton,
-  ListItemIcon,
+  CircularProgress,
+  Box,
+  Fade,
+  List,
   Menu,
+  Drawer,
+  useTheme,
   MenuItem,
+  ListItem,
+  TextField,
   Typography,
+  IconButton,
+  ListItemText,
+  ListItemIcon,
+  useMediaQuery,
+  InputAdornment,
+  ListItemButton,
 } from "@mui/material";
 import DeleteDialog from "@/app/chat/components/DeleteDialog";
+import { OrganizationChannel } from "@/interfaces/entities";
+import useAxiosApi from "@eGroupAI/hooks/apis/useAxiosApi";
+import apis from "@/utils/hooks/apis/apis";
+import ChannelContentContext from "@/app/chat/components/ChannelContentContext";
 
 interface ToolboxProps {
   open: boolean;
+  channelList?: OrganizationChannel[];
+  selectedChannel?: OrganizationChannel;
   toggleDrawer: (open: boolean) => void;
   children: React.ReactNode;
 }
-const listItems = [
+const menuActions = [
   {
     title: (
       <Typography
@@ -68,13 +82,40 @@ const listItems = [
     icon: <DeleteRounded sx={{ color: "red" }} />,
   },
 ];
-const Toolbox: React.FC<ToolboxProps> = ({ open, toggleDrawer, children }) => {
-  const [toolsAnchor, setToolsAnchor] = React.useState<null | HTMLElement>(
-    null
+const Toolbox: React.FC<ToolboxProps> = ({
+  open,
+  channelList,
+  toggleDrawer,
+  children,
+}) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+  const [toolsAnchor, setToolsAnchor] = useState<null | HTMLElement>(null);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
+  const { setIsLoading, setSelectedChannel } = useContext(
+    ChannelContentContext
   );
-  const [activeIndex, setActiveIndex] = React.useState<number | null>(null);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] =
-    React.useState<boolean>(false);
+
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearchToggle = () => {
+    setIsSearchOpen((prev) => !prev); // Toggle the search field visibility
+    setSearchTerm(""); // Clear the search field when toggled
+  };
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handleSearchSubmit = () => {
+    if (searchTerm.trim()) {
+      console.log(`Searching for: ${searchTerm}`);
+      // Add your search logic here
+    }
+  };
 
   const handleDeleteDialogOpen = () => setIsDeleteDialogOpen(true);
   const handleDeleteDialogClose = () => setIsDeleteDialogOpen(false);
@@ -92,6 +133,25 @@ const Toolbox: React.FC<ToolboxProps> = ({ open, toggleDrawer, children }) => {
     setActiveIndex(index);
   };
 
+  const { excute: getChannelDetail, isLoading: isLoadingChannel } = useAxiosApi(
+    apis.getChannelDetail
+  );
+
+  const handleGetChannelDetail = useCallback(
+    async (channelId: string) => {
+      const res = await getChannelDetail({
+        organizationId: "4aba77788ae94eca8d6ff330506af944",
+        organizationChannelId: channelId,
+      });
+      setSelectedChannel(res.data);
+    },
+    [getChannelDetail, setSelectedChannel]
+  );
+
+  useEffect(() => {
+    setIsLoading(isLoadingChannel);
+  }, [setIsLoading, isLoadingChannel]);
+
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation">
       <List>
@@ -108,10 +168,72 @@ const Toolbox: React.FC<ToolboxProps> = ({ open, toggleDrawer, children }) => {
           >
             <MenuRounded />
           </IconButton>
-          <Box sx={{ display: "flex" }}>
-            <IconButton sx={{ color: "black", padding: 0.5 }}>
-              <SearchRounded />
-            </IconButton>
+          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <Box
+              sx={{
+                padding: "0px",
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            >
+              <Fade in={isSearchOpen}>
+                <TextField
+                  variant="outlined"
+                  size="small"
+                  placeholder="搜尋"
+                  value={searchTerm}
+                  onChange={handleInputChange}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleSearchSubmit();
+                  }}
+                  sx={{
+                    maxWidth: 150,
+                    borderRadius: "8px",
+                    transition: "width 0.3s ease",
+                    backgroundColor: "#9B9B9B12",
+                    "& .MuiOutlinedInput-root": {
+                      padding: "4px",
+                      borderRadius: "8px",
+                      "& fieldset": {
+                        border: "none",
+                      },
+                    },
+                    "& .MuiInputBase-input": {
+                      padding: "4px",
+                    },
+                  }}
+                  slotProps={{
+                    input: {
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <IconButton sx={{ color: "black", padding: "4px" }}>
+                            <SearchRounded />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={handleSearchToggle}
+                            sx={{ color: "black", padding: "4px" }}
+                          >
+                            <CloseRounded />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    },
+                  }}
+                />
+              </Fade>
+              {!isSearchOpen && (
+                <IconButton
+                  onClick={handleSearchToggle}
+                  sx={{ color: "black" }}
+                >
+                  <SearchRounded />
+                </IconButton>
+              )}
+            </Box>
             <IconButton sx={{ color: "black", padding: 0.5 }}>
               <AddRounded />
             </IconButton>
@@ -132,7 +254,7 @@ const Toolbox: React.FC<ToolboxProps> = ({ open, toggleDrawer, children }) => {
         Today
       </Typography>
       <List>
-        {["頻道名稱", "頻道名稱", "頻道名稱", "頻道名稱"].map((text, index) => (
+        {channelList?.map((channel, index) => (
           <ListItem
             key={index}
             disablePadding
@@ -143,8 +265,27 @@ const Toolbox: React.FC<ToolboxProps> = ({ open, toggleDrawer, children }) => {
               backgroundColor: activeIndex === index ? "#9B9B9B33" : "white",
             }}
           >
-            <ListItemButton sx={{ padding: "4px 8px" }}>
-              <ListItemText primary={text} />
+            <ListItemButton
+              sx={{
+                padding: "4px 8px",
+                whiteSpace: "nowrap",
+              }}
+              onClick={() =>
+                handleGetChannelDetail(channel.organizationChannelId)
+              }
+            >
+              <ListItemText
+                primary={channel.organizationChannelTitle}
+                slotProps={{
+                  primary: {
+                    sx: {
+                      color: "black",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    },
+                  },
+                }}
+              />
               <IconButton onClick={(e) => handleMenuOpen(e, index)}>
                 <MoreHorizIcon />
               </IconButton>
@@ -156,10 +297,20 @@ const Toolbox: React.FC<ToolboxProps> = ({ open, toggleDrawer, children }) => {
                 setToolsAnchor(null);
                 setActiveIndex(null);
               }}
+              slotProps={{
+                paper: {
+                  sx: {
+                    maxWidth: "199px",
+                    minHeight: "80px",
+                    padding: "4px",
+                    borderRadius: "12px",
+                    "& .MuiList-root": {
+                      padding: "0px",
+                    },
+                  },
+                },
+              }}
               sx={{
-                justifyContent: "center",
-                alignItems: "center",
-                borderRadius: "20px",
                 top: -10,
                 left: {
                   sm: "-160px",
@@ -190,17 +341,18 @@ const Toolbox: React.FC<ToolboxProps> = ({ open, toggleDrawer, children }) => {
                 },
               }}
             >
-              {listItems.map((item, index) => (
+              {menuActions.map((item, index) => (
                 <MenuItem
                   key={index}
                   sx={{
-                    width: "200px",
-                    alignItems: "flex-start",
-                    padding: "8px",
+                    width: "175px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    padding: "6px 8px",
                     "&:hover": {
                       backgroundColor: "#F5F5F5",
-                      borderRadius: "8px",
-                      margin: "0px 4px",
+                      borderRadius: "6px",
                     },
                   }}
                   onClick={
@@ -235,12 +387,14 @@ const Toolbox: React.FC<ToolboxProps> = ({ open, toggleDrawer, children }) => {
           "& .MuiDrawer-paper": {
             width: 250,
             boxSizing: "border-box",
-            top: "74px",
-            height: "calc(100% - 64px)",
+            height: isMobile ? "calc(100% - 58px)" : "calc(100% - 48px)",
+            top: isMobile ? "57px" : "65px",
+            borderTopRightRadius: isMobile ? "8px" : "0px",
+            borderBottomRightRadius: isMobile ? "8px" : "0px",
           },
         }}
         onClose={() => toggleDrawer(false)}
-        variant="persistent"
+        variant={isMobile ? "temporary" : "persistent"} // Use overlay style for mobile
       >
         {DrawerList}
       </Drawer>
@@ -248,10 +402,22 @@ const Toolbox: React.FC<ToolboxProps> = ({ open, toggleDrawer, children }) => {
         sx={{
           marginLeft: open ? "250px" : "0",
           transition: "margin-left 0.3s",
-          height: "calc(100vh - 64px)",
+          // height: "calc(100vh - 64px)",
           overflow: "auto",
+          position: "relative",
         }}
       >
+        <Box
+          sx={{
+            display: isLoadingChannel ? "flex" : "none",
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+          }}
+        >
+          <CircularProgress />
+        </Box>
         {children}
       </Box>
     </>

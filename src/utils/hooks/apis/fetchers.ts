@@ -7,23 +7,9 @@ export interface ExtendedAxiosRequestConfig extends AxiosRequestConfig {
   __retryCount?: number;
 }
 
-const fetcherConfig: ExtendedAxiosRequestConfig = {
+export const fetcherConfig: ExtendedAxiosRequestConfig = {
   baseURL: "/api/v1",
   timeout: 1000 * 60 * 20,
-  headers: {
-    "Content-Type": "application/json;charset=UTF-8",
-    "X-XSRF-TOKEN": cookies.get("XSRF-TOKEN"),
-  },
-};
-
-const mockFetcherConfig: ExtendedAxiosRequestConfig = {
-  baseURL: "/api-mock",
-  timeout: 1000 * 60 * 20,
-  headers: {
-    "Content-type": "application/json;charset=UTF-8",
-    "x-api-key":
-      "PMAK-652aac302155aa002b73a66d-c9e6f0f2d4328874f95cd842d106fd8014",
-  },
 };
 
 const uploadFetcherConfig: ExtendedAxiosRequestConfig = {
@@ -75,15 +61,13 @@ const applyRetryInterceptor = (axiosInstance: AxiosInstance) => {
 
 // Create axios instances
 const fetcher = axios.create(fetcherConfig);
-const mockFetcher = axios.create(mockFetcherConfig);
 const uploadFetcher = axios.create(uploadFetcherConfig);
 const downloadFetcher = axios.create(downloadFetcherConfig);
 
 // Apply retry interceptor
 applyRetryInterceptor(fetcher);
-applyRetryInterceptor(mockFetcher);
 applyRetryInterceptor(uploadFetcher);
 applyRetryInterceptor(downloadFetcher);
 
 // Export axios instances
-export { fetcher, mockFetcher, uploadFetcher, downloadFetcher };
+export { fetcher, uploadFetcher, downloadFetcher };
