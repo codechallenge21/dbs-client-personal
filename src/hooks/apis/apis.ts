@@ -1,92 +1,77 @@
-import encodeFilesNameToUtf8 from "@/utils/encodeFilesNameToUtf8";
+import { fetcher, fetcherConfig, uploadFetcher } from "@/api/fetchers";
+import axios from "axios";
+import { OrganizationChannel, } from "@/interfaces/entities";
 import {
-  CreateFeedbackApiPayload,
-  UploadFilesApiPayload,
-  UploadOrgFilesApiPayload,
-} from "../../typings/apis";
+  LogApiPayload,
+  GetChannelsApiPayload,
+  GetChannelDetailApiPayload,
+  UploadFileApiPayload,
+} from "@/interfaces/payloads";
 import { AxiosRequestConfig } from "axios";
-import queryString from "query-string";
-import { fetcher, uploadFetcher } from "../../api/fetchers";
+// import { fetcher, fetcherConfig, uploadFetcher } from "@eGroupAI/hooks/apis/fetchers";
 
-export const getUploadFileFormData = (
-  filePathType?: string,
-  imageSizeType?: string,
-  filesPayload?: File[],
-  targetId?: string
-) => {
-  const formData = new FormData();
-  if (filePathType) {
-    formData.append("filePathType", filePathType);
-  }
-  if (imageSizeType) {
-    formData.append("imageSizeType", imageSizeType);
-  }
-  if (filesPayload) {
-    const files = encodeFilesNameToUtf8(filesPayload);
-    files.forEach((el) => {
-      formData.append("files", el);
-    });
-  }
-  if (targetId) {
-    formData.append("targetId", targetId);
-  }
-  return formData;
+// import Cookies from "universal-cookie";
+
+// const cookies = new Cookies();
+
+const tools = {
+  /**
+   * Log errors.
+   */
+  createLog: (payload?: LogApiPayload) => fetcher.post("/logs", payload),
+};
+
+const baseURL =
+  process.env.NODE_ENV === "production"
+    ? `${process.env.URL_FOR_NEXTJS_SERVER_SIDE_API}/api/v1/`
+    : `${process.env.NEXT_PUBLIC_PROXY_URL}/api/v1/`;
+
+const ssFetcher = axios.create({
+  ...fetcherConfig,
+  baseURL,
+});
+
+const serverSide = {
+  getChannels: (payload?: GetChannelsApiPayload) => {
+    const { organizationId } = payload || {};
+    return ssFetcher.get<OrganizationChannel[] | undefined>(
+      `/organizations/${organizationId}/channels`
+    );
+  },
 };
 
 const apis = {
-  /**
-   * Create feedback.
-   */
-  createFeedback: (
-    payload?: CreateFeedbackApiPayload,
-    config?: AxiosRequestConfig<CreateFeedbackApiPayload>
-  ) => fetcher.post(`/feedbacks`, payload, config),
-
-  /**
-   * Upload files.
-   */
-  uploadFiles: <ServiceModuleValue extends string>(
-    payload?: UploadFilesApiPayload<ServiceModuleValue>,
-    config?: AxiosRequestConfig<FormData>
-  ) => {
-    const { targetId, filePathType, files: filesPayload } = payload || {};
-    const formData = getUploadFileFormData(
-      filePathType,
-      undefined,
-      filesPayload,
-      targetId
+  getChannelDetail: (payload?: GetChannelDetailApiPayload) => {
+    const { organizationId, organizationChannelId } = payload || {};
+    return fetcher.get<OrganizationChannel>(
+      `/v1/organizations/${organizationId}/channels/${organizationChannelId}`
     );
-    return uploadFetcher.post(`/upload-files`, formData, config);
   },
-  /**
-   * Upload Org files.
-   */
-  uploadOrgFiles: <ServiceModuleValue extends string>(
-    payload?: UploadOrgFilesApiPayload<ServiceModuleValue>,
+  createChannelByAudio: (
+    payload?: UploadFileApiPayload,
     config?: AxiosRequestConfig<FormData>
   ) => {
     const {
-      organizationId,
-      filePathType,
-      imageSizeType,
-      files: filesPayload,
-      eGroupService,
-      timeZone,
+      file,
     } = payload || {};
-    const formData = getUploadFileFormData(
-      filePathType,
-      imageSizeType,
-      filesPayload
-    );
+
+    const formData = new FormData();
+    if (file) {
+      formData.append("file", file);
+    }
+    
     return uploadFetcher.post(
-      `/organizations/${organizationId}/upload-files?${queryString.stringify({
-        EGROUP_SERVICE_: eGroupService,
-        timeZone,
-      })}`,
+      `/organizations/4aba77788ae94eca8d6ff330506af944/channels/upload`,
       formData,
       config
     );
   },
 };
 
-export default apis;
+const apiExports = {
+  tools,
+  serverSide,
+  ...apis,
+};
+
+export default apiExports;

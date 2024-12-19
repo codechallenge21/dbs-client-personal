@@ -11,6 +11,9 @@ import {
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 // import { useRouter } from "next/navigation";
 import { useState } from "react";
+import useAxiosApiWrapper from "@/utils/useAxiosApiWrapper";
+import apiExports from "@/hooks/apis/apis";
+// import useChannelUpload from "@/hooks/useChannelUpload";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -26,12 +29,18 @@ const VisuallyHiddenInput = styled("input")({
 
 export default function Toolbox() {
   // const router = useRouter();
+  const { excute: createChannelByAudio, isLoading: isCreating, snackbarData } = useAxiosApiWrapper(
+    apiExports.createChannelByAudio,
+    "Create"
+  );
 
   const [dragActive, setDragActive] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   console.log("dragActive", dragActive);
+  console.log("snackbarData", snackbarData);
+
 
   console.log("file", file);
 
@@ -61,7 +70,7 @@ export default function Toolbox() {
     }
   };
 
-  const validateFile = (file: File) => {
+  const validateFile = async (file: File) => {
     const allowedFormats = ["audio/mpeg", "audio/wav", "audio/x-m4a"];
     const maxFileSize = 100 * 1024 * 1024; // 100MB
 
@@ -76,7 +85,14 @@ export default function Toolbox() {
     }
 
     setFile(file);
+
+    const res = await createChannelByAudio({
+      file
+    });
+    console.log("res", res);
+    console.log("isCreating", isCreating);
   };
+  console.log("isCreating", isCreating);
 
   const handleCloseError = () => {
     setError(null);

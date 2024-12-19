@@ -7,8 +7,8 @@ export interface ExtendedAxiosRequestConfig extends AxiosRequestConfig {
   __retryCount?: number;
 }
 
-export const fetcherConfig: ExtendedAxiosRequestConfig = {
-  baseURL: "https://dev.egroup-infocenter.com/api/v1",
+const fetcherConfig: ExtendedAxiosRequestConfig = {
+  baseURL: "/api/v1",
   timeout: 1000 * 60 * 20,
   headers: {
     "Content-Type": "application/json;charset=UTF-8",
@@ -27,7 +27,7 @@ const mockFetcherConfig: ExtendedAxiosRequestConfig = {
 };
 
 const uploadFetcherConfig: ExtendedAxiosRequestConfig = {
-  baseURL: "https://dev.egroup-infocenter.com/api/v1",
+  baseURL: "/api/v1",
   timeout: 0,
   headers: {
     "Content-Type": 'multipart/form-data; charset="utf-8";',
@@ -36,7 +36,7 @@ const uploadFetcherConfig: ExtendedAxiosRequestConfig = {
 };
 
 const downloadFetcherConfig: ExtendedAxiosRequestConfig = {
-  baseURL: "https://dev.egroup-infocenter.com/api/v1",
+  baseURL: "/api/v1",
   timeout: 0,
   responseType: "blob",
   headers: {
