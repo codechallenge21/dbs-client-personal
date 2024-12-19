@@ -54,7 +54,7 @@ const listItems = [
   },
 ];
 
-export default function DropdownMenu({title}: {title: string}) {
+export default function DropdownMenu({ title }: { title: string }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [toolsAnchor, setToolsAnchor] = useState<null | HTMLElement>(null);
@@ -82,11 +82,19 @@ export default function DropdownMenu({title}: {title: string}) {
         anchorEl={toolsAnchor}
         open={Boolean(toolsAnchor)}
         onClose={() => setToolsAnchor(null)}
-        sx={{
-          position: "absolute",
-          justifyContent: "center",
-          alignItems: "center",
-          width: { xs: "100%", sm: "390px" },
+        slotProps={{
+          paper: {
+            sx: {
+              padding: "4px",
+              borderRadius: "12px",
+              width: {
+                xs: "100%",
+                sm: "358px",
+              },
+              maxWidth: "358px",
+              minHeight: "392px",
+            },
+          },
         }}
       >
         {listItems.map((item, index) => (

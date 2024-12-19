@@ -9,16 +9,20 @@ import ListItemText from "@mui/material/ListItemText";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import {
   AddRounded,
+  CloseRounded,
   DeleteRounded,
   EditRounded,
   MenuRounded,
   SearchRounded,
 } from "@mui/icons-material";
 import {
+  Fade,
   IconButton,
+  InputAdornment,
   ListItemIcon,
   Menu,
   MenuItem,
+  TextField,
   Typography,
 } from "@mui/material";
 import DeleteDialog from "@/app/chat/components/DeleteDialog";
@@ -75,6 +79,24 @@ const Toolbox: React.FC<ToolboxProps> = ({ open, toggleDrawer, children }) => {
   const [activeIndex, setActiveIndex] = React.useState<number | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] =
     React.useState<boolean>(false);
+  const [isSearchOpen, setIsSearchOpen] = React.useState(false);
+  const [searchTerm, setSearchTerm] = React.useState("");
+
+  const handleSearchToggle = () => {
+    setIsSearchOpen((prev) => !prev); // Toggle the search field visibility
+    setSearchTerm(""); // Clear the search field when toggled
+  };
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handleSearchSubmit = () => {
+    if (searchTerm.trim()) {
+      console.log(`Searching for: ${searchTerm}`);
+      // Add your search logic here
+    }
+  };
 
   const handleDeleteDialogOpen = () => setIsDeleteDialogOpen(true);
   const handleDeleteDialogClose = () => setIsDeleteDialogOpen(false);
@@ -93,7 +115,12 @@ const Toolbox: React.FC<ToolboxProps> = ({ open, toggleDrawer, children }) => {
   };
 
   const DrawerList = (
-    <Box sx={{ width: 250 }} role="presentation">
+    <Box
+      sx={{
+        width: 250,
+      }}
+      role="presentation"
+    >
       <List>
         <ListItemButton
           sx={{
@@ -108,10 +135,72 @@ const Toolbox: React.FC<ToolboxProps> = ({ open, toggleDrawer, children }) => {
           >
             <MenuRounded />
           </IconButton>
-          <Box sx={{ display: "flex" }}>
-            <IconButton sx={{ color: "black", padding: 0.5 }}>
-              <SearchRounded />
-            </IconButton>
+          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <Box
+              sx={{
+                padding: "0px",
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            >
+              <Fade in={isSearchOpen}>
+                <TextField
+                  variant="outlined"
+                  size="small"
+                  placeholder="搜尋"
+                  value={searchTerm}
+                  onChange={handleInputChange}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleSearchSubmit();
+                  }}
+                  sx={{
+                    maxWidth: 150,
+                    borderRadius: "8px",
+                    transition: "width 0.3s ease",
+                    backgroundColor: "#9B9B9B12",
+                    "& .MuiOutlinedInput-root": {
+                      padding: "4px",
+                      borderRadius: "8px",
+                      "& fieldset": {
+                        border: "none",
+                      },
+                    },
+                    "& .MuiInputBase-input": {
+                      padding: "4px",
+                    },
+                  }}
+                  slotProps={{
+                    input: {
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <IconButton sx={{ color: "black", padding: "4px" }}>
+                            <SearchRounded />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={handleSearchToggle}
+                            sx={{ color: "black", padding: "4px" }}
+                          >
+                            <CloseRounded />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    },
+                  }}
+                />
+              </Fade>
+              {!isSearchOpen && (
+                <IconButton
+                  onClick={handleSearchToggle}
+                  sx={{ color: "black" }}
+                >
+                  <SearchRounded />
+                </IconButton>
+              )}
+            </Box>
             <IconButton sx={{ color: "black", padding: 0.5 }}>
               <AddRounded />
             </IconButton>
@@ -235,7 +324,7 @@ const Toolbox: React.FC<ToolboxProps> = ({ open, toggleDrawer, children }) => {
           "& .MuiDrawer-paper": {
             width: 250,
             boxSizing: "border-box",
-            top: "74px",
+            top: "65px",
             height: "calc(100% - 64px)",
           },
         }}

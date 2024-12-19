@@ -1,16 +1,25 @@
-import AttachFileRoundedIcon from "@mui/icons-material/AttachFileRounded";
-import MicRoundedIcon from "@mui/icons-material/MicRounded";
+import React, { useState } from "react";
 import {
   Box,
-  IconButton,
-  TextareaAutosize,
   useTheme,
+  IconButton,
   useMediaQuery,
+  TextareaAutosize,
 } from "@mui/material";
+import {
+  MicRounded,
+  SendRounded,
+  AttachFileRounded,
+} from "@mui/icons-material";
 
 const TextInput = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const [text, setText] = useState("");
+
+  const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setText(event.target.value);
+  };
 
   return (
     <Box
@@ -18,56 +27,65 @@ const TextInput = () => {
         display: "flex",
         flexDirection: "column",
         width: isMobile ? "95%" : "calc(100% - 20px)",
-        height: isMobile ? "100px" : "124px",
         maxWidth: "760px",
-        position: isMobile ? "absolute" : "relative",
+        minHeight: "108px",
+        position: isMobile ? "fixed" : "relative",
         bottom: isMobile ? 0 : "auto",
-        backgroundColor: '#F5F5F5',
-        borderRadius: 2,
+        backgroundColor: "#F5F5F5",
         overflow: "hidden",
         margin: isMobile ? 3 : 0,
+        borderRadius: "16px",
       }}
     >
-      <TextareaAutosize
-        minRows={2}
-        maxRows={10}
-        placeholder="傳訊息給智能顧問"
-        style={{
+      <Box
+        sx={{
           width: "100%",
-          paddingTop: isMobile ? "20px" : "24px",
-          paddingRight: "20px",
-          paddingBottom: isMobile ? "20px" : "24px",
+          paddingTop: "8px",
           paddingLeft: "20px",
-          borderRadius: "8px",
-          border: "none",
-          outline: "none",
-          resize: "none",
-          fontSize: isMobile ? "16px" : "24px",
-          color: "#000",
-          backgroundColor: "#F5F5F5",
-          overflow: "auto",
-        }}
-      />
-      <IconButton
-        sx={{
-          position: "absolute",
-          bottom: "12px",
-          left: "10px",
+          paddingRight: "20px",
+          paddingBottom: "8px",
         }}
       >
-        <AttachFileRoundedIcon
-          sx={{ transform: "rotate(180deg)", color: "black" }}
+        <TextareaAutosize
+          minRows={1}
+          maxRows={10}
+          placeholder="傳訊息給智能顧問"
+          value={text}
+          onChange={handleTextChange}
+          style={{
+            width: "100%",
+            color: "#000",
+            border: "none",
+            outline: "none",
+            resize: "none",
+            overflow: "auto",
+            alignContent: "center",
+            backgroundColor: "#F5F5F5",
+            fontSize: isMobile ? "16px" : "24px",
+          }}
         />
-      </IconButton>
-      <IconButton
+      </Box>
+      <Box
         sx={{
+          bottom: 0,
+          width: "100%",
+          padding: "12px",
+          display: "flex",
           position: "absolute",
-          bottom: "12px",
-          right: "10px",
+          justifyContent: "space-between",
         }}
       >
-        <MicRoundedIcon sx={{ color: "black" }} />
-      </IconButton>
+        <IconButton>
+          <AttachFileRounded sx={{ color: "black" }} />
+        </IconButton>
+        <IconButton>
+          {text ? (
+            <SendRounded sx={{ color: "black" }} />
+          ) : (
+            <MicRounded sx={{ color: "black" }} />
+          )}
+        </IconButton>
+      </Box>
     </Box>
   );
 };
