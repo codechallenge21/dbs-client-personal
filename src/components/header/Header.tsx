@@ -1,6 +1,6 @@
-'use client'
+"use client";
 
-import React, { useState } from 'react'
+import React, { useState } from "react";
 import {
   AppBar,
   Box,
@@ -16,151 +16,205 @@ import {
   MenuItem,
   Toolbar,
   Typography,
-} from '@mui/material'
-import { Menu as MenuIcon, KeyboardArrowDown } from '@mui/icons-material'
+} from "@mui/material";
+import { Menu as MenuIcon } from "@mui/icons-material";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+
+const menuItems = [
+  { text: "知識庫", color: "text.primary" },
+  { text: "財務快報", color: "text.primary" },
+  { text: "工具箱", color: "primary.main" },
+];
+
+const toolItems = [
+  { text: "智能語音摘要", href: "/tools/ai-summary" },
+  { text: "家系圖", href: "/tools/family-tree" },
+  { text: "財務盤點表", href: "/tools/financial-statement" },
+  { text: "債務試算模擬器", href: "/tools/debt-calculator" },
+];
 
 export default function Header() {
-  const [mobileOpen, setMobileOpen] = useState(false)
-  const [knowledgeAnchor, setKnowledgeAnchor] = useState<null | HTMLElement>(null)
-  const [financeAnchor, setFinanceAnchor] = useState<null | HTMLElement>(null)
-  const [toolsAnchor, setToolsAnchor] = useState<null | HTMLElement>(null)
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [expandedItem, setExpandedItem] = useState<string | null>(null);
 
   const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen)
-  }
+    setMobileOpen(!mobileOpen);
+  };
 
-  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, setAnchor: React.Dispatch<React.SetStateAction<HTMLElement | null>>) => {
-    setAnchor(event.currentTarget)
-  }
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
 
-  const handleMenuClose = (setAnchor: React.Dispatch<React.SetStateAction<HTMLElement | null>>) => {
-    setAnchor(null)
-  }
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
 
-  const menuItems = [
-    { text: '知識庫', color: 'black', anchor: knowledgeAnchor, setAnchor: setKnowledgeAnchor },
-    { text: '財務快餐', color: 'black', anchor: financeAnchor, setAnchor: setFinanceAnchor },
-    { text: '工具箱', color: '#0066cc', anchor: toolsAnchor, setAnchor: setToolsAnchor },
-  ]
+  const handleExpandItem = (item: string) => {
+    setExpandedItem(expandedItem === item ? null : item);
+  };
 
   const drawer = (
-    <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-      <List>
-        {menuItems.map((item) => (
-          <ListItem key={item.text} disablePadding>
-            <ListItemButton sx={{ textAlign: 'center' }}>
-              <ListItemText primary={item.text} sx={{ color: item.color }} />
-            </ListItemButton>
-          </ListItem>
+    <Box
+      sx={{
+        width: 250,
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <List sx={{ flexGrow: 1 }}>
+        {menuItems.map((item, index) => (
+          <React.Fragment key={item.text}>
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => handleExpandItem(item.text)}>
+                <ListItemText primary={item.text} sx={{ color: item.color }} />
+                {index === menuItems.length - 1 ? (
+                  expandedItem === "工具箱" ? (
+                    <ArrowDropDownIcon />
+                  ) : (
+                    <ArrowRightIcon />
+                  )
+                ) : (
+                  <ArrowRightIcon />
+                )}
+              </ListItemButton>
+            </ListItem>
+            {item.text === "工具箱" && expandedItem === "工具箱" && (
+              <List component="div" disablePadding>
+                {toolItems.map((tool) => (
+                  <ListItemButton key={tool.text} sx={{ pl: 4 }}>
+                    <ListItemText primary={tool.text} />
+                  </ListItemButton>
+                ))}
+              </List>
+            )}
+          </React.Fragment>
         ))}
         <ListItem disablePadding>
-          <ListItemButton sx={{ textAlign: 'center' }}>
+          <ListItemButton>
             <ListItemText primary="解決麻煩事" />
           </ListItemButton>
         </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton sx={{ textAlign: 'center' }}>
-            <Button
-              variant="contained"
-              sx={{
-                bgcolor: '#cc0000',
-                '&:hover': { bgcolor: '#aa0000' },
-                borderRadius: 0,
-                width: '100%',
-              }}
-            >
-              登入
-            </Button>
-          </ListItemButton>
-        </ListItem>
       </List>
-    </Box>
-  )
-
-  return (
-    <Box sx={{ bgcolor: '#4b4b4b', boxShadow: '0px 1px 1px 0px rgba(0, 0, 0, 0.32)' }}>
-      <AppBar position="static" sx={{ bgcolor: 'white', boxShadow: 'none' }}>
-        <Container  maxWidth="xl">
-          <Toolbar disableGutters>
-            <Typography
-              variant="h6"
-              component="div"
-              sx={{
-                flexGrow: 1,
-                color: 'black',
-                fontSize: '24px',
-                fontWeight: 'bold',
-              }}
-            >
-              好理家在
-            </Typography>
-
-            <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 2 }}>
-              {menuItems.map((item) => (
-                <React.Fragment key={item.text}>
-                  <Button
-                    endIcon={<KeyboardArrowDown />}
-                    onClick={(e) => handleMenuOpen(e, item.setAnchor)}
-                    sx={{ color: item.color }}
-                  >
-                    {item.text}
-                  </Button>
-                  <Menu
-                    anchorEl={item.anchor}
-                    open={Boolean(item.anchor)}
-                    onClose={() => handleMenuClose(item.setAnchor)}
-                  >
-                    <MenuItem>Option 1</MenuItem>
-                    <MenuItem>Option 2</MenuItem>
-                  </Menu>
-                </React.Fragment>
-              ))}
-
-              <Typography sx={{ color: 'black' }}>解決麻煩事</Typography>
-
-              <Button
-                variant="contained"
-                sx={{
-                  bgcolor: '#cc0000',
-                  '&:hover': { bgcolor: '#aa0000' },
-                  borderRadius: 0,
-                  px: 3,
-                }}
-              >
-                登入
-              </Button>
-            </Box>
-
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: { md: 'none' } }}
-            >
-              <MenuIcon sx={{ color: 'black' }} />
-            </IconButton>
-          </Toolbar>
-        </Container>
-      </AppBar>
-
-      <Box component="nav">
-        <Drawer
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true,
-          }}
+      <Box sx={{ p: 2, borderColor: "divider" }}>
+        <Button
+          fullWidth
+          variant="contained"
           sx={{
-            display: { xs: 'block', md: 'none' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 240 },
+            bgcolor: "error.main",
+            "&:hover": { bgcolor: "error.dark" },
+            borderRadius: "8px",
           }}
         >
-          {drawer}
-        </Drawer>
+          登入
+        </Button>
       </Box>
     </Box>
-  )
-}
+  );
 
+  return (
+    <AppBar
+      position="static"
+      sx={{ bgcolor: "background.paper", boxShadow: 1 }}
+    >
+      <Container
+        maxWidth="xl"
+        sx={{
+          "&.MuiContainer-root": {
+            paddingLeft: "16px",
+            paddingRight: "16px",
+          },
+        }}
+      >
+        <Toolbar disableGutters>
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{
+              flexGrow: 1,
+              color: "text.primary",
+              fontSize: "24px",
+              fontWeight: "bold",
+            }}
+          >
+            好理家在
+          </Typography>
+
+          <Box
+            sx={{
+              gap: 2,
+              flexGrow: 1,
+              display: { xs: "none", md: "flex" },
+            }}
+          >
+            {menuItems.map((item) => (
+              <Button
+                key={item.text}
+                endIcon={<ArrowDropDownIcon />}
+                onClick={handleMenuOpen}
+                sx={{ color: item.color }}
+              >
+                {item.text}
+              </Button>
+            ))}
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={handleMenuClose}
+            >
+              {toolItems.map((tool) => (
+                <MenuItem key={tool.text} onClick={handleMenuClose}>
+                  {tool.text}
+                </MenuItem>
+              ))}
+            </Menu>
+            <Button sx={{ color: "text.primary" }}>解決麻煩事</Button>
+          </Box>
+          <Button
+            variant="contained"
+            sx={{
+              bgcolor: "error.main",
+              "&:hover": { bgcolor: "error.dark" },
+              borderRadius: 0,
+              px: 3,
+              display: { xs: "none", md: "block" },
+            }}
+          >
+            登入
+          </Button>
+
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{ display: { xs: "block", md: "none" } }}
+          >
+            <MenuIcon sx={{ color: "text.primary" }} />
+          </IconButton>
+        </Toolbar>
+      </Container>
+
+      <Drawer
+        variant="temporary"
+        open={mobileOpen}
+        onClose={handleDrawerToggle}
+        ModalProps={{
+          keepMounted: true,
+        }}
+        sx={{
+          display: { xs: "block", md: "none" },
+          "& .MuiDrawer-paper": {
+            boxSizing: "border-box",
+            width: 250,
+            height: "100%",
+          },
+        }}
+      >
+        {drawer}
+      </Drawer>
+    </AppBar>
+  );
+}

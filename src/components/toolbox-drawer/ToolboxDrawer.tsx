@@ -1,15 +1,10 @@
 "use client";
 
 import { useState, useCallback, useEffect, useContext } from "react";
-import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import {
   AddRounded,
+  CloseRounded,
   DeleteRounded,
   EditRounded,
   MenuRounded,
@@ -17,11 +12,22 @@ import {
 } from "@mui/icons-material";
 import {
   CircularProgress,
-  IconButton,
-  ListItemIcon,
+  Box,
+  Fade,
+  List,
   Menu,
+  Drawer,
+  useTheme,
   MenuItem,
+  ListItem,
+  TextField,
   Typography,
+  IconButton,
+  ListItemText,
+  ListItemIcon,
+  useMediaQuery,
+  InputAdornment,
+  ListItemButton,
 } from "@mui/material";
 import DeleteDialog from "@/app/chat/components/DeleteDialog";
 import { OrganizationChannel } from "@/interfaces/entities";
@@ -82,11 +88,34 @@ const Toolbox: React.FC<ToolboxProps> = ({
   toggleDrawer,
   children,
 }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   const [toolsAnchor, setToolsAnchor] = useState<null | HTMLElement>(null);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
+  const { setIsLoading, setSelectedChannel } = useContext(
+    ChannelContentContext
+  );
 
-  const { setIsLoading, setSelectedChannel } = useContext(ChannelContentContext);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearchToggle = () => {
+    setIsSearchOpen((prev) => !prev); // Toggle the search field visibility
+    setSearchTerm(""); // Clear the search field when toggled
+  };
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handleSearchSubmit = () => {
+    if (searchTerm.trim()) {
+      console.log(`Searching for: ${searchTerm}`);
+      // Add your search logic here
+    }
+  };
 
   const handleDeleteDialogOpen = () => setIsDeleteDialogOpen(true);
   const handleDeleteDialogClose = () => setIsDeleteDialogOpen(false);
@@ -95,7 +124,10 @@ const Toolbox: React.FC<ToolboxProps> = ({
     setIsDeleteDialogOpen(false);
   };
 
-  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, index: number) => {
+  const handleMenuOpen = (
+    event: React.MouseEvent<HTMLElement>,
+    index: number
+  ) => {
     setToolsAnchor(null);
     setToolsAnchor(event.currentTarget);
     setActiveIndex(index);
@@ -130,13 +162,78 @@ const Toolbox: React.FC<ToolboxProps> = ({
             justifyContent: "space-between",
           }}
         >
-          <IconButton onClick={() => toggleDrawer(false)} sx={{ color: "black" }}>
+          <IconButton
+            onClick={() => toggleDrawer(false)}
+            sx={{ color: "black" }}
+          >
             <MenuRounded />
           </IconButton>
-          <Box sx={{ display: "flex" }}>
-            <IconButton sx={{ color: "black", padding: 0.5 }}>
-              <SearchRounded />
-            </IconButton>
+          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <Box
+              sx={{
+                padding: "0px",
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            >
+              <Fade in={isSearchOpen}>
+                <TextField
+                  variant="outlined"
+                  size="small"
+                  placeholder="搜尋"
+                  value={searchTerm}
+                  onChange={handleInputChange}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleSearchSubmit();
+                  }}
+                  sx={{
+                    maxWidth: 150,
+                    borderRadius: "8px",
+                    transition: "width 0.3s ease",
+                    backgroundColor: "#9B9B9B12",
+                    "& .MuiOutlinedInput-root": {
+                      padding: "4px",
+                      borderRadius: "8px",
+                      "& fieldset": {
+                        border: "none",
+                      },
+                    },
+                    "& .MuiInputBase-input": {
+                      padding: "4px",
+                    },
+                  }}
+                  slotProps={{
+                    input: {
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <IconButton sx={{ color: "black", padding: "4px" }}>
+                            <SearchRounded />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={handleSearchToggle}
+                            sx={{ color: "black", padding: "4px" }}
+                          >
+                            <CloseRounded />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    },
+                  }}
+                />
+              </Fade>
+              {!isSearchOpen && (
+                <IconButton
+                  onClick={handleSearchToggle}
+                  sx={{ color: "black" }}
+                >
+                  <SearchRounded />
+                </IconButton>
+              )}
+            </Box>
             <IconButton sx={{ color: "black", padding: 0.5 }}>
               <AddRounded />
             </IconButton>
@@ -173,7 +270,9 @@ const Toolbox: React.FC<ToolboxProps> = ({
                 padding: "4px 8px",
                 whiteSpace: "nowrap",
               }}
-              onClick={() => handleGetChannelDetail(channel.organizationChannelId)}
+              onClick={() =>
+                handleGetChannelDetail(channel.organizationChannelId)
+              }
             >
               <ListItemText
                 primary={channel.organizationChannelTitle}
@@ -198,10 +297,20 @@ const Toolbox: React.FC<ToolboxProps> = ({
                 setToolsAnchor(null);
                 setActiveIndex(null);
               }}
+              slotProps={{
+                paper: {
+                  sx: {
+                    maxWidth: "199px",
+                    minHeight: "80px",
+                    padding: "4px",
+                    borderRadius: "12px",
+                    "& .MuiList-root": {
+                      padding: "0px",
+                    },
+                  },
+                },
+              }}
               sx={{
-                justifyContent: "center",
-                alignItems: "center",
-                borderRadius: "20px",
                 top: -10,
                 left: {
                   sm: "-160px",
@@ -236,16 +345,21 @@ const Toolbox: React.FC<ToolboxProps> = ({
                 <MenuItem
                   key={index}
                   sx={{
-                    width: "200px",
-                    alignItems: "flex-start",
-                    padding: "8px",
+                    width: "175px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    padding: "6px 8px",
                     "&:hover": {
                       backgroundColor: "#F5F5F5",
-                      borderRadius: "8px",
-                      margin: "0px 4px",
+                      borderRadius: "6px",
                     },
                   }}
-                  onClick={index === 1 ? handleDeleteDialogOpen : handleDeleteDialogOpen}
+                  onClick={
+                    index === 1
+                      ? handleDeleteDialogOpen
+                      : handleDeleteDialogOpen
+                  }
                 >
                   <ListItemIcon>{item.icon}</ListItemIcon>
                   <ListItemText>{item.title}</ListItemText>
@@ -273,12 +387,14 @@ const Toolbox: React.FC<ToolboxProps> = ({
           "& .MuiDrawer-paper": {
             width: 250,
             boxSizing: "border-box",
-            top: "74px",
-            height: "calc(100% - 64px)",
+            height: isMobile ? "calc(100% - 58px)" : "calc(100% - 48px)",
+            top: isMobile ? "57px" : "65px",
+            borderTopRightRadius: isMobile ? "8px" : "0px",
+            borderBottomRightRadius: isMobile ? "8px" : "0px",
           },
         }}
         onClose={() => toggleDrawer(false)}
-        variant="persistent"
+        variant={isMobile ? "temporary" : "persistent"} // Use overlay style for mobile
       >
         {DrawerList}
       </Drawer>

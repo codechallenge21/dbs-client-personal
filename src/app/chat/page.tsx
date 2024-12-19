@@ -47,9 +47,18 @@ export default function Home() {
         toggleDrawer={toggleDrawer}
         channelList={channels}
       >
-        <Header toggleDrawer={toggleDrawer} open={isOpenDrawer} title="債務事件顧問" />
+        <Header
+          isChat
+          toggleDrawer={toggleDrawer}
+          open={isOpenDrawer}
+          title="債務事件顧問"
+        />
         <MainContent />
-        <SwitchDialog open={isOpen} onClose={handleClose} onConfirm={handleConfirm} />
+        <SwitchDialog
+          open={isOpen}
+          onClose={handleClose}
+          onConfirm={handleConfirm}
+        />
       </ToolboxDrawer>
     </ChannelContentContext.Provider>
   );
