@@ -81,3 +81,11 @@ export interface OrganizationChannelDetail {
   organizationChannelTranscriptList: OrganizationChannelTranscript[];
   organizationChannelMessageList: OrganizationChannelMessage[];
 }
+
+export interface OrganizationChannelResponse {
+  organizationChannelId: string;
+  organization: Organization;
+  organizationChannelTitle: string;
+  creator: Creator;
+  organizationChannelType: "MEETING" | "CHAT";
+}

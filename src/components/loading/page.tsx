@@ -14,7 +14,7 @@ export default function LoadingScreen() {
         if (oldProgress === 100) {
           return 0;
         }
-        const diff = Math.random() * 10;
+        const diff = Math.random() * 20;
         return Math.min(oldProgress + diff, 100);
       });
     }, 500);

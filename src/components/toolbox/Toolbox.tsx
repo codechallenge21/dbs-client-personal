@@ -9,10 +9,11 @@ import {
   Typography,
 } from "@mui/material";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
-// import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import apiExports from "@/utils/hooks/apis/apis";
 import useAxiosApi from "@eGroupAI/hooks/apis/useAxiosApi";
+import LoadingScreen from "@/components/loading/page";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -27,19 +28,14 @@ const VisuallyHiddenInput = styled("input")({
 });
 
 export default function Toolbox() {
-  // const router = useRouter();
+  const router = useRouter();
   const { excute: createChannelByAudio, isLoading: isCreating } = useAxiosApi(
     apiExports.createChannelByAudio
   );
 
-
   const [dragActive, setDragActive] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
-
-  console.log("dragActive", dragActive);
-  // console.log("snackbarData", snackbarData);
-
 
   console.log("file", file);
 
@@ -86,16 +82,29 @@ export default function Toolbox() {
     setFile(file);
 
     const res = await createChannelByAudio({
-      file
+      file,
     });
     console.log("res", res);
     console.log("isCreating", isCreating);
+    const { data } = res;
+
+    const searchParams = new URLSearchParams({
+      organizationChannelId: data.organizationChannelId,
+      organizationChannelTitle: data.organizationChannelTitle,
+      organizationChannelType: data.organizationChannelType,
+    });
+
+    router.push(`/summary?${searchParams.toString()}`);
   };
   console.log("isCreating", isCreating);
 
   const handleCloseError = () => {
     setError(null);
   };
+
+  if (isCreating) {
+    return <LoadingScreen />;
+  }
 
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "#4b4b4b" }}>
@@ -203,9 +212,6 @@ export default function Toolbox() {
                 lineHeight: "normal",
               }}
               startIcon={<FileUploadIcon sx={{ marginRight: 2 }} />}
-              // onClick={() => {
-              //   router.push("/summary");
-              // }}
             >
               選擇檔案
               <VisuallyHiddenInput

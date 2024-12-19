@@ -1,6 +1,6 @@
 import { fetcher, fetcherConfig, uploadFetcher } from "./fetchers";
 import axios from "axios";
-import { OrganizationChannel, } from "@/interfaces/entities";
+import { OrganizationChannel, OrganizationChannelResponse, } from "@/interfaces/entities";
 import {
   LogApiPayload,
   GetChannelsApiPayload,
@@ -44,7 +44,7 @@ const apis = {
   getChannelDetail: (payload?: GetChannelDetailApiPayload) => {
     const { organizationId, organizationChannelId } = payload || {};
     return fetcher.get<OrganizationChannel>(
-      `/v1/organizations/${organizationId}/channels/${organizationChannelId}`
+      `/organizations/${organizationId}/channels/${organizationChannelId}`
     );
   },
   createChannelByAudio: (
@@ -60,7 +60,7 @@ const apis = {
       formData.append("file", file);
     }
     
-    return uploadFetcher.post(
+    return uploadFetcher.post<OrganizationChannelResponse>(
       `/organizations/4aba77788ae94eca8d6ff330506af944/channels/upload`,
       formData,
       config
