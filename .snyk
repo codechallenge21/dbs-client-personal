@@ -1,0 +1,8 @@
+# .snyk
+version: v1.25.0
+ignore:
+  SNYK-JS-SOURCEMAPSUPPORT-6112477:
+    - "*":
+        reason: "Temporarily ignoring while waiting for upstream fix. No direct upgrade path available currently."
+        expires: 2024-11-30T00:00:00.000Z # Set a reasonable expiration date as a reminder to revisit this issue
+        created: 2024-11-13T00:00:00.000Z
