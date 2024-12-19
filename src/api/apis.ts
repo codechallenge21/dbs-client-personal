@@ -31,6 +31,11 @@ import {
 // };
 
 const org = {
+  createChannelByAudio: () => {
+    return fetcher.post(
+      `/organizations/4aba77788ae94eca8d6ff330506af944/channels/upload`
+    );
+  },
   createOrgRole: (payload?: CreateOrgRoleApiPayload) => {
     const { organizationId, ...others } = payload || {};
     return fetcher.post<OrganizationRole>(
