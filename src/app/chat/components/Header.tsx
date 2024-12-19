@@ -4,11 +4,14 @@ import React from "react";
 import DropdownMenu from "./DropdownMenu";
 import { Box, IconButton, useMediaQuery, useTheme } from "@mui/material";
 import { EditRounded, MenuRounded } from "@mui/icons-material";
+import AddIcon from "@mui/icons-material/Add";
+import UploadDialog from "@/components/uploadDialog/page";
 
 interface HeaderProps {
   open?: boolean;
   setIsopen?: boolean;
   title: string;
+  isChat?: boolean;
   toggleDrawer?: (open: boolean) => void;
 }
 
@@ -16,9 +19,15 @@ export default function Header({
   open,
   toggleDrawer = () => {},
   title,
+  isChat = false,
 }: HeaderProps) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const [openUpload, setOpenUpload] = React.useState(false);
+
+  const handleOpenUpload = () => {
+    setOpenUpload(!openUpload);
+  };
 
   return (
     <>
@@ -40,7 +49,11 @@ export default function Header({
             <DropdownMenu title={title} />
 
             <IconButton>
-              <EditRounded sx={{ color: "black" }} />
+              {isChat ? (
+                <EditRounded sx={{ color: "black" }} />
+              ) : (
+                <AddIcon sx={{ color: "black" }} />
+              )}{" "}
             </IconButton>
           </Box>
         </>
@@ -67,12 +80,19 @@ export default function Header({
                 <MenuRounded sx={{ color: "black" }} />
               </IconButton>
 
-              <IconButton>
-                <EditRounded sx={{ color: "black" }} />
-              </IconButton>
+              {isChat ? (
+                <IconButton>
+                  <EditRounded sx={{ color: "black" }} />
+                </IconButton>
+              ) : (
+                <IconButton onClick={() => setOpenUpload(true)}>
+                  <AddIcon sx={{ color: "black" }} />
+                </IconButton>
+              )}
             </Box>
           )}
           <DropdownMenu title={title} />
+          <UploadDialog open={openUpload} onClose={handleOpenUpload} />
         </Box>
       )}
     </>

@@ -14,7 +14,7 @@ export default function SummaryCard() {
       sx={{
         display: "flex",
         justifyContent: "center",
-        padding: "24px",
+        padding: "24px 16px",
         bgcolor: "#fff",
       }}
     >

@@ -14,12 +14,12 @@ import {
 import {
   AccountBalanceWalletRounded,
   BusinessCenterRounded,
-  KeyboardArrowDown,
   LocalHospitalRounded,
   MoneyOffRounded,
   PhishingRounded,
   WorkRounded,
 } from "@mui/icons-material";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 const listItems = [
   {
@@ -62,7 +62,7 @@ export default function DropdownMenu({ title }: { title: string }) {
   return (
     <>
       <Button
-        endIcon={<KeyboardArrowDown />}
+        endIcon={<ArrowDropDownIcon />}
         onClick={(e) => setToolsAnchor(e.currentTarget)}
         sx={{
           height: "40px",

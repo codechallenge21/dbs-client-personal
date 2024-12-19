@@ -23,6 +23,7 @@ export default function Home() {
   return (
     <ToolboxDrawer open={isOpenDrawer} toggleDrawer={toggleDrawer}>
       <Header
+        isChat
         toggleDrawer={toggleDrawer}
         open={isOpenDrawer}
         title="債務事件顧問"
