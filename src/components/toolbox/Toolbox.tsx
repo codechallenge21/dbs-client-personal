@@ -11,9 +11,8 @@ import {
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 // import { useRouter } from "next/navigation";
 import { useState } from "react";
-import useAxiosApiWrapper from "@/utils/useAxiosApiWrapper";
-import apiExports from "@/hooks/apis/apis";
-// import useChannelUpload from "@/hooks/useChannelUpload";
+import apiExports from "@/utils/hooks/apis/apis";
+import useAxiosApi from "@eGroupAI/hooks/apis/useAxiosApi";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -29,17 +28,17 @@ const VisuallyHiddenInput = styled("input")({
 
 export default function Toolbox() {
   // const router = useRouter();
-  const { excute: createChannelByAudio, isLoading: isCreating, snackbarData } = useAxiosApiWrapper(
-    apiExports.createChannelByAudio,
-    "Create"
+  const { excute: createChannelByAudio, isLoading: isCreating } = useAxiosApi(
+    apiExports.createChannelByAudio
   );
+
 
   const [dragActive, setDragActive] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   console.log("dragActive", dragActive);
-  console.log("snackbarData", snackbarData);
+  // console.log("snackbarData", snackbarData);
 
 
   console.log("file", file);

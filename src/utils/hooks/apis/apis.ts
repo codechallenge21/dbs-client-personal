@@ -1,11 +1,15 @@
-import { fetcher, fetcherConfig } from "@eGroupAI/hooks/apis/fetchers";
+import { fetcher, fetcherConfig, uploadFetcher } from "./fetchers";
 import axios from "axios";
-import { OrganizationChannel } from "@/interfaces/entities";
+import { OrganizationChannel, } from "@/interfaces/entities";
 import {
   LogApiPayload,
   GetChannelsApiPayload,
   GetChannelDetailApiPayload,
+  UploadFileApiPayload,
 } from "@/interfaces/payloads";
+import { AxiosRequestConfig } from "axios";
+// import { fetcher, fetcherConfig, uploadFetcher } from "@eGroupAI/hooks/apis/fetchers";
+
 // import Cookies from "universal-cookie";
 
 // const cookies = new Cookies();
@@ -41,6 +45,25 @@ const apis = {
     const { organizationId, organizationChannelId } = payload || {};
     return fetcher.get<OrganizationChannel>(
       `/v1/organizations/${organizationId}/channels/${organizationChannelId}`
+    );
+  },
+  createChannelByAudio: (
+    payload?: UploadFileApiPayload,
+    config?: AxiosRequestConfig<FormData>
+  ) => {
+    const {
+      file,
+    } = payload || {};
+
+    const formData = new FormData();
+    if (file) {
+      formData.append("file", file);
+    }
+    
+    return uploadFetcher.post(
+      `/organizations/4aba77788ae94eca8d6ff330506af944/channels/upload`,
+      formData,
+      config
     );
   },
 };
