@@ -1,29 +1,28 @@
 "use client";
 import * as React from "react";
-import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import {
   AddRounded,
-  CloseRounded,
-  DeleteRounded,
   EditRounded,
   MenuRounded,
+  CloseRounded,
+  DeleteRounded,
   SearchRounded,
+  MoreHorizRounded,
 } from "@mui/icons-material";
 import {
+  Box,
   Fade,
-  IconButton,
-  InputAdornment,
-  ListItemIcon,
+  List,
   Menu,
+  Drawer,
   MenuItem,
+  ListItem,
   TextField,
   Typography,
+  IconButton,
+  ListItemText,
+  InputAdornment,
+  ListItemIcon,
 } from "@mui/material";
 import DeleteDialog from "@/app/chat/components/DeleteDialog";
 
@@ -122,7 +121,7 @@ const Toolbox: React.FC<ToolboxProps> = ({ open, toggleDrawer, children }) => {
       role="presentation"
     >
       <List>
-        <ListItemButton
+        <ListItem
           sx={{
             display: "flex",
             padding: "4px 8px",
@@ -205,7 +204,7 @@ const Toolbox: React.FC<ToolboxProps> = ({ open, toggleDrawer, children }) => {
               <AddRounded />
             </IconButton>
           </Box>
-        </ListItemButton>
+        </ListItem>
       </List>
       <Typography
         sx={{
@@ -222,9 +221,8 @@ const Toolbox: React.FC<ToolboxProps> = ({ open, toggleDrawer, children }) => {
       </Typography>
       <List>
         {["頻道名稱", "頻道名稱", "頻道名稱", "頻道名稱"].map((text, index) => (
-          <ListItem
+          <Box
             key={index}
-            disablePadding
             sx={{
               width: "93%",
               marginLeft: "8px",
@@ -232,12 +230,12 @@ const Toolbox: React.FC<ToolboxProps> = ({ open, toggleDrawer, children }) => {
               backgroundColor: activeIndex === index ? "#9B9B9B33" : "white",
             }}
           >
-            <ListItemButton sx={{ padding: "4px 8px" }}>
+            <ListItem sx={{ padding: "4px 8px" }}>
               <ListItemText primary={text} />
               <IconButton onClick={(e) => handleMenuOpen(e, index)}>
-                <MoreHorizIcon />
+                <MoreHorizRounded sx={{ color: "black" }} />
               </IconButton>
-            </ListItemButton>
+            </ListItem>
             <Menu
               anchorEl={toolsAnchor}
               open={Boolean(toolsAnchor) && activeIndex === index}
@@ -245,10 +243,20 @@ const Toolbox: React.FC<ToolboxProps> = ({ open, toggleDrawer, children }) => {
                 setToolsAnchor(null);
                 setActiveIndex(null);
               }}
+              slotProps={{
+                paper: {
+                  sx: {
+                    maxWidth: "199px",
+                    minHeight: "80px",
+                    padding: "4px",
+                    borderRadius: "12px",
+                    "& .MuiList-root": {
+                      padding: "0px",
+                    },
+                  },
+                },
+              }}
               sx={{
-                justifyContent: "center",
-                alignItems: "center",
-                borderRadius: "20px",
                 top: -10,
                 left: {
                   sm: "-160px",
@@ -283,13 +291,14 @@ const Toolbox: React.FC<ToolboxProps> = ({ open, toggleDrawer, children }) => {
                 <MenuItem
                   key={index}
                   sx={{
-                    width: "200px",
-                    alignItems: "flex-start",
-                    padding: "8px",
+                    width: "175px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    padding: "6px 8px",
                     "&:hover": {
                       backgroundColor: "#F5F5F5",
-                      borderRadius: "8px",
-                      margin: "0px 4px",
+                      borderRadius: "6px",
                     },
                   }}
                   onClick={
@@ -303,7 +312,7 @@ const Toolbox: React.FC<ToolboxProps> = ({ open, toggleDrawer, children }) => {
                 </MenuItem>
               ))}
             </Menu>
-          </ListItem>
+          </Box>
         ))}
       </List>
     </Box>

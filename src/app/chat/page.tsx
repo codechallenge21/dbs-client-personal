@@ -7,7 +7,7 @@ import ToolboxDrawer from "@/components/toolbox-drawer/ToolboxDrawer";
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(false);
+  const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(true);
 
   const handleClose = () => setIsOpen(false);
 
@@ -16,19 +16,23 @@ export default function Home() {
     setIsOpen(false);
   };
 
-   const toggleDrawer = (newOpen: boolean) => {
+  const toggleDrawer = (newOpen: boolean) => {
     setIsOpenDrawer(newOpen);
   };
 
   return (
-    <ToolboxDrawer open={isOpenDrawer}  toggleDrawer={toggleDrawer}>
-      <Header toggleDrawer={toggleDrawer} open={isOpenDrawer} title="債務事件顧問"  />
+    <ToolboxDrawer open={isOpenDrawer} toggleDrawer={toggleDrawer}>
+      <Header
+        toggleDrawer={toggleDrawer}
+        open={isOpenDrawer}
+        title="債務事件顧問"
+      />
       <MainContent />
       <SwitchDialog
         open={isOpen}
         onClose={handleClose}
         onConfirm={handleConfirm}
       />
-      </ToolboxDrawer>
+    </ToolboxDrawer>
   );
 }
