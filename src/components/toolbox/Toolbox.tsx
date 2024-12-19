@@ -90,8 +90,6 @@ export default function Toolbox() {
 
     const searchParams = new URLSearchParams({
       organizationChannelId: data.organizationChannelId,
-      organizationChannelTitle: data.organizationChannelTitle,
-      organizationChannelType: data.organizationChannelType,
     });
 
     router.push(`/summary?${searchParams.toString()}`);
