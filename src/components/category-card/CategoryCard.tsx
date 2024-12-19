@@ -4,9 +4,10 @@ import Link from "next/link";
 interface CategoryCardProps {
   readonly icon: string;
   readonly title: string;
+  readonly link: string;
 }
 
-export default function CategoryCard({ icon, title }: CategoryCardProps) {
+export default function CategoryCard({ icon, title, link }: CategoryCardProps) {
   return (
     <Box
       display="flex"
@@ -21,7 +22,7 @@ export default function CategoryCard({ icon, title }: CategoryCardProps) {
       overflow="hidden"
       border="1.5px solid transparent"
     >
-      <Link href="/toolbox">
+      <Link href={link}>
         <Typography
           variant="h6"
           component="div"

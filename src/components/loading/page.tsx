@@ -17,7 +17,7 @@ export default function LoadingScreen() {
         const diff = Math.random() * 10;
         return Math.min(oldProgress + diff, 100);
       });
-    }, 100);
+    }, 500);
 
     return () => {
       clearInterval(timer);
