@@ -22,7 +22,7 @@ const TextInput = () => {
         maxWidth: "760px",
         position: isMobile ? "absolute" : "relative",
         bottom: isMobile ? 0 : "auto",
-        backgroundColor: '#F5F5F5',
+        backgroundColor: "#F5F5F5",
         borderRadius: 2,
         overflow: "hidden",
         margin: isMobile ? 3 : 0,
@@ -55,9 +55,7 @@ const TextInput = () => {
           left: "10px",
         }}
       >
-        <AttachFileRoundedIcon
-          sx={{ transform: "rotate(180deg)", color: "black" }}
-        />
+        <AttachFileRoundedIcon sx={{ transform: "rotate(180deg)", color: "black" }} />
       </IconButton>
       <IconButton
         sx={{

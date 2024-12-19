@@ -12,7 +12,7 @@ interface HeaderProps {
   toggleDrawer?: (open: boolean) => void;
 }
 
-export default function Header({ open, toggleDrawer = () => {} , title }: HeaderProps) {
+export default function Header({ open, toggleDrawer = () => {}, title }: HeaderProps) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -33,7 +33,7 @@ export default function Header({ open, toggleDrawer = () => {} , title }: Header
               <MenuRounded sx={{ color: "black" }} />
             </IconButton>
 
-            <DropdownMenu title={title}/>
+            <DropdownMenu title={title} />
 
             <IconButton>
               <EditRounded sx={{ color: "black" }} />
