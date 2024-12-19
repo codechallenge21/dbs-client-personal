@@ -15,14 +15,16 @@ import {
   List,
   Menu,
   Drawer,
+  useTheme,
   MenuItem,
   ListItem,
   TextField,
   Typography,
   IconButton,
   ListItemText,
-  InputAdornment,
   ListItemIcon,
+  useMediaQuery,
+  InputAdornment,
 } from "@mui/material";
 import DeleteDialog from "@/app/chat/components/DeleteDialog";
 
@@ -72,6 +74,8 @@ const listItems = [
   },
 ];
 const Toolbox: React.FC<ToolboxProps> = ({ open, toggleDrawer, children }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [toolsAnchor, setToolsAnchor] = React.useState<null | HTMLElement>(
     null
   );
@@ -333,18 +337,20 @@ const Toolbox: React.FC<ToolboxProps> = ({ open, toggleDrawer, children }) => {
           "& .MuiDrawer-paper": {
             width: 250,
             boxSizing: "border-box",
-            top: "65px",
-            height: "calc(100% - 64px)",
+            height: isMobile ? "calc(100% - 58px)" : "calc(100% - 48px)",
+            top: isMobile ? "57px" : "65px",
+            borderTopRightRadius: isMobile ? "8px" : "0px",
+            borderBottomRightRadius: isMobile ? "8px" : "0px",
           },
         }}
         onClose={() => toggleDrawer(false)}
-        variant="persistent"
+        variant={isMobile ? "temporary" : "persistent"} // Use overlay style for mobile
       >
         {DrawerList}
       </Drawer>
       <Box
         sx={{
-          marginLeft: open ? "250px" : "0",
+          marginLeft: open && !isMobile ? "250px" : "0",
           transition: "margin-left 0.3s",
           height: "calc(100vh - 64px)",
           overflow: "auto",
