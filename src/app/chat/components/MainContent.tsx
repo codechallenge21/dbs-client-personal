@@ -14,10 +14,10 @@ export default function MainContent() {
         justifyContent: "center",
         alignItems: "center",
         textAlign: "center",
+        paddingTop: isMobile ? "192px" : "0px",
         paddingLeft: isMobile ? "16px" : "0px",
         paddingRight: isMobile ? "16px" : "0px",
         paddingBottom: isMobile ? "16px" : "0px",
-        paddingTop: isMobile ? "192px" : "0px",
       }}
     >
       {isMobile ? (
