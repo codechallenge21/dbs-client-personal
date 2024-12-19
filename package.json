@@ -6,7 +6,9 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "snyk-test": "snyk test --severity-threshold=high",
+    "snyk-test-auth": "snyk auth $SNYK_TOKEN && yarn snyk-test"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -15,6 +17,7 @@
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@mui/icons-material": "^6.2.0",
     "@mui/material": "^6.2.0",
+    "dbs-client": "file:",
     "next": "15.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
