@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import apiExports from "@/utils/hooks/apis/apis";
 import useAxiosApi from "@eGroupAI/hooks/apis/useAxiosApi";
 import LoadingScreen from "@/components/loading/page";
@@ -27,6 +27,21 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
+// 處理狀態的常數
+const ProcessingStatus = {
+  IDLE: 'IDLE',
+  UPLOADING: 'UPLOADING',
+  UPLOAD_COMPLETE: 'UPLOAD_COMPLETE',
+  UPLOAD_ERROR: 'UPLOAD_ERROR',
+  TRANSCRIBING: 'TRANSCRIBING',
+  TRANSCRIBE_COMPLETE: 'TRANSCRIBE_COMPLETE',
+  TRANSCRIBE_ERROR: 'TRANSCRIBE_ERROR',
+  SUMMARIZING: 'SUMMARIZING',
+  SUMMARY_COMPLETE: 'SUMMARY_COMPLETE',
+  SUMMARY_ERROR: 'SUMMARY_ERROR',
+  COMPLETE: 'COMPLETE'
+};
+
 export default function Toolbox() {
   const router = useRouter();
   const { excute: createChannelByAudio, isLoading: isCreating } = useAxiosApi(
@@ -36,6 +51,9 @@ export default function Toolbox() {
   const [dragActive, setDragActive] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [status, setStatus] = useState(ProcessingStatus.IDLE);
+  const [transcript, setTranscript] = useState('');
+  const [summary, setSummary] = useState('');
 
   console.log("file", file);
 
@@ -84,21 +102,64 @@ export default function Toolbox() {
     const res = await createChannelByAudio({
       file,
     });
-    console.log("res", res);
-    console.log("isCreating", isCreating);
+    setStatus(ProcessingStatus.UPLOAD_COMPLETE);
+
     const { data } = res;
+    startSSEConnection(data.organizationChannelId);
 
-    const searchParams = new URLSearchParams({
-      organizationChannelId: data.organizationChannelId,
-    });
 
-    router.push(`/summary?${searchParams.toString()}`);
+    // const searchParams = new URLSearchParams({
+    //   organizationChannelId: data.organizationChannelId,
+    // });
+
+    // router.push(`/summary?${searchParams.toString()}`);
   };
-  console.log("isCreating", isCreating);
 
   const handleCloseError = () => {
     setError(null);
   };
+
+    // 建立 SSE 連接
+    const startSSEConnection = useCallback((jobId) => {
+      const eventSource = new EventSource(`/api/v1/organizations/4aba77788ae94eca8d6ff330506af944/channels/status/${jobId}`);
+  
+      eventSource.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        setStatus(data.status);
+  
+        switch (data.status) {
+          case ProcessingStatus.TRANSCRIBE_COMPLETE:
+            setTranscript(data.transcript);
+            break;
+          case ProcessingStatus.SUMMARY_COMPLETE:
+            setSummary(data.summary);
+            break;
+          case ProcessingStatus.COMPLETE:
+            eventSource.close();
+            break;
+          case ProcessingStatus.UPLOAD_ERROR:
+          case ProcessingStatus.TRANSCRIBE_ERROR:
+          case ProcessingStatus.SUMMARY_ERROR:
+            setError(data.error);
+            eventSource.close();
+            break;
+        }
+      };
+  
+      eventSource.onerror = () => {
+        setError('連接中斷');
+        eventSource.close();
+      };
+  
+      return () => {
+        eventSource.close();
+      };
+    }, [setError]);
+
+
+  console.log("sse status", status);
+  console.log("sse transcript", transcript);
+  console.log("sse summary", summary);
 
   if (isCreating) {
     return <LoadingScreen />;
