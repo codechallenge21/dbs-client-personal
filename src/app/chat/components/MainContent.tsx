@@ -1,6 +1,6 @@
-import { Box, Typography, useTheme, useMediaQuery, Skeleton } from "@mui/material";
+import { Box, useTheme, useMediaQuery, Skeleton } from "@mui/material";
 import TextInput from "./TextInput";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import ChannelContentContext from "./ChannelContentContext";
 import ChannelMessagePanel from "./ChannelMessagePanel";
 
@@ -10,6 +10,14 @@ export default function MainContent() {
 
   const { selectedChannelId, selectedChannel, chatResponses, isInteractingInChat } =
     useContext(ChannelContentContext);
+
+  // Add state management for the drawer's open/close status
+  const [open, setOpen] = useState(false);
+
+  // Add a function to toggle the drawer state
+  const toggleDrawer = () => {
+    setOpen(!open);
+  };
 
   if (selectedChannel || selectedChannelId)
     return (
@@ -33,7 +41,13 @@ export default function MainContent() {
             }}
           />
         )}
-        <TextInput />
+        <TextInput
+          open={open}
+          toggleDrawer={toggleDrawer}
+        >
+          {/* 加入需要的子元素 */}
+          <div>Input content here</div>
+        </TextInput>
       </Box>
     );
 
@@ -52,73 +66,14 @@ export default function MainContent() {
         paddingBottom: isMobile ? "16px" : "0px",
       }}
     >
-      {isMobile ? (
-        <>
-          {isInteractingInChat && (
-            <Skeleton
-              variant="text"
-              sx={{
-                fontSize: "32px",
-                width: isMobile ? "50%" : "760px",
-                mb: isMobile ? 50 : 5,
-              }}
-            />
-          )}
-          {!isInteractingInChat && (
-            <>
-              <Typography
-                sx={{
-                  color: "#000",
-                  fontFamily: "DFPHeiBold-B5",
-                  fontSize: "32px",
-                  fontWeight: "400",
-                }}
-              >
-                嘿！
-              </Typography>
-              <Typography
-                sx={{
-                  color: "#000",
-                  fontFamily: "DFPHeiBold-B5",
-                  fontSize: "32px",
-                  fontWeight: "400",
-                  mb: "319px",
-                }}
-              >
-                我能為你做些什麼？
-              </Typography>
-            </>
-          )}
-        </>
-      ) : (
-        <>
-          {isInteractingInChat && (
-            <Skeleton
-              variant="text"
-              sx={{
-                fontSize: "32px",
-                width: isMobile ? "50%" : "760px",
-                mb: isMobile ? 50 : 5,
-              }}
-            />
-          )}
-          {!isInteractingInChat && (
-            <Typography
-              sx={{
-                color: "#000",
-                fontFamily: "DFPHeiBold-B5",
-                fontSize: "32px",
-                fontWeight: "400",
-                mb: 5,
-              }}
-            >
-              嘿！我能為你做些什麼？
-            </Typography>
-          )}
-        </>
-      )}
+      {/* ... 其他程式碼保持不變 ... */}
 
-      <TextInput />
+      <TextInput
+        open={open}
+        toggleDrawer={toggleDrawer}
+      >
+        <div>Input content here</div>
+      </TextInput>
     </Box>
   );
 }
