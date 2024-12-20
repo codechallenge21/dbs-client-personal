@@ -23,7 +23,7 @@ const TextInput = () => {
   );
 
   const {
-    selectedChannel,
+    selectedChannelId,
     setIsInteractingInChat,
     setSelectedChannelId,
     setChatResponses,
@@ -37,7 +37,7 @@ const TextInput = () => {
       organizationId: "4aba77788ae94eca8d6ff330506af944",
       query: userInputValue,
       advisorType,
-      organizationChannelId: selectedChannel?.organizationChannelId,
+      organizationChannelId: selectedChannelId,
     });
     if (response.data.response) {
       setChatResponses((prev) => [
@@ -60,7 +60,7 @@ const TextInput = () => {
   }, [
     channelsMutate,
     isInteracting,
-    selectedChannel?.organizationChannelId,
+    selectedChannelId,
     setChatResponses,
     setSelectedChannelId,
     submitUserInputs,
@@ -86,10 +86,7 @@ const TextInput = () => {
 
   const handleOnKeyDownUserInput = useCallback(
     (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-      if (e.key === "Enter") {
-        // const lines = userInputValue.split("\n");
-        // const currentLine = lines[lines.length - 1];
-        // if (currentLine.trim() === "" && userInputValue.trim() !== "") {
+      if (e.key === "Enter" && !e.shiftKey) {
         if (userInputValue.trim() !== "") {
           e.preventDefault();
           handleSendMessage();
