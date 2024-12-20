@@ -87,9 +87,10 @@ const TextInput = () => {
   const handleOnKeyDownUserInput = useCallback(
     (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
       if (e.key === "Enter") {
-        const lines = userInputValue.split("\n");
-        const currentLine = lines[lines.length - 1];
-        if (currentLine.trim() === "" && userInputValue.trim() !== "") {
+        // const lines = userInputValue.split("\n");
+        // const currentLine = lines[lines.length - 1];
+        // if (currentLine.trim() === "" && userInputValue.trim() !== "") {
+        if (userInputValue.trim() !== "") {
           e.preventDefault();
           handleSendMessage();
         }
