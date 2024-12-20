@@ -7,8 +7,6 @@ import ChannelContentContext from "@/app/chat/components/ChannelContentContext";
 export default function SummaryCard() {
   const { selectedChannel } = useContext(ChannelContentContext);
 
-  console.log("selectedChannel", selectedChannel);
-
   return (
     <Box
       sx={{
@@ -57,10 +55,7 @@ export default function SummaryCard() {
               >
                 摘要
               </Typography>
-              <Button
-                variant="contained"
-                sx={{ bgcolor: "#000", borderRadius: 2 }}
-              >
+              <Button variant="contained" sx={{ bgcolor: "#000", borderRadius: 2 }}>
                 <LoopSharpIcon sx={{ mr: 2 }} /> 重新生成
               </Button>
             </Box>

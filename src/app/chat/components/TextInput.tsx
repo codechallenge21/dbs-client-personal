@@ -89,7 +89,6 @@ const TextInput = () => {
       if (e.key === "Enter") {
         const lines = userInputValue.split("\n");
         const currentLine = lines[lines.length - 1];
-        console.log("userInputValue.trim()", userInputValue.trim());
         if (currentLine.trim() === "" && userInputValue.trim() !== "") {
           e.preventDefault();
           handleSendMessage();
