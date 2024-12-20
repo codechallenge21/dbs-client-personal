@@ -1,6 +1,6 @@
 import { Box, useTheme, useMediaQuery, Skeleton } from "@mui/material";
 import TextInput from "./TextInput";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import ChannelContentContext from "./ChannelContentContext";
 import ChannelMessagePanel from "./ChannelMessagePanel";
 
@@ -10,14 +10,6 @@ export default function MainContent() {
 
   const { selectedChannelId, selectedChannel, chatResponses, isInteractingInChat } =
     useContext(ChannelContentContext);
-
-  // Add state management for the drawer's open/close status
-  const [open, setOpen] = useState(false);
-
-  // Add a function to toggle the drawer state
-  const toggleDrawer = () => {
-    setOpen(!open);
-  };
 
   if (selectedChannel || selectedChannelId)
     return (
@@ -41,13 +33,7 @@ export default function MainContent() {
             }}
           />
         )}
-        <TextInput
-          open={open}
-          toggleDrawer={toggleDrawer}
-        >
-          {/* 加入需要的子元素 */}
-          <div>Input content here</div>
-        </TextInput>
+        <TextInput />
       </Box>
     );
 
@@ -66,14 +52,7 @@ export default function MainContent() {
         paddingBottom: isMobile ? "16px" : "0px",
       }}
     >
-      {/* ... 其他程式碼保持不變 ... */}
-
-      <TextInput
-        open={open}
-        toggleDrawer={toggleDrawer}
-      >
-        <div>Input content here</div>
-      </TextInput>
+      <TextInput />
     </Box>
   );
 }
