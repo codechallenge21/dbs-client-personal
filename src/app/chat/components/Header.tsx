@@ -6,11 +6,12 @@ import { Box, IconButton, useMediaQuery, useTheme } from "@mui/material";
 import { EditRounded, MenuRounded } from "@mui/icons-material";
 import AddIcon from "@mui/icons-material/Add";
 import UploadDialog from "@/components/uploadDialog/page";
+import { AdvisorType } from "./types";
 
 interface HeaderProps {
   open?: boolean;
   setIsopen?: boolean;
-  title: string;
+  advisor: AdvisorType;
   isChat?: boolean;
   toggleDrawer?: (open: boolean) => void;
 }
@@ -18,7 +19,7 @@ interface HeaderProps {
 export default function Header({
   open,
   toggleDrawer = () => {},
-  title,
+  advisor,
   isChat = false,
 }: HeaderProps) {
   const theme = useTheme();
@@ -45,7 +46,7 @@ export default function Header({
               <MenuRounded sx={{ color: "black" }} />
             </IconButton>
 
-            <DropdownMenu title={title} />
+            <DropdownMenu advisor={advisor} />
 
             <IconButton>
               {isChat ? (
@@ -89,7 +90,7 @@ export default function Header({
               )}
             </Box>
           )}
-          <DropdownMenu title={title} />
+          <DropdownMenu advisor={advisor} />
           <UploadDialog open={openUpload} onClose={handleOpenUpload} />
         </Box>
       )}

@@ -1,11 +1,15 @@
 import type { NextConfig } from "next";
 
 const isProd = process.env.NODE_ENV === "production";
+const domains = process.env.IMAGE_DOMAINS ? process.env.IMAGE_DOMAINS.split(",") : [];
 
 const nextConfig: NextConfig = {
   /* config options here */
   experimental: {
     taint: true,
+  },
+  images: {
+    domains: [...domains, "icons.iconarchive.com"],
   },
 };
 

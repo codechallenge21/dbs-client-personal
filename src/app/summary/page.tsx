@@ -9,6 +9,7 @@ import { useAudioChannels } from "@/utils/hooks/useAudioChannels";
 import ChannelContentContext from "../chat/components/ChannelContentContext";
 import { OrganizationChannel, OrganizationChannelMessage } from "@/interfaces/entities";
 import { CircularProgress } from "@mui/material";
+import { AdvisorType } from "../chat/components/types";
 
 function SummaryPage() {
   /**
@@ -18,7 +19,6 @@ function SummaryPage() {
   const searchParams = useSearchParams();
 
   const organizationChannelId = searchParams.get("organizationChannelId") || "";
-  console.log("organizationChannelId", organizationChannelId);
   const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(false);
 
   const [isLoadingChannel, setIsLoadingChannel] = useState<boolean>(false);
@@ -26,6 +26,7 @@ function SummaryPage() {
   const [selectedChannelId, setSelectedChannelId] = useState<string>();
   const [isInteractingInChat, setIsInteractingInChat] = useState<boolean>(false);
   const [chatResponses, setChatResponses] = useState<OrganizationChannelMessage[]>([]);
+  const [advisorType, setAdvisorType] = useState<AdvisorType>(AdvisorType.DEFAULT);
 
   const { data: channels, mutate } = useAudioChannels({
     organizationId: "4aba77788ae94eca8d6ff330506af944",
@@ -44,6 +45,8 @@ function SummaryPage() {
       chatResponses,
       setChatResponses,
       channelsMutate: mutate,
+      advisorType,
+      setAdvisorType,
     }),
     [
       isLoadingChannel,
@@ -55,6 +58,8 @@ function SummaryPage() {
       chatResponses,
       setChatResponses,
       mutate,
+      advisorType,
+      setAdvisorType,
     ]
   );
   const { data: channel } = useAudioChannel({
@@ -68,7 +73,6 @@ function SummaryPage() {
     }
   }, [channel]);
 
-  console.log("channels", channel);
   const toggleDrawer = (newOpen: boolean) => {
     setIsOpenDrawer(newOpen);
   };
@@ -81,7 +85,7 @@ function SummaryPage() {
           toggleDrawer={toggleDrawer}
           channelList={channels}
         >
-          <Header toggleDrawer={toggleDrawer} open={isOpenDrawer} title="智能語音摘要" />
+          <Header toggleDrawer={toggleDrawer} open={isOpenDrawer} advisor={advisorType} />
           <SummaryCard />
         </ToolboxDrawer>
       </ChannelContentContext.Provider>

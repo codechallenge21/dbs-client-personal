@@ -74,7 +74,7 @@ const apis = {
     const { organizationId, organizationChannelId, query, advisorType } = payload || {};
     if (!organizationChannelId) {
       return fetcher.post<OrganizationChannelChatInteractResponse>(
-        `/v1/organizations/${organizationId}/channels/chat`,
+        `/organizations/${organizationId}/channels/chat`,
         {
           query,
           advisorType,
@@ -82,7 +82,7 @@ const apis = {
       );
     }
     return fetcher.post<OrganizationChannelChatInteractResponse>(
-      `/v1/organizations/${organizationId}/channels/chat`,
+      `/organizations/${organizationId}/channels/chat`,
       {
         organizationChannelId,
         query,
@@ -93,7 +93,7 @@ const apis = {
   deleteChannel: (payload?: DeleteChannelApiPayload) => {
     const { organizationId, organizationChannelId } = payload || {};
     return fetcher.delete(
-      `/v1/organizations/${organizationId}/channels/${organizationChannelId}`
+      `/organizations/${organizationId}/channels/${organizationChannelId}`
     );
   },
 };

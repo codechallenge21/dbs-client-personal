@@ -7,6 +7,7 @@ import ToolboxDrawer from "@/components/toolbox-drawer/ToolboxDrawer";
 import { useChatChannels } from "@/utils/hooks/useChatChannels";
 import { OrganizationChannel, OrganizationChannelMessage } from "@/interfaces/entities";
 import ChannelContentContext from "./components/ChannelContentContext";
+import { AdvisorType } from "./components/types";
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -17,10 +18,14 @@ export default function Home() {
   const [selectedChannelId, setSelectedChannelId] = useState<string>();
   const [isInteractingInChat, setIsInteractingInChat] = useState<boolean>(false);
   const [chatResponses, setChatResponses] = useState<OrganizationChannelMessage[]>([]);
+  const [advisorType, setAdvisorType] = useState<AdvisorType>(AdvisorType.DEFAULT);
 
-  const { data: channels, mutate } = useChatChannels({
-    organizationId: "4aba77788ae94eca8d6ff330506af944",
-  });
+  const { data: channels, mutate } = useChatChannels(
+    {
+      organizationId: "4aba77788ae94eca8d6ff330506af944",
+    },
+    { organizationChannelType: "CHAT" }
+  );
 
   const handleClose = () => setIsOpen(false);
 
@@ -46,6 +51,8 @@ export default function Home() {
       chatResponses,
       setChatResponses,
       channelsMutate: mutate,
+      advisorType,
+      setAdvisorType,
     }),
     [
       isLoadingChannel,
@@ -57,6 +64,8 @@ export default function Home() {
       chatResponses,
       setChatResponses,
       mutate,
+      advisorType,
+      setAdvisorType,
     ]
   );
 
@@ -76,14 +85,10 @@ export default function Home() {
           isChat
           toggleDrawer={toggleDrawer}
           open={isOpenDrawer}
-          title="債務事件顧問"
+          advisor={advisorType}
         />
         <MainContent />
-        <SwitchDialog
-          open={isOpen}
-          onClose={handleClose}
-          onConfirm={handleConfirm}
-        />
+        <SwitchDialog open={isOpen} onClose={handleClose} onConfirm={handleConfirm} />
       </ToolboxDrawer>
     </ChannelContentContext.Provider>
   );

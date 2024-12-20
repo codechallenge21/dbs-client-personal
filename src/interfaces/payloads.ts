@@ -1,3 +1,4 @@
+import { AdvisorType } from "@/app/chat/components/types";
 import { Locale } from "@eGroupAI/typings/apis";
 import { Outcome } from "@eGroupAI/utils/getDeviceInfo";
 
@@ -36,7 +37,7 @@ export interface SubmitUserInputsApiPayload {
   organizationId: string;
   organizationChannelId?: string;
   query: string;
-  advisorType: "DEFAULT";
+  advisorType: AdvisorType;
 }
 
 export interface DeleteChannelApiPayload {

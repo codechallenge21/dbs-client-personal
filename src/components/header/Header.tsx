@@ -21,18 +21,21 @@ import {
 import { Menu as MenuIcon } from "@mui/icons-material";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import { usePathname } from "next/navigation";
 
 const menuItems = [
-  { text: "知識庫", color: "text.primary" },
-  { text: "財務快報", color: "text.primary" },
-  { text: "工具箱", color: "primary.main" },
+  { text: "知識庫", href: "#" },
+  { text: "財務快報", href: "#" },
+  { text: "工具箱", href: "/toolbox" },
+  { text: "解決麻煩事", href: "/chat" },
 ];
 
 const toolItems = [
+  { text: "智能語音摘要", href: "/toolbox/ai-summary" },
+  { text: "家系圖", href: "/toolbox/family-tree" },
+  { text: "財務盤點表", href: "/toolbox/financial-statement" },
+  { text: "債務試算模擬器", href: "/toolbox/debt-calculator" },
   { text: "智能語音摘要", href: "/toolbox" },
-  { text: "家系圖", href: "/tools/family-tree" },
-  { text: "財務盤點表", href: "/tools/financial-statement" },
-  { text: "債務試算模擬器", href: "/tools/debt-calculator" },
 ];
 
 export default function Header() {
@@ -40,12 +43,17 @@ export default function Header() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [expandedItem, setExpandedItem] = useState<string | null>(null);
 
+  const pathname = usePathname();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
-  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+  const handleMenuOpen = (
+    event: React.MouseEvent<HTMLElement>,
+    hasChildren?: boolean
+  ) => {
+    if (!hasChildren) return;
     setAnchorEl(event.currentTarget);
   };
 
@@ -70,9 +78,14 @@ export default function Header() {
         {menuItems.map((item, index) => (
           <React.Fragment key={item.text}>
             <ListItem disablePadding>
-              <ListItemButton onClick={() => handleExpandItem(item.text)}>
-                <ListItemText primary={item.text} sx={{ color: item.color }} />
-                {index === menuItems.length - 1 ? (
+              <ListItemButton
+                onClick={() => handleExpandItem(item.text)}
+                sx={{
+                  color: pathname.startsWith(item.href) ? "primary.main" : "text.primary",
+                }}
+              >
+                <ListItemText primary={item.text} />
+                {index === menuItems.length - 2 ? (
                   expandedItem === "工具箱" ? (
                     <ArrowDropDownIcon />
                   ) : (
@@ -94,11 +107,6 @@ export default function Header() {
             )}
           </React.Fragment>
         ))}
-        <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemText primary="解決麻煩事" />
-          </ListItemButton>
-        </ListItem>
       </List>
       <Stack spacing={2} sx={{ p: 2, borderColor: "divider" }}>
         <Button
@@ -129,10 +137,7 @@ export default function Header() {
   );
 
   return (
-    <AppBar
-      position="static"
-      sx={{ bgcolor: "background.paper", boxShadow: 1 }}
-    >
+    <AppBar position="static" sx={{ bgcolor: "background.paper", boxShadow: 1 }}>
       <Container
         maxWidth="xl"
         sx={{
@@ -166,21 +171,20 @@ export default function Header() {
             {menuItems.map((item) => (
               <Button
                 key={item.text}
-                endIcon={<ArrowDropDownIcon />}
-                onClick={handleMenuOpen}
-                sx={{ color: item.color }}
+                endIcon={item.text !== "解決麻煩事" && <ArrowDropDownIcon />}
+                onClick={(e) => handleMenuOpen(e, item.text !== "解決麻煩事")}
+                sx={{
+                  color: pathname.startsWith(item.href) ? "primary.main" : "text.primary",
+                }}
+                href={item.text === "解決麻煩事" ? item.href : undefined}
               >
                 {item.text}
               </Button>
             ))}
-            <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleMenuClose}
-            >
+            <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
               {toolItems.map((tool) => (
-                <MenuItem 
-                  key={tool.text} 
+                <MenuItem
+                  key={tool.text}
                   onClick={handleMenuClose}
                   component="a"
                   href={tool.href}
@@ -189,18 +193,8 @@ export default function Header() {
                 </MenuItem>
               ))}
             </Menu>
-            <Button 
-              sx={{ color: "text.primary" }}
-              href="/chat"
-            >
-                解決麻煩事
-            </Button>
           </Box>
-          <Stack
-            direction="row"
-            spacing={2}
-            sx={{ display: { xs: "none", md: "flex" } }}
-          >
+          <Stack direction="row" spacing={2} sx={{ display: { xs: "none", md: "flex" } }}>
             <Button
               variant="outlined"
               href="https://forms.gle/Jrq5bDjKzqmp82gQ8"
