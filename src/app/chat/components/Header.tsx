@@ -26,7 +26,7 @@ export default function Header({
   const [openUpload, setOpenUpload] = React.useState(false);
 
   const handleOpenUpload = () => {
-    setOpenUpload(!openUpload);
+    setOpenUpload(false);
   };
 
   return (
