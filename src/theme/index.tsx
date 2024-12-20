@@ -6,10 +6,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { createTheme, ThemeProvider as MuiThemeProvider, ThemeOptions } from '@mui/material/styles';
 // system
 import { palette } from './palette';
-import { shadows } from './shadows';
-import { typography } from './typography';
-import { customShadows } from './custom-shadows';
-import { breakpoints } from './breakpoints';
+import { usePathname } from 'next/navigation';
 
 // ----------------------------------------------------------------------
 
@@ -18,18 +15,14 @@ type Props = {
 };
 
 export default function ThemeProvider({ children }: Props) {
+  const pathname = usePathname();
+  const isHomePage = pathname === '/';
 
   const baseOption = useMemo(
     () => ({
-      palette: palette('light'),
-      shadows: shadows('light'),
-      customShadows: customShadows('light'),
-      typography,
-      breakpoints,
-      shape: { borderRadius: 8 },
+      palette: isHomePage ? palette('dark') : palette('light'),
     }),
-
-    []
+    [isHomePage]
   );
 
   const theme = createTheme(baseOption as ThemeOptions);
