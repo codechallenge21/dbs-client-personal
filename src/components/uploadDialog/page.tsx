@@ -13,12 +13,12 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { styled } from "@mui/material/styles";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
 import { useRouter } from "next/navigation";
 import useAxiosApi from "@eGroupAI/hooks/apis/useAxiosApi";
 import apiExports from "@/utils/hooks/apis/apis";
 import { useState } from "react";
 import LoadingScreen from "../loading/page";
-import AddIcon from "@mui/icons-material/Add";
 
 interface UploadDialogProps {
   open: boolean;
@@ -176,7 +176,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
             role={undefined}
             variant="contained"
             tabIndex={-1}
-            startIcon={<AddIcon />}
+            startIcon={<FileUploadIcon />}
           >
             選擇檔案
             <VisuallyHiddenInput

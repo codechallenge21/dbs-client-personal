@@ -6,7 +6,6 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import {
-  AddRounded,
   CloseRounded,
   DeleteRounded,
   EditRounded,
@@ -34,6 +33,7 @@ import useAxiosApi from "@eGroupAI/hooks/apis/useAxiosApi";
 import apis from "@/utils/hooks/apis/apis";
 import ChannelContentContext from "@/app/chat/components/ChannelContentContext";
 import UploadDialog from "../uploadDialog/page";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
 
 interface ToolboxProps {
   open: boolean;
@@ -252,7 +252,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
               sx={{ color: "black", padding: 0.5 }}
               onClick={handleStartNewChannel}
             >
-              <AddRounded />
+              <FileUploadIcon />
             </IconButton>
           </Box>
         </ListItem>

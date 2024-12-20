@@ -6,6 +6,7 @@ import { Box, IconButton, useMediaQuery, useTheme } from "@mui/material";
 import { EditRounded, MenuRounded } from "@mui/icons-material";
 import AddIcon from "@mui/icons-material/Add";
 import UploadDialog from "@/components/uploadDialog/page";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
 
 interface HeaderProps {
   open?: boolean;
@@ -84,7 +85,7 @@ export default function Header({
                 </IconButton>
               ) : (
                 <IconButton onClick={() => setOpenUpload(true)}>
-                  <AddIcon sx={{ color: "black" }} />
+                  <FileUploadIcon sx={{ color: "black" }} />
                 </IconButton>
               )}
             </Box>
