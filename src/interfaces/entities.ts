@@ -31,11 +31,11 @@ export interface Organization {
 }
 
 export interface OrganizationChannelMessage {
-  organizationChannelMessageId: string;
+  organizationChannelMessageId?: string;
   organizationChannelMessageType: "AI" | "USER";
   organizationChannelMessageContent: string;
-  organizationChannelMessageTokenCount: number;
-  organizationChannelMessageCreateDate: string;
+  organizationChannelMessageTokenCount?: number;
+  organizationChannelMessageCreateDate?: string;
 }
 
 export interface OrganizationChannelFile {
@@ -59,6 +59,34 @@ export interface OrganizationChannelTranscript {
 }
 
 export type OrganizationChannelTypes = "CHAT" | "MEETING";
+
+export interface OrganizationChannelChatInteractResponse {
+  status: "success";
+  channelId: string;
+  response: string;
+  contextInfo: {
+    hasContext: boolean;
+    historyLength: number;
+    advisorType: "DEFAULT";
+    modelConfig: {
+      maxLength: number;
+      temperature: number;
+      topP: number;
+    };
+  };
+  tokenInfo: {
+    inputTokens: {
+      total: number;
+      query: number;
+      context: number;
+      systemPrompt: number;
+      history: number;
+    };
+    outputTokens: {
+      total: number;
+    };
+  };
+}
 
 export interface OrganizationChannel {
   organizationChannelId: string;

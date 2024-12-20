@@ -86,14 +86,29 @@ const Toolbox: React.FC<ToolboxProps> = ({
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
 
-  const { setIsLoading, setSelectedChannel } = useContext(ChannelContentContext);
+  const { excute: deleteChannel } = useAxiosApi(apis.deleteChannel);
 
-  const handleDeleteDialogOpen = () => setIsDeleteDialogOpen(true);
-  const handleDeleteDialogClose = () => setIsDeleteDialogOpen(false);
+  const { setIsLoadingChannel, setSelectedChannel, channelsMutate } =
+    useContext(ChannelContentContext);
 
-  const handleDeleteDialogConfirm = () => {
-    setIsDeleteDialogOpen(false);
-  };
+  const handleDeleteChannelOpenConfirmDialog = useCallback(
+    () => setIsDeleteDialogOpen(true),
+    []
+  );
+  const handleCloseDeleteDialog = useCallback(() => setIsDeleteDialogOpen(false), []);
+  const handleDeleteChannelConfirm = useCallback(async () => {
+    deleteChannel({
+      organizationId: "4aba77788ae94eca8d6ff330506af944",
+      organizationChannelId: channelList?.[activeIndex!].organizationChannelId || "",
+    })
+      .then(() => {
+        setIsDeleteDialogOpen(false);
+        if (channelsMutate) channelsMutate();
+      })
+      .catch(() => {});
+  }, [activeIndex, channelList, channelsMutate, deleteChannel]);
+
+  const handleEditChannelTitle = useCallback(() => setIsDeleteDialogOpen(false), []);
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, index: number) => {
     setToolsAnchor(null);
@@ -116,9 +131,13 @@ const Toolbox: React.FC<ToolboxProps> = ({
     [getChannelDetail, setSelectedChannel]
   );
 
+  const handleStartNewChannel = useCallback(() => {
+    setSelectedChannel(undefined);
+  }, [setSelectedChannel]);
+
   useEffect(() => {
-    setIsLoading(isLoadingChannel);
-  }, [setIsLoading, isLoadingChannel]);
+    setIsLoadingChannel(isLoadingChannel);
+  }, [setIsLoadingChannel, isLoadingChannel]);
 
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation">
@@ -137,7 +156,10 @@ const Toolbox: React.FC<ToolboxProps> = ({
             <IconButton sx={{ color: "black", padding: 0.5 }}>
               <SearchRounded />
             </IconButton>
-            <IconButton sx={{ color: "black", padding: 0.5 }}>
+            <IconButton
+              sx={{ color: "black", padding: 0.5 }}
+              onClick={handleStartNewChannel}
+            >
               <AddRounded />
             </IconButton>
           </Box>
@@ -245,7 +267,11 @@ const Toolbox: React.FC<ToolboxProps> = ({
                       margin: "0px 4px",
                     },
                   }}
-                  onClick={index === 1 ? handleDeleteDialogOpen : handleDeleteDialogOpen}
+                  onClick={
+                    index === 1
+                      ? handleDeleteChannelOpenConfirmDialog
+                      : handleEditChannelTitle
+                  }
                 >
                   <ListItemIcon>{item.icon}</ListItemIcon>
                   <ListItemText>{item.title}</ListItemText>
@@ -262,8 +288,8 @@ const Toolbox: React.FC<ToolboxProps> = ({
     <>
       <DeleteDialog
         open={isDeleteDialogOpen}
-        onClose={handleDeleteDialogClose}
-        onConfirm={handleDeleteDialogConfirm}
+        onClose={handleCloseDeleteDialog}
+        onConfirm={handleDeleteChannelConfirm}
       />
       <Drawer
         open={open}
@@ -286,7 +312,6 @@ const Toolbox: React.FC<ToolboxProps> = ({
         sx={{
           marginLeft: open ? "250px" : "0",
           transition: "margin-left 0.3s",
-          // height: "calc(100vh - 64px)",
           overflow: "auto",
           position: "relative",
         }}
@@ -300,7 +325,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
             transform: "translate(-50%, -50%)",
           }}
         >
-          <CircularProgress />
+          <CircularProgress color="primary" />
         </Box>
         {children}
       </Box>

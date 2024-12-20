@@ -1,5 +1,6 @@
 import AttachFileRoundedIcon from "@mui/icons-material/AttachFileRounded";
 import MicRoundedIcon from "@mui/icons-material/MicRounded";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import {
   Box,
   IconButton,
@@ -7,10 +8,98 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
+import { useCallback, useContext, useEffect, useState } from "react";
+import useAxiosApi from "@eGroupAI/hooks/apis/useAxiosApi";
+import apis from "@/utils/hooks/apis/apis";
+import ChannelContentContext from "./ChannelContentContext";
 
 const TextInput = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const [userInputValue, setUserInputValue] = useState("");
+
+  const { excute: submitUserInputs, isLoading: isInteracting } = useAxiosApi(
+    apis.submitUserInputs
+  );
+
+  const {
+    selectedChannel,
+    setIsInteractingInChat,
+    setSelectedChannelId,
+    setChatResponses,
+    channelsMutate,
+  } = useContext(ChannelContentContext);
+
+  const handleSendMessage = useCallback(async () => {
+    if (isInteracting) return;
+    const response = await submitUserInputs({
+      organizationId: "4aba77788ae94eca8d6ff330506af944",
+      query: userInputValue,
+      advisorType: "DEFAULT",
+      organizationChannelId: selectedChannel?.organizationChannelId,
+    });
+    if (response.data.response) {
+      setChatResponses((prev) => [
+        ...prev,
+        {
+          organizationChannelMessageType: "USER",
+          organizationChannelMessageContent: userInputValue,
+        },
+        {
+          organizationChannelMessageType: "AI",
+          organizationChannelMessageContent: response?.data?.response,
+        },
+      ]);
+      setSelectedChannelId(response?.data?.channelId);
+      if (channelsMutate) {
+        channelsMutate();
+      }
+      setUserInputValue("");
+    }
+  }, [
+    channelsMutate,
+    isInteracting,
+    selectedChannel?.organizationChannelId,
+    setChatResponses,
+    setSelectedChannelId,
+    submitUserInputs,
+    userInputValue,
+  ]);
+
+  const handleClickSubmitOrAudioFileUpload = useCallback(() => {
+    if (userInputValue !== "") {
+      handleSendMessage();
+    } else {
+      console.log("upload audio file");
+    }
+  }, [handleSendMessage, userInputValue]);
+
+  const handleOnChangeUserInput = useCallback(
+    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      const { value } = e.target;
+      setUserInputValue(value);
+    },
+    []
+  );
+
+  const handleOnKeyDownUserInput = useCallback(
+    (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+      if (e.key === "Enter") {
+        const lines = userInputValue.split("\n");
+        const currentLine = lines[lines.length - 1];
+        console.log("userInputValue.trim()", userInputValue.trim());
+        if (currentLine.trim() === "" && userInputValue.trim() !== "") {
+          e.preventDefault();
+          handleSendMessage();
+        }
+      }
+    },
+    [handleSendMessage, userInputValue]
+  );
+
+  useEffect(() => {
+    setIsInteractingInChat(isInteracting);
+  }, [isInteracting, setIsInteractingInChat]);
 
   return (
     <Box
@@ -47,6 +136,9 @@ const TextInput = () => {
           backgroundColor: "#F5F5F5",
           overflow: "auto",
         }}
+        value={userInputValue}
+        onChange={handleOnChangeUserInput}
+        onKeyDown={handleOnKeyDownUserInput}
       />
       <IconButton
         sx={{
@@ -63,8 +155,13 @@ const TextInput = () => {
           bottom: "12px",
           right: "10px",
         }}
+        onClick={handleClickSubmitOrAudioFileUpload}
       >
-        <MicRoundedIcon sx={{ color: "black" }} />
+        {userInputValue !== "" ? (
+          <ArrowUpwardIcon sx={{ color: "black" }} />
+        ) : (
+          <MicRoundedIcon sx={{ color: "black" }} />
+        )}
       </IconButton>
     </Box>
   );

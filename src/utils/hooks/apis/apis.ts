@@ -1,10 +1,15 @@
 import { fetcher, fetcherConfig } from "@eGroupAI/hooks/apis/fetchers";
 import axios from "axios";
-import { OrganizationChannel } from "@/interfaces/entities";
+import {
+  OrganizationChannel,
+  OrganizationChannelChatInteractResponse,
+} from "@/interfaces/entities";
 import {
   LogApiPayload,
   GetChannelsApiPayload,
   GetChannelDetailApiPayload,
+  SubmitUserInputsApiPayload,
+  DeleteChannelApiPayload,
 } from "@/interfaces/payloads";
 // import Cookies from "universal-cookie";
 
@@ -40,6 +45,32 @@ const apis = {
   getChannelDetail: (payload?: GetChannelDetailApiPayload) => {
     const { organizationId, organizationChannelId } = payload || {};
     return fetcher.get<OrganizationChannel>(
+      `/v1/organizations/${organizationId}/channels/${organizationChannelId}`
+    );
+  },
+  submitUserInputs: (payload?: SubmitUserInputsApiPayload) => {
+    const { organizationId, organizationChannelId, query, advisorType } = payload || {};
+    if (!organizationChannelId) {
+      return fetcher.post<OrganizationChannelChatInteractResponse>(
+        `/v1/organizations/${organizationId}/channels/chat`,
+        {
+          query,
+          advisorType,
+        }
+      );
+    }
+    return fetcher.post<OrganizationChannelChatInteractResponse>(
+      `/v1/organizations/${organizationId}/channels/chat`,
+      {
+        organizationChannelId,
+        query,
+        advisorType,
+      }
+    );
+  },
+  deleteChannel: (payload?: DeleteChannelApiPayload) => {
+    const { organizationId, organizationChannelId } = payload || {};
+    return fetcher.delete(
       `/v1/organizations/${organizationId}/channels/${organizationChannelId}`
     );
   },
