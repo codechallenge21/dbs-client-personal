@@ -84,11 +84,18 @@ export default function Toolbox() {
   };
 
   const validateFile = async (file: File) => {
-    const allowedFormats = ["audio/mpeg", "audio/wav", "audio/x-m4a"];
+    const allowedFormats = [
+      "audio/mpeg",
+      "audio/mp4",
+      "audio/mpga",
+      "audio/wav",
+      "audio/webm",
+      "audio/x-m4a"
+    ];
     const maxFileSize = 100 * 1024 * 1024; // 100MB
 
     if (!allowedFormats.includes(file.type)) {
-      setError("不支持的檔案格式，請選擇 mp3, wav 或 m4a 格式");
+      setError("不支援的檔案格式，請選擇 mp3, mp4, mpeg, mpga, m4a, wav 或 webm 格式");
       return;
     }
 
