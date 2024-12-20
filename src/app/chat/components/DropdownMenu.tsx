@@ -26,7 +26,7 @@ import ChannelContentContext from "./ChannelContentContext";
 
 const listItems = [
   {
-    title: "預設顧問",
+    title: "預設",
     value: AdvisorType.DEFAULT,
     description: "提供應對策略與資源連結。",
     icon: <AutoFixNormalIcon />,
