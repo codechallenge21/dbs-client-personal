@@ -7,7 +7,7 @@ import { useAudioChannel } from "@/utils/hooks/useAudioChannel";
 import { useSearchParams } from "next/navigation";
 import { useAudioChannels } from "@/utils/hooks/useAudioChannels";
 import ChannelContentContext from "../chat/components/ChannelContentContext";
-import { OrganizationChannel } from "@/interfaces/entities";
+import { OrganizationChannel, OrganizationChannelMessage } from "@/interfaces/entities";
 
 export default function SummaryPage() {
   const searchParams = useSearchParams();
@@ -16,23 +16,42 @@ export default function SummaryPage() {
   console.log("organizationChannelId", organizationChannelId);
   const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(false);
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoadingChannel, setIsLoadingChannel] = useState<boolean>(false);
   const [selectedChannel, setSelectedChannel] = useState<OrganizationChannel>();
+  const [selectedChannelId, setSelectedChannelId] = useState<string>();
+  const [isInteractingInChat, setIsInteractingInChat] = useState<boolean>(false);
+  const [chatResponses, setChatResponses] = useState<OrganizationChannelMessage[]>([]);
 
-  const { data: channels } = useAudioChannels({
+  const { data: channels, mutate } = useAudioChannels({
     organizationId: "4aba77788ae94eca8d6ff330506af944",
   });
 
   const contextValue = useMemo(
     () => ({
-      isLoading,
-      setIsLoading,
+      isLoadingChannel,
+      setIsLoadingChannel,
       selectedChannel,
       setSelectedChannel,
+      isInteractingInChat,
+      selectedChannelId,
+      setSelectedChannelId,
+      setIsInteractingInChat,
+      chatResponses,
+      setChatResponses,
+      channelsMutate: mutate,
     }),
-    [isLoading, selectedChannel]
+    [
+      isLoadingChannel,
+      selectedChannel,
+      selectedChannelId,
+      setSelectedChannelId,
+      isInteractingInChat,
+      setIsInteractingInChat,
+      chatResponses,
+      setChatResponses,
+      mutate,
+    ]
   );
-
   const { data: channel } = useAudioChannel({
     organizationId: "4aba77788ae94eca8d6ff330506af944",
     organizationChannelId,
@@ -57,11 +76,7 @@ export default function SummaryPage() {
           toggleDrawer={toggleDrawer}
           channelList={channels}
         >
-          <Header
-            toggleDrawer={toggleDrawer}
-            open={isOpenDrawer}
-            title="智能語音摘要"
-          />
+          <Header toggleDrawer={toggleDrawer} open={isOpenDrawer} title="智能語音摘要" />
           <SummaryCard />
         </ToolboxDrawer>
       </ChannelContentContext.Provider>
