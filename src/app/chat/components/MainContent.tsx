@@ -40,35 +40,82 @@ export default function MainContent() {
   return (
     <Box
       sx={{
-        height: "80vh",
+        height: "90vh",
         display: "flex",
         flexDirection: "column",
-        justifyContent: isMobile ? "flex-end" : "center",
+        justifyContent: "center",
         alignItems: "center",
         textAlign: "center",
+        paddingTop: isMobile ? "192px" : "0px",
+        paddingLeft: isMobile ? "16px" : "0px",
+        paddingRight: isMobile ? "16px" : "0px",
+        paddingBottom: isMobile ? "16px" : "0px",
       }}
     >
-      {isInteractingInChat ? (
-        <Skeleton
-          variant="text"
-          sx={{
-            fontSize: "32px",
-            width: isMobile ? "80%" : "50%",
-            mb: isMobile ? 50 : 5,
-          }}
-        />
+      {isMobile ? (
+        <>
+          {isInteractingInChat && (
+            <Skeleton
+              variant="text"
+              sx={{
+                fontSize: "32px",
+                width: isMobile ? "50%" : "760px",
+                mb: isMobile ? 50 : 5,
+              }}
+            />
+          )}
+          {!isInteractingInChat && (
+            <>
+              <Typography
+                sx={{
+                  color: "#000",
+                  fontFamily: "DFPHeiBold-B5",
+                  fontSize: "32px",
+                  fontWeight: "400",
+                }}
+              >
+                嘿！
+              </Typography>
+              <Typography
+                sx={{
+                  color: "#000",
+                  fontFamily: "DFPHeiBold-B5",
+                  fontSize: "32px",
+                  fontWeight: "400",
+                  mb: "319px",
+                }}
+              >
+                我能為你做些什麼？
+              </Typography>
+            </>
+          )}
+        </>
       ) : (
-        <Typography
-          sx={{
-            color: "#000",
-            fontFamily: "DFPHeiBold-B5",
-            fontSize: "32px",
-            fontWeight: "400",
-            mb: isMobile ? 50 : 5,
-          }}
-        >
-          嘿！我能為你做些什麼？
-        </Typography>
+        <>
+          {isInteractingInChat && (
+            <Skeleton
+              variant="text"
+              sx={{
+                fontSize: "32px",
+                width: isMobile ? "50%" : "760px",
+                mb: isMobile ? 50 : 5,
+              }}
+            />
+          )}
+          {!isInteractingInChat && (
+            <Typography
+              sx={{
+                color: "#000",
+                fontFamily: "DFPHeiBold-B5",
+                fontSize: "32px",
+                fontWeight: "400",
+                mb: 5,
+              }}
+            >
+              嘿！我能為你做些什麼？
+            </Typography>
+          )}
+        </>
       )}
 
       <TextInput />

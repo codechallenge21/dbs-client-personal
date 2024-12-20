@@ -4,25 +4,37 @@ import React from "react";
 import DropdownMenu from "./DropdownMenu";
 import { Box, IconButton, useMediaQuery, useTheme } from "@mui/material";
 import { EditRounded, MenuRounded } from "@mui/icons-material";
+import AddIcon from "@mui/icons-material/Add";
+import UploadDialog from "@/components/uploadDialog/page";
 
 interface HeaderProps {
   open?: boolean;
   setIsopen?: boolean;
   title: string;
+  isChat?: boolean;
   toggleDrawer?: (open: boolean) => void;
 }
 
-export default function Header({ open, toggleDrawer = () => {}, title }: HeaderProps) {
+export default function Header({
+  open,
+  toggleDrawer = () => {},
+  title,
+  isChat = false,
+}: HeaderProps) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const [openUpload, setOpenUpload] = React.useState(false);
+
+  const handleOpenUpload = () => {
+    setOpenUpload(!openUpload);
+  };
 
   return (
-    <>
+    <Box sx={{ width: "100%", position: "absolute" }}>
       {isMobile && (
         <>
           <Box
             sx={{
-              width: "100%",
               display: "flex",
               padding: "4px 8px",
               alignItems: "center",
@@ -36,7 +48,11 @@ export default function Header({ open, toggleDrawer = () => {}, title }: HeaderP
             <DropdownMenu title={title} />
 
             <IconButton>
-              <EditRounded sx={{ color: "black" }} />
+              {isChat ? (
+                <EditRounded sx={{ color: "black" }} />
+              ) : (
+                <AddIcon sx={{ color: "black" }} />
+              )}{" "}
             </IconButton>
           </Box>
         </>
@@ -44,9 +60,8 @@ export default function Header({ open, toggleDrawer = () => {}, title }: HeaderP
       {!isMobile && (
         <Box
           sx={{
-            width: "54%",
             display: "flex",
-            padding: "16px 16px",
+            padding: "8px 16px",
             alignItems: "flex-start",
             justifyContent: open ? "space-between" : "flex-start",
           }}
@@ -63,14 +78,21 @@ export default function Header({ open, toggleDrawer = () => {}, title }: HeaderP
                 <MenuRounded sx={{ color: "black" }} />
               </IconButton>
 
-              <IconButton>
-                <EditRounded sx={{ color: "black" }} />
-              </IconButton>
+              {isChat ? (
+                <IconButton>
+                  <EditRounded sx={{ color: "black" }} />
+                </IconButton>
+              ) : (
+                <IconButton onClick={() => setOpenUpload(true)}>
+                  <AddIcon sx={{ color: "black" }} />
+                </IconButton>
+              )}
             </Box>
           )}
           <DropdownMenu title={title} />
+          <UploadDialog open={openUpload} onClose={handleOpenUpload} />
         </Box>
       )}
-    </>
+    </Box>
   );
 }

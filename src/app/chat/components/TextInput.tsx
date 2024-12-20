@@ -109,7 +109,8 @@ const TextInput = () => {
         width: isMobile ? "95%" : "calc(100% - 20px)",
         height: isMobile ? "100px" : "124px",
         maxWidth: "760px",
-        position: isMobile ? "absolute" : "relative",
+        minHeight: "108px",
+        position: isMobile ? "fixed" : "relative",
         bottom: isMobile ? 0 : "auto",
         backgroundColor: "#F5F5F5",
         borderRadius: 2,
@@ -117,52 +118,72 @@ const TextInput = () => {
         margin: isMobile ? 3 : 0,
       }}
     >
-      <TextareaAutosize
-        minRows={2}
-        maxRows={10}
-        placeholder="傳訊息給智能顧問"
-        style={{
+      <Box
+        sx={{
           width: "100%",
-          paddingTop: isMobile ? "20px" : "24px",
-          paddingRight: "20px",
-          paddingBottom: isMobile ? "20px" : "24px",
+          paddingTop: "8px",
           paddingLeft: "20px",
-          borderRadius: "8px",
-          border: "none",
-          outline: "none",
-          resize: "none",
-          fontSize: isMobile ? "16px" : "24px",
-          color: "#000",
-          backgroundColor: "#F5F5F5",
-          overflow: "auto",
-        }}
-        value={userInputValue}
-        onChange={handleOnChangeUserInput}
-        onKeyDown={handleOnKeyDownUserInput}
-      />
-      <IconButton
-        sx={{
-          position: "absolute",
-          bottom: "12px",
-          left: "10px",
+          paddingRight: "20px",
+          paddingBottom: "8px",
         }}
       >
-        <AttachFileRoundedIcon sx={{ transform: "rotate(180deg)", color: "black" }} />
-      </IconButton>
-      <IconButton
+        <TextareaAutosize
+          minRows={2}
+          maxRows={10}
+          placeholder="傳訊息給智能顧問"
+          style={{
+            width: "100%",
+            paddingTop: isMobile ? "20px" : "24px",
+            paddingRight: "20px",
+            paddingBottom: isMobile ? "20px" : "24px",
+            paddingLeft: "20px",
+            borderRadius: "8px",
+            border: "none",
+            outline: "none",
+            resize: "none",
+            fontSize: isMobile ? "16px" : "24px",
+            color: "#000",
+            backgroundColor: "#F5F5F5",
+            overflow: "auto",
+          }}
+          value={userInputValue}
+          onChange={handleOnChangeUserInput}
+          onKeyDown={handleOnKeyDownUserInput}
+        />
+      </Box>
+      <Box
         sx={{
-          position: "absolute",
-          bottom: "12px",
-          right: "10px",
+          bottom: 0,
+          width: "100%",
+          padding: "12px",
+          display: "flex",
+          justifyContent: "space-between",
         }}
-        onClick={handleClickSubmitOrAudioFileUpload}
       >
-        {userInputValue !== "" ? (
-          <ArrowUpwardIcon sx={{ color: "black" }} />
-        ) : (
-          <MicRoundedIcon sx={{ color: "black" }} />
-        )}
-      </IconButton>
+        <IconButton
+          sx={{
+            position: "absolute",
+            bottom: "12px",
+            left: "10px",
+          }}
+        >
+          <AttachFileRoundedIcon sx={{ transform: "rotate(180deg)", color: "black" }} />
+        </IconButton>
+        <IconButton
+          sx={{
+            position: "absolute",
+            bottom: "12px",
+            right: "10px",
+          }}
+          onClick={handleClickSubmitOrAudioFileUpload}
+        >
+          {userInputValue !== "" ? (
+            <ArrowUpwardIcon sx={{ color: "black" }} />
+          ) : (
+            <MicRoundedIcon sx={{ color: "black" }} />
+          )}
+        </IconButton>
+      </Box>
     </Box>
   );
 };
