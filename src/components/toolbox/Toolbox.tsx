@@ -116,7 +116,7 @@ export default function Toolbox() {
             fontSize: { xs: "28px", md: "40px" },
           }}
         >
-          歡迎使用 AI語音轉文字
+          歡迎使用 智能語音摘要
         </Typography>
 
         <Box
@@ -130,7 +130,11 @@ export default function Toolbox() {
           <Box>
             <Box
               sx={{
-                bgcolor: "#f5f5f5",
+                backgroundImage: `url('/assets/images/toolbox_Voice_to_Text.png')`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+                bgcolor: "#FFFFFF",
                 borderRadius: "16px",
                 height: { xs: "200px", sm: "250px", md: "350px" },
                 mb: 2,
@@ -145,7 +149,7 @@ export default function Toolbox() {
                 mb: 2,
               }}
             >
-              標題
+              一鍵實現語音轉文字與智能摘要
             </Typography>
             <Typography
               sx={{
