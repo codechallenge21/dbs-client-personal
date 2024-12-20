@@ -10,6 +10,8 @@ import {
   Typography,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { styled } from "@mui/material/styles";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
 
 interface UploadDialogProps {
   open: boolean;
@@ -17,6 +19,18 @@ interface UploadDialogProps {
 }
 
 export default function UploadDialog({ open, onClose }: UploadDialogProps) {
+  const VisuallyHiddenInput = styled("input")({
+    clip: "rect(0 0 0 0)",
+    clipPath: "inset(50%)",
+    height: 1,
+    overflow: "hidden",
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    whiteSpace: "nowrap",
+    width: 1,
+  });
+
   return (
     <Dialog
       open={open}
@@ -56,7 +70,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          borderRadius: '16px',
+          borderRadius: "16px",
           border: "2px dashed #2196f3",
           margin: "32px",
           justifyContent: "center",
@@ -64,7 +78,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
         }}
       >
         <Button
-          variant="contained"
+          component="label"
           sx={{
             bgcolor: "#2196f3",
             color: "white",
@@ -73,8 +87,16 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
               bgcolor: "#1976d2",
             },
           }}
+          role={undefined}
+          variant="contained"
+          tabIndex={-1}
+          startIcon={<FileUploadIcon />}
         >
           選擇檔案
+          <VisuallyHiddenInput
+            type="file"
+            onChange={(event) => console.log(event.target.files)}
+          />
         </Button>
 
         <Box sx={{ textAlign: "center" }}>
