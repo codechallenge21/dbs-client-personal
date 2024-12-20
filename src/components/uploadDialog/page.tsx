@@ -13,12 +13,12 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { styled } from "@mui/material/styles";
-import FileUploadIcon from "@mui/icons-material/FileUpload";
 import { useRouter } from "next/navigation";
 import useAxiosApi from "@eGroupAI/hooks/apis/useAxiosApi";
 import apiExports from "@/utils/hooks/apis/apis";
 import { useState } from "react";
 import LoadingScreen from "../loading/page";
+import AddIcon from "@mui/icons-material/Add";
 
 interface UploadDialogProps {
   open: boolean;
@@ -51,33 +51,47 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
   };
 
   const validateFile = async (file: File) => {
-    const allowedFormats = ["audio/mpeg", "audio/wav", "audio/x-m4a"];
-    const maxFileSize = 100 * 1024 * 1024; // 100MB
+    try {
+      const allowedFormats = [
+        "audio/mpeg",
+        "audio/mp4",
+        "audio/mpga",
+        "audio/wav",
+        "audio/webm",
+        "audio/x-m4a",
+      ];
+      const maxFileSize = 100 * 1024 * 1024; // 100MB
 
-    if (!allowedFormats.includes(file.type)) {
-      setError("不支持的檔案格式，請選擇 mp3, wav 或 m4a 格式");
-      return;
+      if (!allowedFormats.includes(file.type)) {
+        setError(
+          "不支援的檔案格式，請選擇 mp3, mp4, mpeg, mpga, m4a, wav 或 webm 格式"
+        );
+        return;
+      }
+
+      if (file.size > maxFileSize) {
+        setError("檔案大小超過 100MB 限制");
+        return;
+      }
+
+      setFile(file);
+      onClose();
+
+      const res = await createChannelByAudio({
+        file,
+      });
+
+      const { data } = res;
+
+      const searchParams = new URLSearchParams({
+        organizationChannelId: data.organizationChannelId,
+      });
+
+      router.push(`/summary?${searchParams.toString()}`);
+    } catch (error) {
+      setError("上傳失敗");
+      console.error(error);
     }
-
-    if (file.size > maxFileSize) {
-      setError("檔案大小超過 100MB 限制");
-      return;
-    }
-
-    setFile(file);
-    onClose();
-
-    const res = await createChannelByAudio({
-      file,
-    });
-
-    const { data } = res;
-
-    const searchParams = new URLSearchParams({
-      organizationChannelId: data.organizationChannelId,
-    });
-
-    router.push(`/summary?${searchParams.toString()}`);
   };
 
   const handleCloseError = () => {
@@ -87,17 +101,17 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
   if (isCreating) {
     return (
       <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-        width: "100%",
-        bgcolor: 'white',
-        zIndex: 1,
-      }}
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+          width: "100%",
+          bgcolor: "white",
+          zIndex: 1,
+        }}
       >
-      <LoadingScreen />
+        <LoadingScreen />
       </Box>
     );
   }
@@ -162,7 +176,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
             role={undefined}
             variant="contained"
             tabIndex={-1}
-            startIcon={<FileUploadIcon />}
+            startIcon={<AddIcon />}
           >
             選擇檔案
             <VisuallyHiddenInput

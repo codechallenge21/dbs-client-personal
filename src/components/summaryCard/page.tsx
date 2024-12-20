@@ -1,7 +1,6 @@
 import { useContext } from "react";
-import { Card, CardContent, Typography, Box, Button } from "@mui/material";
+import { Card, CardContent, Typography, Box } from "@mui/material";
 import SmsSharpIcon from "@mui/icons-material/SmsSharp";
-import LoopSharpIcon from "@mui/icons-material/LoopSharp";
 import ChannelContentContext from "@/app/chat/components/ChannelContentContext";
 
 export default function SummaryCard() {
@@ -55,12 +54,6 @@ export default function SummaryCard() {
               >
                 摘要
               </Typography>
-              <Button
-                variant="contained"
-                sx={{ bgcolor: "#000", borderRadius: 2 }}
-              >
-                <LoopSharpIcon sx={{ mr: 2 }} /> 重新生成
-              </Button>
             </Box>
             <Typography
               sx={{
