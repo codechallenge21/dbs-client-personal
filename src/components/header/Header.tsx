@@ -28,7 +28,7 @@ const menuItems = [
 ];
 
 const toolItems = [
-  { text: "智能語音摘要", href: "/tools/ai-summary" },
+  { text: "智能語音摘要", href: "/toolbox" },
   { text: "家系圖", href: "/tools/family-tree" },
   { text: "財務盤點表", href: "/tools/financial-statement" },
   { text: "債務試算模擬器", href: "/tools/debt-calculator" },
@@ -38,6 +38,7 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [expandedItem, setExpandedItem] = useState<string | null>(null);
+
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -165,12 +166,22 @@ export default function Header() {
               onClose={handleMenuClose}
             >
               {toolItems.map((tool) => (
-                <MenuItem key={tool.text} onClick={handleMenuClose}>
+                <MenuItem 
+                  key={tool.text} 
+                  onClick={handleMenuClose}
+                  component="a"
+                  href={tool.href}
+                >
                   {tool.text}
                 </MenuItem>
               ))}
             </Menu>
-            <Button sx={{ color: "text.primary" }}>解決麻煩事</Button>
+            <Button 
+              sx={{ color: "text.primary" }}
+              href="/chat"
+            >
+                解決麻煩事
+            </Button>
           </Box>
           <Button
             variant="contained"
