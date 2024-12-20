@@ -2,6 +2,7 @@ import { OrganizationChannel, OrganizationChannelMessage } from "@/interfaces/en
 import { AxiosResponse } from "axios";
 import { createContext, Dispatch, SetStateAction } from "react";
 import { KeyedMutator } from "swr";
+import { AdvisorType } from "./types";
 
 export type ChannelContentContextProps = {
   isLoadingChannel: boolean;
@@ -15,6 +16,8 @@ export type ChannelContentContextProps = {
   chatResponses: OrganizationChannelMessage[];
   setChatResponses: Dispatch<SetStateAction<OrganizationChannelMessage[]>>;
   channelsMutate?: KeyedMutator<AxiosResponse<OrganizationChannel[], unknown>>;
+  advisorType: AdvisorType;
+  setAdvisorType?: Dispatch<SetStateAction<AdvisorType>>;
 };
 
 const ChannelContentContext = createContext<ChannelContentContextProps>({
@@ -26,6 +29,8 @@ const ChannelContentContext = createContext<ChannelContentContextProps>({
   setSelectedChannelId: () => {},
   chatResponses: [],
   setChatResponses: () => {},
+  setAdvisorType: () => {},
+  advisorType: AdvisorType.DEFAULT,
 });
 
 export default ChannelContentContext;
