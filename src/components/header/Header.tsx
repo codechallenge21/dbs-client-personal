@@ -176,6 +176,7 @@ export default function Header() {
                 sx={{
                   color: pathname.startsWith(item.href) ? "primary.main" : "text.primary",
                 }}
+                href={item.text === "解決麻煩事" ? item.href : undefined}
               >
                 {item.text}
               </Button>
