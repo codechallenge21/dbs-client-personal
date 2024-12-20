@@ -116,8 +116,19 @@ const Toolbox: React.FC<ToolboxProps> = ({
     }
   };
 
-  const { setIsLoadingChannel, setSelectedChannel, channelsMutate } =
-    useContext(ChannelContentContext);
+  const {
+    selectedChannel,
+    selectedChannelId,
+    setSelectedChannelId,
+    setIsLoadingChannel,
+    setSelectedChannel,
+    channelsMutate,
+  } = useContext(ChannelContentContext);
+
+  const handleCloseToolsMenu = useCallback(() => {
+    setToolsAnchor(null);
+    setActiveIndex(null);
+  }, []);
 
   const handleDeleteChannelOpenConfirmDialog = useCallback(
     () => setIsDeleteDialogOpen(true),
@@ -131,10 +142,26 @@ const Toolbox: React.FC<ToolboxProps> = ({
     })
       .then(() => {
         setIsDeleteDialogOpen(false);
-        if (channelsMutate) channelsMutate();
+        handleCloseToolsMenu();
+        if (channelsMutate)
+          channelsMutate().then(() => {
+            if (selectedChannelId === selectedChannel?.organizationChannelId)
+              setSelectedChannel(undefined);
+            setSelectedChannelId(undefined);
+          });
       })
       .catch(() => {});
-  }, [activeIndex, channelList, channelsMutate, deleteChannel]);
+  }, [
+    deleteChannel,
+    channelList,
+    activeIndex,
+    handleCloseToolsMenu,
+    channelsMutate,
+    selectedChannelId,
+    selectedChannel?.organizationChannelId,
+    setSelectedChannel,
+    setSelectedChannelId,
+  ]);
 
   const handleEditChannelTitle = useCallback(() => setIsDeleteDialogOpen(false), []);
 
@@ -161,7 +188,8 @@ const Toolbox: React.FC<ToolboxProps> = ({
 
   const handleStartNewChannel = useCallback(() => {
     setSelectedChannel(undefined);
-  }, [setSelectedChannel]);
+    setSelectedChannelId(undefined);
+  }, [setSelectedChannel, setSelectedChannelId]);
 
   useEffect(() => {
     setIsLoadingChannel(isLoadingChannel);
@@ -273,7 +301,14 @@ const Toolbox: React.FC<ToolboxProps> = ({
               width: "93%",
               marginLeft: "8px",
               borderRadius: "10px",
-              backgroundColor: activeIndex === index ? "#9B9B9B33" : "white",
+              backgroundColor:
+                selectedChannelId === channel.organizationChannelId
+                  ? "#9B9B9B33"
+                  : "white",
+              "&:hover": {
+                cursor: "pointer",
+                backgroundColor: "#9B9B9B33",
+              },
             }}
           >
             <ListItem
@@ -302,10 +337,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
             <Menu
               anchorEl={toolsAnchor}
               open={Boolean(toolsAnchor) && activeIndex === index}
-              onClose={() => {
-                setToolsAnchor(null);
-                setActiveIndex(null);
-              }}
+              onClose={handleCloseToolsMenu}
               slotProps={{
                 paper: {
                   sx: {
