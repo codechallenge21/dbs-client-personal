@@ -173,7 +173,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
   }, [setIsLoadingChannel, isLoadingChannel]);
 
   const DrawerList = (
-    <Box sx={{ width: 232 }} role="presentation">
+    <Box sx={{ width: 232, backgroundColor: '#ffffff',}} role="presentation">
       <List>
         <ListItem
           sx={{
@@ -398,6 +398,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
         open={open}
         sx={{
           width: 250,
+          backgroundColor: '#ffffff',
           flexShrink: 0,
           "& .MuiDrawer-paper": {
             width: 250,
