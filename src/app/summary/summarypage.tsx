@@ -78,7 +78,7 @@ export default function SummaryPage() {
       } else {
         setTimeout(() => {
           mutateChannel();
-        }, 2000);
+        }, 5000);
       }
     }
   }, [channel, mutateChannel]);
