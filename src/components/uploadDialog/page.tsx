@@ -50,7 +50,6 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
     console.log("files11", e.target.files);
     if (e.target.files && e.target.files.length > 0) {
       validateFile(e.target.files[0]);
-      onClose();
     }
   };
 
@@ -69,7 +68,8 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
     }
 
     setFile(file);
-
+    onClose();
+    
     const res = await createChannelByAudio({
       file,
     });
