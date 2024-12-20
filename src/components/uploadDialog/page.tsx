@@ -12,7 +12,6 @@ import {
   Snackbar,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { styled } from "@mui/material/styles";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import { useRouter } from "next/navigation";
 import useAxiosApi from "@eGroupAI/hooks/apis/useAxiosApi";
@@ -26,17 +25,6 @@ interface UploadDialogProps {
 }
 
 export default function UploadDialog({ open, onClose }: UploadDialogProps) {
-  const VisuallyHiddenInput = styled("input")({
-    clip: "rect(0 0 0 0)",
-    clipPath: "inset(50%)",
-    height: 1,
-    overflow: "hidden",
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    whiteSpace: "nowrap",
-    width: 1,
-  });
   const router = useRouter();
   const [, setFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -45,8 +33,10 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
   );
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
     if (e.target.files && e.target.files.length > 0) {
       validateFile(e.target.files[0]);
+      e.target.value = ""; 
     }
   };
 
@@ -172,17 +162,17 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
               "&:hover": {
                 bgcolor: "#1976d2",
               },
+              zIndex: 1,
             }}
-            role={undefined}
             variant="contained"
-            tabIndex={-1}
             startIcon={<FileUploadIcon />}
           >
             選擇檔案
-            <VisuallyHiddenInput
+            <input
               type="file"
               onChange={handleFileUpload}
               accept=".mp3, .wav, .m4a"
+              style={{ display: "none" }}
             />
           </Button>
 
