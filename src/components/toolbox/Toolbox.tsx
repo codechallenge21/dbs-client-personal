@@ -9,7 +9,6 @@ import {
   Typography,
 } from "@mui/material";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
-import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import apiExports from "@/utils/hooks/apis/apis";
 import useAxiosApi from "@eGroupAI/hooks/apis/useAxiosApi";
@@ -43,7 +42,7 @@ const ProcessingStatus = {
 };
 
 export default function Toolbox() {
-  const router = useRouter();
+  // const router = useRouter();
   const { excute: createChannelByAudio, isLoading: isCreating } = useAxiosApi(
     apiExports.createChannelByAudio
   );
@@ -84,35 +83,40 @@ export default function Toolbox() {
   };
 
   const validateFile = async (file: File) => {
-    const allowedFormats = [
-      "audio/mpeg",
-      "audio/mp4",
-      "audio/mpga",
-      "audio/wav",
-      "audio/webm",
-      "audio/x-m4a"
-    ];
-    const maxFileSize = 100 * 1024 * 1024; // 100MB
+    try {
+      const allowedFormats = [
+        "audio/mpeg",
+        "audio/mp4",
+        "audio/mpga",
+        "audio/wav",
+        "audio/webm",
+        "audio/x-m4a"
+      ];
+      const maxFileSize = 100 * 1024 * 1024; // 100MB
 
-    if (!allowedFormats.includes(file.type)) {
-      setError("不支援的檔案格式，請選擇 mp3, mp4, mpeg, mpga, m4a, wav 或 webm 格式");
-      return;
+      if (!allowedFormats.includes(file.type)) {
+        setError("不支援的檔案格式，請選擇 mp3, mp4, mpeg, mpga, m4a, wav 或 webm 格式");
+        return;
+      }
+
+      if (file.size > maxFileSize) {
+        setError("檔案大小超過 100MB 限制");
+        return;
+      }
+
+      setFile(file);
+
+      const res = await createChannelByAudio({
+        file,
+      });
+      setStatus(ProcessingStatus.UPLOAD_COMPLETE);
+
+      const { data } = res;
+      startSSEConnection(data.organizationChannelId);
+    } catch (error) {
+      setError('上傳失敗');
+      console.error(error);
     }
-
-    if (file.size > maxFileSize) {
-      setError("檔案大小超過 100MB 限制");
-      return;
-    }
-
-    setFile(file);
-
-    const res = await createChannelByAudio({
-      file,
-    });
-    setStatus(ProcessingStatus.UPLOAD_COMPLETE);
-
-    const { data } = res;
-    startSSEConnection(data.organizationChannelId);
 
 
     // const searchParams = new URLSearchParams({
@@ -126,42 +130,56 @@ export default function Toolbox() {
     setError(null);
   };
 
-    // 建立 SSE 連接
-    const startSSEConnection = useCallback((jobId) => {
-      const eventSource = new EventSource(`/api/v1/organizations/4aba77788ae94eca8d6ff330506af944/channels/status/${jobId}`);
-  
-      eventSource.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        setStatus(data.status);
-  
-        switch (data.status) {
-          case ProcessingStatus.TRANSCRIBE_COMPLETE:
-            setTranscript(data.transcript);
-            break;
-          case ProcessingStatus.SUMMARY_COMPLETE:
-            setSummary(data.summary);
-            break;
-          case ProcessingStatus.COMPLETE:
-            eventSource.close();
-            break;
-          case ProcessingStatus.UPLOAD_ERROR:
-          case ProcessingStatus.TRANSCRIBE_ERROR:
-          case ProcessingStatus.SUMMARY_ERROR:
-            setError(data.error);
-            eventSource.close();
-            break;
-        }
-      };
-  
-      eventSource.onerror = () => {
-        setError('連接中斷');
-        eventSource.close();
-      };
-  
-      return () => {
-        eventSource.close();
-      };
-    }, [setError]);
+  // 建立 SSE 連接
+  const startSSEConnection = useCallback((jobId: string) => {
+    const sseUrl = `${process.env.NEXT_PUBLIC_PROXY_URL}/api/v1/organizations/4aba77788ae94eca8d6ff330506af944/channels/status/${jobId}`;
+
+    // 如果是 https 網址，添加額外的安全設定
+    const options = {
+      withCredentials: true,
+      headers: {
+        'Accept': 'text/event-stream'
+      }
+    };
+
+    const eventSource = new EventSource(sseUrl, options);
+
+    eventSource.onopen = () => {
+      console.log('SSE 連接已開啟');
+    };
+
+    eventSource.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      setStatus(data.status);
+
+      switch (data.status) {
+        case ProcessingStatus.TRANSCRIBE_COMPLETE:
+          setTranscript(data.transcript);
+          break;
+        case ProcessingStatus.SUMMARY_COMPLETE:
+          setSummary(data.summary);
+          break;
+        case ProcessingStatus.COMPLETE:
+          eventSource.close();
+          break;
+        case ProcessingStatus.UPLOAD_ERROR:
+        case ProcessingStatus.TRANSCRIBE_ERROR:
+        case ProcessingStatus.SUMMARY_ERROR:
+          setError(data.error);
+          eventSource.close();
+          break;
+      }
+    };
+
+    eventSource.onerror = () => {
+      setError('連接中斷');
+      eventSource.close();
+    };
+
+    return () => {
+      eventSource.close();
+    };
+  }, [setError]);
 
 
   console.log("sse status", status);
