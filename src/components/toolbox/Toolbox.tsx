@@ -235,7 +235,7 @@ export default function Toolbox() {
                 mb: 2,
               }}
             >
-              一鍵實現語音轉文字與智能摘要
+              一鍵實現語音轉文字與AI智能摘要
             </Typography>
             <Typography
               sx={{
@@ -245,8 +245,7 @@ export default function Toolbox() {
                 lineHeight: "20px",
               }}
             >
-              AI 語音轉文字線上工具可以精準將多種語言的 MP3
-              或錄音檔轉文字，並以純文字檔或字幕檔輸出呈現，非常適合用來製作筆記、字幕或會議記錄等。
+              AI 語音轉文字工具，精準轉換錄音檔，快速輸出文字或字幕，筆記、字幕、會議記錄全搞定！
             </Typography>
           </Box>
 
@@ -320,7 +319,7 @@ export default function Toolbox() {
                 mb: 1,
               }}
             >
-              支援檔案格式：.mp3, .wav, .m4a
+              支援檔案格式：mp3, mp4, mpeg, mpga, m4a, wav, webm
             </Typography>
             <Typography
               sx={{
