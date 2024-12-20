@@ -30,12 +30,11 @@ export default function Header({
   };
 
   return (
-    <>
+    <Box sx={{ width: "100%", position: "absolute" }}>
       {isMobile && (
         <>
           <Box
             sx={{
-              width: "100%",
               display: "flex",
               padding: "4px 8px",
               alignItems: "center",
@@ -61,7 +60,6 @@ export default function Header({
       {!isMobile && (
         <Box
           sx={{
-            width: "54%",
             display: "flex",
             padding: "8px 16px",
             alignItems: "flex-start",
@@ -95,6 +93,6 @@ export default function Header({
           <UploadDialog open={openUpload} onClose={handleOpenUpload} />
         </Box>
       )}
-    </>
+    </Box>
   );
 }

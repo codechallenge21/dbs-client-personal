@@ -71,7 +71,6 @@ const TextInput = () => {
           width: "100%",
           padding: "12px",
           display: "flex",
-          position: "absolute",
           justifyContent: "space-between",
         }}
       >
