@@ -4,9 +4,9 @@ import React from "react";
 import DropdownMenu from "./DropdownMenu";
 import { Box, IconButton, useMediaQuery, useTheme } from "@mui/material";
 import { EditRounded, MenuRounded } from "@mui/icons-material";
-import AddIcon from "@mui/icons-material/Add";
 import UploadDialog from "@/components/uploadDialog/page";
 import { AdvisorType } from "./types";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
 
 interface HeaderProps {
   open?: boolean;
@@ -27,7 +27,7 @@ export default function Header({
   const [openUpload, setOpenUpload] = React.useState(false);
 
   const handleOpenUpload = () => {
-    setOpenUpload(!openUpload);
+    setOpenUpload(false);
   };
 
   return (
@@ -52,7 +52,7 @@ export default function Header({
               {isChat ? (
                 <EditRounded sx={{ color: "black" }} />
               ) : (
-                <AddIcon sx={{ color: "black" }} />
+                <FileUploadIcon sx={{ color: "black" }} />
               )}{" "}
             </IconButton>
           </Box>
@@ -85,7 +85,7 @@ export default function Header({
                 </IconButton>
               ) : (
                 <IconButton onClick={() => setOpenUpload(true)}>
-                  <AddIcon sx={{ color: "black" }} />
+                  <FileUploadIcon sx={{ color: "black" }} />
                 </IconButton>
               )}
             </Box>

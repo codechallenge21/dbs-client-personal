@@ -30,7 +30,6 @@ export default function Home() {
   const handleClose = () => setIsOpen(false);
 
   const handleConfirm = () => {
-    console.log("Switched to 意外事件顧問");
     setIsOpen(false);
   };
 

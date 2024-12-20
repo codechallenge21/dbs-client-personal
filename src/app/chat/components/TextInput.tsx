@@ -71,8 +71,6 @@ const TextInput = () => {
   const handleClickSubmitOrAudioFileUpload = useCallback(() => {
     if (userInputValue !== "") {
       handleSendMessage();
-    } else {
-      console.log("upload audio file");
     }
   }, [handleSendMessage, userInputValue]);
 

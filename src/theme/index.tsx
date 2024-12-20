@@ -20,7 +20,7 @@ export default function ThemeProvider({ children }: Props) {
 
   const baseOption = useMemo(
     () => ({
-      palette: isHomePage ? palette('dark') : palette('light'),
+      palette: isHomePage ? palette('light') : palette('light'),
     }),
     [isHomePage]
   );
