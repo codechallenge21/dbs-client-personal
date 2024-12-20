@@ -50,9 +50,11 @@ const TextInput = () => {
       />
       <IconButton
         sx={{
-          position: "absolute",
-          bottom: "12px",
-          left: "10px",
+          bottom: 0,
+          width: "100%",
+          padding: "12px",
+          display: "flex",
+          justifyContent: "space-between",
         }}
       >
         <AttachFileRoundedIcon sx={{ transform: "rotate(180deg)", color: "black" }} />
