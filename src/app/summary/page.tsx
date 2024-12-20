@@ -1,15 +1,20 @@
 "use client";
 import SummaryCard from "@/components/summaryCard/page";
 import ToolboxDrawer from "@/components/toolbox-drawer/ToolboxDrawer";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, Suspense } from "react";
 import Header from "../chat/components/Header";
 import { useAudioChannel } from "@/utils/hooks/useAudioChannel";
 import { useSearchParams } from "next/navigation";
 import { useAudioChannels } from "@/utils/hooks/useAudioChannels";
 import ChannelContentContext from "../chat/components/ChannelContentContext";
 import { OrganizationChannel, OrganizationChannelMessage } from "@/interfaces/entities";
+import { CircularProgress } from "@mui/material";
 
-export default function SummaryPage() {
+function SummaryPage() {
+  /**
+   * @useSearchParams hook requires Suspense Boundary Component wrapping
+   * Reference: https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout
+   ** */
   const searchParams = useSearchParams();
 
   const organizationChannelId = searchParams.get("organizationChannelId") || "";
@@ -81,5 +86,13 @@ export default function SummaryPage() {
         </ToolboxDrawer>
       </ChannelContentContext.Provider>
     </>
+  );
+}
+
+export default function SummaryPageWrapper() {
+  return (
+    <Suspense fallback={<CircularProgress />}>
+      <SummaryPage />
+    </Suspense>
   );
 }
