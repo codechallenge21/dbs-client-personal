@@ -3,7 +3,6 @@
 import React, { useState, useCallback, useEffect, useContext } from "react";
 import Drawer from "@mui/material/Drawer";
 import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import {
@@ -34,6 +33,7 @@ import { OrganizationChannel } from "@/interfaces/entities";
 import useAxiosApi from "@eGroupAI/hooks/apis/useAxiosApi";
 import apis from "@/utils/hooks/apis/apis";
 import ChannelContentContext from "@/app/chat/components/ChannelContentContext";
+import UploadDialog from "../uploadDialog/page";
 
 interface ToolboxProps {
   open: boolean;
@@ -94,6 +94,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
   const [toolsAnchor, setToolsAnchor] = useState<null | HTMLElement>(null);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
+  const [openUpload, setOpenUpload] = React.useState(false);
 
   const { excute: deleteChannel } = useAxiosApi(apis.deleteChannel);
 
@@ -135,6 +136,10 @@ const Toolbox: React.FC<ToolboxProps> = ({
       .catch(() => {});
   }, [activeIndex, channelList, channelsMutate, deleteChannel]);
 
+  const handleOpenUpload = () => {
+    setOpenUpload(false);
+  };
+
   const handleEditChannelTitle = useCallback(() => setIsDeleteDialogOpen(false), []);
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, index: number) => {
@@ -159,6 +164,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
   );
 
   const handleStartNewChannel = useCallback(() => {
+    setOpenUpload(true);
     setSelectedChannel(undefined);
   }, [setSelectedChannel]);
 
@@ -167,9 +173,9 @@ const Toolbox: React.FC<ToolboxProps> = ({
   }, [setIsLoadingChannel, isLoadingChannel]);
 
   const DrawerList = (
-    <Box sx={{ width: 250 }} role="presentation">
+    <Box sx={{ width: 232 }} role="presentation">
       <List>
-        <ListItemButton
+        <ListItem
           sx={{
             display: "flex",
             padding: "4px 8px",
@@ -249,7 +255,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
               <AddRounded />
             </IconButton>
           </Box>
-        </ListItemButton>
+        </ListItem>
       </List>
       <Typography
         sx={{
@@ -377,6 +383,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
           </Box>
         ))}
       </List>
+      <UploadDialog open={openUpload} onClose={handleOpenUpload} />
     </Box>
   );
 
