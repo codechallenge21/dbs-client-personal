@@ -79,8 +79,8 @@ export default function SummaryCard() {
                 },
               }}
             >
-              {selectedChannel?.organizationChannelTranscriptList?.[0]
-                ?.organizationChannelTranscriptContent ?? ""}
+              {selectedChannel?.organizationChannelMessageList?.[0]
+                ?.organizationChannelMessageContent ?? ""}
             </Typography>
           </Box>
 
