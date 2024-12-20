@@ -10,10 +10,12 @@ import {
 } from "@mui/material";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import apiExports from "@/utils/hooks/apis/apis";
 import useAxiosApi from "@eGroupAI/hooks/apis/useAxiosApi";
 import LoadingScreen from "@/components/loading/page";
+import { useAudioChannels } from "@/utils/hooks/useAudioChannels";
+import SummaryPageWrapper from "@/app/summary/page";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -27,17 +29,37 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
+// 處理狀態的常數
+const ProcessingStatus = {
+  IDLE: "IDLE",
+  UPLOADING: "UPLOADING",
+  UPLOAD_COMPLETE: "UPLOAD_COMPLETE",
+  UPLOAD_ERROR: "UPLOAD_ERROR",
+  TRANSCRIBING: "TRANSCRIBING",
+  TRANSCRIBE_COMPLETE: "TRANSCRIBE_COMPLETE",
+  TRANSCRIBE_ERROR: "TRANSCRIBE_ERROR",
+  SUMMARIZING: "SUMMARIZING",
+  SUMMARY_COMPLETE: "SUMMARY_COMPLETE",
+  SUMMARY_ERROR: "SUMMARY_ERROR",
+  COMPLETE: "COMPLETE",
+};
+
 export default function Toolbox() {
   const router = useRouter();
   const { excute: createChannelByAudio, isLoading: isCreating } = useAxiosApi(
     apiExports.createChannelByAudio
   );
 
-  const [dragActive, setDragActive] = useState(false);
-  const [file, setFile] = useState<File | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const { data: channelsData } = useAudioChannels({
+    organizationId: "4aba77788ae94eca8d6ff330506af944",
+  });
 
-  console.log("file", file);
+  const [dragActive, setDragActive] = useState(false);
+  const [, setFile] = useState<File | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [status, setStatus] = useState(ProcessingStatus.IDLE);
+  const [transcript, setTranscript] = useState("");
+  const [summary, setSummary] = useState("");
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -52,67 +74,130 @@ export default function Toolbox() {
     e.preventDefault();
     setDragActive(false);
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      // setFile(e.dataTransfer.files[0]);
       validateFile(e.dataTransfer.files[0]);
     }
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("files11", e.target.files);
     if (e.target.files && e.target.files.length > 0) {
-      // setFile(e.target.files[0]);
       validateFile(e.target.files[0]);
     }
   };
 
   const validateFile = async (file: File) => {
-    const allowedFormats = [
-      "audio/mpeg",
-      "audio/mp4",
-      "audio/mpga",
-      "audio/wav",
-      "audio/webm",
-      "audio/x-m4a"
-    ];
-    const maxFileSize = 100 * 1024 * 1024; // 100MB
+    try {
+      const allowedFormats = [
+        "audio/mpeg",
+        "audio/mp4",
+        "audio/mpga",
+        "audio/wav",
+        "audio/webm",
+        "audio/x-m4a",
+      ];
+      const maxFileSize = 100 * 1024 * 1024; // 100MB
 
-    if (!allowedFormats.includes(file.type)) {
-      setError("不支援的檔案格式，請選擇 mp3, mp4, mpeg, mpga, m4a, wav 或 webm 格式");
-      return;
+      if (!allowedFormats.includes(file.type)) {
+        setError(
+          "不支援的檔案格式，請選擇 mp3, mp4, mpeg, mpga, m4a, wav 或 webm 格式"
+        );
+        return;
+      }
+
+      if (file.size > maxFileSize) {
+        setError("檔案大小超過 100MB 限制");
+        return;
+      }
+
+      setFile(file);
+
+      const res = await createChannelByAudio({
+        file,
+      });
+      setStatus(ProcessingStatus.UPLOAD_COMPLETE);
+
+      const { data } = res;
+      startSSEConnection(data.organizationChannelId);
+      const searchParams = new URLSearchParams({
+        organizationChannelId: data.organizationChannelId,
+      });
+
+      router.push(`/summary?${searchParams.toString()}`);
+    } catch (error) {
+      setError("上傳失敗");
+      console.error(error);
     }
-
-    if (file.size > maxFileSize) {
-      setError("檔案大小超過 100MB 限制");
-      return;
-    }
-
-    setFile(file);
-
-    const res = await createChannelByAudio({
-      file,
-    });
-    console.log("res", res);
-    console.log("isCreating", isCreating);
-    const { data } = res;
-
-    const searchParams = new URLSearchParams({
-      organizationChannelId: data.organizationChannelId,
-    });
-
-    router.push(`/summary?${searchParams.toString()}`);
   };
-  console.log("isCreating", isCreating);
 
   const handleCloseError = () => {
     setError(null);
   };
 
-  if (isCreating) {
+  // 建立 SSE 連接
+  const startSSEConnection = useCallback(
+    (jobId: string) => {
+      const sseUrl = `${process.env.NEXT_PUBLIC_PROXY_URL}/api/v1/organizations/4aba77788ae94eca8d6ff330506af944/channels/status/${jobId}`;
+
+      // 如果是 https 網址，添加額外的安全設定
+      const options = {
+        withCredentials: true,
+        headers: {
+          Accept: "text/event-stream",
+        },
+      };
+
+      const eventSource = new EventSource(sseUrl, options);
+
+      eventSource.onopen = () => {
+        console.log("SSE 連接已開啟");
+      };
+
+      eventSource.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        setStatus(data.status);
+
+        switch (data.status) {
+          case ProcessingStatus.TRANSCRIBE_COMPLETE:
+            setTranscript(data.transcript);
+            break;
+          case ProcessingStatus.SUMMARY_COMPLETE:
+            setSummary(data.summary);
+            break;
+          case ProcessingStatus.COMPLETE:
+            eventSource.close();
+            break;
+          case ProcessingStatus.UPLOAD_ERROR:
+          case ProcessingStatus.TRANSCRIBE_ERROR:
+          case ProcessingStatus.SUMMARY_ERROR:
+            setError(data.error);
+            eventSource.close();
+            break;
+        }
+      };
+
+      eventSource.onerror = () => {
+        setError("連接中斷");
+        eventSource.close();
+      };
+
+      return () => {
+        eventSource.close();
+      };
+    },
+    [setError]
+  );
+
+  console.log("sse status", status);
+  console.log("sse transcript", transcript);
+  console.log("sse summary", summary);
+
+  if (isCreating || !channelsData) {
     return <LoadingScreen />;
   }
 
-  return (
-    <Box sx={{ minHeight: "100vh", bgcolor: "#4b4b4b" }}>
+  return channelsData ? (
+    <SummaryPageWrapper />
+  ) : (
+    <Box sx={{ minHeight: "100vh", bgcolor: "#fff" }}>
       <Container maxWidth="xl" sx={{ pt: { xs: 8, md: 20 }, color: "white" }}>
         <Typography
           variant="h4"
@@ -156,7 +241,7 @@ export default function Toolbox() {
                 mb: 2,
               }}
             >
-              一鍵實現語音轉文字與智能摘要
+              一鍵實現語音轉文字與AI智能摘要
             </Typography>
             <Typography
               sx={{
@@ -166,8 +251,8 @@ export default function Toolbox() {
                 lineHeight: "20px",
               }}
             >
-              AI 語音轉文字線上工具可以精準將多種語言的 MP3
-              或錄音檔轉文字，並以純文字檔或字幕檔輸出呈現，非常適合用來製作筆記、字幕或會議記錄等。
+              AI
+              語音轉文字工具，精準轉換錄音檔，快速輸出文字或字幕，筆記、字幕、會議記錄全搞定！
             </Typography>
           </Box>
 
@@ -241,7 +326,7 @@ export default function Toolbox() {
                 mb: 1,
               }}
             >
-              支援檔案格式：.mp3, .wav, .m4a
+              支援檔案格式：mp3, mp4, mpeg, mpga, m4a, wav, webm
             </Typography>
             <Typography
               sx={{

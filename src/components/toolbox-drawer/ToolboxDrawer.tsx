@@ -3,11 +3,9 @@
 import React, { useState, useCallback, useEffect, useContext } from "react";
 import Drawer from "@mui/material/Drawer";
 import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import {
-  AddRounded,
   CloseRounded,
   DeleteRounded,
   EditRounded,
@@ -34,6 +32,8 @@ import { OrganizationChannel } from "@/interfaces/entities";
 import useAxiosApi from "@eGroupAI/hooks/apis/useAxiosApi";
 import apis from "@/utils/hooks/apis/apis";
 import ChannelContentContext from "@/app/chat/components/ChannelContentContext";
+import UploadDialog from "../uploadDialog/page";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
 
 interface ToolboxProps {
   open: boolean;
@@ -94,6 +94,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
   const [toolsAnchor, setToolsAnchor] = useState<null | HTMLElement>(null);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
+  const [openUpload, setOpenUpload] = React.useState(false);
 
   const { excute: deleteChannel } = useAxiosApi(apis.deleteChannel);
 
@@ -111,7 +112,6 @@ const Toolbox: React.FC<ToolboxProps> = ({
 
   const handleSearchSubmit = () => {
     if (searchTerm.trim()) {
-      console.log(`Searching for: ${searchTerm}`);
       // Add your search logic here
     }
   };
@@ -163,6 +163,10 @@ const Toolbox: React.FC<ToolboxProps> = ({
     setSelectedChannelId,
   ]);
 
+  const handleOpenUpload = () => {
+    setOpenUpload(false);
+  };
+
   const handleEditChannelTitle = useCallback(() => setIsDeleteDialogOpen(false), []);
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, index: number) => {
@@ -187,6 +191,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
   );
 
   const handleStartNewChannel = useCallback(() => {
+    setOpenUpload(true);
     setSelectedChannel(undefined);
     setSelectedChannelId(undefined);
   }, [setSelectedChannel, setSelectedChannelId]);
@@ -196,9 +201,9 @@ const Toolbox: React.FC<ToolboxProps> = ({
   }, [setIsLoadingChannel, isLoadingChannel]);
 
   const DrawerList = (
-    <Box sx={{ width: 250 }} role="presentation">
+    <Box sx={{ width: 232, backgroundColor: '#ffffff',}} role="presentation">
       <List>
-        <ListItemButton
+        <ListItem
           sx={{
             display: "flex",
             padding: "4px 8px",
@@ -275,10 +280,10 @@ const Toolbox: React.FC<ToolboxProps> = ({
               sx={{ color: "black", padding: 0.5 }}
               onClick={handleStartNewChannel}
             >
-              <AddRounded />
+              <FileUploadIcon />
             </IconButton>
           </Box>
-        </ListItemButton>
+        </ListItem>
       </List>
       <Typography
         sx={{
@@ -410,6 +415,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
           </Box>
         ))}
       </List>
+      <UploadDialog open={openUpload} onClose={handleOpenUpload} />
     </Box>
   );
 
@@ -424,6 +430,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
         open={open}
         sx={{
           width: 250,
+          backgroundColor: '#ffffff',
           flexShrink: 0,
           "& .MuiDrawer-paper": {
             width: 250,
