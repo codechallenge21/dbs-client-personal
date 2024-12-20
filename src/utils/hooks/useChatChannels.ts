@@ -3,7 +3,7 @@ import { fetcher } from "@/utils/hooks/apis/fetchers";
 import { OrganizationChannel } from "@/interfaces/entities";
 
 export type PathParams = {
-  organizationId?: string;
+  organizationId: string;
 };
 
 export const useChatChannels = makeGetHook<OrganizationChannel[], PathParams>(
