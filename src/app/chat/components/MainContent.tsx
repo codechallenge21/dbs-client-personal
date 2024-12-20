@@ -1,4 +1,4 @@
-import { Box, useTheme, useMediaQuery, Skeleton } from "@mui/material";
+import { Box, Typography, useTheme, useMediaQuery, Skeleton } from "@mui/material";
 import TextInput from "./TextInput";
 import { useContext } from "react";
 import ChannelContentContext from "./ChannelContentContext";
@@ -27,9 +27,9 @@ export default function MainContent() {
           <Skeleton
             variant="text"
             sx={{
+              width: "100%",
               fontSize: "32px",
-              maxWidth: isMobile ? "80%" : "760px",
-              mb: isMobile ? 50 : 5,
+              maxWidth: isMobile ? "50%" : "760px",
             }}
           />
         )}
@@ -40,18 +40,79 @@ export default function MainContent() {
   return (
     <Box
       sx={{
-        height: "90vh",
+        height: "80vh",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center",
+        justifyContent: isMobile ? "flex-end" : "center",
         alignItems: "center",
         textAlign: "center",
-        paddingTop: isMobile ? "192px" : "0px",
-        paddingLeft: isMobile ? "16px" : "0px",
-        paddingRight: isMobile ? "16px" : "0px",
-        paddingBottom: isMobile ? "16px" : "0px",
       }}
     >
+      {isMobile ? (
+        <>
+          {isInteractingInChat && (
+            <Skeleton
+              variant="text"
+              sx={{
+                width: "100%",
+                fontSize: "32px",
+                maxWidth: isMobile ? "50%" : "760px",
+              }}
+            />
+          )}
+          {!isInteractingInChat && (
+            <>
+              <Typography
+                sx={{
+                  color: "#000",
+                  fontFamily: "DFPHeiBold-B5",
+                  fontSize: "32px",
+                  fontWeight: "400",
+                }}
+              >
+                嘿！
+              </Typography>
+              <Typography
+                sx={{
+                  color: "#000",
+                  fontFamily: "DFPHeiBold-B5",
+                  fontSize: "32px",
+                  fontWeight: "400",
+                  mb: "319px",
+                }}
+              >
+                我能為你做些什麼？
+              </Typography>
+            </>
+          )}
+        </>
+      ) : (
+        <>
+          {isInteractingInChat && (
+            <Skeleton
+              variant="text"
+              sx={{
+                fontSize: "32px",
+                width: isMobile ? "50%" : "760px",
+                mb: isMobile ? 50 : 5,
+              }}
+            />
+          )}
+          {!isInteractingInChat && (
+            <Typography
+              sx={{
+                color: "#000",
+                fontFamily: "DFPHeiBold-B5",
+                fontSize: "32px",
+                fontWeight: "400",
+                mb: 5,
+              }}
+            >
+              嘿！我能為你做些什麼？
+            </Typography>
+          )}
+        </>
+      )}
       <TextInput />
     </Box>
   );
