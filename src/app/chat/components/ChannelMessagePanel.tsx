@@ -50,7 +50,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                     backgroundColor: "#E8E8E8",
                     borderRadius: 5,
                     alignContent: "right",
-                    alignItems: "right",
+                    alignItems: "flex-end",
                     justifyContent: "flex-end",
                     "& p": { marginBottom: 0 },
                   }),
