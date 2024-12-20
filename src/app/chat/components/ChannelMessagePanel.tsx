@@ -17,7 +17,8 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
       maxWidth={false}
       sx={{
         display: "flex",
-        height: "70vh",
+        marginTop: 10,
+        height: "65vh",
         overflow: "auto",
         alignItems: "center",
         justifyContent: "center",

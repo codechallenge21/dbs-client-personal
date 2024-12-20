@@ -28,6 +28,7 @@ const TextInput = () => {
     setSelectedChannelId,
     setChatResponses,
     channelsMutate,
+    advisorType,
   } = useContext(ChannelContentContext);
 
   const handleSendMessage = useCallback(async () => {
@@ -35,7 +36,7 @@ const TextInput = () => {
     const response = await submitUserInputs({
       organizationId: "4aba77788ae94eca8d6ff330506af944",
       query: userInputValue,
-      advisorType: "DEFAULT",
+      advisorType,
       organizationChannelId: selectedChannel?.organizationChannelId,
     });
     if (response.data.response) {
@@ -64,6 +65,7 @@ const TextInput = () => {
     setSelectedChannelId,
     submitUserInputs,
     userInputValue,
+    advisorType,
   ]);
 
   const handleClickSubmitOrAudioFileUpload = useCallback(() => {
@@ -83,9 +85,10 @@ const TextInput = () => {
   const handleOnKeyDownUserInput = useCallback(
     (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
       if (e.key === "Enter") {
-        const lines = userInputValue.split("\n");
-        const currentLine = lines[lines.length - 1];
-        if (currentLine.trim() === "" && userInputValue.trim() !== "") {
+        // const lines = userInputValue.split("\n");
+        // const currentLine = lines[lines.length - 1];
+        // if (currentLine.trim() === "" && userInputValue.trim() !== "") {
+        if (userInputValue.trim() !== "") {
           e.preventDefault();
           handleSendMessage();
         }

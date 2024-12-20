@@ -12,6 +12,7 @@ import {
   OrganizationChannelMessage,
 } from "@/interfaces/entities";
 import { Box, CircularProgress } from "@mui/material";
+import { AdvisorType } from "../chat/components/types";
 
 export default function SummaryPage() {
   /**
@@ -31,6 +32,7 @@ export default function SummaryPage() {
   const [chatResponses, setChatResponses] = useState<
     OrganizationChannelMessage[]
   >([]);
+  const [advisorType, setAdvisorType] = useState<AdvisorType>(AdvisorType.DEFAULT);
 
   const { data: channels, mutate } = useAudioChannels({
     organizationId: "4aba77788ae94eca8d6ff330506af944",
@@ -49,6 +51,8 @@ export default function SummaryPage() {
       chatResponses,
       setChatResponses,
       channelsMutate: mutate,
+      advisorType,
+      setAdvisorType,
     }),
     [
       isLoadingChannel,
@@ -60,6 +64,8 @@ export default function SummaryPage() {
       chatResponses,
       setChatResponses,
       mutate,
+      advisorType,
+      setAdvisorType,
     ]
   );
   const {
@@ -95,11 +101,7 @@ export default function SummaryPage() {
           toggleDrawer={toggleDrawer}
           channelList={channels}
         >
-          <Header
-            toggleDrawer={toggleDrawer}
-            open={isOpenDrawer}
-            title="智能語音摘要"
-          />
+          <Header toggleDrawer={toggleDrawer} open={isOpenDrawer} advisor={advisorType} />
           {isloadingChannelData ||
           channel?.organizationChannelTranscriptList.length === 0 ? (
             <Box

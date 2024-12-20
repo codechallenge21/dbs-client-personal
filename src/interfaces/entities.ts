@@ -1,3 +1,5 @@
+import { AdvisorType } from "@/app/chat/components/types";
+
 export interface Creator {
   loginId: string;
   memberName: string;
@@ -67,7 +69,7 @@ export interface OrganizationChannelChatInteractResponse {
   contextInfo: {
     hasContext: boolean;
     historyLength: number;
-    advisorType: "DEFAULT";
+    advisorType: AdvisorType;
     modelConfig: {
       maxLength: number;
       temperature: number;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import {
   Typography,
   ListItemIcon,
@@ -20,44 +20,68 @@ import {
   WorkRounded,
 } from "@mui/icons-material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import AutoFixNormalIcon from "@mui/icons-material/AutoFixNormal";
+import { AdvisorType } from "./types";
+import ChannelContentContext from "./ChannelContentContext";
 
 const listItems = [
   {
+    title: "預設顧問",
+    value: AdvisorType.DEFAULT,
+    description: "提供應對策略與資源連結。",
+    icon: <AutoFixNormalIcon />,
+  },
+  {
     title: "債務事件顧問",
+    value: AdvisorType.DEBT,
     description: "提供債務管理與還款建議，幫助改善財務壓力。",
     icon: <MoneyOffRounded />,
   },
   {
     title: "意外事件顧問",
+    value: AdvisorType.CONTINGENCY,
     description: "快速提供應急策略與風險評估。",
     icon: <BusinessCenterRounded />,
   },
   {
     title: "詐騙事件顧問",
+    value: AdvisorType.FRAUD,
     description: "快速辨識詐騙風險，提供建議與後續行動指引。",
     icon: <PhishingRounded />,
   },
   {
     title: "醫療事件顧問",
+    value: AdvisorType.MEDICAL,
     description: "提供您醫療事件應對策略與資源連結。",
     icon: <LocalHospitalRounded />,
   },
   {
     title: "就業協助顧問",
+    value: AdvisorType.EMPLOYMENT,
     description: "支援您求職與職涯規劃。",
     icon: <WorkRounded />,
   },
   {
     title: "財務事件顧問",
+    value: AdvisorType.FINANCIAL,
     description: "提供儲蓄、投資與債務建議。",
     icon: <AccountBalanceWalletRounded />,
   },
 ];
 
-export default function DropdownMenu({ title }: { title: string }) {
+export default function DropdownMenu({ advisor }: { advisor: AdvisorType }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [toolsAnchor, setToolsAnchor] = useState<null | HTMLElement>(null);
+
+  const { setAdvisorType } = useContext(ChannelContentContext);
+
+  const handleOnClickMenuItem = useCallback(
+    (value: AdvisorType) => {
+      if (setAdvisorType) setAdvisorType(value);
+    },
+    [setAdvisorType]
+  );
 
   return (
     <>
@@ -75,7 +99,7 @@ export default function DropdownMenu({ title }: { title: string }) {
         }}
       >
         <Typography sx={{ fontSize: "16px", fontFamily: "DFPHeiBold-B5" }}>
-          {title}
+          {listItems.find((item) => item.value === advisor)?.title}
         </Typography>
       </Button>
       <Menu
@@ -105,12 +129,17 @@ export default function DropdownMenu({ title }: { title: string }) {
               padding: "8px",
               margin: "0px 4px",
               borderRadius: "8px",
+              backgroundColor: advisor === item.value ? "#E0E0E0" : "transparent",
               "&:hover": {
                 backgroundColor: "#F5F5F5",
                 borderRadius: "8px",
                 margin: "0px 4px",
               },
             }}
+            disabled={
+              item.value !== AdvisorType.DEFAULT && item.value !== AdvisorType.DEBT
+            }
+            onClick={() => handleOnClickMenuItem(item.value)}
           >
             <ListItemIcon sx={{ color: "black" }}>{item.icon}</ListItemIcon>
             <ListItemText
