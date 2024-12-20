@@ -16,6 +16,7 @@ import {
   MenuItem,
   Toolbar,
   Typography,
+  Stack,
 } from "@mui/material";
 import { Menu as MenuIcon } from "@mui/icons-material";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
@@ -98,7 +99,7 @@ export default function Header() {
           </ListItemButton>
         </ListItem>
       </List>
-      <Box sx={{ p: 2, borderColor: "divider" }}>
+      <Stack spacing={2} sx={{ p: 2, borderColor: "divider" }}>
         <Button
           fullWidth
           variant="contained"
@@ -110,7 +111,19 @@ export default function Header() {
         >
           登入
         </Button>
-      </Box>
+        <Button
+          fullWidth
+          variant="outlined"
+          href="https://your-feedback-url.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          sx={{
+            borderRadius: "8px",
+          }}
+        >
+          意見回饋
+        </Button>
+      </Stack>
     </Box>
   );
 
@@ -172,18 +185,35 @@ export default function Header() {
             </Menu>
             <Button sx={{ color: "text.primary" }}>解決麻煩事</Button>
           </Box>
-          <Button
-            variant="contained"
-            sx={{
-              bgcolor: "error.main",
-              "&:hover": { bgcolor: "error.dark" },
-              borderRadius: 0,
-              px: 3,
-              display: { xs: "none", md: "block" },
-            }}
+          <Stack
+            direction="row"
+            spacing={2}
+            sx={{ display: { xs: "none", md: "flex" } }}
           >
-            登入
-          </Button>
+            <Button
+              variant="outlined"
+              href="https://your-feedback-url.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{
+                borderRadius: 0,
+                px: 3,
+              }}
+            >
+              意見回饋
+            </Button>
+            <Button
+              variant="contained"
+              sx={{
+                bgcolor: "error.main",
+                "&:hover": { bgcolor: "error.dark" },
+                borderRadius: 0,
+                px: 3,
+              }}
+            >
+              登入
+            </Button>
+          </Stack>
 
           <IconButton
             color="inherit"
