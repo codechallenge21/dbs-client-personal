@@ -1,4 +1,4 @@
-import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
+import { Box, Typography, useTheme, useMediaQuery, Skeleton } from "@mui/material";
 import TextInput from "./TextInput";
 import { useContext } from "react";
 import ChannelContentContext from "./ChannelContentContext";
@@ -8,11 +8,10 @@ export default function MainContent() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const { selectedChannel } = useContext(ChannelContentContext);
+  const { selectedChannelId, selectedChannel, chatResponses, isInteractingInChat } =
+    useContext(ChannelContentContext);
 
-  console.log("selectedChannel", selectedChannel);
-
-  if (selectedChannel)
+  if (selectedChannel || selectedChannelId)
     return (
       <Box
         sx={{
@@ -23,7 +22,17 @@ export default function MainContent() {
           justifyContent: isMobile ? "flex-end" : "center",
         }}
       >
-        <ChannelMessagePanel channel={selectedChannel} />
+        <ChannelMessagePanel channel={selectedChannel} chatResponses={chatResponses} />
+        {isInteractingInChat && (
+          <Skeleton
+            variant="text"
+            sx={{
+              fontSize: "32px",
+              maxWidth: isMobile ? "80%" : "760px",
+              mb: isMobile ? 50 : 5,
+            }}
+          />
+        )}
         <TextInput />
       </Box>
     );
@@ -45,41 +54,70 @@ export default function MainContent() {
     >
       {isMobile ? (
         <>
-          <Typography
-            sx={{
-              color: "#000",
-              fontFamily: "DFPHeiBold-B5",
-              fontSize: "32px",
-              fontWeight: "400",
-            }}
-          >
-            嘿！
-          </Typography>
-          <Typography
-            sx={{
-              color: "#000",
-              fontFamily: "DFPHeiBold-B5",
-              fontSize: "32px",
-              fontWeight: "400",
-              mb: "319px",
-            }}
-          >
-            我能為你做些什麼？
-          </Typography>
+          {isInteractingInChat && (
+            <Skeleton
+              variant="text"
+              sx={{
+                fontSize: "32px",
+                width: isMobile ? "50%" : "760px",
+                mb: isMobile ? 50 : 5,
+              }}
+            />
+          )}
+          {!isInteractingInChat && (
+            <>
+              <Typography
+                sx={{
+                  color: "#000",
+                  fontFamily: "DFPHeiBold-B5",
+                  fontSize: "32px",
+                  fontWeight: "400",
+                }}
+              >
+                嘿！
+              </Typography>
+              <Typography
+                sx={{
+                  color: "#000",
+                  fontFamily: "DFPHeiBold-B5",
+                  fontSize: "32px",
+                  fontWeight: "400",
+                  mb: "319px",
+                }}
+              >
+                我能為你做些什麼？
+              </Typography>
+            </>
+          )}
         </>
       ) : (
-        <Typography
-          sx={{
-            color: "#000",
-            fontFamily: "DFPHeiBold-B5",
-            fontSize: "32px",
-            fontWeight: "400",
-            mb: 5,
-          }}
-        >
-          嘿！我能為你做些什麼？
-        </Typography>
+        <>
+          {isInteractingInChat && (
+            <Skeleton
+              variant="text"
+              sx={{
+                fontSize: "32px",
+                width: isMobile ? "50%" : "760px",
+                mb: isMobile ? 50 : 5,
+              }}
+            />
+          )}
+          {!isInteractingInChat && (
+            <Typography
+              sx={{
+                color: "#000",
+                fontFamily: "DFPHeiBold-B5",
+                fontSize: "32px",
+                fontWeight: "400",
+                mb: 5,
+              }}
+            >
+              嘿！我能為你做些什麼？
+            </Typography>
+          )}
+        </>
       )}
+
       <TextInput />
     </Box>
   );

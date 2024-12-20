@@ -1,6 +1,10 @@
 "use client";
 
-import { useState, useCallback, useEffect, useContext } from "react";
+import React, { useState, useCallback, useEffect, useContext } from "react";
+import Drawer from "@mui/material/Drawer";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import {
   AddRounded,
@@ -11,23 +15,19 @@ import {
   SearchRounded,
 } from "@mui/icons-material";
 import {
-  CircularProgress,
   Box,
   Fade,
   List,
-  Menu,
-  Drawer,
-  useTheme,
-  MenuItem,
-  ListItem,
-  TextField,
-  Typography,
+  CircularProgress,
   IconButton,
-  ListItemText,
   ListItemIcon,
-  useMediaQuery,
+  Menu,
+  MenuItem,
+  Typography,
+  TextField,
   InputAdornment,
-  ListItemButton,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import DeleteDialog from "@/app/chat/components/DeleteDialog";
 import { OrganizationChannel } from "@/interfaces/entities";
@@ -94,12 +94,11 @@ const Toolbox: React.FC<ToolboxProps> = ({
   const [toolsAnchor, setToolsAnchor] = useState<null | HTMLElement>(null);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
-  const { setIsLoading, setSelectedChannel } = useContext(
-    ChannelContentContext
-  );
 
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
+  const { excute: deleteChannel } = useAxiosApi(apis.deleteChannel);
+
+  const [isSearchOpen, setIsSearchOpen] = React.useState(false);
+  const [searchTerm, setSearchTerm] = React.useState("");
 
   const handleSearchToggle = () => {
     setIsSearchOpen((prev) => !prev); // Toggle the search field visibility
@@ -117,17 +116,29 @@ const Toolbox: React.FC<ToolboxProps> = ({
     }
   };
 
-  const handleDeleteDialogOpen = () => setIsDeleteDialogOpen(true);
-  const handleDeleteDialogClose = () => setIsDeleteDialogOpen(false);
+  const { setIsLoadingChannel, setSelectedChannel, channelsMutate } =
+    useContext(ChannelContentContext);
 
-  const handleDeleteDialogConfirm = () => {
-    setIsDeleteDialogOpen(false);
-  };
+  const handleDeleteChannelOpenConfirmDialog = useCallback(
+    () => setIsDeleteDialogOpen(true),
+    []
+  );
+  const handleCloseDeleteDialog = useCallback(() => setIsDeleteDialogOpen(false), []);
+  const handleDeleteChannelConfirm = useCallback(async () => {
+    deleteChannel({
+      organizationId: "4aba77788ae94eca8d6ff330506af944",
+      organizationChannelId: channelList?.[activeIndex!].organizationChannelId || "",
+    })
+      .then(() => {
+        setIsDeleteDialogOpen(false);
+        if (channelsMutate) channelsMutate();
+      })
+      .catch(() => {});
+  }, [activeIndex, channelList, channelsMutate, deleteChannel]);
 
-  const handleMenuOpen = (
-    event: React.MouseEvent<HTMLElement>,
-    index: number
-  ) => {
+  const handleEditChannelTitle = useCallback(() => setIsDeleteDialogOpen(false), []);
+
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, index: number) => {
     setToolsAnchor(null);
     setToolsAnchor(event.currentTarget);
     setActiveIndex(index);
@@ -148,9 +159,13 @@ const Toolbox: React.FC<ToolboxProps> = ({
     [getChannelDetail, setSelectedChannel]
   );
 
+  const handleStartNewChannel = useCallback(() => {
+    setSelectedChannel(undefined);
+  }, [setSelectedChannel]);
+
   useEffect(() => {
-    setIsLoading(isLoadingChannel);
-  }, [setIsLoading, isLoadingChannel]);
+    setIsLoadingChannel(isLoadingChannel);
+  }, [setIsLoadingChannel, isLoadingChannel]);
 
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation">
@@ -162,10 +177,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
             justifyContent: "space-between",
           }}
         >
-          <IconButton
-            onClick={() => toggleDrawer(false)}
-            sx={{ color: "black" }}
-          >
+          <IconButton onClick={() => toggleDrawer(false)} sx={{ color: "black" }}>
             <MenuRounded />
           </IconButton>
           <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
@@ -226,15 +238,15 @@ const Toolbox: React.FC<ToolboxProps> = ({
                 />
               </Fade>
               {!isSearchOpen && (
-                <IconButton
-                  onClick={handleSearchToggle}
-                  sx={{ color: "black" }}
-                >
+                <IconButton onClick={handleSearchToggle} sx={{ color: "black" }}>
                   <SearchRounded />
                 </IconButton>
               )}
             </Box>
-            <IconButton sx={{ color: "black", padding: 0.5 }}>
+            <IconButton
+              sx={{ color: "black", padding: 0.5 }}
+              onClick={handleStartNewChannel}
+            >
               <AddRounded />
             </IconButton>
           </Box>
@@ -255,9 +267,8 @@ const Toolbox: React.FC<ToolboxProps> = ({
       </Typography>
       <List>
         {channelList?.map((channel, index) => (
-          <ListItem
+          <Box
             key={index}
-            disablePadding
             sx={{
               width: "93%",
               marginLeft: "8px",
@@ -265,14 +276,12 @@ const Toolbox: React.FC<ToolboxProps> = ({
               backgroundColor: activeIndex === index ? "#9B9B9B33" : "white",
             }}
           >
-            <ListItemButton
+            <ListItem
               sx={{
                 padding: "4px 8px",
                 whiteSpace: "nowrap",
               }}
-              onClick={() =>
-                handleGetChannelDetail(channel.organizationChannelId)
-              }
+              onClick={() => handleGetChannelDetail(channel.organizationChannelId)}
             >
               <ListItemText
                 primary={channel.organizationChannelTitle}
@@ -289,7 +298,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
               <IconButton onClick={(e) => handleMenuOpen(e, index)}>
                 <MoreHorizIcon />
               </IconButton>
-            </ListItemButton>
+            </ListItem>
             <Menu
               anchorEl={toolsAnchor}
               open={Boolean(toolsAnchor) && activeIndex === index}
@@ -357,8 +366,8 @@ const Toolbox: React.FC<ToolboxProps> = ({
                   }}
                   onClick={
                     index === 1
-                      ? handleDeleteDialogOpen
-                      : handleDeleteDialogOpen
+                      ? handleDeleteChannelOpenConfirmDialog
+                      : handleEditChannelTitle
                   }
                 >
                   <ListItemIcon>{item.icon}</ListItemIcon>
@@ -366,7 +375,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
                 </MenuItem>
               ))}
             </Menu>
-          </ListItem>
+          </Box>
         ))}
       </List>
     </Box>
@@ -376,8 +385,8 @@ const Toolbox: React.FC<ToolboxProps> = ({
     <>
       <DeleteDialog
         open={isDeleteDialogOpen}
-        onClose={handleDeleteDialogClose}
-        onConfirm={handleDeleteDialogConfirm}
+        onClose={handleCloseDeleteDialog}
+        onConfirm={handleDeleteChannelConfirm}
       />
       <Drawer
         open={open}
@@ -400,11 +409,10 @@ const Toolbox: React.FC<ToolboxProps> = ({
       </Drawer>
       <Box
         sx={{
-          marginLeft: open ? "250px" : "0",
+          marginLeft: open && !isMobile ? "250px" : "0",
           transition: "margin-left 0.3s",
-          // height: "calc(100vh - 64px)",
+          height: "calc(100vh - 64px)",
           overflow: "auto",
-          position: "relative",
         }}
       >
         <Box
@@ -416,7 +424,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
             transform: "translate(-50%, -50%)",
           }}
         >
-          <CircularProgress />
+          <CircularProgress color="primary" />
         </Box>
         {children}
       </Box>

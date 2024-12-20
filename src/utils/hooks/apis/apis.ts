@@ -1,11 +1,17 @@
 import { fetcher, fetcherConfig, uploadFetcher } from "./fetchers";
 import axios from "axios";
-import { OrganizationChannel, OrganizationChannelResponse, } from "@/interfaces/entities";
+import {
+  OrganizationChannel,
+  OrganizationChannelResponse,
+  OrganizationChannelChatInteractResponse,
+} from "@/interfaces/entities";
 import {
   LogApiPayload,
   GetChannelsApiPayload,
   GetChannelDetailApiPayload,
   UploadFileApiPayload,
+  SubmitUserInputsApiPayload,
+  DeleteChannelApiPayload,
 } from "@/interfaces/payloads";
 import { AxiosRequestConfig } from "axios";
 // import { fetcher, fetcherConfig, uploadFetcher } from "@eGroupAI/hooks/apis/fetchers";
@@ -51,19 +57,43 @@ const apis = {
     payload?: UploadFileApiPayload,
     config?: AxiosRequestConfig<FormData>
   ) => {
-    const {
-      file,
-    } = payload || {};
+    const { file } = payload || {};
 
     const formData = new FormData();
     if (file) {
       formData.append("file", file);
     }
-    
+
     return uploadFetcher.post<OrganizationChannelResponse>(
       `/organizations/4aba77788ae94eca8d6ff330506af944/channels/upload`,
       formData,
       config
+    );
+  },
+  submitUserInputs: (payload?: SubmitUserInputsApiPayload) => {
+    const { organizationId, organizationChannelId, query, advisorType } = payload || {};
+    if (!organizationChannelId) {
+      return fetcher.post<OrganizationChannelChatInteractResponse>(
+        `/v1/organizations/${organizationId}/channels/chat`,
+        {
+          query,
+          advisorType,
+        }
+      );
+    }
+    return fetcher.post<OrganizationChannelChatInteractResponse>(
+      `/v1/organizations/${organizationId}/channels/chat`,
+      {
+        organizationChannelId,
+        query,
+        advisorType,
+      }
+    );
+  },
+  deleteChannel: (payload?: DeleteChannelApiPayload) => {
+    const { organizationId, organizationChannelId } = payload || {};
+    return fetcher.delete(
+      `/v1/organizations/${organizationId}/channels/${organizationChannelId}`
     );
   },
 };

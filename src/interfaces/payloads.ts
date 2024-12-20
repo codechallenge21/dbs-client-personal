@@ -31,3 +31,15 @@ export interface GetChannelDetailApiPayload {
   organizationId: string;
   organizationChannelId: string;
 }
+
+export interface SubmitUserInputsApiPayload {
+  organizationId: string;
+  organizationChannelId?: string;
+  query: string;
+  advisorType: "DEFAULT";
+}
+
+export interface DeleteChannelApiPayload {
+  organizationId: string;
+  organizationChannelId: string;
+}
