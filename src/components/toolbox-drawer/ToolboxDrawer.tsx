@@ -111,7 +111,6 @@ const Toolbox: React.FC<ToolboxProps> = ({
 
   const handleSearchSubmit = () => {
     if (searchTerm.trim()) {
-      console.log(`Searching for: ${searchTerm}`);
       // Add your search logic here
     }
   };

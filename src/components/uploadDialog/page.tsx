@@ -44,10 +44,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
     apiExports.createChannelByAudio
   );
 
-  console.log("file", file);
-
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("files11", e.target.files);
     if (e.target.files && e.target.files.length > 0) {
       validateFile(e.target.files[0]);
     }
@@ -69,12 +66,11 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
 
     setFile(file);
     onClose();
-    
+
     const res = await createChannelByAudio({
       file,
     });
-    console.log("res", res);
-    console.log("isCreating", isCreating);
+
     const { data } = res;
 
     const searchParams = new URLSearchParams({
@@ -83,7 +79,6 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
 
     router.push(`/summary?${searchParams.toString()}`);
   };
-  console.log("isCreating", isCreating);
 
   const handleCloseError = () => {
     setError(null);

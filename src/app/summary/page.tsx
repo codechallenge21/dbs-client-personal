@@ -18,7 +18,6 @@ function SummaryPage() {
   const searchParams = useSearchParams();
 
   const organizationChannelId = searchParams.get("organizationChannelId") || "";
-  console.log("organizationChannelId", organizationChannelId);
   const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(false);
 
   const [isLoadingChannel, setIsLoadingChannel] = useState<boolean>(false);
@@ -68,7 +67,6 @@ function SummaryPage() {
     }
   }, [channel]);
 
-  console.log("channels", channel);
   const toggleDrawer = (newOpen: boolean) => {
     setIsOpenDrawer(newOpen);
   };

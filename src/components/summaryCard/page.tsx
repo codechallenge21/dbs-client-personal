@@ -7,8 +7,6 @@ import ChannelContentContext from "@/app/chat/components/ChannelContentContext";
 export default function SummaryCard() {
   const { selectedChannel } = useContext(ChannelContentContext);
 
-  console.log("selectedChannel", selectedChannel);
-
   return (
     <Box
       sx={{
