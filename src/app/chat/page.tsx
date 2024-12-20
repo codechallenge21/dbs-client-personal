@@ -20,9 +20,12 @@ export default function Home() {
   const [chatResponses, setChatResponses] = useState<OrganizationChannelMessage[]>([]);
   const [advisorType, setAdvisorType] = useState<AdvisorType>(AdvisorType.DEFAULT);
 
-  const { data: channels, mutate } = useChatChannels({
-    organizationId: "4aba77788ae94eca8d6ff330506af944",
-  });
+  const { data: channels, mutate } = useChatChannels(
+    {
+      organizationId: "4aba77788ae94eca8d6ff330506af944",
+    },
+    { organizationChannelType: "CHAT" }
+  );
 
   const handleClose = () => setIsOpen(false);
 
