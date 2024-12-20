@@ -81,27 +81,11 @@ export default function SummaryPage() {
         }, 2000);
       }
     }
-  }, [channel]);
+  }, [channel, mutateChannel]);
 
   const toggleDrawer = (newOpen: boolean) => {
     setIsOpenDrawer(newOpen);
   };
-
-  if (isloadingChannelData || channel?.organizationChannelTranscriptList.length === 0) {
-    return (
-      <Box
-        sx={{
-          display: isloadingChannelData ? "flex" : "none",
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-        }}
-      >
-        <CircularProgress color="primary"/>
-      </Box>
-    );
-  }
 
   return (
     <>
@@ -116,7 +100,22 @@ export default function SummaryPage() {
             open={isOpenDrawer}
             title="智能語音摘要"
           />
-          <SummaryCard />
+          {isloadingChannelData ||
+          channel?.organizationChannelTranscriptList.length === 0 ? (
+            <Box
+              sx={{
+                display: "flex",
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+              }}
+            >
+              <CircularProgress color="primary" />
+            </Box>
+          ) : (
+            <SummaryCard />
+          )}
         </ToolboxDrawer>
       </ChannelContentContext.Provider>
     </>

@@ -50,13 +50,9 @@ export default function Toolbox() {
     apiExports.createChannelByAudio
   );
 
-  const { data: channelsData, isValidating: isChannelsLoading } =
-    useAudioChannels({
-      organizationId: "4aba77788ae94eca8d6ff330506af944",
-    });
-
-  console.log("channels", channelsData);
-  console.log("isChannelsLoading", isChannelsLoading);
+  const { data: channelsData } = useAudioChannels({
+    organizationId: "4aba77788ae94eca8d6ff330506af944",
+  });
 
   const [dragActive, setDragActive] = useState(false);
   const [, setFile] = useState<File | null>(null);
@@ -198,174 +194,171 @@ export default function Toolbox() {
     return <LoadingScreen />;
   }
 
-  return (
+  return channelsData ? (
+    <SummaryPageWrapper />
+  ) : (
     <Box sx={{ minHeight: "100vh", bgcolor: "#fff" }}>
-      {channelsData ? (
-        <SummaryPageWrapper />
-      ) : (
-        <Container maxWidth="xl" sx={{ pt: { xs: 8, md: 20 }, color: "white" }}>
-          <Typography
-            variant="h4"
-            align="center"
-            sx={{
-              mb: 6,
-              fontWeight: "bold",
-              fontSize: { xs: "28px", md: "40px" },
-            }}
-          >
-            歡迎使用 智能語音摘要
-          </Typography>
+      <Container maxWidth="xl" sx={{ pt: { xs: 8, md: 20 }, color: "white" }}>
+        <Typography
+          variant="h4"
+          align="center"
+          sx={{
+            mb: 6,
+            fontWeight: "bold",
+            fontSize: { xs: "28px", md: "40px" },
+          }}
+        >
+          歡迎使用 智能語音摘要
+        </Typography>
+
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
+            gap: 4,
+            px: { xs: 2, sm: 4, md: 8 },
+          }}
+        >
+          <Box>
+            <Box
+              sx={{
+                backgroundImage: `url('/assets/images/toolbox_Voice_to_Text.png')`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+                bgcolor: "#FFFFFF",
+                borderRadius: "16px",
+                height: { xs: "200px", sm: "250px", md: "350px" },
+                mb: 2,
+              }}
+            />
+            <Typography
+              variant="h6"
+              sx={{
+                color: "#FFF",
+                fontFamily: "DFPHeiBold-B5",
+                fontSize: { xs: "20px", sm: "24px", md: "32px" },
+                mb: 2,
+              }}
+            >
+              一鍵實現語音轉文字與AI智能摘要
+            </Typography>
+            <Typography
+              sx={{
+                color: "#FFF",
+                fontFamily: "DFPHeiMedium-B5",
+                fontSize: { xs: "14px", sm: "16px" },
+                lineHeight: "20px",
+              }}
+            >
+              AI
+              語音轉文字工具，精準轉換錄音檔，快速輸出文字或字幕，筆記、字幕、會議記錄全搞定！
+            </Typography>
+          </Box>
 
           <Box
             sx={{
-              display: "grid",
-              gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
-              gap: 4,
-              px: { xs: 2, sm: 4, md: 8 },
+              border: "2px dashed #0066cc",
+              borderRadius: "8px",
+              p: { xs: 2, sm: 4 },
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              minHeight: { xs: "300px", sm: "350px", md: "400px" },
+              position: "relative",
+              backgroundColor: dragActive ? "#e3f2fd" : "transparent",
             }}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
           >
-            <Box>
-              <Box
-                sx={{
-                  backgroundImage: `url('/assets/images/toolbox_Voice_to_Text.png')`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                  backgroundRepeat: "no-repeat",
-                  bgcolor: "#FFFFFF",
-                  borderRadius: "16px",
-                  height: { xs: "200px", sm: "250px", md: "350px" },
-                  mb: 2,
-                }}
-              />
-              <Typography
-                variant="h6"
-                sx={{
-                  color: "#FFF",
-                  fontFamily: "DFPHeiBold-B5",
-                  fontSize: { xs: "20px", sm: "24px", md: "32px" },
-                  mb: 2,
-                }}
-              >
-                一鍵實現語音轉文字與AI智能摘要
-              </Typography>
-              <Typography
-                sx={{
-                  color: "#FFF",
-                  fontFamily: "DFPHeiMedium-B5",
-                  fontSize: { xs: "14px", sm: "16px" },
-                  lineHeight: "20px",
-                }}
-              >
-                AI
-                語音轉文字工具，精準轉換錄音檔，快速輸出文字或字幕，筆記、字幕、會議記錄全搞定！
-              </Typography>
-            </Box>
-
-            <Box
+            <Typography
               sx={{
-                border: "2px dashed #0066cc",
-                borderRadius: "8px",
-                p: { xs: 2, sm: 4 },
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                minHeight: { xs: "300px", sm: "350px", md: "400px" },
-                position: "relative",
-                backgroundColor: dragActive ? "#e3f2fd" : "transparent",
+                mb: 3,
+                color: "var(--Primary-White, #FFF)",
+                textAlign: "center",
+                fontFamily: "DFPHeiBold-B5",
+                fontSize: "24px",
+                fontStyle: "normal",
+                fontWeight: 400,
+                lineHeight: "normal",
               }}
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={handleDrop}
             >
-              <Typography
-                sx={{
-                  mb: 3,
-                  color: "var(--Primary-White, #FFF)",
-                  textAlign: "center",
-                  fontFamily: "DFPHeiBold-B5",
-                  fontSize: "24px",
-                  fontStyle: "normal",
-                  fontWeight: 400,
-                  lineHeight: "normal",
-                }}
-              >
-                請將音訊檔案拖曳到這裡上傳
-              </Typography>
-              <Button
-                component="label"
-                role={undefined}
-                variant="contained"
-                tabIndex={-1}
-                sx={{
-                  bgcolor: "#0066cc",
-                  "&:hover": { bgcolor: "#0052a3" },
-                  mb: 3,
-                  px: { xs: 2, sm: 4 },
-                  width: "50%",
-                  color: "var(--Primary-White, #FFF)",
-                  fontFamily: "DFPHeiBold-B5",
-                  fontSize: "16px",
-                  fontStyle: "normal",
-                  fontWeight: 400,
-                  lineHeight: "normal",
-                }}
-                startIcon={<FileUploadIcon sx={{ marginRight: 2 }} />}
-              >
-                選擇檔案
-                <VisuallyHiddenInput
-                  type="file"
-                  onChange={handleFileUpload}
-                  accept=".mp3, .wav, .m4a"
-                />
-              </Button>
-              <Typography
-                sx={{
-                  color: "var(--Secondary-Mid-Gray, #9B9B9B)",
-                  textAlign: "center",
-                  fontFamily: "DFPHeiBold-B5",
-                  fontSize: "16px",
-                  fontStyle: "normal",
-                  fontWeight: 400,
-                  lineHeight: "normal",
-                  mb: 1,
-                }}
-              >
-                支援檔案格式：mp3, mp4, mpeg, mpga, m4a, wav, webm
-              </Typography>
-              <Typography
-                sx={{
-                  color: "var(--Secondary-Mid-Gray, #9B9B9B)",
-                  textAlign: "center",
-                  fontFamily: "DFPHeiBold-B5",
-                  fontSize: "16px",
-                  fontStyle: "normal",
-                  fontWeight: 400,
-                  lineHeight: "normal",
-                  mb: 1,
-                }}
-              >
-                限制大小：100MB
-              </Typography>
-            </Box>
-            <Snackbar
-              open={!!error} // Opens if error is set
-              autoHideDuration={6000}
-              onClose={handleCloseError}
-              anchorOrigin={{ vertical: "top", horizontal: "center" }}
+              請將音訊檔案拖曳到這裡上傳
+            </Typography>
+            <Button
+              component="label"
+              role={undefined}
+              variant="contained"
+              tabIndex={-1}
+              sx={{
+                bgcolor: "#0066cc",
+                "&:hover": { bgcolor: "#0052a3" },
+                mb: 3,
+                px: { xs: 2, sm: 4 },
+                width: "50%",
+                color: "var(--Primary-White, #FFF)",
+                fontFamily: "DFPHeiBold-B5",
+                fontSize: "16px",
+                fontStyle: "normal",
+                fontWeight: 400,
+                lineHeight: "normal",
+              }}
+              startIcon={<FileUploadIcon sx={{ marginRight: 2 }} />}
             >
-              <Alert
-                onClose={handleCloseError}
-                severity="error"
-                sx={{ width: "100%" }}
-              >
-                {error}
-              </Alert>
-            </Snackbar>
+              選擇檔案
+              <VisuallyHiddenInput
+                type="file"
+                onChange={handleFileUpload}
+                accept=".mp3, .wav, .m4a"
+              />
+            </Button>
+            <Typography
+              sx={{
+                color: "var(--Secondary-Mid-Gray, #9B9B9B)",
+                textAlign: "center",
+                fontFamily: "DFPHeiBold-B5",
+                fontSize: "16px",
+                fontStyle: "normal",
+                fontWeight: 400,
+                lineHeight: "normal",
+                mb: 1,
+              }}
+            >
+              支援檔案格式：mp3, mp4, mpeg, mpga, m4a, wav, webm
+            </Typography>
+            <Typography
+              sx={{
+                color: "var(--Secondary-Mid-Gray, #9B9B9B)",
+                textAlign: "center",
+                fontFamily: "DFPHeiBold-B5",
+                fontSize: "16px",
+                fontStyle: "normal",
+                fontWeight: 400,
+                lineHeight: "normal",
+                mb: 1,
+              }}
+            >
+              限制大小：100MB
+            </Typography>
           </Box>
-        </Container>
-      )}
-      :
+          <Snackbar
+            open={!!error} // Opens if error is set
+            autoHideDuration={6000}
+            onClose={handleCloseError}
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          >
+            <Alert
+              onClose={handleCloseError}
+              severity="error"
+              sx={{ width: "100%" }}
+            >
+              {error}
+            </Alert>
+          </Snackbar>
+        </Box>
+      </Container>
     </Box>
   );
 }
