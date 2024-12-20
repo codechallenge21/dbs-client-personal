@@ -38,7 +38,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
     width: 1,
   });
   const router = useRouter();
-  const [file, setFile] = useState<File | null>(null);
+  const [, setFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
   const { excute: createChannelByAudio, isLoading: isCreating } = useAxiosApi(
     apiExports.createChannelByAudio

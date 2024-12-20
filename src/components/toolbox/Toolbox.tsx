@@ -49,7 +49,7 @@ export default function Toolbox() {
   );
 
   const [dragActive, setDragActive] = useState(false);
-  const [file, setFile] = useState<File | null>(null);
+  const [, setFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [status, setStatus] = useState(ProcessingStatus.IDLE);
   const [transcript, setTranscript] = useState('');
