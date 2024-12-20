@@ -11,16 +11,24 @@
     "snyk-test-auth": "snyk auth $SNYK_TOKEN && yarn snyk-test"
   },
   "dependencies": {
+    "@eGroupAI/hooks": "^8.33.26",
+    "@eGroupAI/typings": "^8.36.31",
+    "@eGroupAI/utils": "^8.33.21",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@fortawesome/free-solid-svg-icons": "^6.7.1",
     "@fortawesome/react-fontawesome": "^0.2.2",
-    "@mui/icons-material": "^6.2.0",
+    "@mui/icons-material": "^6.2.1",
     "@mui/material": "^6.2.0",
-    "dbs-client": "file:",
+    "@reduxjs/toolkit": "^2.5.0",
+    "axios": "^1.7.9",
+    "mobile-detect": "^1.4.5",
     "next": "15.1.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-markdown": "^9.0.1",
+    "swr": "^2.2.5",
+    "universal-cookie": "^7.2.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
