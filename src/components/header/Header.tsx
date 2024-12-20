@@ -16,6 +16,7 @@ import {
   MenuItem,
   Toolbar,
   Typography,
+  Stack,
 } from "@mui/material";
 import { Menu as MenuIcon } from "@mui/icons-material";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
@@ -34,6 +35,7 @@ const toolItems = [
   { text: "家系圖", href: "/toolbox/family-tree" },
   { text: "財務盤點表", href: "/toolbox/financial-statement" },
   { text: "債務試算模擬器", href: "/toolbox/debt-calculator" },
+  { text: "智能語音摘要", href: "/toolbox" },
 ];
 
 export default function Header() {
@@ -106,7 +108,7 @@ export default function Header() {
           </React.Fragment>
         ))}
       </List>
-      <Box sx={{ p: 2, borderColor: "divider" }}>
+      <Stack spacing={2} sx={{ p: 2, borderColor: "divider" }}>
         <Button
           fullWidth
           variant="contained"
@@ -118,7 +120,19 @@ export default function Header() {
         >
           登入
         </Button>
-      </Box>
+        <Button
+          fullWidth
+          variant="outlined"
+          href="https://forms.gle/Jrq5bDjKzqmp82gQ8"
+          target="_blank"
+          rel="noopener noreferrer"
+          sx={{
+            borderRadius: "8px",
+          }}
+        >
+          意見回饋
+        </Button>
+      </Stack>
     </Box>
   );
 
@@ -168,24 +182,42 @@ export default function Header() {
             ))}
             <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
               {toolItems.map((tool) => (
-                <MenuItem key={tool.text} onClick={handleMenuClose}>
+                <MenuItem
+                  key={tool.text}
+                  onClick={handleMenuClose}
+                  component="a"
+                  href={tool.href}
+                >
                   {tool.text}
                 </MenuItem>
               ))}
             </Menu>
           </Box>
-          <Button
-            variant="contained"
-            sx={{
-              bgcolor: "error.main",
-              "&:hover": { bgcolor: "error.dark" },
-              borderRadius: 0,
-              px: 3,
-              display: { xs: "none", md: "block" },
-            }}
-          >
-            登入
-          </Button>
+          <Stack direction="row" spacing={2} sx={{ display: { xs: "none", md: "flex" } }}>
+            <Button
+              variant="outlined"
+              href="https://forms.gle/Jrq5bDjKzqmp82gQ8"
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{
+                borderRadius: 0,
+                px: 3,
+              }}
+            >
+              意見回饋
+            </Button>
+            <Button
+              variant="contained"
+              sx={{
+                bgcolor: "error.main",
+                "&:hover": { bgcolor: "error.dark" },
+                borderRadius: 0,
+                px: 3,
+              }}
+            >
+              登入
+            </Button>
+          </Stack>
 
           <IconButton
             color="inherit"

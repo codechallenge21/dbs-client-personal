@@ -66,11 +66,18 @@ export default function Toolbox() {
   };
 
   const validateFile = async (file: File) => {
-    const allowedFormats = ["audio/mpeg", "audio/wav", "audio/x-m4a"];
+    const allowedFormats = [
+      "audio/mpeg",
+      "audio/mp4",
+      "audio/mpga",
+      "audio/wav",
+      "audio/webm",
+      "audio/x-m4a"
+    ];
     const maxFileSize = 100 * 1024 * 1024; // 100MB
 
     if (!allowedFormats.includes(file.type)) {
-      setError("不支持的檔案格式，請選擇 mp3, wav 或 m4a 格式");
+      setError("不支援的檔案格式，請選擇 mp3, mp4, mpeg, mpga, m4a, wav 或 webm 格式");
       return;
     }
 
@@ -116,7 +123,7 @@ export default function Toolbox() {
             fontSize: { xs: "28px", md: "40px" },
           }}
         >
-          歡迎使用 AI語音轉文字
+          歡迎使用 智能語音摘要
         </Typography>
 
         <Box
@@ -130,7 +137,11 @@ export default function Toolbox() {
           <Box>
             <Box
               sx={{
-                bgcolor: "#f5f5f5",
+                backgroundImage: `url('/assets/images/toolbox_Voice_to_Text.png')`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+                bgcolor: "#FFFFFF",
                 borderRadius: "16px",
                 height: { xs: "200px", sm: "250px", md: "350px" },
                 mb: 2,
@@ -145,7 +156,7 @@ export default function Toolbox() {
                 mb: 2,
               }}
             >
-              標題
+              一鍵實現語音轉文字與智能摘要
             </Typography>
             <Typography
               sx={{

@@ -1,8 +1,8 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ThemeProvider from "@/theme";
-import NavBarSwitcher from "@/client-components/NavBarSwitcher";
 import { Box } from "@mui/material";
+import { Header } from "@/components/header";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "DBS Client",
-  description: "DBS Client Official WebSite",
+  title: "好理家在｜好好理財家就在",
+  description: "好理家在官方網站",
   keywords: "react,material,kit,application,dashboard,admin,template",
   themeColor: "#000000",
   manifest: "/manifest.json",
@@ -54,7 +54,7 @@ export default function RootLayout({ children }: Props) {
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Box>
-          <NavBarSwitcher />
+          <Header />
         </Box>
         <ThemeProvider>{children}</ThemeProvider>
       </body>
