@@ -7,7 +7,7 @@ export interface ExtendedAxiosRequestConfig extends AxiosRequestConfig {
   __retryCount?: number;
 }
 
-const fetcherConfig: ExtendedAxiosRequestConfig = {
+export const fetcherConfig: ExtendedAxiosRequestConfig = {
   baseURL: "/api/v1",
   timeout: 1000 * 60 * 20,
 };

@@ -10,7 +10,7 @@ import ChannelContentContext from "./components/ChannelContentContext";
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(true);
+  const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(false);
 
   const [isLoadingChannel, setIsLoadingChannel] = useState<boolean>(false);
   const [selectedChannel, setSelectedChannel] = useState<OrganizationChannel>();
@@ -79,7 +79,11 @@ export default function Home() {
           title="債務事件顧問"
         />
         <MainContent />
-        <SwitchDialog open={isOpen} onClose={handleClose} onConfirm={handleConfirm} />
+        <SwitchDialog
+          open={isOpen}
+          onClose={handleClose}
+          onConfirm={handleConfirm}
+        />
       </ToolboxDrawer>
     </ChannelContentContext.Provider>
   );

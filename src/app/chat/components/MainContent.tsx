@@ -1,4 +1,4 @@
-import { Box, Typography, useTheme, useMediaQuery, Skeleton } from "@mui/material";
+import { Box, useTheme, useMediaQuery, Skeleton } from "@mui/material";
 import TextInput from "./TextInput";
 import { useContext } from "react";
 import ChannelContentContext from "./ChannelContentContext";
@@ -52,72 +52,6 @@ export default function MainContent() {
         paddingBottom: isMobile ? "16px" : "0px",
       }}
     >
-      {isMobile ? (
-        <>
-          {isInteractingInChat && (
-            <Skeleton
-              variant="text"
-              sx={{
-                fontSize: "32px",
-                width: isMobile ? "50%" : "760px",
-                mb: isMobile ? 50 : 5,
-              }}
-            />
-          )}
-          {!isInteractingInChat && (
-            <>
-              <Typography
-                sx={{
-                  color: "#000",
-                  fontFamily: "DFPHeiBold-B5",
-                  fontSize: "32px",
-                  fontWeight: "400",
-                }}
-              >
-                嘿！
-              </Typography>
-              <Typography
-                sx={{
-                  color: "#000",
-                  fontFamily: "DFPHeiBold-B5",
-                  fontSize: "32px",
-                  fontWeight: "400",
-                  mb: "319px",
-                }}
-              >
-                我能為你做些什麼？
-              </Typography>
-            </>
-          )}
-        </>
-      ) : (
-        <>
-          {isInteractingInChat && (
-            <Skeleton
-              variant="text"
-              sx={{
-                fontSize: "32px",
-                width: isMobile ? "50%" : "760px",
-                mb: isMobile ? 50 : 5,
-              }}
-            />
-          )}
-          {!isInteractingInChat && (
-            <Typography
-              sx={{
-                color: "#000",
-                fontFamily: "DFPHeiBold-B5",
-                fontSize: "32px",
-                fontWeight: "400",
-                mb: 5,
-              }}
-            >
-              嘿！我能為你做些什麼？
-            </Typography>
-          )}
-        </>
-      )}
-
       <TextInput />
     </Box>
   );

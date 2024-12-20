@@ -1,34 +1,98 @@
 "use client";
-import LoadingScreen from "@/components/loading/page";
 import SummaryCard from "@/components/summaryCard/page";
 import ToolboxDrawer from "@/components/toolbox-drawer/ToolboxDrawer";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useMemo, useState, Suspense } from "react";
 import Header from "../chat/components/Header";
+import { useAudioChannel } from "@/utils/hooks/useAudioChannel";
+import { useSearchParams } from "next/navigation";
+import { useAudioChannels } from "@/utils/hooks/useAudioChannels";
+import ChannelContentContext from "../chat/components/ChannelContentContext";
+import { OrganizationChannel, OrganizationChannelMessage } from "@/interfaces/entities";
+import { CircularProgress } from "@mui/material";
 
-export default function SummaryPage() {
-  const [loading, setLoading] = useState(true);
-  const [open, setOpen] = useState(false);
-  const toggleDrawer = (newOpen: boolean) => {
-    setOpen(newOpen);
-  };
+function SummaryPage() {
+  /**
+   * @useSearchParams hook requires Suspense Boundary Component wrapping
+   * Reference: https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout
+   ** */
+  const searchParams = useSearchParams();
+
+  const organizationChannelId = searchParams.get("organizationChannelId") || "";
+  console.log("organizationChannelId", organizationChannelId);
+  const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(false);
+
+  const [isLoadingChannel, setIsLoadingChannel] = useState<boolean>(false);
+  const [selectedChannel, setSelectedChannel] = useState<OrganizationChannel>();
+  const [selectedChannelId, setSelectedChannelId] = useState<string>();
+  const [isInteractingInChat, setIsInteractingInChat] = useState<boolean>(false);
+  const [chatResponses, setChatResponses] = useState<OrganizationChannelMessage[]>([]);
+
+  const { data: channels, mutate } = useAudioChannels({
+    organizationId: "4aba77788ae94eca8d6ff330506af944",
+  });
+
+  const contextValue = useMemo(
+    () => ({
+      isLoadingChannel,
+      setIsLoadingChannel,
+      selectedChannel,
+      setSelectedChannel,
+      isInteractingInChat,
+      selectedChannelId,
+      setSelectedChannelId,
+      setIsInteractingInChat,
+      chatResponses,
+      setChatResponses,
+      channelsMutate: mutate,
+    }),
+    [
+      isLoadingChannel,
+      selectedChannel,
+      selectedChannelId,
+      setSelectedChannelId,
+      isInteractingInChat,
+      setIsInteractingInChat,
+      chatResponses,
+      setChatResponses,
+      mutate,
+    ]
+  );
+  const { data: channel } = useAudioChannel({
+    organizationId: "4aba77788ae94eca8d6ff330506af944",
+    organizationChannelId,
+  });
+
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2000);
+    if (channel) {
+      setSelectedChannel(channel);
+    }
+  }, [channel]);
 
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (loading) {
-    return <LoadingScreen />;
-  }
+  console.log("channels", channel);
+  const toggleDrawer = (newOpen: boolean) => {
+    setIsOpenDrawer(newOpen);
+  };
 
   return (
     <>
-      <ToolboxDrawer open={open} toggleDrawer={toggleDrawer}>
-        <Header toggleDrawer={toggleDrawer} open={open} title="智能語音摘要"/>
-        <SummaryCard />
-      </ToolboxDrawer>
+      <ChannelContentContext.Provider value={contextValue}>
+        <ToolboxDrawer
+          open={isOpenDrawer}
+          toggleDrawer={toggleDrawer}
+          channelList={channels}
+        >
+          <Header toggleDrawer={toggleDrawer} open={isOpenDrawer} title="智能語音摘要" />
+          <SummaryCard />
+        </ToolboxDrawer>
+      </ChannelContentContext.Provider>
     </>
+  );
+}
+
+export default function SummaryPageWrapper() {
+  return (
+    <Suspense fallback={<CircularProgress />}>
+      <SummaryPage />
+    </Suspense>
   );
 }

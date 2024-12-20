@@ -119,10 +119,10 @@ export default function Header() {
       position="static"
       sx={{ bgcolor: "background.paper", boxShadow: 1 }}
     >
-           <Container
+      <Container
         maxWidth="xl"
         sx={{
-          '&.MuiContainer-root': {
+          "&.MuiContainer-root": {
             paddingLeft: "16px",
             paddingRight: "16px",
           },
