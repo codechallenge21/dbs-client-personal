@@ -46,7 +46,7 @@ export default function Header({
               <MenuRounded sx={{ color: "black" }} />
             </IconButton>
 
-            <DropdownMenu advisor={advisor} />
+            {isChat && <DropdownMenu advisor={advisor} />}
 
             <IconButton>
               {isChat ? (
@@ -90,7 +90,7 @@ export default function Header({
               )}
             </Box>
           )}
-          <DropdownMenu advisor={advisor} />
+          {isChat && <DropdownMenu advisor={advisor} />}
           <UploadDialog open={openUpload} onClose={handleOpenUpload} />
         </Box>
       )}
