@@ -22,6 +22,7 @@ import { Menu as MenuIcon } from "@mui/icons-material";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 const menuItems = [
   { text: "知識庫", href: "#" },
@@ -35,7 +36,6 @@ const toolItems = [
   { text: "家系圖", href: "/toolbox/family-tree" },
   { text: "財務盤點表", href: "/toolbox/financial-statement" },
   { text: "債務試算模擬器", href: "/toolbox/debt-calculator" },
-  { text: "智能語音摘要", href: "/toolbox" },
 ];
 
 export default function Header() {
@@ -81,27 +81,40 @@ export default function Header() {
               <ListItemButton
                 onClick={() => handleExpandItem(item.text)}
                 sx={{
-                  color: pathname.startsWith(item.href) ? "primary.main" : "text.primary",
+                  color: pathname.startsWith(item.href)
+                    ? "primary.main"
+                    : "text.primary",
                 }}
               >
-                <ListItemText primary={item.text} />
-                {index === menuItems.length - 2 ? (
-                  expandedItem === "工具箱" ? (
+                <Link
+                  href={item.href}
+                  passHref
+                  key={item.text}
+                  onClick={handleDrawerToggle}
+                >
+                  <ListItemText primary={item.text} />
+                </Link>
+                {index === menuItems.length - 2 &&
+                  (expandedItem === "工具箱" ? (
                     <ArrowDropDownIcon />
                   ) : (
                     <ArrowRightIcon />
-                  )
-                ) : (
-                  <ArrowRightIcon />
-                )}
+                  ))}
               </ListItemButton>
             </ListItem>
             {item.text === "工具箱" && expandedItem === "工具箱" && (
               <List component="div" disablePadding>
                 {toolItems.map((tool) => (
-                  <ListItemButton key={tool.text} sx={{ pl: 4 }}>
-                    <ListItemText primary={tool.text} />
-                  </ListItemButton>
+                  <Link
+                    href={tool.href}
+                    passHref
+                    key={tool.text}
+                    onClick={handleDrawerToggle}
+                  >
+                    <ListItemButton key={tool.text} sx={{ pl: 4 }}>
+                      <ListItemText primary={tool.text} />
+                    </ListItemButton>
+                  </Link>
                 ))}
               </List>
             )}
@@ -137,7 +150,10 @@ export default function Header() {
   );
 
   return (
-    <AppBar position="static" sx={{ bgcolor: "background.paper", boxShadow: 1 }}>
+    <AppBar
+      position="static"
+      sx={{ bgcolor: "background.paper", boxShadow: 1 }}
+    >
       <Container
         maxWidth="xl"
         sx={{
@@ -174,14 +190,20 @@ export default function Header() {
                 endIcon={item.text !== "解決麻煩事" && <ArrowDropDownIcon />}
                 onClick={(e) => handleMenuOpen(e, item.text !== "解決麻煩事")}
                 sx={{
-                  color: pathname.startsWith(item.href) ? "primary.main" : "text.primary",
+                  color: pathname.startsWith(item.href)
+                    ? "primary.main"
+                    : "text.primary",
                 }}
                 href={item.text === "解決麻煩事" ? item.href : undefined}
               >
                 {item.text}
               </Button>
             ))}
-            <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={handleMenuClose}
+            >
               {toolItems.map((tool) => (
                 <MenuItem
                   key={tool.text}
@@ -194,7 +216,11 @@ export default function Header() {
               ))}
             </Menu>
           </Box>
-          <Stack direction="row" spacing={2} sx={{ display: { xs: "none", md: "flex" } }}>
+          <Stack
+            direction="row"
+            spacing={2}
+            sx={{ display: { xs: "none", md: "flex" } }}
+          >
             <Button
               variant="outlined"
               href="https://forms.gle/Jrq5bDjKzqmp82gQ8"

@@ -11,10 +11,15 @@ import {
   OrganizationChannel,
   OrganizationChannelMessage,
 } from "@/interfaces/entities";
-import { Box, CircularProgress } from "@mui/material";
+import { Box, CircularProgress,  useTheme,
+  useMediaQuery, } from "@mui/material";
 import { AdvisorType } from "../chat/components/types";
 
 export default function SummaryPage() {
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   /**
    * @useSearchParams hook requires Suspense Boundary Component wrapping
    * Reference: https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout
@@ -22,7 +27,7 @@ export default function SummaryPage() {
   const searchParams = useSearchParams();
 
   const organizationChannelId = searchParams.get("organizationChannelId") || "";
-  const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(true);
+  const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(isMobile ? false : true);
 
   const [isLoadingChannel, setIsLoadingChannel] = useState<boolean>(false);
   const [selectedChannel, setSelectedChannel] = useState<OrganizationChannel>();
