@@ -26,33 +26,33 @@ import ChannelContentContext from "./ChannelContentContext";
 
 const listItems = [
   {
-    title: "預設",
+    title: "一般案件顧問",
     value: AdvisorType.DEFAULT,
     description: "提供應對策略與資源連結。",
     icon: <AutoFixNormalIcon />,
   },
   {
-    title: "債務事件顧問",
+    title: "債務案件顧問",
     value: AdvisorType.DEBT,
     description: "提供債務管理與還款建議，幫助改善財務壓力。",
     icon: <MoneyOffRounded />,
   },
   {
-    title: "意外事件顧問",
+    title: "意外案件顧問",
     value: AdvisorType.CONTINGENCY,
     description: "快速提供應急策略與風險評估。",
     icon: <BusinessCenterRounded />,
   },
   {
-    title: "詐騙事件顧問",
+    title: "詐騙案件顧問",
     value: AdvisorType.FRAUD,
     description: "快速辨識詐騙風險，提供建議與後續行動指引。",
     icon: <PhishingRounded />,
   },
   {
-    title: "醫療事件顧問",
+    title: "醫療案件顧問",
     value: AdvisorType.MEDICAL,
-    description: "提供您醫療事件應對策略與資源連結。",
+    description: "提供您醫療案件應對策略與資源連結。",
     icon: <LocalHospitalRounded />,
   },
   {
@@ -62,7 +62,7 @@ const listItems = [
     icon: <WorkRounded />,
   },
   {
-    title: "財務事件顧問",
+    title: "財務案件顧問",
     value: AdvisorType.FINANCIAL,
     description: "提供儲蓄、投資與債務建議。",
     icon: <AccountBalanceWalletRounded />,

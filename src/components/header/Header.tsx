@@ -32,10 +32,11 @@ const menuItems = [
 ];
 
 const toolItems = [
-  { text: "智能語音摘要", href: "/toolbox" },
+  { text: "語音摘要", href: "/toolbox" },
   { text: "家系圖", href: "/toolbox/family-tree" },
   { text: "財務盤點表", href: "/toolbox/financial-statement" },
   { text: "債務試算模擬器", href: "/toolbox/debt-calculator" },
+  { text: "生活紀錄", href: "/toolbox/life-record" },
 ];
 
 export default function Header() {
