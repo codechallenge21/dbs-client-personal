@@ -194,7 +194,7 @@ export default function Toolbox() {
     return <LoadingScreen />;
   }
 
-  return channelsData ? (
+  return channelsData && channelsData.length ? (
     <SummaryPageWrapper />
   ) : (
     <Box sx={{ minHeight: "100vh", bgcolor: "#fff" }}>
