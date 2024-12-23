@@ -50,7 +50,7 @@ export default function Header({
                 <EditRounded sx={{ color: "black" }} />
               </IconButton>
             ) : (
-              <IconButton onClick={() => setOpenUpload(true)}>
+              <IconButton onClick={() => isChat ? null : setOpenUpload(true)}>
                 <FileUploadIcon sx={{ color: "black" }} />
               </IconButton>
             )}{" "}
@@ -83,7 +83,7 @@ export default function Header({
                   <EditRounded sx={{ color: "black" }} />
                 </IconButton>
               ) : (
-                <IconButton onClick={() => setOpenUpload(true)}>
+                <IconButton onClick={() => isChat ? null : setOpenUpload(true)}>
                   <FileUploadIcon sx={{ color: "black" }} />
                 </IconButton>
               )}
@@ -92,7 +92,7 @@ export default function Header({
           {isChat && <DropdownMenu advisor={advisor} />}
         </Box>
       )}
-      <UploadDialog open={openUpload} onClose={handleOpenUpload} />
+      {!isChat && <UploadDialog open={openUpload} onClose={handleOpenUpload} /> }
     </Box>
   );
 }
