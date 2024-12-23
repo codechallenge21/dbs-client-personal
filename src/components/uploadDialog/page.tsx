@@ -10,6 +10,8 @@ import {
   Typography,
   Alert,
   Snackbar,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
@@ -26,6 +28,8 @@ interface UploadDialogProps {
 
 export default function UploadDialog({ open, onClose }: UploadDialogProps) {
   const router = useRouter();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [, setFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
   const { excute: createChannelByAudio, isLoading: isCreating } = useAxiosApi(
@@ -95,10 +99,13 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          position: "fixed",
+          top: 0,
+          left: 0,
           height: "100vh",
-          width: "100%",
-          bgcolor: "white",
-          zIndex: 1,
+          width: "100vw",
+          bgcolor: "#fff",
+          zIndex: 1300,
         }}
       >
         <LoadingScreen />
@@ -113,10 +120,10 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
         onClose={onClose}
         PaperProps={{
           sx: {
-            maxWidth: "400px",
+            maxWidth: "600px",
             bgcolor: "#fff",
             borderRadius: "16px",
-            width: "324px",
+            width: isMobile ? "324px" : "100%",
             justifyContent: "center",
           },
         }}
@@ -127,14 +134,14 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
             fontWeight: 500,
           }}
         >
-          上傳檔案
+          {isMobile ? "上傳檔案" : "AI 語音轉文字"}
           <IconButton
             onClick={onClose}
             sx={{
               position: "absolute",
               right: 8,
               top: 8,
-              color: "grey.500",
+              color: (theme) => theme.palette.grey[500],
             }}
           >
             <CloseIcon />
@@ -153,6 +160,11 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
             height: "352px",
           }}
         >
+          {!isMobile && (
+            <Typography align="center" sx={{
+              mb: 2,
+            }}>請將音訊檔案拖曳到這裡上傳</Typography>
+          )}
           <Button
             component="label"
             sx={{

@@ -31,13 +31,12 @@ export default function Header({
   };
 
   return (
-    <Box sx={{ width: "100%", position: "absolute" }}>
+    <Box>
       {isMobile && (
         <>
           <Box
             sx={{
               display: "flex",
-              padding: "4px 8px",
               alignItems: "center",
               justifyContent: "space-between",
             }}
@@ -45,16 +44,16 @@ export default function Header({
             <IconButton onClick={() => toggleDrawer(true)}>
               <MenuRounded sx={{ color: "black" }} />
             </IconButton>
-
             {isChat && <DropdownMenu advisor={advisor} />}
-
-            <IconButton>
-              {isChat ? (
+            {isChat ? (
+              <IconButton>
                 <EditRounded sx={{ color: "black" }} />
-              ) : (
+              </IconButton>
+            ) : (
+              <IconButton onClick={() => setOpenUpload(true)}>
                 <FileUploadIcon sx={{ color: "black" }} />
-              )}{" "}
-            </IconButton>
+              </IconButton>
+            )}{" "}
           </Box>
         </>
       )}
