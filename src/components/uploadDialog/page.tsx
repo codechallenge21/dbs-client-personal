@@ -36,7 +36,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
     e.preventDefault();
     if (e.target.files && e.target.files.length > 0) {
       validateFile(e.target.files[0]);
-      e.target.value = ""; 
+      e.target.value = "";
     }
   };
 
@@ -186,7 +186,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
                 height: "auto",
               }}
             >
-              支援檔案格式：.mp3, .wav, .m4a
+              支援檔案格式：mp3, mp4, mpeg, mpga, m4a, wav, webm
             </Typography>
             <Typography
               sx={{
@@ -194,7 +194,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
                 fontSize: 14,
               }}
             >
-              檔案大小：100MB
+              限制大小：100MB
             </Typography>
           </Box>
         </DialogContent>
