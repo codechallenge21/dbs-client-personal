@@ -119,6 +119,7 @@ export default function SummaryPage() {
           openUpload={openUpload}
           setOpenUpload={setOpenUpload}
           timeoutRef={timeoutRef}
+          channels={channels}
         >
           <Header
             toggleDrawer={toggleDrawer}
@@ -128,7 +129,7 @@ export default function SummaryPage() {
             setOpenUpload={setOpenUpload}
           />
           {isloadingChannelData ||
-          channel?.organizationChannelTranscriptList.length === 0 ? (
+          selectedChannel?.organizationChannelTranscriptList.length === 0 ? (
             <Box
               sx={{
                 display: "flex",

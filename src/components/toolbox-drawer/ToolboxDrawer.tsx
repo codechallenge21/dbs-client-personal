@@ -44,6 +44,7 @@ interface ToolboxProps {
   openUpload: boolean;
   setOpenUpload: React.Dispatch<React.SetStateAction<boolean>>;
   timeoutRef: React.MutableRefObject<NodeJS.Timeout | null>;
+  channels?: OrganizationChannel[];
 }
 const menuActions = [
   {
@@ -93,6 +94,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
   openUpload,
   setOpenUpload,
   timeoutRef,
+  channels,
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -198,16 +200,22 @@ const Toolbox: React.FC<ToolboxProps> = ({
     async (channelId: string) => {
       setOpenUpload(false);
       if (timeoutRef.current) {
-        console.log("clear timeout");
         clearTimeout(timeoutRef.current);
       }
-      const res = await getChannelDetail({
-        organizationId: "4aba77788ae94eca8d6ff330506af944",
-        organizationChannelId: channelId,
-      });
-      setSelectedChannel(res.data);
+      const channel = channels?.find(
+        (ch) => ch.organizationChannelId === channelId
+      );
+      if (channel) {
+        setSelectedChannel(channel);
+      } else {
+        const res = await getChannelDetail({
+          organizationId: "4aba77788ae94eca8d6ff330506af944",
+          organizationChannelId: channelId,
+        });
+        setSelectedChannel(res.data);
+      }
     },
-    [getChannelDetail, setOpenUpload, setSelectedChannel, timeoutRef]
+    [getChannelDetail, setOpenUpload, setSelectedChannel, timeoutRef, channels]
   );
 
   const handleStartNewChannel = useCallback(() => {
