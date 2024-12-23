@@ -90,9 +90,9 @@ export default function Header({
             </Box>
           )}
           {isChat && <DropdownMenu advisor={advisor} />}
-          <UploadDialog open={openUpload} onClose={handleOpenUpload} />
         </Box>
       )}
+      <UploadDialog open={openUpload} onClose={handleOpenUpload} />
     </Box>
   );
 }
