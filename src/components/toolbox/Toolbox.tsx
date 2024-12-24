@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import { useRouter } from "next/navigation";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import apiExports from "@/utils/hooks/apis/apis";
 import useAxiosApi from "@eGroupAI/hooks/apis/useAxiosApi";
 import LoadingScreen from "@/components/loading/page";
@@ -29,21 +29,6 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
-// 處理狀態的常數
-const ProcessingStatus = {
-  IDLE: "IDLE",
-  UPLOADING: "UPLOADING",
-  UPLOAD_COMPLETE: "UPLOAD_COMPLETE",
-  UPLOAD_ERROR: "UPLOAD_ERROR",
-  TRANSCRIBING: "TRANSCRIBING",
-  TRANSCRIBE_COMPLETE: "TRANSCRIBE_COMPLETE",
-  TRANSCRIBE_ERROR: "TRANSCRIBE_ERROR",
-  SUMMARIZING: "SUMMARIZING",
-  SUMMARY_COMPLETE: "SUMMARY_COMPLETE",
-  SUMMARY_ERROR: "SUMMARY_ERROR",
-  COMPLETE: "COMPLETE",
-};
-
 export default function Toolbox() {
   const router = useRouter();
   const { excute: createChannelByAudio, isLoading: isCreating } = useAxiosApi(
@@ -57,9 +42,6 @@ export default function Toolbox() {
   const [dragActive, setDragActive] = useState(false);
   const [, setFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [status, setStatus] = useState(ProcessingStatus.IDLE);
-  const [transcript, setTranscript] = useState("");
-  const [summary, setSummary] = useState("");
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -113,10 +95,8 @@ export default function Toolbox() {
       const res = await createChannelByAudio({
         file,
       });
-      setStatus(ProcessingStatus.UPLOAD_COMPLETE);
 
       const { data } = res;
-      startSSEConnection(data.organizationChannelId);
       const searchParams = new URLSearchParams({
         organizationChannelId: data.organizationChannelId,
       });
@@ -131,64 +111,6 @@ export default function Toolbox() {
   const handleCloseError = () => {
     setError(null);
   };
-
-  // 建立 SSE 連接
-  const startSSEConnection = useCallback(
-    (jobId: string) => {
-      const sseUrl = `${process.env.NEXT_PUBLIC_PROXY_URL}/api/v1/organizations/4aba77788ae94eca8d6ff330506af944/channels/status/${jobId}`;
-
-      // 如果是 https 網址，添加額外的安全設定
-      const options = {
-        withCredentials: true,
-        headers: {
-          Accept: "text/event-stream",
-        },
-      };
-
-      const eventSource = new EventSource(sseUrl, options);
-
-      eventSource.onopen = () => {
-        console.log("SSE 連接已開啟");
-      };
-
-      eventSource.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        setStatus(data.status);
-
-        switch (data.status) {
-          case ProcessingStatus.TRANSCRIBE_COMPLETE:
-            setTranscript(data.transcript);
-            break;
-          case ProcessingStatus.SUMMARY_COMPLETE:
-            setSummary(data.summary);
-            break;
-          case ProcessingStatus.COMPLETE:
-            eventSource.close();
-            break;
-          case ProcessingStatus.UPLOAD_ERROR:
-          case ProcessingStatus.TRANSCRIBE_ERROR:
-          case ProcessingStatus.SUMMARY_ERROR:
-            setError(data.error);
-            eventSource.close();
-            break;
-        }
-      };
-
-      eventSource.onerror = () => {
-        setError("連接中斷");
-        eventSource.close();
-      };
-
-      return () => {
-        eventSource.close();
-      };
-    },
-    [setError]
-  );
-
-  console.log("sse status", status);
-  console.log("sse transcript", transcript);
-  console.log("sse summary", summary);
 
   if (isCreating || !channelsData) {
     return <LoadingScreen />;
