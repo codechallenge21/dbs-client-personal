@@ -41,9 +41,9 @@ interface ToolboxProps {
   selectedChannel?: OrganizationChannel;
   toggleDrawer: (open: boolean) => void;
   children: React.ReactNode;
-  openUpload: boolean;
-  setOpenUpload: React.Dispatch<React.SetStateAction<boolean>>;
-  timeoutRef: React.RefObject<NodeJS.Timeout | null>;
+  openUpload?: boolean;
+  setOpenUpload?: React.Dispatch<React.SetStateAction<boolean>>;
+  timeoutRef?: React.RefObject<NodeJS.Timeout | null>;
   channels?: OrganizationChannel[];
 }
 
@@ -92,8 +92,8 @@ const Toolbox: React.FC<ToolboxProps> = ({
   channelList,
   toggleDrawer,
   children,
-  openUpload,
-  setOpenUpload,
+  openUpload = false,
+  setOpenUpload = () => {},
   timeoutRef,
   channels,
 }) => {
@@ -200,8 +200,8 @@ const Toolbox: React.FC<ToolboxProps> = ({
   const handleGetChannelDetail = useCallback(
     async (channelId: string) => {
       setOpenUpload(false);
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
+      if (timeoutRef?.current) {
+        clearTimeout(timeoutRef?.current);
       }
       const channel = channels?.find(
         (ch) => ch.organizationChannelId === channelId

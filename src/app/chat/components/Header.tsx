@@ -14,8 +14,8 @@ interface HeaderProps {
   advisor: AdvisorType;
   isChat?: boolean;
   toggleDrawer?: (open: boolean) => void;
-  openUpload: boolean;
-  setOpenUpload: React.Dispatch<React.SetStateAction<boolean>>;
+  openUpload?: boolean;
+  setOpenUpload?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function Header({
@@ -23,14 +23,14 @@ export default function Header({
   toggleDrawer = () => {},
   advisor,
   isChat = false,
-  openUpload,
-  setOpenUpload,
+  openUpload = false,
+  setOpenUpload = () => {},
 }: HeaderProps) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleOpenUpload = () => {
-    setOpenUpload(false);
+    if (setOpenUpload) setOpenUpload(false);
   };
 
   return (
@@ -53,7 +53,7 @@ export default function Header({
                 <EditRounded sx={{ color: "black" }} />
               </IconButton>
             ) : (
-              <IconButton onClick={() => isChat ? null : setOpenUpload(true)}>
+              <IconButton onClick={() => (isChat ? null : setOpenUpload(true))}>
                 <FileUploadIcon sx={{ color: "black" }} />
               </IconButton>
             )}{" "}
@@ -86,7 +86,9 @@ export default function Header({
                   <EditRounded sx={{ color: "black" }} />
                 </IconButton>
               ) : (
-                <IconButton onClick={() => isChat ? null : setOpenUpload(true)}>
+                <IconButton
+                  onClick={() => (isChat ? null : setOpenUpload(true))}
+                >
                   <FileUploadIcon sx={{ color: "black" }} />
                 </IconButton>
               )}
@@ -95,7 +97,7 @@ export default function Header({
           {isChat && <DropdownMenu advisor={advisor} />}
         </Box>
       )}
-      {!isChat && <UploadDialog open={openUpload} onClose={handleOpenUpload} /> }
+      {!isChat && <UploadDialog open={openUpload} onClose={handleOpenUpload} />}
     </Box>
   );
 }
