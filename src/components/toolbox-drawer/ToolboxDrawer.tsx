@@ -43,9 +43,10 @@ interface ToolboxProps {
   children: React.ReactNode;
   openUpload: boolean;
   setOpenUpload: React.Dispatch<React.SetStateAction<boolean>>;
-  timeoutRef: React.MutableRefObject<NodeJS.Timeout | null>;
+  timeoutRef: React.RefObject<NodeJS.Timeout | null>;
   channels?: OrganizationChannel[];
 }
+
 const menuActions = [
   {
     title: (
