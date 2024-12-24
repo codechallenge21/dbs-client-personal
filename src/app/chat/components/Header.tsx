@@ -14,6 +14,8 @@ interface HeaderProps {
   advisor: AdvisorType;
   isChat?: boolean;
   toggleDrawer?: (open: boolean) => void;
+  openUpload: boolean;
+  setOpenUpload: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function Header({
@@ -21,10 +23,11 @@ export default function Header({
   toggleDrawer = () => {},
   advisor,
   isChat = false,
+  openUpload,
+  setOpenUpload,
 }: HeaderProps) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const [openUpload, setOpenUpload] = React.useState(false);
 
   const handleOpenUpload = () => {
     setOpenUpload(false);

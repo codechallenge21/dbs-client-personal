@@ -1,7 +1,7 @@
 "use client";
 import SummaryCard from "@/components/summaryCard/page";
 import ToolboxDrawer from "@/components/toolbox-drawer/ToolboxDrawer";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import Header from "../chat/components/Header";
 import { useAudioChannel } from "@/utils/hooks/useAudioChannel";
 import { useSearchParams } from "next/navigation";
@@ -11,12 +11,10 @@ import {
   OrganizationChannel,
   OrganizationChannelMessage,
 } from "@/interfaces/entities";
-import { Box, CircularProgress,  useTheme,
-  useMediaQuery, } from "@mui/material";
+import { Box, CircularProgress, useTheme, useMediaQuery } from "@mui/material";
 import { AdvisorType } from "../chat/components/types";
 
 export default function SummaryPage() {
-
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -27,7 +25,9 @@ export default function SummaryPage() {
   const searchParams = useSearchParams();
 
   const organizationChannelId = searchParams.get("organizationChannelId") || "";
-  const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(isMobile ? false : true);
+  const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(
+    isMobile ? false : true
+  );
 
   const [isLoadingChannel, setIsLoadingChannel] = useState<boolean>(false);
   const [selectedChannel, setSelectedChannel] = useState<OrganizationChannel>();
@@ -37,7 +37,12 @@ export default function SummaryPage() {
   const [chatResponses, setChatResponses] = useState<
     OrganizationChannelMessage[]
   >([]);
-  const [advisorType, setAdvisorType] = useState<AdvisorType>(AdvisorType.DEFAULT);
+  const [advisorType, setAdvisorType] = useState<AdvisorType>(
+    AdvisorType.DEFAULT
+  );
+
+  const [openUpload, setOpenUpload] = React.useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const { data: channels, mutate } = useAudioChannels({
     organizationId: "4aba77788ae94eca8d6ff330506af944",
@@ -87,11 +92,17 @@ export default function SummaryPage() {
       if (channel?.organizationChannelTranscriptList.length > 0) {
         setSelectedChannel(channel);
       } else {
-        setTimeout(() => {
+        timeoutRef.current = setTimeout(() => {
           mutateChannel();
         }, 5000);
       }
     }
+
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
   }, [channel, mutateChannel]);
 
   const toggleDrawer = (newOpen: boolean) => {
@@ -105,10 +116,20 @@ export default function SummaryPage() {
           open={isOpenDrawer}
           toggleDrawer={toggleDrawer}
           channelList={channels}
+          openUpload={openUpload}
+          setOpenUpload={setOpenUpload}
+          timeoutRef={timeoutRef}
+          channels={channels}
         >
-          <Header toggleDrawer={toggleDrawer} open={isOpenDrawer} advisor={advisorType} />
+          <Header
+            toggleDrawer={toggleDrawer}
+            open={isOpenDrawer}
+            advisor={advisorType}
+            openUpload={openUpload}
+            setOpenUpload={setOpenUpload}
+          />
           {isloadingChannelData ||
-          channel?.organizationChannelTranscriptList.length === 0 ? (
+          selectedChannel?.organizationChannelTranscriptList.length === 0 ? (
             <Box
               sx={{
                 display: "flex",
