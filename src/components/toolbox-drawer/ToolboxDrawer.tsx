@@ -462,6 +462,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
         open={isDeleteDialogOpen}
         onClose={handleCloseDeleteDialog}
         onConfirm={handleDeleteChannelConfirm}
+        deletableName={channelList?.[activeIndex!]?.organizationChannelTitle || ""}
       />
       <Drawer
         open={open}
