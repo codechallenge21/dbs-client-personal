@@ -312,12 +312,12 @@ const Toolbox: React.FC<ToolboxProps> = ({
                 key={channel.organizationChannelId}
                 channel={channel}
                 onSave={async (id, newTitle) => {
-                  channel.organizationChannelTitle = newTitle;
                   await updateChannelDetail({
                     organizationId: "4aba77788ae94eca8d6ff330506af944",
                     organizationChannelId: id,
                     organizationChannelTitle: newTitle,
                   });
+                  if (channelsMutate) channelsMutate();
                 }}
                 index={index}
                 toolsAnchor={toolsAnchor}
