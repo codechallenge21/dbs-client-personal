@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  ListItem,
   ListItemText,
   IconButton,
   TextField,
@@ -82,14 +81,11 @@ const EditableItem: React.FC<{
   const [isEditing, setIsEditing] = useState(false);
 
   const handleToggleEdit = () => {
-    console.log("11");
     setIsEditing(true);
     setToolsAnchor(null); // Close menu
   };
 
   const handleSave = () => {
-    console.log("333");
-
     if (
       editedTitle.trim() &&
       editedTitle !== channel.organizationChannelTitle
@@ -100,30 +96,20 @@ const EditableItem: React.FC<{
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    console.log("222", e.key);
     if (e.key === "Enter") {
       handleSave();
     } else if (e.key === "Escape") {
       setEditedTitle(channel.organizationChannelTitle); // Reset on cancel
       setIsEditing(false);
     }
-    console.log("444");
   };
 
-  console.log("isEditing", isEditing, channel.organizationChannelTitle);
-
   return (
-    <ListItem
-      sx={{
-        padding: "4px 8px",
-        whiteSpace: "nowrap",
-      }}
-    >
+    <>
       {isEditing ? (
         <TextField
           value={editedTitle}
           onChange={(e) => {
-            console.log("e.target", e.target.value);
             setEditedTitle(e.target.value);
           }}
           onBlur={handleSave}
@@ -230,7 +216,7 @@ const EditableItem: React.FC<{
           </MenuItem>
         ))}
       </Menu>
-    </ListItem>
+    </>
   );
 };
 

@@ -3,11 +3,7 @@
 import React, { useState, useCallback, useEffect, useContext } from "react";
 import Drawer from "@mui/material/Drawer";
 import ListItem from "@mui/material/ListItem";
-import {
-  CloseRounded,
-  MenuRounded,
-  SearchRounded,
-} from "@mui/icons-material";
+import { CloseRounded, MenuRounded, SearchRounded } from "@mui/icons-material";
 import {
   Box,
   Fade,
@@ -146,6 +142,8 @@ const Toolbox: React.FC<ToolboxProps> = ({
   const { excute: getChannelDetail, isLoading: isLoadingChannel } = useAxiosApi(
     apis.getChannelDetail
   );
+
+  const { excute: updateChannelDetail } = useAxiosApi(apis.updateChannelDetail);
 
   const handleGetChannelDetail = useCallback(
     async (channelId: string) => {
@@ -313,9 +311,13 @@ const Toolbox: React.FC<ToolboxProps> = ({
               <EditableItem
                 key={channel.organizationChannelId}
                 channel={channel}
-                onSave={(id, newTitle) => {
-                  // Save logic here
-                  console.log(`Saved ${id}: ${newTitle}`);
+                onSave={async (id, newTitle) => {
+                  channel.organizationChannelTitle = newTitle;
+                  await updateChannelDetail({
+                    organizationId: "4aba77788ae94eca8d6ff330506af944",
+                    organizationChannelId: id,
+                    organizationChannelTitle: newTitle,
+                  });
                 }}
                 index={index}
                 toolsAnchor={toolsAnchor}
@@ -341,7 +343,9 @@ const Toolbox: React.FC<ToolboxProps> = ({
         open={isDeleteDialogOpen}
         onClose={handleCloseDeleteDialog}
         onConfirm={handleDeleteChannelConfirm}
-        deletableName={channelList?.[activeIndex!]?.organizationChannelTitle || ""}
+        deletableName={
+          channelList?.[activeIndex!]?.organizationChannelTitle || ""
+        }
       />
       <Drawer
         open={open}

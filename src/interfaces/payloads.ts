@@ -44,3 +44,9 @@ export interface DeleteChannelApiPayload {
   organizationId: string;
   organizationChannelId: string;
 }
+
+export interface UpdateChannelApiPayload {
+  organizationId: string;
+  organizationChannelId: string;
+  organizationChannelTitle: string;
+}

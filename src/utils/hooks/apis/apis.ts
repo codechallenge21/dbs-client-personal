@@ -12,6 +12,7 @@ import {
   UploadFileApiPayload,
   SubmitUserInputsApiPayload,
   DeleteChannelApiPayload,
+  UpdateChannelApiPayload,
 } from "@/interfaces/payloads";
 import { AxiosRequestConfig } from "axios";
 // import { fetcher, fetcherConfig, uploadFetcher } from "@eGroupAI/hooks/apis/fetchers";
@@ -87,6 +88,15 @@ const apis = {
         organizationChannelId,
         query,
         advisorType,
+      }
+    );
+  },
+  updateChannelDetail: (payload?: UpdateChannelApiPayload) => {
+    const { organizationId, organizationChannelId, organizationChannelTitle } = payload || {};
+    return fetcher.patch<OrganizationChannel>(
+      `/organizations/${organizationId}/channels/${organizationChannelId}`,
+      {
+        organizationChannelTitle,
       }
     );
   },
