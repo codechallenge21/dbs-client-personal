@@ -80,7 +80,8 @@ const EditableItem: React.FC<{
   );
   const [isEditing, setIsEditing] = useState(false);
 
-  const handleToggleEdit = () => {
+  const handleToggleEdit = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
     setIsEditing(true);
     setToolsAnchor(null); // Close menu
   };
@@ -147,6 +148,14 @@ const EditableItem: React.FC<{
         anchorEl={toolsAnchor}
         open={Boolean(toolsAnchor) && activeIndex === index}
         onClose={handleCloseToolsMenu}
+        anchorOrigin={{
+          vertical: "bottom", // Position relative to the menu button
+          horizontal: "right", // Align to the right edge of the button
+        }}
+        transformOrigin={{
+          vertical: "top", // Position relative to the menu
+          horizontal: "right", // Align to the right edge of the menu
+        }}
         slotProps={{
           paper: {
             sx: {
@@ -158,36 +167,6 @@ const EditableItem: React.FC<{
                 padding: "0px",
               },
             },
-          },
-        }}
-        sx={{
-          top: -10,
-          left: {
-            sm: "-160px",
-          },
-          "@media (max-width: 300px)": {
-            left: "-70px",
-          },
-          "@media (min-width: 300px) and (max-width: 324px)": {
-            left: "-70px",
-          },
-          "@media (min-width: 325px) and (max-width: 337px)": {
-            left: "-90px",
-          },
-          "@media (min-width: 338px) and (max-width: 349px)": {
-            left: "-100px",
-          },
-          "@media (min-width: 350px) and (max-width: 359px)": {
-            left: "-110px",
-          },
-          "@media (min-width: 360px) and (max-width: 374px)": {
-            left: "-120px",
-          },
-          "@media (min-width: 375px) and (max-width: 399px)": {
-            left: "-140px",
-          },
-          "@media (min-width: 400px) and (max-width: 600px)": {
-            left: "-155px",
           },
         }}
       >
