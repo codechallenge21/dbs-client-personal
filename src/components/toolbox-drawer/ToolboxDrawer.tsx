@@ -34,17 +34,17 @@ import apis from "@/utils/hooks/apis/apis";
 import ChannelContentContext from "@/app/chat/components/ChannelContentContext";
 import UploadDialog from "../uploadDialog/page";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { useLoadChatChannels } from "@/utils/hooks/useLoadChatChannels";
 
 interface ToolboxProps {
   open: boolean;
-  channelList?: OrganizationChannel[];
   selectedChannel?: OrganizationChannel;
   toggleDrawer: (open: boolean) => void;
   children: React.ReactNode;
   openUpload?: boolean;
   setOpenUpload?: React.Dispatch<React.SetStateAction<boolean>>;
   timeoutRef?: React.RefObject<NodeJS.Timeout | null>;
-  channels?: OrganizationChannel[];
 }
 
 const menuActions = [
@@ -89,17 +89,15 @@ const menuActions = [
 ];
 const Toolbox: React.FC<ToolboxProps> = ({
   open,
-  channelList,
   toggleDrawer,
   children,
   openUpload = false,
   setOpenUpload = () => {},
   timeoutRef,
-  channels,
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-
+  const [channelList, setChannelList] = useState<OrganizationChannel[]>([]);
   const [toolsAnchor, setToolsAnchor] = useState<null | HTMLElement>(null);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
@@ -123,6 +121,54 @@ const Toolbox: React.FC<ToolboxProps> = ({
       // Add your search logic here
     }
   };
+
+  const [page, setPage] = useState(0);
+  const itemsPerPage = 20;
+  const [hasMore, setHasMore] = useState(true);
+  const [isFetching, setIsFetching] = useState(false);
+
+  const { mutate: loadChannels, data: loadedChannelsData } =
+    useLoadChatChannels(
+      {
+        organizationId: "4aba77788ae94eca8d6ff330506af944",
+      },
+      {
+        startIndex: page,
+        size: itemsPerPage,
+      }
+    );
+
+  // Initialize channelList with loadedChannelsData
+  useEffect(() => {
+    if (loadedChannelsData) {
+      setChannelList(loadedChannelsData);
+    }
+  }, [loadedChannelsData]);
+
+  const fetchMoreData = useCallback(async () => {
+    if (isFetching || !hasMore) return;
+
+    setIsFetching(true);
+    try {
+      const response = await loadChannels();
+      const newChannels: OrganizationChannel[] = response?.data || [];
+      if (newChannels.length > 0) {
+        setChannelList((prev: OrganizationChannel[]) => [
+          ...prev,
+          ...newChannels,
+        ]);
+        setHasMore(newChannels.length === itemsPerPage);
+        setPage(page + 1);
+      } else {
+        setHasMore(false);
+      }
+    } catch (error) {
+      console.error("Error loading channels:", error);
+      setHasMore(false);
+    } finally {
+      setIsFetching(false);
+    }
+  }, [isFetching, hasMore, loadChannels, page]);
 
   const {
     selectedChannel,
@@ -203,7 +249,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
       if (timeoutRef?.current) {
         clearTimeout(timeoutRef?.current);
       }
-      const channel = channels?.find(
+      const channel = channelList?.find(
         (ch) => ch.organizationChannelId === channelId
       );
       if (channel) {
@@ -216,7 +262,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
         setSelectedChannel(res.data);
       }
     },
-    [getChannelDetail, setOpenUpload, setSelectedChannel, timeoutRef, channels]
+    [getChannelDetail, setOpenUpload, setSelectedChannel, timeoutRef, channelList]
   );
 
   const handleStartNewChannel = useCallback(() => {
@@ -230,7 +276,12 @@ const Toolbox: React.FC<ToolboxProps> = ({
   }, [setIsLoadingChannel, isLoadingChannel]);
 
   const DrawerList = (
-    <Box sx={{ width: 232, backgroundColor: "#ffffff" }} role="presentation">
+    <Box
+      sx={{
+        backgroundColor: "#ffffff",
+      }}
+      role="presentation"
+    >
       <List>
         <ListItem
           sx={{
@@ -320,138 +371,179 @@ const Toolbox: React.FC<ToolboxProps> = ({
           </Box>
         </ListItem>
       </List>
-      <Typography
+      <Box
+        id="scrollableDiv"
         sx={{
-          color: "#000",
-          fontFamily: "DFPHeiBold-B5",
-          fontSize: "14px",
-          fontStyle: "normal",
-          fontWeight: "400",
-          lineHeight: "normal",
-          paddingLeft: "8px",
+          overflow: "auto",
+          height: "900px",
+          "&::-webkit-scrollbar": {
+            width: "8px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            backgroundColor: "#c1c1c1",
+            borderRadius: "4px",
+          },
+          "&::-webkit-scrollbar-thumb:hover": {
+            backgroundColor: "#a8a8a8",
+          },
+          "&::-webkit-scrollbar-track": {
+            backgroundColor: "#f1f1f1",
+            borderRadius: "4px",
+          },
         }}
       >
-        Today
-      </Typography>
-      <List>
-        {channelList?.map((channel, index) => (
-          <Box
-            key={index}
-            sx={{
-              width: "93%",
-              marginLeft: "8px",
-              borderRadius: "10px",
-              backgroundColor:
-                selectedChannelId === channel.organizationChannelId
-                  ? "#9B9B9B33"
-                  : "white",
-              "&:hover": {
-                cursor: "pointer",
-                backgroundColor: "#9B9B9B33",
-              },
-            }}
-          >
-            <ListItem
+        <Typography
+          sx={{
+            color: "#000",
+            fontFamily: "DFPHeiBold-B5",
+            fontSize: "14px",
+            fontStyle: "normal",
+            fontWeight: "400",
+            lineHeight: "normal",
+            paddingLeft: "8px",
+          }}
+        >
+          Today
+        </Typography>
+
+        <InfiniteScroll
+          dataLength={channelList.length}
+          next={fetchMoreData}
+          hasMore={hasMore}
+          loader={
+            <Box
               sx={{
-                padding: "4px 8px",
-                whiteSpace: "nowrap",
+                display: "flex",
+                justifyContent: "center",
+                padding: "16px",
               }}
-              onClick={() =>
-                handleGetChannelDetail(channel.organizationChannelId)
-              }
             >
-              <ListItemText
-                primary={channel.organizationChannelTitle}
+              <CircularProgress
+                style={{ display: isFetching ? "block" : "none" }}
+              />
+            </Box>
+          }
+          scrollableTarget="scrollableDiv"
+        >
+          {channelList.map((channel, index) => (
+            <Box
+              key={index}
+              sx={{
+                width: "93%",
+                marginLeft: "8px",
+                borderRadius: "10px",
+                backgroundColor:
+                  selectedChannelId === channel.organizationChannelId
+                    ? "#9B9B9B33"
+                    : "white",
+                "&:hover": {
+                  cursor: "pointer",
+                  backgroundColor: "#9B9B9B33",
+                },
+              }}
+            >
+              <ListItem
+                sx={{
+                  padding: "4px 8px",
+                  whiteSpace: "nowrap",
+                }}
+                onClick={() =>
+                  handleGetChannelDetail(channel.organizationChannelId)
+                }
+              >
+                <ListItemText
+                  primary={channel.organizationChannelTitle}
+                  slotProps={{
+                    primary: {
+                      sx: {
+                        color: "black",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      },
+                    },
+                  }}
+                />
+                <IconButton onClick={(e) => handleMenuOpen(e, index)}>
+                  <MoreHorizIcon />
+                </IconButton>
+              </ListItem>
+              <Menu
+                anchorEl={toolsAnchor}
+                open={Boolean(toolsAnchor) && activeIndex === index}
+                onClose={handleCloseToolsMenu}
                 slotProps={{
-                  primary: {
+                  paper: {
                     sx: {
-                      color: "black",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
+                      maxWidth: "199px",
+                      minHeight: "80px",
+                      padding: "4px",
+                      borderRadius: "12px",
+                      "& .MuiList-root": {
+                        padding: "0px",
+                      },
                     },
                   },
                 }}
-              />
-              <IconButton onClick={(e) => handleMenuOpen(e, index)}>
-                <MoreHorizIcon />
-              </IconButton>
-            </ListItem>
-            <Menu
-              anchorEl={toolsAnchor}
-              open={Boolean(toolsAnchor) && activeIndex === index}
-              onClose={handleCloseToolsMenu}
-              slotProps={{
-                paper: {
-                  sx: {
-                    maxWidth: "199px",
-                    minHeight: "80px",
-                    padding: "4px",
-                    borderRadius: "12px",
-                    "& .MuiList-root": {
-                      padding: "0px",
-                    },
+                sx={{
+                  top: -10,
+                  left: {
+                    sm: "-160px",
                   },
-                },
-              }}
-              sx={{
-                top: -10,
-                left: {
-                  sm: "-160px",
-                },
-                "@media (max-width: 300px)": {
-                  left: "-70px",
-                },
-                "@media (min-width: 300px) and (max-width: 324px)": {
-                  left: "-70px",
-                },
-                "@media (min-width: 325px) and (max-width: 337px)": {
-                  left: "-90px",
-                },
-                "@media (min-width: 338px) and (max-width: 349px)": {
-                  left: "-100px",
-                },
-                "@media (min-width: 350px) and (max-width: 359px)": {
-                  left: "-110px",
-                },
-                "@media (min-width: 360px) and (max-width: 374px)": {
-                  left: "-120px",
-                },
-                "@media (min-width: 375px) and (max-width: 399px)": {
-                  left: "-140px",
-                },
-                "@media (min-width: 400px) and (max-width: 600px)": {
-                  left: "-155px",
-                },
-              }}
-            >
-              {menuActions.map((item, index) => (
-                <MenuItem
-                  key={index}
-                  sx={{
-                    width: "175px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "flex-start",
-                    padding: "6px 8px",
-                    "&:hover": {
-                      backgroundColor: "#F5F5F5",
-                      borderRadius: "6px",
-                    },
-                  }}
-                  onClick={
-                    index === 1
-                      ? handleDeleteChannelOpenConfirmDialog
-                      : handleEditChannelTitle
-                  }
-                >
-                  <ListItemIcon>{item.icon}</ListItemIcon>
-                  <ListItemText>{item.title}</ListItemText>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-        ))}
-      </List>
+                  "@media (max-width: 300px)": {
+                    left: "-70px",
+                  },
+                  "@media (min-width: 300px) and (max-width: 324px)": {
+                    left: "-70px",
+                  },
+                  "@media (min-width: 325px) and (max-width: 337px)": {
+                    left: "-90px",
+                  },
+                  "@media (min-width: 338px) and (max-width: 349px)": {
+                    left: "-100px",
+                  },
+                  "@media (min-width: 350px) and (max-width: 359px)": {
+                    left: "-110px",
+                  },
+                  "@media (min-width: 360px) and (max-width: 374px)": {
+                    left: "-120px",
+                  },
+                  "@media (min-width: 375px) and (max-width: 399px)": {
+                    left: "-140px",
+                  },
+                  "@media (min-width: 400px) and (max-width: 600px)": {
+                    left: "-155px",
+                  },
+                }}
+              >
+                {menuActions.map((item, index) => (
+                  <MenuItem
+                    key={index}
+                    sx={{
+                      width: "175px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "flex-start",
+                      padding: "6px 8px",
+                      "&:hover": {
+                        backgroundColor: "#F5F5F5",
+                        borderRadius: "6px",
+                      },
+                    }}
+                    onClick={
+                      index === 1
+                        ? handleDeleteChannelOpenConfirmDialog
+                        : handleEditChannelTitle
+                    }
+                  >
+                    <ListItemIcon>{item.icon}</ListItemIcon>
+                    <ListItemText>{item.title}</ListItemText>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
+          ))}
+        </InfiniteScroll>
+      </Box>
       <UploadDialog open={openUpload} onClose={handleOpenUpload} />
     </Box>
   );
@@ -479,7 +571,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
           },
         }}
         onClose={() => toggleDrawer(false)}
-        variant={isMobile ? "temporary" : "persistent"} // Use overlay style for mobile
+        variant={isMobile ? "temporary" : "persistent"}
       >
         {DrawerList}
       </Drawer>

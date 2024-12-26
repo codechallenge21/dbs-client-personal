@@ -5,7 +5,6 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import Header from "../chat/components/Header";
 import { useAudioChannel } from "@/utils/hooks/useAudioChannel";
 import { useSearchParams } from "next/navigation";
-import { useAudioChannels } from "@/utils/hooks/useAudioChannels";
 import ChannelContentContext from "../chat/components/ChannelContentContext";
 import {
   OrganizationChannel,
@@ -44,10 +43,6 @@ export default function SummaryPage() {
   const [openUpload, setOpenUpload] = React.useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const { data: channels, mutate } = useAudioChannels({
-    organizationId: "4aba77788ae94eca8d6ff330506af944",
-  });
-
   const contextValue = useMemo(
     () => ({
       isLoadingChannel,
@@ -60,7 +55,6 @@ export default function SummaryPage() {
       setIsInteractingInChat,
       chatResponses,
       setChatResponses,
-      channelsMutate: mutate,
       advisorType,
       setAdvisorType,
     }),
@@ -73,7 +67,6 @@ export default function SummaryPage() {
       setIsInteractingInChat,
       chatResponses,
       setChatResponses,
-      mutate,
       advisorType,
       setAdvisorType,
     ]
@@ -115,11 +108,9 @@ export default function SummaryPage() {
         <ToolboxDrawer
           open={isOpenDrawer}
           toggleDrawer={toggleDrawer}
-          channelList={channels}
           openUpload={openUpload}
           setOpenUpload={setOpenUpload}
           timeoutRef={timeoutRef}
-          channels={channels}
         >
           <Header
             toggleDrawer={toggleDrawer}
