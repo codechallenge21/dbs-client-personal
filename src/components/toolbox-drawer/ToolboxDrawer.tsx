@@ -158,7 +158,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
           ...newChannels,
         ]);
         setHasMore(newChannels.length === itemsPerPage);
-        setPage(page + 1);
+        setPage((prevPage) => prevPage + 1);
       } else {
         setHasMore(false);
       }
@@ -168,7 +168,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
     } finally {
       setIsFetching(false);
     }
-  }, [isFetching, hasMore, loadChannels, page]);
+  }, [isFetching, hasMore, loadChannels]);
 
   const {
     selectedChannel,
