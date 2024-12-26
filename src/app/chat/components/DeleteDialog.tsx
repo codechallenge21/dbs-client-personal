@@ -31,7 +31,7 @@ const DeleteDialog: React.FC<DeleteDialogProps> = ({
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const [inputValue, setInputValue] = useState<string>();
+  const [inputValue, setInputValue] = useState<string>("");
 
   return (
     <Dialog
@@ -125,7 +125,7 @@ const DeleteDialog: React.FC<DeleteDialogProps> = ({
           variant="contained"
           color="primary"
           onClick={onConfirm}
-          disabled={deletableName !== inputValue}
+          disabled={deletableName !== undefined && deletableName !== inputValue}
           sx={{
             padding: isMobile ? "8px 16px" : "6px 12px",
             borderRadius: "8px",
