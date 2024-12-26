@@ -123,7 +123,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
   };
 
   const [page, setPage] = useState(0);
-  const itemsPerPage = 20;
+  const itemsPerPage = 10;
   const [hasMore, setHasMore] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
 
