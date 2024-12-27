@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Button,
   Dialog,
@@ -11,6 +11,8 @@ import {
   DialogActions,
   DialogContent,
   useMediaQuery,
+  TextField,
+  DialogContentText,
 } from "@mui/material";
 import { CloseRounded } from "@mui/icons-material";
 
@@ -18,15 +20,19 @@ interface DeleteDialogProps {
   open: boolean;
   onClose: () => void;
   onConfirm: () => void;
+  deletableName?: string;
 }
 
 const DeleteDialog: React.FC<DeleteDialogProps> = ({
   open,
   onClose,
   onConfirm,
+  deletableName,
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const [inputValue, setInputValue] = useState<string>("");
+
   return (
     <Dialog
       open={open}
@@ -36,7 +42,7 @@ const DeleteDialog: React.FC<DeleteDialogProps> = ({
           width: "100%",
           maxWidth: "460px",
           minHeight: "80px",
-          maxHeight: isMobile ? "156px" : "152px",
+          maxHeight: "calc(100% - 64px)",
           borderRadius: "16px",
         },
       }}
@@ -75,18 +81,10 @@ const DeleteDialog: React.FC<DeleteDialogProps> = ({
         </IconButton>
       </DialogTitle>
 
-      <DialogContent
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "flex-start",
-          paddingLeft: "24px !important",
-          paddingRight: "32px !important",
-          paddingBottom: "16px !important",
-        }}
-      >
-        <Typography
+      <DialogContent>
+        <DialogContentText
           sx={{
+            wordBreak: "break-all",
             color: "#000",
             fontSize: "16px",
             fontStyle: "normal",
@@ -95,8 +93,22 @@ const DeleteDialog: React.FC<DeleteDialogProps> = ({
             fontFamily: "DFPHeiMedium-B5",
           }}
         >
-          這將刪除 <strong>頻道名稱</strong>。
-        </Typography>
+          {`您確定要刪除 "${deletableName}" 嗎？`}
+        </DialogContentText>
+        {!!deletableName && (
+          <TextField
+            id="delete-dialog-name-input"
+            data-tid="delete-dialog-name-input"
+            variant="standard"
+            sx={{ width: "100%", pt: 2 }}
+            placeholder="請輸入名稱以刪除"
+            onChange={(e) => {
+              e.preventDefault();
+              const { value } = e.target;
+              setInputValue(value);
+            }}
+          />
+        )}
       </DialogContent>
       <DialogActions
         sx={{
@@ -113,9 +125,8 @@ const DeleteDialog: React.FC<DeleteDialogProps> = ({
           variant="contained"
           color="primary"
           onClick={onConfirm}
+          disabled={deletableName !== undefined && deletableName !== inputValue}
           sx={{
-            width: isMobile ? "100%" : "40px",
-            maxWidth: isMobile ? "100%" : "40px",
             padding: isMobile ? "8px 16px" : "6px 12px",
             borderRadius: "8px",
             backgroundColor: "red",
