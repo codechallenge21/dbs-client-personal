@@ -3,24 +3,13 @@
 import React, { useState, useCallback, useEffect, useContext } from "react";
 import Drawer from "@mui/material/Drawer";
 import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import {
-  CloseRounded,
-  DeleteRounded,
-  EditRounded,
-  MenuRounded,
-  SearchRounded,
-} from "@mui/icons-material";
+import { CloseRounded, MenuRounded, SearchRounded } from "@mui/icons-material";
 import {
   Box,
   Fade,
   List,
   CircularProgress,
   IconButton,
-  ListItemIcon,
-  Menu,
-  MenuItem,
   Typography,
   TextField,
   InputAdornment,
@@ -34,6 +23,7 @@ import apis from "@/utils/hooks/apis/apis";
 import ChannelContentContext from "@/app/chat/components/ChannelContentContext";
 import UploadDialog from "../uploadDialog/page";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
+import EditableItem from "../editable-item/EditableItem";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useLoadChatChannels } from "@/utils/hooks/useLoadChatChannels";
 
@@ -47,46 +37,6 @@ interface ToolboxProps {
   timeoutRef?: React.RefObject<NodeJS.Timeout | null>;
 }
 
-const menuActions = [
-  {
-    title: (
-      <Typography
-        sx={{
-          overflow: "hidden",
-          color: "var(--Primary-Black, #000)",
-          textOverflow: "ellipsis",
-          fontFamily: "DFPHeiBold-B5",
-          fontSize: "16px",
-          fontStyle: "normal",
-          fontWeight: "400",
-          lineHeight: "normal",
-        }}
-      >
-        重新命名
-      </Typography>
-    ),
-    icon: <EditRounded sx={{ color: "black" }} />,
-  },
-  {
-    title: (
-      <Typography
-        sx={{
-          overflow: "hidden",
-          color: "red",
-          textOverflow: "ellipsis",
-          fontFamily: "DFPHeiBold-B5",
-          fontSize: "16px",
-          fontStyle: "normal",
-          fontWeight: "400",
-          lineHeight: "normal",
-        }}
-      >
-        刪除
-      </Typography>
-    ),
-    icon: <DeleteRounded sx={{ color: "red" }} />,
-  },
-];
 const Toolbox: React.FC<ToolboxProps> = ({
   open,
   toggleDrawer,
@@ -104,8 +54,8 @@ const Toolbox: React.FC<ToolboxProps> = ({
 
   const { excute: deleteChannel } = useAxiosApi(apis.deleteChannel);
 
-  const [isSearchOpen, setIsSearchOpen] = React.useState(false);
-  const [searchTerm, setSearchTerm] = React.useState("");
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleSearchToggle = () => {
     setIsSearchOpen((prev) => !prev); // Toggle the search field visibility
@@ -123,7 +73,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
   };
 
   const [page, setPage] = useState(0);
-  const itemsPerPage = 10;
+  const itemsPerPage = 20;
   const [hasMore, setHasMore] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
 
@@ -141,6 +91,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
   // Initialize channelList with loadedChannelsData
   useEffect(() => {
     if (loadedChannelsData) {
+      console.log("loadedChannelsData", loadedChannelsData);
       setChannelList(loadedChannelsData);
     }
   }, [loadedChannelsData]);
@@ -184,14 +135,16 @@ const Toolbox: React.FC<ToolboxProps> = ({
     setActiveIndex(null);
   }, []);
 
-  const handleDeleteChannelOpenConfirmDialog = useCallback(
-    () => setIsDeleteDialogOpen(true),
-    []
-  );
-  const handleCloseDeleteDialog = useCallback(
-    () => setIsDeleteDialogOpen(false),
-    []
-  );
+  const handleDeleteChannelOpenConfirmDialog = useCallback(() => {
+    setIsDeleteDialogOpen(true);
+    setToolsAnchor(null);
+  }, []);
+
+  const handleCloseDeleteDialog = useCallback(() => {
+    setIsDeleteDialogOpen(false);
+    setToolsAnchor(null);
+  }, []);
+
   const handleDeleteChannelConfirm = useCallback(async () => {
     deleteChannel({
       organizationId: "4aba77788ae94eca8d6ff330506af944",
@@ -225,16 +178,10 @@ const Toolbox: React.FC<ToolboxProps> = ({
     setOpenUpload(false);
   };
 
-  const handleEditChannelTitle = useCallback(
-    () => setIsDeleteDialogOpen(false),
-    []
-  );
-
   const handleMenuOpen = (
     event: React.MouseEvent<HTMLElement>,
     index: number
   ) => {
-    setToolsAnchor(null);
     setToolsAnchor(event.currentTarget);
     setActiveIndex(index);
   };
@@ -242,6 +189,8 @@ const Toolbox: React.FC<ToolboxProps> = ({
   const { excute: getChannelDetail, isLoading: isLoadingChannel } = useAxiosApi(
     apis.getChannelDetail
   );
+
+  const { excute: updateChannelDetail } = useAxiosApi(apis.updateChannelDetail);
 
   const handleGetChannelDetail = useCallback(
     async (channelId: string) => {
@@ -262,7 +211,13 @@ const Toolbox: React.FC<ToolboxProps> = ({
         setSelectedChannel(res.data);
       }
     },
-    [getChannelDetail, setOpenUpload, setSelectedChannel, timeoutRef, channelList]
+    [
+      getChannelDetail,
+      setOpenUpload,
+      setSelectedChannel,
+      timeoutRef,
+      channelList,
+    ]
   );
 
   const handleStartNewChannel = useCallback(() => {
@@ -451,95 +406,28 @@ const Toolbox: React.FC<ToolboxProps> = ({
                   handleGetChannelDetail(channel.organizationChannelId)
                 }
               >
-                <ListItemText
-                  primary={channel.organizationChannelTitle}
-                  slotProps={{
-                    primary: {
-                      sx: {
-                        color: "black",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                      },
-                    },
+                <EditableItem
+                  key={channel.organizationChannelId}
+                  channel={channel}
+                  onSave={async (id, newTitle) => {
+                    await updateChannelDetail({
+                      organizationId: "4aba77788ae94eca8d6ff330506af944",
+                      organizationChannelId: id,
+                      organizationChannelTitle: newTitle,
+                    });
+                    if (channelsMutate) channelsMutate();
                   }}
+                  index={index}
+                  toolsAnchor={toolsAnchor}
+                  activeIndex={activeIndex}
+                  handleCloseToolsMenu={handleCloseToolsMenu}
+                  handleDeleteChannelOpenConfirmDialog={
+                    handleDeleteChannelOpenConfirmDialog
+                  }
+                  handleMenuOpen={handleMenuOpen}
+                  setToolsAnchor={setToolsAnchor}
                 />
-                <IconButton onClick={(e) => handleMenuOpen(e, index)}>
-                  <MoreHorizIcon />
-                </IconButton>
               </ListItem>
-              <Menu
-                anchorEl={toolsAnchor}
-                open={Boolean(toolsAnchor) && activeIndex === index}
-                onClose={handleCloseToolsMenu}
-                slotProps={{
-                  paper: {
-                    sx: {
-                      maxWidth: "199px",
-                      minHeight: "80px",
-                      padding: "4px",
-                      borderRadius: "12px",
-                      "& .MuiList-root": {
-                        padding: "0px",
-                      },
-                    },
-                  },
-                }}
-                sx={{
-                  top: -10,
-                  left: {
-                    sm: "-160px",
-                  },
-                  "@media (max-width: 300px)": {
-                    left: "-70px",
-                  },
-                  "@media (min-width: 300px) and (max-width: 324px)": {
-                    left: "-70px",
-                  },
-                  "@media (min-width: 325px) and (max-width: 337px)": {
-                    left: "-90px",
-                  },
-                  "@media (min-width: 338px) and (max-width: 349px)": {
-                    left: "-100px",
-                  },
-                  "@media (min-width: 350px) and (max-width: 359px)": {
-                    left: "-110px",
-                  },
-                  "@media (min-width: 360px) and (max-width: 374px)": {
-                    left: "-120px",
-                  },
-                  "@media (min-width: 375px) and (max-width: 399px)": {
-                    left: "-140px",
-                  },
-                  "@media (min-width: 400px) and (max-width: 600px)": {
-                    left: "-155px",
-                  },
-                }}
-              >
-                {menuActions.map((item, index) => (
-                  <MenuItem
-                    key={index}
-                    sx={{
-                      width: "175px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "flex-start",
-                      padding: "6px 8px",
-                      "&:hover": {
-                        backgroundColor: "#F5F5F5",
-                        borderRadius: "6px",
-                      },
-                    }}
-                    onClick={
-                      index === 1
-                        ? handleDeleteChannelOpenConfirmDialog
-                        : handleEditChannelTitle
-                    }
-                  >
-                    <ListItemIcon>{item.icon}</ListItemIcon>
-                    <ListItemText>{item.title}</ListItemText>
-                  </MenuItem>
-                ))}
-              </Menu>
             </Box>
           ))}
         </InfiniteScroll>
@@ -554,6 +442,9 @@ const Toolbox: React.FC<ToolboxProps> = ({
         open={isDeleteDialogOpen}
         onClose={handleCloseDeleteDialog}
         onConfirm={handleDeleteChannelConfirm}
+        deletableName={
+          channelList?.[activeIndex!]?.organizationChannelTitle || ""
+        }
       />
       <Drawer
         open={open}

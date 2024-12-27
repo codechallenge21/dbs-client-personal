@@ -4,15 +4,9 @@ import { OrganizationChannel } from "@/interfaces/entities";
 
 export type PathParams = {
   organizationId: string;
-
 };
 
-export type queryParams = {
-  startIndex: number;
-  size: number;
-}
-
-export const useLoadChatChannels = makeGetHook<OrganizationChannel[], PathParams>(
-  "/organizations/{{organizationId}}/channels",
-  fetcher,
-);
+export const useLoadChatChannels = makeGetHook<
+  OrganizationChannel[],
+  PathParams
+>("/organizations/{{organizationId}}/channels", fetcher);
