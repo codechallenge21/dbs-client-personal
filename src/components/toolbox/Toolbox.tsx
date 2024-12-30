@@ -233,7 +233,7 @@ export default function Toolbox() {
               <VisuallyHiddenInput
                 type="file"
                 onChange={handleFileUpload}
-                accept=".mp3, .wav, .m4a"
+                accept=".mp3, .mp4, .mpeg, .mpga, .m4a, .wav, .webm"
               />
             </Button>
             <Typography
