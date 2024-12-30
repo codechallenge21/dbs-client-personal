@@ -91,7 +91,6 @@ const Toolbox: React.FC<ToolboxProps> = ({
   // Initialize channelList with loadedChannelsData
   useEffect(() => {
     if (loadedChannelsData) {
-      console.log("loadedChannelsData", loadedChannelsData);
       setChannelList(loadedChannelsData);
     }
   }, [loadedChannelsData]);
@@ -108,8 +107,12 @@ const Toolbox: React.FC<ToolboxProps> = ({
           ...prev,
           ...newChannels,
         ]);
-        setHasMore(newChannels.length === itemsPerPage);
-        setPage((prevPage) => prevPage + 1);
+        setHasMore(newChannels.length >= itemsPerPage);
+        if (newChannels.length >= itemsPerPage) {
+          setPage((prevPage) => prevPage + itemsPerPage);
+        } else {
+          setHasMore(false);
+        }
       } else {
         setHasMore(false);
       }
@@ -330,7 +333,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
         id="scrollableDiv"
         sx={{
           overflow: "auto",
-          height: "900px",
+          height: "calc(100vh - 64px)",
           "&::-webkit-scrollbar": {
             width: "8px",
           },
