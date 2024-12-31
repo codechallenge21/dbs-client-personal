@@ -1,6 +1,12 @@
 "use client";
 
-import React, { useState, useCallback, useEffect, useContext } from "react";
+import React, {
+  useState,
+  useCallback,
+  useEffect,
+  useContext,
+  useRef,
+} from "react";
 import Drawer from "@mui/material/Drawer";
 import ListItem from "@mui/material/ListItem";
 import { CloseRounded, MenuRounded, SearchRounded } from "@mui/icons-material";
@@ -87,42 +93,56 @@ const Toolbox: React.FC<ToolboxProps> = ({
         size: itemsPerPage,
       }
     );
+  const hasLoadedChannelsData = useRef(false);
 
   // Initialize channelList with loadedChannelsData
   useEffect(() => {
-    if (loadedChannelsData) {
+    if (loadedChannelsData && !hasLoadedChannelsData.current) {
       setChannelList(loadedChannelsData);
+      hasLoadedChannelsData.current = true;
     }
   }, [loadedChannelsData]);
 
-  const fetchMoreData = useCallback(async () => {
-    if (isFetching || !hasMore) return;
+  const isMounted = useRef(false);
+  const [isPageUpdated, setIsPageUpdated] = useState(false);
 
-    setIsFetching(true);
-    try {
-      const response = await loadChannels();
-      const newChannels: OrganizationChannel[] = response?.data || [];
-      if (newChannels.length > 0) {
-        setChannelList((prev: OrganizationChannel[]) => [
-          ...prev,
-          ...newChannels,
-        ]);
-        setHasMore(newChannels.length >= itemsPerPage);
-        if (newChannels.length >= itemsPerPage) {
-          setPage((prevPage) => prevPage + itemsPerPage);
-        } else {
+
+  useEffect(() => {
+    if (isMounted.current && isPageUpdated) {
+      const handleScroll = async () => {
+        if (isFetching) return;
+        setIsFetching(true);
+        try {
+          const response = await loadChannels();
+          const newChannels: OrganizationChannel[] = response?.data || [];
+          if (newChannels.length > 0) {
+            setChannelList((prev: OrganizationChannel[]) => [
+              ...prev,
+              ...newChannels,
+            ]);
+            setHasMore(newChannels.length >= itemsPerPage);
+          } else {
+            setHasMore(false);
+          }
+        } catch (error) {
+          console.error("Error loading channels:", error);
           setHasMore(false);
+        } finally {
+          setIsFetching(false);
         }
-      } else {
-        setHasMore(false);
-      }
-    } catch (error) {
-      console.error("Error loading channels:", error);
-      setHasMore(false);
-    } finally {
-      setIsFetching(false);
+      };
+
+      handleScroll();
+    } else {
+      isMounted.current = true; // Mark as mounted after the first render
     }
-  }, [isFetching, hasMore, loadChannels]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
+
+  const fetchMoreData = useCallback(async () => {
+    setIsPageUpdated(true);
+    setPage((prevPage) => prevPage + itemsPerPage);
+  }, []);
 
   const {
     selectedChannel,
@@ -374,18 +394,32 @@ const Toolbox: React.FC<ToolboxProps> = ({
                 display: "flex",
                 justifyContent: "center",
                 padding: "16px",
+                minHeight: "100px",
+                marginTop: "auto",
               }}
             >
-              <CircularProgress
-                style={{ display: isFetching ? "block" : "none" }}
-              />
+              <CircularProgress size={24} color="primary" />
             </Box>
           }
           scrollableTarget="scrollableDiv"
+          endMessage={
+            !hasMore && (
+              <Typography
+                variant="body2"
+                sx={{
+                  textAlign: "center",
+                  marginTop: 2,
+                  color: "gray",
+                }}
+              >
+                No more data available.
+              </Typography>
+            )
+          }
         >
           {channelList.map((channel, index) => (
             <Box
-              key={index}
+              key={`${channel.organizationChannelId}-${index}`}
               sx={{
                 width: "93%",
                 marginLeft: "8px",
