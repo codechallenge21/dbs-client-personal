@@ -394,7 +394,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
                 display: "flex",
                 justifyContent: "center",
                 padding: "16px",
-                minHeight: "100px",
+                minHeight: "150px",
                 marginTop: "auto",
               }}
             >
