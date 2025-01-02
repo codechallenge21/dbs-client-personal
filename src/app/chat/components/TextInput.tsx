@@ -278,14 +278,18 @@ const TextInput = () => {
             </IconButton>
           ) : (
             <IconButton
+              onClick={handleListening}
+              className={isListening ? "mic-listening" : ""}
               sx={{
                 position: "absolute",
                 bottom: "12px",
                 right: "10px",
               }}
-              onClick={handleListening}
             >
-              <MicRoundedIcon sx={{ color: isListening ? "red" : "black" }} />
+              <MicRoundedIcon
+                className={isListening ? "mic-icon" : ""}
+                sx={{ color: isListening ? "white" : "black" }}
+              />
             </IconButton>
           )}
         </Box>
