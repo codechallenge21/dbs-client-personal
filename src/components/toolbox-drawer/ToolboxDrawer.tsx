@@ -55,13 +55,12 @@ function categorizeChannels(channelList: OrganizationChannel[]) {
     Yesterday: OrganizationChannel[];
     "Last 7 Days": OrganizationChannel[];
     "Last 30 Days": OrganizationChannel[];
-    Older: OrganizationChannel[];
+    [key: string]: OrganizationChannel[]; // Dynamic keys for months and years
   } = {
     Today: [],
     Yesterday: [],
     "Last 7 Days": [],
     "Last 30 Days": [],
-    Older: [],
   };
 
   channelList.forEach((channel) => {
@@ -76,7 +75,11 @@ function categorizeChannels(channelList: OrganizationChannel[]) {
     } else if (channelDate.isAfter(last30Days)) {
       categories["Last 30 Days"].push(channel);
     } else {
-      categories.Older.push(channel);
+      const monthYear = channelDate.format("MMMM YYYY");
+      if (!categories[monthYear]) {
+        categories[monthYear] = [];
+      }
+      categories[monthYear].push(channel);
     }
   });
 
@@ -99,13 +102,11 @@ const Toolbox: React.FC<ToolboxProps> = ({
     Yesterday: OrganizationChannel[];
     "Last 7 Days": OrganizationChannel[];
     "Last 30 Days": OrganizationChannel[];
-    Older: OrganizationChannel[];
   }>({
     Today: [],
     Yesterday: [],
     "Last 7 Days": [],
     "Last 30 Days": [],
-    Older: [],
   });
   const [toolsAnchor, setToolsAnchor] = useState<null | HTMLElement>(null);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -469,9 +470,9 @@ const Toolbox: React.FC<ToolboxProps> = ({
                     sx={{
                       color: "#000",
                       fontFamily: "DFPHeiBold-B5",
-                      fontSize: "14px",
+                      fontSize: "15px",
                       fontStyle: "normal",
-                      fontWeight: "400",
+                      fontWeight: "700",
                       lineHeight: "normal",
                       paddingLeft: "8px",
                     }}
