@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "好理家在｜好好理財家就在",
+  title: "好理家在｜好好理財，家就會在",
   description: "好理家在官方網站",
   keywords: "react,material,kit,application,dashboard,admin,template",
   themeColor: "#000000",
