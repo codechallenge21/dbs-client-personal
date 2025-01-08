@@ -411,20 +411,6 @@ const Toolbox: React.FC<ToolboxProps> = ({
           },
         }}
       >
-        <Typography
-          sx={{
-            color: "#000",
-            fontFamily: "DFPHeiBold-B5",
-            fontSize: "14px",
-            fontStyle: "normal",
-            fontWeight: "400",
-            lineHeight: "normal",
-            paddingLeft: "8px",
-          }}
-        >
-          Today
-        </Typography>
-
         <InfiniteScroll
           dataLength={channelList.length}
           next={fetchMoreData}
@@ -458,56 +444,78 @@ const Toolbox: React.FC<ToolboxProps> = ({
             )
           }
         >
-          {channelList.map((channel, index) => (
-            <Box
-              key={`${channel.organizationChannelId}-${index}`}
-              sx={{
-                width: "93%",
-                marginLeft: "8px",
-                borderRadius: "10px",
-                backgroundColor:
-                  selectedChannelId === channel.organizationChannelId
-                    ? "#9B9B9B33"
-                    : "white",
-                "&:hover": {
-                  cursor: "pointer",
-                  backgroundColor: "#9B9B9B33",
-                },
-              }}
-            >
-              <ListItem
-                sx={{
-                  padding: "4px 8px",
-                  whiteSpace: "nowrap",
-                }}
-                onClick={() =>
-                  handleGetChannelDetail(channel.organizationChannelId)
-                }
-              >
-                <EditableItem
-                  key={channel.organizationChannelId}
-                  channel={channel}
-                  onSave={async (id, newTitle) => {
-                    await updateChannelDetail({
-                      organizationId: "4aba77788ae94eca8d6ff330506af944",
-                      organizationChannelId: id,
-                      organizationChannelTitle: newTitle,
-                    });
-                    if (channelsMutate) channelsMutate();
-                  }}
-                  index={index}
-                  toolsAnchor={toolsAnchor}
-                  activeIndex={activeIndex}
-                  handleCloseToolsMenu={handleCloseToolsMenu}
-                  handleDeleteChannelOpenConfirmDialog={
-                    handleDeleteChannelOpenConfirmDialog
-                  }
-                  handleMenuOpen={handleMenuOpen}
-                  setToolsAnchor={setToolsAnchor}
-                />
-              </ListItem>
-            </Box>
-          ))}
+          {Object.entries(categorizedChannels).map(
+            ([category, channelList]) =>
+              channelList.length > 0 && (
+                <Box key={category}>
+                  <Typography
+                    sx={{
+                      color: "#000",
+                      fontFamily: "DFPHeiBold-B5",
+                      fontSize: "14px",
+                      fontStyle: "normal",
+                      fontWeight: "400",
+                      lineHeight: "normal",
+                      paddingLeft: "8px",
+                    }}
+                  >
+                    {category}
+                  </Typography>
+
+                  {channelList.map((channel, index) => (
+                    <Box
+                      key={`${channel.organizationChannelId}-${index}`}
+                      sx={{
+                        width: "93%",
+                        marginLeft: "8px",
+                        borderRadius: "10px",
+                        backgroundColor:
+                          selectedChannelId === channel.organizationChannelId
+                            ? "#9B9B9B33"
+                            : "white",
+                        "&:hover": {
+                          cursor: "pointer",
+                          backgroundColor: "#9B9B9B33",
+                        },
+                      }}
+                    >
+                      <ListItem
+                        sx={{
+                          padding: "4px 8px",
+                          whiteSpace: "nowrap",
+                        }}
+                        onClick={() =>
+                          handleGetChannelDetail(channel.organizationChannelId)
+                        }
+                      >
+                        <EditableItem
+                          key={channel.organizationChannelId}
+                          channel={channel}
+                          onSave={async (id, newTitle) => {
+                            await updateChannelDetail({
+                              organizationId:
+                                "4aba77788ae94eca8d6ff330506af944",
+                              organizationChannelId: id,
+                              organizationChannelTitle: newTitle,
+                            });
+                            if (channelsMutate) channelsMutate();
+                          }}
+                          index={index}
+                          toolsAnchor={toolsAnchor}
+                          activeIndex={activeIndex}
+                          handleCloseToolsMenu={handleCloseToolsMenu}
+                          handleDeleteChannelOpenConfirmDialog={
+                            handleDeleteChannelOpenConfirmDialog
+                          }
+                          handleMenuOpen={handleMenuOpen}
+                          setToolsAnchor={setToolsAnchor}
+                        />
+                      </ListItem>
+                    </Box>
+                  ))}
+                </Box>
+              )
+          )}
         </InfiniteScroll>
       </Box>
       <UploadDialog open={openUpload} onClose={handleOpenUpload} />
