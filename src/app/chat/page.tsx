@@ -4,7 +4,6 @@ import Header from "./components/Header";
 import MainContent from "./components/MainContent";
 import SwitchDialog from "./components/SwitchDialog";
 import ToolboxDrawer from "@/components/toolbox-drawer/ToolboxDrawer";
-import { useChatChannels } from "@/utils/hooks/useChatChannels";
 import { OrganizationChannel, OrganizationChannelMessage } from "@/interfaces/entities";
 import ChannelContentContext from "./components/ChannelContentContext";
 import { AdvisorType } from "./components/types";
@@ -19,13 +18,6 @@ export default function Home() {
   const [isInteractingInChat, setIsInteractingInChat] = useState<boolean>(false);
   const [chatResponses, setChatResponses] = useState<OrganizationChannelMessage[]>([]);
   const [advisorType, setAdvisorType] = useState<AdvisorType>(AdvisorType.DEFAULT);
-
-  const { data: channels, mutate } = useChatChannels(
-    {
-      organizationId: "4aba77788ae94eca8d6ff330506af944",
-    },
-    { organizationChannelType: "CHAT" }
-  );
 
   const handleClose = () => setIsOpen(false);
 
@@ -49,7 +41,6 @@ export default function Home() {
       setIsInteractingInChat,
       chatResponses,
       setChatResponses,
-      channelsMutate: mutate,
       advisorType,
       setAdvisorType,
     }),
@@ -62,7 +53,6 @@ export default function Home() {
       setIsInteractingInChat,
       chatResponses,
       setChatResponses,
-      mutate,
       advisorType,
       setAdvisorType,
     ]
@@ -78,7 +68,6 @@ export default function Home() {
       <ToolboxDrawer
         open={isOpenDrawer}
         toggleDrawer={toggleDrawer}
-        channelList={channels}
       >
         <Header
           isChat

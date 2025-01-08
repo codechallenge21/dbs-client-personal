@@ -183,7 +183,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
             <input
               type="file"
               onChange={handleFileUpload}
-              accept=".mp3, .wav, .m4a"
+              accept=".mp3, .mp4, .mpeg, .mpga, .m4a, .wav, .webm"
               style={{ display: "none" }}
             />
           </Button>
