@@ -94,6 +94,19 @@ const Toolbox: React.FC<ToolboxProps> = ({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [channelList, setChannelList] = useState<OrganizationChannel[]>([]);
+  const [categorizedChannels, setCategorizedChannels] = useState<{
+    Today: OrganizationChannel[];
+    Yesterday: OrganizationChannel[];
+    "Last 7 Days": OrganizationChannel[];
+    "Last 30 Days": OrganizationChannel[];
+    Older: OrganizationChannel[];
+  }>({
+    Today: [],
+    Yesterday: [],
+    "Last 7 Days": [],
+    "Last 30 Days": [],
+    Older: [],
+  });
   const [toolsAnchor, setToolsAnchor] = useState<null | HTMLElement>(null);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
@@ -102,8 +115,6 @@ const Toolbox: React.FC<ToolboxProps> = ({
 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-
-  const categorizedChannels = categorizeChannels(channelList || []);
 
   const handleSearchToggle = () => {
     setIsSearchOpen((prev) => !prev); // Toggle the search field visibility
@@ -144,6 +155,12 @@ const Toolbox: React.FC<ToolboxProps> = ({
       hasLoadedChannelsData.current = true;
     }
   }, [loadedChannelsData]);
+
+  useEffect(() => {
+    if (channelList.length > 0) {
+      setCategorizedChannels(categorizeChannels(channelList || []));
+    }
+  }, [channelList]);
 
   const isMounted = useRef(false);
   const [isPageUpdated, setIsPageUpdated] = useState(false);
