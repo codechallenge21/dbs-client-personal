@@ -13,6 +13,10 @@ import apis from '@/utils/hooks/apis/apis';
 import ChannelContentContext from './ChannelContentContext';
 import { SupportAgentRounded, SendRounded, Close } from '@mui/icons-material';
 import Image from 'next/image';
+import pdfPreview from '@/assets/Images/Pdf Icon.svg';
+import txtPerview from '@/assets/Images/Txt Icon.svg';
+import imagePerview from '@/assets/Images/Image Icon.svg';
+import docPerview from '@/assets/Images/Doc Icon.svg';
 
 interface SpeechRecognition extends EventTarget {
   continuous: boolean;
@@ -84,7 +88,7 @@ const TextInput = () => {
     if (event.target.files) {
       const selectedFiles = Array.from(event.target.files);
       const newFiles = selectedFiles.map((file) => {
-        const icon = getFileIcon(file); // Get icon based on file extension
+        const icon = getFileIcon(file);
         return { file, preview: icon };
       });
       setFiles((prev) => [...prev, ...newFiles]);
@@ -95,28 +99,28 @@ const TextInput = () => {
     setFiles(files.filter((_, i) => i !== index));
   };
 
-  // Helper function to return the correct icon based on file extension
   const getFileIcon = (file: File): string => {
     const extension = file.name.split('.').pop()?.toLowerCase();
 
+    console.log('extension, ', extension);
+
     switch (extension) {
       case 'pdf':
-        return '/path/to/pdf-icon.png';
+        return pdfPreview;
       case 'txt':
-        return '/path/to/txt-icon.png';
+        return txtPerview;
       case 'png':
       case 'jpg':
       case 'jpeg':
       case 'gif':
-        return '/path/to/image-icon.png';
+        return imagePerview;
       case 'doc':
       case 'docx':
-        return '/path/to/word-icon.png';
-      case 'xls':
       case 'xlsx':
-        return '/path/to/excel-icon.png';
+      case 'xls':
+        return docPerview;
       default:
-        return '/path/to/default-icon.png';
+        return imagePerview;
     }
   };
 
@@ -288,7 +292,6 @@ const TextInput = () => {
             },
           }}
         >
-          {/* File Preview Section */}
           {files.length > 0 && (
             <Box
               sx={{
@@ -311,7 +314,7 @@ const TextInput = () => {
                   }}
                 >
                   <Image
-                    src={file.preview || '/path/to/default-icon.png'} // Display icon as thumbnail
+                    src={file.preview || imagePerview}
                     alt={file.file.name}
                     width={48}
                     height={48}
