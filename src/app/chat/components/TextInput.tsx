@@ -1,19 +1,19 @@
-import AttachFileRoundedIcon from "@mui/icons-material/AttachFileRounded";
-import MicRoundedIcon from "@mui/icons-material/MicRounded";
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import AttachFileRoundedIcon from '@mui/icons-material/AttachFileRounded';
+import MicRoundedIcon from '@mui/icons-material/MicRounded';
 import {
   Box,
   IconButton,
   TextareaAutosize,
   useTheme,
   useMediaQuery,
-} from "@mui/material";
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
-import useAxiosApi from "@eGroupAI/hooks/apis/useAxiosApi";
-import apis from "@/utils/hooks/apis/apis";
-import ChannelContentContext from "./ChannelContentContext";
+} from '@mui/material';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
+import apis from '@/utils/hooks/apis/apis';
+import ChannelContentContext from './ChannelContentContext';
+import { SupportAgentRounded, SendRounded, Close } from '@mui/icons-material';
+import Image from 'next/image';
 
-// Define the types for SpeechRecognition and related events
 interface SpeechRecognition extends EventTarget {
   continuous: boolean;
   interimResults: boolean;
@@ -57,16 +57,68 @@ interface SpeechRecognitionErrorEvent extends Event {
 
 const TextInput = () => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const [userInputValue, setUserInputValue] = useState("");
-
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const [userInputValue, setUserInputValue] = useState('');
   const [isListening, setIsListening] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const recognitionRef = useRef<null | SpeechRecognition>(null);
-
+  const [files, setFiles] = useState<{ file: File; preview: string | null }[]>(
+    []
+  );
   const { excute: submitUserInputs, isLoading: isInteracting } = useAxiosApi(
     apis.submitUserInputs
   );
+
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    const droppedFiles = Array.from(event.dataTransfer.files);
+    const mappedFiles = droppedFiles.map((file) => ({ file, preview: null }));
+    setFiles((prev) => [...prev, ...mappedFiles]);
+  };
+
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+  };
+
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      const selectedFiles = Array.from(event.target.files);
+      const newFiles = selectedFiles.map((file) => {
+        const icon = getFileIcon(file); // Get icon based on file extension
+        return { file, preview: icon };
+      });
+      setFiles((prev) => [...prev, ...newFiles]);
+    }
+  };
+
+  const handleRemoveFile = (index: number) => {
+    setFiles(files.filter((_, i) => i !== index));
+  };
+
+  // Helper function to return the correct icon based on file extension
+  const getFileIcon = (file: File): string => {
+    const extension = file.name.split('.').pop()?.toLowerCase();
+
+    switch (extension) {
+      case 'pdf':
+        return '/path/to/pdf-icon.png';
+      case 'txt':
+        return '/path/to/txt-icon.png';
+      case 'png':
+      case 'jpg':
+      case 'jpeg':
+      case 'gif':
+        return '/path/to/image-icon.png';
+      case 'doc':
+      case 'docx':
+        return '/path/to/word-icon.png';
+      case 'xls':
+      case 'xlsx':
+        return '/path/to/excel-icon.png';
+      default:
+        return '/path/to/default-icon.png';
+    }
+  };
 
   const {
     selectedChannelId,
@@ -80,7 +132,7 @@ const TextInput = () => {
   const handleSendMessage = useCallback(async () => {
     if (isInteracting) return;
     const response = await submitUserInputs({
-      organizationId: "4aba77788ae94eca8d6ff330506af944",
+      organizationId: '4aba77788ae94eca8d6ff330506af944',
       query: userInputValue,
       advisorType,
       organizationChannelId: selectedChannelId,
@@ -89,11 +141,11 @@ const TextInput = () => {
       setChatResponses((prev) => [
         ...prev,
         {
-          organizationChannelMessageType: "USER",
+          organizationChannelMessageType: 'USER',
           organizationChannelMessageContent: userInputValue,
         },
         {
-          organizationChannelMessageType: "AI",
+          organizationChannelMessageType: 'AI',
           organizationChannelMessageContent: response?.data?.response,
         },
       ]);
@@ -101,7 +153,7 @@ const TextInput = () => {
       if (channelsMutate) {
         channelsMutate();
       }
-      setUserInputValue("");
+      setUserInputValue('');
     }
   }, [
     channelsMutate,
@@ -115,7 +167,7 @@ const TextInput = () => {
   ]);
 
   const handleClickSubmitOrAudioFileUpload = useCallback(() => {
-    if (userInputValue !== "") {
+    if (userInputValue !== '') {
       handleSendMessage();
     }
   }, [handleSendMessage, userInputValue]);
@@ -130,8 +182,8 @@ const TextInput = () => {
 
   const handleOnKeyDownUserInput = useCallback(
     (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-      if (e.key === "Enter" && !e.shiftKey) {
-        if (userInputValue.trim() !== "") {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        if (userInputValue.trim() !== '') {
           e.preventDefault();
           handleSendMessage();
         }
@@ -144,20 +196,20 @@ const TextInput = () => {
     setIsInteractingInChat(isInteracting);
   }, [isInteracting, setIsInteractingInChat]);
 
-  // Initialize webkitSpeechRecognition for speech-to-text
   useEffect(() => {
-    if ("webkitSpeechRecognition" in window) {
-      const SpeechRecognition = (window as any).webkitSpeechRecognition; // eslint-disable-line
+    if ('webkitSpeechRecognition' in window) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const SpeechRecognition = (window as any).webkitSpeechRecognition;
       recognitionRef.current = new SpeechRecognition();
       if (recognitionRef.current) {
-        recognitionRef.current.continuous = true; // Keep listening until stopped
-        recognitionRef.current.interimResults = true; // Show interim results
-        recognitionRef.current.lang = "zh-TW"; // Set language
+        recognitionRef.current.continuous = true;
+        recognitionRef.current.interimResults = true;
+        recognitionRef.current.lang = 'zh-TW';
 
         recognitionRef.current.onresult = (event: SpeechRecognitionEvent) => {
           const finalTranscript = Array.from(event.results)
             .map((result) => result[0].transcript)
-            .join("");
+            .join('');
           setUserInputValue(finalTranscript);
         };
 
@@ -173,7 +225,7 @@ const TextInput = () => {
         };
       }
     } else {
-      setError("Your browser does not support Speech Recognition.");
+      setError('Your browser does not support Speech Recognition.');
     }
   }, []);
 
@@ -182,7 +234,7 @@ const TextInput = () => {
       if (isListening) {
         recognitionRef.current.stop();
         setIsListening(false);
-        if (userInputValue !== "") {
+        if (userInputValue !== '') {
           handleSendMessage();
         }
       } else {
@@ -195,50 +247,121 @@ const TextInput = () => {
 
   return (
     <>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
       <Box
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          width: isMobile ? "95%" : "calc(100% - 20px)",
-          height: isMobile ? "100px" : "124px",
-          maxWidth: "760px",
-          minHeight: "108px",
-          position: isMobile ? "fixed" : "relative",
-          bottom: isMobile ? 0 : "auto",
-          backgroundColor: "#F5F5F5",
+          display: 'flex',
+          flexDirection: 'column',
+          width: isMobile ? '95%' : 'calc(100% - 20px)',
+          height: isMobile ? '100px' : files.length ? '260px' : '124px',
+          maxWidth: '760px',
+          minHeight: '108px',
+          position: isMobile ? 'fixed' : 'relative',
+          bottom: isMobile ? 0 : 'auto',
+          backgroundColor: '#F5F5F5',
           borderRadius: 2,
-          overflow: "hidden",
+          overflow: 'auto',
           margin: isMobile ? 3 : 0,
         }}
       >
         <Box
           sx={{
-            width: "100%",
-            paddingTop: "8px",
-            paddingLeft: "20px",
-            paddingRight: "20px",
-            paddingBottom: "8px",
+            width: '100%',
+            paddingTop: '8px',
+            paddingLeft: '20px',
+            paddingRight: '20px',
+            paddingBottom: '8px',
+            overflow: 'auto',
+            '&::-webkit-scrollbar': {
+              width: '8px',
+            },
+            '&::-webkit-scrollbar-thumb': {
+              backgroundColor: '#c1c1c1',
+              borderRadius: '4px',
+            },
+            '&::-webkit-scrollbar-thumb:hover': {
+              backgroundColor: '#a8a8a8',
+            },
+            '&::-webkit-scrollbar-track': {
+              backgroundColor: '#f1f1f1',
+              borderRadius: '4px',
+            },
           }}
         >
+          {/* File Preview Section */}
+          {files.length > 0 && (
+            <Box
+              sx={{
+                display: 'flex',
+                gap: 2,
+                flexWrap: 'wrap',
+                padding: '8px',
+              }}
+            >
+              {files.map((file, index) => (
+                <Box
+                  key={index}
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    textAlign: 'center',
+                    position: 'relative',
+                    width: 80,
+                  }}
+                >
+                  <Image
+                    src={file.preview || '/path/to/default-icon.png'} // Display icon as thumbnail
+                    alt={file.file.name}
+                    width={48}
+                    height={48}
+                    style={{
+                      objectFit: 'cover',
+                      borderRadius: '4px',
+                    }}
+                  />
+                  <Box
+                    sx={{
+                      mt: 1,
+                      fontSize: '12px',
+                      wordBreak: 'break-word',
+                      textAlign: 'center',
+                    }}
+                  >
+                    {file.file.name}
+                  </Box>
+                  <IconButton
+                    sx={{
+                      position: 'absolute',
+                      top: '-10px',
+                      right: '-10px',
+                    }}
+                    onClick={() => handleRemoveFile(index)}
+                  >
+                    <Close fontSize="small" />
+                  </IconButton>
+                </Box>
+              ))}
+            </Box>
+          )}
           <TextareaAutosize
             minRows={2}
             maxRows={10}
             placeholder="傳訊息給智能顧問"
             style={{
-              width: "100%",
-              paddingTop: isMobile ? "20px" : "24px",
-              paddingRight: "20px",
-              paddingBottom: isMobile ? "20px" : "24px",
-              paddingLeft: "20px",
-              borderRadius: "8px",
-              border: "none",
-              outline: "none",
-              resize: "none",
-              fontSize: isMobile ? "16px" : "24px",
-              color: "#000",
-              backgroundColor: "#F5F5F5",
-              overflow: "auto",
+              width: '100%',
+              paddingTop: isMobile ? '20px' : '2px',
+              paddingRight: '20px',
+              paddingBottom: isMobile ? '20px' : '',
+              paddingLeft: '20px',
+              borderRadius: '8px',
+              border: 'none',
+              outline: 'none',
+              resize: 'none',
+              fontSize: isMobile ? '16px' : '24px',
+              color: '#000',
+              backgroundColor: '#F5F5F5',
+              overflow: 'auto',
             }}
             value={userInputValue}
             onChange={handleOnChangeUserInput}
@@ -248,47 +371,68 @@ const TextInput = () => {
         <Box
           sx={{
             bottom: 0,
-            width: "100%",
-            padding: "12px",
-            display: "flex",
-            justifyContent: "space-between",
+            width: '100%',
+            padding: '20px',
+            display: 'flex',
+            marginTop: userInputValue !== '' && !isListening ? '12px' : '0px',
+            justifyContent: 'space-between',
           }}
         >
           <IconButton
+            component="span"
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
             sx={{
-              position: "absolute",
-              bottom: "12px",
-              left: "10px",
+              position: 'absolute',
+              bottom: '12px',
+              left: '10px',
             }}
           >
             <AttachFileRoundedIcon
-              sx={{ transform: "rotate(180deg)", color: "black" }}
+              sx={{ transform: 'rotate(180deg)', color: 'black' }}
+              onClick={() => document.getElementById('file-upload')?.click()}
             />
           </IconButton>
-          {userInputValue !== "" && !isListening ? (
+          <input
+            type="file"
+            id="file-upload"
+            multiple
+            onChange={handleFileSelect}
+            style={{ display: 'none' }}
+          />
+          <IconButton
+            sx={{
+              position: 'absolute',
+              bottom: '12px',
+              left: '49px',
+            }}
+          >
+            <SupportAgentRounded sx={{ color: 'black' }} />
+          </IconButton>
+          {userInputValue !== '' && !isListening ? (
             <IconButton
               sx={{
-                position: "absolute",
-                bottom: "12px",
-                right: "10px",
+                position: 'absolute',
+                bottom: '12px',
+                right: '10px',
               }}
               onClick={handleClickSubmitOrAudioFileUpload}
             >
-              <ArrowUpwardIcon sx={{ color: "black" }} />
+              <SendRounded sx={{ color: 'black' }} />
             </IconButton>
           ) : (
             <IconButton
               onClick={handleListening}
-              className={isListening ? "mic-listening" : ""}
+              className={isListening ? 'mic-listening' : ''}
               sx={{
-                position: "absolute",
-                bottom: "12px",
-                right: "10px",
+                position: 'absolute',
+                bottom: '12px',
+                right: '10px',
               }}
             >
               <MicRoundedIcon
-                className={isListening ? "mic-icon" : ""}
-                sx={{ color: isListening ? "white" : "black" }}
+                className={isListening ? 'mic-icon' : ''}
+                sx={{ color: isListening ? 'white' : 'black' }}
               />
             </IconButton>
           )}
