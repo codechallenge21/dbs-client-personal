@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, {
   useState,
@@ -6,10 +6,10 @@ import React, {
   useEffect,
   useContext,
   useRef,
-} from "react";
-import Drawer from "@mui/material/Drawer";
-import ListItem from "@mui/material/ListItem";
-import { CloseRounded, MenuRounded, SearchRounded } from "@mui/icons-material";
+} from 'react';
+import Drawer from '@mui/material/Drawer';
+import ListItem from '@mui/material/ListItem';
+import { CloseRounded, MenuRounded, SearchRounded } from '@mui/icons-material';
 import {
   Box,
   Fade,
@@ -21,17 +21,17 @@ import {
   InputAdornment,
   useTheme,
   useMediaQuery,
-} from "@mui/material";
-import DeleteDialog from "@/app/chat/components/DeleteDialog";
-import { OrganizationChannel } from "@/interfaces/entities";
-import useAxiosApi from "@eGroupAI/hooks/apis/useAxiosApi";
-import apis from "@/utils/hooks/apis/apis";
-import ChannelContentContext from "@/app/chat/components/ChannelContentContext";
-import UploadDialog from "../uploadDialog/page";
-import FileUploadIcon from "@mui/icons-material/FileUpload";
-import EditableItem from "../editable-item/EditableItem";
-import InfiniteScroll from "react-infinite-scroll-component";
-import { useLoadChatChannels } from "@/utils/hooks/useLoadChatChannels";
+} from '@mui/material';
+import DeleteDialog from '@/app/chat/components/DeleteDialog';
+import { OrganizationChannel } from '@/interfaces/entities';
+import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
+import apis from '@/utils/hooks/apis/apis';
+import ChannelContentContext from '@/app/chat/components/ChannelContentContext';
+import UploadDialog from '../uploadDialog/page';
+import FileUploadIcon from '@mui/icons-material/FileUpload';
+import EditableItem from '../editable-item/EditableItem';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { useLoadChatChannels } from '@/utils/hooks/useLoadChatChannels';
 
 interface ToolboxProps {
   open: boolean;
@@ -52,7 +52,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
   timeoutRef,
 }) => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [channelList, setChannelList] = useState<OrganizationChannel[]>([]);
   const [toolsAnchor, setToolsAnchor] = useState<null | HTMLElement>(null);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -61,11 +61,11 @@ const Toolbox: React.FC<ToolboxProps> = ({
   const { excute: deleteChannel } = useAxiosApi(apis.deleteChannel);
 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
 
   const handleSearchToggle = () => {
     setIsSearchOpen((prev) => !prev); // Toggle the search field visibility
-    setSearchTerm(""); // Clear the search field when toggled
+    setSearchTerm(''); // Clear the search field when toggled
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,7 +86,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
   const { mutate: loadChannels, data: loadedChannelsData } =
     useLoadChatChannels(
       {
-        organizationId: "4aba77788ae94eca8d6ff330506af944",
+        organizationId: '4aba77788ae94eca8d6ff330506af944',
       },
       {
         startIndex: page,
@@ -106,7 +106,6 @@ const Toolbox: React.FC<ToolboxProps> = ({
   const isMounted = useRef(false);
   const [isPageUpdated, setIsPageUpdated] = useState(false);
 
-
   useEffect(() => {
     if (isMounted.current && isPageUpdated) {
       const handleScroll = async () => {
@@ -125,7 +124,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
             setHasMore(false);
           }
         } catch (error) {
-          console.error("Error loading channels:", error);
+          console.error('Error loading channels:', error);
           setHasMore(false);
         } finally {
           setIsFetching(false);
@@ -170,9 +169,9 @@ const Toolbox: React.FC<ToolboxProps> = ({
 
   const handleDeleteChannelConfirm = useCallback(async () => {
     deleteChannel({
-      organizationId: "4aba77788ae94eca8d6ff330506af944",
+      organizationId: '4aba77788ae94eca8d6ff330506af944',
       organizationChannelId:
-        channelList?.[activeIndex!].organizationChannelId || "",
+        channelList?.[activeIndex!].organizationChannelId || '',
     })
       .then(() => {
         setIsDeleteDialogOpen(false);
@@ -228,7 +227,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
         setSelectedChannel(channel);
       } else {
         const res = await getChannelDetail({
-          organizationId: "4aba77788ae94eca8d6ff330506af944",
+          organizationId: '4aba77788ae94eca8d6ff330506af944',
           organizationChannelId: channelId,
         });
         setSelectedChannel(res.data);
@@ -256,30 +255,30 @@ const Toolbox: React.FC<ToolboxProps> = ({
   const DrawerList = (
     <Box
       sx={{
-        backgroundColor: "#ffffff",
+        backgroundColor: '#ffffff',
       }}
       role="presentation"
     >
       <List>
         <ListItem
           sx={{
-            display: "flex",
-            padding: "4px 8px",
-            justifyContent: "space-between",
+            display: 'flex',
+            padding: '4px 8px',
+            justifyContent: 'space-between',
           }}
         >
           <IconButton
             onClick={() => toggleDrawer(false)}
-            sx={{ color: "black" }}
+            sx={{ color: 'black' }}
           >
             <MenuRounded />
           </IconButton>
-          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Box
               sx={{
-                padding: "0px",
-                display: "flex",
-                justifyContent: "flex-end",
+                padding: '0px',
+                display: 'flex',
+                justifyContent: 'flex-end',
               }}
             >
               <Fade in={isSearchOpen}>
@@ -290,29 +289,29 @@ const Toolbox: React.FC<ToolboxProps> = ({
                   value={searchTerm}
                   onChange={handleInputChange}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter") handleSearchSubmit();
+                    if (e.key === 'Enter') handleSearchSubmit();
                   }}
                   sx={{
                     maxWidth: 150,
-                    borderRadius: "8px",
-                    transition: "width 0.3s ease",
-                    backgroundColor: "#9B9B9B12",
-                    "& .MuiOutlinedInput-root": {
-                      padding: "4px",
-                      borderRadius: "8px",
-                      "& fieldset": {
-                        border: "none",
+                    borderRadius: '8px',
+                    transition: 'width 0.3s ease',
+                    backgroundColor: '#9B9B9B12',
+                    '& .MuiOutlinedInput-root': {
+                      padding: '4px',
+                      borderRadius: '8px',
+                      '& fieldset': {
+                        border: 'none',
                       },
                     },
-                    "& .MuiInputBase-input": {
-                      padding: "4px",
+                    '& .MuiInputBase-input': {
+                      padding: '4px',
                     },
                   }}
                   slotProps={{
                     input: {
                       startAdornment: (
                         <InputAdornment position="start">
-                          <IconButton sx={{ color: "black", padding: "4px" }}>
+                          <IconButton sx={{ color: 'black', padding: '4px' }}>
                             <SearchRounded />
                           </IconButton>
                         </InputAdornment>
@@ -321,7 +320,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
                         <InputAdornment position="end">
                           <IconButton
                             onClick={handleSearchToggle}
-                            sx={{ color: "black", padding: "4px" }}
+                            sx={{ color: 'black', padding: '4px' }}
                           >
                             <CloseRounded />
                           </IconButton>
@@ -334,14 +333,14 @@ const Toolbox: React.FC<ToolboxProps> = ({
               {!isSearchOpen && (
                 <IconButton
                   onClick={handleSearchToggle}
-                  sx={{ color: "black" }}
+                  sx={{ color: 'black' }}
                 >
                   <SearchRounded />
                 </IconButton>
               )}
             </Box>
             <IconButton
-              sx={{ color: "black", padding: 0.5 }}
+              sx={{ color: 'black', padding: 0.5 }}
               onClick={handleStartNewChannel}
             >
               <FileUploadIcon />
@@ -352,33 +351,33 @@ const Toolbox: React.FC<ToolboxProps> = ({
       <Box
         id="scrollableDiv"
         sx={{
-          overflow: "auto",
-          height: "calc(100vh - 64px)",
-          "&::-webkit-scrollbar": {
-            width: "8px",
+          overflow: 'auto',
+          height: 'calc(100vh - 64px)',
+          '&::-webkit-scrollbar': {
+            width: '4px',
           },
-          "&::-webkit-scrollbar-thumb": {
-            backgroundColor: "#c1c1c1",
-            borderRadius: "4px",
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: '#c1c1c1',
+            borderRadius: '4px',
           },
-          "&::-webkit-scrollbar-thumb:hover": {
-            backgroundColor: "#a8a8a8",
+          '&::-webkit-scrollbar-thumb:hover': {
+            backgroundColor: '#a8a8a8',
           },
-          "&::-webkit-scrollbar-track": {
-            backgroundColor: "#f1f1f1",
-            borderRadius: "4px",
+          '&::-webkit-scrollbar-track': {
+            backgroundColor: '#f1f1f1',
+            borderRadius: '4px',
           },
         }}
       >
         <Typography
           sx={{
-            color: "#000",
-            fontFamily: "DFPHeiBold-B5",
-            fontSize: "14px",
-            fontStyle: "normal",
-            fontWeight: "400",
-            lineHeight: "normal",
-            paddingLeft: "8px",
+            color: '#000',
+            fontFamily: 'DFPHeiBold-B5',
+            fontSize: '14px',
+            fontStyle: 'normal',
+            fontWeight: '400',
+            lineHeight: 'normal',
+            paddingLeft: '8px',
           }}
         >
           Today
@@ -391,11 +390,10 @@ const Toolbox: React.FC<ToolboxProps> = ({
           loader={
             <Box
               sx={{
-                display: "flex",
-                justifyContent: "center",
-                padding: "16px",
-                minHeight: "150px",
-                marginTop: "auto",
+                display: 'flex',
+                justifyContent: 'center',
+                padding: '16px',
+                marginTop: 'auto',
               }}
             >
               <CircularProgress size={24} color="primary" />
@@ -407,9 +405,9 @@ const Toolbox: React.FC<ToolboxProps> = ({
               <Typography
                 variant="body2"
                 sx={{
-                  textAlign: "center",
+                  textAlign: 'center',
                   marginTop: 2,
-                  color: "gray",
+                  color: 'gray',
                 }}
               >
                 No more data available.
@@ -421,23 +419,23 @@ const Toolbox: React.FC<ToolboxProps> = ({
             <Box
               key={`${channel.organizationChannelId}-${index}`}
               sx={{
-                width: "93%",
-                marginLeft: "8px",
-                borderRadius: "10px",
+                width: '93%',
+                marginLeft: '8px',
+                borderRadius: '10px',
                 backgroundColor:
                   selectedChannelId === channel.organizationChannelId
-                    ? "#9B9B9B33"
-                    : "white",
-                "&:hover": {
-                  cursor: "pointer",
-                  backgroundColor: "#9B9B9B33",
+                    ? '#9B9B9B33'
+                    : 'white',
+                '&:hover': {
+                  cursor: 'pointer',
+                  backgroundColor: '#9B9B9B33',
                 },
               }}
             >
               <ListItem
                 sx={{
-                  padding: "4px 8px",
-                  whiteSpace: "nowrap",
+                  padding: '4px 8px',
+                  whiteSpace: 'nowrap',
                 }}
                 onClick={() =>
                   handleGetChannelDetail(channel.organizationChannelId)
@@ -448,7 +446,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
                   channel={channel}
                   onSave={async (id, newTitle) => {
                     await updateChannelDetail({
-                      organizationId: "4aba77788ae94eca8d6ff330506af944",
+                      organizationId: '4aba77788ae94eca8d6ff330506af944',
                       organizationChannelId: id,
                       organizationChannelTitle: newTitle,
                     });
@@ -480,44 +478,43 @@ const Toolbox: React.FC<ToolboxProps> = ({
         onClose={handleCloseDeleteDialog}
         onConfirm={handleDeleteChannelConfirm}
         deletableName={
-          channelList?.[activeIndex!]?.organizationChannelTitle || ""
+          channelList?.[activeIndex!]?.organizationChannelTitle || ''
         }
       />
       <Drawer
         open={open}
         sx={{
           width: 250,
-          backgroundColor: "#ffffff",
+          backgroundColor: '#ffffff',
           flexShrink: 0,
-          "& .MuiDrawer-paper": {
+          '& .MuiDrawer-paper': {
             width: 250,
-            boxSizing: "border-box",
-            height: isMobile ? "calc(100% - 58px)" : "calc(100% - 48px)",
-            top: isMobile ? "57px" : "65px",
-            borderTopRightRadius: isMobile ? "8px" : "0px",
-            borderBottomRightRadius: isMobile ? "8px" : "0px",
+            boxSizing: 'border-box',
+            height: '100%',
+            borderTopRightRadius: isMobile ? '8px' : '0px',
+            borderBottomRightRadius: isMobile ? '8px' : '0px',
           },
         }}
         onClose={() => toggleDrawer(false)}
-        variant={isMobile ? "temporary" : "persistent"}
+        variant={isMobile ? 'temporary' : 'persistent'}
       >
         {DrawerList}
       </Drawer>
       <Box
         sx={{
-          marginLeft: open && !isMobile ? "250px" : "0",
-          transition: "margin-left 0.3s",
-          height: "calc(100vh - 64px)",
-          overflow: "auto",
+          marginLeft: open && !isMobile ? '250px' : '0',
+          transition: 'margin-left 0.3s',
+          height: 'calc(100vh - 64px)',
+          overflow: 'auto',
         }}
       >
         <Box
           sx={{
-            display: isLoadingChannel ? "flex" : "none",
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
+            display: isLoadingChannel ? 'flex' : 'none',
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
           }}
         >
           <CircularProgress color="primary" />

@@ -1,12 +1,15 @@
-"use client";
-import { useEffect, useMemo, useState } from "react";
-import Header from "./components/Header";
-import MainContent from "./components/MainContent";
-import SwitchDialog from "./components/SwitchDialog";
-import ToolboxDrawer from "@/components/toolbox-drawer/ToolboxDrawer";
-import { OrganizationChannel, OrganizationChannelMessage } from "@/interfaces/entities";
-import ChannelContentContext from "./components/ChannelContentContext";
-import { AdvisorType } from "./components/types";
+'use client';
+import { useEffect, useMemo, useState } from 'react';
+import Header from './components/Header';
+import MainContent from './components/MainContent';
+import SwitchDialog from './components/SwitchDialog';
+import ToolboxDrawer from '@/components/toolbox-drawer/ToolboxDrawer';
+import {
+  OrganizationChannel,
+  OrganizationChannelMessage,
+} from '@/interfaces/entities';
+import ChannelContentContext from './components/ChannelContentContext';
+import { AdvisorType } from './components/types';
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -15,9 +18,14 @@ export default function Home() {
   const [isLoadingChannel, setIsLoadingChannel] = useState<boolean>(false);
   const [selectedChannel, setSelectedChannel] = useState<OrganizationChannel>();
   const [selectedChannelId, setSelectedChannelId] = useState<string>();
-  const [isInteractingInChat, setIsInteractingInChat] = useState<boolean>(false);
-  const [chatResponses, setChatResponses] = useState<OrganizationChannelMessage[]>([]);
-  const [advisorType, setAdvisorType] = useState<AdvisorType>(AdvisorType.DEFAULT);
+  const [isInteractingInChat, setIsInteractingInChat] =
+    useState<boolean>(false);
+  const [chatResponses, setChatResponses] = useState<
+    OrganizationChannelMessage[]
+  >([]);
+  const [advisorType, setAdvisorType] = useState<AdvisorType>(
+    AdvisorType.DEFAULT
+  );
 
   const handleClose = () => setIsOpen(false);
 
@@ -59,16 +67,14 @@ export default function Home() {
   );
 
   useEffect(() => {
-    if (selectedChannel) setSelectedChannelId(selectedChannel?.organizationChannelId);
+    if (selectedChannel)
+      setSelectedChannelId(selectedChannel?.organizationChannelId);
     else setSelectedChannelId(undefined);
   }, [selectedChannel]);
 
   return (
     <ChannelContentContext.Provider value={contextValue}>
-      <ToolboxDrawer
-        open={isOpenDrawer}
-        toggleDrawer={toggleDrawer}
-      >
+      <ToolboxDrawer open={isOpenDrawer} toggleDrawer={toggleDrawer}>
         <Header
           isChat
           toggleDrawer={toggleDrawer}
@@ -76,7 +82,11 @@ export default function Home() {
           advisor={advisorType}
         />
         <MainContent />
-        <SwitchDialog open={isOpen} onClose={handleClose} onConfirm={handleConfirm} />
+        <SwitchDialog
+          open={isOpen}
+          onClose={handleClose}
+          onConfirm={handleConfirm}
+        />
       </ToolboxDrawer>
     </ChannelContentContext.Provider>
   );
