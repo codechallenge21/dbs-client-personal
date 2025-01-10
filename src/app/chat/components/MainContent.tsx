@@ -6,15 +6,17 @@ import {
   Skeleton,
 } from '@mui/material';
 import TextInput from './TextInput';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import ChannelContentContext from './ChannelContentContext';
 import ChannelMessagePanel from './ChannelMessagePanel';
 import Suggestions from './Suggestions';
 import ViewChats from './viewChats';
+import HistoryChats, { Chat } from './HistoryChats';
 
 export default function MainContent() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const [viewAllChats, setViewAllChats] = useState<boolean>(false);
 
   const {
     selectedChannelId,
@@ -63,6 +65,15 @@ export default function MainContent() {
       title: 'Financial Case Consultant',
       description: 'Offers savings, investment, and debt advice.',
     },
+  ];
+
+  const dummyChats: Chat[] = [
+    { title: 'Chat with Alice', date: '2023-10-01' },
+    { title: 'Meeting with Bob', date: '2023-10-02' },
+    { title: 'Discussion', date: '2023-10-03' },
+    { title: 'Call with Dave', date: '2023-10-04' },
+    { title: 'Session with Eve', date: '2023-10-05' },
+    { title: 'Briefing with Frank', date: '2023-10-06' },
   ];
 
   if (selectedChannel || selectedChannelId)
@@ -202,8 +213,17 @@ export default function MainContent() {
         ))}
       </Box>
       <Box sx={{ marginTop: '40px', width: '100%', maxWidth: '780px' }}>
-        <ViewChats />
+        <ViewChats
+          onClick={() => {
+            setViewAllChats(!viewAllChats);
+          }}
+        />
       </Box>
+      {viewAllChats && (
+        <Box sx={{ marginTop: '40px', width: '100%', maxWidth: '780px' }}>
+          <HistoryChats chats={dummyChats} />;
+        </Box>
+      )}
     </Box>
   );
 }

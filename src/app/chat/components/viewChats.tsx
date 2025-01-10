@@ -3,9 +3,14 @@ import { Box, Button, Typography } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 
-const ViewChats: React.FC = () => {
+interface ViewChatsProps {
+  onClick: () => void;
+}
+
+const ViewChats: React.FC<ViewChatsProps> = ({ onClick }) => {
   return (
     <Button
+      onClick={onClick}
       variant="text"
       sx={{
         display: 'flex',
