@@ -394,6 +394,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
                 justifyContent: 'center',
                 padding: '16px',
                 marginTop: 'auto',
+                minHeight: '50px',
               }}
             >
               <CircularProgress size={24} color="primary" />

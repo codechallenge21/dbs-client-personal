@@ -17,6 +17,7 @@ import pdfPreview from '@/assets/Images/Pdf Icon.svg';
 import txtPerview from '@/assets/Images/Txt Icon.svg';
 import imagePerview from '@/assets/Images/Image Icon.svg';
 import docPerview from '@/assets/Images/Doc Icon.svg';
+import DropdownMenu from './DropdownMenu';
 
 interface SpeechRecognition extends EventTarget {
   continuous: boolean;
@@ -408,9 +409,12 @@ const TextInput = () => {
               position: 'absolute',
               bottom: '12px',
               left: '49px',
+              padding: '4px',
             }}
           >
-            <SupportAgentRounded sx={{ color: 'black' }} />
+            <DropdownMenu advisor={advisorType}>
+              <SupportAgentRounded sx={{ color: 'black' }} />
+            </DropdownMenu>
           </IconButton>
           {userInputValue !== '' && !isListening ? (
             <IconButton

@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useContext, useState } from 'react';
+import { ReactNode, useCallback, useContext, useState } from 'react';
 import {
   Typography,
   ListItemIcon,
@@ -69,7 +69,13 @@ const listItems = [
   },
 ];
 
-export default function DropdownMenu({ advisor }: { advisor: AdvisorType }) {
+export default function DropdownMenu({
+  advisor,
+  children,
+}: {
+  advisor: AdvisorType;
+  children?: ReactNode;
+}) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [toolsAnchor, setToolsAnchor] = useState<null | HTMLElement>(null);
@@ -85,39 +91,49 @@ export default function DropdownMenu({ advisor }: { advisor: AdvisorType }) {
 
   return (
     <>
-      <Button
-        endIcon={<ArrowDropDownIcon />}
-        onClick={(e) => setToolsAnchor(e.currentTarget)}
-        sx={{
-          height: '40px',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: '4px 12px 4px 16px',
-          color: toolsAnchor ? '#0066cc' : 'black',
-          backgroundColor: toolsAnchor ? '#F5F5F5' : 'white',
-          borderRadius: toolsAnchor ? '10px' : '0px',
-        }}
-      >
-        <Typography sx={{ fontSize: '16px', fontFamily: 'DFPHeiBold-B5' }}>
-          {listItems.find((item) => item.value === advisor)?.title}
-        </Typography>
-      </Button>
+      {children ? (
+        <div
+          onClick={(e) => setToolsAnchor(e.currentTarget)}
+          style={{
+            background: 'none',
+            cursor: 'pointer',
+          }}
+        >
+          {children}
+        </div>
+      ) : (
+        <Button
+          endIcon={<ArrowDropDownIcon />}
+          onClick={(e) => setToolsAnchor(e.currentTarget)}
+          sx={{
+            height: '40px',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '4px 12px 4px 16px',
+            color: toolsAnchor ? '#0066cc' : 'black',
+            backgroundColor: toolsAnchor ? '#F5F5F5' : 'white',
+            borderRadius: toolsAnchor ? '10px' : '0px',
+          }}
+        >
+          <Typography sx={{ fontSize: '16px', fontFamily: 'DFPHeiBold-B5' }}>
+            {listItems.find((item) => item.value === advisor)?.title}
+          </Typography>
+        </Button>
+      )}
       <Menu
         anchorEl={toolsAnchor}
         open={Boolean(toolsAnchor)}
         onClose={() => setToolsAnchor(null)}
-        slotProps={{
-          paper: {
-            sx: {
-              padding: '4px',
-              borderRadius: '12px',
-              width: {
-                xs: '100%',
-                sm: '358px',
-              },
-              maxWidth: '358px',
-              minHeight: '392px',
+        PaperProps={{
+          sx: {
+            padding: '4px',
+            borderRadius: '12px',
+            width: {
+              xs: '100%',
+              sm: '358px',
             },
+            maxWidth: '358px',
+            minHeight: '392px',
           },
         }}
       >
