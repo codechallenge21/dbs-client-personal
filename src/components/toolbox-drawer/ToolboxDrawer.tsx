@@ -43,6 +43,48 @@ interface ToolboxProps {
   timeoutRef?: React.RefObject<NodeJS.Timeout | null>;
 }
 
+function categorizeChannels(channelList: OrganizationChannel[]) {
+  const today = dayjs().startOf('day');
+  const yesterday = today.subtract(1, 'day');
+  const last7Days = today.subtract(7, 'day');
+  const last30Days = today.subtract(30, 'day');
+
+  const categories: {
+    Today: OrganizationChannel[];
+    Yesterday: OrganizationChannel[];
+    'Last 7 Days': OrganizationChannel[];
+    'Last 30 Days': OrganizationChannel[];
+    [key: string]: OrganizationChannel[]; // Dynamic keys for months and years
+  } = {
+    Today: [],
+    Yesterday: [],
+    'Last 7 Days': [],
+    'Last 30 Days': [],
+  };
+
+  channelList.forEach((channel) => {
+    const channelDate = dayjs(channel.organizationChannelCreateDate);
+
+    if (channelDate.isSame(today, 'day')) {
+      categories.Today.push(channel);
+    } else if (channelDate.isSame(yesterday, 'day')) {
+      categories.Yesterday.push(channel);
+    } else if (channelDate.isAfter(last7Days)) {
+      categories['Last 7 Days'].push(channel);
+    } else if (channelDate.isAfter(last30Days)) {
+      categories['Last 30 Days'].push(channel);
+    } else {
+      const monthYear = channelDate.format('MMMM YYYY');
+      if (!categories[monthYear]) {
+        categories[monthYear] = [];
+      }
+      categories[monthYear].push(channel);
+    }
+  });
+
+  return categories;
+}
+
 const Toolbox: React.FC<ToolboxProps> = ({
   open,
   toggleDrawer,
@@ -54,6 +96,17 @@ const Toolbox: React.FC<ToolboxProps> = ({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [channelList, setChannelList] = useState<OrganizationChannel[]>([]);
+  const [categorizedChannels, setCategorizedChannels] = useState<{
+    Today: OrganizationChannel[];
+    Yesterday: OrganizationChannel[];
+    'Last 7 Days': OrganizationChannel[];
+    'Last 30 Days': OrganizationChannel[];
+  }>({
+    Today: [],
+    Yesterday: [],
+    'Last 7 Days': [],
+    'Last 30 Days': [],
+  });
   const [toolsAnchor, setToolsAnchor] = useState<null | HTMLElement>(null);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
@@ -102,6 +155,12 @@ const Toolbox: React.FC<ToolboxProps> = ({
       hasLoadedChannelsData.current = true;
     }
   }, [loadedChannelsData]);
+
+  useEffect(() => {
+    if (channelList.length > 0) {
+      setCategorizedChannels(categorizeChannels(channelList || []));
+    }
+  }, [channelList]);
 
   const isMounted = useRef(false);
   const [isPageUpdated, setIsPageUpdated] = useState(false);
