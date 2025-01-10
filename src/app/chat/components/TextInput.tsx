@@ -11,7 +11,7 @@ import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import apis from '@/utils/hooks/apis/apis';
 import ChannelContentContext from './ChannelContentContext';
-import { SupportAgentRounded, SendRounded, Close } from '@mui/icons-material';
+import { SendRounded, Close } from '@mui/icons-material';
 import Image from 'next/image';
 import pdfPreview from '@/assets/Images/Pdf Icon.svg';
 import txtPerview from '@/assets/Images/Txt Icon.svg';
@@ -159,6 +159,7 @@ const TextInput = () => {
         channelsMutate();
       }
       setUserInputValue('');
+      setFiles([]);
     }
   }, [
     channelsMutate,
@@ -257,26 +258,81 @@ const TextInput = () => {
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          width: isMobile ? '95%' : 'calc(100% - 20px)',
-          height: isMobile ? '100px' : files.length ? '260px' : '124px',
+          width: '100%',
           maxWidth: '760px',
+          maxHeight: '760px',
           minHeight: '108px',
           position: isMobile ? 'fixed' : 'relative',
           bottom: isMobile ? 0 : 'auto',
           backgroundColor: '#F5F5F5',
           borderRadius: 2,
-          overflow: 'auto',
           margin: isMobile ? 3 : 0,
+          overflow: 'hidden',
         }}
       >
+        {files.length > 0 && (
+          <Box
+            sx={{
+              display: 'flex',
+              gap: 2,
+              flexWrap: 'wrap',
+              padding: '8px',
+            }}
+          >
+            {files.map((file, index) => (
+              <Box
+                key={index}
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  textAlign: 'center',
+                  position: 'relative',
+                  width: 80,
+                }}
+              >
+                <Image
+                  src={file.preview || imagePerview}
+                  alt={file.file.name}
+                  width={48}
+                  height={48}
+                  style={{
+                    objectFit: 'cover',
+                    borderRadius: '4px',
+                  }}
+                />
+                <Box
+                  sx={{
+                    mt: 1,
+                    fontSize: '12px',
+                    wordBreak: 'break-word',
+                    textAlign: 'center',
+                  }}
+                >
+                  {file.file.name}
+                </Box>
+                <IconButton
+                  sx={{
+                    position: 'absolute',
+                    top: '-10px',
+                    right: '-10px',
+                  }}
+                  onClick={() => handleRemoveFile(index)}
+                >
+                  <Close fontSize="small" />
+                </IconButton>
+              </Box>
+            ))}
+          </Box>
+        )}
         <Box
           sx={{
             width: '100%',
             paddingTop: '8px',
             paddingLeft: '20px',
             paddingRight: '20px',
-            paddingBottom: '8px',
-            overflow: 'auto',
+            overflowY: 'auto',
+            maxHeight: '200px',
             '&::-webkit-scrollbar': {
               width: '8px',
             },
@@ -293,7 +349,7 @@ const TextInput = () => {
             },
           }}
         >
-          {files.length > 0 && (
+          {/* {files.length > 0 && (
             <Box
               sx={{
                 display: 'flex',
@@ -347,7 +403,7 @@ const TextInput = () => {
                 </Box>
               ))}
             </Box>
-          )}
+          )} */}
           <TextareaAutosize
             minRows={2}
             maxRows={10}
@@ -412,9 +468,7 @@ const TextInput = () => {
               padding: '4px',
             }}
           >
-            <DropdownMenu advisor={advisorType}>
-              <SupportAgentRounded sx={{ color: 'black' }} />
-            </DropdownMenu>
+            <DropdownMenu isTextInput advisor={advisorType} />
           </IconButton>
           {userInputValue !== '' && !isListening ? (
             <IconButton

@@ -1,11 +1,10 @@
 'use client';
 
-import { ReactNode, useCallback, useContext, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import {
   Typography,
   ListItemIcon,
   ListItemText,
-  Button,
   Menu,
   MenuItem,
   useTheme,
@@ -19,7 +18,6 @@ import {
   PhishingRounded,
   WorkRounded,
 } from '@mui/icons-material';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import AutoFixNormalIcon from '@mui/icons-material/AutoFixNormal';
 import { AdvisorType } from './types';
 import ChannelContentContext from './ChannelContentContext';
@@ -71,10 +69,10 @@ const listItems = [
 
 export default function DropdownMenu({
   advisor,
-  children,
+  isTextInput = false,
 }: {
   advisor: AdvisorType;
-  children?: ReactNode;
+  isTextInput?: boolean;
 }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -91,7 +89,7 @@ export default function DropdownMenu({
 
   return (
     <>
-      {children ? (
+      {isTextInput ? (
         <div
           onClick={(e) => setToolsAnchor(e.currentTarget)}
           style={{
@@ -99,26 +97,36 @@ export default function DropdownMenu({
             cursor: 'pointer',
           }}
         >
-          {children}
+          {listItems
+            .filter((item) => item.value === advisor)
+            .map((item) => (
+              <ListItemIcon
+                key={item.value}
+                sx={{ color: 'black', minWidth: 'auto' }}
+              >
+                {item.icon}
+              </ListItemIcon>
+            ))}
         </div>
       ) : (
-        <Button
-          endIcon={<ArrowDropDownIcon />}
+        <Typography
           onClick={(e) => setToolsAnchor(e.currentTarget)}
           sx={{
-            height: '40px',
+            display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             padding: '4px 12px 4px 16px',
             color: toolsAnchor ? '#0066cc' : 'black',
             backgroundColor: toolsAnchor ? '#F5F5F5' : 'white',
             borderRadius: toolsAnchor ? '10px' : '0px',
+            cursor: 'pointer',
+            height: '40px',
+            fontSize: '16px',
+            fontFamily: 'DFPHeiBold-B5',
           }}
         >
-          <Typography sx={{ fontSize: '16px', fontFamily: 'DFPHeiBold-B5' }}>
-            {listItems.find((item) => item.value === advisor)?.title}
-          </Typography>
-        </Button>
+          {listItems.find((item) => item.value === advisor)?.title}
+        </Typography>
       )}
       <Menu
         anchorEl={toolsAnchor}
