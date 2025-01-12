@@ -1,0 +1,93 @@
+'use client';
+import { useEffect, useMemo, useState } from 'react';
+import ToolboxDrawer from '@/components/toolbox-drawer/ToolboxDrawer';
+import {
+  OrganizationChannel,
+  OrganizationChannelMessage,
+} from '@/interfaces/entities';
+import ChannelSearch from './ViewAllHistory';
+import { AdvisorType } from '../chat/components/types';
+import ChannelContentContext from '../chat/components/ChannelContentContext';
+import Header from '../chat/components/Header';
+import SwitchDialog from '../chat/components/SwitchDialog';
+
+export default function Home() {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(false);
+
+  const [isLoadingChannel, setIsLoadingChannel] = useState<boolean>(false);
+  const [selectedChannel, setSelectedChannel] = useState<OrganizationChannel>();
+  const [selectedChannelId, setSelectedChannelId] = useState<string>();
+  const [isInteractingInChat, setIsInteractingInChat] =
+    useState<boolean>(false);
+  const [chatResponses, setChatResponses] = useState<
+    OrganizationChannelMessage[]
+  >([]);
+  const [advisorType, setAdvisorType] = useState<AdvisorType>(
+    AdvisorType.DEFAULT
+  );
+
+  const handleClose = () => setIsOpen(false);
+
+  const handleConfirm = () => {
+    setIsOpen(false);
+  };
+
+  const toggleDrawer = (newOpen: boolean) => {
+    setIsOpenDrawer(newOpen);
+  };
+
+  const contextValue = useMemo(
+    () => ({
+      isLoadingChannel,
+      setIsLoadingChannel,
+      selectedChannel,
+      setSelectedChannel,
+      isInteractingInChat,
+      selectedChannelId,
+      setSelectedChannelId,
+      setIsInteractingInChat,
+      chatResponses,
+      setChatResponses,
+      advisorType,
+      setAdvisorType,
+    }),
+    [
+      isLoadingChannel,
+      selectedChannel,
+      selectedChannelId,
+      setSelectedChannelId,
+      isInteractingInChat,
+      setIsInteractingInChat,
+      chatResponses,
+      setChatResponses,
+      advisorType,
+      setAdvisorType,
+    ]
+  );
+
+  useEffect(() => {
+    if (selectedChannel)
+      setSelectedChannelId(selectedChannel?.organizationChannelId);
+    else setSelectedChannelId(undefined);
+  }, [selectedChannel]);
+
+  return (
+    <ChannelContentContext.Provider value={contextValue}>
+      <ToolboxDrawer open={isOpenDrawer} toggleDrawer={toggleDrawer}>
+        <Header
+          isChat
+          toggleDrawer={toggleDrawer}
+          open={isOpenDrawer}
+          advisor={advisorType}
+        />
+        <ChannelSearch />
+        <SwitchDialog
+          open={isOpen}
+          onClose={handleClose}
+          onConfirm={handleConfirm}
+        />
+      </ToolboxDrawer>
+    </ChannelContentContext.Provider>
+  );
+}

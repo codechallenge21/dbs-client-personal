@@ -6,17 +6,19 @@ import {
   Skeleton,
 } from '@mui/material';
 import TextInput from './TextInput';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import ChannelContentContext from './ChannelContentContext';
 import ChannelMessagePanel from './ChannelMessagePanel';
 import Suggestions from './Suggestions';
 import ViewChats from './viewChats';
-import HistoryChats, { Chat } from './HistoryChats';
+import { useRouter } from 'next/navigation';
+// import HistoryChats, { Chat } from './HistoryChats';
 
 export default function MainContent() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const [viewAllChats, setViewAllChats] = useState<boolean>(false);
+  const router = useRouter();
+  // const [viewAllChats, setViewAllChats] = useState<boolean>(false);
 
   const {
     selectedChannelId,
@@ -67,14 +69,14 @@ export default function MainContent() {
     },
   ];
 
-  const dummyChats: Chat[] = [
-    { title: 'Chat with Alice', date: '2023-10-01' },
-    { title: 'Meeting with Bob', date: '2023-10-02' },
-    { title: 'Discussion', date: '2023-10-03' },
-    { title: 'Call with Dave', date: '2023-10-04' },
-    { title: 'Session with Eve', date: '2023-10-05' },
-    { title: 'Briefing with Frank', date: '2023-10-06' },
-  ];
+  // const dummyChats: Chat[] = [
+  //   { title: 'Chat with Alice', date: '2023-10-01' },
+  //   { title: 'Meeting with Bob', date: '2023-10-02' },
+  //   { title: 'Discussion', date: '2023-10-03' },
+  //   { title: 'Call with Dave', date: '2023-10-04' },
+  //   { title: 'Session with Eve', date: '2023-10-05' },
+  //   { title: 'Briefing with Frank', date: '2023-10-06' },
+  // ];
 
   if (selectedChannel || selectedChannelId)
     return (
@@ -215,15 +217,16 @@ export default function MainContent() {
       <Box sx={{ marginTop: '40px', width: '100%', maxWidth: '780px' }}>
         <ViewChats
           onClick={() => {
-            setViewAllChats(!viewAllChats);
+            // setViewAllChats(!viewAllChats);
+            router.push('/allchat');
           }}
         />
       </Box>
-      {viewAllChats && (
+      {/* {viewAllChats && (
         <Box sx={{ marginTop: '40px', width: '100%', maxWidth: '780px' }}>
           <HistoryChats chats={dummyChats} />;
         </Box>
-      )}
+      )} */}
     </Box>
   );
 }
