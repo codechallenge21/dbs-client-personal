@@ -12,14 +12,12 @@ import ChannelMessagePanel from './ChannelMessagePanel';
 import Suggestions from './Suggestions';
 import ViewChats from './viewChats';
 import { useRouter } from 'next/navigation';
-// import HistoryChats, { Chat } from './HistoryChats';
+import HistoryChats, { Chat } from './HistoryChats';
 
 export default function MainContent() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const router = useRouter();
-  // const [viewAllChats, setViewAllChats] = useState<boolean>(false);
-
   const {
     selectedChannelId,
     selectedChannel,
@@ -69,14 +67,14 @@ export default function MainContent() {
     },
   ];
 
-  // const dummyChats: Chat[] = [
-  //   { title: 'Chat with Alice', date: '2023-10-01' },
-  //   { title: 'Meeting with Bob', date: '2023-10-02' },
-  //   { title: 'Discussion', date: '2023-10-03' },
-  //   { title: 'Call with Dave', date: '2023-10-04' },
-  //   { title: 'Session with Eve', date: '2023-10-05' },
-  //   { title: 'Briefing with Frank', date: '2023-10-06' },
-  // ];
+  const dummyChats: Chat[] = [
+    { title: '與愛麗絲的聊天', date: '2023-10-01' },
+    { title: '與鮑勃的會議', date: '2023-10-02' },
+    { title: '討論', date: '2023-10-03' },
+    { title: '與戴夫的通話', date: '2023-10-04' },
+    { title: '與伊芙的會議', date: '2023-10-05' },
+    { title: '與弗蘭克的簡報', date: '2023-10-06' },
+  ];
 
   if (selectedChannel || selectedChannelId)
     return (
@@ -217,16 +215,13 @@ export default function MainContent() {
       <Box sx={{ marginTop: '40px', width: '100%', maxWidth: '780px' }}>
         <ViewChats
           onClick={() => {
-            // setViewAllChats(!viewAllChats);
             router.push('/allchat');
           }}
         />
       </Box>
-      {/* {viewAllChats && (
-        <Box sx={{ marginTop: '40px', width: '100%', maxWidth: '780px' }}>
-          <HistoryChats chats={dummyChats} />;
-        </Box>
-      )} */}
+      <Box sx={{ marginTop: '40px', width: '100%', maxWidth: '780px' }}>
+        <HistoryChats chats={dummyChats} />
+      </Box>
     </Box>
   );
 }

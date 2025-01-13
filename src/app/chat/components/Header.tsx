@@ -1,12 +1,17 @@
-"use client";
+'use client';
 
-import React from "react";
-import DropdownMenu from "./DropdownMenu";
-import { Box, IconButton, useMediaQuery, useTheme } from "@mui/material";
-import { EditRounded, MenuRounded } from "@mui/icons-material";
-import UploadDialog from "@/components/uploadDialog/page";
-import { AdvisorType } from "./types";
-import FileUploadIcon from "@mui/icons-material/FileUpload";
+import React from 'react';
+import DropdownMenu from './DropdownMenu';
+import { Box, IconButton, useMediaQuery, useTheme } from '@mui/material';
+import {
+  EditRounded,
+  MenuRounded,
+  SettingsInputComponentRounded,
+  StarBorderRounded,
+} from '@mui/icons-material';
+import UploadDialog from '@/components/uploadDialog/page';
+import { AdvisorType } from './types';
+import FileUploadIcon from '@mui/icons-material/FileUpload';
 
 interface HeaderProps {
   open?: boolean;
@@ -27,7 +32,7 @@ export default function Header({
   setOpenUpload = () => {},
 }: HeaderProps) {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleOpenUpload = () => {
     if (setOpenUpload) setOpenUpload(false);
@@ -39,62 +44,84 @@ export default function Header({
         <>
           <Box
             sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
             }}
           >
             <IconButton onClick={() => toggleDrawer(true)}>
-              <MenuRounded sx={{ color: "black" }} />
+              <MenuRounded sx={{ color: 'black' }} />
             </IconButton>
             {isChat && <DropdownMenu advisor={advisor} />}
             {isChat ? (
               <IconButton>
-                <EditRounded sx={{ color: "black" }} />
+                <EditRounded sx={{ color: 'black' }} />
+                <StarBorderRounded sx={{ color: 'black' }} />
+                <SettingsInputComponentRounded sx={{ color: 'black' }} />
               </IconButton>
             ) : (
               <IconButton onClick={() => (isChat ? null : setOpenUpload(true))}>
-                <FileUploadIcon sx={{ color: "black" }} />
+                <FileUploadIcon sx={{ color: 'black' }} />
               </IconButton>
-            )}{" "}
+            )}{' '}
           </Box>
         </>
       )}
       {!isMobile && (
         <Box
           sx={{
-            display: "flex",
-            padding: "8px 16px",
-            alignItems: "flex-start",
-            justifyContent: open ? "space-between" : "flex-start",
+            display: 'flex',
+            padding: '8px 16px',
+            alignItems: 'flex-start',
+            justifyContent: open ? 'space-between' : 'flex-start',
           }}
         >
           {!open && (
             <Box
               sx={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "flex-start",
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
               }}
             >
               <IconButton onClick={() => toggleDrawer(true)}>
-                <MenuRounded sx={{ color: "black" }} />
+                <MenuRounded sx={{ color: 'black' }} />
               </IconButton>
 
               {isChat ? (
                 <IconButton>
-                  <EditRounded sx={{ color: "black" }} />
+                  <EditRounded sx={{ color: 'black' }} />
                 </IconButton>
               ) : (
                 <IconButton
                   onClick={() => (isChat ? null : setOpenUpload(true))}
                 >
-                  <FileUploadIcon sx={{ color: "black" }} />
+                  <FileUploadIcon sx={{ color: 'black' }} />
                 </IconButton>
               )}
             </Box>
           )}
-          {isChat && <DropdownMenu advisor={advisor} />}
+          {isChat && (
+            <Box
+              sx={{
+                display: 'flex',
+                width: '100%',
+                justifyContent: 'space-between',
+              }}
+            >
+              <DropdownMenu advisor={advisor} />
+              <Box>
+                <IconButton>
+                  <StarBorderRounded sx={{ color: 'black', margin: '8px' }} />
+                </IconButton>
+                <IconButton>
+                  <SettingsInputComponentRounded
+                    sx={{ color: 'black', margin: '8px' }}
+                  />
+                </IconButton>
+              </Box>
+            </Box>
+          )}
         </Box>
       )}
       {!isChat && <UploadDialog open={openUpload} onClose={handleOpenUpload} />}

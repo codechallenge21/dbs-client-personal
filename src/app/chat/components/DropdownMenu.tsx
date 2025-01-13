@@ -21,6 +21,7 @@ import {
 import AutoFixNormalIcon from '@mui/icons-material/AutoFixNormal';
 import { AdvisorType } from './types';
 import ChannelContentContext from './ChannelContentContext';
+import DeleteDialog from './DeleteDialog';
 
 const listItems = [
   {
@@ -77,8 +78,19 @@ export default function DropdownMenu({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [toolsAnchor, setToolsAnchor] = useState<null | HTMLElement>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
 
   const { setAdvisorType } = useContext(ChannelContentContext);
+
+  const handleCloseDeleteDialog = useCallback(() => {
+    setIsDeleteDialogOpen(false);
+    setToolsAnchor(null);
+  }, []);
+
+  const handleDeleteChannelConfirm = useCallback(() => {
+    setIsDeleteDialogOpen(false);
+    setToolsAnchor(null);
+  }, []);
 
   const handleOnClickMenuItem = useCallback(
     (value: AdvisorType) => {
@@ -110,7 +122,7 @@ export default function DropdownMenu({
         </div>
       ) : (
         <Typography
-          onClick={(e) => setToolsAnchor(e.currentTarget)}
+          onClick={() => setIsDeleteDialogOpen(true)}
           sx={{
             display: 'flex',
             alignItems: 'center',
@@ -204,6 +216,12 @@ export default function DropdownMenu({
           </MenuItem>
         ))}
       </Menu>
+      <DeleteDialog
+        open={isDeleteDialogOpen}
+        onClose={handleCloseDeleteDialog}
+        onConfirm={handleDeleteChannelConfirm}
+        deletableName={'Delete this channel'}
+      />
     </>
   );
 }
