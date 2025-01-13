@@ -118,12 +118,12 @@ export default function PopularArea() {
               <Box
                 key={index}
                 sx={{
+                  display: "flex",
                   minWidth: "260px",
                   minHeight: "220px",
-                  display: "flex",
+                  alignItems: "center",
                   flexDirection: "column",
                   justifyContent: "center",
-                  alignItems: "center",
                 }}
               >
                 <Image
@@ -133,11 +133,15 @@ export default function PopularArea() {
                     width: "100%",
                     height: "130px",
                     objectFit: "cover",
+                    borderTopLeftRadius: "8px",
+                    borderTopRightRadius: "8px",
                   }}
                 />
                 <Box
                   sx={{
                     width: "100%",
+                    borderBottomLeftRadius: "8px",
+                    borderBottomRightRadius: "8px",
                     backgroundColor: "var(--Primary-, #EBE3DD)",
                   }}
                 >
