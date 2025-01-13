@@ -129,12 +129,12 @@ export default function ChannelSearchCombined() {
                 選擇
               </Button>
             </Typography>
+            <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+              可選擇的頻道
+            </Typography>
             {/* Selected Channels */}
             {selectedChannels.length > 0 && (
-              <Stack spacing={2} sx={{ mb: 3 }}>
-                <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
-                  已選擇的頻道
-                </Typography>
+              <Stack spacing={2} sx={{ mb: 2 }}>
                 {selectedChannels.map((channel) => (
                   <Paper
                     key={channel.id}
@@ -160,6 +160,18 @@ export default function ChannelSearchCombined() {
                         {channel.date}
                       </Typography>
                     </Box>
+                    <IconButton
+                      size="small"
+                      onClick={() => {
+                        if (!channel.selected) {
+                          toggleChannel(channel.id);
+                        } else {
+                          handleDelete();
+                        }
+                      }}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
                   </Paper>
                 ))}
               </Stack>
@@ -167,14 +179,14 @@ export default function ChannelSearchCombined() {
 
             {/* Available Channels */}
             <Stack spacing={2}>
-              <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
-                可選擇的頻道
-              </Typography>
               {filteredChannels
                 .filter((ch) => !ch.selected)
                 .map((channel) => (
                   <Paper
                     key={channel.id}
+                    onClick={() => {
+                      toggleChannel(channel.id);
+                    }}
                     sx={{
                       p: 2,
                       border: '1px solid',
@@ -258,7 +270,6 @@ export default function ChannelSearchCombined() {
                 <Paper
                   key={channel.id}
                   elevation={0}
-                  // zindex={1}
                   sx={{
                     display: 'flex',
                     alignItems: 'center',
@@ -313,14 +324,14 @@ export default function ChannelSearchCombined() {
                 </Paper>
               ))}
             </Stack>
-            <DeleteConfirmationModal
-              open={open}
-              onClose={() => setOpen(false)}
-              onDelete={handleConfirmDelete}
-              ChannelName={selectedChannels}
-            />
           </>
         )}
+        <DeleteConfirmationModal
+          open={open}
+          onClose={() => setOpen(false)}
+          onDelete={handleConfirmDelete}
+          ChannelName={selectedChannels}
+        />
       </Box>
     </Box>
   );
