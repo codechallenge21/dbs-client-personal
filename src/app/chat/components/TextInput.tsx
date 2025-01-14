@@ -11,7 +11,7 @@ import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import apis from '@/utils/hooks/apis/apis';
 import ChannelContentContext from './ChannelContentContext';
-import { SendRounded, Close } from '@mui/icons-material';
+import { SendRounded, CloseRounded } from '@mui/icons-material';
 import Image from 'next/image';
 import pdfPreview from '@/assets/Images/Pdf Icon.svg';
 import txtPerview from '@/assets/Images/Txt Icon.svg';
@@ -136,6 +136,14 @@ const TextInput = () => {
 
   const handleSendMessage = useCallback(async () => {
     if (isInteracting) return;
+    setChatResponses((prev) => [
+      ...prev,
+      {
+        organizationChannelMessageType: 'USER',
+        organizationChannelMessageContent: userInputValue,
+        organizationChannelFiles: files,
+      },
+    ]);
     const response = await submitUserInputs({
       organizationId: '4aba77788ae94eca8d6ff330506af944',
       query: userInputValue,
@@ -145,10 +153,6 @@ const TextInput = () => {
     if (response.data.response) {
       setChatResponses((prev) => [
         ...prev,
-        {
-          organizationChannelMessageType: 'USER',
-          organizationChannelMessageContent: userInputValue,
-        },
         {
           organizationChannelMessageType: 'AI',
           organizationChannelMessageContent: response?.data?.response,
@@ -170,6 +174,7 @@ const TextInput = () => {
     submitUserInputs,
     userInputValue,
     advisorType,
+    files,
   ]);
 
   const handleClickSubmitOrAudioFileUpload = useCallback(() => {
@@ -289,10 +294,11 @@ const TextInput = () => {
                   textAlign: 'center',
                   position: 'relative',
                   width: 80,
+                  paddingTop: '10px',
                 }}
               >
                 <Image
-                  src={file.preview || imagePerview}
+                  src={file.preview ?? imagePerview}
                   alt={file.file.name}
                   width={48}
                   height={48}
@@ -314,12 +320,19 @@ const TextInput = () => {
                 <IconButton
                   sx={{
                     position: 'absolute',
-                    top: '-10px',
-                    right: '-10px',
+                    top: '0px',
+                    left: '6px', // Adjusted for top-left placement
+                    backgroundColor: 'red',
+                    width: '16px', // Smaller size for the button
+                    height: '16px',
+                    color: 'white',
+                    '&:hover': {
+                      backgroundColor: 'darkred', // Optional hover effect
+                    },
                   }}
-                  onClick={() => handleRemoveFile(index)}
+                  onClick={() => handleRemoveFile(index)} // Your event handler
                 >
-                  <Close fontSize="small" />
+                  <CloseRounded sx={{ fontSize: '14px' }} />
                 </IconButton>
               </Box>
             ))}
@@ -434,7 +447,7 @@ const TextInput = () => {
             width: '100%',
             padding: '20px',
             display: 'flex',
-            marginTop: userInputValue !== '' && !isListening ? '12px' : '0px',
+            marginTop: '12px',
             justifyContent: 'space-between',
           }}
         >

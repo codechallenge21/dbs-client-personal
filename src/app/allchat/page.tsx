@@ -1,6 +1,5 @@
 'use client';
 import { useEffect, useMemo, useState } from 'react';
-import ToolboxDrawer from '@/components/toolbox-drawer/ToolboxDrawer';
 import {
   OrganizationChannel,
   OrganizationChannelMessage,
@@ -10,6 +9,7 @@ import { AdvisorType } from '../chat/components/types';
 import ChannelContentContext from '../chat/components/ChannelContentContext';
 import Header from '../chat/components/Header';
 import SwitchDialog from '../chat/components/SwitchDialog';
+import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -74,7 +74,7 @@ export default function Home() {
 
   return (
     <ChannelContentContext.Provider value={contextValue}>
-      <ToolboxDrawer open={isOpenDrawer} toggleDrawer={toggleDrawer}>
+      <ToolbarDrawer open={isOpenDrawer} toggleDrawer={toggleDrawer}>
         <Header
           isChat
           toggleDrawer={toggleDrawer}
@@ -87,7 +87,7 @@ export default function Home() {
           onClose={handleClose}
           onConfirm={handleConfirm}
         />
-      </ToolboxDrawer>
+      </ToolbarDrawer>
     </ChannelContentContext.Provider>
   );
 }

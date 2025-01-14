@@ -1,4 +1,4 @@
-import { AdvisorType } from "@/app/chat/components/types";
+import { AdvisorType } from '@/app/chat/components/types';
 
 export interface Creator {
   loginId: string;
@@ -32,12 +32,18 @@ export interface Organization {
   organizationDomainName: string;
 }
 
+export interface FileListType {
+  file: File;
+  preview: string | null;
+}
+
 export interface OrganizationChannelMessage {
   organizationChannelMessageId?: string;
-  organizationChannelMessageType: "AI" | "USER";
+  organizationChannelMessageType: 'AI' | 'USER';
   organizationChannelMessageContent: string;
   organizationChannelMessageTokenCount?: number;
   organizationChannelMessageCreateDate?: string;
+  organizationChannelFiles?: FileListType[];
 }
 
 export interface OrganizationChannelFile {
@@ -57,13 +63,13 @@ export interface OrganizationChannelTranscript {
   organizationChannelTranscriptCreateDate: string;
 
   organizationChannelTranscriptContent: string;
-  organizationChannelTranscriptStatus: "COMPLETE";
+  organizationChannelTranscriptStatus: 'COMPLETE';
 }
 
-export type OrganizationChannelTypes = "CHAT" | "MEETING";
+export type OrganizationChannelTypes = 'CHAT' | 'MEETING';
 
 export interface OrganizationChannelChatInteractResponse {
-  status: "success";
+  status: 'success';
   channelId: string;
   response: string;
   contextInfo: {
@@ -104,9 +110,9 @@ export interface OrganizationChannel {
 export interface OrganizationChannelDetail {
   organizationChannelId: string;
   organization: Organization;
-  organizationChannelTitle: "5566";
-  organizationChannelCreateDate: "2024-12-18T10:41:27.000Z";
-  organizationChannelUpdateDate: "2024-12-18T16:07:18.000Z";
+  organizationChannelTitle: '5566';
+  organizationChannelCreateDate: '2024-12-18T10:41:27.000Z';
+  organizationChannelUpdateDate: '2024-12-18T16:07:18.000Z';
   organizationChannelFileList: OrganizationChannelFile[];
   organizationChannelTranscriptList: OrganizationChannelTranscript[];
   organizationChannelMessageList: OrganizationChannelMessage[];
@@ -117,5 +123,5 @@ export interface OrganizationChannelResponse {
   organization: Organization;
   organizationChannelTitle: string;
   creator: Creator;
-  organizationChannelType: "MEETING" | "CHAT";
+  organizationChannelType: 'MEETING' | 'CHAT';
 }

@@ -76,7 +76,7 @@ export default function MainContent() {
     { title: '與弗蘭克的簡報', date: '2023-10-06' },
   ];
 
-  if (selectedChannel || selectedChannelId)
+  if (selectedChannel || selectedChannelId || chatResponses.length)
     return (
       <Box
         sx={{
@@ -102,21 +102,6 @@ export default function MainContent() {
           />
         )}
         <TextInput />
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            flexDirection: 'row',
-            marginTop: '20px',
-            gap: '16px',
-            flexWrap: 'wrap',
-            maxWidth: '760px',
-          }}
-        >
-          {SuggestionsData.map((suggestion) => (
-            <Suggestions key={suggestion.id} title={suggestion.title} />
-          ))}
-        </Box>{' '}
       </Box>
     );
 
