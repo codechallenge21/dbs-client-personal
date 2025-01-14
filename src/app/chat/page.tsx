@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import Header from './components/Header';
 import MainContent from './components/MainContent';
 import SwitchDialog from './components/SwitchDialog';
-import ToolboxDrawer from '@/components/toolbox-drawer/ToolboxDrawer';
+import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
 import {
   OrganizationChannel,
   OrganizationChannelMessage,
@@ -74,7 +74,7 @@ export default function Home() {
 
   return (
     <ChannelContentContext.Provider value={contextValue}>
-      <ToolboxDrawer open={isOpenDrawer} toggleDrawer={toggleDrawer}>
+      <ToolbarDrawer open={isOpenDrawer} toggleDrawer={toggleDrawer}>
         <Header
           isChat
           toggleDrawer={toggleDrawer}
@@ -87,7 +87,7 @@ export default function Home() {
           onClose={handleClose}
           onConfirm={handleConfirm}
         />
-      </ToolboxDrawer>
+      </ToolbarDrawer>
     </ChannelContentContext.Provider>
   );
 }
