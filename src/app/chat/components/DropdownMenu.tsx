@@ -23,6 +23,7 @@ import { AdvisorType } from './types';
 import ChannelContentContext from './ChannelContentContext';
 import EditDeleteModal from './EditDeleteModal';
 import DeleteConfirmationModal from '@/app/allchat/DeleteConfirmationModal';
+import RenameDialog from './renameChat';
 
 const listItems = [
   {
@@ -82,9 +83,14 @@ export default function DropdownMenu({
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [openEditDeleteModal, setOpenEditDeleteModal] =
     useState<HTMLElement | null>(null);
+  const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setOpenEditDeleteModal(event.currentTarget);
+  };
+
+  const handleSave = (newName: string) => {
+    console.log('New name:', newName);
   };
 
   const handleClose = () => {
@@ -95,7 +101,9 @@ export default function DropdownMenu({
     setIsDeleteDialogOpen(false);
   };
 
-  const handleEdit = () => {};
+  const handleEdit = () => {
+    setIsRenameDialogOpen(true);
+  };
 
   const handleDelete = () => {
     setIsDeleteDialogOpen(true);
@@ -245,6 +253,12 @@ export default function DropdownMenu({
         onClose={handleClose}
         onEdit={handleEdit}
         onDelete={handleDelete}
+      />
+      <RenameDialog
+        open={isRenameDialogOpen}
+        onClose={() => setIsRenameDialogOpen(false)}
+        onSave={handleSave}
+        initialName=""
       />
     </>
   );
