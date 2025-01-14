@@ -21,7 +21,8 @@ import {
 import AutoFixNormalIcon from '@mui/icons-material/AutoFixNormal';
 import { AdvisorType } from './types';
 import ChannelContentContext from './ChannelContentContext';
-import DeleteDialog from './DeleteDialog';
+import EditDeleteModal from './EditDeleteModal';
+import DeleteConfirmationModal from '@/app/allchat/DeleteConfirmationModal';
 
 const listItems = [
   {
@@ -78,19 +79,29 @@ export default function DropdownMenu({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [toolsAnchor, setToolsAnchor] = useState<null | HTMLElement>(null);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [openEditDeleteModal, setOpenEditDeleteModal] =
+    useState<HTMLElement | null>(null);
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setOpenEditDeleteModal(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setOpenEditDeleteModal(null);
+  };
+
+  const handleConfirmDelete = () => {
+    setIsDeleteDialogOpen(false);
+  };
+
+  const handleEdit = () => {};
+
+  const handleDelete = () => {
+    setIsDeleteDialogOpen(true);
+  };
 
   const { setAdvisorType } = useContext(ChannelContentContext);
-
-  const handleCloseDeleteDialog = useCallback(() => {
-    setIsDeleteDialogOpen(false);
-    setToolsAnchor(null);
-  }, []);
-
-  const handleDeleteChannelConfirm = useCallback(() => {
-    setIsDeleteDialogOpen(false);
-    setToolsAnchor(null);
-  }, []);
 
   const handleOnClickMenuItem = useCallback(
     (value: AdvisorType) => {
@@ -122,7 +133,6 @@ export default function DropdownMenu({
         </div>
       ) : (
         <Typography
-          onClick={() => setIsDeleteDialogOpen(true)}
           sx={{
             display: 'flex',
             alignItems: 'center',
@@ -136,6 +146,7 @@ export default function DropdownMenu({
             fontSize: '16px',
             fontFamily: 'DFPHeiBold-B5',
           }}
+          onClick={handleClick}
         >
           {listItems.find((item) => item.value === advisor)?.title}
         </Typography>
@@ -216,11 +227,24 @@ export default function DropdownMenu({
           </MenuItem>
         ))}
       </Menu>
-      <DeleteDialog
+      <DeleteConfirmationModal
         open={isDeleteDialogOpen}
-        onClose={handleCloseDeleteDialog}
-        onConfirm={handleDeleteChannelConfirm}
-        deletableName={'Delete this channel'}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        onDelete={handleConfirmDelete}
+        ChannelName={[
+          {
+            id: 1,
+            title: 'Delete This Channel',
+            date: new Date().toISOString(),
+            selected: false,
+          },
+        ]}
+      />
+      <EditDeleteModal
+        anchorEl={openEditDeleteModal}
+        onClose={handleClose}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
       />
     </>
   );
