@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import DropdownMenu from './DropdownMenu';
 import { Box, IconButton, useMediaQuery, useTheme } from '@mui/material';
 import {
@@ -12,6 +12,7 @@ import {
 import UploadDialog from '@/components/uploadDialog/page';
 import { AdvisorType } from './types';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
+import DataSourceDialog from './chatDataStore';
 
 interface HeaderProps {
   open?: boolean;
@@ -33,6 +34,7 @@ export default function Header({
 }: HeaderProps) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const [openDataSource, setOpenDataSource] = useState(false);
 
   const handleOpenUpload = () => {
     if (setOpenUpload) setOpenUpload(false);
@@ -116,6 +118,7 @@ export default function Header({
                 </IconButton>
                 <IconButton>
                   <SettingsInputComponentRounded
+                    onClick={() => setOpenDataSource(true)}
                     sx={{ color: 'black', margin: '8px' }}
                   />
                 </IconButton>
@@ -125,6 +128,10 @@ export default function Header({
         </Box>
       )}
       {!isChat && <UploadDialog open={openUpload} onClose={handleOpenUpload} />}
+      <DataSourceDialog
+        open={openDataSource}
+        onClose={() => setOpenDataSource(false)}
+      />
     </Box>
   );
 }
