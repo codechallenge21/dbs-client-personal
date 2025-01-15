@@ -11,6 +11,8 @@ import {
   Checkbox,
   IconButton,
   InputAdornment,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -34,6 +36,8 @@ export default function ChannelSearchCombined() {
   ]);
   const [searchQuery, setSearchQuery] = useState('');
   const [open, setOpen] = useState(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleConfirmDelete = () => {
     setChannels((prev) => prev.filter((ch) => !ch.selected));
@@ -80,8 +84,8 @@ export default function ChannelSearchCombined() {
           overflow: 'auto', // Local scrolling behavior for this component
           bgcolor: 'background.paper',
           borderRadius: 2,
-          p: 3,
-          mx: 2,
+          p: isMobile ? '16px' : 3,
+          mx: isMobile ? '' : 2,
         }}
       >
         {/* Search Input */}
@@ -197,12 +201,17 @@ export default function ChannelSearchCombined() {
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 mb: 2,
+                flexDirection: isMobile ? 'column' : 'row',
               }}
             >
-              <Typography>
+              <Typography sx={{ mb: isMobile ? 1 : 0 }}>
                 當前已選擇 {selectedChannels.length} 個頻道
               </Typography>
-              <Stack direction="row" spacing={1}>
+              <Stack
+                direction={isMobile ? 'column' : 'row'}
+                spacing={1}
+                sx={{ width: isMobile ? '100%' : 'auto' }}
+              >
                 <Button
                   variant="text"
                   onClick={handleSelectAll}
