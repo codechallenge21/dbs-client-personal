@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Drawer from '@mui/material/Drawer';
 import ListItem from '@mui/material/ListItem';
 import {
@@ -74,7 +74,17 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
   children,
 }) => {
   const theme = useTheme();
+  const [isClient, setIsClient] = useState(false);
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  useEffect(() => {
+    // Ensure this component renders only on the client
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return null; // Avoid mismatches by skipping rendering on the server
+  }
 
   const DrawerList = (
     <Box

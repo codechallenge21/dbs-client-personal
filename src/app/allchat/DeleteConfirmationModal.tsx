@@ -66,11 +66,21 @@ export default function DeleteConfirmationModal({
         </Typography>
 
         {/* Content */}
-        <Typography sx={{ mb: 3 }}>
+        <Box sx={{ mb: 3 }}>
           {ChannelName.map((channel, index) => (
-            <div key={index}>{channel.title}</div>
+            <Typography
+              key={index}
+              variant="body2"
+              sx={{
+                mb: 1,
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              {channel.title}
+            </Typography>
           ))}
-        </Typography>
+        </Box>
 
         {/* Actions */}
         <Box

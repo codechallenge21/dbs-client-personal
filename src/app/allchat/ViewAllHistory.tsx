@@ -244,72 +244,70 @@ export default function ChannelSearchCombined() {
             {/* Channel List */}
             <Stack spacing={1}>
               {filteredChannels.map((channel) => (
-                <>
-                  <Paper
-                    key={channel.id}
-                    elevation={0}
+                <Paper
+                  key={channel.id}
+                  elevation={0}
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    p: 2,
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    borderRadius: 2,
+                    bgcolor: channel.selected
+                      ? 'rgba(255, 0, 0, 0.05)'
+                      : 'transparent',
+                    position: 'relative', // Add this to support absolute positioning of delete icon
+                  }}
+                >
+                  <Box
                     sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      p: 2,
-                      border: '1px solid',
-                      borderColor: 'divider',
-                      borderRadius: 2,
-                      bgcolor: channel.selected
-                        ? 'rgba(255, 0, 0, 0.05)'
-                        : 'transparent',
-                      position: 'relative', // Add this to support absolute positioning of delete icon
+                      position: 'absolute',
+                      left: '-20px', // Move checkbox half outside the paper
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      zIndex: 2,
+                      pointerEvents: 'auto', // Ensure the checkbox is clickable
                     }}
                   >
-                    <Box
+                    <Checkbox
+                      checked={channel.selected}
+                      onChange={() => toggleChannel(channel.id)}
                       sx={{
-                        position: 'absolute',
-                        left: '-20px', // Move checkbox half outside the paper
-                        top: '50%',
-                        transform: 'translateY(-50%)',
-                        zIndex: 2,
-                        pointerEvents: 'auto', // Ensure the checkbox is clickable
-                      }}
-                    >
-                      <Checkbox
-                        checked={channel.selected}
-                        onChange={() => toggleChannel(channel.id)}
-                        sx={{
+                        color: 'var(--Primary-Black, #212B36)',
+                        '&.Mui-checked': {
                           color: 'var(--Primary-Black, #212B36)',
-                          '&.Mui-checked': {
-                            color: 'var(--Primary-Black, #212B36)',
-                          },
-                        }}
-                      />
-                    </Box>
-                    <Box sx={{ flexGrow: 1, pl: 4 }}>
-                      <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
-                        {channel.title}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        sx={{ color: 'text.secondary' }}
-                      >
-                        {channel.date}
-                      </Typography>
-                    </Box>
-                    <IconButton
-                      size="small"
-                      sx={{
-                        color: 'error.main',
-                        position: 'absolute',
-                        top: '5px',
-                        right: '4px',
+                        },
                       }}
-                      onClick={() => {
-                        toggleChannel(channel.id);
-                        handleDelete();
-                      }}
+                    />
+                  </Box>
+                  <Box sx={{ flexGrow: 1, pl: 4 }}>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                      {channel.title}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{ color: 'text.secondary' }}
                     >
-                      <DeleteIcon sx={{ width: '18px', height: '18px' }} />
-                    </IconButton>
-                  </Paper>
-                </>
+                      {channel.date}
+                    </Typography>
+                  </Box>
+                  <IconButton
+                    size="small"
+                    sx={{
+                      color: 'error.main',
+                      position: 'absolute',
+                      top: '5px',
+                      right: '4px',
+                    }}
+                    onClick={() => {
+                      toggleChannel(channel.id);
+                      handleDelete();
+                    }}
+                  >
+                    <DeleteIcon sx={{ width: '18px', height: '18px' }} />
+                  </IconButton>
+                </Paper>
               ))}
             </Stack>
           </>
