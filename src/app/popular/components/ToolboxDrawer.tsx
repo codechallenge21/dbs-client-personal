@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Drawer from "@mui/material/Drawer";
 import ListItem from "@mui/material/ListItem";
 import {
@@ -17,11 +17,11 @@ import {
 import {
   Box,
   List,
-  IconButton,
-  Typography,
-  useTheme,
-  useMediaQuery,
   Button,
+  useTheme,
+  Typography,
+  IconButton,
+  useMediaQuery,
 } from "@mui/material";
 
 interface ToolboxDrawerProps {
@@ -74,7 +74,16 @@ const ToolboxDrawer: React.FC<ToolboxDrawerProps> = ({
   children,
 }) => {
   const theme = useTheme();
+  const [isClient, setIsClient] = useState(false);
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return null;
+  }
 
   const DrawerList = (
     <Box
@@ -91,18 +100,18 @@ const ToolboxDrawer: React.FC<ToolboxDrawerProps> = ({
         <ListItem
           sx={{
             display: "flex",
-            padding: "4px 8px",
+            paddingLeft: "8px",
             justifyContent: "space-between",
           }}
         >
           <Typography
             sx={{
-              color: "var(--Primary-Black, #212B36)",
-              fontFamily: "DFPHeiUBold-B5",
+              fontWeight: 800,
               fontSize: "20px",
               fontStyle: "normal",
-              fontWeight: 800,
               lineHeight: "normal",
+              fontFamily: "DFPHeiUBold-B5",
+              color: "var(--Primary-Black, #212B36)",
             }}
           >
             好理家在

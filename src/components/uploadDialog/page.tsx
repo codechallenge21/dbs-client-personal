@@ -13,13 +13,12 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import FileUploadIcon from "@mui/icons-material/FileUpload";
 import { useRouter } from "next/navigation";
-import useAxiosApi from "@eGroupAI/hooks/apis/useAxiosApi";
 import apiExports from "@/utils/hooks/apis/apis";
+import useAxiosApi from "@eGroupAI/hooks/apis/useAxiosApi";
 import { useState } from "react";
 import LoadingScreen from "../loading/page";
+import { CloseRounded, UploadRounded } from "@mui/icons-material";
 
 interface UploadDialogProps {
   open: boolean;
@@ -120,18 +119,22 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
         onClose={onClose}
         PaperProps={{
           sx: {
-            maxWidth: "600px",
             bgcolor: "#fff",
+            maxWidth: "800px",
             borderRadius: "16px",
-            width: isMobile ? "324px" : "100%",
             justifyContent: "center",
+            width: isMobile ? "324px" : "716px",
           },
         }}
       >
         <DialogTitle
           sx={{
-            fontSize: 16,
-            fontWeight: 500,
+            fontSize: "32px",
+            fontWeight: 400,
+            fontStyle: "normal",
+            lineHeight: "normal",
+            fontFamily: "DFPHeiBold-B5",
+            color: "var(--Primary-Black, #212B36)",
           }}
         >
           {isMobile ? "上傳檔案" : "AI 語音轉文字"}
@@ -144,40 +147,60 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
               color: (theme) => theme.palette.grey[500],
             }}
           >
-            <CloseIcon />
+            <CloseRounded sx={{ color: "black" }} />
           </IconButton>
         </DialogTitle>
 
         <DialogContent
           sx={{
+            margin: "32px",
+            height: "453px",
             display: "flex",
-            flexDirection: "column",
             alignItems: "center",
             borderRadius: "16px",
+            flexDirection: "column",
+            justifyContent: "flex-end",
+            padding: "160px 0px 80px 0px",
             border: "2px dashed #2196f3",
-            margin: "32px",
-            justifyContent: "center",
-            height: "352px",
           }}
         >
           {!isMobile && (
-            <Typography align="center" sx={{
-              mb: 2,
-            }}>請將音訊檔案拖曳到這裡上傳</Typography>
+            <Typography
+              sx={{
+                color: "var(--Primary-Black, #212B36)",
+                fontFamily: "DFPHeiBold-B5",
+                fontSize: "24px",
+                fontStyle: "normal",
+                fontWeight: 400,
+                lineHeight: "normal",
+                mb: "40px",
+              }}
+            >
+              請將音訊檔案拖曳到這裡上傳
+            </Typography>
           )}
           <Button
             component="label"
             sx={{
-              bgcolor: "#2196f3",
-              color: "white",
-              mb: "40px",
-              "&:hover": {
-                bgcolor: "#1976d2",
-              },
               zIndex: 1,
+              gap: "8px",
+              mb: "65px",
+              width: "294px",
+              display: "flex",
+              fontWeight: 400,
+              fontSize: "16px",
+              borderRadius: "8px",
+              fontStyle: "normal",
+              lineHeight: "normal",
+              padding: "11px 16px",
+              alignItems: "center",
+              justifyContent: "center",
+              fontFamily: "DFPHeiBold-B5",
+              color: "var(--Info-ContrastText, #FFF)",
+              background: "var(--Secondary-, #5C443A)",
             }}
             variant="contained"
-            startIcon={<FileUploadIcon />}
+            startIcon={<UploadRounded />}
           >
             選擇檔案
             <input

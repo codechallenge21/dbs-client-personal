@@ -1,8 +1,8 @@
 "use client";
 import SummaryCard from "@/components/summaryCard/page";
-import ToolboxDrawer from "@/components/toolbox-drawer/ToolboxDrawer";
+import ToolboxDrawer from "../popular/components/ToolboxDrawer";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import Header from "../chat/components/Header";
+// import Header from "../chat/components/Header";
 import { useAudioChannel } from "@/utils/hooks/useAudioChannel";
 import { useSearchParams } from "next/navigation";
 import ChannelContentContext from "../chat/components/ChannelContentContext";
@@ -27,6 +27,7 @@ export default function SummaryPage() {
   const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(
     isMobile ? false : true
   );
+  const [isClient, setIsClient] = React.useState(false);
 
   const [isLoadingChannel, setIsLoadingChannel] = useState<boolean>(false);
   const [selectedChannel, setSelectedChannel] = useState<OrganizationChannel>();
@@ -102,41 +103,44 @@ export default function SummaryPage() {
     setIsOpenDrawer(newOpen);
   };
 
+  React.useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return null;
+  }
+
   return (
-    <>
+    <Box
+      sx={{
+        minHeight: "100vh",
+        background: "var(--Primary-, #EBE3DD)",
+      }}
+    >
       <ChannelContentContext.Provider value={contextValue}>
-        <ToolboxDrawer
-          open={isOpenDrawer}
-          toggleDrawer={toggleDrawer}
-          openUpload={openUpload}
-          setOpenUpload={setOpenUpload}
-          timeoutRef={timeoutRef}
-        >
-          <Header
-            toggleDrawer={toggleDrawer}
-            open={isOpenDrawer}
-            advisor={advisorType}
-            openUpload={openUpload}
-            setOpenUpload={setOpenUpload}
-          />
+        <ToolboxDrawer open={isOpenDrawer} toggleDrawer={toggleDrawer}>
           {isloadingChannelData ||
           selectedChannel?.organizationChannelTranscriptList.length === 0 ? (
             <Box
               sx={{
-                display: "flex",
-                position: "absolute",
                 top: "50%",
                 left: "50%",
+                display: "flex",
+                position: "absolute",
                 transform: "translate(-50%, -50%)",
               }}
             >
               <CircularProgress color="primary" />
             </Box>
           ) : (
-            <SummaryCard />
+            <SummaryCard
+              openUpload={openUpload}
+              setOpenUpload={setOpenUpload}
+            />
           )}
         </ToolboxDrawer>
       </ChannelContentContext.Provider>
-    </>
+    </Box>
   );
 }
