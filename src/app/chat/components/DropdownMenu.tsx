@@ -145,7 +145,7 @@ export default function DropdownMenu({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: '4px 12px 4px 16px',
+            padding: '4px 8px',
             color: toolsAnchor ? '#0066cc' : 'black',
             backgroundColor: toolsAnchor ? '#F5F5F5' : 'white',
             borderRadius: toolsAnchor ? '10px' : '0px',

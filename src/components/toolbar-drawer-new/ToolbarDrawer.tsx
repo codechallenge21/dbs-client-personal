@@ -23,6 +23,8 @@ import {
   useMediaQuery,
   Button,
 } from '@mui/material';
+import { styled, Theme, CSSObject } from '@mui/material/styles';
+import MuiDrawer from '@mui/material/Drawer';
 
 interface ToolbarDrawerProps {
   open: boolean;
@@ -68,6 +70,54 @@ const drawerItems = [
   },
 ];
 
+const drawerWidth = 240;
+
+const openedMixin = (theme: Theme): CSSObject => ({
+  width: drawerWidth,
+  transition: theme.transitions.create('width', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.enteringScreen,
+  }),
+  overflowX: 'hidden',
+});
+
+const closedMixin = (theme: Theme): CSSObject => ({
+  transition: theme.transitions.create('width', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  overflowX: 'hidden',
+  width: `calc(${theme.spacing(7)} + 1px)`,
+  [theme.breakpoints.up('sm')]: {
+    width: `calc(${theme.spacing(8)} + 1px)`,
+  },
+});
+
+const CustomDrawer = styled(MuiDrawer, {
+  shouldForwardProp: (prop) => prop !== 'open',
+})(({ theme }) => ({
+  width: drawerWidth,
+  flexShrink: 0,
+  whiteSpace: 'nowrap',
+  boxSizing: 'border-box',
+  variants: [
+    {
+      props: ({ open }) => open,
+      style: {
+        ...openedMixin(theme),
+        '& .MuiDrawer-paper': openedMixin(theme),
+      },
+    },
+    {
+      props: ({ open }) => !open,
+      style: {
+        ...closedMixin(theme),
+        '& .MuiDrawer-paper': closedMixin(theme),
+      },
+    },
+  ],
+}));
+
 const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
   open,
   toggleDrawer,
@@ -76,6 +126,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
   const theme = useTheme();
   const [isClient, setIsClient] = useState(false);
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  console.log('open', open);
 
   useEffect(() => {
     // Ensure this component renders only on the client
@@ -95,7 +146,6 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
         flexDirection: 'column',
         height: '100%',
       }}
-      role="presentation"
     >
       <List sx={{ padding: '0', flexGrow: 1 }}>
         <ListItem
@@ -118,7 +168,9 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             好理家在
           </Typography>
           <IconButton
-            onClick={() => toggleDrawer(false)}
+            onClick={() => {
+              if (isMobile) toggleDrawer(!open);
+            }}
             sx={{ color: 'black' }}
           >
             <MenuOpenRounded />
@@ -252,31 +304,48 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
 
   return (
     <Box>
-      <Drawer
-        open={open}
-        sx={{
-          flexShrink: 0,
-          backgroundColor: '#ffffff',
-          '& .MuiDrawer-paper': {
-            width: 250,
-            height: '96%',
-            margin: '16px',
-            borderRadius: '8px',
-          },
-        }}
-        onClose={() => toggleDrawer(false)}
-        variant={isMobile ? 'temporary' : 'persistent'}
-      >
-        {DrawerList}
-      </Drawer>
+      {!isMobile ? (
+        <CustomDrawer
+          open={true}
+          sx={{
+            flexShrink: 0,
+            backgroundColor: '#ffffff',
+            '& .MuiDrawer-paper': {
+              height: '97%',
+              margin: '16px',
+              borderRadius: '8px',
+            },
+          }}
+          onClose={() => toggleDrawer(!open)}
+          variant={isMobile ? 'temporary' : 'permanent'}
+        >
+          {DrawerList}
+        </CustomDrawer>
+      ) : (
+        <Drawer
+          open={open}
+          sx={{
+            flexShrink: 0,
+            backgroundColor: '#ffffff',
+            '& .MuiDrawer-paper': {
+              width: 250,
+              height: '96%',
+              margin: '16px',
+              borderRadius: '8px',
+            },
+          }}
+          onClose={() => toggleDrawer(false)}
+          variant={isMobile ? 'temporary' : 'persistent'}
+        >
+          {DrawerList}
+        </Drawer>
+      )}
+
       <Box
         sx={{
           overflow: 'auto',
-          marginTop: '16px',
-          marginRight: '16px',
-          marginBottom: '16px',
           transition: 'margin-left 0.3s',
-          marginLeft: open && !isMobile ? '282px' : '0',
+          marginLeft: open && !isMobile ? '260px' : '0',
         }}
       >
         {children}

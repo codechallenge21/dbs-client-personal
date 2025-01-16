@@ -96,14 +96,15 @@ export default function Header({
                 display: 'flex',
                 width: '100%',
                 justifyContent: 'space-between',
+                alignItems: 'center',
               }}
             >
               <DropdownMenu advisor={advisor} />
               <Box>
-                <IconButton>
+                <IconButton sx={{ padding: '0px' }}>
                   <StarBorderRounded sx={{ color: 'black', margin: '8px' }} />
                 </IconButton>
-                <IconButton>
+                <IconButton sx={{ padding: '0px' }}>
                   <SettingsInputComponentRounded
                     onClick={() => setOpenDataSource(true)}
                     sx={{ color: 'black', margin: '8px' }}

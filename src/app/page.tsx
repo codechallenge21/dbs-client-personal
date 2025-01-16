@@ -10,6 +10,7 @@ import {
 } from '@/interfaces/entities';
 import ChannelContentContext from '@/app/chat/components/ChannelContentContext';
 import { AdvisorType } from '@/app/chat/components/types';
+import { Box } from '@mui/material';
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
@@ -75,18 +76,28 @@ export default function Home() {
   return (
     <ChannelContentContext.Provider value={contextValue}>
       <ToolbarDrawer open={isOpenDrawer} toggleDrawer={toggleDrawer}>
-        <Header
-          isChat
-          toggleDrawer={toggleDrawer}
-          open={isOpenDrawer}
-          advisor={advisorType}
-        />
-        <MainContent />
-        <SwitchDialog
-          open={isOpen}
-          onClose={handleClose}
-          onConfirm={handleConfirm}
-        />
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            height: 'calc(100vh - 32px)',
+            backgroundColor: '#FFFFFF',
+            borderRadius: '16px',
+          }}
+        >
+          <Header
+            isChat
+            toggleDrawer={toggleDrawer}
+            open={isOpenDrawer}
+            advisor={advisorType}
+          />
+          <MainContent />
+          <SwitchDialog
+            open={isOpen}
+            onClose={handleClose}
+            onConfirm={handleConfirm}
+          />
+        </Box>
       </ToolbarDrawer>
     </ChannelContentContext.Provider>
   );
