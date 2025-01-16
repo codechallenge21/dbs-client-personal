@@ -273,6 +273,7 @@ const TextInput = () => {
           borderRadius: 2,
           margin: isMobile ? 3 : 0,
           overflow: 'hidden',
+          justifyContent: 'flex-end',
         }}
       >
         {files.length > 0 && (
@@ -282,6 +283,8 @@ const TextInput = () => {
               gap: 2,
               flexWrap: 'wrap',
               padding: '8px',
+              height: '180px',
+              overflowY: 'auto',
             }}
           >
             {files.map((file, index) => (
@@ -342,10 +345,10 @@ const TextInput = () => {
           sx={{
             width: '100%',
             paddingTop: '8px',
-            paddingLeft: '20px',
-            paddingRight: '20px',
+            paddingInline: '20px',
             overflowY: 'auto',
             maxHeight: '200px',
+            minHeight: '40px',
             '&::-webkit-scrollbar': {
               width: '8px',
             },
@@ -362,76 +365,19 @@ const TextInput = () => {
             },
           }}
         >
-          {/* {files.length > 0 && (
-            <Box
-              sx={{
-                display: 'flex',
-                gap: 2,
-                flexWrap: 'wrap',
-                padding: '8px',
-              }}
-            >
-              {files.map((file, index) => (
-                <Box
-                  key={index}
-                  sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    textAlign: 'center',
-                    position: 'relative',
-                    width: 80,
-                  }}
-                >
-                  <Image
-                    src={file.preview || imagePerview}
-                    alt={file.file.name}
-                    width={48}
-                    height={48}
-                    style={{
-                      objectFit: 'cover',
-                      borderRadius: '4px',
-                    }}
-                  />
-                  <Box
-                    sx={{
-                      mt: 1,
-                      fontSize: '12px',
-                      wordBreak: 'break-word',
-                      textAlign: 'center',
-                    }}
-                  >
-                    {file.file.name}
-                  </Box>
-                  <IconButton
-                    sx={{
-                      position: 'absolute',
-                      top: '-10px',
-                      right: '-10px',
-                    }}
-                    onClick={() => handleRemoveFile(index)}
-                  >
-                    <Close fontSize="small" />
-                  </IconButton>
-                </Box>
-              ))}
-            </Box>
-          )} */}
           <TextareaAutosize
-            minRows={2}
-            maxRows={10}
+            minRows={1}
+            // maxRows={10}
             placeholder="傳訊息給智能顧問"
             style={{
               width: '100%',
               paddingTop: isMobile ? '20px' : '2px',
-              paddingRight: '20px',
               paddingBottom: isMobile ? '20px' : '',
-              paddingLeft: '20px',
               borderRadius: '8px',
               border: 'none',
               outline: 'none',
               resize: 'none',
-              fontSize: isMobile ? '16px' : '24px',
+              fontSize: '16px',
               color: '#000',
               backgroundColor: '#F5F5F5',
               overflow: 'auto',
@@ -443,46 +389,58 @@ const TextInput = () => {
         </Box>
         <Box
           sx={{
-            bottom: 0,
             width: '100%',
-            padding: '20px',
-            display: 'flex',
             marginTop: '12px',
             justifyContent: 'space-between',
+            display: 'flex',
+            gap: '16px',
+            flexWrap: 'wrap',
+            padding: '22px',
+            position: 'relative',
+            bottom: '-4px',
           }}
         >
-          <IconButton
-            component="span"
-            onDrop={handleDrop}
-            onDragOver={handleDragOver}
+          <Box
             sx={{
-              position: 'absolute',
-              bottom: '12px',
-              left: '10px',
+              width: '100%',
+              display: 'flex',
+              gap: '16px',
             }}
           >
-            <AttachFileRoundedIcon
-              sx={{ transform: 'rotate(180deg)', color: 'black' }}
-              onClick={() => document.getElementById('file-upload')?.click()}
+            <IconButton
+              component="span"
+              onDrop={handleDrop}
+              onDragOver={handleDragOver}
+              sx={{
+                position: 'absolute',
+                bottom: '12px',
+                left: '10px',
+              }}
+            >
+              <AttachFileRoundedIcon
+                sx={{ transform: 'rotate(180deg)', color: 'black' }}
+                onClick={() => document.getElementById('file-upload')?.click()}
+              />
+            </IconButton>
+            <input
+              type="file"
+              id="file-upload"
+              multiple
+              onChange={handleFileSelect}
+              style={{ display: 'none' }}
             />
-          </IconButton>
-          <input
-            type="file"
-            id="file-upload"
-            multiple
-            onChange={handleFileSelect}
-            style={{ display: 'none' }}
-          />
-          <IconButton
-            sx={{
-              position: 'absolute',
-              bottom: '12px',
-              left: '49px',
-              padding: '4px',
-            }}
-          >
-            <DropdownMenu isTextInput advisor={advisorType} />
-          </IconButton>
+            <IconButton
+              sx={{
+                position: 'absolute',
+                bottom: '12px',
+                left: '49px',
+                padding: '4px',
+              }}
+            >
+              <DropdownMenu isTextInput advisor={advisorType} />
+            </IconButton>
+          </Box>
+
           {userInputValue !== '' && !isListening ? (
             <IconButton
               sx={{

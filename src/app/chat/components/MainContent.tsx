@@ -108,7 +108,7 @@ export default function MainContent() {
   return (
     <Box
       sx={{
-        height: '80vh',
+        height: '100%',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: isMobile ? 'flex-end' : 'center',
@@ -173,7 +173,7 @@ export default function MainContent() {
                 fontFamily: 'DFPHeiBold-B5',
                 fontSize: '32px',
                 fontWeight: '400',
-                mb: 5,
+                mb: '24px',
               }}
             >
               嗨！我能為你做些什麼？
