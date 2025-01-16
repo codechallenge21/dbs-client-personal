@@ -6,8 +6,8 @@ import LinearProgress from "@mui/material/LinearProgress";
 import Typography from "@mui/material/Typography";
 
 export default function LoadingScreen() {
-
   const [progress, setProgress] = React.useState(0);
+  const [isClient, setIsClient] = React.useState(false);
 
   React.useEffect(() => {
     const timer = setInterval(() => {
@@ -24,6 +24,14 @@ export default function LoadingScreen() {
       clearInterval(timer);
     };
   }, []);
+
+  React.useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return null;
+  }
 
   return (
     <Box
