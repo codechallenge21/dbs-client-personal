@@ -1,5 +1,5 @@
 "use client";
-import SummaryCard from "@/components/summaryCard/page";
+// import SummaryCard from "@/components/summaryCard/page";
 import ToolboxDrawer from "../popular/components/ToolboxDrawer";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 // import Header from "../chat/components/Header";
@@ -12,6 +12,7 @@ import {
 } from "@/interfaces/entities";
 import { Box, CircularProgress, useTheme, useMediaQuery } from "@mui/material";
 import { AdvisorType } from "../chat/components/types";
+import SummaryDetailPage from "@/components/summary-details/page";
 
 export default function SummaryPage() {
   const theme = useTheme();
@@ -41,7 +42,7 @@ export default function SummaryPage() {
     AdvisorType.DEFAULT
   );
 
-  const [openUpload, setOpenUpload] = React.useState(false);
+  // const [openUpload, setOpenUpload] = React.useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const contextValue = useMemo(
@@ -134,10 +135,11 @@ export default function SummaryPage() {
               <CircularProgress color="primary" />
             </Box>
           ) : (
-            <SummaryCard
-              openUpload={openUpload}
-              setOpenUpload={setOpenUpload}
-            />
+            <SummaryDetailPage />
+            // <SummaryCard
+            //   openUpload={openUpload}
+            //   setOpenUpload={setOpenUpload}
+            // />
           )}
         </ToolboxDrawer>
       </ChannelContentContext.Provider>

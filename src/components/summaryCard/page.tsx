@@ -40,7 +40,7 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
   const [isClient, setIsClient] = useState(false);
   const [toolsAnchor, setToolsAnchor] = useState<null | HTMLElement>(null);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
+  // const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
 
   const { data: channelsData } = useAudioChannels({
     organizationId: "4aba77788ae94eca8d6ff330506af944",
@@ -49,11 +49,11 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
   const { excute: updateChannelDetail } = useAxiosApi(apis.updateChannelDetail);
 
   const {
-    selectedChannel,
-    selectedChannelId,
-    setSelectedChannelId,
-    setIsLoadingChannel,
-    setSelectedChannel,
+    // selectedChannel,
+    // selectedChannelId,
+    // setSelectedChannelId,
+    // setIsLoadingChannel,
+    // setSelectedChannel,
     channelsMutate,
   } = useContext(ChannelContentContext);
 
@@ -63,7 +63,7 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
   }, []);
 
   const handleDeleteChannelOpenConfirmDialog = useCallback(() => {
-    setIsDeleteDialogOpen(true);
+    // setIsDeleteDialogOpen(true);
     setToolsAnchor(null);
   }, []);
 
