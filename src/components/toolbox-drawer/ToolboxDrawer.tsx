@@ -32,6 +32,7 @@ import FileUploadIcon from "@mui/icons-material/FileUpload";
 import EditableItem from "../editable-item/EditableItem";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useLoadChatChannels } from "@/utils/hooks/useLoadChatChannels";
+import dayjs from "dayjs";
 
 interface ToolboxProps {
   open: boolean;
@@ -41,6 +42,48 @@ interface ToolboxProps {
   openUpload?: boolean;
   setOpenUpload?: React.Dispatch<React.SetStateAction<boolean>>;
   timeoutRef?: React.RefObject<NodeJS.Timeout | null>;
+}
+
+function categorizeChannels(channelList: OrganizationChannel[]) {
+  const today = dayjs().startOf("day");
+  const yesterday = today.subtract(1, "day");
+  const last7Days = today.subtract(7, "day");
+  const last30Days = today.subtract(30, "day");
+
+  const categories: {
+    Today: OrganizationChannel[];
+    Yesterday: OrganizationChannel[];
+    "Last 7 Days": OrganizationChannel[];
+    "Last 30 Days": OrganizationChannel[];
+    [key: string]: OrganizationChannel[]; // Dynamic keys for months and years
+  } = {
+    Today: [],
+    Yesterday: [],
+    "Last 7 Days": [],
+    "Last 30 Days": [],
+  };
+
+  channelList.forEach((channel) => {
+    const channelDate = dayjs(channel.organizationChannelCreateDate);
+
+    if (channelDate.isSame(today, "day")) {
+      categories.Today.push(channel);
+    } else if (channelDate.isSame(yesterday, "day")) {
+      categories.Yesterday.push(channel);
+    } else if (channelDate.isAfter(last7Days)) {
+      categories["Last 7 Days"].push(channel);
+    } else if (channelDate.isAfter(last30Days)) {
+      categories["Last 30 Days"].push(channel);
+    } else {
+      const monthYear = channelDate.format("MMMM YYYY");
+      if (!categories[monthYear]) {
+        categories[monthYear] = [];
+      }
+      categories[monthYear].push(channel);
+    }
+  });
+
+  return categories;
 }
 
 const Toolbox: React.FC<ToolboxProps> = ({
@@ -54,6 +97,17 @@ const Toolbox: React.FC<ToolboxProps> = ({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [channelList, setChannelList] = useState<OrganizationChannel[]>([]);
+  const [categorizedChannels, setCategorizedChannels] = useState<{
+    Today: OrganizationChannel[];
+    Yesterday: OrganizationChannel[];
+    "Last 7 Days": OrganizationChannel[];
+    "Last 30 Days": OrganizationChannel[];
+  }>({
+    Today: [],
+    Yesterday: [],
+    "Last 7 Days": [],
+    "Last 30 Days": [],
+  });
   const [toolsAnchor, setToolsAnchor] = useState<null | HTMLElement>(null);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
@@ -103,9 +157,14 @@ const Toolbox: React.FC<ToolboxProps> = ({
     }
   }, [loadedChannelsData]);
 
+  useEffect(() => {
+    if (channelList.length > 0) {
+      setCategorizedChannels(categorizeChannels(channelList || []));
+    }
+  }, [channelList]);
+
   const isMounted = useRef(false);
   const [isPageUpdated, setIsPageUpdated] = useState(false);
-
 
   useEffect(() => {
     if (isMounted.current && isPageUpdated) {
@@ -370,20 +429,6 @@ const Toolbox: React.FC<ToolboxProps> = ({
           },
         }}
       >
-        <Typography
-          sx={{
-            color: "#000",
-            fontFamily: "DFPHeiBold-B5",
-            fontSize: "14px",
-            fontStyle: "normal",
-            fontWeight: "400",
-            lineHeight: "normal",
-            paddingLeft: "8px",
-          }}
-        >
-          Today
-        </Typography>
-
         <InfiniteScroll
           dataLength={channelList.length}
           next={fetchMoreData}
@@ -417,56 +462,78 @@ const Toolbox: React.FC<ToolboxProps> = ({
             )
           }
         >
-          {channelList.map((channel, index) => (
-            <Box
-              key={`${channel.organizationChannelId}-${index}`}
-              sx={{
-                width: "93%",
-                marginLeft: "8px",
-                borderRadius: "10px",
-                backgroundColor:
-                  selectedChannelId === channel.organizationChannelId
-                    ? "#9B9B9B33"
-                    : "white",
-                "&:hover": {
-                  cursor: "pointer",
-                  backgroundColor: "#9B9B9B33",
-                },
-              }}
-            >
-              <ListItem
-                sx={{
-                  padding: "4px 8px",
-                  whiteSpace: "nowrap",
-                }}
-                onClick={() =>
-                  handleGetChannelDetail(channel.organizationChannelId)
-                }
-              >
-                <EditableItem
-                  key={channel.organizationChannelId}
-                  channel={channel}
-                  onSave={async (id, newTitle) => {
-                    await updateChannelDetail({
-                      organizationId: "4aba77788ae94eca8d6ff330506af944",
-                      organizationChannelId: id,
-                      organizationChannelTitle: newTitle,
-                    });
-                    if (channelsMutate) channelsMutate();
-                  }}
-                  index={index}
-                  toolsAnchor={toolsAnchor}
-                  activeIndex={activeIndex}
-                  handleCloseToolsMenu={handleCloseToolsMenu}
-                  handleDeleteChannelOpenConfirmDialog={
-                    handleDeleteChannelOpenConfirmDialog
-                  }
-                  handleMenuOpen={handleMenuOpen}
-                  setToolsAnchor={setToolsAnchor}
-                />
-              </ListItem>
-            </Box>
-          ))}
+          {Object.entries(categorizedChannels).map(
+            ([category, channelList]) =>
+              channelList.length > 0 && (
+                <Box key={category}>
+                  <Typography
+                    sx={{
+                      color: "#000",
+                      fontFamily: "DFPHeiBold-B5",
+                      fontSize: "15px",
+                      fontStyle: "normal",
+                      fontWeight: "700",
+                      lineHeight: "normal",
+                      paddingLeft: "8px",
+                    }}
+                  >
+                    {category}
+                  </Typography>
+
+                  {channelList.map((channel, index) => (
+                    <Box
+                      key={`${channel.organizationChannelId}-${index}`}
+                      sx={{
+                        width: "93%",
+                        marginLeft: "8px",
+                        borderRadius: "10px",
+                        backgroundColor:
+                          selectedChannelId === channel.organizationChannelId
+                            ? "#9B9B9B33"
+                            : "white",
+                        "&:hover": {
+                          cursor: "pointer",
+                          backgroundColor: "#9B9B9B33",
+                        },
+                      }}
+                    >
+                      <ListItem
+                        sx={{
+                          padding: "4px 8px",
+                          whiteSpace: "nowrap",
+                        }}
+                        onClick={() =>
+                          handleGetChannelDetail(channel.organizationChannelId)
+                        }
+                      >
+                        <EditableItem
+                          key={channel.organizationChannelId}
+                          channel={channel}
+                          onSave={async (id, newTitle) => {
+                            await updateChannelDetail({
+                              organizationId:
+                                "4aba77788ae94eca8d6ff330506af944",
+                              organizationChannelId: id,
+                              organizationChannelTitle: newTitle,
+                            });
+                            if (channelsMutate) channelsMutate();
+                          }}
+                          index={index}
+                          toolsAnchor={toolsAnchor}
+                          activeIndex={activeIndex}
+                          handleCloseToolsMenu={handleCloseToolsMenu}
+                          handleDeleteChannelOpenConfirmDialog={
+                            handleDeleteChannelOpenConfirmDialog
+                          }
+                          handleMenuOpen={handleMenuOpen}
+                          setToolsAnchor={setToolsAnchor}
+                        />
+                      </ListItem>
+                    </Box>
+                  ))}
+                </Box>
+              )
+          )}
         </InfiniteScroll>
       </Box>
       <UploadDialog open={openUpload} onClose={handleOpenUpload} />
