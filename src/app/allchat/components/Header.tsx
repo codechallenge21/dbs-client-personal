@@ -1,8 +1,12 @@
-import React from 'react';
+'use client';
+
+import { useRouter } from 'next/navigation';
 import { Box, IconButton, Typography } from '@mui/material';
 import { ArrowBackIosNewRounded } from '@mui/icons-material';
 
 export default function Header() {
+  const router = useRouter();
+
   return (
     <Box>
       <Box
@@ -21,7 +25,12 @@ export default function Header() {
             alignItems: 'center',
           }}
         >
-          <IconButton sx={{ padding: '0px' }}>
+          <IconButton
+            sx={{ padding: '0px' }}
+            onClick={() => {
+              router.push('/chat'); // Navigate to the chat page
+            }}
+          >
             <ArrowBackIosNewRounded sx={{ color: 'black', margin: '8px' }} />
           </IconButton>
           <Typography

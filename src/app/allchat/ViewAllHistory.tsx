@@ -86,6 +86,12 @@ export default function ChannelSearchCombined() {
           borderRadius: 2,
           p: isMobile ? '16px' : 3,
           mx: isMobile ? '' : 2,
+          display: 'flex',
+          alignItems: 'flex-start',
+          position: 'relative',
+          gap: '16px',
+          alignSelf: 'stretch',
+          flexDirection: 'column',
         }}
       >
         {/* Search Input */}
@@ -96,7 +102,6 @@ export default function ChannelSearchCombined() {
           onChange={(e) => setSearchQuery(e.target.value)}
           variant="outlined"
           sx={{
-            mb: 2,
             '& .MuiOutlinedInput-root': {
               borderRadius: '8px',
             },
@@ -114,33 +119,54 @@ export default function ChannelSearchCombined() {
         {isV2 ? (
           <>
             {/* Selected Channels Count */}
-            <Typography
+            <Box
               sx={{
-                mb: 2,
-                '& .highlight': {
-                  color: 'error.main',
-                  px: 0.5,
-                },
+                display: 'flex',
+                gap: '4px',
+                alignItems: 'center',
               }}
             >
-              你目前有{' '}
-              <span className="highlight">
-                {filteredChannels.length ? filteredChannels.length : 0}
-              </span>{' '}
-              個頻道
+              <Typography
+                sx={{
+                  color: 'var(--Primary-Black, #212B36)',
+                  fontFamily: 'Open Sans',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  lineHeight: 'normal',
+                  '& .highlight': {
+                    color: 'error.main',
+                    px: 0.5,
+                  },
+                }}
+              >
+                你目前有{' '}
+                <span className="highlight">
+                  {filteredChannels.length ? filteredChannels.length : 0}
+                </span>{' '}
+                個頻道
+              </Typography>
               <Button
                 variant="text"
                 onClick={handleToggleV2}
-                sx={{ color: 'primary.main' }}
+                sx={{
+                  color: 'primary.main',
+                  padding: 0,
+                  fontFamily: 'Open Sans',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  lineHeight: 'normal',
+                  p: 0.5,
+                  minWidth: 'auto',
+                }}
                 className="highlight"
               >
                 選擇
               </Button>
-            </Typography>
-            <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
-              可選擇的頻道
-            </Typography>
-            <Stack spacing={1}>
+            </Box>
+
+            <Stack spacing={1} sx={{ width: '100%' }}>
               {filteredChannels.map((channel) => (
                 <Paper
                   key={channel.id}
@@ -149,7 +175,7 @@ export default function ChannelSearchCombined() {
                   elevation={0}
                   sx={{
                     display: 'flex',
-                    alignItems: 'center',
+                    alignItems: 'flex-start',
                     p: 2,
                     border: '1px solid',
                     borderColor: 'divider',
@@ -157,21 +183,42 @@ export default function ChannelSearchCombined() {
                     bgcolor: channel.selected
                       ? 'rgba(255, 0, 0, 0.05)'
                       : 'transparent',
-                    position: 'relative', // Add this to support absolute positioning of delete icon
-                    pl: 4, // Add left padding to accommodate the checkbox
+                    position: 'relative',
+                    gap: '16px',
+                    alignSelf: 'stretch',
+                    flexDirection: 'column',
                   }}
                 >
-                  <Box sx={{ flexGrow: 1 }}>
-                    <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
-                      {channel.title}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      sx={{ color: 'text.secondary' }}
-                    >
-                      {channel.date}
-                    </Typography>
-                  </Box>
+                  <Typography
+                    sx={{
+                      color: '#000',
+                      fontFamily: 'Open Sans',
+                      fontSize: '14px',
+                      fontStyle: 'normal',
+                      fontWeight: 700,
+                      lineHeight: 'normal',
+                    }}
+                  >
+                    {channel.title}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      display: '-webkit-box',
+                      '-webkit-box-orient': 'vertical',
+                      '-webkit-line-clamp': 1,
+                      alignSelf: 'stretch',
+                      overflow: 'hidden',
+                      color: 'var(--Secondary-Dark-Gray, #4A4A4A)',
+                      textOverflow: 'ellipsis',
+                      fontFamily: 'DFPHeiMedium-B5',
+                      fontSize: '12px',
+                      fontStyle: 'normal',
+                      fontWeight: 400,
+                      lineHeight: 'normal',
+                    }}
+                  >
+                    {channel.date}
+                  </Typography>
                   {channel.selected && (
                     <IconButton
                       size="small"

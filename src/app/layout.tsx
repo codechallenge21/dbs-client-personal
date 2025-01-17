@@ -12,7 +12,7 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
-export const publicSansFont = Public_Sans({
+const publicSansFont = Public_Sans({
   weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
   subsets: ['latin'],
   variable: '--font-public-sans',
@@ -20,7 +20,7 @@ export const publicSansFont = Public_Sans({
   display: 'swap',
 });
 
-export const openSansFont = Open_Sans({
+const openSansFont = Open_Sans({
   weight: ['300', '400', '500', '600', '700', '800'],
   subsets: ['latin'],
   variable: '--font-open-sans',
