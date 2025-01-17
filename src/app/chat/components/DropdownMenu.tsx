@@ -114,6 +114,7 @@ export default function DropdownMenu({
   const handleOnClickMenuItem = useCallback(
     (value: AdvisorType) => {
       if (setAdvisorType) setAdvisorType(value);
+      setToolsAnchor(null);
     },
     [setAdvisorType]
   );
