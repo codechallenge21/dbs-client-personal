@@ -5,24 +5,6 @@
   src: local("DFPHeiBold-B5"), url("DFPHeiBold-B5.ttf") format("opentype");
 }
 
-@font-face {
-  font-family: "Inter";
-  font-weight: 400;
-  font-style: normal;
-  src: local("Inter"),
-    url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap")
-      format("woff2");
-}
-
-@font-face {
-  font-family: "Open Sans";
-  font-weight: 400;
-  font-style: normal;
-  src: local("Open Sans"),
-    url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap")
-      format("woff2");
-}
-
 :root {
   --background: #ffffff;
   --foreground: #171717;

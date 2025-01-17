@@ -12,7 +12,7 @@ import {
 } from "@/interfaces/entities";
 import { Box, CircularProgress, useTheme, useMediaQuery } from "@mui/material";
 import { AdvisorType } from "../chat/components/types";
-// import SummaryDetailPage from "@/components/summary-details/page";
+import SummaryDetailPage from "@/components/summary-details/page";
 
 export default function SummaryPage() {
   const theme = useTheme();
@@ -44,6 +44,18 @@ export default function SummaryPage() {
 
   const [openUpload, setOpenUpload] = React.useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const [activeComponent, setActiveComponent] = useState<"card" | "detail">(
+    "card"
+  );
+
+  const handleShowCard = () => {
+    setActiveComponent("card");
+  };
+
+  const handleShowDetail = () => {
+    setActiveComponent("detail");
+  };
 
   const contextValue = useMemo(
     () => ({
@@ -135,11 +147,18 @@ export default function SummaryPage() {
               <CircularProgress color="primary" />
             </Box>
           ) : (
-            // <SummaryDetailPage />
-            <SummaryCard
-              openUpload={openUpload}
-              setOpenUpload={setOpenUpload}
-            />
+            <>
+              {activeComponent === "card" && (
+                <SummaryCard
+                  openUpload={openUpload}
+                  setOpenUpload={setOpenUpload}
+                  handleShowDetail={handleShowDetail}
+                />
+              )}
+              {activeComponent === "detail" && (
+                <SummaryDetailPage handleShowCard={handleShowCard} />
+              )}
+            </>
           )}
         </ToolboxDrawer>
       </ChannelContentContext.Provider>

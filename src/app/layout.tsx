@@ -1,4 +1,10 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import {
+  Geist,
+  Geist_Mono,
+  Open_Sans,
+  Public_Sans,
+  Inter,
+} from "next/font/google";
 import "./globals.css";
 import ThemeProvider from "@/theme";
 // import { Box } from "@mui/material";
@@ -12,6 +18,30 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const openSansFont = Open_Sans({
+  weight: ["300", "400", "500", "600", "700", "800"],
+  subsets: ["latin"],
+  variable: "--font-open-sans",
+  adjustFontFallback: false,
+  display: "swap",
+});
+
+const publicSansFont = Public_Sans({
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  subsets: ["latin"],
+  variable: "--font-public-sans",
+  adjustFontFallback: false,
+  display: "swap",
+});
+
+const interFont = Inter({
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  subsets: ["latin"],
+  variable: "--font-inter",
+  adjustFontFallback: false,
+  display: "swap",
 });
 
 export const metadata = {
@@ -52,7 +82,9 @@ type Props = {
 export default function RootLayout({ children }: Props) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} ${publicSansFont.variable} ${openSansFont.variable} ${interFont.variable}`}
+      >
         {/* <Box>
           <Header />
         </Box> */}

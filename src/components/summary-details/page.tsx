@@ -3,29 +3,29 @@ import {
   Tab,
   Box,
   Tabs,
+  Card,
   Paper,
   Grid2,
   styled,
   Button,
   Typography,
   IconButton,
-  TextareaAutosize,
-  Card,
   CardContent,
+  TextareaAutosize,
 } from "@mui/material";
 import {
+  MicRounded,
+  SyncRounded,
+  ReplayRounded,
+  PushPinRounded,
   StarBorderRounded,
   ContentCopyRounded,
+  PermIdentityRounded,
   ArrowBackIosRounded,
   ArrowDropDownRounded,
+  ArrowForwardIosRounded,
   ThumbDownOffAltRounded,
   SettingsInputComponentRounded,
-  SyncRounded,
-  PermIdentityRounded,
-  PushPinRounded,
-  ReplayRounded,
-  MicRounded,
-  ArrowForwardIosRounded,
 } from "@mui/icons-material";
 
 function TabPanel(props: {
@@ -105,7 +105,13 @@ const dataRow3 = [
   },
 ];
 
-const SummaryDetailPage = () => {
+interface SummaryDetailPageProps {
+  handleShowCard?: () => void;
+}
+
+const SummaryDetailPage: React.FC<SummaryDetailPageProps> = ({
+  handleShowCard,
+}) => {
   const [tabValue, setTabValue] = React.useState(0);
   const [aIAnalysisTabValue, setAIAnalysisTabValue] = React.useState(0);
 
@@ -212,7 +218,7 @@ const SummaryDetailPage = () => {
               alignItems: "center",
             }}
           >
-            <IconButton>
+            <IconButton onClick={handleShowCard}>
               <ArrowBackIosRounded sx={{ color: "black" }} />
             </IconButton>
             <Typography

@@ -31,9 +31,11 @@ import EditDialog from "@/app/chat/components/EditDialog";
 
 interface SummaryCardProps {
   openUpload?: boolean;
+  handleShowDetail?: () => void;
   setOpenUpload?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 const SummaryCard: React.FC<SummaryCardProps> = ({
+  handleShowDetail,
   openUpload = false,
   setOpenUpload = () => {},
 }) => {
@@ -149,6 +151,11 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
     setTabValue(newValue);
   };
 
+  const handleRowClick = () => {
+    // console.log("Row clicked with id:", id);
+    if (handleShowDetail) handleShowDetail();
+  };
+
   // useEffect(() => {
   //     setIsLoadingChannel(isLoadingChannel);
   //   }, [setIsLoadingChannel, isLoadingChannel]);
@@ -187,6 +194,20 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
           borderRadius: "8px",
           padding: "16px 32px",
           backgroundColor: "white",
+          "&::-webkit-scrollbar": {
+            width: "8px",
+          },
+          "&::-webkit-scrollbar-track": {
+            borderRadius: "10px",
+            background: "#f1f1f1",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            borderRadius: "10px",
+            background: "#888",
+          },
+          "&::-webkit-scrollbar-thumb:hover": {
+            background: "#555",
+          },
         }}
       >
         <Tabs
@@ -202,36 +223,56 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
           <Tab
             label="智能生活轉文字"
             sx={{
-              color: "#637381",
+              fontWeight: 400,
+              fontSize: "14px",
+              lineHeight: "22px",
+              fontStyle: "normal",
+              fontFamily: "DFPHeiBold-B5",
+              color: "var(--Text-Secondary, #637381))",
               "&.Mui-selected": {
-                color: "#212B36",
+                color: "var(--Primary-Black, #212B36)",
               },
             }}
           />
           <Tab
             label="家系圖"
             sx={{
-              color: "#637381",
+              fontWeight: 400,
+              fontSize: "14px",
+              lineHeight: "22px",
+              fontStyle: "normal",
+              fontFamily: "DFPHeiBold-B5",
+              color: "var(--Text-Secondary, #637381)",
               "&.Mui-selected": {
-                color: "#212B36",
+                color: "var(--Primary-Black, #212B36)",
               },
             }}
           />
           <Tab
             label="問答語音錄音"
             sx={{
-              color: "#637381",
+              fontWeight: 400,
+              fontSize: "14px",
+              lineHeight: "22px",
+              fontStyle: "normal",
+              fontFamily: "DFPHeiBold-B5",
+              color: "var(--Text-Secondary, #637381)",
               "&.Mui-selected": {
-                color: "#212B36",
+                color: "var(--Primary-Black, #212B36)",
               },
             }}
           />
           <Tab
             label="個別與實時錄音"
             sx={{
-              color: "#637381",
+              fontWeight: 400,
+              fontSize: "14px",
+              lineHeight: "22px",
+              fontStyle: "normal",
+              fontFamily: "DFPHeiBold-B5",
+              color: "var(--Text-Secondary, #637381)",
               "&.Mui-selected": {
-                color: "#212B36",
+                color: "var(--Primary-Black, #212B36)",
               },
             }}
           />
@@ -246,12 +287,12 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
         >
           <Typography
             sx={{
-              color: "var(--Primary-Black, #212B36)",
-              fontFamily: "DFPHeiUBold-B5",
+              fontWeight: 400,
               fontSize: "32px",
               fontStyle: "normal",
-              fontWeight: 400,
               lineHeight: "normal",
+              fontFamily: "DFPHeiBold-B5",
+              color: "var(--Primary-Black, #212B36)",
             }}
             gutterBottom
           >
@@ -319,22 +360,103 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>標題</TableCell>
-                <TableCell>狀態</TableCell>
-                <TableCell>建立時間</TableCell>
+                <TableCell
+                  sx={{
+                    fontWeight: 400,
+                    fontSize: "16px",
+                    overflow: "hidden",
+                    fontStyle: "normal",
+                    lineHeight: "normal",
+                    textOverflow: "ellipsis",
+                    fontFamily: "DFPHeiBold-B5",
+                    color: "var(--Text-Primary, #212B36)",
+                  }}
+                >
+                  標題
+                </TableCell>
+                <TableCell
+                  sx={{
+                    fontWeight: 400,
+                    fontSize: "16px",
+                    overflow: "hidden",
+                    fontStyle: "normal",
+                    lineHeight: "normal",
+                    textOverflow: "ellipsis",
+                    fontFamily: "DFPHeiBold-B5",
+                    color: "var(--Text-Primary, #212B36)",
+                  }}
+                >
+                  狀態
+                </TableCell>
+                <TableCell
+                  sx={{
+                    fontWeight: 400,
+                    fontSize: "16px",
+                    overflow: "hidden",
+                    fontStyle: "normal",
+                    lineHeight: "normal",
+                    textOverflow: "ellipsis",
+                    fontFamily: "DFPHeiBold-B5",
+                    color: "var(--Text-Primary, #212B36)",
+                  }}
+                >
+                  建立時間
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {channelsData?.map((channel, index) => (
-                <TableRow key={index}>
-                  <TableCell>{channel?.organizationChannelTitle}</TableCell>
-                  <TableCell>
+                <TableRow
+                  key={index}
+                  sx={{ cursor: "pointer" }}
+                  onClick={() => handleRowClick()}
+                  // onClick={() => handleRowClick(channel?.organizationChannelId)}
+                >
+                  <TableCell
+                    sx={{
+                      fontWeight: 600,
+                      fontSize: "16px",
+                      overflow: "hidden",
+                      fontStyle: "normal",
+                      lineHeight: "normal",
+                      textOverflow: "ellipsis",
+                      fontFamily: "Public Sans",
+                      color: "var(--Text-Primary, #212B36)",
+                    }}
+                  >
+                    {channel?.organizationChannelTitle}
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      fontWeight: 400,
+                      fontSize: "16px",
+                      overflow: "hidden",
+                      fontStyle: "normal",
+                      lineHeight: "normal",
+                      textOverflow: "ellipsis",
+                      fontFamily: "DFPHeiBold-B5",
+                      color: "var(--Text-Primary, #212B36)",
+                    }}
+                  >
                     {
                       channel.organizationChannelTranscriptList[0]
                         ?.organizationChannelTranscriptStatus
                     }
                   </TableCell>
-                  <TableCell>{channel.organizationChannelCreateDate}</TableCell>
+                  <TableCell
+                    sx={{
+                      fontWeight: 400,
+                      fontSize: "16px",
+                      overflow: "hidden",
+                      fontStyle: "normal",
+                      lineHeight: "normal",
+                      textOverflow: "ellipsis",
+                      fontFamily: "DFPHeiBold-B5",
+                      color: "var(--Text-Primary, #212B36)",
+                    }}
+                  >
+                    {channel.organizationChannelCreateDate}
+                  </TableCell>
                   <TableCell>
                     <IconButton>
                       <StarRounded sx={{ color: "black" }} />
