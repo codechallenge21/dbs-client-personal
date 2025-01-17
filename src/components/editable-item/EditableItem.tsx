@@ -59,7 +59,7 @@ const EditableItem: React.FC<{
   toolsAnchor: HTMLElement | null;
   activeIndex: number | null;
   handleCloseToolsMenu: () => void;
-  handleOpenEditChannelDialog: () => void;
+  handleOpenEditChannelDialog?: () => void;
   handleDeleteChannelOpenConfirmDialog: () => void;
   handleMenuOpen: (event: React.MouseEvent<HTMLElement>, index: number) => void;
   setToolsAnchor: React.Dispatch<React.SetStateAction<HTMLElement | null>>;
