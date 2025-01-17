@@ -1,3 +1,11 @@
+@font-face {
+  font-family: 'DFPHeiBold-B5';
+  font-weight: 400;
+  font-style: normal;
+  src: local('DFPHeiBold-B5'),
+    url('../../public/fonts/DFPHeiBold-B5.ttf') format('opentype');
+}
+
 :root {
   --background: #ebe3dd;
   --foreground: #171717;

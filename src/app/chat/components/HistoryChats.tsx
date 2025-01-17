@@ -17,7 +17,9 @@ const HistoryChats: React.FC<HistoryChatsProps> = ({ chats }) => {
         display: 'flex',
         flexDirection: 'row',
         flexWrap: 'wrap',
-        gap: '16px',
+        gap: '12px',
+        justifyContent: 'center',
+        alignItems: 'center',
       }}
     >
       {chats.map((chat, index) => (
@@ -29,13 +31,42 @@ const HistoryChats: React.FC<HistoryChatsProps> = ({ chats }) => {
             flex: '1 1 calc(33.33% - 16px)', // Ensuring flex basis is 33.33%
             border: '1px solid #ccc',
             borderRadius: '8px',
-            margin: '10px 0',
             textAlign: 'left',
             boxSizing: 'border-box', // Ensuring padding and border are included in width
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '16px',
           }}
         >
-          <Typography variant="h6">{chat.title}</Typography>
-          <Typography variant="body2">{chat.date}</Typography>
+          <Typography
+            sx={{
+              fontFamily: 'var(--font-open-sans)',
+              fontSize: '14px',
+              fontStyle: 'normal',
+              fontWeight: 700,
+              lineHeight: 'normal',
+            }}
+          >
+            {chat.title}
+          </Typography>
+          <Typography
+            sx={{
+              overflow: 'hidden',
+              color: 'var(--Secondary-Dark-Gray, #4A4A4A)',
+              textOverflow: 'ellipsis',
+              fontFamily: 'DFPHeiMedium-B5',
+              fontSize: '12px',
+              fontStyle: 'normal',
+              fontWeight: 400,
+              lineHeight: 'normal',
+              display: '-webkit-box',
+              '-webkit-box-orient': 'vertical',
+              '-webkit-line-clamp': 1,
+              alignSelf: 'stretch',
+            }}
+          >
+            {chat.date}
+          </Typography>
         </Box>
       ))}
     </Box>

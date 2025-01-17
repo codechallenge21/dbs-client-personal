@@ -187,7 +187,7 @@ export default function MainContent() {
           display: 'flex',
           justifyContent: 'center',
           flexDirection: 'row',
-          marginTop: '20px',
+          marginTop: '24px',
           gap: '16px',
           flexWrap: 'wrap',
           maxWidth: '760px',
@@ -197,14 +197,14 @@ export default function MainContent() {
           <Suggestions key={suggestion.id} title={suggestion.title} />
         ))}
       </Box>
-      <Box sx={{ marginTop: '40px', width: '100%', maxWidth: '780px' }}>
+      <Box sx={{ marginTop: '40px', width: '100%', maxWidth: '760px' }}>
         <ViewChats
           onClick={() => {
             router.push('/allchat');
           }}
         />
       </Box>
-      <Box sx={{ marginTop: '40px', width: '100%', maxWidth: '780px' }}>
+      <Box sx={{ marginTop: '12px', width: '100%', maxWidth: '780px' }}>
         <HistoryChats chats={dummyChats} />
       </Box>
     </Box>

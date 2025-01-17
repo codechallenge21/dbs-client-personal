@@ -20,7 +20,7 @@ const ViewChats: React.FC<ViewChatsProps> = ({ onClick }) => {
         padding: '2px',
         borderRadius: 1,
         color: 'var(--Text-Primary, #212B36)',
-        fontFamily: 'Open Sans',
+        fontFamily: 'var(--font-open-sans)',
         fontSize: '14px',
         fontStyle: 'normal',
         fontWeight: 700,
@@ -53,7 +53,7 @@ const ViewChats: React.FC<ViewChatsProps> = ({ onClick }) => {
         }}
       >
         View All
-        <ArrowForwardIosIcon />
+        <ArrowForwardIosIcon sx={{ fontSize: '12px' }} />
       </Box>
     </Button>
   );

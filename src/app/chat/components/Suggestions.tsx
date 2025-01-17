@@ -16,7 +16,7 @@ const Suggestions: React.FC<SuggestionsProps> = ({ title }) => {
           alignItems: 'center',
           justifyContent: 'center',
           backgroundColor: 'var(--Primary-Black, #000)',
-          fontFamily: 'Public Sans',
+          fontFamily: 'var(--font-public-sans)',
           fontSize: '13px',
           fontWeight: '700',
           lineHeight: '22px',
@@ -27,7 +27,7 @@ const Suggestions: React.FC<SuggestionsProps> = ({ title }) => {
         }}
       >
         {title}
-        <ArrowOutwardRounded sx={{ color: 'white' }} />
+        <ArrowOutwardRounded sx={{ color: 'white', fontSize: '18px' }} />
       </Typography>
     </Box>
   );
