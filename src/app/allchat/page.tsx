@@ -7,13 +7,14 @@ import {
 import ChannelSearch from './ViewAllHistory';
 import { AdvisorType } from '../chat/components/types';
 import ChannelContentContext from '../chat/components/ChannelContentContext';
-import Header from '../chat/components/Header';
+import Header from './components/Header';
 import SwitchDialog from '../chat/components/SwitchDialog';
 import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
+import { Box } from '@mui/material';
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(false);
+  const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(true);
 
   const [isLoadingChannel, setIsLoadingChannel] = useState<boolean>(false);
   const [selectedChannel, setSelectedChannel] = useState<OrganizationChannel>();
@@ -75,18 +76,23 @@ export default function Home() {
   return (
     <ChannelContentContext.Provider value={contextValue}>
       <ToolbarDrawer open={isOpenDrawer} toggleDrawer={toggleDrawer}>
-        <Header
-          isChat
-          toggleDrawer={toggleDrawer}
-          open={isOpenDrawer}
-          advisor={advisorType}
-        />
-        <ChannelSearch />
-        <SwitchDialog
-          open={isOpen}
-          onClose={handleClose}
-          onConfirm={handleConfirm}
-        />
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            height: 'calc(100vh - 32px)',
+            backgroundColor: '#FFFFFF',
+            borderRadius: '16px',
+          }}
+        >
+          <Header />
+          <ChannelSearch />
+          <SwitchDialog
+            open={isOpen}
+            onClose={handleClose}
+            onConfirm={handleConfirm}
+          />
+        </Box>
       </ToolbarDrawer>
     </ChannelContentContext.Provider>
   );

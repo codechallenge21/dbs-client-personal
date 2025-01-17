@@ -122,7 +122,7 @@ export function palette(mode: 'light' | 'dark') {
       disabled: GREY[500],
     },
     background: {
-      paper: '#ebe3dd',
+      paper: '#ffffff',
       default: '#ebe3dd',
       neutral: GREY[200],
     },

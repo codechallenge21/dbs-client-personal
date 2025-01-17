@@ -73,7 +73,7 @@ export default function ChannelSearchCombined() {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        bgcolor: 'background.default',
+        bgcolor: '#ffffff',
       }}
     >
       <Box
