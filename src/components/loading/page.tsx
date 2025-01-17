@@ -24,12 +24,11 @@ export default function LoadingScreen() {
       clearInterval(timer);
     };
   }, []);
+
   React.useEffect(() => {
-    console.log("set true hone laga ");
     setIsClient(true);
   }, []);
 
-  // Render nothing on the server
   if (!isClient) {
     return null;
   }

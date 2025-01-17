@@ -9,6 +9,9 @@ import {
   Button,
   Typography,
   IconButton,
+  TextareaAutosize,
+  Card,
+  CardContent,
 } from "@mui/material";
 import {
   StarBorderRounded,
@@ -21,6 +24,8 @@ import {
   PermIdentityRounded,
   PushPinRounded,
   ReplayRounded,
+  MicRounded,
+  ArrowForwardIosRounded,
 } from "@mui/icons-material";
 
 function TabPanel(props: {
@@ -46,6 +51,59 @@ const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: "#1A2027",
   }),
 }));
+
+const dataRow1 = [
+  {
+    title: "延伸资料A",
+    description:
+      "社工在財務類別的知識中，了解如何幫助客戶管理個人財務是至關重要的。這不僅包括制定預算和儲蓄計劃",
+  },
+  {
+    title: "延伸资料B",
+    description:
+      "社工在財務類別的知識中，了解如何幫助客戶管理個人財務是至關重要的。這不僅包括制定預算和儲蓄計劃",
+  },
+  {
+    title: "延伸资料C",
+    description:
+      "社工在財務類別的知識中，了解如何幫助客戶管理個人財務是至關重要的。這不僅包括制定預算和儲蓄計劃",
+  },
+];
+
+const dataRow2 = [
+  {
+    title: "延伸资料D",
+    description:
+      "社工在財務類別的知識中，了解如何幫助客戶管理個人財務是至關重要的。這不僅包括制定預算和儲蓄計劃",
+  },
+  {
+    title: "延伸资料E",
+    description:
+      "社工在財務類別的知識中，了解如何幫助客戶管理個人財務是至關重要的。這不僅包括制定預算和儲蓄計劃",
+  },
+  {
+    title: "延伸资料F",
+    description:
+      "社工在財務類別的知識中，了解如何幫助客戶管理個人財務是至關重要的。這不僅包括制定預算和儲蓄計劃",
+  },
+];
+const dataRow3 = [
+  {
+    title: "延伸资料G",
+    description:
+      "社工在財務類別的知識中，了解如何幫助客戶管理個人財務是至關重要的。這不僅包括制定預算和儲蓄計劃",
+  },
+  {
+    title: "延伸资料H",
+    description:
+      "社工在財務類別的知識中，了解如何幫助客戶管理個人財務是至關重要的。這不僅包括制定預算和儲蓄計劃",
+  },
+  {
+    title: "延伸资料I",
+    description:
+      "社工在財務類別的知識中，了解如何幫助客戶管理個人財務是至關重要的。這不僅包括制定預算和儲蓄計劃",
+  },
+];
 
 const SummaryDetailPage = () => {
   const [tabValue, setTabValue] = React.useState(0);
@@ -86,36 +144,56 @@ const SummaryDetailPage = () => {
           <Tab
             label="智能生活轉文字"
             sx={{
-              color: "#637381",
+              fontWeight: 400,
+              fontSize: "14px",
+              lineHeight: "22px",
+              fontStyle: "normal",
+              fontFamily: "DFPHeiBold-B5",
+              color: "var(--Text-Secondary, #637381))",
               "&.Mui-selected": {
-                color: "#212B36",
+                color: "var(--Primary-Black, #212B36)",
               },
             }}
           />
           <Tab
             label="家系圖"
             sx={{
-              color: "#637381",
+              fontWeight: 400,
+              fontSize: "14px",
+              lineHeight: "22px",
+              fontStyle: "normal",
+              fontFamily: "DFPHeiBold-B5",
+              color: "var(--Text-Secondary, #637381)",
               "&.Mui-selected": {
-                color: "#212B36",
+                color: "var(--Primary-Black, #212B36)",
               },
             }}
           />
           <Tab
             label="問答語音錄音"
             sx={{
-              color: "#637381",
+              fontWeight: 400,
+              fontSize: "14px",
+              lineHeight: "22px",
+              fontStyle: "normal",
+              fontFamily: "DFPHeiBold-B5",
+              color: "var(--Text-Secondary, #637381)",
               "&.Mui-selected": {
-                color: "#212B36",
+                color: "var(--Primary-Black, #212B36)",
               },
             }}
           />
           <Tab
             label="個別與實時錄音"
             sx={{
-              color: "#637381",
+              fontWeight: 400,
+              fontSize: "14px",
+              lineHeight: "22px",
+              fontStyle: "normal",
+              fontFamily: "DFPHeiBold-B5",
+              color: "var(--Text-Secondary, #637381)",
               "&.Mui-selected": {
-                color: "#212B36",
+                color: "var(--Primary-Black, #212B36)",
               },
             }}
           />
@@ -139,14 +217,15 @@ const SummaryDetailPage = () => {
             </IconButton>
             <Typography
               sx={{
-                overflow: "hidden",
-                color: "var(--Text-Primary, #212B36)",
-                textOverflow: "ellipsis",
-                fontFamily: "Inter",
-                fontSize: "16px",
-                fontStyle: "normal",
                 fontWeight: 600,
+                fontSize: "16px",
+                overflow: "hidden",
+                fontStyle: "normal",
+                textAlign: "center",
+                // fontFamily: "Inter",
                 lineHeight: "normal",
+                textOverflow: "ellipsis",
+                color: "var(--Text-Primary, #212B36)",
               }}
             >
               DBS_2024/12/01_OO市OO區OO路OO號_OO會議廳
@@ -188,7 +267,18 @@ const SummaryDetailPage = () => {
           >
             <Item>
               <Paper variant="outlined" sx={{ padding: "16px" }}>
-                <Typography variant="h6" gutterBottom>
+                <Typography
+                  sx={{
+                    fontWeight: 400,
+                    fontSize: "24px",
+                    textAlign: "start",
+                    fontStyle: "normal",
+                    lineHeight: "normal",
+                    fontFamily: "DFPHeiBold-B5",
+                    color: "var(--Primary-Black, #212B36)",
+                  }}
+                  gutterBottom
+                >
                   逐字稿
                 </Typography>
                 <Box
@@ -198,7 +288,18 @@ const SummaryDetailPage = () => {
                     justifyContent: "space-between",
                   }}
                 >
-                  <Typography variant="body1">原稿</Typography>
+                  <Typography
+                    sx={{
+                      fontWeight: 400,
+                      fontSize: "16px",
+                      fontStyle: "normal",
+                      lineHeight: "normal",
+                      fontFamily: "DFPHeiBold-B5",
+                      color: "var(--Primary-Black, #212B36)",
+                    }}
+                  >
+                    原稿
+                  </Typography>
                   <Box
                     sx={{
                       display: "flex",
@@ -223,7 +324,16 @@ const SummaryDetailPage = () => {
                     </IconButton>
                   </Box>
                 </Box>
-                <Typography>
+                <Typography
+                  sx={{
+                    fontWeight: 400,
+                    fontSize: "16px",
+                    lineHeight: "24px",
+                    fontStyle: "normal",
+                    fontFamily: "DFPHeiMedium-B5",
+                    color: "var(--Primary-Black, #212B36)",
+                  }}
+                >
                   因為裡面有一個交讓每一個人上來之後覺得它是被克制化的非常重要。所以要秉持這個金去設計這些東西。然後再有一點就是在語音輸入或是它上傳檔案的時候，我們也會幫它產生對不對？對，那個後面還是要再連接一個東西。當今天上漲的這一段當我們解析完了之後也一樣。推薦他相關的議題，因為我們解析完之後大概就知道他鋪到什麼問題或是對哪些議題有興趣，對吧？對，因為你前面有做到推波嘛。對。對不對？在上傳檔案跟那個幫他解讀完子音這一部分，這個也很重要。好，那表示他要處理這些事情，所以我們就主動播我們給他的建議應該是什麼，他應該往哪裡去問題或找資料。好。目前看起來就是這個概念。要把它建立起來，所以我的地方只要做出來的東西都要去追蹤跟辨別他的意向跟氣圖跟他的滿意，然後記錄在L裡面。那每個人上來他只要有傳他的東西，問他的問題，後面就有一套拉的東西。在減少他的思考。好。OK。好。好，那這個頁面就要實際做出來，大家試的才有感覺。目前看起來就是清爽，我至少我個人是很直覺，很清楚。只是說那些字跟它的那個差別差異度要更明顯。好。因為這現在看不出來嘛，對不對？包括側邊側那些究竟哪一個什麼的功能是什麼這些東西要設計的更明顯一點。OK，好。OK，其他各位有沒有什麼要給一下？好，那個你看到那個對話的頁面。對，跟話。你有用過那個Cody嗎？Cloud有。有。你覺得Cody跟GPT最大的差別是什麼？嗯，C在產那個什麼程式碼的時候，它可以有一個直接可以看的那個頁面。會代表什麼？審複製貼上在那個ID的那個時間，然還有方便性。對，就是說現在你的排版啊，嗯簡單應該說是新爽的沒錯，但你右邊那個只要放記錄對不對？對可是記錄對於一個工作人他使用情是什麼？第一個你進去你還沒開始對話的時候，他已經佔了一款。嗯，對吧？嗯，第二個是你很多對話的時候你也不會在那邊找到東西。對吧？像我現在跟AI對話一兩千人。不會在那邊去找東西。嗯。好，那所以C跟確定力最大的差異就是他把頁面都在他當下要做的事情。讓你很讓工作者很好去操作。那Cody的主視覺是中間你跟他的對話，右邊那邊是產生什麼？生成的是你當下需要的其實的數據的斷是嗎？嗯，或是公式。嗯，或是等的一些被註質量。舉例來說。比如說以這個情定來說，它可能會需要什麼？說法條來。
                   源 。 嗯 ， 出 計 算 公 式 。 你 聽 懂 嗎 ？ 嗯 。 他 跟 你 對
                   話 ， 可 是 他 旁 邊 給 你 產 出 的 推 出 來 的 東 西 是 跟 你
@@ -453,12 +563,33 @@ const SummaryDetailPage = () => {
               </Paper>
             </Item>
           </Grid2>
-          <Grid2 size={{ xs: 7 }} sx={{ height: "100%", overflowY: "auto" }}>
+          <Grid2
+            size={{ xs: 7 }}
+            sx={{
+              overflowY: "auto",
+              height: "calc(100vh - 200px)",
+              "&::-webkit-scrollbar": {
+                width: "8px",
+              },
+              "&::-webkit-scrollbar-track": {
+                borderRadius: "10px",
+                background: "#f1f1f1",
+              },
+              "&::-webkit-scrollbar-thumb": {
+                borderRadius: "10px",
+                background: "#888",
+              },
+              "&::-webkit-scrollbar-thumb:hover": {
+                background: "#555",
+              },
+            }}
+          >
             <Item>
               <Paper variant="outlined" sx={{ padding: "16px" }}>
                 <Box
                   sx={{
                     display: "flex",
+                    minHeight: "33px",
                     alignItems: "center",
                     justifyContent: "space-between",
                   }}
@@ -507,27 +638,42 @@ const SummaryDetailPage = () => {
                   <Tab
                     label="摘要"
                     sx={{
-                      color: "#637381",
+                      fontWeight: 700,
+                      fontSize: "14px",
+                      fontStyle: "normal",
+                      lineHeight: "normal",
+                      // fontFamily: "Open Sans",
+                      color: "var(--Text-Secondary, #637381)",
                       "&.Mui-selected": {
-                        color: "#212B36",
+                        color: "var(--Text-Primary, #212B36)",
                       },
                     }}
                   />
                   <Tab
                     label="問問AI"
                     sx={{
-                      color: "#637381",
+                      fontWeight: 700,
+                      fontSize: "14px",
+                      fontStyle: "normal",
+                      lineHeight: "normal",
+                      // fontFamily: "Open Sans",
+                      color: "var(--Text-Secondary, #637381)",
                       "&.Mui-selected": {
-                        color: "#212B36",
+                        color: "var(--Text-Primary, #212B36)",
                       },
                     }}
                   />
                   <Tab
                     label="相關資料"
                     sx={{
-                      color: "#637381",
+                      fontWeight: 700,
+                      fontSize: "14px",
+                      fontStyle: "normal",
+                      lineHeight: "normal",
+                      // fontFamily: "Open Sans",
+                      color: "var(--Text-Secondary, #637381)",
                       "&.Mui-selected": {
-                        color: "#212B36",
+                        color: "var(--Text-Primary, #212B36)",
                       },
                     }}
                   />
@@ -543,7 +689,18 @@ const SummaryDetailPage = () => {
                       justifyContent: "space-between",
                     }}
                   >
-                    <Typography variant="body1">原稿</Typography>
+                    <Typography
+                      sx={{
+                        fontWeight: 400,
+                        fontSize: "16px",
+                        fontStyle: "normal",
+                        lineHeight: "normal",
+                        fontFamily: "DFPHeiBold-B5",
+                        color: "var(--Primary-Black, #212B36)",
+                      }}
+                    >
+                      原稿
+                    </Typography>
                     <Box
                       sx={{
                         display: "flex",
@@ -570,7 +727,17 @@ const SummaryDetailPage = () => {
                       </IconButton>
                     </Box>
                   </Box>
-                  <Typography variant="body1" sx={{ mt: "10px" }}>
+                  <Typography
+                    sx={{
+                      mt: "10px",
+                      fontWeight: 400,
+                      fontSize: "16px",
+                      lineHeight: "24px",
+                      fontStyle: "normal",
+                      fontFamily: "DFPHeiMedium-B5",
+                      color: "var(--Primary-Black, #212B36)",
+                    }}
+                  >
                     這段會議記錄討論的是一個AI輔助系統的介面設計。核心議題在於提升使用者體驗，減少使用者思考負擔，並提高工作效率。
                     討論重點包含介面布局的優化，例如參考Cody的設計，將重要的資訊和工具置於顯眼位置，並將次要資訊收納整理；同時也著重於使用者回饋機制的設計，以便收集使用者意見以改進系統。
                     此外，會議也涉及語音轉文字功能的流程優化以及整體視覺風格的調整，特別是顏色配置的邏輯性與一致性。
@@ -682,44 +849,389 @@ const SummaryDetailPage = () => {
                         </IconButton>
                       </Box>
                     </Box>
+                    <Box
+                      sx={{
+                        width: "100%",
+                        display: "flex",
+                        borderRadius: "8px",
+                        alignSelf: "stretch",
+                        flexDirection: "column",
+                        alignItems: "flex-start",
+                        background: "var(--Primary-, #EBE3DD)",
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          width: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                          padding: "8px 16px 8px 20px",
+                          borderRadius: "0px 16px 0px 0px",
+                          background: "var(--Primary-, #EBE3DD)",
+                        }}
+                      >
+                        <TextareaAutosize
+                          minRows={1}
+                          maxRows={10}
+                          style={{
+                            width: "100%",
+                            color: "black",
+                            border: "none",
+                            resize: "none",
+                            outline: "none",
+                            display: "flex",
+                            fontWeight: 400,
+                            overflow: "auto",
+                            fontSize: "16px",
+                            minHeight: "40px",
+                            maxHeight: "198px",
+                            fontStyle: "normal",
+                            alignItems: "center",
+                            alignSelf: "stretch",
+                            whiteSpace: "nowrap",
+                            lineHeight: "normal",
+                            textOverflow: "ellipsis",
+                            fontFamily: "DFPHeiBold-B5",
+                            background: "var(--Primary-, #EBE3DD)",
+                          }}
+                          placeholder="問問AI"
+                        />
+                        <MicRounded
+                          sx={{
+                            color: "black",
+                            marginLeft: "8px",
+                          }}
+                        />
+                      </Box>
+                    </Box>
                   </Box>
                 </TabPanel>
                 <TabPanel value={aIAnalysisTabValue} index={2}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Typography variant="body1">原稿</Typography>
-                    <Box
+                  <Grid2 container spacing={2} direction="column">
+                    <Grid2
+                      container
+                      direction="column"
+                      spacing={2}
                       sx={{
                         display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
+                        overflowX: "auto",
                       }}
                     >
-                      <IconButton>
-                        <ContentCopyRounded sx={{ color: "black" }} />
-                      </IconButton>
-                      <IconButton>
-                        <ThumbDownOffAltRounded
-                          sx={{
-                            color: "black",
-                            transform: "scale(-1, -1)",
-                          }}
-                        />
-                      </IconButton>
+                      <Typography
+                        sx={{
+                          mt: "10px",
+                          fontWeight: 400,
+                          fontSize: "24px",
+                          textAlign: "start",
+                          fontStyle: "normal",
+                          lineHeight: "normal",
+                          fontFamily: "DFPHeiBold-B5",
+                          color: "var(--Primary-Black, #212B36)",
+                        }}
+                        gutterBottom
+                      >
+                        類別
+                      </Typography>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "row",
+                          overflowX: "auto",
+                          "&::-webkit-scrollbar": {
+                            height: "8px",
+                          },
+                          "&::-webkit-scrollbar-thumb": {
+                            backgroundColor: "transparent",
+                          },
+                        }}
+                      >
+                        {dataRow1.map((item, index) => (
+                          <Card
+                            key={index}
+                            sx={{
+                              gap: "20px",
+                              width: "300px",
+                              height: "146px",
+                              padding: "16px",
+                              display: "flex",
+                              minWidth: "300px",
+                              maxWidth: "384px",
+                              maxHeight: "146px",
+                              borderRadius: "8px",
+                              flexDirection: "column",
+                              alignItems: "flex-start",
+                              background: "var(--Primary-, #EBE3DD)",
+                              marginRight: "16px",
+                            }}
+                          >
+                            <CardContent sx={{ padding: "0px" }}>
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  flexDirection: "row",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <Typography
+                                  sx={{
+                                    fontWeight: 600,
+                                    fontSize: "24px",
+                                    textAlign: "start",
+                                    fontFamily: "Inter",
+                                    fontStyle: "normal",
+                                    lineHeight: "normal",
+                                    color: "var(--Primary-Black, #212B36)",
+                                  }}
+                                >
+                                  {item.title}
+                                </Typography>
+                                <IconButton sx={{ padding: "0px" }}>
+                                  <ArrowForwardIosRounded
+                                    sx={{
+                                      width: "16px",
+                                      height: "16px",
+                                      color: "black",
+                                    }}
+                                  />
+                                </IconButton>
+                              </Box>
+                              <Typography
+                                sx={{
+                                  mt: "20px",
+                                  fontWeight: 400,
+                                  fontSize: "16px",
+                                  overflow: "hidden",
+                                  fontStyle: "normal",
+                                  lineHeight: "normal",
+                                  fontFamily: "Open Sans",
+                                  textOverflow: "ellipsis",
+                                  color: "var(--Primary-Black, #212B36)",
+                                }}
+                              >
+                                {item.description}
+                              </Typography>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </Box>
+                    </Grid2>
 
-                      <IconButton>
-                        <ThumbDownOffAltRounded sx={{ color: "black" }} />
-                      </IconButton>
-                    </Box>
-                  </Box>
-                  <Typography variant="body1">
-                    相關資料的描述可以填這裡...
-                  </Typography>
+                    <Grid2
+                      container
+                      direction="column"
+                      spacing={2}
+                      sx={{
+                        display: "flex",
+                        overflowX: "auto",
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          mt: "10px",
+                          fontWeight: 400,
+                          fontSize: "24px",
+                          textAlign: "start",
+                          fontStyle: "normal",
+                          lineHeight: "normal",
+                          fontFamily: "DFPHeiBold-B5",
+                          color: "var(--Primary-Black, #212B36)",
+                        }}
+                        gutterBottom
+                      >
+                        類別
+                      </Typography>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "row",
+                          overflowX: "auto",
+                          "&::-webkit-scrollbar": {
+                            height: "8px",
+                          },
+                          "&::-webkit-scrollbar-thumb": {
+                            backgroundColor: "transparent",
+                          },
+                        }}
+                      >
+                        {dataRow2.map((item, index) => (
+                          <Card
+                            key={index}
+                            sx={{
+                              gap: "20px",
+                              width: "300px",
+                              height: "146px",
+                              padding: "16px",
+                              display: "flex",
+                              minWidth: "300px",
+                              maxWidth: "384px",
+                              maxHeight: "146px",
+                              borderRadius: "8px",
+                              flexDirection: "column",
+                              alignItems: "flex-start",
+                              background: "var(--Primary-, #EBE3DD)",
+                              marginRight: "16px",
+                            }}
+                          >
+                            <CardContent sx={{ padding: "0px" }}>
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  flexDirection: "row",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <Typography
+                                  sx={{
+                                    fontWeight: 600,
+                                    fontSize: "24px",
+                                    textAlign: "start",
+                                    fontFamily: "Inter",
+                                    fontStyle: "normal",
+                                    lineHeight: "normal",
+                                    color: "var(--Primary-Black, #212B36)",
+                                  }}
+                                >
+                                  {item.title}
+                                </Typography>
+                                <IconButton sx={{ padding: "0px" }}>
+                                  <ArrowForwardIosRounded
+                                    sx={{
+                                      width: "16px",
+                                      height: "16px",
+                                      color: "black",
+                                    }}
+                                  />
+                                </IconButton>
+                              </Box>
+                              <Typography
+                                sx={{
+                                  mt: "20px",
+                                  fontWeight: 400,
+                                  fontSize: "16px",
+                                  overflow: "hidden",
+                                  fontStyle: "normal",
+                                  lineHeight: "normal",
+                                  fontFamily: "Open Sans",
+                                  textOverflow: "ellipsis",
+                                  color: "var(--Primary-Black, #212B36)",
+                                }}
+                              >
+                                {item.description}
+                              </Typography>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </Box>
+                    </Grid2>
+
+                    <Grid2
+                      container
+                      direction="column"
+                      spacing={2}
+                      sx={{
+                        display: "flex",
+                        overflowX: "auto",
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          mt: "10px",
+                          fontWeight: 400,
+                          fontSize: "24px",
+                          textAlign: "start",
+                          fontStyle: "normal",
+                          lineHeight: "normal",
+                          fontFamily: "DFPHeiBold-B5",
+                          color: "var(--Primary-Black, #212B36)",
+                        }}
+                        gutterBottom
+                      >
+                        類別
+                      </Typography>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "row",
+                          overflowX: "auto",
+                          "&::-webkit-scrollbar": {
+                            height: "8px",
+                          },
+                          "&::-webkit-scrollbar-thumb": {
+                            backgroundColor: "transparent",
+                          },
+                        }}
+                      >
+                        {dataRow3.map((item, index) => (
+                          <Card
+                            key={index}
+                            sx={{
+                              gap: "20px",
+                              width: "300px",
+                              height: "146px",
+                              padding: "16px",
+                              display: "flex",
+                              minWidth: "300px",
+                              maxWidth: "384px",
+                              maxHeight: "146px",
+                              borderRadius: "8px",
+                              flexDirection: "column",
+                              alignItems: "flex-start",
+                              background: "var(--Primary-, #EBE3DD)",
+                              marginRight: "16px",
+                            }}
+                          >
+                            <CardContent sx={{ padding: "0px" }}>
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  flexDirection: "row",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <Typography
+                                  sx={{
+                                    fontWeight: 600,
+                                    fontSize: "24px",
+                                    textAlign: "start",
+                                    fontFamily: "Inter",
+                                    fontStyle: "normal",
+                                    lineHeight: "normal",
+                                    color: "var(--Primary-Black, #212B36)",
+                                  }}
+                                >
+                                  {item.title}
+                                </Typography>
+                                <IconButton sx={{ padding: "0px" }}>
+                                  <ArrowForwardIosRounded
+                                    sx={{
+                                      width: "16px",
+                                      height: "16px",
+                                      color: "black",
+                                    }}
+                                  />
+                                </IconButton>
+                              </Box>
+                              <Typography
+                                sx={{
+                                  mt: "20px",
+                                  fontWeight: 400,
+                                  fontSize: "16px",
+                                  overflow: "hidden",
+                                  fontStyle: "normal",
+                                  lineHeight: "normal",
+                                  fontFamily: "Open Sans",
+                                  textOverflow: "ellipsis",
+                                  color: "var(--Primary-Black, #212B36)",
+                                }}
+                              >
+                                {item.description}
+                              </Typography>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </Box>
+                    </Grid2>
+                  </Grid2>
                 </TabPanel>
               </Paper>
             </Item>
