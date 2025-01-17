@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Menu,
   MenuItem,
@@ -7,7 +7,6 @@ import {
   ListItemText,
   ListItemIcon,
 } from "@mui/material";
-import { OrganizationChannel } from "@/interfaces/entities";
 import {
   EditRounded,
   DeleteRounded,
@@ -56,63 +55,28 @@ const menuActions = [
 ];
 
 const EditableItem: React.FC<{
-  channel: OrganizationChannel;
-  onSave: (id: string, newTitle: string) => void;
   index: number;
   toolsAnchor: HTMLElement | null;
   activeIndex: number | null;
   handleCloseToolsMenu: () => void;
+  handleOpenEditChannelDialog: () => void;
   handleDeleteChannelOpenConfirmDialog: () => void;
   handleMenuOpen: (event: React.MouseEvent<HTMLElement>, index: number) => void;
   setToolsAnchor: React.Dispatch<React.SetStateAction<HTMLElement | null>>;
 }> = ({
   index,
-  onSave,
-  channel,
   toolsAnchor,
   activeIndex,
   handleMenuOpen,
-  setToolsAnchor,
   handleCloseToolsMenu,
+  handleOpenEditChannelDialog,
   handleDeleteChannelOpenConfirmDialog,
 }) => {
-  const [editedTitle, setEditedTitle] = useState(
-    channel.organizationChannelTitle
-  );
-  const [isEditing, setIsEditing] = useState(false);
-
-  const handleToggleEdit = (event: React.MouseEvent<HTMLElement>) => {
-    event.stopPropagation();
-    setIsEditing(true);
-    setToolsAnchor(null);
-  };
-
-  const handleSave = () => {
-    if (
-      editedTitle.trim() &&
-      editedTitle !== channel.organizationChannelTitle
-    ) {
-      onSave(channel.organizationChannelId, editedTitle);
-    }
-    setIsEditing(false);
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      handleSave();
-    } else if (e.key === "Escape") {
-      setEditedTitle(channel.organizationChannelTitle);
-      setIsEditing(false);
-    }
-  };
-
   return (
     <>
-      {!isEditing && (
-        <IconButton onClick={(event) => handleMenuOpen(event, index)}>
-          <MoreVertRounded sx={{ color: "black" }} />
-        </IconButton>
-      )}
+      <IconButton onClick={(event) => handleMenuOpen(event, index)}>
+        <MoreVertRounded sx={{ color: "black" }} />
+      </IconButton>
       <Menu
         anchorEl={toolsAnchor}
         open={Boolean(toolsAnchor) && activeIndex === index}
@@ -156,7 +120,7 @@ const EditableItem: React.FC<{
             onClick={
               index === 1
                 ? handleDeleteChannelOpenConfirmDialog
-                : handleToggleEdit
+                : handleOpenEditChannelDialog
             }
           >
             <ListItemIcon>{item.icon}</ListItemIcon>
