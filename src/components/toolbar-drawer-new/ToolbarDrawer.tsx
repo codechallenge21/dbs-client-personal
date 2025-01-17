@@ -143,6 +143,10 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
     setIsClient(true);
   }, []);
 
+  useEffect(() => {
+    if (!isMobile) toggleDrawer(true);
+  }, [isMobile, toggleDrawer]);
+
   if (!isClient) {
     return null; // Avoid mismatches by skipping rendering on the server
   }

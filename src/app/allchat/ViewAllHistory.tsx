@@ -52,8 +52,10 @@ export default function ChannelSearchCombined() {
   const handleSelectAll = () =>
     setChannels((prev) => prev.map((ch) => ({ ...ch, selected: true })));
 
-  const handleCancelAll = () =>
+  const handleCancelAll = () => {
     setChannels((prev) => prev.map((ch) => ({ ...ch, selected: false })));
+    handleToggleV2();
+  };
 
   const toggleChannel = (id: number) =>
     setChannels((prev) =>
@@ -122,50 +124,113 @@ export default function ChannelSearchCombined() {
             <Box
               sx={{
                 display: 'flex',
-                gap: '4px',
+                justifyContent: 'space-between',
                 alignItems: 'center',
+                flexDirection: 'row',
+                width: '100%',
               }}
             >
-              <Typography
+              <Box
                 sx={{
-                  color: 'var(--Primary-Black, #212B36)',
-                  fontFamily: 'Open Sans',
-                  fontSize: '14px',
-                  fontStyle: 'normal',
-                  fontWeight: 700,
-                  lineHeight: 'normal',
-                  '& .highlight': {
+                  display: 'flex',
+                  gap: '4px',
+                  alignItems: 'center',
+                  py: 0.5,
+                }}
+              >
+                <Typography
+                  sx={{
+                    color: 'var(--Primary-Black, #212B36)',
+                    fontFamily: 'Open Sans',
+                    fontSize: '14px',
+                    fontStyle: 'normal',
+                    fontWeight: 700,
+                    lineHeight: 'normal',
+                    '& .highlight': {
+                      color: 'error.main',
+                      px: 0.5,
+                    },
+                  }}
+                >
+                  你目前有{' '}
+                  <span className="highlight">
+                    {filteredChannels.length ? filteredChannels.length : 0}
+                  </span>{' '}
+                  個頻道
+                </Typography>
+                <Button
+                  variant="text"
+                  onClick={handleToggleV2}
+                  sx={{
+                    color: 'primary.main',
+                    fontFamily: 'Open Sans',
+                    fontSize: '14px',
+                    fontStyle: 'normal',
+                    fontWeight: 700,
+                    lineHeight: 'normal',
+                    minWidth: 'auto',
+                    borderRadius: '8px',
+                  }}
+                  className="highlight"
+                >
+                  選擇
+                </Button>
+              </Box>
+              {/* <Stack direction={'row'} spacing={1} sx={{ width: 'auto' }}>
+                <Button
+                  variant="text"
+                  onClick={handleSelectAll}
+                  sx={{
                     color: 'error.main',
-                    px: 0.5,
-                  },
-                }}
-              >
-                你目前有{' '}
-                <span className="highlight">
-                  {filteredChannels.length ? filteredChannels.length : 0}
-                </span>{' '}
-                個頻道
-              </Typography>
-              <Button
-                variant="text"
-                onClick={handleToggleV2}
-                sx={{
-                  color: 'primary.main',
-                  padding: 0,
-                  fontFamily: 'Open Sans',
-                  fontSize: '14px',
-                  fontStyle: 'normal',
-                  fontWeight: 700,
-                  lineHeight: 'normal',
-                  p: 0.5,
-                  minWidth: 'auto',
-                }}
-                className="highlight"
-              >
-                選擇
-              </Button>
+                    fontFamily: 'Open Sans',
+                    fontSize: '14px',
+                    fontStyle: 'normal',
+                    fontWeight: 700,
+                    borderRadius: '8px',
+                  }}
+                >
+                  全選
+                </Button>
+                <Button
+                  variant="outlined"
+                  sx={{
+                    fontFamily: 'Open Sans',
+                    fontSize: '14px',
+                    fontStyle: 'normal',
+                    fontWeight: 700,
+                    lineHeight: 'normal',
+                    color: 'black',
+                    border: '1px solid var(--Primary-Black, #212B36)',
+                    borderRadius: '8px',
+                    padding: '4px 8px',
+                  }}
+                  onClick={handleCancelAll}
+                >
+                  取消
+                </Button>
+                <Button
+                  variant="contained"
+                  disabled={selectedChannels.length === 0}
+                  onClick={handleDelete}
+                  sx={{
+                    fontFamily: 'Open Sans',
+                    fontSize: '14px',
+                    fontStyle: 'normal',
+                    fontWeight: 700,
+                    lineHeight: 'normal',
+                    bgcolor: 'red.500',
+                    color: '#ffffff',
+                    padding: '4px 8px',
+                    borderRadius: '8px',
+                    '&:hover': {
+                      bgcolor: 'grey.400',
+                    },
+                  }}
+                >
+                  刪除
+                </Button>
+              </Stack> */}
             </Box>
-
             <Stack spacing={1} sx={{ width: '100%' }}>
               {filteredChannels.map((channel) => (
                 <Paper
@@ -177,8 +242,7 @@ export default function ChannelSearchCombined() {
                     display: 'flex',
                     alignItems: 'flex-start',
                     p: 2,
-                    border: '1px solid',
-                    borderColor: 'divider',
+                    border: '1px solid var(--Secondary-Dark-Gray, #4A4A4A)',
                     borderRadius: 2,
                     bgcolor: channel.selected
                       ? 'rgba(255, 0, 0, 0.05)'
@@ -189,6 +253,33 @@ export default function ChannelSearchCombined() {
                     flexDirection: 'column',
                   }}
                 >
+                  {channel.selected && (
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        left: '-13px', // Move checkbox half outside the paper
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        zIndex: 2,
+                        pointerEvents: 'auto', // Ensure the checkbox is clickable
+                        p: 0,
+                        bgcolor: '#fff',
+                      }}
+                    >
+                      <Checkbox
+                        checked={channel.selected}
+                        onChange={() => toggleChannel(channel.id)}
+                        sx={{
+                          color: 'var(--Primary-Black, #212B36)',
+                          p: 0,
+
+                          '&.Mui-checked': {
+                            color: 'var(--Primary-Black, #212B36)',
+                          },
+                        }}
+                      />
+                    </Box>
+                  )}
                   <Typography
                     sx={{
                       color: '#000',
@@ -248,30 +339,52 @@ export default function ChannelSearchCombined() {
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                mb: 2,
-                flexDirection: isMobile ? 'column' : 'row',
+                flexDirection: 'row',
+                width: '100%',
+                py: '1px',
               }}
             >
-              <Typography sx={{ mb: isMobile ? 1 : 0 }}>
+              <Typography
+                sx={{
+                  color: 'var(--Primary-Black, #212B36)',
+                  fontFamily: 'Open Sans',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  lineHeight: 'normal',
+                  '& .highlight': {
+                    color: 'error.main',
+                    px: 0.5,
+                  },
+                }}
+              >
                 當前已選擇 {selectedChannels.length} 個頻道
               </Typography>
-              <Stack
-                direction={isMobile ? 'column' : 'row'}
-                spacing={1}
-                sx={{ width: isMobile ? '100%' : 'auto' }}
-              >
+              <Stack direction={'row'} spacing={1} sx={{ width: 'auto' }}>
                 <Button
                   variant="text"
                   onClick={handleSelectAll}
-                  sx={{ color: 'error.main' }}
+                  sx={{
+                    color: 'error.main',
+                    fontFamily: 'Open Sans',
+                    fontSize: '14px',
+                    fontStyle: 'normal',
+                    fontWeight: 700,
+                    borderRadius: '8px',
+                  }}
                 >
                   全選
                 </Button>
                 <Button
                   variant="outlined"
                   sx={{
+                    fontFamily: 'Open Sans',
+                    fontSize: '14px',
+                    fontStyle: 'normal',
+                    fontWeight: 700,
+                    lineHeight: 'normal',
                     color: 'black',
-                    border: '1px solid',
+                    border: '1px solid var(--Primary-Black, #212B36)',
                     borderRadius: '8px',
                     padding: '4px 8px',
                   }}
@@ -284,6 +397,11 @@ export default function ChannelSearchCombined() {
                   disabled={selectedChannels.length === 0}
                   onClick={handleDelete}
                   sx={{
+                    fontFamily: 'Open Sans',
+                    fontSize: '14px',
+                    fontStyle: 'normal',
+                    fontWeight: 700,
+                    lineHeight: 'normal',
                     bgcolor: 'red.500',
                     color: '#ffffff',
                     padding: '4px 8px',
@@ -299,32 +417,36 @@ export default function ChannelSearchCombined() {
             </Box>
 
             {/* Channel List */}
-            <Stack spacing={1}>
+            <Stack spacing={1} sx={{ width: '100%' }}>
               {filteredChannels.map((channel) => (
                 <Paper
                   key={channel.id}
                   elevation={0}
                   sx={{
                     display: 'flex',
-                    alignItems: 'center',
                     p: 2,
-                    border: '1px solid',
-                    borderColor: 'divider',
                     borderRadius: 2,
                     bgcolor: channel.selected
                       ? 'rgba(255, 0, 0, 0.05)'
                       : 'transparent',
                     position: 'relative', // Add this to support absolute positioning of delete icon
+                    alignItems: 'flex-start',
+                    border: '1px solid var(--Secondary-Dark-Gray, #4A4A4A)',
+                    gap: '16px',
+                    alignSelf: 'stretch',
+                    flexDirection: 'column',
                   }}
                 >
                   <Box
                     sx={{
                       position: 'absolute',
-                      left: '-20px', // Move checkbox half outside the paper
+                      left: '-13px', // Move checkbox half outside the paper
                       top: '50%',
                       transform: 'translateY(-50%)',
                       zIndex: 2,
                       pointerEvents: 'auto', // Ensure the checkbox is clickable
+                      p: 0,
+                      bgcolor: '#fff',
                     }}
                   >
                     <Checkbox
@@ -332,23 +454,44 @@ export default function ChannelSearchCombined() {
                       onChange={() => toggleChannel(channel.id)}
                       sx={{
                         color: 'var(--Primary-Black, #212B36)',
+                        p: 0,
+
                         '&.Mui-checked': {
                           color: 'var(--Primary-Black, #212B36)',
                         },
                       }}
                     />
                   </Box>
-                  <Box sx={{ flexGrow: 1, pl: 4 }}>
-                    <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
-                      {channel.title}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      sx={{ color: 'text.secondary' }}
-                    >
-                      {channel.date}
-                    </Typography>
-                  </Box>
+                  <Typography
+                    sx={{
+                      color: '#000',
+                      fontFamily: 'Open Sans',
+                      fontSize: '14px',
+                      fontStyle: 'normal',
+                      fontWeight: 700,
+                      lineHeight: 'normal',
+                    }}
+                  >
+                    {channel.title}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      display: '-webkit-box',
+                      '-webkit-box-orient': 'vertical',
+                      '-webkit-line-clamp': 1,
+                      alignSelf: 'stretch',
+                      overflow: 'hidden',
+                      color: 'var(--Secondary-Dark-Gray, #4A4A4A)',
+                      textOverflow: 'ellipsis',
+                      fontFamily: 'DFPHeiMedium-B5',
+                      fontSize: '12px',
+                      fontStyle: 'normal',
+                      fontWeight: 400,
+                      lineHeight: 'normal',
+                    }}
+                  >
+                    {channel.date}
+                  </Typography>
                   <IconButton
                     size="small"
                     sx={{
