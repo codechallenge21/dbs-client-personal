@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import DropdownMenu from './DropdownMenu';
 import { Box, IconButton, useMediaQuery, useTheme } from '@mui/material';
 import {
+  HistoryRounded,
   MenuRounded,
   SettingsInputComponentRounded,
   StarBorderRounded,
@@ -12,6 +13,8 @@ import UploadDialog from '@/components/uploadDialog/page';
 import { AdvisorType } from './types';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import DataSourceDialog from './chatDataStore';
+import ChannelContentContext from './ChannelContentContext';
+import { useRouter } from 'next/navigation';
 
 interface HeaderProps {
   open?: boolean;
@@ -34,6 +37,10 @@ export default function Header({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [openDataSource, setOpenDataSource] = useState(false);
+  const { selectedChannelId, selectedChannel, chatResponses } = useContext(
+    ChannelContentContext
+  );
+  const router = useRouter();
 
   const handleOpenUpload = () => {
     if (setOpenUpload) setOpenUpload(false);
@@ -104,6 +111,20 @@ export default function Header({
                 <IconButton sx={{ padding: '0px' }}>
                   <StarBorderRounded sx={{ color: 'black', margin: '8px' }} />
                 </IconButton>
+                {selectedChannel ||
+                selectedChannelId ||
+                chatResponses.length ? (
+                  <IconButton
+                    sx={{ padding: '0px' }}
+                    onClick={() => {
+                      router.push('/allchat');
+                    }}
+                  >
+                    <HistoryRounded sx={{ color: 'black', margin: '8px' }} />
+                  </IconButton>
+                ) : (
+                  <></>
+                )}
                 <IconButton sx={{ padding: '0px' }}>
                   <SettingsInputComponentRounded
                     onClick={() => setOpenDataSource(true)}
