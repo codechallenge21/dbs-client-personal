@@ -37,6 +37,7 @@ export default function DeleteConfirmationModal({
           borderRadius: '8px',
           p: 3,
           mx: 2,
+          py: 2,
         }}
       >
         {/* Close Button */}
@@ -58,28 +59,34 @@ export default function DeleteConfirmationModal({
           variant="h6"
           component="h2"
           sx={{
-            mb: 2,
-            fontWeight: 500,
+            mb: 3,
+            color: 'var(--Primary-Black, #212B36)',
+            fontFamily: 'DFPHeiBold-B5',
+            fontSize: '24px',
+            fontStyle: 'normal',
+            fontWeight: 400,
+            lineHeight: 'normal',
           }}
         >
           刪除紀錄
         </Typography>
 
         {/* Content */}
-        <Box sx={{ mb: 3 }}>
-          {ChannelName.map((channel, index) => (
-            <Typography
-              key={index}
-              variant="body2"
-              sx={{
-                mb: 1,
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              {channel.title}
-            </Typography>
-          ))}
+        <Box sx={{ mb: 1 }}>
+          <Typography
+            variant="body2"
+            sx={{
+              mb: 1,
+              color: 'var(--Primary-Black, #212B36)',
+              fontFamily: 'DFPHeiBold-B5',
+              fontSize: '16px',
+              fontStyle: 'normal',
+              fontWeight: 400,
+              lineHeight: 'normal',
+            }}
+          >
+            即將刪除 {ChannelName.length} 個頻道
+          </Typography>
         </Box>
 
         {/* Actions */}
