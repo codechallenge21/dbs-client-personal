@@ -49,7 +49,7 @@ export default function RenameDialog({
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          padding: '16px',
+          padding: '8px 11px 8px 24px',
           borderBottom: '1px solid',
           borderColor: 'divider',
         }}
@@ -58,22 +58,29 @@ export default function RenameDialog({
         <IconButton
           onClick={onClose}
           size="small"
-          sx={{ color: 'text.secondary' }}
+          sx={{ color: 'text.secondary', padding: '8px' }}
         >
           <Close />
         </IconButton>
       </DialogTitle>
-      <DialogContent sx={{ padding: '24px 16px' }}>
+      <DialogContent sx={{ padding: '0 24px' }}>
         <TextField
           fullWidth
           placeholder="新名字"
           value={newName}
           sx={{
-            my: '16px',
+            mt: '16px',
           }}
           onChange={(e) => setNewName(e.target.value)}
           variant="outlined"
           size="small"
+          slotProps={{
+            htmlInput: {
+              sx: {
+                padding: '16px 14px',
+              },
+            },
+          }}
         />
       </DialogContent>
       <DialogActions sx={{ padding: '8px 16px 16px' }}>

@@ -25,6 +25,7 @@ import {
 } from '@mui/material';
 import { styled, Theme, CSSObject } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
+import { usePathname, useRouter } from 'next/navigation';
 
 interface ToolbarDrawerProps {
   open: boolean;
@@ -43,30 +44,37 @@ const drawerItems = [
         }}
       />
     ),
+    route: '/popular',
   },
   {
     text: '我的最愛',
     icon: <StarRounded sx={{ color: 'black', marginRight: '8px' }} />,
+    route: '/favorite',
   },
   {
     text: '活動公告',
     icon: <CampaignRounded sx={{ color: 'black', marginRight: '8px' }} />,
+    route: '/events',
   },
   {
     text: '解決麻煩事',
     icon: <PsychologyRounded sx={{ color: 'black', marginRight: '8px' }} />,
+    route: '/chat',
   },
   {
     text: '工具箱',
     icon: <BuildRounded sx={{ color: 'black', marginRight: '8px' }} />,
+    route: '/toolbox',
   },
   {
     text: '財務快篩',
     icon: <PaidRounded sx={{ color: 'black', marginRight: '8px' }} />,
+    route: '/financial-screening',
   },
   {
     text: '知識庫',
     icon: <AutoStoriesRounded sx={{ color: 'black', marginRight: '8px' }} />,
+    route: '/knowledge-base',
   },
 ];
 
@@ -123,6 +131,8 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
   toggleDrawer,
   children,
 }) => {
+  const pathname = usePathname(); // Get the current path
+  const router = useRouter(); // Navigation
   const theme = useTheme();
   const [isClient, setIsClient] = useState(false);
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -137,6 +147,8 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
     return null; // Avoid mismatches by skipping rendering on the server
   }
 
+  console.log('pathname', pathname);
+
   const DrawerList = (
     <Box
       sx={{
@@ -147,11 +159,11 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
         height: '100%',
       }}
     >
-      <List sx={{ padding: '0', flexGrow: 1 }}>
+      <List sx={{ padding: '0 8px', flexGrow: 1 }}>
         <ListItem
           sx={{
             display: 'flex',
-            padding: '4px 8px',
+            padding: '8px 0',
             justifyContent: 'space-between',
           }}
         >
@@ -171,7 +183,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             onClick={() => {
               if (isMobile) toggleDrawer(!open);
             }}
-            sx={{ color: 'black' }}
+            sx={{ color: 'black', padding: '8xp' }}
           >
             <MenuOpenRounded />
           </IconButton>
@@ -180,7 +192,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
         <ListItem
           sx={{
             display: 'flex',
-            padding: ' 8px',
+            padding: '8px 0 16px',
             justifyContent: 'space-between',
           }}
         >
@@ -202,35 +214,53 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             + New Chat
           </Button>
         </ListItem>
-        {drawerItems.map((item, index) => (
-          <ListItem
-            key={index}
-            sx={{
-              padding: '8px',
-              borderRadius: '8px',
-              '&:hover': {
-                backgroundColor: '#f5f5f5',
-              },
-            }}
-          >
-            <Typography
+        <Box
+          sx={{
+            gap: '8px',
+            display: 'flex',
+            alignSelf: 'stretch',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            justifyContent: 'flex-end',
+          }}
+        >
+          {drawerItems.map((item, index) => (
+            <ListItem
+              key={index}
               sx={{
-                display: 'flex',
-                fontWeight: 400,
-                fontSize: '16px',
-                overflow: 'hidden',
-                fontStyle: 'normal',
-                lineHeight: 'normal',
-                alignItems: 'center',
-                textOverflow: 'ellipsis',
-                fontFamily: 'DFPHeiBold-B5',
-                color: index === 0 ? 'red' : 'black',
+                padding: '8px',
+                borderRadius: '8px',
+                backgroundColor:
+                  pathname === item.route ||
+                  (pathname === '/' && item.route === '/chat')
+                    ? 'var(--Action-Selected, rgba(204, 0, 0, 0.20))'
+                    : 'transparent', // Active state
+                '&:hover': {
+                  backgroundColor: '#f5f5f5',
+                },
+                cursor: 'pointer',
               }}
+              onClick={() => router.push(item.route)}
             >
-              <span>{item.icon}</span> {item.text}
-            </Typography>
-          </ListItem>
-        ))}
+              <Typography
+                sx={{
+                  display: 'flex',
+                  fontWeight: 400,
+                  fontSize: '16px',
+                  overflow: 'hidden',
+                  fontStyle: 'normal',
+                  lineHeight: 'normal',
+                  alignItems: 'center',
+                  textOverflow: 'ellipsis',
+                  fontFamily: 'DFPHeiBold-B5',
+                  color: index === 0 ? 'red' : 'black',
+                }}
+              >
+                <span>{item.icon}</span> {item.text}
+              </Typography>
+            </ListItem>
+          ))}
+        </Box>
       </List>
       <Box
         sx={{
