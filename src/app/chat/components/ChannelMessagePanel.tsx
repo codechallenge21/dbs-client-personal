@@ -7,6 +7,7 @@ import { FC } from 'react';
 import ReactMarkdown from 'react-markdown';
 import Image from 'next/image';
 import imagePerview from '@/assets/Images/Image Icon.svg';
+import React from 'react';
 
 export interface ChannelMessagePanelProps {
   channel?: OrganizationChannel;
@@ -42,37 +43,39 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
           flexDirection: 'column',
         }}
       >
-        {channel?.organizationChannelMessageList.map((message, index) => (
-          <Box
-            key={index}
-            sx={{
-              width: '100%',
-              marginBottom: 2,
-              textAlign: 'left',
-              display: 'flex',
-              flexDirection: 'column',
-              ...(message.organizationChannelMessageType === 'AI'
-                ? { padding: 2, px: 0, '& p': { marginBottom: 1 } }
-                : {
-                    padding: 2,
-                    width: 'auto',
-                    maxWidth: '80%',
-                    backgroundColor: '#E8E8E8',
-                    borderRadius: 5,
-                    alignContent: 'right',
-                    alignItems: 'flex-end',
-                    justifyContent: 'flex-end',
-                    '& p': { marginBottom: 0 },
-                  }),
-            }}
-          >
-            <ReactMarkdown>
-              {message.organizationChannelMessageContent}
-            </ReactMarkdown>
-          </Box>
-        ))}
-        {chatResponses?.map((message, index) => (
-          <>
+        {channel?.organizationChannelMessageList.map(
+          (message, messageIndex) => (
+            <Box
+              key={`channelMessage-${messageIndex}`}
+              sx={{
+                width: '100%',
+                marginBottom: 2,
+                textAlign: 'left',
+                display: 'flex',
+                flexDirection: 'column',
+                ...(message.organizationChannelMessageType === 'AI'
+                  ? { padding: 2, px: 0, '& p': { marginBottom: 1 } }
+                  : {
+                      padding: 2,
+                      width: 'auto',
+                      maxWidth: '80%',
+                      backgroundColor: '#E8E8E8',
+                      borderRadius: 5,
+                      alignContent: 'right',
+                      alignItems: 'flex-end',
+                      justifyContent: 'flex-end',
+                      '& p': { marginBottom: 0 },
+                    }),
+              }}
+            >
+              <ReactMarkdown>
+                {message.organizationChannelMessageContent}
+              </ReactMarkdown>
+            </Box>
+          )
+        )}
+        {chatResponses?.map((message, messageIndex) => (
+          <React.Fragment key={`chatResponse-${messageIndex}`}>
             {(message.organizationChannelFiles?.length ?? 0) > 0 && (
               <Box
                 sx={{
@@ -82,9 +85,9 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                   padding: '8px',
                 }}
               >
-                {message.organizationChannelFiles?.map((file, index) => (
+                {message.organizationChannelFiles?.map((file, fileIndex) => (
                   <Box
-                    key={index}
+                    key={`file-${messageIndex}-${fileIndex}`}
                     sx={{
                       display: 'flex',
                       flexDirection: 'column',
@@ -120,7 +123,6 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
               </Box>
             )}
             <Box
-              key={index}
               sx={{
                 width: '100%',
                 marginBottom: 2,
@@ -144,7 +146,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                 {message.organizationChannelMessageContent}
               </ReactMarkdown>
             </Box>
-          </>
+          </React.Fragment>
         ))}
       </Box>
     </Container>

@@ -144,7 +144,8 @@ export default function ChannelSearchCombined() {
               {filteredChannels.map((channel) => (
                 <Paper
                   key={channel.id}
-                  onClick={() => toggleChannel(channel.id)}
+                  onMouseEnter={() => toggleChannel(channel.id)}
+                  onMouseLeave={() => toggleChannel(channel.id)}
                   elevation={0}
                   sx={{
                     display: 'flex',
@@ -181,7 +182,7 @@ export default function ChannelSearchCombined() {
                         right: '4px',
                       }}
                       onClick={() => {
-                        toggleChannel(channel.id);
+                        // toggleChannel(channel.id);
                         handleDelete();
                       }}
                     >

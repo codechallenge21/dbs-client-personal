@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import {
   AccountBalanceWalletRounded,
+  ArrowDropDown,
   BusinessCenterRounded,
   LocalHospitalRounded,
   MoneyOffRounded,
@@ -141,24 +142,29 @@ export default function DropdownMenu({
             ))}
         </div>
       ) : (
-        <Typography
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '4px 8px',
-            color: toolsAnchor ? '#0066cc' : 'black',
-            backgroundColor: toolsAnchor ? '#F5F5F5' : 'white',
-            borderRadius: toolsAnchor ? '10px' : '0px',
-            cursor: 'pointer',
-            height: '40px',
-            fontSize: '16px',
-            fontFamily: 'DFPHeiBold-B5',
-          }}
-          onClick={handleClick}
-        >
-          {listItems.find((item) => item.value === advisor)?.title}
-        </Typography>
+        <>
+          <Typography
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '4px 8px',
+              color: toolsAnchor ? '#0066cc' : 'black',
+              backgroundColor: toolsAnchor ? '#F5F5F5' : 'white',
+              borderRadius: toolsAnchor ? '10px' : '0px',
+              cursor: 'pointer',
+              height: '40px',
+              fontSize: '16px',
+              fontFamily: 'DFPHeiBold-B5',
+            }}
+            onClick={handleClick}
+          >
+            {listItems.find((item) => item.value === advisor)?.title}
+            <ArrowDropDown
+              sx={{ width: '32px', height: '32px', color: 'black' }}
+            />
+          </Typography>
+        </>
       )}
       <Menu
         anchorEl={toolsAnchor}
