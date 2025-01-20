@@ -60,8 +60,8 @@ const HistoryChats: React.FC<HistoryChatsProps> = ({ chats }) => {
               fontWeight: 400,
               lineHeight: 'normal',
               display: '-webkit-box',
-              '-webkit-box-orient': 'vertical',
-              '-webkit-line-clamp': 1,
+              WebkitBoxOrient: 'vertical',
+              WebkitLineClamp: 1,
               alignSelf: 'stretch',
             }}
           >

@@ -114,6 +114,7 @@ export default function MainContent() {
         justifyContent: isMobile ? 'flex-end' : 'center',
         alignItems: 'center',
         textAlign: 'center',
+        px: '24px',
       }}
     >
       {isMobile ? (
