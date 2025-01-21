@@ -25,6 +25,7 @@ import ChannelContentContext from './ChannelContentContext';
 import EditDeleteModal from './EditDeleteModal';
 import DeleteConfirmationModal from '@/app/allchat/DeleteConfirmationModal';
 import RenameDialog from './renameChat';
+import { useRouter } from 'next/navigation';
 
 const listItems = [
   {
@@ -79,6 +80,7 @@ export default function DropdownMenu({
   isTextInput?: boolean;
 }) {
   const theme = useTheme();
+  const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [toolsAnchor, setToolsAnchor] = useState<null | HTMLElement>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -99,6 +101,7 @@ export default function DropdownMenu({
   };
 
   const handleConfirmDelete = () => {
+    router.push('/');
     setIsDeleteDialogOpen(false);
   };
 
@@ -110,7 +113,7 @@ export default function DropdownMenu({
     setIsDeleteDialogOpen(true);
   };
 
-  const { setAdvisorType } = useContext(ChannelContentContext);
+  const { setAdvisorType, chatResponses } = useContext(ChannelContentContext);
 
   const handleOnClickMenuItem = useCallback(
     (value: AdvisorType) => {
@@ -157,12 +160,22 @@ export default function DropdownMenu({
               fontSize: '16px',
               fontFamily: 'DFPHeiBold-B5',
             }}
-            onClick={handleClick}
+            onClick={
+              chatResponses[1]?.organizationChannelTitle
+                ? handleClick
+                : undefined
+            }
           >
-            {listItems.find((item) => item.value === advisor)?.title}
-            <ArrowDropDown
-              sx={{ width: '32px', height: '32px', color: 'black' }}
-            />
+            {chatResponses[1]?.organizationChannelTitle ? (
+              <>
+                {chatResponses[1]?.organizationChannelTitle}
+                <ArrowDropDown
+                  sx={{ width: '32px', height: '32px', color: 'black' }}
+                />
+              </>
+            ) : (
+              listItems.find((item) => item.value === advisor)?.title
+            )}
           </Typography>
         </>
       )}

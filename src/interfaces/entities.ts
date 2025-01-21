@@ -41,6 +41,7 @@ export interface OrganizationChannelMessage {
   organizationChannelMessageId?: string;
   organizationChannelMessageType: 'AI' | 'USER';
   organizationChannelMessageContent: string;
+  organizationChannelTitle?: string;
   organizationChannelMessageTokenCount?: number;
   organizationChannelMessageCreateDate?: string;
   organizationChannelFiles?: FileListType[];
@@ -71,6 +72,7 @@ export type OrganizationChannelTypes = 'CHAT' | 'MEETING';
 export interface OrganizationChannelChatInteractResponse {
   status: 'success';
   channelId: string;
+  organizationChannelTitle: string;
   response: string;
   contextInfo: {
     hasContext: boolean;

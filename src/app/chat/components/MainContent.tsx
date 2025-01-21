@@ -147,7 +147,7 @@ export default function MainContent() {
                   fontFamily: 'DFPHeiBold-B5',
                   fontSize: '32px',
                   fontWeight: '400',
-                  mb: '319px',
+                  mb: isMobile ? '' : '319px',
                 }}
               >
                 我能為你做些什麼？

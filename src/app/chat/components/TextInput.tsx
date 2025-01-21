@@ -8,6 +8,7 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import RotateRightRounded from '@mui/icons-material/RotateRightRounded';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import apis from '@/utils/hooks/apis/apis';
 import ChannelContentContext from './ChannelContentContext';
@@ -65,6 +66,7 @@ const TextInput = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [userInputValue, setUserInputValue] = useState('');
   const [isListening, setIsListening] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const recognitionRef = useRef<null | SpeechRecognition>(null);
   const [files, setFiles] = useState<{ file: File; preview: string | null }[]>(
@@ -103,8 +105,6 @@ const TextInput = () => {
   const getFileIcon = (file: File): string => {
     const extension = file.name.split('.').pop()?.toLowerCase();
 
-    console.log('extension, ', extension);
-
     switch (extension) {
       case 'pdf':
         return pdfPreview;
@@ -135,6 +135,7 @@ const TextInput = () => {
   } = useContext(ChannelContentContext);
 
   const handleSendMessage = useCallback(async () => {
+    setIsLoading(true);
     if (isInteracting) return;
     setChatResponses((prev) => [
       ...prev,
@@ -156,6 +157,7 @@ const TextInput = () => {
         {
           organizationChannelMessageType: 'AI',
           organizationChannelMessageContent: response?.data?.response,
+          organizationChannelTitle: response?.data?.organizationChannelTitle,
         },
       ]);
       setSelectedChannelId(response?.data?.channelId);
@@ -164,6 +166,7 @@ const TextInput = () => {
       }
       setUserInputValue('');
       setFiles([]);
+      setIsLoading(false);
     }
   }, [
     channelsMutate,
@@ -263,7 +266,7 @@ const TextInput = () => {
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          width: '100%',
+          width: isMobile ? '90%' : '100%',
           maxWidth: '760px',
           maxHeight: '760px',
           minHeight: '108px',
@@ -271,6 +274,7 @@ const TextInput = () => {
           bottom: isMobile ? 0 : 'auto',
           backgroundColor: '#F5F5F5',
           borderRadius: 2,
+          zIndex: isMobile ? 10 : '',
           margin: isMobile ? 3 : 0,
           overflow: 'hidden',
           justifyContent: 'flex-end',
@@ -455,7 +459,17 @@ const TextInput = () => {
             </IconButton>
           </Box>
 
-          {userInputValue !== '' && !isListening ? (
+          {isLoading || isInteracting ? (
+            <Box
+              sx={{
+                position: 'absolute',
+                bottom: '12px',
+                right: '10px',
+              }}
+            >
+              <RotateRightRounded sx={{ color: '#1877F2', fontSize: 24 }} />
+            </Box>
+          ) : userInputValue !== '' && !isListening ? (
             <IconButton
               sx={{
                 position: 'absolute',

@@ -106,6 +106,9 @@ export default function ChannelSearchCombined() {
           sx={{
             '& .MuiOutlinedInput-root': {
               borderRadius: '8px',
+              '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                borderColor: 'black',
+              },
             },
           }}
           slotProps={{
@@ -153,7 +156,7 @@ export default function ChannelSearchCombined() {
                   }}
                 >
                   你目前有{' '}
-                  <span className="highlight">
+                  <span>
                     {filteredChannels.length ? filteredChannels.length : 0}
                   </span>{' '}
                   個頻道
@@ -176,67 +179,12 @@ export default function ChannelSearchCombined() {
                   選擇
                 </Button>
               </Box>
-              {/* <Stack direction={'row'} spacing={1} sx={{ width: 'auto' }}>
-                <Button
-                  variant="text"
-                  onClick={handleSelectAll}
-                  sx={{
-                    color: 'error.main',
-                    fontFamily: 'Open Sans',
-                    fontSize: '14px',
-                    fontStyle: 'normal',
-                    fontWeight: 700,
-                    borderRadius: '8px',
-                  }}
-                >
-                  全選
-                </Button>
-                <Button
-                  variant="outlined"
-                  sx={{
-                    fontFamily: 'Open Sans',
-                    fontSize: '14px',
-                    fontStyle: 'normal',
-                    fontWeight: 700,
-                    lineHeight: 'normal',
-                    color: 'black',
-                    border: '1px solid var(--Primary-Black, #212B36)',
-                    borderRadius: '8px',
-                    padding: '4px 8px',
-                  }}
-                  onClick={handleCancelAll}
-                >
-                  取消
-                </Button>
-                <Button
-                  variant="contained"
-                  disabled={selectedChannels.length === 0}
-                  onClick={handleDelete}
-                  sx={{
-                    fontFamily: 'Open Sans',
-                    fontSize: '14px',
-                    fontStyle: 'normal',
-                    fontWeight: 700,
-                    lineHeight: 'normal',
-                    bgcolor: 'red.500',
-                    color: '#ffffff',
-                    padding: '4px 8px',
-                    borderRadius: '8px',
-                    '&:hover': {
-                      bgcolor: 'grey.400',
-                    },
-                  }}
-                >
-                  刪除
-                </Button>
-              </Stack> */}
             </Box>
             <Stack spacing={1} sx={{ width: '100%' }}>
               {filteredChannels.map((channel) => (
                 <Paper
                   key={channel.id}
                   onMouseEnter={() => toggleChannel(channel.id)}
-                  onMouseLeave={() => toggleChannel(channel.id)}
                   elevation={0}
                   sx={{
                     display: 'flex',
@@ -295,13 +243,13 @@ export default function ChannelSearchCombined() {
                   <Typography
                     sx={{
                       display: '-webkit-box',
-                      '-webkit-box-orient': 'vertical',
-                      '-webkit-line-clamp': 1,
+                      WebkitBoxOrient: 'vertical',
+                      WebkitLineClamp: 1,
                       alignSelf: 'stretch',
                       overflow: 'hidden',
-                      color: 'var(--Secondary-Dark-Gray, #4A4A4A)',
+                      color: 'text.secondary',
                       textOverflow: 'ellipsis',
-                      fontFamily: 'DFPHeiMedium-B5',
+                      fontFamily: 'Open Sans',
                       fontSize: '12px',
                       fontStyle: 'normal',
                       fontWeight: 400,

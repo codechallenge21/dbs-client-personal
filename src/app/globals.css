@@ -19,6 +19,7 @@
 }
 
 body {
+  overflow: hidden; /* Keep it here only if absolutely necessary */
   margin: 0;
   color: var(--foreground);
   background: var(--background);
@@ -34,7 +35,6 @@ body {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
-  overflow: hidden;
 }
 
 .checkbox-visible * {

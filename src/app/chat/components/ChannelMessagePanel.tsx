@@ -29,9 +29,23 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
         display: 'flex',
         marginTop: 10,
         height: '65vh',
-        overflow: 'auto',
+        overflow: 'auto !important',
         alignItems: 'center',
         justifyContent: 'center',
+        '&::-webkit-scrollbar': {
+          width: '5px',
+        },
+        '&::-webkit-scrollbar-thumb': {
+          backgroundColor: '#c1c1c1',
+          borderRadius: '4px',
+        },
+        '&::-webkit-scrollbar-thumb:hover': {
+          backgroundColor: '#a8a8a8',
+        },
+        '&::-webkit-scrollbar-track': {
+          backgroundColor: '#f1f1f1',
+          borderRadius: '4px',
+        },
       }}
     >
       <Box
