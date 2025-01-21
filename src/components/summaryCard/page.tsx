@@ -1,5 +1,5 @@
-"use client";
-import React, { useCallback, useContext, useEffect, useState } from "react";
+'use client';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import {
   Box,
   Tab,
@@ -13,25 +13,26 @@ import {
   Typography,
   IconButton,
   TableContainer,
-} from "@mui/material";
+} from '@mui/material';
 import {
   MicRounded,
   StarRounded,
   SearchRounded,
   UploadRounded,
-} from "@mui/icons-material";
-import { useAudioChannels } from "@/utils/hooks/useAudioChannels";
-import apis from "@/utils/hooks/apis/apis";
-import EditableItem from "../editable-item/EditableItem";
-import useAxiosApi from "@eGroupAI/hooks/apis/useAxiosApi";
-import ChannelContentContext from "@/app/chat/components/ChannelContentContext";
-import UploadDialog from "../uploadDialog/page";
-import DeleteDialog from "@/app/chat/components/DeleteDialog";
-import EditDialog from "@/app/chat/components/EditDialog";
+} from '@mui/icons-material';
+import { useAudioChannels } from '@/utils/hooks/useAudioChannels';
+import apis from '@/utils/hooks/apis/apis';
+import EditableItem from '../editable-item/EditableItem';
+import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
+import ChannelContentContext from '@/app/chat/components/ChannelContentContext';
+import UploadDialog from '../uploadDialog/page';
+import DeleteDialog from '@/app/chat/components/DeleteDialog';
+import EditDialog from '@/app/chat/components/EditDialog';
+import { OrganizationChannel } from '@/interfaces/entities';
 
 interface SummaryCardProps {
   openUpload?: boolean;
-  handleShowDetail?: () => void;
+  handleShowDetail?: (channel: OrganizationChannel) => void;
   setOpenUpload?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 const SummaryCard: React.FC<SummaryCardProps> = ({
@@ -47,7 +48,7 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
   const [isEditDialogOpen, setIsEditDialogOpen] = useState<boolean>(false);
 
   const { data: channelsData } = useAudioChannels({
-    organizationId: "4aba77788ae94eca8d6ff330506af944",
+    organizationId: '4aba77788ae94eca8d6ff330506af944',
   });
 
   // const { excute: getChannelDetail, isLoading: isLoadingChannel } = useAxiosApi(
@@ -82,15 +83,15 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
 
   const handleDeleteChannelConfirm = useCallback(async () => {
     deleteChannel({
-      organizationId: "4aba77788ae94eca8d6ff330506af944",
+      organizationId: '4aba77788ae94eca8d6ff330506af944',
       organizationChannelId:
-        channelsData?.[activeIndex!].organizationChannelId || "",
+        channelsData?.[activeIndex!].organizationChannelId || '',
     })
       .then(() => {
         setIsDeleteDialogOpen(false);
         handleCloseToolsMenu();
         if (channelsMutate) {
-          console.log("channelsMutate");
+          console.log('channelsMutate');
           channelsMutate().then(() => {
             if (selectedChannelId === selectedChannel?.organizationChannelId)
               setSelectedChannel(undefined);
@@ -114,9 +115,9 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
   const handleEditChannelConfirm = useCallback(
     async (newTitle: string) => {
       await updateChannelDetail({
-        organizationId: "4aba77788ae94eca8d6ff330506af944",
+        organizationId: '4aba77788ae94eca8d6ff330506af944',
         organizationChannelId:
-          channelsData?.[activeIndex!]?.organizationChannelId || "",
+          channelsData?.[activeIndex!]?.organizationChannelId || '',
         organizationChannelTitle: newTitle,
       });
       setIsEditDialogOpen(false);
@@ -151,9 +152,9 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
     setTabValue(newValue);
   };
 
-  const handleRowClick = () => {
+  const handleRowClick = (channel: OrganizationChannel) => {
     // console.log("Row clicked with id:", id);
-    if (handleShowDetail) handleShowDetail();
+    if (handleShowDetail) handleShowDetail(channel);
   };
 
   // useEffect(() => {
@@ -175,7 +176,7 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
         onClose={handleCloseDeleteDialog}
         onConfirm={handleDeleteChannelConfirm}
         deletableName={
-          channelsData?.[activeIndex!]?.organizationChannelTitle || ""
+          channelsData?.[activeIndex!]?.organizationChannelTitle || ''
         }
       />
       <EditDialog
@@ -183,30 +184,30 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
         onClose={handleCloseEditDialog}
         onConfirm={handleEditChannelConfirm}
         editableName={
-          channelsData?.[activeIndex!]?.organizationChannelTitle || ""
+          channelsData?.[activeIndex!]?.organizationChannelTitle || ''
         }
       />
       <Box
         sx={{
-          minHeight: "96vh",
-          maxHeight: "96vh",
-          overflowY: "auto",
-          borderRadius: "8px",
-          padding: "16px 32px",
-          backgroundColor: "white",
-          "&::-webkit-scrollbar": {
-            width: "8px",
+          minHeight: '96vh',
+          maxHeight: '96vh',
+          overflowY: 'auto',
+          borderRadius: '8px',
+          padding: '16px 32px',
+          backgroundColor: 'white',
+          '&::-webkit-scrollbar': {
+            width: '8px',
           },
-          "&::-webkit-scrollbar-track": {
-            borderRadius: "10px",
-            background: "#f1f1f1",
+          '&::-webkit-scrollbar-track': {
+            borderRadius: '10px',
+            background: '#f1f1f1',
           },
-          "&::-webkit-scrollbar-thumb": {
-            borderRadius: "10px",
-            background: "#888",
+          '&::-webkit-scrollbar-thumb': {
+            borderRadius: '10px',
+            background: '#888',
           },
-          "&::-webkit-scrollbar-thumb:hover": {
-            background: "#555",
+          '&::-webkit-scrollbar-thumb:hover': {
+            background: '#555',
           },
         }}
       >
@@ -216,7 +217,7 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
           sx={{ mb: 2 }}
           TabIndicatorProps={{
             style: {
-              backgroundColor: "#212B36",
+              backgroundColor: '#212B36',
             },
           }}
         >
@@ -224,13 +225,13 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
             label="智能生活轉文字"
             sx={{
               fontWeight: 400,
-              fontSize: "14px",
-              lineHeight: "22px",
-              fontStyle: "normal",
-              fontFamily: "DFPHeiBold-B5",
-              color: "var(--Text-Secondary, #637381))",
-              "&.Mui-selected": {
-                color: "var(--Primary-Black, #212B36)",
+              fontSize: '14px',
+              lineHeight: '22px',
+              fontStyle: 'normal',
+              fontFamily: 'DFPHeiBold-B5',
+              color: 'var(--Text-Secondary, #637381))',
+              '&.Mui-selected': {
+                color: 'var(--Primary-Black, #212B36)',
               },
             }}
           />
@@ -238,13 +239,13 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
             label="家系圖"
             sx={{
               fontWeight: 400,
-              fontSize: "14px",
-              lineHeight: "22px",
-              fontStyle: "normal",
-              fontFamily: "DFPHeiBold-B5",
-              color: "var(--Text-Secondary, #637381)",
-              "&.Mui-selected": {
-                color: "var(--Primary-Black, #212B36)",
+              fontSize: '14px',
+              lineHeight: '22px',
+              fontStyle: 'normal',
+              fontFamily: 'DFPHeiBold-B5',
+              color: 'var(--Text-Secondary, #637381)',
+              '&.Mui-selected': {
+                color: 'var(--Primary-Black, #212B36)',
               },
             }}
           />
@@ -252,13 +253,13 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
             label="問答語音錄音"
             sx={{
               fontWeight: 400,
-              fontSize: "14px",
-              lineHeight: "22px",
-              fontStyle: "normal",
-              fontFamily: "DFPHeiBold-B5",
-              color: "var(--Text-Secondary, #637381)",
-              "&.Mui-selected": {
-                color: "var(--Primary-Black, #212B36)",
+              fontSize: '14px',
+              lineHeight: '22px',
+              fontStyle: 'normal',
+              fontFamily: 'DFPHeiBold-B5',
+              color: 'var(--Text-Secondary, #637381)',
+              '&.Mui-selected': {
+                color: 'var(--Primary-Black, #212B36)',
               },
             }}
           />
@@ -266,33 +267,33 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
             label="個別與實時錄音"
             sx={{
               fontWeight: 400,
-              fontSize: "14px",
-              lineHeight: "22px",
-              fontStyle: "normal",
-              fontFamily: "DFPHeiBold-B5",
-              color: "var(--Text-Secondary, #637381)",
-              "&.Mui-selected": {
-                color: "var(--Primary-Black, #212B36)",
+              fontSize: '14px',
+              lineHeight: '22px',
+              fontStyle: 'normal',
+              fontFamily: 'DFPHeiBold-B5',
+              color: 'var(--Text-Secondary, #637381)',
+              '&.Mui-selected': {
+                color: 'var(--Primary-Black, #212B36)',
               },
             }}
           />
         </Tabs>
         <Box
           sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            alignSelf: "stretch",
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            alignSelf: 'stretch',
           }}
         >
           <Typography
             sx={{
               fontWeight: 400,
-              fontSize: "32px",
-              fontStyle: "normal",
-              lineHeight: "normal",
-              fontFamily: "DFPHeiBold-B5",
-              color: "var(--Primary-Black, #212B36)",
+              fontSize: '32px',
+              fontStyle: 'normal',
+              lineHeight: 'normal',
+              fontFamily: 'DFPHeiBold-B5',
+              color: 'var(--Primary-Black, #212B36)',
             }}
             gutterBottom
           >
@@ -301,35 +302,35 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
 
           <Box
             sx={{
-              display: "flex",
-              width: "458px",
-              justifyContent: "flex-end",
-              alignItems: "center",
-              gap: "16px",
+              display: 'flex',
+              width: '458px',
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+              gap: '16px',
             }}
           >
             <IconButton
               sx={{
-                display: "flex",
-                padding: "8px",
-                justifyContent: "center",
-                alignItems: "center",
-                borderRadius: "50px",
+                display: 'flex',
+                padding: '8px',
+                justifyContent: 'center',
+                alignItems: 'center',
+                borderRadius: '50px',
               }}
             >
               <SearchRounded />
             </IconButton>
             <Button
               sx={{
-                gap: "8px",
-                display: "flex",
-                color: "#5C443A",
-                padding: "6px 12px",
-                background: "white",
-                borderRadius: "8px",
-                alignItems: "center",
-                justifyContent: "center",
-                border: "1px solid var(--Secondary-, #5C443A)",
+                gap: '8px',
+                display: 'flex',
+                color: '#5C443A',
+                padding: '6px 12px',
+                background: 'white',
+                borderRadius: '8px',
+                alignItems: 'center',
+                justifyContent: 'center',
+                border: '1px solid var(--Secondary-, #5C443A)',
               }}
               variant="contained"
               startIcon={<MicRounded />}
@@ -338,13 +339,13 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
             </Button>
             <Button
               sx={{
-                display: "flex",
-                padding: "6px 12px",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: "8px",
-                borderRadius: "8px",
-                background: "var(--Secondary-, #5C443A)",
+                display: 'flex',
+                padding: '6px 12px',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: '8px',
+                borderRadius: '8px',
+                background: 'var(--Secondary-, #5C443A)',
               }}
               variant="contained"
               color="primary"
@@ -363,13 +364,13 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
                 <TableCell
                   sx={{
                     fontWeight: 400,
-                    fontSize: "16px",
-                    overflow: "hidden",
-                    fontStyle: "normal",
-                    lineHeight: "normal",
-                    textOverflow: "ellipsis",
-                    fontFamily: "DFPHeiBold-B5",
-                    color: "var(--Text-Primary, #212B36)",
+                    fontSize: '16px',
+                    overflow: 'hidden',
+                    fontStyle: 'normal',
+                    lineHeight: 'normal',
+                    textOverflow: 'ellipsis',
+                    fontFamily: 'DFPHeiBold-B5',
+                    color: 'var(--Text-Primary, #212B36)',
                   }}
                 >
                   標題
@@ -377,13 +378,13 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
                 <TableCell
                   sx={{
                     fontWeight: 400,
-                    fontSize: "16px",
-                    overflow: "hidden",
-                    fontStyle: "normal",
-                    lineHeight: "normal",
-                    textOverflow: "ellipsis",
-                    fontFamily: "DFPHeiBold-B5",
-                    color: "var(--Text-Primary, #212B36)",
+                    fontSize: '16px',
+                    overflow: 'hidden',
+                    fontStyle: 'normal',
+                    lineHeight: 'normal',
+                    textOverflow: 'ellipsis',
+                    fontFamily: 'DFPHeiBold-B5',
+                    color: 'var(--Text-Primary, #212B36)',
                   }}
                 >
                   狀態
@@ -391,13 +392,13 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
                 <TableCell
                   sx={{
                     fontWeight: 400,
-                    fontSize: "16px",
-                    overflow: "hidden",
-                    fontStyle: "normal",
-                    lineHeight: "normal",
-                    textOverflow: "ellipsis",
-                    fontFamily: "DFPHeiBold-B5",
-                    color: "var(--Text-Primary, #212B36)",
+                    fontSize: '16px',
+                    overflow: 'hidden',
+                    fontStyle: 'normal',
+                    lineHeight: 'normal',
+                    textOverflow: 'ellipsis',
+                    fontFamily: 'DFPHeiBold-B5',
+                    color: 'var(--Text-Primary, #212B36)',
                   }}
                 >
                   建立時間
@@ -408,20 +409,20 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
               {channelsData?.map((channel, index) => (
                 <TableRow
                   key={index}
-                  sx={{ cursor: "pointer" }}
-                  onClick={() => handleRowClick()}
+                  sx={{ cursor: 'pointer' }}
+                  onClick={() => handleRowClick(channel)}
                   // onClick={() => handleRowClick(channel?.organizationChannelId)}
                 >
                   <TableCell
                     sx={{
                       fontWeight: 600,
-                      fontSize: "16px",
-                      overflow: "hidden",
-                      fontStyle: "normal",
-                      lineHeight: "normal",
-                      textOverflow: "ellipsis",
-                      fontFamily: "Public Sans",
-                      color: "var(--Text-Primary, #212B36)",
+                      fontSize: '16px',
+                      overflow: 'hidden',
+                      fontStyle: 'normal',
+                      lineHeight: 'normal',
+                      textOverflow: 'ellipsis',
+                      fontFamily: 'Public Sans',
+                      color: 'var(--Text-Primary, #212B36)',
                     }}
                   >
                     {channel?.organizationChannelTitle}
@@ -429,13 +430,13 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
                   <TableCell
                     sx={{
                       fontWeight: 400,
-                      fontSize: "16px",
-                      overflow: "hidden",
-                      fontStyle: "normal",
-                      lineHeight: "normal",
-                      textOverflow: "ellipsis",
-                      fontFamily: "DFPHeiBold-B5",
-                      color: "var(--Text-Primary, #212B36)",
+                      fontSize: '16px',
+                      overflow: 'hidden',
+                      fontStyle: 'normal',
+                      lineHeight: 'normal',
+                      textOverflow: 'ellipsis',
+                      fontFamily: 'DFPHeiBold-B5',
+                      color: 'var(--Text-Primary, #212B36)',
                     }}
                   >
                     {
@@ -446,20 +447,20 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
                   <TableCell
                     sx={{
                       fontWeight: 400,
-                      fontSize: "16px",
-                      overflow: "hidden",
-                      fontStyle: "normal",
-                      lineHeight: "normal",
-                      textOverflow: "ellipsis",
-                      fontFamily: "DFPHeiBold-B5",
-                      color: "var(--Text-Primary, #212B36)",
+                      fontSize: '16px',
+                      overflow: 'hidden',
+                      fontStyle: 'normal',
+                      lineHeight: 'normal',
+                      textOverflow: 'ellipsis',
+                      fontFamily: 'DFPHeiBold-B5',
+                      color: 'var(--Text-Primary, #212B36)',
                     }}
                   >
                     {channel.organizationChannelCreateDate}
                   </TableCell>
                   <TableCell>
                     <IconButton>
-                      <StarRounded sx={{ color: "black" }} />
+                      <StarRounded sx={{ color: 'black' }} />
                     </IconButton>
                   </TableCell>
                   <TableCell>
