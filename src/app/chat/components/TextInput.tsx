@@ -160,7 +160,7 @@ const TextInput = () => {
           organizationChannelTitle: response?.data?.organizationChannelTitle,
         },
       ]);
-      setSelectedChannelId(response?.data?.channelId);
+      setSelectedChannelId(response?.data?.organizationChannelId);
       if (channelsMutate) {
         channelsMutate();
       }

@@ -71,7 +71,7 @@ export type OrganizationChannelTypes = 'CHAT' | 'MEETING';
 
 export interface OrganizationChannelChatInteractResponse {
   status: 'success';
-  channelId: string;
+  organizationChannelId: string;
   organizationChannelTitle: string;
   response: string;
   contextInfo: {
