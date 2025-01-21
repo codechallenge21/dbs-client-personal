@@ -13,6 +13,8 @@ import Suggestions from './Suggestions';
 import ViewChats from './viewChats';
 import { useRouter } from 'next/navigation';
 import HistoryChats, { Chat } from './HistoryChats';
+import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
+import apis from '@/utils/hooks/apis/apis';
 
 export default function MainContent() {
   const theme = useTheme();
@@ -24,6 +26,9 @@ export default function MainContent() {
     chatResponses,
     isInteractingInChat,
   } = useContext(ChannelContentContext);
+  const { excute: submitUserInputs, isLoading: isInteracting } = useAxiosApi(
+    apis.submitUserInputs
+  );
 
   const SuggestionsData = [
     {
@@ -101,7 +106,10 @@ export default function MainContent() {
             }}
           />
         )}
-        <TextInput />
+        <TextInput
+          submitUserInputs={submitUserInputs}
+          isInteracting={isInteracting}
+        />
       </Box>
     );
 
@@ -182,7 +190,10 @@ export default function MainContent() {
           )}
         </>
       )}
-      <TextInput />
+      <TextInput
+        submitUserInputs={submitUserInputs}
+        isInteracting={isInteracting}
+      />
       <Box
         sx={{
           display: 'flex',

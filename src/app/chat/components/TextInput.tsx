@@ -9,8 +9,6 @@ import {
 } from '@mui/material';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import RotateRightRounded from '@mui/icons-material/RotateRightRounded';
-import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
-import apis from '@/utils/hooks/apis/apis';
 import ChannelContentContext from './ChannelContentContext';
 import { SendRounded, CloseRounded } from '@mui/icons-material';
 import Image from 'next/image';
@@ -19,6 +17,7 @@ import txtPerview from '@/assets/Images/Txt Icon.svg';
 import imagePerview from '@/assets/Images/Image Icon.svg';
 import docPerview from '@/assets/Images/Doc Icon.svg';
 import DropdownMenu from './DropdownMenu';
+import { SubmitUserInputsApiPayload } from '@/interfaces/payloads';
 
 interface SpeechRecognition extends EventTarget {
   continuous: boolean;
@@ -61,19 +60,29 @@ interface SpeechRecognitionErrorEvent extends Event {
   error: string;
 }
 
-const TextInput = () => {
+type TextInputProps = {
+  submitUserInputs: (input: SubmitUserInputsApiPayload) => Promise<{
+    data: {
+      response: string;
+      organizationChannelTitle: string;
+      organizationChannelId: string;
+    };
+  }>;
+  isInteracting: boolean;
+};
+
+const TextInput: React.FC<TextInputProps> = ({
+  submitUserInputs,
+  isInteracting,
+}) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [userInputValue, setUserInputValue] = useState('');
   const [isListening, setIsListening] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const recognitionRef = useRef<null | SpeechRecognition>(null);
   const [files, setFiles] = useState<{ file: File; preview: string | null }[]>(
     []
-  );
-  const { excute: submitUserInputs, isLoading: isInteracting } = useAxiosApi(
-    apis.submitUserInputs
   );
 
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
@@ -135,38 +144,34 @@ const TextInput = () => {
   } = useContext(ChannelContentContext);
 
   const handleSendMessage = useCallback(async () => {
-    setIsLoading(true);
-    if (isInteracting) return;
-    setChatResponses((prev) => [
-      ...prev,
-      {
-        organizationChannelMessageType: 'USER',
-        organizationChannelMessageContent: userInputValue,
-        organizationChannelFiles: files,
-      },
-    ]);
-    const response = await submitUserInputs({
-      organizationId: '4aba77788ae94eca8d6ff330506af944',
-      query: userInputValue,
-      advisorType,
-      organizationChannelId: selectedChannelId,
-    });
-    if (response.data.response) {
-      setChatResponses((prev) => [
-        ...prev,
-        {
-          organizationChannelMessageType: 'AI',
-          organizationChannelMessageContent: response?.data?.response,
-          organizationChannelTitle: response?.data?.organizationChannelTitle,
-        },
-      ]);
-      setSelectedChannelId(response?.data?.organizationChannelId);
-      if (channelsMutate) {
-        channelsMutate();
+    try {
+      if (isInteracting) {
+        return;
       }
-      setUserInputValue('');
-      setFiles([]);
-      setIsLoading(false);
+      const response = await submitUserInputs({
+        organizationId: '4aba77788ae94eca8d6ff330506af944',
+        query: userInputValue,
+        advisorType,
+        organizationChannelId: selectedChannelId,
+      });
+      if (response.data.response) {
+        setChatResponses((prev) => [
+          ...prev,
+          {
+            organizationChannelMessageType: 'AI',
+            organizationChannelMessageContent: response?.data?.response,
+            organizationChannelTitle: response?.data?.organizationChannelTitle,
+          },
+        ]);
+        setSelectedChannelId(response?.data?.organizationChannelId);
+        if (channelsMutate) {
+          channelsMutate();
+        }
+        setUserInputValue('');
+        setFiles([]);
+      }
+    } catch (error) {
+      console.error('Error sending message:', error);
     }
   }, [
     channelsMutate,
@@ -177,7 +182,6 @@ const TextInput = () => {
     submitUserInputs,
     userInputValue,
     advisorType,
-    files,
   ]);
 
   const handleClickSubmitOrAudioFileUpload = useCallback(() => {
@@ -459,7 +463,7 @@ const TextInput = () => {
             </IconButton>
           </Box>
 
-          {isLoading || isInteracting ? (
+          {isInteracting ? (
             <Box
               sx={{
                 position: 'absolute',
@@ -476,7 +480,17 @@ const TextInput = () => {
                 bottom: '12px',
                 right: '10px',
               }}
-              onClick={handleClickSubmitOrAudioFileUpload}
+              onClick={() => {
+                setChatResponses((prev) => [
+                  ...prev,
+                  {
+                    organizationChannelMessageType: 'USER',
+                    organizationChannelMessageContent: userInputValue,
+                    organizationChannelFiles: files,
+                  },
+                ]);
+                handleClickSubmitOrAudioFileUpload();
+              }}
             >
               <SendRounded sx={{ color: 'black' }} />
             </IconButton>
