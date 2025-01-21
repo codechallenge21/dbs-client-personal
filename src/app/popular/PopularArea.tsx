@@ -64,6 +64,13 @@ export default function PopularArea() {
     }
   }, []);
 
+  const handleScrollRight = () => {
+    if (focusRef.current) {
+      const itemWidth = 260 + 16;
+      focusRef.current.scrollBy({ left: itemWidth * 3, behavior: 'smooth' });
+    }
+  };
+
   const FAQItems = Array.from({ length: 5 });
   const toolItems = Array.from({ length: 12 });
   const focusItems = Array.from({ length: 10 });
@@ -77,6 +84,20 @@ export default function PopularArea() {
     <Box
       sx={{
         minHeight: '100vh',
+        '&::-webkit-scrollbar': {
+          width: '8px',
+        },
+        '&::-webkit-scrollbar-track': {
+          borderRadius: '10px',
+          background: '#f1f1f1',
+        },
+        '&::-webkit-scrollbar-thumb': {
+          borderRadius: '10px',
+          background: '#888',
+        },
+        '&::-webkit-scrollbar-thumb:hover': {
+          background: '#555',
+        },
         background: 'var(--Primary-, #EBE3DD)',
       }}
     >
@@ -91,83 +112,108 @@ export default function PopularArea() {
             backgroundColor: 'white',
           }}
         >
-          <Typography
-            gutterBottom
-            sx={{
-              fontWeight: 400,
-              fontSize: '24px',
-              fontStyle: 'normal',
-              lineHeight: 'normal',
-              marginBottom: '16px',
-              fontFamily: 'DFPHeiBold-B5',
-              color: 'var(--Primary-Black, #212B36)',
-            }}
-          >
-            焦點
-          </Typography>
-          <Box
-            ref={focusRef}
-            sx={{
-              gap: '16px',
-              cursor: 'grab',
-              display: 'flex',
-              overflow: 'hidden',
-              marginBottom: '20px',
-            }}
-          >
-            {focusItems.map((_, index) => (
+          <Box sx={{ position: 'relative', marginBottom: '40px' }}>
+            <Typography
+              gutterBottom
+              sx={{
+                fontWeight: 400,
+                fontSize: '24px',
+                fontStyle: 'normal',
+                lineHeight: 'normal',
+                marginBottom: '16px',
+                fontFamily: 'DFPHeiBold-B5',
+                color: 'var(--Primary-Black, #212B36)',
+              }}
+            >
+              焦點
+            </Typography>
+            <Box
+              sx={{
+                display: 'flex',
+                position: 'relative',
+              }}
+            >
               <Box
-                key={index}
+                ref={focusRef}
                 sx={{
+                  gap: '16px',
+                  cursor: 'grab',
                   display: 'flex',
-                  minWidth: '260px',
-                  minHeight: '220px',
-                  alignItems: 'center',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
+                  overflow: 'hidden',
+                  marginBottom: '20px',
+                  width: '100%',
                 }}
               >
-                <Image
-                  src={boxImage}
-                  alt="Boxed Image"
-                  style={{
-                    width: '100%',
-                    height: '130px',
-                    objectFit: 'cover',
-                    borderTopLeftRadius: '8px',
-                    borderTopRightRadius: '8px',
-                  }}
-                />
-                <Box
-                  sx={{
-                    width: '100%',
-                    borderBottomLeftRadius: '8px',
-                    borderBottomRightRadius: '8px',
-                    backgroundColor: 'var(--Primary-, #EBE3DD)',
-                  }}
-                >
-                  <Typography
-                    variant="h6"
-                    component="div"
+                {focusItems.map((_, index) => (
+                  <Box
+                    key={index}
                     sx={{
-                      marginLeft: '20px',
-                      marginTop: '10px',
-                      fontFamily: 'DFPHeiBold-B5',
-                      color: 'var(--Primary-Black, #212B36)',
+                      display: 'flex',
+                      minWidth: '260px',
+                      minHeight: '220px',
+                      alignItems: 'center',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
                     }}
                   >
-                    標題
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="textSecondary"
-                    sx={{ marginLeft: '20px', marginBottom: '20px' }}
-                  >
-                    説明文字
-                  </Typography>
-                </Box>
+                    <Image
+                      src={boxImage}
+                      alt="Boxed Image"
+                      style={{
+                        width: '100%',
+                        height: '130px',
+                        objectFit: 'cover',
+                        borderTopLeftRadius: '8px',
+                        borderTopRightRadius: '8px',
+                      }}
+                    />
+                    <Box
+                      sx={{
+                        width: '100%',
+                        borderBottomLeftRadius: '8px',
+                        borderBottomRightRadius: '8px',
+                        backgroundColor: 'var(--Primary-, #EBE3DD)',
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          marginLeft: '20px',
+                          marginTop: '10px',
+                          fontFamily: 'DFPHeiBold-B5',
+                          color: 'var(--Primary-Black, #212B36)',
+                        }}
+                      >
+                        標題
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="textSecondary"
+                        sx={{ marginLeft: '20px', marginBottom: '20px' }}
+                      >
+                        説明文字
+                      </Typography>
+                    </Box>
+                  </Box>
+                ))}
               </Box>
-            ))}
+              <IconButton
+                onClick={handleScrollRight}
+                sx={{
+                  top: '80px',
+                  right: '2px',
+                  '&:hover': {
+                    backgroundColor: 'rgba(204, 0, 0, 0.40)',
+                  },
+                  zIndex: 10,
+                  position: 'absolute',
+                  backgroundColor: 'rgba(204, 0, 0, 0.60)',
+                }}
+              >
+                <ArrowForwardIosRounded
+                  sx={{ width: '18px', height: '18px', color: 'white' }}
+                />
+              </IconButton>
+            </Box>
           </Box>
 
           <Typography
@@ -221,83 +267,112 @@ export default function PopularArea() {
           >
             為你推薦
           </Typography>
-          <Box
-            ref={recommendationsRef}
-            sx={{
-              gap: '16px',
-              cursor: 'grab',
-              display: 'flex',
-              overflow: 'hidden',
-              marginBottom: '20px',
-            }}
-          >
-            {recommendedItems.map((_, index) => (
-              <Card
-                key={index}
-                sx={{
-                  flexShrink: 0,
-                  width: '268px',
-                  padding: '16px',
-                  minHeight: '114px',
-                  borderRadius: '8px',
-                  backgroundColor: 'var(--Primary-, #EBE3DD)',
-                }}
-              >
-                <CardContent sx={{ padding: 0 }}>
-                  <Typography
-                    sx={{
-                      fontWeight: 400,
-                      fontSize: '14px',
-                      lineHeight: '22px',
-                      fontStyle: 'normal',
-                      fontFamily: 'DFPHeiMedium-B5',
-                      color: 'var(--Primary-Black, #212B36)',
-                    }}
-                  >
-                    類別
-                  </Typography>
-                  <Box
-                    sx={{
-                      mb: '20px',
-                      display: 'flex',
-                      alignItems: 'center',
-                    }}
-                  >
+          <Box sx={{ position: 'relative', marginBottom: '40px' }}>
+            <Box
+              ref={recommendationsRef}
+              sx={{
+                gap: '16px',
+                cursor: 'grab',
+                display: 'flex',
+                overflow: 'hidden',
+                marginBottom: '20px',
+                width: '100%',
+              }}
+            >
+              {recommendedItems.map((_, index) => (
+                <Card
+                  key={index}
+                  sx={{
+                    flexShrink: 0,
+                    width: '268px',
+                    padding: '16px',
+                    minHeight: '114px',
+                    borderRadius: '8px',
+                    backgroundColor: 'var(--Primary-, #EBE3DD)',
+                  }}
+                >
+                  <CardContent sx={{ padding: 0 }}>
                     <Typography
                       sx={{
-                        fontWeight: 600,
-                        fontSize: '24px',
-                        fontFamily: 'Inter',
+                        fontWeight: 400,
+                        fontSize: '14px',
+                        lineHeight: '22px',
                         fontStyle: 'normal',
-                        lineHeight: 'normal',
+                        fontFamily: 'DFPHeiMedium-B5',
                         color: 'var(--Primary-Black, #212B36)',
                       }}
                     >
-                      標題
+                      類別
                     </Typography>
-                    <IconButton>
-                      <ArrowForwardIosRounded sx={{ color: 'black' }} />
-                    </IconButton>
-                  </Box>
-                  <Typography
-                    sx={{
-                      overflow: 'hidden',
-                      color: 'var(--Primary-Black, #212B36)',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap',
-                      fontFamily: 'Open Sans',
-                      fontSize: '16px',
-                      fontStyle: 'normal',
-                      fontWeight: 400,
-                      lineHeight: 'normal',
-                    }}
-                  >
-                    社工在財務類別的知識中，了解如何...
-                  </Typography>
-                </CardContent>
-              </Card>
-            ))}
+                    <Box
+                      sx={{
+                        mb: '20px',
+                        display: 'flex',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontWeight: 600,
+                          fontSize: '24px',
+                          fontFamily: 'Inter',
+                          fontStyle: 'normal',
+                          lineHeight: 'normal',
+                          color: 'var(--Primary-Black, #212B36)',
+                        }}
+                      >
+                        標題
+                      </Typography>
+                      <IconButton>
+                        <ArrowForwardIosRounded sx={{ color: 'black' }} />
+                      </IconButton>
+                    </Box>
+                    <Typography
+                      sx={{
+                        overflow: 'hidden',
+                        color: 'var(--Primary-Black, #212B36)',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                        fontFamily: 'Open Sans',
+                        fontSize: '16px',
+                        fontStyle: 'normal',
+                        fontWeight: 400,
+                        lineHeight: 'normal',
+                      }}
+                    >
+                      社工在財務類別的知識中，了解如何...
+                    </Typography>
+                  </CardContent>
+                </Card>
+              ))}
+            </Box>
+            <IconButton
+              onClick={() => {
+                if (recommendationsRef.current) {
+                  const itemWidth = 268 + 16;
+                  recommendationsRef.current.scrollBy({
+                    left: itemWidth * 3,
+                    behavior: 'smooth',
+                  });
+                }
+              }}
+              sx={{
+                top: '60px',
+                right: '2px',
+                '&:hover': {
+                  backgroundColor: 'rgba(204, 0, 0, 0.40)',
+                },
+                zIndex: 10,
+                position: 'absolute',
+                backgroundColor: 'rgba(204, 0, 0, 0.60)',
+              }}
+            >
+              <ArrowForwardIosRounded
+                sx={{ width: '18px', height: '18px', color: 'white' }}
+              />
+            </IconButton>
           </Box>
+
           <Box sx={{ padding: '0px' }}>
             <Typography
               gutterBottom
