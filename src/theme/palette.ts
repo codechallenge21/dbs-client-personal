@@ -2,7 +2,13 @@ import { alpha } from '@mui/material/styles';
 
 // ----------------------------------------------------------------------
 
-export type ColorSchema = 'primary' | 'secondary' | 'info' | 'success' | 'warning' | 'error';
+export type ColorSchema =
+  | 'primary'
+  | 'secondary'
+  | 'info'
+  | 'success'
+  | 'warning'
+  | 'error';
 
 declare module '@mui/material/styles/createPalette' {
   interface TypeBackground {
@@ -116,8 +122,8 @@ export function palette(mode: 'light' | 'dark') {
       disabled: GREY[500],
     },
     background: {
-      paper: '#FFFFFF',
-      default: '#FFFFFF',
+      paper: '#ffffff',
+      default: '#ebe3dd',
       neutral: GREY[200],
     },
     action: {
@@ -136,7 +142,7 @@ export function palette(mode: 'light' | 'dark') {
     },
     background: {
       paper: GREY[800],
-      default: "#0D0402",
+      default: '#0D0402',
       neutral: alpha(GREY[500], 0.12),
     },
     action: {

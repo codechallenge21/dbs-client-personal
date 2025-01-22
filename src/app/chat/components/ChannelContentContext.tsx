@@ -1,8 +1,11 @@
-import { OrganizationChannel, OrganizationChannelMessage } from "@/interfaces/entities";
-import { AxiosResponse } from "axios";
-import { createContext, Dispatch, SetStateAction } from "react";
-import { KeyedMutator } from "swr";
-import { AdvisorType } from "./types";
+import {
+  OrganizationChannel,
+  OrganizationChannelMessage,
+} from '@/interfaces/entities';
+import { AxiosResponse } from 'axios';
+import { createContext, Dispatch, SetStateAction } from 'react';
+import { KeyedMutator } from 'swr';
+import { AdvisorType } from './types';
 
 export type ChannelContentContextProps = {
   isLoadingChannel: boolean;

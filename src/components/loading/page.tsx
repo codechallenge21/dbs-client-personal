@@ -1,15 +1,18 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import Box from "@mui/material/Box";
-import LinearProgress from "@mui/material/LinearProgress";
-import Typography from "@mui/material/Typography";
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import LinearProgress from '@mui/material/LinearProgress';
+import Typography from '@mui/material/Typography';
 
 export default function LoadingScreen() {
   const [progress, setProgress] = React.useState(0);
   const [isClient, setIsClient] = React.useState(false);
 
   React.useEffect(() => {
+    // Set isClient to true when the component is mounted on the client
+    setIsClient(true);
+
     const timer = setInterval(() => {
       setProgress((oldProgress) => {
         if (oldProgress === 100) {
@@ -36,12 +39,12 @@ export default function LoadingScreen() {
   return (
     <Box
       sx={{
-        display: "flex",
-        height: "80vh",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        textAlign: "center",
+        display: 'flex',
+        height: '80vh',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center',
       }}
     >
       <Typography
@@ -58,7 +61,7 @@ export default function LoadingScreen() {
       <Typography
         sx={{
           marginBottom: 3,
-          color: "text.secondary",
+          color: 'text.secondary',
         }}
       >
         這可能需要幾秒鐘的時間，請不要離開頁面。
@@ -68,15 +71,15 @@ export default function LoadingScreen() {
         variant="determinate"
         value={progress}
         sx={{
-          width: "100%",
-          maxWidth: "600px",
+          width: '100%',
+          maxWidth: '600px',
           height: 8,
           borderRadius: 4,
-          "& .MuiLinearProgress-bar": {
+          '& .MuiLinearProgress-bar': {
             borderRadius: 4,
-            backgroundColor: "#1976d2",
+            backgroundColor: '#1976d2',
           },
-          backgroundColor: "#e3f2fd",
+          backgroundColor: '#e3f2fd',
         }}
       />
     </Box>

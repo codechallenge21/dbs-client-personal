@@ -1,22 +1,22 @@
 'use client';
 import { useEffect, useMemo, useState } from 'react';
-import Header from '@/app/chat/components/Header';
-import MainContent from '@/app/chat/components/MainContent';
-import SwitchDialog from '@/app/chat/components/SwitchDialog';
-import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
 import {
   OrganizationChannel,
   OrganizationChannelMessage,
 } from '@/interfaces/entities';
-import ChannelContentContext from '@/app/chat/components/ChannelContentContext';
-import { AdvisorType } from '@/app/chat/components/types';
+import ChannelSearch from './ViewAllHistory';
+import { AdvisorType } from '../chat/components/types';
+import ChannelContentContext from '../chat/components/ChannelContentContext';
+import Header from './components/Header';
+import SwitchDialog from '../chat/components/SwitchDialog';
+import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
 import { Box } from '@mui/material';
 
 export default function Home() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isOpenDrawer, setIsOpenDrawer] = useState(true);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(true);
 
-  const [isLoadingChannel, setIsLoadingChannel] = useState(false);
+  const [isLoadingChannel, setIsLoadingChannel] = useState<boolean>(false);
   const [selectedChannel, setSelectedChannel] = useState<OrganizationChannel>();
   const [selectedChannelId, setSelectedChannelId] = useState<string>();
   const [isInteractingInChat, setIsInteractingInChat] =
@@ -85,13 +85,8 @@ export default function Home() {
             borderRadius: '16px',
           }}
         >
-          <Header
-            isChat
-            toggleDrawer={toggleDrawer}
-            open={isOpenDrawer}
-            advisor={advisorType}
-          />
-          <MainContent />
+          <Header />
+          <ChannelSearch />
           <SwitchDialog
             open={isOpen}
             onClose={handleClose}
