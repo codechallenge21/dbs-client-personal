@@ -491,7 +491,8 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
           marginRight: '16px',
           marginBottom: '16px',
           transition: 'margin-left 0.3s',
-          marginLeft: open && !isMobile ? '260px' : '0',
+          marginLeft:
+            isExpanded && !isMobile ? '260px' : isMobile ? '0' : '75px',
         }}
       >
         {children}
