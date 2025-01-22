@@ -1,13 +1,9 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
-
-export interface Chat {
-  title: string;
-  date: string;
-}
+import { OrganizationChannel } from '@/interfaces/entities';
 
 interface HistoryChatsProps {
-  chats: Chat[];
+  chats: OrganizationChannel[];
 }
 
 const HistoryChats: React.FC<HistoryChatsProps> = ({ chats }) => {
@@ -22,7 +18,7 @@ const HistoryChats: React.FC<HistoryChatsProps> = ({ chats }) => {
         alignItems: 'center',
       }}
     >
-      {chats.map((chat, index) => (
+      {chats.slice(0, 6).map((chat, index) => (
         <Box
           key={index}
           sx={{
@@ -47,7 +43,7 @@ const HistoryChats: React.FC<HistoryChatsProps> = ({ chats }) => {
               lineHeight: 'normal',
             }}
           >
-            {chat.title}
+            {chat.organizationChannelTitle}
           </Typography>
           <Typography
             sx={{
@@ -65,7 +61,7 @@ const HistoryChats: React.FC<HistoryChatsProps> = ({ chats }) => {
               alignSelf: 'stretch',
             }}
           >
-            {chat.date}
+            {new Date(chat.organizationChannelCreateDate).toLocaleString()}
           </Typography>
         </Box>
       ))}

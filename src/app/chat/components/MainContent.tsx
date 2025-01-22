@@ -12,9 +12,10 @@ import ChannelMessagePanel from './ChannelMessagePanel';
 import Suggestions from './Suggestions';
 import ViewChats from './viewChats';
 import { useRouter } from 'next/navigation';
-import HistoryChats, { Chat } from './HistoryChats';
+import HistoryChats from './HistoryChats';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import apis from '@/utils/hooks/apis/apis';
+import { useChatChannels } from '@/utils/hooks/useChatChannels';
 
 export default function MainContent() {
   const theme = useTheme();
@@ -29,6 +30,12 @@ export default function MainContent() {
   const { excute: submitUserInputs, isLoading: isInteracting } = useAxiosApi(
     apis.submitUserInputs
   );
+
+  const { data: chatsData } = useChatChannels({
+    organizationId: '4aba77788ae94eca8d6ff330506af944',
+  });
+
+  console.log('chatsData', chatsData);
 
   const SuggestionsData = [
     {
@@ -70,15 +77,6 @@ export default function MainContent() {
       title: 'Financial Case Consultant',
       description: 'Offers savings, investment, and debt advice.',
     },
-  ];
-
-  const dummyChats: Chat[] = [
-    { title: '與愛麗絲的聊天', date: '2023-10-01' },
-    { title: '與鮑勃的會議', date: '2023-10-02' },
-    { title: '討論', date: '2023-10-03' },
-    { title: '與戴夫的通話', date: '2023-10-04' },
-    { title: '與伊芙的會議', date: '2023-10-05' },
-    { title: '與弗蘭克的簡報', date: '2023-10-06' },
   ];
 
   if (selectedChannel || selectedChannelId || chatResponses.length)
@@ -217,7 +215,7 @@ export default function MainContent() {
         />
       </Box>
       <Box sx={{ marginTop: '12px', width: '100%', maxWidth: '780px' }}>
-        <HistoryChats chats={dummyChats} />
+        <HistoryChats chats={chatsData || []} />
       </Box>
     </Box>
   );
