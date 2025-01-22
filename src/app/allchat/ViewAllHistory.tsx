@@ -16,12 +16,11 @@ import {
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import DeleteIcon from '@mui/icons-material/Delete';
-// import DeleteConfirmationModal from './DeleteConfirmationModal';
+import DeleteConfirmationModal from './DeleteConfirmationModal';
 import { useChatChannels } from '@/utils/hooks/useChatChannels';
 import { OrganizationChannel } from '@/interfaces/entities';
 
 interface OrganizationChannelData extends OrganizationChannel {
-  isSelect: boolean;
   selected: boolean;
 }
 
@@ -29,7 +28,7 @@ export default function ChannelSearchCombined() {
   const [isV2, setIsV2] = useState(true);
   const [channels, setChannels] = useState<OrganizationChannelData[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
-  // const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -44,19 +43,18 @@ export default function ChannelSearchCombined() {
         id: chat.organizationChannelId,
         date: chat.organizationChannelCreateDate,
         selected: false,
-        isSelect: false,
       }));
       setChannels(formattedChannels);
     }
   }, [chatsData]);
 
-  // const handleConfirmDelete = () => {
-  //   setChannels((prev) => prev.filter((ch) => !ch.selected));
-  //   setOpen(false);
-  // };
-  // const handleDelete = () => setOpen(true);
+  const handleConfirmDelete = () => {
+    setChannels((prev) => prev.filter((ch) => !ch.selected));
+    setOpen(false);
+  };
+  const handleDelete = () => setOpen(true);
 
-  // const selectedChannels = channels.filter((ch) => ch.selected);
+  const selectedChannels = channels.filter((ch) => ch.selected);
 
   const handleToggleV2 = () => setIsV2((prev) => !prev);
 
@@ -170,11 +168,7 @@ export default function ChannelSearchCombined() {
                     },
                   }}
                 >
-                  你目前有{' '}
-                  <span>
-                    {filteredChannels.length ? filteredChannels.length : 0}
-                  </span>{' '}
-                  個頻道
+                  你目前有 <span>{filteredChannels.length ?? 0}</span> 個頻道
                 </Typography>
                 <Button
                   variant="text"
@@ -199,9 +193,9 @@ export default function ChannelSearchCombined() {
               {filteredChannels.map((channel) => (
                 <Paper
                   key={channel.organizationChannelId}
-                  onMouseEnter={() =>
-                    toggleChannel(channel.organizationChannelId)
-                  }
+                  // onMouseEnter={() =>
+                  //   toggleChannel(channel.organizationChannelId)
+                  // }
                   elevation={0}
                   sx={{
                     display: 'flex',
@@ -325,7 +319,7 @@ export default function ChannelSearchCombined() {
                 }}
               >
                 當前已選擇
-                {/* {selectedChannels.length} */}
+                {selectedChannels.length}
                 個頻道
               </Typography>
               <Stack direction={'row'} spacing={1} sx={{ width: 'auto' }}>
@@ -362,8 +356,8 @@ export default function ChannelSearchCombined() {
                 </Button>
                 <Button
                   variant="contained"
-                  // disabled={selectedChannels.length === 0}
-                  // onClick={handleDelete}
+                  disabled={selectedChannels.length === 0}
+                  onClick={handleDelete}
                   sx={{
                     fontFamily: 'Open Sans',
                     fontSize: '14px',
@@ -394,10 +388,9 @@ export default function ChannelSearchCombined() {
                     display: 'flex',
                     p: 2,
                     borderRadius: 2,
-                    bgcolor:
-                      // : channel.selected
-                      //   ? 'rgba(255, 0, 0, 0.05)'
-                      'transparent',
+                    bgcolor: channel.selected
+                      ? 'rgba(255, 0, 0, 0.05)'
+                      : 'transparent',
                     position: 'relative', // Add this to support absolute positioning of delete icon
                     alignItems: 'flex-start',
                     border: '1px solid var(--Secondary-Dark-Gray, #4A4A4A)',
@@ -419,8 +412,10 @@ export default function ChannelSearchCombined() {
                     }}
                   >
                     <Checkbox
-                      // checked={channel.selected}
-                      // onChange={() => toggleChannel(channel.organizationChannelId)}
+                      checked={channel.selected}
+                      onChange={() =>
+                        toggleChannel(channel.organizationChannelId)
+                      }
                       sx={{
                         color: 'var(--Primary-Black, #212B36)',
                         p: 0,
@@ -446,8 +441,8 @@ export default function ChannelSearchCombined() {
                   <Typography
                     sx={{
                       display: '-webkit-box',
-                      '-webkit-box-orient': 'vertical',
-                      '-webkit-line-clamp': 1,
+                      WebkitBoxOrient: 'vertical',
+                      WebkitLineClamp: 1,
                       alignSelf: 'stretch',
                       overflow: 'hidden',
                       color: 'var(--Secondary-Dark-Gray, #4A4A4A)',
@@ -469,10 +464,9 @@ export default function ChannelSearchCombined() {
                       top: '5px',
                       right: '4px',
                     }}
-                    // onClick={() => {
-                    //   toggleChannel(channel.organizationChannelId);
-                    //   handleDelete();
-                    // }}
+                    onClick={() => {
+                      handleDelete();
+                    }}
                   >
                     <DeleteIcon sx={{ width: '18px', height: '18px' }} />
                   </IconButton>
@@ -481,12 +475,12 @@ export default function ChannelSearchCombined() {
             </Stack>
           </>
         )}
-        {/* <DeleteConfirmationModal
+        <DeleteConfirmationModal
           open={open}
           onClose={() => setOpen(false)}
           onDelete={handleConfirmDelete}
           ChannelName={selectedChannels}
-        /> */}
+        />
       </Box>
     </Box>
   );
