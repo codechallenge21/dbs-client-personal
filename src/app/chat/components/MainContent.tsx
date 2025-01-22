@@ -16,6 +16,7 @@ import HistoryChats from './HistoryChats';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import apis from '@/utils/hooks/apis/apis';
 import { useChatChannels } from '@/utils/hooks/useChatChannels';
+import { OrganizationChannelData } from '@/interfaces/entities';
 
 export default function MainContent() {
   const theme = useTheme();
@@ -26,6 +27,7 @@ export default function MainContent() {
     selectedChannel,
     chatResponses,
     isInteractingInChat,
+    setSelectedChannel,
   } = useContext(ChannelContentContext);
   const { excute: submitUserInputs, isLoading: isInteracting } = useAxiosApi(
     apis.submitUserInputs
@@ -36,6 +38,17 @@ export default function MainContent() {
   });
 
   console.log('chatsData', chatsData);
+
+  const moveToChannelDetail = (channel: OrganizationChannelData) => {
+    console.log('channel', channel);
+
+    setSelectedChannel(channel);
+    const searchParams = new URLSearchParams({
+      organizationChannelId: channel.organizationChannelId,
+    });
+
+    router.push(`/chat?${searchParams.toString()}`);
+  };
 
   const SuggestionsData = [
     {
@@ -215,7 +228,10 @@ export default function MainContent() {
         />
       </Box>
       <Box sx={{ marginTop: '12px', width: '100%', maxWidth: '780px' }}>
-        <HistoryChats chats={chatsData || []} />
+        <HistoryChats
+          chats={chatsData || []}
+          moveToChannelDetail={moveToChannelDetail}
+        />
       </Box>
     </Box>
   );

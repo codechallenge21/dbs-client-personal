@@ -1,12 +1,19 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
-import { OrganizationChannel } from '@/interfaces/entities';
+import {
+  OrganizationChannel,
+  OrganizationChannelData,
+} from '@/interfaces/entities';
 
 interface HistoryChatsProps {
   chats: OrganizationChannel[];
+  moveToChannelDetail: (channel: OrganizationChannelData) => void;
 }
 
-const HistoryChats: React.FC<HistoryChatsProps> = ({ chats }) => {
+const HistoryChats: React.FC<HistoryChatsProps> = ({
+  chats,
+  moveToChannelDetail,
+}) => {
   return (
     <Box
       sx={{
@@ -32,7 +39,9 @@ const HistoryChats: React.FC<HistoryChatsProps> = ({ chats }) => {
             display: 'flex',
             flexDirection: 'column',
             gap: '16px',
+            cursor: 'pointer',
           }}
+          onClick={() => moveToChannelDetail({ ...chat, selected: false })}
         >
           <Typography
             sx={{

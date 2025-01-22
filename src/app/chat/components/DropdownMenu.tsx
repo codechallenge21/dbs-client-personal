@@ -82,6 +82,11 @@ export default function DropdownMenu({
   const theme = useTheme();
   const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  const { setAdvisorType, chatResponses, selectedChannel } = useContext(
+    ChannelContentContext
+  );
+
   const [toolsAnchor, setToolsAnchor] = useState<null | HTMLElement>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [openEditDeleteModal, setOpenEditDeleteModal] =
@@ -112,8 +117,6 @@ export default function DropdownMenu({
   const handleDelete = () => {
     setIsDeleteDialogOpen(true);
   };
-
-  const { setAdvisorType, chatResponses } = useContext(ChannelContentContext);
 
   const handleOnClickMenuItem = useCallback(
     (value: AdvisorType) => {
@@ -259,14 +262,19 @@ export default function DropdownMenu({
         open={isDeleteDialogOpen}
         onClose={() => setIsDeleteDialogOpen(false)}
         onDelete={handleConfirmDelete}
-        ChannelName={[
-          {
-            id: 1,
-            title: 'Delete This Channel',
-            date: new Date().toISOString(),
-            selected: false,
-          },
-        ]}
+        channelName={
+          selectedChannel
+            ? [
+                {
+                  ...selectedChannel,
+                  organizationChannelId:
+                    selectedChannel.organizationChannelId || '',
+                  selected: true,
+                  organization: selectedChannel.organization || {},
+                },
+              ]
+            : []
+        }
       />
       <EditDeleteModal
         anchorEl={openEditDeleteModal}

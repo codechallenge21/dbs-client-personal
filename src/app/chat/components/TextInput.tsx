@@ -148,6 +148,14 @@ const TextInput: React.FC<TextInputProps> = ({
       if (isInteracting) {
         return;
       }
+      setChatResponses((prev) => [
+        ...prev,
+        {
+          organizationChannelMessageType: 'USER',
+          organizationChannelMessageContent: userInputValue,
+          organizationChannelFiles: files,
+        },
+      ]);
       const response = await submitUserInputs({
         organizationId: '4aba77788ae94eca8d6ff330506af944',
         query: userInputValue,
@@ -480,17 +488,7 @@ const TextInput: React.FC<TextInputProps> = ({
                 bottom: '12px',
                 right: '10px',
               }}
-              onClick={() => {
-                setChatResponses((prev) => [
-                  ...prev,
-                  {
-                    organizationChannelMessageType: 'USER',
-                    organizationChannelMessageContent: userInputValue,
-                    organizationChannelFiles: files,
-                  },
-                ]);
-                handleClickSubmitOrAudioFileUpload();
-              }}
+              onClick={handleClickSubmitOrAudioFileUpload}
             >
               <SendRounded sx={{ color: 'black' }} />
             </IconButton>
