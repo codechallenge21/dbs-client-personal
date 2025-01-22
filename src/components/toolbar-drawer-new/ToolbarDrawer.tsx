@@ -10,18 +10,19 @@ import {
   MenuOpenRounded,
   PsychologyRounded,
   AutoStoriesRounded,
+  EmojiObjectsRounded,
   PermIdentityRounded,
   LocalFireDepartmentRounded,
-  EmojiObjectsRounded,
+  AddRounded,
 } from '@mui/icons-material';
 import {
   Box,
   List,
+  Button,
+  useTheme,
   IconButton,
   Typography,
-  useTheme,
   useMediaQuery,
-  Button,
 } from '@mui/material';
 import { styled, Theme, CSSObject } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
@@ -131,15 +132,14 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
   toggleDrawer,
   children,
 }) => {
-  const pathname = usePathname(); // Get the current path
-  const router = useRouter(); // Navigation
+  const pathname = usePathname();
+  const router = useRouter();
   const theme = useTheme();
   const [isClient, setIsClient] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true); // Track expanded/collapsed state
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  console.log('open', open);
 
   useEffect(() => {
-    // Ensure this component renders only on the client
     setIsClient(true);
   }, []);
 
@@ -148,10 +148,8 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
   }, [isMobile, toggleDrawer]);
 
   if (!isClient) {
-    return null; // Avoid mismatches by skipping rendering on the server
+    return null;
   }
-
-  console.log('pathname', pathname);
 
   const DrawerList = (
     <Box
@@ -168,61 +166,94 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
           sx={{
             display: 'flex',
             padding: '8px 0',
-            justifyContent: 'space-between',
+            flexDirection: isExpanded ? 'row' : 'column',
+            alignItems: isExpanded ? 'center' : 'stretch',
+            justifyContent: isExpanded ? 'space-between' : 'center',
           }}
         >
-          <Typography
-            sx={{
-              color: 'var(--Primary-Black, #212B36)',
-              fontFamily: 'DFPHeiUBold-B5',
-              fontSize: '20px',
-              fontStyle: 'normal',
-              fontWeight: 800,
-              lineHeight: 'normal',
-            }}
-          >
-            好理家在
-          </Typography>
+          {isExpanded && (
+            <Typography
+              sx={{
+                color: 'var(--Primary-Black, #212B36)',
+                fontFamily: 'DFPHeiUBold-B5',
+                fontSize: '20px',
+                fontWeight: 800,
+              }}
+            >
+              好理家在
+            </Typography>
+          )}
+          {!isExpanded && (
+            <Typography
+              sx={{
+                fontWeight: 800,
+                fontSize: '20px',
+                textAlign: 'center',
+                fontFamily: 'DFPHeiUBold-B5',
+                color: 'var(--Primary-Black, #212B36)',
+              }}
+            >
+              好
+            </Typography>
+          )}
           <IconButton
             onClick={() => {
               if (isMobile) toggleDrawer(!open);
+              setIsExpanded((prev) => !prev); // Toggle expanded/collapsed state
             }}
-            sx={{ color: 'black', padding: '8xp' }}
+            sx={{ color: 'black', padding: '8px' }}
           >
             <MenuOpenRounded />
           </IconButton>
         </ListItem>
-
-        <ListItem
-          sx={{
-            display: 'flex',
-            padding: '8px 0 16px',
-            justifyContent: 'space-between',
-          }}
-        >
-          <Button
+        {isExpanded && (
+          <ListItem
             sx={{
-              gap: '8px',
-              width: '100%',
-              color: 'black',
-              height: '38px',
+              display: 'flex',
+              padding: ' 8px',
+              justifyContent: 'space-between',
+            }}
+          >
+            <Button
+              sx={{
+                gap: '8px',
+                width: '100%',
+                color: 'black',
+                height: '38px',
+                padding: '8px',
+                display: 'flex',
+                borderRadius: '8px',
+                alignItems: 'center',
+                alignSelf: 'stretch',
+                justifyContent: 'center',
+                border: '1px solid var(--Primary-Black, #212B36)',
+              }}
+            >
+              + New Chat
+            </Button>
+          </ListItem>
+        )}
+
+        {!isExpanded && (
+          <IconButton
+            sx={{
+              mb: '10px',
               padding: '8px',
               display: 'flex',
-              borderRadius: '8px',
               alignItems: 'center',
-              alignSelf: 'stretch',
+              borderRadius: '50px',
               justifyContent: 'center',
               border: '1px solid var(--Primary-Black, #212B36)',
             }}
           >
-            + New Chat
-          </Button>
-        </ListItem>
+            <AddRounded sx={{ color: 'black' }} />
+          </IconButton>
+        )}
+
         <Box
           sx={{
             gap: '8px',
             display: 'flex',
-            alignSelf: 'stretch',
             flexDirection: 'column',
             alignItems: 'flex-start',
             justifyContent: 'flex-end',
@@ -238,7 +269,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                   pathname === item.route ||
                   (pathname === '/' && item.route === '/chat')
                     ? 'var(--Action-Selected, rgba(204, 0, 0, 0.20))'
-                    : 'transparent', // Active state
+                    : 'transparent',
                 '&:hover': {
                   backgroundColor: '#f5f5f5',
                 },
@@ -251,16 +282,14 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                   display: 'flex',
                   fontWeight: 400,
                   fontSize: '16px',
-                  overflow: 'hidden',
-                  fontStyle: 'normal',
-                  lineHeight: 'normal',
                   alignItems: 'center',
-                  textOverflow: 'ellipsis',
-                  fontFamily: 'DFPHeiBold-B5',
                   color: index === 0 ? 'red' : 'black',
                 }}
               >
-                <span>{item.icon}</span> {item.text}
+                <span>{item.icon}</span>
+                {isExpanded && (
+                  <span style={{ marginLeft: 8 }}>{item.text}</span>
+                )}
               </Typography>
             </ListItem>
           ))}
@@ -277,61 +306,143 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
           justifyContent: 'flex-end',
         }}
       >
-        <Box
-          sx={{
-            display: 'flex',
-            padding: '16px',
-            alignItems: 'center',
-          }}
-        >
-          <PermIdentityRounded sx={{ color: 'black', marginRight: '8px' }} />
-          <Typography
-            sx={{
-              fontWeight: 400,
-              fontSize: '16px',
-              overflow: 'hidden',
-              fontStyle: 'normal',
-              lineHeight: 'normal',
-              whiteSpace: 'nowrap',
-              textOverflow: 'ellipsis',
-              fontFamily: 'DFPHeiBold-B5',
-              color: 'var(--Primary-Black, #212B36)',
-            }}
-          >
-            UserName
-          </Typography>
-        </Box>
-        <Button
-          sx={{
-            gap: '8px',
-            color: 'white',
-            display: 'flex',
-            padding: '4px 8px',
-            borderRadius: '8px',
-            alignSelf: 'stretch',
-            alignItems: 'center',
-            justifyContent: 'center',
-            background: 'var(--Secondary-, #5C443A)',
-          }}
-        >
-          <EmojiObjectsRounded sx={{ color: 'white' }} />
-          許願池
-        </Button>
-        <Button
-          sx={{
-            gap: '8px',
-            color: 'white',
-            display: 'flex',
-            padding: '4px 8px',
-            borderRadius: '8px',
-            alignSelf: 'stretch',
-            alignItems: 'center',
-            justifyContent: 'center',
-            background: 'var(--Secondary-, #5C443A)',
-          }}
-        >
-          諮詢師專區
-        </Button>
+        {isExpanded && (
+          <>
+            <Box
+              sx={{
+                display: 'flex',
+                padding: '16px',
+                alignItems: 'center',
+              }}
+            >
+              <PermIdentityRounded
+                sx={{ color: 'black', marginRight: '8px' }}
+              />
+              <Typography
+                sx={{
+                  fontWeight: 400,
+                  fontSize: '16px',
+                  overflow: 'hidden',
+                  fontStyle: 'normal',
+                  lineHeight: 'normal',
+                  whiteSpace: 'nowrap',
+                  textOverflow: 'ellipsis',
+                  fontFamily: 'DFPHeiBold-B5',
+                  color: 'var(--Primary-Black, #212B36)',
+                }}
+              >
+                UserName
+              </Typography>
+            </Box>
+            <Button
+              sx={{
+                gap: '8px',
+                color: 'white',
+                display: 'flex',
+                padding: '4px 8px',
+                borderRadius: '8px',
+                alignSelf: 'stretch',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'var(--Secondary-, #5C443A)',
+              }}
+            >
+              <EmojiObjectsRounded sx={{ color: 'white' }} />
+              許願池
+            </Button>
+            <Button
+              sx={{
+                gap: '8px',
+                color: 'white',
+                display: 'flex',
+                padding: '4px 8px',
+                borderRadius: '8px',
+                alignSelf: 'stretch',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'var(--Secondary-, #5C443A)',
+              }}
+            >
+              諮詢師專區
+            </Button>
+          </>
+        )}
+        {!isExpanded && (
+          <>
+            <IconButton
+              sx={{
+                width: '36px',
+                height: '36px',
+                padding: '8px',
+                display: 'flex',
+                borderRadius: '50px',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'var(--Secondary-, #5C443A)',
+                '&:hover': {
+                  background: 'rgba(92, 68, 58, 0.8)',
+                },
+                '&:active': {
+                  background: 'rgba(92, 68, 58, 0.6)',
+                },
+              }}
+            >
+              <PermIdentityRounded sx={{ color: 'white' }} />
+            </IconButton>
+            <IconButton
+              sx={{
+                width: '36px',
+                height: '36px',
+                padding: '8px',
+                display: 'flex',
+                borderRadius: '50px',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'var(--Secondary-, #5C443A)',
+                '&:hover': {
+                  background: 'rgba(92, 68, 58, 0.8)',
+                },
+                '&:active': {
+                  background: 'rgba(92, 68, 58, 0.6)',
+                },
+              }}
+            >
+              <EmojiObjectsRounded sx={{ color: 'white' }} />
+            </IconButton>
+            <IconButton
+              sx={{
+                width: '36px',
+                height: '36px',
+                padding: '8px',
+                display: 'flex',
+                borderRadius: '50px',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'var(--Secondary-, #5C443A)',
+                '&:hover': {
+                  background: 'rgba(92, 68, 58, 0.8)',
+                },
+                '&:active': {
+                  background: 'rgba(92, 68, 58, 0.6)',
+                },
+              }}
+            >
+              <Typography
+                sx={{
+                  fontWeight: 600,
+                  fontSize: '16px',
+                  fontFamily: 'Inter',
+                  fontStyle: 'normal',
+                  lineHeight: 'normal',
+                  color:
+                    'var(--Components-Button-Contained-Inherit-Text, #FFF)',
+                }}
+              >
+                諮
+              </Typography>
+            </IconButton>
+          </>
+        )}
       </Box>
     </Box>
   );
@@ -343,8 +454,8 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
           open={true}
           sx={{
             flexShrink: 0,
-            backgroundColor: '#ffffff',
             '& .MuiDrawer-paper': {
+              width: isExpanded ? drawerWidth : 56, // Adjust drawer width
               height: '97%',
               margin: '16px',
               borderRadius: '8px',
@@ -360,9 +471,8 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
           open={open}
           sx={{
             flexShrink: 0,
-            backgroundColor: '#ffffff',
             '& .MuiDrawer-paper': {
-              width: 250,
+              width: isExpanded ? drawerWidth : 72,
               height: '96%',
               margin: '16px',
               borderRadius: '8px',
@@ -378,6 +488,8 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
       <Box
         sx={{
           overflow: 'auto',
+          marginRight: '16px',
+          marginBottom: '16px',
           transition: 'margin-left 0.3s',
           marginLeft: open && !isMobile ? '260px' : '0',
         }}
