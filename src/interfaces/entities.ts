@@ -127,3 +127,7 @@ export interface OrganizationChannelResponse {
   creator: Creator;
   organizationChannelType: 'MEETING' | 'CHAT';
 }
+
+export interface OrganizationChannelData extends OrganizationChannel {
+  selected: boolean;
+}

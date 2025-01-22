@@ -18,11 +18,10 @@ import SearchIcon from '@mui/icons-material/Search';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteConfirmationModal from './DeleteConfirmationModal';
 import { useChatChannels } from '@/utils/hooks/useChatChannels';
-import { OrganizationChannel } from '@/interfaces/entities';
-
-interface OrganizationChannelData extends OrganizationChannel {
-  selected: boolean;
-}
+import {
+  OrganizationChannel,
+  OrganizationChannelData,
+} from '@/interfaces/entities';
 
 export default function ChannelSearchCombined() {
   const [isV2, setIsV2] = useState(true);

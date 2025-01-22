@@ -2,13 +2,13 @@
 
 import { Modal, Box, Typography, Button, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { Channel } from './ViewAllHistory';
+import { OrganizationChannelData } from '@/interfaces/entities';
 
 interface DeleteConfirmationModalProps {
   open: boolean;
   onClose: () => void;
   onDelete: () => void;
-  ChannelName: Channel[];
+  ChannelName: OrganizationChannelData[];
 }
 
 export default function DeleteConfirmationModal({
