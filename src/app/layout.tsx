@@ -1,6 +1,14 @@
-import { Geist, Geist_Mono, Public_Sans, Open_Sans } from 'next/font/google';
+import {
+  Geist,
+  Geist_Mono,
+  Open_Sans,
+  Public_Sans,
+  Inter,
+} from 'next/font/google';
 import './globals.css';
 import ThemeProvider from '@/theme';
+// import { Box } from "@mui/material";
+// import { Header } from "@/components/header";
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -12,6 +20,14 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
+const openSansFont = Open_Sans({
+  weight: ['300', '400', '500', '600', '700', '800'],
+  subsets: ['latin'],
+  variable: '--font-open-sans',
+  adjustFontFallback: false,
+  display: 'swap',
+});
+
 const publicSansFont = Public_Sans({
   weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
   subsets: ['latin'],
@@ -20,10 +36,10 @@ const publicSansFont = Public_Sans({
   display: 'swap',
 });
 
-const openSansFont = Open_Sans({
-  weight: ['300', '400', '500', '600', '700', '800'],
+const interFont = Inter({
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
   subsets: ['latin'],
-  variable: '--font-open-sans',
+  variable: '--font-inter',
   adjustFontFallback: false,
   display: 'swap',
 });
@@ -67,8 +83,11 @@ export default function RootLayout({ children }: Props) {
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${publicSansFont.variable} ${openSansFont.variable}`}
+        className={`${geistSans.variable} ${geistMono.variable} ${publicSansFont.variable} ${openSansFont.variable} ${interFont.variable}`}
       >
+        {/* <Box>
+          <Header />
+        </Box> */}
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>

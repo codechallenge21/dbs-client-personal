@@ -271,7 +271,7 @@ const Toolbox: React.FC<ToolboxProps> = ({
     apis.getChannelDetail
   );
 
-  const { excute: updateChannelDetail } = useAxiosApi(apis.updateChannelDetail);
+  // const { excute: updateChannelDetail } = useAxiosApi(apis.updateChannelDetail);
 
   const handleGetChannelDetail = useCallback(
     async (channelId: string) => {
@@ -507,16 +507,16 @@ const Toolbox: React.FC<ToolboxProps> = ({
                       >
                         <EditableItem
                           key={channel.organizationChannelId}
-                          channel={channel}
-                          onSave={async (id, newTitle) => {
-                            await updateChannelDetail({
-                              organizationId:
-                                '4aba77788ae94eca8d6ff330506af944',
-                              organizationChannelId: id,
-                              organizationChannelTitle: newTitle,
-                            });
-                            if (channelsMutate) channelsMutate();
-                          }}
+                          // channel={channel}
+                          // onSave={async (id, newTitle) => {
+                          //   await updateChannelDetail({
+                          //     organizationId:
+                          //       "4aba77788ae94eca8d6ff330506af944",
+                          //     organizationChannelId: id,
+                          //     organizationChannelTitle: newTitle,
+                          //   });
+                          //   if (channelsMutate) channelsMutate();
+                          // }}
                           index={index}
                           toolsAnchor={toolsAnchor}
                           activeIndex={activeIndex}

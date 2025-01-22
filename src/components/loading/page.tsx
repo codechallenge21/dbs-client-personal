@@ -28,7 +28,10 @@ export default function LoadingScreen() {
     };
   }, []);
 
-  // Render nothing on the server
+  React.useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   if (!isClient) {
     return null;
   }
