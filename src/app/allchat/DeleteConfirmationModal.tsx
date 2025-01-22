@@ -8,14 +8,14 @@ interface DeleteConfirmationModalProps {
   open: boolean;
   onClose: () => void;
   onDelete: () => void;
-  ChannelName: OrganizationChannelData[];
+  channelName: OrganizationChannelData[];
 }
 
 export default function DeleteConfirmationModal({
   open,
   onClose,
   onDelete,
-  ChannelName,
+  channelName,
 }: DeleteConfirmationModalProps) {
   return (
     <Modal
@@ -85,7 +85,7 @@ export default function DeleteConfirmationModal({
               lineHeight: 'normal',
             }}
           >
-            即將刪除 {ChannelName.length} 個頻道
+            即將刪除 {channelName.length} 個頻道
           </Typography>
         </Box>
 

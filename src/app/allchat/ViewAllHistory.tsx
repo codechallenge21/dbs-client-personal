@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import {
   Box,
   TextField,
@@ -22,30 +22,26 @@ import {
   OrganizationChannel,
   OrganizationChannelData,
 } from '@/interfaces/entities';
+import { useRouter } from 'next/navigation';
+import ChannelContentContext from '../chat/components/ChannelContentContext';
 
 export default function ChannelSearchCombined() {
+  const router = useRouter();
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const { setSelectedChannel, selectedChannel } = useContext(
+    ChannelContentContext
+  );
+
   const [isV2, setIsV2] = useState(true);
   const [channels, setChannels] = useState<OrganizationChannelData[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [open, setOpen] = useState(false);
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const { data: chatsData } = useChatChannels({
     organizationId: '4aba77788ae94eca8d6ff330506af944',
   });
-
-  useEffect(() => {
-    if (chatsData) {
-      const formattedChannels = chatsData.map((chat: OrganizationChannel) => ({
-        ...chat,
-        id: chat.organizationChannelId,
-        date: chat.organizationChannelCreateDate,
-        selected: false,
-      }));
-      setChannels(formattedChannels);
-    }
-  }, [chatsData]);
 
   const handleConfirmDelete = () => {
     setChannels((prev) => prev.filter((ch) => !ch.selected));
@@ -79,6 +75,31 @@ export default function ChannelSearchCombined() {
         .includes(searchQuery.toLowerCase()) ||
       ch.organizationChannelCreateDate.includes(searchQuery)
   );
+
+  const moveToChannelDetail = (channel: OrganizationChannelData) => {
+    console.log('channel', channel);
+
+    setSelectedChannel(channel);
+    const searchParams = new URLSearchParams({
+      organizationChannelId: channel.organizationChannelId,
+    });
+
+    router.push(`/chat?${searchParams.toString()}`);
+  };
+
+  console.log('selectedChannel', selectedChannel);
+
+  useEffect(() => {
+    if (chatsData) {
+      const formattedChannels = chatsData.map((chat: OrganizationChannel) => ({
+        ...chat,
+        id: chat.organizationChannelId,
+        date: chat.organizationChannelCreateDate,
+        selected: false,
+      }));
+      setChannels(formattedChannels);
+    }
+  }, [chatsData]);
 
   return (
     <Box
@@ -210,6 +231,10 @@ export default function ChannelSearchCombined() {
                     gap: '16px',
                     alignSelf: 'stretch',
                     flexDirection: 'column',
+                    cursor: 'pointer',
+                  }}
+                  onClick={() => {
+                    moveToChannelDetail(channel);
                   }}
                 >
                   {/* {channel.selected && (
@@ -478,7 +503,7 @@ export default function ChannelSearchCombined() {
           open={open}
           onClose={() => setOpen(false)}
           onDelete={handleConfirmDelete}
-          ChannelName={selectedChannels}
+          channelName={selectedChannels}
         />
       </Box>
     </Box>
