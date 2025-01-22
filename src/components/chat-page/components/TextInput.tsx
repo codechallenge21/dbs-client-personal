@@ -190,6 +190,7 @@ const TextInput: React.FC<TextInputProps> = ({
     submitUserInputs,
     userInputValue,
     advisorType,
+    files,
   ]);
 
   const handleClickSubmitOrAudioFileUpload = useCallback(() => {

@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Drawer from '@mui/material/Drawer';
 import ListItem from '@mui/material/ListItem';
 import {
@@ -27,6 +27,7 @@ import {
 import { styled, Theme, CSSObject } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 import { usePathname, useRouter } from 'next/navigation';
+import ChannelContentContext from '../channel-context-provider/ChannelContentContext';
 
 interface ToolbarDrawerProps {
   open: boolean;
@@ -138,6 +139,20 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
   const [isClient, setIsClient] = useState(false);
   const [isExpanded, setIsExpanded] = useState(true); // Track expanded/collapsed state
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const {
+    setSelectedChannelId,
+    setSelectedChannel,
+    setChatResponses,
+    setIsInteractingInChat,
+  } = useContext(ChannelContentContext);
+
+  const resetChat = () => {
+    setSelectedChannelId(undefined);
+    setSelectedChannel(undefined);
+    setChatResponses([]);
+    setIsInteractingInChat(false);
+    router.push('/chat');
+  };
 
   useEffect(() => {
     setIsClient(true);
@@ -228,6 +243,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 justifyContent: 'center',
                 border: '1px solid var(--Primary-Black, #212B36)',
               }}
+              onClick={resetChat}
             >
               + New Chat
             </Button>
