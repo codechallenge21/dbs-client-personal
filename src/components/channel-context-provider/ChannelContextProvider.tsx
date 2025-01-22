@@ -1,12 +1,12 @@
 'use client'; // Mark this file as a client component
 
 import React, { useState, useMemo } from 'react';
-import ChannelContentContext from '@/app/chat/components/ChannelContentContext';
+import ChannelContentContext from '@/components/channel-context-provider/ChannelContentContext';
 import {
   OrganizationChannel,
   OrganizationChannelMessage,
 } from '@/interfaces/entities';
-import { AdvisorType } from '@/app/chat/components/types';
+import { AdvisorType } from '@/app/chat/types';
 
 export default function ChannelContextProvider({
   children,

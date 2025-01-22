@@ -24,10 +24,10 @@ import { useAudioChannels } from '@/utils/hooks/useAudioChannels';
 import apis from '@/utils/hooks/apis/apis';
 import EditableItem from '../editable-item/EditableItem';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
-import ChannelContentContext from '@/app/chat/components/ChannelContentContext';
+import ChannelContentContext from '@/components/channel-context-provider/ChannelContentContext';
 import UploadDialog from '../uploadDialog/page';
-import DeleteDialog from '@/app/chat/components/DeleteDialog';
-import EditDialog from '@/app/chat/components/EditDialog';
+import DeleteDialog from '@/components/dialogs/DeleteDialog';
+import EditDialog from '@/components/dialogs/EditDialog';
 import { OrganizationChannel } from '@/interfaces/entities';
 
 interface SummaryCardProps {

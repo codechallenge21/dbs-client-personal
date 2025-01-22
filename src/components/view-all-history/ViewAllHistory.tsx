@@ -16,14 +16,14 @@ import {
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import DeleteIcon from '@mui/icons-material/Delete';
-import DeleteConfirmationModal from './DeleteConfirmationModal';
+import DeleteConfirmationModal from '../dialogs/DeleteConfirmationModal';
 import { useChatChannels } from '@/utils/hooks/useChatChannels';
 import {
   OrganizationChannel,
   OrganizationChannelData,
 } from '@/interfaces/entities';
 import { useRouter } from 'next/navigation';
-import ChannelContentContext from '../chat/components/ChannelContentContext';
+import ChannelContentContext from '../channel-context-provider/ChannelContentContext';
 
 export default function ChannelSearchCombined() {
   const router = useRouter();

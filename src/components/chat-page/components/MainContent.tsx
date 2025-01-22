@@ -7,8 +7,8 @@ import {
 } from '@mui/material';
 import TextInput from './TextInput';
 import { useContext } from 'react';
-import ChannelContentContext from './ChannelContentContext';
-import ChannelMessagePanel from './ChannelMessagePanel';
+import ChannelContentContext from '../../channel-context-provider/ChannelContentContext';
+import ChannelMessagePanel from '../../channel-message-panel/ChannelMessagePanel';
 import Suggestions from './Suggestions';
 import ViewChats from './viewChats';
 import { useRouter } from 'next/navigation';

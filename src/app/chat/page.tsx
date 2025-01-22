@@ -1,11 +1,11 @@
 'use client';
 import { useContext, useEffect, useState } from 'react';
-import Header from '@/app/chat/components/Header';
-import MainContent from '@/app/chat/components/MainContent';
-import SwitchDialog from '@/app/chat/components/SwitchDialog';
+import Header from '@/components/chat-page/components/Header';
+import MainContent from '@/components/chat-page/components/MainContent';
+import SwitchDialog from '@/components/dialogs/SwitchDialog';
 import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
 import { Box } from '@mui/material';
-import ChannelContentContext from './components/ChannelContentContext';
+import ChannelContentContext from '../../components/channel-context-provider/ChannelContentContext';
 
 export default function Home() {
   const { selectedChannel, setSelectedChannelId, advisorType } = useContext(

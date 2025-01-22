@@ -1,4 +1,4 @@
-import { AdvisorType } from '@/app/chat/components/types';
+import { AdvisorType } from '@/app/chat/types';
 
 export interface Creator {
   loginId: string;

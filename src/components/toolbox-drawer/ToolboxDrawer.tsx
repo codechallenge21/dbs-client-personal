@@ -22,11 +22,11 @@ import {
   useTheme,
   useMediaQuery,
 } from '@mui/material';
-import DeleteDialog from '@/app/chat/components/DeleteDialog';
+import DeleteDialog from '@/components/dialogs/DeleteDialog';
 import { OrganizationChannel } from '@/interfaces/entities';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import apis from '@/utils/hooks/apis/apis';
-import ChannelContentContext from '@/app/chat/components/ChannelContentContext';
+import ChannelContentContext from '@/components/channel-context-provider/ChannelContentContext';
 import UploadDialog from '../uploadDialog/page';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import EditableItem from '../editable-item/EditableItem';

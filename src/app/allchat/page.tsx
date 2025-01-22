@@ -1,8 +1,8 @@
 'use client';
 import { useState } from 'react';
-import ChannelSearch from './ViewAllHistory';
-import Header from './components/Header';
-import SwitchDialog from '../chat/components/SwitchDialog';
+import ChannelSearch from '../../components/view-all-history/ViewAllHistory';
+import Header from '../../components/all-chat-header/Header';
+import SwitchDialog from '../../components/dialogs/SwitchDialog';
 import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
 import { Box } from '@mui/material';
 
