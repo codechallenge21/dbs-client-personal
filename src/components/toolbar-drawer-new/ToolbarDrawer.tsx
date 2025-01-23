@@ -243,7 +243,10 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 justifyContent: 'center',
                 border: '1px solid var(--Primary-Black, #212B36)',
               }}
-              onClick={resetChat}
+              onClick={() => {
+                resetChat();
+                toggleDrawer(false);
+              }}
             >
               + New Chat
             </Button>
