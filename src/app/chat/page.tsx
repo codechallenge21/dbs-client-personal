@@ -33,9 +33,13 @@ function ClientContent() {
     setSelectedChannel,
   } = useContext(ChannelContentContext);
   const { excute: getChannelDetail } = useAxiosApi(apis.getChannelDetail);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const [isOpen, setIsOpen] = useState(false);
-  const [isOpenDrawer, setIsOpenDrawer] = useState(true);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(
+    isMobile ? false : true
+  );
 
   const handleClose = () => setIsOpen(false);
 
@@ -81,6 +85,10 @@ function ClientContent() {
     fetchChannelDetail,
     organizationChannelId,
   ]);
+
+  useEffect(() => {
+    toggleDrawer(isMobile ? false : true);
+  }, [isMobile]);
 
   return (
     <ToolbarDrawer open={isOpenDrawer} toggleDrawer={toggleDrawer}>
