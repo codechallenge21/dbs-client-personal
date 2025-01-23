@@ -158,10 +158,6 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
     setIsClient(true);
   }, []);
 
-  useEffect(() => {
-    if (!isMobile) toggleDrawer(true);
-  }, [isMobile, toggleDrawer]);
-
   if (!isClient) {
     return null;
   }
@@ -181,12 +177,12 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
           sx={{
             display: 'flex',
             padding: '8px 0',
-            flexDirection: isExpanded ? 'row' : 'column',
-            alignItems: isExpanded ? 'center' : 'stretch',
-            justifyContent: isExpanded ? 'space-between' : 'center',
+            flexDirection: isExpanded || isMobile ? 'row' : 'column',
+            alignItems: isExpanded || isMobile ? 'center' : 'stretch',
+            justifyContent: isExpanded || isMobile ? 'space-between' : 'center',
           }}
         >
-          {isExpanded && (
+          {(isExpanded || isMobile) && (
             <Typography
               sx={{
                 color: 'var(--Primary-Black, #212B36)',
@@ -198,7 +194,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               好理家在
             </Typography>
           )}
-          {!isExpanded && (
+          {!isExpanded && !isMobile && (
             <Typography
               sx={{
                 fontWeight: 800,
@@ -214,14 +210,18 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
           <IconButton
             onClick={() => {
               if (isMobile) toggleDrawer(!open);
-              setIsExpanded((prev) => !prev); // Toggle expanded/collapsed state
+              if (!isMobile) setIsExpanded((prev) => !prev); // Toggle expanded/collapsed state
             }}
-            sx={{ color: 'black', padding: '8px' }}
+            sx={{
+              color: 'black',
+              padding: '8px',
+              transform: !isExpanded && !isMobile ? 'rotate(180deg)' : 'none',
+            }}
           >
             <MenuOpenRounded />
           </IconButton>
         </ListItem>
-        {isExpanded && (
+        {(isExpanded || isMobile) && (
           <ListItem
             sx={{
               display: 'flex',
@@ -243,14 +243,17 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 justifyContent: 'center',
                 border: '1px solid var(--Primary-Black, #212B36)',
               }}
-              onClick={resetChat}
+              onClick={() => {
+                resetChat();
+                toggleDrawer(false);
+              }}
             >
               + New Chat
             </Button>
           </ListItem>
         )}
 
-        {!isExpanded && (
+        {!isExpanded && !isMobile && (
           <IconButton
             sx={{
               mb: '10px',
@@ -303,7 +306,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 }}
               >
                 <span>{item.icon}</span>
-                {isExpanded && (
+                {(isExpanded || isMobile) && (
                   <span style={{ marginLeft: 8 }}>{item.text}</span>
                 )}
               </Typography>
@@ -322,7 +325,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
           justifyContent: 'flex-end',
         }}
       >
-        {isExpanded && (
+        {(isExpanded || isMobile) && (
           <>
             <Box
               sx={{
@@ -383,7 +386,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             </Button>
           </>
         )}
-        {!isExpanded && (
+        {!isExpanded && !isMobile && (
           <>
             <IconButton
               sx={{
@@ -467,11 +470,11 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
     <Box>
       {!isMobile ? (
         <CustomDrawer
-          open={true}
+          open={open}
           sx={{
             flexShrink: 0,
             '& .MuiDrawer-paper': {
-              width: isExpanded ? drawerWidth : 56, // Adjust drawer width
+              width: isExpanded || isMobile ? drawerWidth : 56, // Adjust drawer width
               height: '97%',
               margin: '16px',
               borderRadius: '8px',
@@ -488,14 +491,14 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
           sx={{
             flexShrink: 0,
             '& .MuiDrawer-paper': {
-              width: isExpanded ? drawerWidth : 72,
+              width: isExpanded || isMobile ? drawerWidth : 72,
               height: '96%',
               margin: '16px',
               borderRadius: '8px',
             },
           }}
           onClose={() => toggleDrawer(false)}
-          variant={isMobile ? 'temporary' : 'persistent'}
+          variant={'persistent'}
         >
           {DrawerList}
         </Drawer>
@@ -504,11 +507,10 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
       <Box
         sx={{
           overflow: 'auto',
-          marginRight: '16px',
           marginBottom: '16px',
           transition: 'margin-left 0.3s',
           marginLeft:
-            isExpanded && !isMobile ? '260px' : isMobile ? '0' : '75px',
+            isExpanded && !isMobile ? '255px' : isMobile ? '0' : '75px',
         }}
       >
         {children}
