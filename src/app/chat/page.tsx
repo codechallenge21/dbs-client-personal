@@ -1,4 +1,8 @@
 'use client';
+
+// 這段告訴 Next.js，請不要嘗試靜態化這個頁面
+export const dynamic = 'force-dynamic';
+
 import { useCallback, useContext, useEffect, useState } from 'react';
 import Header from '@/components/chat-page/components/Header';
 import MainContent from '@/components/chat-page/components/MainContent';
