@@ -90,7 +90,7 @@ function ClientContent() {
           flexDirection: 'column',
           height: isMobile ? '100vh' : 'calc(100vh - 32px)',
           backgroundColor: '#FFFFFF',
-          borderRadius: '16px',
+          borderRadius: '8px',
           overflowY: isMobile ? 'auto' : 'unset',
         }}
       >

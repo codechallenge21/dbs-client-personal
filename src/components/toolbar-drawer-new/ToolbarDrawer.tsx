@@ -504,11 +504,10 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
       <Box
         sx={{
           overflow: 'auto',
-          marginRight: '16px',
           marginBottom: '16px',
           transition: 'margin-left 0.3s',
           marginLeft:
-            isExpanded && !isMobile ? '260px' : isMobile ? '0' : '75px',
+            isExpanded && !isMobile ? '255px' : isMobile ? '0' : '75px',
         }}
       >
         {children}
