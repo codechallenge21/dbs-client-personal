@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import RotateRightRounded from '@mui/icons-material/RotateRightRounded';
-import ChannelContentContext from './ChannelContentContext';
+import ChannelContentContext from '../../channel-context-provider/ChannelContentContext';
 import { SendRounded, CloseRounded } from '@mui/icons-material';
 import Image from 'next/image';
 import pdfPreview from '@/assets/Images/Pdf Icon.svg';
@@ -148,6 +148,14 @@ const TextInput: React.FC<TextInputProps> = ({
       if (isInteracting) {
         return;
       }
+      setChatResponses((prev) => [
+        ...prev,
+        {
+          organizationChannelMessageType: 'USER',
+          organizationChannelMessageContent: userInputValue,
+          organizationChannelFiles: files,
+        },
+      ]);
       const response = await submitUserInputs({
         organizationId: '4aba77788ae94eca8d6ff330506af944',
         query: userInputValue,
@@ -182,6 +190,7 @@ const TextInput: React.FC<TextInputProps> = ({
     submitUserInputs,
     userInputValue,
     advisorType,
+    files,
   ]);
 
   const handleClickSubmitOrAudioFileUpload = useCallback(() => {
@@ -480,17 +489,7 @@ const TextInput: React.FC<TextInputProps> = ({
                 bottom: '12px',
                 right: '10px',
               }}
-              onClick={() => {
-                setChatResponses((prev) => [
-                  ...prev,
-                  {
-                    organizationChannelMessageType: 'USER',
-                    organizationChannelMessageContent: userInputValue,
-                    organizationChannelFiles: files,
-                  },
-                ]);
-                handleClickSubmitOrAudioFileUpload();
-              }}
+              onClick={handleClickSubmitOrAudioFileUpload}
             >
               <SendRounded sx={{ color: 'black' }} />
             </IconButton>

@@ -1,4 +1,4 @@
-import { AdvisorType } from '@/app/chat/components/types';
+import { AdvisorType } from '@/app/chat/types';
 
 export interface Creator {
   loginId: string;
@@ -126,4 +126,8 @@ export interface OrganizationChannelResponse {
   organizationChannelTitle: string;
   creator: Creator;
   organizationChannelType: 'MEETING' | 'CHAT';
+}
+
+export interface OrganizationChannelData extends OrganizationChannel {
+  selected: boolean;
 }

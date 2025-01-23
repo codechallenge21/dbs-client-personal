@@ -5,7 +5,7 @@ import {
 import { AxiosResponse } from 'axios';
 import { createContext, Dispatch, SetStateAction } from 'react';
 import { KeyedMutator } from 'swr';
-import { AdvisorType } from './types';
+import { AdvisorType } from '../../app/chat/types';
 
 export type ChannelContentContextProps = {
   isLoadingChannel: boolean;

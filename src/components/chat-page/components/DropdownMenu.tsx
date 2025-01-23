@@ -20,10 +20,10 @@ import {
   WorkRounded,
 } from '@mui/icons-material';
 import AutoFixNormalIcon from '@mui/icons-material/AutoFixNormal';
-import { AdvisorType } from './types';
-import ChannelContentContext from './ChannelContentContext';
-import EditDeleteModal from './EditDeleteModal';
-import DeleteConfirmationModal from '@/app/allchat/DeleteConfirmationModal';
+import { AdvisorType } from '../../../app/chat/types';
+import ChannelContentContext from '../../channel-context-provider/ChannelContentContext';
+import EditDeleteModal from '../../dialogs/EditDeleteModal';
+import DeleteConfirmationModal from '@/components/dialogs/DeleteConfirmationModal';
 import RenameDialog from './renameChat';
 import { useRouter } from 'next/navigation';
 
@@ -82,6 +82,11 @@ export default function DropdownMenu({
   const theme = useTheme();
   const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  const { setAdvisorType, chatResponses, selectedChannel } = useContext(
+    ChannelContentContext
+  );
+
   const [toolsAnchor, setToolsAnchor] = useState<null | HTMLElement>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [openEditDeleteModal, setOpenEditDeleteModal] =
@@ -112,8 +117,6 @@ export default function DropdownMenu({
   const handleDelete = () => {
     setIsDeleteDialogOpen(true);
   };
-
-  const { setAdvisorType, chatResponses } = useContext(ChannelContentContext);
 
   const handleOnClickMenuItem = useCallback(
     (value: AdvisorType) => {
@@ -259,14 +262,19 @@ export default function DropdownMenu({
         open={isDeleteDialogOpen}
         onClose={() => setIsDeleteDialogOpen(false)}
         onDelete={handleConfirmDelete}
-        ChannelName={[
-          {
-            id: 1,
-            title: 'Delete This Channel',
-            date: new Date().toISOString(),
-            selected: false,
-          },
-        ]}
+        channelName={
+          selectedChannel
+            ? [
+                {
+                  ...selectedChannel,
+                  organizationChannelId:
+                    selectedChannel.organizationChannelId || '',
+                  selected: true,
+                  organization: selectedChannel.organization || {},
+                },
+              ]
+            : []
+        }
       />
       <EditDeleteModal
         anchorEl={openEditDeleteModal}

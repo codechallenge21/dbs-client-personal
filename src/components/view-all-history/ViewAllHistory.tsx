@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import {
   Box,
   TextField,
@@ -16,47 +16,40 @@ import {
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import DeleteIcon from '@mui/icons-material/Delete';
-// import DeleteConfirmationModal from './DeleteConfirmationModal';
+import DeleteConfirmationModal from '../dialogs/DeleteConfirmationModal';
 import { useChatChannels } from '@/utils/hooks/useChatChannels';
-import { OrganizationChannel } from '@/interfaces/entities';
-
-interface OrganizationChannelData extends OrganizationChannel {
-  isSelect: boolean;
-  selected: boolean;
-}
+import {
+  OrganizationChannel,
+  OrganizationChannelData,
+} from '@/interfaces/entities';
+import { useRouter } from 'next/navigation';
+import ChannelContentContext from '../channel-context-provider/ChannelContentContext';
 
 export default function ChannelSearchCombined() {
+  const router = useRouter();
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const { setSelectedChannel, selectedChannel } = useContext(
+    ChannelContentContext
+  );
+
   const [isV2, setIsV2] = useState(true);
   const [channels, setChannels] = useState<OrganizationChannelData[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
-  // const [open, setOpen] = useState(false);
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const [open, setOpen] = useState(false);
 
   const { data: chatsData } = useChatChannels({
     organizationId: '4aba77788ae94eca8d6ff330506af944',
   });
 
-  useEffect(() => {
-    if (chatsData) {
-      const formattedChannels = chatsData.map((chat: OrganizationChannel) => ({
-        ...chat,
-        id: chat.organizationChannelId,
-        date: chat.organizationChannelCreateDate,
-        selected: false,
-        isSelect: false,
-      }));
-      setChannels(formattedChannels);
-    }
-  }, [chatsData]);
+  const handleConfirmDelete = () => {
+    setChannels((prev) => prev.filter((ch) => !ch.selected));
+    setOpen(false);
+  };
+  const handleDelete = () => setOpen(true);
 
-  // const handleConfirmDelete = () => {
-  //   setChannels((prev) => prev.filter((ch) => !ch.selected));
-  //   setOpen(false);
-  // };
-  // const handleDelete = () => setOpen(true);
-
-  // const selectedChannels = channels.filter((ch) => ch.selected);
+  const selectedChannels = channels.filter((ch) => ch.selected);
 
   const handleToggleV2 = () => setIsV2((prev) => !prev);
 
@@ -82,6 +75,31 @@ export default function ChannelSearchCombined() {
         .includes(searchQuery.toLowerCase()) ||
       ch.organizationChannelCreateDate.includes(searchQuery)
   );
+
+  const moveToChannelDetail = (channel: OrganizationChannelData) => {
+    console.log('channel', channel);
+
+    setSelectedChannel(channel);
+    const searchParams = new URLSearchParams({
+      organizationChannelId: channel.organizationChannelId,
+    });
+
+    router.push(`/chat?${searchParams.toString()}`);
+  };
+
+  console.log('selectedChannel', selectedChannel);
+
+  useEffect(() => {
+    if (chatsData) {
+      const formattedChannels = chatsData.map((chat: OrganizationChannel) => ({
+        ...chat,
+        id: chat.organizationChannelId,
+        date: chat.organizationChannelCreateDate,
+        selected: false,
+      }));
+      setChannels(formattedChannels);
+    }
+  }, [chatsData]);
 
   return (
     <Box
@@ -170,11 +188,7 @@ export default function ChannelSearchCombined() {
                     },
                   }}
                 >
-                  你目前有{' '}
-                  <span>
-                    {filteredChannels.length ? filteredChannels.length : 0}
-                  </span>{' '}
-                  個頻道
+                  你目前有 <span>{filteredChannels.length ?? 0}</span> 個頻道
                 </Typography>
                 <Button
                   variant="text"
@@ -199,9 +213,9 @@ export default function ChannelSearchCombined() {
               {filteredChannels.map((channel) => (
                 <Paper
                   key={channel.organizationChannelId}
-                  onMouseEnter={() =>
-                    toggleChannel(channel.organizationChannelId)
-                  }
+                  // onMouseEnter={() =>
+                  //   toggleChannel(channel.organizationChannelId)
+                  // }
                   elevation={0}
                   sx={{
                     display: 'flex',
@@ -217,6 +231,10 @@ export default function ChannelSearchCombined() {
                     gap: '16px',
                     alignSelf: 'stretch',
                     flexDirection: 'column',
+                    cursor: 'pointer',
+                  }}
+                  onClick={() => {
+                    moveToChannelDetail(channel);
                   }}
                 >
                   {/* {channel.selected && (
@@ -325,7 +343,7 @@ export default function ChannelSearchCombined() {
                 }}
               >
                 當前已選擇
-                {/* {selectedChannels.length} */}
+                {selectedChannels.length}
                 個頻道
               </Typography>
               <Stack direction={'row'} spacing={1} sx={{ width: 'auto' }}>
@@ -362,8 +380,8 @@ export default function ChannelSearchCombined() {
                 </Button>
                 <Button
                   variant="contained"
-                  // disabled={selectedChannels.length === 0}
-                  // onClick={handleDelete}
+                  disabled={selectedChannels.length === 0}
+                  onClick={handleDelete}
                   sx={{
                     fontFamily: 'Open Sans',
                     fontSize: '14px',
@@ -394,10 +412,9 @@ export default function ChannelSearchCombined() {
                     display: 'flex',
                     p: 2,
                     borderRadius: 2,
-                    bgcolor:
-                      // : channel.selected
-                      //   ? 'rgba(255, 0, 0, 0.05)'
-                      'transparent',
+                    bgcolor: channel.selected
+                      ? 'rgba(255, 0, 0, 0.05)'
+                      : 'transparent',
                     position: 'relative', // Add this to support absolute positioning of delete icon
                     alignItems: 'flex-start',
                     border: '1px solid var(--Secondary-Dark-Gray, #4A4A4A)',
@@ -419,8 +436,10 @@ export default function ChannelSearchCombined() {
                     }}
                   >
                     <Checkbox
-                      // checked={channel.selected}
-                      // onChange={() => toggleChannel(channel.organizationChannelId)}
+                      checked={channel.selected}
+                      onChange={() =>
+                        toggleChannel(channel.organizationChannelId)
+                      }
                       sx={{
                         color: 'var(--Primary-Black, #212B36)',
                         p: 0,
@@ -446,8 +465,8 @@ export default function ChannelSearchCombined() {
                   <Typography
                     sx={{
                       display: '-webkit-box',
-                      '-webkit-box-orient': 'vertical',
-                      '-webkit-line-clamp': 1,
+                      WebkitBoxOrient: 'vertical',
+                      WebkitLineClamp: 1,
                       alignSelf: 'stretch',
                       overflow: 'hidden',
                       color: 'var(--Secondary-Dark-Gray, #4A4A4A)',
@@ -469,10 +488,9 @@ export default function ChannelSearchCombined() {
                       top: '5px',
                       right: '4px',
                     }}
-                    // onClick={() => {
-                    //   toggleChannel(channel.organizationChannelId);
-                    //   handleDelete();
-                    // }}
+                    onClick={() => {
+                      handleDelete();
+                    }}
                   >
                     <DeleteIcon sx={{ width: '18px', height: '18px' }} />
                   </IconButton>
@@ -481,12 +499,12 @@ export default function ChannelSearchCombined() {
             </Stack>
           </>
         )}
-        {/* <DeleteConfirmationModal
+        <DeleteConfirmationModal
           open={open}
           onClose={() => setOpen(false)}
           onDelete={handleConfirmDelete}
-          ChannelName={selectedChannels}
-        /> */}
+          channelName={selectedChannels}
+        />
       </Box>
     </Box>
   );

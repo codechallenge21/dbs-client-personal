@@ -7,6 +7,7 @@ import {
 } from 'next/font/google';
 import './globals.css';
 import ThemeProvider from '@/theme';
+import ChannelContextProvider from '@/components/channel-context-provider/ChannelContextProvider';
 // import { Box } from "@mui/material";
 // import { Header } from "@/components/header";
 
@@ -88,7 +89,10 @@ export default function RootLayout({ children }: Props) {
         {/* <Box>
           <Header />
         </Box> */}
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          {' '}
+          <ChannelContextProvider>{children}</ChannelContextProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

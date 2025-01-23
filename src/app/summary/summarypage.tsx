@@ -5,13 +5,13 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 // import Header from "../chat/components/Header";
 import { useAudioChannel } from '@/utils/hooks/useAudioChannel';
 import { useSearchParams } from 'next/navigation';
-import ChannelContentContext from '../chat/components/ChannelContentContext';
+import ChannelContentContext from '../../components/channel-context-provider/ChannelContentContext';
 import {
   OrganizationChannel,
   OrganizationChannelMessage,
 } from '@/interfaces/entities';
 import { Box, CircularProgress, useTheme, useMediaQuery } from '@mui/material';
-import { AdvisorType } from '../chat/components/types';
+import { AdvisorType } from '../chat/types';
 import SummaryDetailPage from '@/components/summary-details/page';
 
 export default function SummaryPage() {

@@ -1,15 +1,15 @@
 'use client';
 import { useEffect, useMemo, useState } from 'react';
-import Header from '@/app/chat/components/Header';
-import MainContent from '@/app/chat/components/MainContent';
-import SwitchDialog from '@/app/chat/components/SwitchDialog';
+import Header from '@/components/chat-page/components/Header';
+import MainContent from '@/components/chat-page/components/MainContent';
+import SwitchDialog from '@/components/dialogs/SwitchDialog';
 import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
 import {
   OrganizationChannel,
   OrganizationChannelMessage,
 } from '@/interfaces/entities';
-import ChannelContentContext from '@/app/chat/components/ChannelContentContext';
-import { AdvisorType } from '@/app/chat/components/types';
+import ChannelContentContext from '@/components/channel-context-provider/ChannelContentContext';
+import { AdvisorType } from '@/app/chat/types';
 import { Box } from '@mui/material';
 
 export default function Home() {

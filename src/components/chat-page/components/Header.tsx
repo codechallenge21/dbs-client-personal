@@ -10,10 +10,10 @@ import {
   StarBorderRounded,
 } from '@mui/icons-material';
 import UploadDialog from '@/components/uploadDialog/page';
-import { AdvisorType } from './types';
+import { AdvisorType } from '../../../app/chat/types';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import DataSourceDialog from './chatDataStore';
-import ChannelContentContext from './ChannelContentContext';
+import ChannelContentContext from '../../channel-context-provider/ChannelContentContext';
 import { useRouter } from 'next/navigation';
 
 interface HeaderProps {
