@@ -50,32 +50,32 @@ const drawerItems = [
   },
   {
     text: '我的最愛',
-    icon: <StarRounded sx={{ color: 'black', marginRight: '8px' }} />,
+    icon: <StarRounded sx={{ color: 'black' }} />,
     route: '/favorite',
   },
   {
     text: '活動公告',
-    icon: <CampaignRounded sx={{ color: 'black', marginRight: '8px' }} />,
+    icon: <CampaignRounded sx={{ color: 'black' }} />,
     route: '/events',
   },
   {
     text: '解決麻煩事',
-    icon: <PsychologyRounded sx={{ color: 'black', marginRight: '8px' }} />,
+    icon: <PsychologyRounded sx={{ color: 'black' }} />,
     route: '/chat',
   },
   {
     text: '工具箱',
-    icon: <BuildRounded sx={{ color: 'black', marginRight: '8px' }} />,
+    icon: <BuildRounded sx={{ color: 'black' }} />,
     route: '/toolbox',
   },
   {
     text: '財務快篩',
-    icon: <PaidRounded sx={{ color: 'black', marginRight: '8px' }} />,
+    icon: <PaidRounded sx={{ color: 'black' }} />,
     route: '/financial-screening',
   },
   {
     text: '知識庫',
-    icon: <AutoStoriesRounded sx={{ color: 'black', marginRight: '8px' }} />,
+    icon: <AutoStoriesRounded sx={{ color: 'black' }} />,
     route: '/knowledge-base',
   },
 ];
@@ -276,6 +276,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             flexDirection: 'column',
             alignItems: 'flex-start',
             justifyContent: 'flex-end',
+            marginTop: '8px',
           }}
         >
           {drawerItems.map((item, index) => (
@@ -290,7 +291,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                     ? 'var(--Action-Selected, rgba(204, 0, 0, 0.20))'
                     : 'transparent',
                 '&:hover': {
-                  backgroundColor: '#f5f5f5',
+                  backgroundColor: '#FBEDED',
                 },
                 cursor: 'pointer',
               }}
@@ -305,9 +306,18 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                   color: index === 0 ? 'red' : 'black',
                 }}
               >
-                <span>{item.icon}</span>
+                <span
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}
+                >
+                  {item.icon}
+                </span>
                 {(isExpanded || isMobile) && (
-                  <span style={{ marginLeft: 8 }}>{item.text}</span>
+                  <span style={{ marginLeft: index === 0 ? '0px' : '8px' }}>
+                    {item.text}
+                  </span>
                 )}
               </Typography>
             </ListItem>
@@ -475,7 +485,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             flexShrink: 0,
             '& .MuiDrawer-paper': {
               width: isExpanded || isMobile ? drawerWidth : 56, // Adjust drawer width
-              height: '97%',
+              height: 'calc(100vh - 32px)',
               margin: '16px',
               borderRadius: '8px',
             },
