@@ -88,7 +88,7 @@ function ClientContent() {
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          height: isMobile ? '100vh' : 'calc(100vh - 32px)',
+          height: 'calc(100vh - 32px)',
           backgroundColor: '#FFFFFF',
           borderRadius: '8px',
           overflowY: isMobile ? 'auto' : 'unset',
