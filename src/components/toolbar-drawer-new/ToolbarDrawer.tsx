@@ -273,13 +273,14 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             flexDirection: 'column',
             alignItems: 'flex-start',
             justifyContent: 'flex-end',
+            marginTop: '8px',
           }}
         >
           {drawerItems.map((item, index) => (
             <ListItem
               key={index}
               sx={{
-                padding: '6px 8px',
+                padding: '8px',
                 borderRadius: '8px',
                 backgroundColor:
                   pathname === item.route ||
