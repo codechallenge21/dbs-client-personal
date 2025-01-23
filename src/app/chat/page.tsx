@@ -60,12 +60,12 @@ export default function Home() {
   );
 
   useEffect(() => {
-    if (selectedChannel)
+    if (selectedChannel) {
       setSelectedChannelId(selectedChannel?.organizationChannelId);
-    else {
+    } else {
       fetchChannelDetail(organizationChannelId);
     }
-  }, []);
+  }, [selectedChannel, setSelectedChannelId, fetchChannelDetail, organizationChannelId]);
 
   return (
     <ToolbarDrawer open={isOpenDrawer} toggleDrawer={toggleDrawer}>
