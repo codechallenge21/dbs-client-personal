@@ -33,6 +33,7 @@ interface ToolbarDrawerProps {
   open: boolean;
   toggleDrawer: (open: boolean) => void;
   children: React.ReactNode;
+  openDataSource?: boolean;
 }
 
 const drawerItems = [
@@ -79,6 +80,36 @@ const drawerItems = [
     route: '/knowledge-base',
   },
 ];
+
+const MainBox = styled('div', {
+  shouldForwardProp: (prop) => prop !== 'open',
+})<{
+  open?: boolean;
+}>(({ theme }) => ({
+  flexGrow: 1,
+  transition: theme.transitions.create('margin', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  /**
+   * This is necessary to enable the selection of content. In the DOM, the stacking order is determined
+   * by the order of appearance. Following this rule, elements appearing later in the markup will overlay
+   * those that appear earlier. Since the Drawer comes after the Main content, this adjustment ensures
+   * proper interaction with the underlying content.
+   */
+  position: 'relative',
+  variants: [
+    {
+      props: ({ open }) => open,
+      style: {
+        transition: theme.transitions.create('margin', {
+          easing: theme.transitions.easing.easeOut,
+          duration: theme.transitions.duration.enteringScreen,
+        }),
+      },
+    },
+  ],
+}));
 
 const drawerWidth = 240;
 
@@ -132,6 +163,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
   open,
   toggleDrawer,
   children,
+  openDataSource = false,
 }) => {
   const pathname = usePathname();
   const router = useRouter();
@@ -502,9 +534,8 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             flexShrink: 0,
             '& .MuiDrawer-paper': {
               width: isExpanded || isMobile ? drawerWidth : 72,
-              height: '96%',
-              margin: '16px',
-              borderRadius: '8px',
+              height: '100%',
+              borderRadius: '0 8px 8px 0',
             },
           }}
           onClose={() => toggleDrawer(false)}
@@ -513,9 +544,10 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
           {DrawerList}
         </Drawer>
       )}
-
-      <Box
+      <MainBox
+        open={openDataSource}
         sx={{
+          marginRight: isMobile ? 0 : openDataSource ? '446px' : 0,
           overflow: 'auto',
           marginBottom: '16px',
           transition: 'margin-left 0.3s',
@@ -524,7 +556,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
         }}
       >
         {children}
-      </Box>
+      </MainBox>
     </Box>
   );
 };
