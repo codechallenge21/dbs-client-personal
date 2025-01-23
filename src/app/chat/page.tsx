@@ -100,6 +100,11 @@ function ClientContent() {
           open={isOpenDrawer}
           advisor={advisorType}
         />
+        <Box
+          sx={{
+            marginTop: isMobile ? '60px' : '8px',
+          }}
+        ></Box>
         <MainContent />
         <SwitchDialog
           open={isOpen}

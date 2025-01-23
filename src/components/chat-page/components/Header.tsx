@@ -47,8 +47,19 @@ export default function Header({
   };
 
   return (
-    <Box>
-      {isMobile && (
+    <Box
+      sx={{
+        position: 'fixed',
+        top: 0,
+        width: isMobile ? '92%' : 'calc(100% - 287px)',
+        borderRadius: '8px 8px 0 0',
+        mt: '16px',
+        zIndex: 11,
+        marginRight: 'auto',
+        backgroundColor: 'white',
+      }}
+    >
+      {isMobile ? (
         <Box
           sx={{
             display: 'flex',
@@ -56,16 +67,21 @@ export default function Header({
             justifyContent: 'space-between',
           }}
         >
-          <IconButton onClick={() => toggleDrawer(true)}>
-            <MenuRounded sx={{ color: 'black' }} />
-            {isChat && <DropdownMenu advisor={advisor} />}
-          </IconButton>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <IconButton onClick={() => toggleDrawer(true)}>
+              <MenuRounded sx={{ color: 'black' }} />
+            </IconButton>
+            {isChat && (
+              <Box sx={{ marginLeft: '8px' }}>
+                <DropdownMenu advisor={advisor} />
+              </Box>
+            )}
+          </Box>
           {!isChat && (
             <IconButton onClick={() => (isChat ? null : setOpenUpload(true))}>
               <FileUploadIcon sx={{ color: 'black' }} />
             </IconButton>
           )}
-
           <IconButton sx={{ padding: '0px' }}>
             <StarBorderRounded sx={{ color: 'black', margin: '8px' }} />
             <SettingsInputComponentRounded
@@ -74,8 +90,7 @@ export default function Header({
             />
           </IconButton>
         </Box>
-      )}
-      {!isMobile && (
+      ) : (
         <Box
           sx={{
             display: 'flex',
@@ -95,7 +110,6 @@ export default function Header({
               <IconButton onClick={() => toggleDrawer(true)}>
                 <MenuRounded sx={{ color: 'black' }} />
               </IconButton>
-
               {!isChat && (
                 <IconButton
                   onClick={() => (isChat ? null : setOpenUpload(true))}
