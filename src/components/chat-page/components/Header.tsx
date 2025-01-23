@@ -58,13 +58,21 @@ export default function Header({
         >
           <IconButton onClick={() => toggleDrawer(true)}>
             <MenuRounded sx={{ color: 'black' }} />
+            {isChat && <DropdownMenu advisor={advisor} />}
           </IconButton>
-          {isChat && <DropdownMenu advisor={advisor} />}
           {!isChat && (
             <IconButton onClick={() => (isChat ? null : setOpenUpload(true))}>
               <FileUploadIcon sx={{ color: 'black' }} />
             </IconButton>
           )}
+
+          <IconButton sx={{ padding: '0px' }}>
+            <StarBorderRounded sx={{ color: 'black', margin: '8px' }} />
+            <SettingsInputComponentRounded
+              onClick={() => setOpenDataSource(true)}
+              sx={{ color: 'black', margin: '8px' }}
+            />
+          </IconButton>
         </Box>
       )}
       {!isMobile && (

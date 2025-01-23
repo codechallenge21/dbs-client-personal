@@ -20,10 +20,10 @@ export default function Home() {
 
 function ClientContent() {
   const searchParams = useSearchParams();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const organizationChannelId = searchParams.get('organizationChannelId') || '';
-  console.log('organizationChannelId', organizationChannelId);
-
   const {
     selectedChannel,
     setSelectedChannelId,
@@ -31,8 +31,6 @@ function ClientContent() {
     setSelectedChannel,
   } = useContext(ChannelContentContext);
   const { excute: getChannelDetail } = useAxiosApi(apis.getChannelDetail);
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(
@@ -49,12 +47,8 @@ function ClientContent() {
     setIsOpenDrawer(newOpen);
   };
 
-  console.log('selected', selectedChannel);
-  console.log('advisorType', advisorType);
-
   const fetchChannelDetail = useCallback(
     async (organizationChannelId: string) => {
-      console.log('fetchChannelDetail', organizationChannelId);
       if (!organizationChannelId) {
         setSelectedChannel(undefined);
         setSelectedChannelId(undefined);
@@ -94,9 +88,10 @@ function ClientContent() {
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          height: 'calc(100vh - 32px)',
+          height: isMobile ? '100vh' : 'calc(100vh - 32px)',
           backgroundColor: '#FFFFFF',
-          borderRadius: '16px',
+          borderRadius: '8px',
+          overflowY: isMobile ? 'auto' : 'unset',
         }}
       >
         <Header
