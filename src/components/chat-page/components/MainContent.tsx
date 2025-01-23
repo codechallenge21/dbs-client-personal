@@ -203,7 +203,9 @@ export default function MainContent() {
           }}
         />
       </Box>
-      <Box sx={{ marginTop: '12px', width: '100%', maxWidth: '780px' }}>
+      <Box
+        sx={{ marginTop: '12px', width: '100%', maxWidth: '780px', mb: '12px' }}
+      >
         <HistoryChats
           chats={chatsData || []}
           moveToChannelDetail={moveToChannelDetail}
