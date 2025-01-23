@@ -76,17 +76,27 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                 alignItems: 'flex-start',
                 gap: 2,
                 flexDirection: 'row',
+                backgroundColor:
+                  message.organizationChannelMessageType === 'AI'
+                    ? 'transparent'
+                    : 'var(--Secondary-Lite-Gray, #F5F5F5)',
+                borderRadius:
+                  message.organizationChannelMessageType === 'AI'
+                    ? 'none'
+                    : '12px',
               }}
             >
               {message.organizationChannelMessageType !== 'AI' ? (
                 <Avatar
                   sx={{
                     bgcolor: '#6B5D52',
+                    ml: '20px',
+                    mt: '10px',
                     width: 36,
                     height: 36,
                   }}
                 >
-                  U
+                  <PermIdentityRounded sx={{ color: 'white' }} />
                 </Avatar>
               ) : (
                 <Box sx={{ width: 36, height: 36 }} /> // Placeholder for spacing
@@ -94,18 +104,11 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
               <Box
                 sx={{
                   flex: 1,
-                  padding: 2,
+                  py: 2,
+                  pr: 2,
                   width: '100%',
                   maxWidth: '710px',
-                  backgroundColor:
-                    message.organizationChannelMessageType === 'AI'
-                      ? 'transparent'
-                      : '#6B5D52',
-                  color:
-                    message.organizationChannelMessageType === 'AI'
-                      ? '#212B36'
-                      : 'white',
-                  borderRadius: '12px',
+                  color: '#212B36',
                   wordBreak: 'break-word',
                   '& p': {
                     marginBottom:
