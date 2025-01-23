@@ -37,11 +37,7 @@ export default function MainContent() {
     organizationId: '4aba77788ae94eca8d6ff330506af944',
   });
 
-  console.log('chatsData', chatsData);
-
   const moveToChannelDetail = (channel: OrganizationChannelData) => {
-    console.log('channel', channel);
-
     setSelectedChannel(channel);
     const searchParams = new URLSearchParams({
       organizationChannelId: channel.organizationChannelId,
@@ -80,16 +76,6 @@ export default function MainContent() {
       description:
         'Provides you with medical case coping strategies and resource links.',
     },
-    {
-      id: 6,
-      title: 'Employment Assistance Consultant',
-      description: 'Supports your job search and career planning.',
-    },
-    {
-      id: 7,
-      title: 'Financial Case Consultant',
-      description: 'Offers savings, investment, and debt advice.',
-    },
   ];
 
   if (selectedChannel || selectedChannelId || chatResponses.length)
@@ -107,16 +93,6 @@ export default function MainContent() {
           channel={selectedChannel}
           chatResponses={chatResponses}
         />
-        {isInteractingInChat && (
-          <Skeleton
-            variant="text"
-            sx={{
-              width: '100%',
-              fontSize: '32px',
-              maxWidth: isMobile ? '50%' : '760px',
-            }}
-          />
-        )}
         <TextInput
           submitUserInputs={submitUserInputs}
           isInteracting={isInteracting}
@@ -127,13 +103,13 @@ export default function MainContent() {
   return (
     <Box
       sx={{
-        height: '100%',
+        height: isMobile ? 'auto' : 'calc(100vh - 10px)',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: isMobile ? 'flex-end' : 'center',
         alignItems: 'center',
         textAlign: 'center',
-        px: '24px',
+        px: '16px',
       }}
     >
       {isMobile ? (

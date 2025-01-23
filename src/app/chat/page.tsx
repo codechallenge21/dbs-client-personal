@@ -4,7 +4,7 @@ import Header from '@/components/chat-page/components/Header';
 import MainContent from '@/components/chat-page/components/MainContent';
 import SwitchDialog from '@/components/dialogs/SwitchDialog';
 import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
-import { Box, CircularProgress } from '@mui/material';
+import { Box, CircularProgress, useMediaQuery, useTheme } from '@mui/material';
 import ChannelContentContext from '../../components/channel-context-provider/ChannelContentContext';
 import { useSearchParams } from 'next/navigation';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
@@ -20,6 +20,8 @@ export default function Home() {
 
 function ClientContent() {
   const searchParams = useSearchParams();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const organizationChannelId = searchParams.get('organizationChannelId') || '';
   console.log('organizationChannelId', organizationChannelId);
@@ -86,9 +88,10 @@ function ClientContent() {
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          height: 'calc(100vh - 32px)',
+          height: isMobile ? '100vh' : 'calc(100vh - 32px)',
           backgroundColor: '#FFFFFF',
           borderRadius: '16px',
+          overflowY: isMobile ? 'auto' : 'unset',
         }}
       >
         <Header

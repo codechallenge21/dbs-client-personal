@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
 import {
   OrganizationChannel,
   OrganizationChannelData,
@@ -14,11 +14,13 @@ const HistoryChats: React.FC<HistoryChatsProps> = ({
   chats,
   moveToChannelDetail,
 }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   return (
     <Box
       sx={{
         display: 'flex',
-        flexDirection: 'row',
+        flexDirection: isMobile ? 'column' : 'row',
         flexWrap: 'wrap',
         gap: '12px',
         justifyContent: 'center',
@@ -29,9 +31,8 @@ const HistoryChats: React.FC<HistoryChatsProps> = ({
         <Box
           key={index}
           sx={{
-            maxWidth: 'calc(33.33% - 16px)', // Adjusting width to fit 3 items per row
-            padding: '16px',
-            flex: '1 1 calc(33.33% - 16px)', // Ensuring flex basis is 33.33%
+            width: isMobile ? '100%' : 'calc(33.33% - 16px)', // Adjusting width to fit 3 items per row on desktop
+            padding: '8px 16px',
             border: '1px solid #ccc',
             borderRadius: '8px',
             textAlign: 'left',
@@ -50,6 +51,9 @@ const HistoryChats: React.FC<HistoryChatsProps> = ({
               fontStyle: 'normal',
               fontWeight: 700,
               lineHeight: 'normal',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
             }}
           >
             {chat.organizationChannelTitle}
