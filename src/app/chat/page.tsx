@@ -1,16 +1,24 @@
 'use client';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { Suspense, useCallback, useContext, useEffect, useState } from 'react';
 import Header from '@/components/chat-page/components/Header';
 import MainContent from '@/components/chat-page/components/MainContent';
 import SwitchDialog from '@/components/dialogs/SwitchDialog';
 import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
-import { Box } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
 import ChannelContentContext from '../../components/channel-context-provider/ChannelContentContext';
 import { useSearchParams } from 'next/navigation';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import apis from '@/utils/hooks/apis/apis';
 
 export default function Home() {
+  return (
+    <Suspense fallback={<CircularProgress />}>
+      <ClientContent />
+    </Suspense>
+  );
+}
+
+function ClientContent() {
   const searchParams = useSearchParams();
 
   const organizationChannelId = searchParams.get('organizationChannelId') || '';
@@ -65,7 +73,12 @@ export default function Home() {
     } else {
       fetchChannelDetail(organizationChannelId);
     }
-  }, [selectedChannel, setSelectedChannelId, fetchChannelDetail, organizationChannelId]);
+  }, [
+    selectedChannel,
+    setSelectedChannelId,
+    fetchChannelDetail,
+    organizationChannelId,
+  ]);
 
   return (
     <ToolbarDrawer open={isOpenDrawer} toggleDrawer={toggleDrawer}>
