@@ -299,7 +299,7 @@ const TextInput: React.FC<TextInputProps> = ({
               display: 'flex',
               gap: 2,
               flexWrap: 'wrap',
-              padding: '8px',
+              padding: '12px',
               height: '180px',
               overflowY: 'auto',
               '&::-webkit-scrollbar': {
@@ -334,8 +334,8 @@ const TextInput: React.FC<TextInputProps> = ({
                 <Image
                   src={file.preview ?? imagePerview}
                   alt={file.file.name}
-                  width={48}
-                  height={48}
+                  width={64}
+                  height={64}
                   style={{
                     objectFit: 'cover',
                     borderRadius: '4px',
