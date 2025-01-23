@@ -1,14 +1,19 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ChannelSearch from '../../components/view-all-history/ViewAllHistory';
 import Header from '../../components/all-chat-header/Header';
 import SwitchDialog from '../../components/dialogs/SwitchDialog';
 import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
-import { Box } from '@mui/material';
+import { Box, useMediaQuery, useTheme } from '@mui/material';
 
 export default function Home() {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(true);
+  const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(
+    isMobile ? false : true
+  );
 
   const handleClose = () => setIsOpen(false);
 
@@ -19,6 +24,10 @@ export default function Home() {
   const toggleDrawer = (newOpen: boolean) => {
     setIsOpenDrawer(newOpen);
   };
+
+  useEffect(() => {
+    toggleDrawer(isMobile ? false : true);
+  }, [isMobile]);
 
   return (
     <ToolbarDrawer open={isOpenDrawer} toggleDrawer={toggleDrawer}>

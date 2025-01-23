@@ -4,7 +4,7 @@ import Header from '@/components/chat-page/components/Header';
 import MainContent from '@/components/chat-page/components/MainContent';
 import SwitchDialog from '@/components/dialogs/SwitchDialog';
 import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
-import { Box, CircularProgress } from '@mui/material';
+import { Box, CircularProgress, useMediaQuery, useTheme } from '@mui/material';
 import ChannelContentContext from '../../components/channel-context-provider/ChannelContentContext';
 import { useSearchParams } from 'next/navigation';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
@@ -31,9 +31,13 @@ function ClientContent() {
     setSelectedChannel,
   } = useContext(ChannelContentContext);
   const { excute: getChannelDetail } = useAxiosApi(apis.getChannelDetail);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const [isOpen, setIsOpen] = useState(false);
-  const [isOpenDrawer, setIsOpenDrawer] = useState(true);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(
+    isMobile ? false : true
+  );
 
   const handleClose = () => setIsOpen(false);
 
@@ -79,6 +83,10 @@ function ClientContent() {
     fetchChannelDetail,
     organizationChannelId,
   ]);
+
+  useEffect(() => {
+    toggleDrawer(isMobile ? false : true);
+  }, [isMobile]);
 
   return (
     <ToolbarDrawer open={isOpenDrawer} toggleDrawer={toggleDrawer}>
