@@ -49,7 +49,6 @@ export const metadata = {
   title: '好理家在｜好好理財，家就會在',
   description: '好理家在官方網站',
   keywords: 'react,material,kit,application,dashboard,admin,template',
-  themeColor: '#000000',
   manifest: '/manifest.json',
   icons: [
     {
