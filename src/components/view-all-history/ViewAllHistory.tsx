@@ -214,7 +214,7 @@ export default function ChannelSearchCombined() {
               sx={{
                 width: '100%',
                 overflowY: 'auto',
-                paddingRight: '2px',
+                paddingRight: '4px',
                 '&::-webkit-scrollbar': {
                   width: '4px',
                 },
@@ -254,6 +254,10 @@ export default function ChannelSearchCombined() {
                       alignSelf: 'stretch',
                       flexDirection: 'column',
                       cursor: 'pointer',
+
+                      '&:hover': {
+                        bgcolor: '#FFF5F5',
+                      },
                     }}
                     onClick={() => {
                       moveToChannelDetail(channel);
