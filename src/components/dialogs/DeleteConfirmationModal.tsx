@@ -17,6 +17,8 @@ export default function DeleteConfirmationModal({
   onDelete,
   channelName,
 }: DeleteConfirmationModalProps) {
+  const singleChannelTitle =
+    channelName.length === 1 ? channelName[0].organizationChannelTitle : null;
   return (
     <Modal
       open={open}
@@ -85,7 +87,10 @@ export default function DeleteConfirmationModal({
               lineHeight: 'normal',
             }}
           >
-            即將刪除 {channelName.length} 個頻道
+            {singleChannelTitle
+              ? `这将删除
+ ${singleChannelTitle}.`
+              : `即將刪除 ${channelName.length} 個頻道`}
           </Typography>
         </Box>
 

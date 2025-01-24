@@ -540,6 +540,9 @@ export default function ChannelSearchCombined() {
                       right: '4px',
                     }}
                     onClick={() => {
+                      if (!channel.selected) {
+                        toggleChannel(channel.organizationChannelId);
+                      }
                       handleDelete();
                     }}
                   >
