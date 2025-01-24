@@ -17,6 +17,7 @@ import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import apis from '@/utils/hooks/apis/apis';
 import { useChatChannels } from '@/utils/hooks/useChatChannels';
 import { OrganizationChannelData } from '@/interfaces/entities';
+import InformationPage from './chatResponsePlaceholder';
 
 export default function MainContent() {
   const theme = useTheme();
@@ -95,6 +96,7 @@ export default function MainContent() {
           channel={selectedChannel}
           chatResponses={chatResponses}
         />
+        {isInteractingInChat && <InformationPage />}
         <TextInput
           submitUserInputs={submitUserInputs}
           isInteracting={isInteracting}
