@@ -86,11 +86,7 @@ function ClientContent() {
   }, [isMobile]);
 
   return (
-    <ToolbarDrawer
-      open={isOpenDrawer}
-      toggleDrawer={toggleDrawer}
-      openDataSource={openDataSource}
-    >
+    <ToolbarDrawer open={isOpenDrawer} toggleDrawer={toggleDrawer}>
       <Box
         sx={{
           display: 'flex',
