@@ -111,7 +111,7 @@ function ClientContent() {
         />
         <Box
           sx={{
-            marginTop: isMobile ? '60px' : '8px',
+            marginTop: isMobile ? '60px' : '0px',
           }}
         ></Box>
         <MainContent />

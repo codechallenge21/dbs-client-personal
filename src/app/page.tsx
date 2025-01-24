@@ -61,7 +61,6 @@ function ClientContent() {
         organizationId: '4aba77788ae94eca8d6ff330506af944',
         organizationChannelId,
       });
-      console.log('22222');
       setSelectedChannel(res.data);
       setSelectedChannelId(organizationChannelId);
     },
@@ -95,7 +94,7 @@ function ClientContent() {
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          height: isMobile ? '100vh' : 'calc(100vh - 32px)',
+          height: '100vh',
           backgroundColor: '#FFFFFF',
           borderRadius: '8px',
           overflowY: isMobile ? 'auto' : 'unset',

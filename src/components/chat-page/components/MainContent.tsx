@@ -33,9 +33,9 @@ export default function MainContent() {
     apis.submitUserInputs
   );
 
-  const { data: chatsData } = useChatChannels(
-    { organizationId: '4aba77788ae94eca8d6ff330506af944' },
-  );
+  const { data: chatsData } = useChatChannels({
+    organizationId: '4aba77788ae94eca8d6ff330506af944',
+  });
 
   const moveToChannelDetail = (channel: OrganizationChannelData) => {
     setSelectedChannel(channel);
@@ -86,6 +86,8 @@ export default function MainContent() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
+          pb: '16px',
+          px: '32px',
           justifyContent: isMobile ? 'flex-end' : 'center',
         }}
       >
@@ -103,7 +105,7 @@ export default function MainContent() {
   return (
     <Box
       sx={{
-        height: isMobile ? 'auto' : 'calc(100vh - 10px)',
+        height: isMobile ? 'auto' : '100%',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: isMobile ? 'flex-end' : 'center',

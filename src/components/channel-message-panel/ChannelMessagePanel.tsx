@@ -35,9 +35,9 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
       maxWidth={false}
       sx={{
         display: 'flex',
-        marginTop: isMobile ? '16px' : '46px',
+        marginTop: isMobile ? '16px' : '0px',
         mb: '16px',
-        height: '65vh',
+        height: isMobile ? '65vh' : 'calc(100vh - 32px)',
         overflow: 'auto !important',
         alignItems: 'center',
         justifyContent: 'center',
@@ -61,8 +61,9 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
         sx={{
           maxWidth: '760px',
           minWidth: !isMobile ? '760px' : '100%',
-          height: '100%',
+          height: 'calc(100% - 81px)',
           display: 'flex',
+          pt: '16px',
           flexDirection: 'column',
         }}
       >
@@ -71,7 +72,8 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
             <Box
               key={`channelMessage-${messageIndex}`}
               sx={{
-                width: '100%',
+                width: 'fit-content',
+                marginLeft: 'auto',
                 marginBottom: 2,
                 display: 'flex',
                 alignItems: 'flex-start',
@@ -273,11 +275,20 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
             )}
             <Box
               sx={{
-                width: '100%',
+                width:
+                  message.organizationChannelMessageType === 'AI'
+                    ? '100%'
+                    : 'fit-content',
+                marginLeft:
+                  message.organizationChannelMessageType === 'AI'
+                    ? '0'
+                    : 'auto',
                 marginBottom: 2,
                 display: 'flex',
                 alignItems: 'flex-start',
                 gap: 2,
+                mt:
+                  message.organizationChannelMessageType !== 'AI' ? '20px' : 0,
                 flexDirection: 'row',
                 backgroundColor:
                   message.organizationChannelMessageType === 'AI'
