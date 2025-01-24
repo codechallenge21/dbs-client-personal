@@ -60,7 +60,7 @@ const ViewChats: React.FC<ViewChatsProps> = ({ onClick }) => {
           gap: '8px',
         }}
       >
-        View All
+        查看全部
         <ArrowForwardIosIcon sx={{ fontSize: '12px' }} />
       </Box>
     </Button>

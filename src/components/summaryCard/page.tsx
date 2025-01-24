@@ -38,7 +38,7 @@ interface SummaryCardProps {
 const SummaryCard: React.FC<SummaryCardProps> = ({
   handleShowDetail,
   openUpload = false,
-  setOpenUpload = () => {},
+  setOpenUpload = () => { },
 }) => {
   const [tabValue, setTabValue] = useState(0);
   const [isClient, setIsClient] = useState(false);
@@ -99,7 +99,7 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
           });
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   }, [
     activeIndex,
     channelsData,
@@ -411,7 +411,7 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
                   key={index}
                   sx={{ cursor: 'pointer' }}
                   onClick={() => handleRowClick(channel)}
-                  // onClick={() => handleRowClick(channel?.organizationChannelId)}
+                // onClick={() => handleRowClick(channel?.organizationChannelId)}
                 >
                   <TableCell
                     sx={{
@@ -456,7 +456,7 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
                       color: 'var(--Text-Primary, #212B36)',
                     }}
                   >
-                    {channel.organizationChannelCreateDate}
+                    {new Date(channel.organizationChannelCreateDate).toLocaleString()}
                   </TableCell>
                   <TableCell>
                     <IconButton>

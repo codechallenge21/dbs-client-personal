@@ -145,7 +145,7 @@ export default function MainContent() {
                   mb: isMobile ? '' : '319px',
                 }}
               >
-                我能為你做些什麼？
+                我能為您做些什麼？
               </Typography>
             </>
           )}
@@ -172,7 +172,7 @@ export default function MainContent() {
                 mb: '24px',
               }}
             >
-              嗨！我能為你做些什麼？
+              嗨！我能為您做些什麼？
             </Typography>
           )}
         </>
