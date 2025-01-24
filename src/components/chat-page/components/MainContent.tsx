@@ -110,10 +110,12 @@ export default function MainContent() {
         height: isMobile ? 'auto' : '100%',
         display: 'flex',
         flexDirection: 'column',
+        pt: isMobile ? '128px' : '0px',
         justifyContent: isMobile ? 'flex-end' : 'center',
         alignItems: 'center',
         textAlign: 'center',
         px: '16px',
+        pb: isMobile ? '16px' : '0px',
       }}
     >
       {isMobile ? (
@@ -200,16 +202,20 @@ export default function MainContent() {
           <Suggestions key={suggestion.id} title={suggestion.title} />
         ))}
       </Box>
-      <Box sx={{ marginTop: '40px', width: '100%', maxWidth: '760px' }}>
+      <Box
+        sx={{
+          marginTop: isMobile ? '32px' : '40px',
+          width: '100%',
+          maxWidth: '760px',
+        }}
+      >
         <ViewChats
           onClick={() => {
             router.push('/allchat');
           }}
         />
       </Box>
-      <Box
-        sx={{ marginTop: '12px', width: '100%', maxWidth: '780px', mb: '12px' }}
-      >
+      <Box sx={{ marginTop: '12px', width: '100%', maxWidth: '760px' }}>
         <HistoryChats
           chats={chatsData || []}
           moveToChannelDetail={moveToChannelDetail}

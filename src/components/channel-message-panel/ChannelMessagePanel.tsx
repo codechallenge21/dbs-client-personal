@@ -74,10 +74,10 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
               sx={{
                 width: 'fit-content',
                 marginLeft: 'auto',
-                marginBottom: 2,
+                marginBottom: '20px',
                 display: 'flex',
                 alignItems: 'flex-start',
-                gap: 2,
+                gap: '20px',
                 flexDirection: 'row',
                 backgroundColor:
                   message.organizationChannelMessageType === 'AI'
@@ -126,14 +126,13 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                       justifyContent: 'space-between',
                       width: '100%',
                       mb: 1,
-                      px: 2,
                     }}
                   >
                     <Box
                       sx={{
                         display: 'flex',
                         alignItems: 'center',
-                        gap: 0.5,
+                        gap: '12px',
                         cursor: 'pointer',
                       }}
                     >
