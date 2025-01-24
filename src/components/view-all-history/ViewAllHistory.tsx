@@ -357,27 +357,33 @@ export default function ChannelSearchCombined() {
                 py: '1px',
               }}
             >
-              <Typography
+              <Box
                 sx={{
-                  color: 'var(--Primary-Black, #212B36)',
-                  fontFamily: 'Open Sans',
-                  fontSize: '14px',
-                  fontStyle: 'normal',
-                  fontWeight: 700,
-                  lineHeight: 'normal',
-                  '& .highlight': {
-                    color: 'error.main',
-                    px: 0.5,
-                  },
+                  display: 'flex',
+                  gap: '4px',
+                  alignItems: 'center',
+                  py: 0.5,
                 }}
               >
-                當前已選擇
-                {selectedChannels.length}
-                個頻道
-              </Typography>
+                <Typography
+                  sx={{
+                    color: ' #CC0000',
+                    fontFamily: 'Open Sans',
+                    fontSize: '14px',
+                    fontStyle: 'normal',
+                    fontWeight: 700,
+                    lineHeight: 'normal',
+                    '& .highlight': {
+                      color: 'error.main',
+                      px: 0.5,
+                    },
+                  }}
+                >
+                  當前已選擇 <span>{selectedChannels.length}</span> 個頻道
+                </Typography>
+              </Box>
               <Stack direction={'row'} spacing={1} sx={{ width: 'auto' }}>
-                <Button
-                  variant="text"
+                <Box
                   onClick={handleSelectAll}
                   sx={{
                     color: '#CC0000',
@@ -386,10 +392,16 @@ export default function ChannelSearchCombined() {
                     fontStyle: 'normal',
                     fontWeight: 700,
                     borderRadius: '8px',
+                    padding: '4px 8px',
+                    cursor: 'pointer',
+
+                    '&:hover': {
+                      bgcolor: 'rgba(204, 0, 0, 0.1)',
+                    },
                   }}
                 >
                   全選
-                </Button>
+                </Box>
                 <Button
                   variant="outlined"
                   sx={{
@@ -461,9 +473,7 @@ export default function ChannelSearchCombined() {
                     display: 'flex',
                     p: 2,
                     borderRadius: 2,
-                    bgcolor: channel.selected
-                      ? 'rgba(255, 0, 0, 0.05)'
-                      : 'transparent',
+                    bgcolor: 'rgba(255, 0, 0, 0.05)',
                     position: 'relative', // Add this to support absolute positioning of delete icon
                     alignItems: 'flex-start',
                     border: '1px solid var(--Secondary-Dark-Gray, #4A4A4A)',
@@ -491,6 +501,7 @@ export default function ChannelSearchCombined() {
                       }
                       sx={{
                         color: 'var(--Primary-Black, #212B36)',
+
                         p: 0,
 
                         '&.Mui-checked': {
@@ -501,7 +512,7 @@ export default function ChannelSearchCombined() {
                   </Box>
                   <Typography
                     sx={{
-                      color: '#000',
+                      color: '#990000',
                       fontFamily: 'Open Sans',
                       fontSize: '14px',
                       fontStyle: 'normal',
