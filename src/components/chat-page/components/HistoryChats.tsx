@@ -41,6 +41,9 @@ const HistoryChats: React.FC<HistoryChatsProps> = ({
             flexDirection: 'column',
             gap: '16px',
             cursor: 'pointer',
+            '&:hover': {
+              backgroundColor: '#FFF5F5',
+            },
           }}
           onClick={() => moveToChannelDetail({ ...chat, selected: false })}
         >
