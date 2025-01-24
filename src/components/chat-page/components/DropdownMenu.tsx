@@ -19,20 +19,20 @@ import {
   PhishingRounded,
   WorkRounded,
 } from '@mui/icons-material';
-import AutoFixNormalIcon from '@mui/icons-material/AutoFixNormal';
 import { AdvisorType } from '../../../app/chat/types';
 import ChannelContentContext from '../../channel-context-provider/ChannelContentContext';
 import EditDeleteModal from '../../dialogs/EditDeleteModal';
 import DeleteConfirmationModal from '@/components/dialogs/DeleteConfirmationModal';
 import RenameDialog from './renameChat';
 import { useRouter } from 'next/navigation';
+import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 
 const listItems = [
   {
     title: '萬事通',
     value: AdvisorType.DEFAULT,
     description: '提供應對策略與資源連結。',
-    icon: <AutoFixNormalIcon />,
+    icon: <SupportAgentIcon />,
   },
   {
     title: '債務案件顧問',
@@ -139,12 +139,12 @@ export default function DropdownMenu({
           {listItems
             .filter((item) => item.value === advisor)
             .map((item) => (
-              <ListItemIcon
+              <SupportAgentIcon
                 key={item.value}
                 sx={{ color: 'black', minWidth: 'auto' }}
               >
                 {item.icon}
-              </ListItemIcon>
+              </SupportAgentIcon>
             ))}
         </div>
       ) : (
@@ -208,9 +208,9 @@ export default function DropdownMenu({
               margin: '0px 4px',
               borderRadius: '8px',
               backgroundColor:
-                advisor === item.value ? '#E0E0E0' : 'transparent',
+                advisor === item.value ? 'rgba(204, 0, 0, 0.2)' : 'transparent',
               '&:hover': {
-                backgroundColor: '#F5F5F5',
+                backgroundColor: '#FBEDED',
                 borderRadius: '8px',
                 margin: '0px 4px',
               },
