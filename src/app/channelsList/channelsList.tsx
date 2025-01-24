@@ -1,11 +1,5 @@
 'use client';
-import React, {
-  useRef,
-  useMemo,
-  useState,
-  useEffect,
-  useCallback,
-} from 'react';
+import React, { useMemo, useState, useEffect, useCallback } from 'react';
 import {
   Box,
   Tab,
@@ -29,8 +23,7 @@ import {
   SearchRounded,
   UploadRounded,
 } from '@mui/icons-material';
-import { useAudioChannel } from '@/utils/hooks/useAudioChannel';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import {
   OrganizationChannel,
   OrganizationChannelMessage,
@@ -48,14 +41,8 @@ import ChannelContentContext from '@/components/channel-context-provider/Channel
 
 const ChannelsList = () => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const router = useRouter();
-
-  /**
-   * @useSearchParams hook requires Suspense Boundary Component wrapping
-   * Reference: https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout
-   ** */
-  const searchParams = useSearchParams();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const [tabValue, setTabValue] = useState(0);
   const [isClient, setIsClient] = useState(false);
@@ -78,7 +65,11 @@ const ChannelsList = () => {
     AdvisorType.DEFAULT
   );
 
-  const { data: channelsData, mutate: mutateAudioChannels } = useAudioChannels({
+  const {
+    data: channelsData,
+    mutate: mutateAudioChannels,
+    isValidating: isLoadingChannels,
+  } = useAudioChannels({
     organizationId: '4aba77788ae94eca8d6ff330506af944',
   });
 
@@ -186,15 +177,12 @@ const ChannelsList = () => {
     if (handleShowDetail) handleShowDetail(channel);
   };
 
-  const organizationChannelId = searchParams.get('organizationChannelId') || '';
-
   const [openUpload, setOpenUpload] = React.useState(false);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleShowDetail = (channel: OrganizationChannel) => {
     setSelectedChannel(channel);
     router.push(
-      `/summaryList/detail?organizationChannelId=${channel?.organizationChannelId}`
+      `/channelSummary/detail?organizationChannelId=${channel?.organizationChannelId}`
     );
   };
 
@@ -226,32 +214,6 @@ const ChannelsList = () => {
       setAdvisorType,
     ]
   );
-  const {
-    data: channel,
-    mutate: mutateChannel,
-    isValidating: isloadingChannelData,
-  } = useAudioChannel({
-    organizationId: '4aba77788ae94eca8d6ff330506af944',
-    organizationChannelId,
-  });
-
-  useEffect(() => {
-    if (channel) {
-      if (channel?.organizationChannelTranscriptList.length > 0) {
-        setSelectedChannel(channel);
-      } else {
-        timeoutRef.current = setTimeout(() => {
-          mutateChannel();
-        }, 5000);
-      }
-    }
-
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, [channel, mutateChannel]);
 
   const toggleDrawer = (newOpen: boolean) => {
     setIsOpenDrawer(newOpen);
@@ -278,8 +240,7 @@ const ChannelsList = () => {
           toggleDrawer={toggleDrawer}
           setOpenUpload={setOpenUpload}
         >
-          {isloadingChannelData ||
-          selectedChannel?.organizationChannelTranscriptList.length === 0 ? (
+          {isLoadingChannels ? (
             <Box
               sx={{
                 top: '50%',
