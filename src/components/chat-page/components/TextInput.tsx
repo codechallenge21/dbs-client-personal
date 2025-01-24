@@ -197,6 +197,8 @@ const TextInput: React.FC<TextInputProps> = ({
   const handleClickSubmitOrAudioFileUpload = useCallback(() => {
     if (userInputValue !== '') {
       handleSendMessage();
+      setFiles([]);
+      setUserInputValue('');
     }
   }, [handleSendMessage, userInputValue]);
 
@@ -214,6 +216,8 @@ const TextInput: React.FC<TextInputProps> = ({
         if (userInputValue.trim() !== '') {
           e.preventDefault();
           handleSendMessage();
+          setFiles([]);
+          setUserInputValue('');
         }
       }
     },

@@ -17,6 +17,7 @@ import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import apis from '@/utils/hooks/apis/apis';
 import { useChatChannels } from '@/utils/hooks/useChatChannels';
 import { OrganizationChannelData } from '@/interfaces/entities';
+import InformationPage from './chatResponsePlaceholder';
 
 export default function MainContent() {
   const theme = useTheme();
@@ -86,6 +87,8 @@ export default function MainContent() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
+          pb: '16px',
+          px: '32px',
           justifyContent: isMobile ? 'flex-end' : 'center',
         }}
       >
@@ -93,6 +96,7 @@ export default function MainContent() {
           channel={selectedChannel}
           chatResponses={chatResponses}
         />
+        {isInteractingInChat && <InformationPage />}
         <TextInput
           submitUserInputs={submitUserInputs}
           isInteracting={isInteracting}
@@ -103,7 +107,7 @@ export default function MainContent() {
   return (
     <Box
       sx={{
-        height: isMobile ? 'auto' : 'calc(100vh - 10px)',
+        height: isMobile ? 'auto' : '100%',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: isMobile ? 'flex-end' : 'center',

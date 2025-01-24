@@ -42,11 +42,17 @@ export default function ChannelContextProvider({
     }),
     [
       isLoadingChannel,
+      setIsLoadingChannel,
       selectedChannel,
+      setSelectedChannel,
       selectedChannelId,
+      setSelectedChannelId,
       isInteractingInChat,
+      setIsInteractingInChat,
       chatResponses,
+      setChatResponses,
       advisorType,
+      setAdvisorType,
     ]
   );
 
