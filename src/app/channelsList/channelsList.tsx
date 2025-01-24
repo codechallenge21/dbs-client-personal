@@ -155,7 +155,6 @@ const ChannelsList = () => {
   };
 
   const handleShowDetail = (channel: OrganizationChannel) => {
-    console.log('handleShowDetail');
     router.push(
       `/channelSummary?organizationChannelId=${channel?.organizationChannelId}`
     );
