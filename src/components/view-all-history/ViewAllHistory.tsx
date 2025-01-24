@@ -235,9 +235,12 @@ export default function ChannelSearchCombined() {
                 {filteredChannels.map((channel) => (
                   <Paper
                     key={channel.organizationChannelId}
-                    // onMouseEnter={() =>
-                    //   toggleChannel(channel.organizationChannelId)
-                    // }
+                    onMouseEnter={() =>
+                      toggleChannel(channel.organizationChannelId)
+                    }
+                    onMouseLeave={() =>
+                      toggleChannel(channel.organizationChannelId)
+                    }
                     elevation={0}
                     sx={{
                       display: 'flex',
@@ -263,33 +266,35 @@ export default function ChannelSearchCombined() {
                       moveToChannelDetail(channel);
                     }}
                   >
-                    {/* {channel.selected && (
-                    <Box
-                      sx={{
-                        position: 'absolute',
-                        left: '-13px', // Move checkbox half outside the paper
-                        top: '50%',
-                        transform: 'translateY(-50%)',
-                        zIndex: 2,
-                        pointerEvents: 'auto', // Ensure the checkbox is clickable
-                        p: 0,
-                        bgcolor: '#fff',
-                      }}
-                    >
-                      <Checkbox
-                        checked={channel.selected}
-                        onChange={() => toggleChannel(channel.organizationChannelId)}
+                    {channel.selected && (
+                      <Box
                         sx={{
-                          color: 'var(--Primary-Black, #212B36)',
+                          position: 'absolute',
+                          left: '-13px', // Move checkbox half outside the paper
+                          top: '50%',
+                          transform: 'translateY(-50%)',
+                          zIndex: 2,
+                          pointerEvents: 'auto', // Ensure the checkbox is clickable
                           p: 0,
-
-                          '&.Mui-checked': {
-                            color: 'var(--Primary-Black, #212B36)',
-                          },
+                          bgcolor: '#fff',
                         }}
-                      />
-                    </Box>
-                  )} */}
+                      >
+                        <Checkbox
+                          checked={channel.selected}
+                          onChange={() =>
+                            toggleChannel(channel.organizationChannelId)
+                          }
+                          sx={{
+                            color: 'var(--Primary-Black, #212B36)',
+                            p: 0,
+
+                            '&.Mui-checked': {
+                              color: 'var(--Primary-Black, #212B36)',
+                            },
+                          }}
+                        />
+                      </Box>
+                    )}
                     <Typography
                       sx={{
                         color: '#000',
@@ -322,23 +327,23 @@ export default function ChannelSearchCombined() {
                         channel.organizationChannelCreateDate
                       ).toLocaleString()}
                     </Typography>
-                    {/* {channel.selected && (
-                    <IconButton
-                      size="small"
-                      sx={{
-                        color: 'error.main',
-                        position: 'absolute',
-                        top: '5px',
-                        right: '4px',
-                      }}
-                      // onClick={() => {
-                      //   // toggleChannel(channel.organizationChannelId);
-                      //   handleDelete();
-                      // }}
-                    >
-                      <DeleteIcon sx={{ width: '18px', height: '18px' }} />
-                    </IconButton>
-                  )} */}
+                    {channel.selected && (
+                      <IconButton
+                        size="small"
+                        sx={{
+                          color: 'error.main',
+                          position: 'absolute',
+                          top: '5px',
+                          right: '4px',
+                        }}
+                        // onClick={() => {
+                        //   // toggleChannel(channel.organizationChannelId);
+                        //   handleDelete();
+                        // }}
+                      >
+                        <DeleteIcon sx={{ width: '18px', height: '18px' }} />
+                      </IconButton>
+                    )}
                   </Paper>
                 ))}
               </Stack>

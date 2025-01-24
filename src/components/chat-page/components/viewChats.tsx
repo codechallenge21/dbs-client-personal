@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Box,
-  Button,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from '@mui/material';
+import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 
@@ -17,9 +11,8 @@ const ViewChats: React.FC<ViewChatsProps> = ({ onClick }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   return (
-    <Button
+    <Box
       onClick={onClick}
-      variant="text"
       sx={{
         display: 'flex',
         justifyContent: 'space-between',
@@ -58,12 +51,17 @@ const ViewChats: React.FC<ViewChatsProps> = ({ onClick }) => {
           justifyContent: 'center',
           alignItems: 'center',
           gap: '8px',
+          cursor: 'pointer',
+          '&:hover': {
+            textDecoration: 'underline',
+            textUnderlineOffset: '2px',
+          },
         }}
       >
         查看全部
         <ArrowForwardIosIcon sx={{ fontSize: '12px' }} />
       </Box>
-    </Button>
+    </Box>
   );
 };
 
