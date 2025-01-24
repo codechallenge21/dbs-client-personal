@@ -94,7 +94,7 @@ function ClientContent() {
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          height: '100vh',
+          height: isMobile ? '100vh' : 'calc(100vh - 32px)',
           backgroundColor: '#FFFFFF',
           borderRadius: '8px',
           overflowY: isMobile ? 'auto' : 'unset',
@@ -110,7 +110,7 @@ function ClientContent() {
         />
         <Box
           sx={{
-            marginTop: isMobile ? '60px' : '8px',
+            marginTop: isMobile ? '60px' : '0px',
           }}
         ></Box>
         <MainContent />
