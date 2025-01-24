@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+'use client';
+import React, { useEffect, useState } from 'react';
 import {
   Tab,
   Box,
@@ -12,7 +13,9 @@ import {
   IconButton,
   CardContent,
   TextareaAutosize,
-  CircularProgress,
+  useMediaQuery,
+  useTheme,
+  // CircularProgress,
 } from '@mui/material';
 import {
   MicRounded,
@@ -30,7 +33,9 @@ import {
 } from '@mui/icons-material';
 import { OrganizationChannel } from '@/interfaces/entities';
 import { useAudioChannel } from '@/utils/hooks/useAudioChannel';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
+import UploadDialog from '@/components/uploadDialog/page';
 
 function TabPanel(props: {
   value: number;
@@ -110,10 +115,18 @@ const dataRow3 = [
 ];
 
 const ChannelDetailPage = () => {
+  const theme = useTheme();
+  const router = useRouter();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   const [tabValue, setTabValue] = React.useState(0);
   const [selectedChannel, setSelectedChannel] =
     React.useState<OrganizationChannel | null>(null);
   const [aIAnalysisTabValue, setAIAnalysisTabValue] = React.useState(0);
+  const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(
+    isMobile ? false : true
+  );
+  const [openUpload, setOpenUpload] = React.useState(false);
   /**
    * @useSearchParams hook requires Suspense Boundary Component wrapping
    * Reference: https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout
@@ -128,7 +141,7 @@ const ChannelDetailPage = () => {
   const {
     data: channel,
     mutate: mutateChannel,
-    isValidating: isloadingChannelData,
+    // isValidating: isloadingChannelData,
   } = useAudioChannel({
     organizationChannelId,
     organizationId: '4aba77788ae94eca8d6ff330506af944',
@@ -142,7 +155,9 @@ const ChannelDetailPage = () => {
     }
   }, [channel, mutateChannel]);
 
-  const handleBackButtonClick = () => {};
+  const handleBackButtonClick = () => {
+    router.push('/channelsList');
+  };
 
   const handleAIAnalysisTabChange = (
     _: React.SyntheticEvent,
@@ -151,18 +166,37 @@ const ChannelDetailPage = () => {
     setAIAnalysisTabValue(newValue);
   };
 
+  const toggleDrawer = (newOpen: boolean) => {
+    setIsOpenDrawer(newOpen);
+  };
+
+  const handleCloseUploadDialog = () => {
+    setOpenUpload(false);
+  };
+
   return (
-    <>
-      <Box
-        sx={{
-          minHeight: '96vh',
-          maxHeight: '96vh',
-          borderRadius: '8px',
-          padding: '16px 32px',
-          backgroundColor: 'white',
-        }}
+    <Box
+      sx={{
+        minHeight: '100vh',
+        background: 'var(--Primary-, #EBE3DD)',
+      }}
+    >
+      <ToolbarDrawer
+        open={isOpenDrawer}
+        toggleDrawer={toggleDrawer}
+        setOpenUpload={setOpenUpload}
       >
-        {isloadingChannelData ? (
+        <Box
+          sx={{
+            minHeight: '97vh',
+            maxHeight: '97vh',
+            overflow: 'hidden',
+            borderRadius: '8px',
+            padding: '16px 32px',
+            backgroundColor: 'white',
+          }}
+        >
+          {/* {isloadingChannelData ? (
           <Box
             sx={{
               top: '50%',
@@ -174,7 +208,7 @@ const ChannelDetailPage = () => {
           >
             <CircularProgress color="primary" />
           </Box>
-        ) : (
+        ) : ( */}
           <>
             <Tabs
               value={tabValue}
@@ -1064,9 +1098,11 @@ const ChannelDetailPage = () => {
               </Grid2>
             </Grid2>
           </>
-        )}
-      </Box>
-    </>
+          {/* )} */}
+          <UploadDialog open={openUpload} onClose={handleCloseUploadDialog} />
+        </Box>
+      </ToolbarDrawer>
+    </Box>
   );
 };
 
