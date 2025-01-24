@@ -12,7 +12,7 @@ export default function Header() {
       <Box
         sx={{
           display: 'flex',
-          padding: '8px 16px',
+          padding: '16px',
           alignItems: 'flex-start',
           justifyContent: 'flex-start',
         }}

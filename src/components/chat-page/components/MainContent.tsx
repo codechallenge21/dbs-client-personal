@@ -33,9 +33,9 @@ export default function MainContent() {
     apis.submitUserInputs
   );
 
-  const { data: chatsData } = useChatChannels({
-    organizationId: '4aba77788ae94eca8d6ff330506af944',
-  });
+  const { data: chatsData } = useChatChannels(
+    { organizationId: '4aba77788ae94eca8d6ff330506af944' },
+  );
 
   const moveToChannelDetail = (channel: OrganizationChannelData) => {
     setSelectedChannel(channel);
@@ -145,7 +145,7 @@ export default function MainContent() {
                   mb: isMobile ? '' : '319px',
                 }}
               >
-                我能為你做些什麼？
+                我能為您做些什麼？
               </Typography>
             </>
           )}
@@ -172,7 +172,7 @@ export default function MainContent() {
                 mb: '24px',
               }}
             >
-              嗨！我能為你做些什麼？
+              嗨！我能為您做些什麼？
             </Typography>
           )}
         </>
@@ -203,7 +203,9 @@ export default function MainContent() {
           }}
         />
       </Box>
-      <Box sx={{ marginTop: '12px', width: '100%', maxWidth: '780px' }}>
+      <Box
+        sx={{ marginTop: '12px', width: '100%', maxWidth: '780px', mb: '12px' }}
+      >
         <HistoryChats
           chats={chatsData || []}
           moveToChannelDetail={moveToChannelDetail}

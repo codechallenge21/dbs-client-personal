@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import DropdownMenu from './DropdownMenu';
 import { Box, IconButton, useMediaQuery, useTheme } from '@mui/material';
 import {
@@ -12,7 +12,6 @@ import {
 import UploadDialog from '@/components/uploadDialog/page';
 import { AdvisorType } from '../../../app/chat/types';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
-import DataSourceDialog from './chatDataStore';
 import ChannelContentContext from '../../channel-context-provider/ChannelContentContext';
 import { useRouter } from 'next/navigation';
 
@@ -24,6 +23,8 @@ interface HeaderProps {
   toggleDrawer?: (open: boolean) => void;
   openUpload?: boolean;
   setOpenUpload?: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpenDataSource: React.Dispatch<React.SetStateAction<boolean>>;
+  openDataSource: boolean;
 }
 
 export default function Header({
@@ -33,10 +34,11 @@ export default function Header({
   isChat = false,
   openUpload = false,
   setOpenUpload = () => {},
+  setOpenDataSource,
+  openDataSource,
 }: HeaderProps) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const [openDataSource, setOpenDataSource] = useState(false);
   const { selectedChannelId, selectedChannel, chatResponses } = useContext(
     ChannelContentContext
   );
@@ -47,8 +49,23 @@ export default function Header({
   };
 
   return (
-    <Box>
-      {isMobile && (
+    <Box
+      sx={{
+        position: 'fixed',
+        top: 0,
+        width: isMobile
+          ? '100%'
+          : `calc(100% - 287px - ${openDataSource ? 446 : 0}px)`,
+        mt: isMobile ? 0 : '16px',
+        pt: isMobile ? '16px' : 0,
+        px: isMobile ? '16px' : 0,
+        zIndex: 11,
+        marginRight: 'auto',
+        backgroundColor: 'white',
+        borderRadius: isMobile ? 0 : '8px',
+      }}
+    >
+      {isMobile ? (
         <Box
           sx={{
             display: 'flex',
@@ -56,26 +73,36 @@ export default function Header({
             justifyContent: 'space-between',
           }}
         >
-          <IconButton onClick={() => toggleDrawer(true)}>
-            <MenuRounded sx={{ color: 'black' }} />
-            {isChat && <DropdownMenu advisor={advisor} />}
-          </IconButton>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <IconButton onClick={() => toggleDrawer(true)}>
+              <MenuRounded sx={{ color: 'black' }} />
+            </IconButton>
+            {isChat && (
+              <Box sx={{ marginLeft: '8px' }}>
+                <DropdownMenu advisor={advisor} />
+              </Box>
+            )}
+          </Box>
           {!isChat && (
             <IconButton onClick={() => (isChat ? null : setOpenUpload(true))}>
               <FileUploadIcon sx={{ color: 'black' }} />
             </IconButton>
           )}
-
-          <IconButton sx={{ padding: '0px' }}>
-            <StarBorderRounded sx={{ color: 'black', margin: '8px' }} />
-            <SettingsInputComponentRounded
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <IconButton sx={{ padding: '0px' }}>
+              <StarBorderRounded sx={{ color: 'black', margin: '8px' }} />
+            </IconButton>
+            <IconButton
+              sx={{ padding: '0px' }}
               onClick={() => setOpenDataSource(true)}
-              sx={{ color: 'black', margin: '8px' }}
-            />
-          </IconButton>
+            >
+              <SettingsInputComponentRounded
+                sx={{ color: 'black', margin: '8px' }}
+              />
+            </IconButton>
+          </Box>
         </Box>
-      )}
-      {!isMobile && (
+      ) : (
         <Box
           sx={{
             display: 'flex',
@@ -95,7 +122,6 @@ export default function Header({
               <IconButton onClick={() => toggleDrawer(true)}>
                 <MenuRounded sx={{ color: 'black' }} />
               </IconButton>
-
               {!isChat && (
                 <IconButton
                   onClick={() => (isChat ? null : setOpenUpload(true))}
@@ -133,9 +159,11 @@ export default function Header({
                 ) : (
                   <></>
                 )}
-                <IconButton sx={{ padding: '0px' }}>
+                <IconButton
+                  sx={{ padding: '0px' }}
+                  onClick={() => setOpenDataSource(true)}
+                >
                   <SettingsInputComponentRounded
-                    onClick={() => setOpenDataSource(true)}
                     sx={{ color: 'black', margin: '8px' }}
                   />
                 </IconButton>
@@ -145,10 +173,6 @@ export default function Header({
         </Box>
       )}
       {!isChat && <UploadDialog open={openUpload} onClose={handleOpenUpload} />}
-      <DataSourceDialog
-        open={openDataSource}
-        onClose={() => setOpenDataSource(false)}
-      />
     </Box>
   );
 }

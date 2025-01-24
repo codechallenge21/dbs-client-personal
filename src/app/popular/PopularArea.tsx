@@ -217,7 +217,7 @@ export default function PopularArea() {
               color: 'var(--Primary-Black, #212B36)',
             }}
           >
-            為你推薦
+            為您推薦
           </Typography>
           <Box
             ref={recommendationsRef}

@@ -9,6 +9,7 @@ import ChannelContentContext from '../../components/channel-context-provider/Cha
 import { useSearchParams } from 'next/navigation';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import apis from '@/utils/hooks/apis/apis';
+import DataSourceDialog from '@/components/chat-page/components/chatDataStore';
 
 export default function Home() {
   return (
@@ -31,6 +32,8 @@ function ClientContent() {
     setSelectedChannel,
   } = useContext(ChannelContentContext);
   const { excute: getChannelDetail } = useAxiosApi(apis.getChannelDetail);
+
+  const [openDataSource, setOpenDataSource] = useState(false);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(
@@ -83,7 +86,11 @@ function ClientContent() {
   }, [isMobile]);
 
   return (
-    <ToolbarDrawer open={isOpenDrawer} toggleDrawer={toggleDrawer}>
+    <ToolbarDrawer
+      open={isOpenDrawer}
+      toggleDrawer={toggleDrawer}
+      openDataSource={openDataSource}
+    >
       <Box
         sx={{
           display: 'flex',
@@ -99,12 +106,23 @@ function ClientContent() {
           toggleDrawer={toggleDrawer}
           open={isOpenDrawer}
           advisor={advisorType}
+          openDataSource={openDataSource}
+          setOpenDataSource={setOpenDataSource}
         />
+        <Box
+          sx={{
+            marginTop: isMobile ? '60px' : '8px',
+          }}
+        ></Box>
         <MainContent />
         <SwitchDialog
           open={isOpen}
           onClose={handleClose}
           onConfirm={handleConfirm}
+        />
+        <DataSourceDialog
+          open={openDataSource}
+          onClose={() => setOpenDataSource(false)}
         />
       </Box>
     </ToolbarDrawer>

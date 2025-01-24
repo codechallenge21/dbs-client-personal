@@ -35,7 +35,7 @@ export default function Home() {
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          height: 'calc(100vh - 32px)',
+          height: isMobile ? '100vh' : 'calc(100vh - 32px)',
           backgroundColor: '#FFFFFF',
           borderRadius: '16px',
         }}

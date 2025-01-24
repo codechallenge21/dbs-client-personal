@@ -8,7 +8,7 @@ import { Box, Container, useTheme, useMediaQuery, Avatar } from '@mui/material';
 import type { FC } from 'react';
 import ReactMarkdown from 'react-markdown';
 import Image from 'next/image';
-import imagePerview from '@/assets/Images/Image Icon.svg';
+import imagePreview from '@/assets/Images/Image Icon.svg';
 import React from 'react';
 import {
   PermIdentityRounded,
@@ -213,7 +213,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                     }}
                   >
                     <Image
-                      src={file.preview ?? imagePerview}
+                      src={file.preview ?? imagePreview}
                       alt={file.file.name}
                       width={48}
                       height={48}

@@ -8,5 +8,7 @@ export type PathParams = {
 
 export const useChatChannels = makeGetHook<OrganizationChannel[], PathParams>(
   "/organizations/{{organizationId}}/channels",
-  fetcher
+  fetcher,
+  undefined,
+  { organizationChannelType: "CHAT" }
 );
