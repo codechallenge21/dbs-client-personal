@@ -41,6 +41,8 @@ export default function ChannelSearchCombined() {
 
   const { data: chatsData } = useChatChannels({
     organizationId: '4aba77788ae94eca8d6ff330506af944',
+  }, {
+    organizationChannelType: 'CHAT',
   });
 
   const handleConfirmDelete = () => {
