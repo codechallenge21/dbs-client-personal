@@ -54,14 +54,15 @@ export default function Header({
         position: 'fixed',
         top: 0,
         width: isMobile
-          ? '92%'
+          ? '100%'
           : `calc(100% - 287px - ${openDataSource ? 446 : 0}px)`,
-        borderRadius: '8px 8px 0 0',
         mt: isMobile ? 0 : '16px',
         pt: isMobile ? '16px' : 0,
+        px: isMobile ? '16px' : 0,
         zIndex: 11,
         marginRight: 'auto',
         backgroundColor: 'white',
+        borderRadius: isMobile ? 0 : '8px',
       }}
     >
       {isMobile ? (

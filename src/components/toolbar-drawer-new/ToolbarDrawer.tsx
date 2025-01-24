@@ -257,7 +257,8 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
           <ListItem
             sx={{
               display: 'flex',
-              padding: ' 8px',
+              padding: '0',
+              pb: '8px',
               justifyContent: 'space-between',
             }}
           >
@@ -271,7 +272,6 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 display: 'flex',
                 borderRadius: '8px',
                 alignItems: 'center',
-                alignSelf: 'stretch',
                 justifyContent: 'center',
                 border: '1px solid var(--Primary-Black, #212B36)',
               }}
@@ -326,6 +326,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                   backgroundColor: '#FBEDED',
                 },
                 cursor: 'pointer',
+                height: '48px',
               }}
               onClick={() => router.push(item.route)}
             >

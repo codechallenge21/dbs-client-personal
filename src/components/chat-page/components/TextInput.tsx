@@ -6,6 +6,7 @@ import {
   TextareaAutosize,
   useTheme,
   useMediaQuery,
+  Typography,
 } from '@mui/material';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import RotateRightRounded from '@mui/icons-material/RotateRightRounded';
@@ -297,10 +298,10 @@ const TextInput: React.FC<TextInputProps> = ({
           <Box
             sx={{
               display: 'flex',
-              gap: 2,
+              gap: '12px',
               flexWrap: 'wrap',
               padding: '12px',
-              height: '180px',
+              maxHeight: '180px',
               overflowY: 'auto',
               '&::-webkit-scrollbar': {
                 width: '8px',
@@ -341,16 +342,17 @@ const TextInput: React.FC<TextInputProps> = ({
                     borderRadius: '4px',
                   }}
                 />
-                <Box
+                <Typography
                   sx={{
                     mt: 1,
-                    fontSize: '12px',
+                    fontSize: '14px',
+                    fontFamily: 'DFPHeiBold-B5',
                     wordBreak: 'break-word',
                     textAlign: 'center',
                   }}
                 >
                   {file.file.name}
-                </Box>
+                </Typography>
                 <IconButton
                   sx={{
                     position: 'absolute',

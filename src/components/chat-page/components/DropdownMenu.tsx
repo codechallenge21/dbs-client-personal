@@ -196,24 +196,51 @@ export default function DropdownMenu({
             },
             maxWidth: '358px',
             minHeight: '392px',
+            ml: chatResponses.length || selectedChannel ? 1 : -1,
+            mt: chatResponses.length || selectedChannel ? 0 : 1,
+            boxShadow:
+              '0px 0px 2px 0px rgba(145, 158, 171, 0.24), -20px 20px 40px -4px rgba(145, 158, 171, 0.24)',
           },
+        }}
+        MenuListProps={{
+          sx: {
+            padding: '0px',
+            borderRadius: '12px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '4px',
+          },
+        }}
+        anchorOrigin={{
+          vertical:
+            chatResponses.length || selectedChannel ? 'bottom' : 'bottom', // Align vertically to the center
+          horizontal:
+            chatResponses.length || selectedChannel ? 'right' : 'left', // Align to the right side of the anchor element
+        }}
+        transformOrigin={{
+          vertical: chatResponses.length || selectedChannel ? 'bottom' : 'top', // Transform origin to match the vertical alignment
+          horizontal: chatResponses.length || selectedChannel ? 'left' : 'left', // Ensure the menu starts from the left edge of its anchor
         }}
       >
         {listItems.map((item, index) => (
           <MenuItem
             key={index}
             sx={{
-              alignItems: 'flex-start',
+              alignItems: 'center',
               padding: '8px',
-              margin: '0px 4px',
               borderRadius: '8px',
               backgroundColor:
-                advisor === item.value ? '#E0E0E0' : 'transparent',
+                advisor === item.value
+                  ? 'var(--Action-Selected, rgba(204, 0, 0, 0.20))'
+                  : 'transparent',
               '&:hover': {
-                backgroundColor: '#F5F5F5',
+                backgroundColor: '#FBEDED',
                 borderRadius: '8px',
-                margin: '0px 4px',
               },
+              '& .MuiListItemIcon-root': {
+                minWidth: 'auto',
+              },
+              gap: '16px',
             }}
             disabled={
               item.value !== AdvisorType.DEFAULT &&
@@ -221,13 +248,20 @@ export default function DropdownMenu({
             }
             onClick={() => handleOnClickMenuItem(item.value)}
           >
-            <ListItemIcon sx={{ color: 'black' }}>{item.icon}</ListItemIcon>
+            <ListItemIcon
+              sx={{
+                color: '#212B36',
+              }}
+            >
+              {item.icon}
+            </ListItemIcon>
             <ListItemText
+              sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}
               primary={
                 <Typography
                   sx={{
                     overflow: 'hidden',
-                    color: 'var(--Primary-Black, #000)',
+                    color: 'var(--Primary-Black, #212B36)',
                     textOverflow: 'ellipsis',
                     fontFamily: 'DFPHeiBold-B5',
                     fontSize: '16px',
