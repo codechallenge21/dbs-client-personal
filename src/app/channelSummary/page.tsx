@@ -231,13 +231,13 @@ const SummaryDetailPage: React.FC<SummaryDetailPageProps> = ({
                 overflow: 'hidden',
                 fontStyle: 'normal',
                 textAlign: 'center',
-                // fontFamily: "Inter",
+                fontFamily: 'Inter',
                 lineHeight: 'normal',
                 textOverflow: 'ellipsis',
                 color: 'var(--Text-Primary, #212B36)',
               }}
             >
-              DBS_2024/12/01_OO市OO區OO路OO號_OO會議廳
+              {selectedChannel?.organizationChannelTitle}
             </Typography>
             <IconButton>
               <ArrowDropDownRounded sx={{ color: 'black' }} />

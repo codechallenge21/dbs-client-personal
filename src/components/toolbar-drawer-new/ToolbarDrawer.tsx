@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import Drawer from '@mui/material/Drawer';
 import ListItem from '@mui/material/ListItem';
 import {
@@ -27,13 +27,12 @@ import {
 import { styled, Theme, CSSObject } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 import { usePathname, useRouter } from 'next/navigation';
-import ChannelContentContext from '../channel-context-provider/ChannelContentContext';
 
 interface ToolbarDrawerProps {
   open: boolean;
-  toggleDrawer: (open: boolean) => void;
   children: React.ReactNode;
-  openDataSource?: boolean;
+  toggleDrawer: (open: boolean) => void;
+  setOpenUpload?: (open: boolean) => void;
 }
 
 const drawerItems = [
@@ -51,65 +50,35 @@ const drawerItems = [
   },
   {
     text: '我的最愛',
-    icon: <StarRounded sx={{ color: 'black' }} />,
+    icon: <StarRounded sx={{ color: 'black', marginRight: '8px' }} />,
     route: '/favorite',
   },
   {
     text: '活動公告',
-    icon: <CampaignRounded sx={{ color: 'black' }} />,
+    icon: <CampaignRounded sx={{ color: 'black', marginRight: '8px' }} />,
     route: '/events',
   },
   {
     text: '解決麻煩事',
-    icon: <PsychologyRounded sx={{ color: 'black' }} />,
+    icon: <PsychologyRounded sx={{ color: 'black', marginRight: '8px' }} />,
     route: '/chat',
   },
   {
     text: '工具箱',
-    icon: <BuildRounded sx={{ color: 'black' }} />,
+    icon: <BuildRounded sx={{ color: 'black', marginRight: '8px' }} />,
     route: '/toolbox',
   },
   {
     text: '財務快篩',
-    icon: <PaidRounded sx={{ color: 'black' }} />,
+    icon: <PaidRounded sx={{ color: 'black', marginRight: '8px' }} />,
     route: '/financial-screening',
   },
   {
     text: '知識庫',
-    icon: <AutoStoriesRounded sx={{ color: 'black' }} />,
+    icon: <AutoStoriesRounded sx={{ color: 'black', marginRight: '8px' }} />,
     route: '/knowledge-base',
   },
 ];
-
-const MainBox = styled('div', {
-  shouldForwardProp: (prop) => prop !== 'open',
-})<{
-  open?: boolean;
-}>(({ theme }) => ({
-  flexGrow: 1,
-  transition: theme.transitions.create('margin', {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  /**
-   * This is necessary to enable the selection of content. In the DOM, the stacking order is determined
-   * by the order of appearance. Following this rule, elements appearing later in the markup will overlay
-   * those that appear earlier. Since the Drawer comes after the Main content, this adjustment ensures
-   * proper interaction with the underlying content.
-   */
-  position: 'relative',
-  variants: [
-    {
-      props: ({ open }) => open,
-      style: {
-        transition: theme.transitions.create('margin', {
-          easing: theme.transitions.easing.easeOut,
-          duration: theme.transitions.duration.enteringScreen,
-        }),
-      },
-    },
-  ],
-}));
 
 const drawerWidth = 240;
 
@@ -161,9 +130,9 @@ const CustomDrawer = styled(MuiDrawer, {
 
 const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
   open,
-  toggleDrawer,
   children,
-  openDataSource = false,
+  toggleDrawer,
+  setOpenUpload,
 }) => {
   const pathname = usePathname();
   const router = useRouter();
@@ -171,24 +140,14 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
   const [isClient, setIsClient] = useState(false);
   const [isExpanded, setIsExpanded] = useState(true); // Track expanded/collapsed state
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const {
-    setSelectedChannelId,
-    setSelectedChannel,
-    setChatResponses,
-    setIsInteractingInChat,
-  } = useContext(ChannelContentContext);
-
-  const resetChat = () => {
-    setSelectedChannelId(undefined);
-    setSelectedChannel(undefined);
-    setChatResponses([]);
-    setIsInteractingInChat(false);
-    router.push('/chat');
-  };
 
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  useEffect(() => {
+    if (!isMobile) toggleDrawer(true);
+  }, [isMobile, toggleDrawer]);
 
   if (!isClient) {
     return null;
@@ -209,12 +168,12 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
           sx={{
             display: 'flex',
             padding: '8px 0',
-            flexDirection: isExpanded || isMobile ? 'row' : 'column',
-            alignItems: isExpanded || isMobile ? 'center' : 'stretch',
-            justifyContent: isExpanded || isMobile ? 'space-between' : 'center',
+            flexDirection: isExpanded ? 'row' : 'column',
+            alignItems: isExpanded ? 'center' : 'stretch',
+            justifyContent: isExpanded ? 'space-between' : 'center',
           }}
         >
-          {(isExpanded || isMobile) && (
+          {isExpanded && (
             <Typography
               sx={{
                 color: 'var(--Primary-Black, #212B36)',
@@ -226,7 +185,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               好理家在
             </Typography>
           )}
-          {!isExpanded && !isMobile && (
+          {!isExpanded && (
             <Typography
               sx={{
                 fontWeight: 800,
@@ -242,23 +201,18 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
           <IconButton
             onClick={() => {
               if (isMobile) toggleDrawer(!open);
-              if (!isMobile) setIsExpanded((prev) => !prev); // Toggle expanded/collapsed state
+              setIsExpanded((prev) => !prev); // Toggle expanded/collapsed state
             }}
-            sx={{
-              color: 'black',
-              padding: '8px',
-              transform: !isExpanded && !isMobile ? 'rotate(180deg)' : 'none',
-            }}
+            sx={{ color: 'black', padding: '8px' }}
           >
             <MenuOpenRounded />
           </IconButton>
         </ListItem>
-        {(isExpanded || isMobile) && (
+        {isExpanded && (
           <ListItem
             sx={{
               display: 'flex',
-              padding: '0',
-              pb: '8px',
+              padding: ' 8px',
               justifyContent: 'space-between',
             }}
           >
@@ -272,12 +226,12 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 display: 'flex',
                 borderRadius: '8px',
                 alignItems: 'center',
+                alignSelf: 'stretch',
                 justifyContent: 'center',
                 border: '1px solid var(--Primary-Black, #212B36)',
               }}
               onClick={() => {
-                resetChat();
-                toggleDrawer(false);
+                if (setOpenUpload) setOpenUpload(true);
               }}
             >
               + New Chat
@@ -285,7 +239,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
           </ListItem>
         )}
 
-        {!isExpanded && !isMobile && (
+        {!isExpanded && (
           <IconButton
             sx={{
               mb: '10px',
@@ -308,7 +262,6 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             flexDirection: 'column',
             alignItems: 'flex-start',
             justifyContent: 'flex-end',
-            marginTop: '8px',
           }}
         >
           {drawerItems.map((item, index) => (
@@ -323,10 +276,9 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                     ? 'var(--Action-Selected, rgba(204, 0, 0, 0.20))'
                     : 'transparent',
                 '&:hover': {
-                  backgroundColor: '#FBEDED',
+                  backgroundColor: '#f5f5f5',
                 },
                 cursor: 'pointer',
-                height: '48px',
               }}
               onClick={() => router.push(item.route)}
             >
@@ -339,18 +291,9 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                   color: index === 0 ? 'red' : 'black',
                 }}
               >
-                <span
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}
-                >
-                  {item.icon}
-                </span>
-                {(isExpanded || isMobile) && (
-                  <span style={{ marginLeft: index === 0 ? '0px' : '8px' }}>
-                    {item.text}
-                  </span>
+                <span>{item.icon}</span>
+                {isExpanded && (
+                  <span style={{ marginLeft: 8 }}>{item.text}</span>
                 )}
               </Typography>
             </ListItem>
@@ -368,7 +311,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
           justifyContent: 'flex-end',
         }}
       >
-        {(isExpanded || isMobile) && (
+        {isExpanded && (
           <>
             <Box
               sx={{
@@ -429,7 +372,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             </Button>
           </>
         )}
-        {!isExpanded && !isMobile && (
+        {!isExpanded && (
           <>
             <IconButton
               sx={{
@@ -513,12 +456,12 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
     <Box>
       {!isMobile ? (
         <CustomDrawer
-          open={open}
+          open={true}
           sx={{
             flexShrink: 0,
             '& .MuiDrawer-paper': {
-              width: isExpanded || isMobile ? drawerWidth : 56, // Adjust drawer width
-              height: 'calc(100vh - 32px)',
+              width: isExpanded ? drawerWidth : 56, // Adjust drawer width
+              height: '97%',
               margin: '16px',
               borderRadius: '8px',
             },
@@ -534,30 +477,30 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
           sx={{
             flexShrink: 0,
             '& .MuiDrawer-paper': {
-              width: isExpanded || isMobile ? drawerWidth : 72,
-              height: '100%',
-              borderRadius: '0 8px 8px 0',
+              width: isExpanded ? drawerWidth : 72,
+              height: '96%',
+              margin: '16px',
+              borderRadius: '8px',
             },
           }}
           onClose={() => toggleDrawer(false)}
-          variant={'persistent'}
+          variant={isMobile ? 'temporary' : 'persistent'}
         >
           {DrawerList}
         </Drawer>
       )}
-      <MainBox
-        open={openDataSource}
+
+      <Box
         sx={{
-          marginRight: isMobile ? 0 : openDataSource ? '446px' : 0,
           overflow: 'auto',
+          marginRight: '16px',
           marginBottom: '16px',
           transition: 'margin-left 0.3s',
-          marginLeft:
-            isExpanded && !isMobile ? '255px' : isMobile ? '0' : '75px',
+          marginLeft: isExpanded && !isMobile ? '265px' : '80px',
         }}
       >
         {children}
-      </MainBox>
+      </Box>
     </Box>
   );
 };
