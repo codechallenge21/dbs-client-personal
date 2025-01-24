@@ -148,7 +148,6 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                       }}
                     >
                       <ContentCopy sx={{ fontSize: 20 }} />
-                      複製
                     </Box>
                   </Box>
                 )}
@@ -268,7 +267,6 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                   }}
                 >
                   <ContentCopy sx={{ fontSize: 20 }} />
-                  複製
                 </Box>
               </Box>
             )}
