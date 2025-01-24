@@ -19,20 +19,20 @@ import {
   PhishingRounded,
   WorkRounded,
 } from '@mui/icons-material';
-import AutoFixNormalIcon from '@mui/icons-material/AutoFixNormal';
 import { AdvisorType } from '../../../app/chat/types';
 import ChannelContentContext from '../../channel-context-provider/ChannelContentContext';
 import EditDeleteModal from '../../dialogs/EditDeleteModal';
 import DeleteConfirmationModal from '@/components/dialogs/DeleteConfirmationModal';
 import RenameDialog from './renameChat';
 import { useRouter } from 'next/navigation';
+import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 
 const listItems = [
   {
     title: '萬事通',
     value: AdvisorType.DEFAULT,
     description: '提供應對策略與資源連結。',
-    icon: <AutoFixNormalIcon />,
+    icon: <SupportAgentIcon />,
   },
   {
     title: '債務案件顧問',
@@ -139,12 +139,12 @@ export default function DropdownMenu({
           {listItems
             .filter((item) => item.value === advisor)
             .map((item) => (
-              <ListItemIcon
+              <SupportAgentIcon
                 key={item.value}
                 sx={{ color: 'black', minWidth: 'auto' }}
               >
                 {item.icon}
-              </ListItemIcon>
+              </SupportAgentIcon>
             ))}
         </div>
       ) : (

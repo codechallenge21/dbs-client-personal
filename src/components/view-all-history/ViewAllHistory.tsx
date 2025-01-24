@@ -109,6 +109,7 @@ export default function ChannelSearchCombined() {
         justifyContent: 'center',
         alignItems: 'center',
         bgcolor: '#ffffff',
+        overflow: 'hidden',
       }}
     >
       <Box
@@ -209,111 +210,144 @@ export default function ChannelSearchCombined() {
                 </Button>
               </Box>
             </Box>
-            <Stack spacing={1} sx={{ width: '100%' }}>
-              {filteredChannels.map((channel) => (
-                <Paper
-                  key={channel.organizationChannelId}
-                  // onMouseEnter={() =>
-                  //   toggleChannel(channel.organizationChannelId)
-                  // }
-                  elevation={0}
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    p: 2,
-                    border: '1px solid var(--Secondary-Dark-Gray, #4A4A4A)',
-                    borderRadius: 2,
-                    bgcolor:
-                      // channel.selected
-                      // ? 'rgba(255, 0, 0, 0.05)'
-                      'transparent',
-                    position: 'relative',
-                    gap: '16px',
-                    alignSelf: 'stretch',
-                    flexDirection: 'column',
-                    cursor: 'pointer',
-                  }}
-                  onClick={() => {
-                    moveToChannelDetail(channel);
-                  }}
-                >
-                  {/* {channel.selected && (
-                    <Box
-                      sx={{
-                        position: 'absolute',
-                        left: '-13px', // Move checkbox half outside the paper
-                        top: '50%',
-                        transform: 'translateY(-50%)',
-                        zIndex: 2,
-                        pointerEvents: 'auto', // Ensure the checkbox is clickable
-                        p: 0,
-                        bgcolor: '#fff',
-                      }}
-                    >
-                      <Checkbox
-                        checked={channel.selected}
-                        onChange={() => toggleChannel(channel.organizationChannelId)}
-                        sx={{
-                          color: 'var(--Primary-Black, #212B36)',
-                          p: 0,
-
-                          '&.Mui-checked': {
-                            color: 'var(--Primary-Black, #212B36)',
-                          },
-                        }}
-                      />
-                    </Box>
-                  )} */}
-                  <Typography
+            <Box
+              sx={{
+                width: '100%',
+                overflowY: 'auto',
+                paddingRight: '4px',
+                '&::-webkit-scrollbar': {
+                  width: '4px',
+                },
+                '&::-webkit-scrollbar-thumb': {
+                  backgroundColor: '#c1c1c1',
+                  borderRadius: '4px',
+                },
+                '&::-webkit-scrollbar-thumb:hover': {
+                  backgroundColor: '#a8a8a8',
+                },
+                '&::-webkit-scrollbar-track': {
+                  backgroundColor: '#f1f1f1',
+                  borderRadius: '4px',
+                },
+              }}
+            >
+              <Stack spacing={1} sx={{ width: '100%' }}>
+                {filteredChannels.map((channel) => (
+                  <Paper
+                    key={channel.organizationChannelId}
+                    onMouseEnter={() =>
+                      toggleChannel(channel.organizationChannelId)
+                    }
+                    onMouseLeave={() =>
+                      toggleChannel(channel.organizationChannelId)
+                    }
+                    elevation={0}
                     sx={{
-                      color: '#000',
-                      fontFamily: 'Open Sans',
-                      fontSize: '14px',
-                      fontStyle: 'normal',
-                      fontWeight: 700,
-                      lineHeight: 'normal',
-                    }}
-                  >
-                    {channel.organizationChannelTitle}
-                  </Typography>
-                  <Typography
-                    sx={{
-                      display: '-webkit-box',
-                      WebkitBoxOrient: 'vertical',
-                      WebkitLineClamp: 1,
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      p: 2,
+                      border: '1px solid var(--Secondary-Dark-Gray, #4A4A4A)',
+                      borderRadius: 2,
+                      bgcolor:
+                        // channel.selected
+                        // ? 'rgba(255, 0, 0, 0.05)'
+                        'transparent',
+                      position: 'relative',
+                      gap: '16px',
                       alignSelf: 'stretch',
-                      overflow: 'hidden',
-                      color: 'text.secondary',
-                      textOverflow: 'ellipsis',
-                      fontFamily: 'Open Sans',
-                      fontSize: '12px',
-                      fontStyle: 'normal',
-                      fontWeight: 400,
-                      lineHeight: 'normal',
+                      flexDirection: 'column',
+                      cursor: 'pointer',
+
+                      '&:hover': {
+                        bgcolor: '#FFF5F5',
+                      },
+                    }}
+                    onClick={() => {
+                      moveToChannelDetail(channel);
                     }}
                   >
-                    {new Date(channel.organizationChannelCreateDate).toLocaleString()}
-                  </Typography>
-                  {/* {channel.selected && (
-                    <IconButton
-                      size="small"
+                    {channel.selected && (
+                      <Box
+                        sx={{
+                          position: 'absolute',
+                          left: '-13px', // Move checkbox half outside the paper
+                          top: '50%',
+                          transform: 'translateY(-50%)',
+                          zIndex: 2,
+                          pointerEvents: 'auto', // Ensure the checkbox is clickable
+                          p: 0,
+                          bgcolor: '#fff',
+                        }}
+                      >
+                        <Checkbox
+                          checked={channel.selected}
+                          onChange={() =>
+                            toggleChannel(channel.organizationChannelId)
+                          }
+                          sx={{
+                            color: 'var(--Primary-Black, #212B36)',
+                            p: 0,
+
+                            '&.Mui-checked': {
+                              color: 'var(--Primary-Black, #212B36)',
+                            },
+                          }}
+                        />
+                      </Box>
+                    )}
+                    <Typography
                       sx={{
-                        color: 'error.main',
-                        position: 'absolute',
-                        top: '5px',
-                        right: '4px',
+                        color: '#000',
+                        fontFamily: 'Open Sans',
+                        fontSize: '14px',
+                        fontStyle: 'normal',
+                        fontWeight: 700,
+                        lineHeight: 'normal',
                       }}
-                      // onClick={() => {
-                      //   // toggleChannel(channel.organizationChannelId);
-                      //   handleDelete();
-                      // }}
                     >
-                      <DeleteIcon sx={{ width: '18px', height: '18px' }} />
-                    </IconButton>
-                  )} */}
-                </Paper>
-              ))}
-            </Stack>
+                      {channel.organizationChannelTitle}
+                    </Typography>
+                    <Typography
+                      sx={{
+                        display: '-webkit-box',
+                        WebkitBoxOrient: 'vertical',
+                        WebkitLineClamp: 1,
+                        alignSelf: 'stretch',
+                        overflow: 'hidden',
+                        color: 'text.secondary',
+                        textOverflow: 'ellipsis',
+                        fontFamily: 'Open Sans',
+                        fontSize: '12px',
+                        fontStyle: 'normal',
+                        fontWeight: 400,
+                        lineHeight: 'normal',
+                      }}
+                    >
+                      {new Date(
+                        channel.organizationChannelCreateDate
+                      ).toLocaleString()}
+                    </Typography>
+                    {channel.selected && (
+                      <IconButton
+                        size="small"
+                        sx={{
+                          color: 'error.main',
+                          position: 'absolute',
+                          top: '5px',
+                          right: '4px',
+                        }}
+                        // onClick={() => {
+                        //   // toggleChannel(channel.organizationChannelId);
+                        //   handleDelete();
+                        // }}
+                      >
+                        <DeleteIcon sx={{ width: '18px', height: '18px' }} />
+                      </IconButton>
+                    )}
+                  </Paper>
+                ))}
+              </Stack>
+            </Box>
           </>
         ) : (
           <>
@@ -328,39 +362,51 @@ export default function ChannelSearchCombined() {
                 py: '1px',
               }}
             >
-              <Typography
+              <Box
                 sx={{
-                  color: 'var(--Primary-Black, #212B36)',
-                  fontFamily: 'Open Sans',
-                  fontSize: '14px',
-                  fontStyle: 'normal',
-                  fontWeight: 700,
-                  lineHeight: 'normal',
-                  '& .highlight': {
-                    color: 'error.main',
-                    px: 0.5,
-                  },
+                  display: 'flex',
+                  gap: '4px',
+                  alignItems: 'center',
+                  py: 0.5,
                 }}
               >
-                當前已選擇
-                {selectedChannels.length}
-                個頻道
-              </Typography>
+                <Typography
+                  sx={{
+                    color: ' #CC0000',
+                    fontFamily: 'Open Sans',
+                    fontSize: '14px',
+                    fontStyle: 'normal',
+                    fontWeight: 700,
+                    lineHeight: 'normal',
+                    '& .highlight': {
+                      color: 'error.main',
+                      px: 0.5,
+                    },
+                  }}
+                >
+                  當前已選擇 <span>{selectedChannels.length}</span> 個頻道
+                </Typography>
+              </Box>
               <Stack direction={'row'} spacing={1} sx={{ width: 'auto' }}>
-                <Button
-                  variant="text"
+                <Box
                   onClick={handleSelectAll}
                   sx={{
-                    color: 'error.main',
+                    color: '#CC0000',
                     fontFamily: 'Open Sans',
                     fontSize: '14px',
                     fontStyle: 'normal',
                     fontWeight: 700,
                     borderRadius: '8px',
+                    padding: '4px 8px',
+                    cursor: 'pointer',
+
+                    '&:hover': {
+                      bgcolor: 'rgba(204, 0, 0, 0.1)',
+                    },
                   }}
                 >
                   全選
-                </Button>
+                </Box>
                 <Button
                   variant="outlined"
                   sx={{
@@ -401,7 +447,27 @@ export default function ChannelSearchCombined() {
                 </Button>
               </Stack>
             </Box>
-
+            {/* <Box
+              sx={{
+                width: '100%',
+                overflowY: 'auto',
+                paddingRight: '4px',
+                '&::-webkit-scrollbar': {
+                  width: '4px',
+                },
+                '&::-webkit-scrollbar-thumb': {
+                  backgroundColor: '#c1c1c1',
+                  borderRadius: '4px',
+                },
+                '&::-webkit-scrollbar-thumb:hover': {
+                  backgroundColor: '#a8a8a8',
+                },
+                '&::-webkit-scrollbar-track': {
+                  backgroundColor: '#f1f1f1',
+                  borderRadius: '4px',
+                },
+              }}
+            > */}
             {/* Channel List */}
             <Stack spacing={1} sx={{ width: '100%' }}>
               {filteredChannels.map((channel) => (
@@ -412,9 +478,7 @@ export default function ChannelSearchCombined() {
                     display: 'flex',
                     p: 2,
                     borderRadius: 2,
-                    bgcolor: channel.selected
-                      ? 'rgba(255, 0, 0, 0.05)'
-                      : 'transparent',
+                    bgcolor: 'rgba(255, 0, 0, 0.05)',
                     position: 'relative', // Add this to support absolute positioning of delete icon
                     alignItems: 'flex-start',
                     border: '1px solid var(--Secondary-Dark-Gray, #4A4A4A)',
@@ -442,6 +506,7 @@ export default function ChannelSearchCombined() {
                       }
                       sx={{
                         color: 'var(--Primary-Black, #212B36)',
+
                         p: 0,
 
                         '&.Mui-checked': {
@@ -452,7 +517,7 @@ export default function ChannelSearchCombined() {
                   </Box>
                   <Typography
                     sx={{
-                      color: '#000',
+                      color: '#990000',
                       fontFamily: 'Open Sans',
                       fontSize: '14px',
                       fontStyle: 'normal',
@@ -478,17 +543,22 @@ export default function ChannelSearchCombined() {
                       lineHeight: 'normal',
                     }}
                   >
-                    {new Date(channel.organizationChannelCreateDate).toLocaleString()}
+                    {new Date(
+                      channel.organizationChannelCreateDate
+                    ).toLocaleString()}
                   </Typography>
                   <IconButton
                     size="small"
                     sx={{
-                      color: 'error.main',
+                      color: '#CC0000',
                       position: 'absolute',
                       top: '5px',
                       right: '4px',
                     }}
                     onClick={() => {
+                      if (!channel.selected) {
+                        toggleChannel(channel.organizationChannelId);
+                      }
                       handleDelete();
                     }}
                   >
@@ -497,6 +567,7 @@ export default function ChannelSearchCombined() {
                 </Paper>
               ))}
             </Stack>
+            {/* </Box> */}
           </>
         )}
         <DeleteConfirmationModal
