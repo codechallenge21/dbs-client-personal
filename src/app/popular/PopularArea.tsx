@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState } from 'react';
 import {
   Box,
   Grid,
@@ -6,11 +6,11 @@ import {
   Button,
   Typography,
   CardContent,
-} from "@mui/material";
-import { WorkRounded } from "@mui/icons-material";
-import Image from "next/image";
-import boxImage from "../../../public/assets/images/box.png";
-import ToolboxDrawer from "./components/ToolboxDrawer";
+} from '@mui/material';
+import { WorkRounded } from '@mui/icons-material';
+import Image from 'next/image';
+import boxImage from '../../../public/assets/images/box.png';
+import ToolboxDrawer from './components/ToolboxDrawer';
 
 export default function PopularArea() {
   const focusRef = useRef<HTMLDivElement>(null);
@@ -41,16 +41,16 @@ export default function PopularArea() {
 
     const onMouseUp = () => (isDragging = false);
 
-    ref.current.addEventListener("mousedown", onMouseDown);
-    ref.current.addEventListener("mousemove", onMouseMove);
-    ref.current.addEventListener("mouseup", onMouseUp);
-    ref.current.addEventListener("mouseleave", onMouseUp);
+    ref.current.addEventListener('mousedown', onMouseDown);
+    ref.current.addEventListener('mousemove', onMouseMove);
+    ref.current.addEventListener('mouseup', onMouseUp);
+    ref.current.addEventListener('mouseleave', onMouseUp);
 
     return () => {
-      ref.current!.removeEventListener("mousedown", onMouseDown);
-      ref.current!.removeEventListener("mousemove", onMouseMove);
-      ref.current!.removeEventListener("mouseup", onMouseUp);
-      ref.current!.removeEventListener("mouseleave", onMouseUp);
+      ref.current!.removeEventListener('mousedown', onMouseDown);
+      ref.current!.removeEventListener('mousemove', onMouseMove);
+      ref.current!.removeEventListener('mouseup', onMouseUp);
+      ref.current!.removeEventListener('mouseleave', onMouseUp);
     };
   };
 
@@ -75,31 +75,31 @@ export default function PopularArea() {
   return (
     <Box
       sx={{
-        minHeight: "100vh",
-        background: "var(--Primary-, #EBE3DD)",
+        minHeight: '100vh',
+        background: 'var(--Primary-, #EBE3DD)',
       }}
     >
       <ToolboxDrawer open={isOpenDrawer} toggleDrawer={toggleDrawer}>
         <Box
           sx={{
-            minHeight: "96vh",
-            maxHeight: "96vh",
-            overflowY: "auto",
-            borderRadius: "8px",
-            padding: "16px 32px",
-            backgroundColor: "white",
+            minHeight: '96vh',
+            maxHeight: '96vh',
+            overflowY: 'auto',
+            borderRadius: '8px',
+            padding: '16px 32px',
+            backgroundColor: 'white',
           }}
         >
           <Typography
             gutterBottom
             sx={{
               fontWeight: 400,
-              fontSize: "24px",
-              fontStyle: "normal",
-              lineHeight: "normal",
-              marginBottom: "16px",
-              fontFamily: "DFPHeiBold-B5",
-              color: "var(--Primary-Black, #212B36)",
+              fontSize: '24px',
+              fontStyle: 'normal',
+              lineHeight: 'normal',
+              marginBottom: '16px',
+              fontFamily: 'DFPHeiBold-B5',
+              color: 'var(--Primary-Black, #212B36)',
             }}
           >
             焦點
@@ -107,51 +107,51 @@ export default function PopularArea() {
           <Box
             ref={focusRef}
             sx={{
-              gap: "16px",
-              cursor: "grab",
-              display: "flex",
-              overflow: "hidden",
-              marginBottom: "20px",
+              gap: '16px',
+              cursor: 'grab',
+              display: 'flex',
+              overflow: 'hidden',
+              marginBottom: '20px',
             }}
           >
             {focusItems.map((_, index) => (
               <Box
                 key={index}
                 sx={{
-                  display: "flex",
-                  minWidth: "260px",
-                  minHeight: "220px",
-                  alignItems: "center",
-                  flexDirection: "column",
-                  justifyContent: "center",
+                  display: 'flex',
+                  minWidth: '255px',
+                  minHeight: '220px',
+                  alignItems: 'center',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
                 }}
               >
                 <Image
                   src={boxImage}
                   alt="Boxed Image"
                   style={{
-                    width: "100%",
-                    height: "130px",
-                    objectFit: "cover",
-                    borderTopLeftRadius: "8px",
-                    borderTopRightRadius: "8px",
+                    width: '100%',
+                    height: '130px',
+                    objectFit: 'cover',
+                    borderTopLeftRadius: '8px',
+                    borderTopRightRadius: '8px',
                   }}
                 />
                 <Box
                   sx={{
-                    width: "100%",
-                    borderBottomLeftRadius: "8px",
-                    borderBottomRightRadius: "8px",
-                    backgroundColor: "var(--Primary-, #EBE3DD)",
+                    width: '100%',
+                    borderBottomLeftRadius: '8px',
+                    borderBottomRightRadius: '8px',
+                    backgroundColor: 'var(--Primary-, #EBE3DD)',
                   }}
                 >
                   <Typography
                     variant="h6"
                     component="div"
                     sx={{
-                      fontWeight: "bold",
-                      marginLeft: "20px",
-                      marginTop: "10px",
+                      fontWeight: 'bold',
+                      marginLeft: '20px',
+                      marginTop: '10px',
                     }}
                   >
                     標題
@@ -159,7 +159,7 @@ export default function PopularArea() {
                   <Typography
                     variant="body2"
                     color="textSecondary"
-                    sx={{ marginLeft: "20px", marginBottom: "20px" }}
+                    sx={{ marginLeft: '20px', marginBottom: '20px' }}
                   >
                     説明文字
                   </Typography>
@@ -172,12 +172,12 @@ export default function PopularArea() {
             gutterBottom
             sx={{
               fontWeight: 400,
-              fontSize: "24px",
-              fontStyle: "normal",
-              lineHeight: "normal",
-              marginBottom: "16px",
-              fontFamily: "DFPHeiBold-B5",
-              color: "var(--Primary-Black, #212B36)",
+              fontSize: '24px',
+              fontStyle: 'normal',
+              lineHeight: 'normal',
+              marginBottom: '16px',
+              fontFamily: 'DFPHeiBold-B5',
+              color: 'var(--Primary-Black, #212B36)',
             }}
           >
             工具下載
@@ -186,18 +186,18 @@ export default function PopularArea() {
             container
             spacing={2}
             sx={{
-              marginBottom: "20px",
+              marginBottom: '20px',
             }}
           >
             {toolItems.map((_, index) => (
               <Grid key={index} component="div" xs={6} sm={4} md={3} lg={2}>
-                <Box sx={{ padding: "16px", textAlign: "center" }}>
+                <Box sx={{ padding: '16px', textAlign: 'center' }}>
                   <WorkRounded
                     sx={{
-                      width: "71px",
-                      height: "72px",
-                      color: "black",
-                      marginBottom: "20px",
+                      width: '71px',
+                      height: '72px',
+                      color: 'black',
+                      marginBottom: '20px',
                     }}
                   />
                   <Typography variant="body2">工具名称</Typography>
@@ -209,24 +209,24 @@ export default function PopularArea() {
             gutterBottom
             sx={{
               fontWeight: 400,
-              fontSize: "24px",
-              fontStyle: "normal",
-              lineHeight: "normal",
-              marginBottom: "16px",
-              fontFamily: "DFPHeiBold-B5",
-              color: "var(--Primary-Black, #212B36)",
+              fontSize: '24px',
+              fontStyle: 'normal',
+              lineHeight: 'normal',
+              marginBottom: '16px',
+              fontFamily: 'DFPHeiBold-B5',
+              color: 'var(--Primary-Black, #212B36)',
             }}
           >
-            為你推薦
+            為您推薦
           </Typography>
           <Box
             ref={recommendationsRef}
             sx={{
-              gap: "16px",
-              cursor: "grab",
-              display: "flex",
-              overflow: "hidden",
-              marginBottom: "20px",
+              gap: '16px',
+              cursor: 'grab',
+              display: 'flex',
+              overflow: 'hidden',
+              marginBottom: '20px',
             }}
           >
             {recommendedItems.map((_, index) => (
@@ -234,49 +234,49 @@ export default function PopularArea() {
                 key={index}
                 sx={{
                   flexShrink: 0,
-                  width: "268px",
-                  height: "114px",
-                  padding: "16px",
-                  borderRadius: "8px",
-                  backgroundColor: "var(--Primary-, #EBE3DD)",
+                  width: '268px',
+                  height: '114px',
+                  padding: '16px',
+                  borderRadius: '8px',
+                  backgroundColor: 'var(--Primary-, #EBE3DD)',
                 }}
               >
                 <CardContent sx={{ padding: 0 }}>
                   <Typography
                     sx={{
                       fontWeight: 400,
-                      fontSize: "14px",
-                      lineHeight: "22px",
-                      fontStyle: "normal",
-                      fontFamily: "DFPHeiMedium-B5",
-                      color: "var(--Primary-Black, #212B36)",
+                      fontSize: '14px',
+                      lineHeight: '22px',
+                      fontStyle: 'normal',
+                      fontFamily: 'DFPHeiMedium-B5',
+                      color: 'var(--Primary-Black, #212B36)',
                     }}
                   >
                     類別
                   </Typography>
                   <Typography
                     sx={{
-                      color: "var(--Primary-Black, #212B36)",
-                      fontFamily: "Inter",
-                      fontSize: "24px",
-                      fontStyle: "normal",
+                      color: 'var(--Primary-Black, #212B36)',
+                      fontFamily: 'Inter',
+                      fontSize: '24px',
+                      fontStyle: 'normal',
                       fontWeight: 600,
-                      lineHeight: "normal",
+                      lineHeight: 'normal',
                     }}
                   >
                     標題
                   </Typography>
                   <Typography
                     sx={{
-                      overflow: "hidden",
-                      color: "var(--Primary-Black, #212B36)",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
-                      fontFamily: "Open Sans",
-                      fontSize: "16px",
-                      fontStyle: "normal",
+                      overflow: 'hidden',
+                      color: 'var(--Primary-Black, #212B36)',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                      fontFamily: 'Open Sans',
+                      fontSize: '16px',
+                      fontStyle: 'normal',
                       fontWeight: 400,
-                      lineHeight: "normal",
+                      lineHeight: 'normal',
                     }}
                   >
                     社工在財務類別的知識中，了解如何...
@@ -285,17 +285,17 @@ export default function PopularArea() {
               </Card>
             ))}
           </Box>
-          <Box sx={{ padding: "0px" }}>
+          <Box sx={{ padding: '0px' }}>
             <Typography
               gutterBottom
               sx={{
                 fontWeight: 400,
-                fontSize: "24px",
-                fontStyle: "normal",
-                lineHeight: "normal",
-                marginBottom: "16px",
-                fontFamily: "DFPHeiBold-B5",
-                color: "var(--Primary-Black, #212B36)",
+                fontSize: '24px',
+                fontStyle: 'normal',
+                lineHeight: 'normal',
+                marginBottom: '16px',
+                fontFamily: 'DFPHeiBold-B5',
+                color: 'var(--Primary-Black, #212B36)',
               }}
             >
               常見問題
@@ -304,28 +304,28 @@ export default function PopularArea() {
               <Box
                 key={index}
                 sx={{
-                  display: "flex",
-                  borderRadius: "8px",
-                  marginBottom: "16px",
-                  alignItems: "center",
-                  padding: " 12px 16px",
-                  justifyContent: "space-between",
-                  backgroundColor: "var(--Primary-, #EBE3DD)",
+                  display: 'flex',
+                  borderRadius: '8px',
+                  marginBottom: '16px',
+                  alignItems: 'center',
+                  padding: ' 12px 16px',
+                  justifyContent: 'space-between',
+                  backgroundColor: 'var(--Primary-, #EBE3DD)',
                 }}
               >
                 <Box>
-                  <Typography variant="body2" sx={{ color: "#4f4f4f" }}>
+                  <Typography variant="body2" sx={{ color: '#4f4f4f' }}>
                     類別
                   </Typography>
                   <Typography
                     variant="h6"
-                    sx={{ color: "#000", marginTop: "8px" }}
+                    sx={{ color: '#000', marginTop: '8px' }}
                   >
                     標題
                   </Typography>
                   <Typography
                     variant="body2"
-                    sx={{ color: "#4f4f4f", marginTop: "4px" }}
+                    sx={{ color: '#4f4f4f', marginTop: '4px' }}
                   >
                     內容
                   </Typography>
@@ -333,17 +333,17 @@ export default function PopularArea() {
                 <Button
                   variant="outlined"
                   sx={{
-                    color: "red",
-                    fontSize: "14px",
-                    borderColor: "red",
-                    borderRadius: "8px",
-                    padding: "6px 12px",
-                    fontStyle: "normal",
+                    color: 'red',
+                    fontSize: '14px',
+                    borderColor: 'red',
+                    borderRadius: '8px',
+                    padding: '6px 12px',
+                    fontStyle: 'normal',
                     fontWeight: 700,
-                    lineHeight: "24px",
-                    "&:hover": {
-                      color: "darkred",
-                      borderColor: "darkred",
+                    lineHeight: '24px',
+                    '&:hover': {
+                      color: 'darkred',
+                      borderColor: 'darkred',
                     },
                   }}
                 >

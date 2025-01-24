@@ -1,13 +1,22 @@
-import {
+'use client';
+
+import type {
   OrganizationChannel,
   OrganizationChannelMessage,
 } from '@/interfaces/entities';
-import { Box, Container, useTheme, useMediaQuery } from '@mui/material';
-import { FC } from 'react';
+import { Box, Container, useTheme, useMediaQuery, Avatar } from '@mui/material';
+import type { FC } from 'react';
 import ReactMarkdown from 'react-markdown';
 import Image from 'next/image';
-import imagePerview from '@/assets/Images/Image Icon.svg';
+import imagePreview from '@/assets/Images/Image Icon.svg';
 import React from 'react';
+import {
+  PermIdentityRounded,
+  LibraryBooksRounded,
+  ContentCopy,
+  ThumbUp,
+  ThumbDown,
+} from '@mui/icons-material';
 
 export interface ChannelMessagePanelProps {
   channel?: OrganizationChannel;
@@ -18,7 +27,6 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
   channel,
   chatResponses,
 }) => {
-  console.log('chatResponses', chatResponses);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -64,27 +72,119 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
               sx={{
                 width: '100%',
                 marginBottom: 2,
-                textAlign: 'left',
                 display: 'flex',
-                flexDirection: 'column',
-                ...(message.organizationChannelMessageType === 'AI'
-                  ? { padding: 2, px: 0, '& p': { marginBottom: 1 } }
-                  : {
-                      padding: 2,
-                      width: 'auto',
-                      maxWidth: '80%',
-                      backgroundColor: '#E8E8E8',
-                      borderRadius: 5,
-                      alignContent: 'right',
-                      alignItems: 'flex-end',
-                      justifyContent: 'flex-end',
-                      '& p': { marginBottom: 0 },
-                    }),
+                alignItems: 'flex-start',
+                gap: 2,
+                flexDirection: 'row',
+                backgroundColor:
+                  message.organizationChannelMessageType === 'AI'
+                    ? 'transparent'
+                    : 'var(--Secondary-Lite-Gray, #F5F5F5)',
+                borderRadius:
+                  message.organizationChannelMessageType === 'AI'
+                    ? 'none'
+                    : '12px',
               }}
             >
-              <ReactMarkdown>
-                {message.organizationChannelMessageContent}
-              </ReactMarkdown>
+              {message.organizationChannelMessageType !== 'AI' ? (
+                <Avatar
+                  sx={{
+                    bgcolor: '#6B5D52',
+                    ml: '20px',
+                    mt: '10px',
+                    width: 36,
+                    height: 36,
+                  }}
+                >
+                  <PermIdentityRounded sx={{ color: 'white' }} />
+                </Avatar>
+              ) : (
+                <Box sx={{ width: 36, height: 36 }} /> // Placeholder for spacing
+              )}
+              <Box
+                sx={{
+                  flex: 1,
+                  py: 2,
+                  pr: 2,
+                  width: '100%',
+                  maxWidth: '710px',
+                  color: '#212B36',
+                  wordBreak: 'break-word',
+                  '& p': {
+                    marginBottom:
+                      message.organizationChannelMessageType === 'AI' ? 1 : 0,
+                  },
+                }}
+              >
+                {message.organizationChannelMessageType === 'AI' && (
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      width: '100%',
+                      mb: 1,
+                      px: 2,
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 0.5,
+                        cursor: 'pointer',
+                      }}
+                    >
+                      <LibraryBooksRounded sx={{ fontSize: 20 }} />
+                      回覆
+                    </Box>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 0.5,
+                        cursor: 'pointer',
+                      }}
+                    >
+                      <ContentCopy sx={{ fontSize: 20 }} />
+                      複製
+                    </Box>
+                  </Box>
+                )}
+                <ReactMarkdown>
+                  {message.organizationChannelMessageContent}
+                </ReactMarkdown>
+                {message.organizationChannelMessageType === 'AI' && (
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'flex-end',
+                      gap: 1,
+                      mt: 2,
+                    }}
+                  >
+                    <ThumbUp
+                      sx={{
+                        fontSize: 20,
+                        cursor: 'pointer',
+                        color: 'text.secondary',
+                        '&:hover': {
+                          color: 'primary.main',
+                        },
+                      }}
+                    />
+                    <ThumbDown
+                      sx={{
+                        fontSize: 20,
+                        cursor: 'pointer',
+                        color: 'text.secondary',
+                        '&:hover': {
+                          color: 'primary.main',
+                        },
+                      }}
+                    />
+                  </Box>
+                )}
+              </Box>
             </Box>
           )
         )}
@@ -113,7 +213,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                     }}
                   >
                     <Image
-                      src={file.preview ?? imagePerview}
+                      src={file.preview ?? imagePreview}
                       alt={file.file.name}
                       width={48}
                       height={48}
@@ -136,29 +236,121 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                 ))}
               </Box>
             )}
+            {message.organizationChannelMessageType === 'AI' && (
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  width: '100%',
+                  mb: 1,
+                  px: 2,
+                }}
+              >
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 0.5,
+                    cursor: 'pointer',
+                  }}
+                >
+                  <LibraryBooksRounded sx={{ fontSize: 20 }} />
+                  回覆
+                </Box>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 0.5,
+                    cursor: 'pointer',
+                  }}
+                >
+                  <ContentCopy sx={{ fontSize: 20 }} />
+                  複製
+                </Box>
+              </Box>
+            )}
             <Box
               sx={{
                 width: '100%',
                 marginBottom: 2,
-                textAlign: 'left',
                 display: 'flex',
-                flexDirection: 'column',
-                ...(message.organizationChannelMessageType === 'AI'
-                  ? { padding: 2, px: 0, '& p': { marginBottom: 1 } }
-                  : {
-                      padding: 2,
-                      backgroundColor: '#E8E8E8',
-                      borderRadius: 5,
-                      alignContent: 'left',
-                      alignItems: 'left',
-                      justifyContent: 'center',
-                      '& p': { marginBottom: 0 },
-                    }),
+                alignItems: 'flex-start',
+                gap: 2,
+                flexDirection: 'row',
+                backgroundColor:
+                  message.organizationChannelMessageType === 'AI'
+                    ? 'transparent'
+                    : 'var(--Secondary-Lite-Gray, #F5F5F5)',
+                borderRadius:
+                  message.organizationChannelMessageType === 'AI'
+                    ? 'none'
+                    : '12px',
               }}
             >
-              <ReactMarkdown>
-                {message.organizationChannelMessageContent}
-              </ReactMarkdown>
+              {message.organizationChannelMessageType !== 'AI' ? (
+                <Avatar
+                  sx={{
+                    bgcolor: '#6B5D52',
+                    ml: '20px',
+                    mt: '10px',
+                    width: 36,
+                    height: 36,
+                  }}
+                >
+                  <PermIdentityRounded sx={{ color: 'white' }} />
+                </Avatar>
+              ) : (
+                <Box sx={{ width: 36, height: 36, ml: '20px', mt: '20px' }} /> // Placeholder for spacing
+              )}
+              <Box
+                sx={{
+                  flex: 1,
+                  py: 2,
+                  pr: 2,
+                  maxWidth: '710px',
+                  wordBreak: 'break-word',
+                  '& p': {
+                    marginBottom:
+                      message.organizationChannelMessageType === 'AI' ? 1 : 0,
+                  },
+                }}
+              >
+                <ReactMarkdown>
+                  {message.organizationChannelMessageContent}
+                </ReactMarkdown>
+                {message.organizationChannelMessageType === 'AI' && (
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'flex-end',
+                      gap: 1,
+                      mt: 2,
+                    }}
+                  >
+                    <ThumbUp
+                      sx={{
+                        fontSize: 20,
+                        cursor: 'pointer',
+                        color: 'text.secondary',
+                        '&:hover': {
+                          color: 'primary.main',
+                        },
+                      }}
+                    />
+                    <ThumbDown
+                      sx={{
+                        fontSize: 20,
+                        cursor: 'pointer',
+                        color: 'text.secondary',
+                        '&:hover': {
+                          color: 'primary.main',
+                        },
+                      }}
+                    />
+                  </Box>
+                )}
+              </Box>
             </Box>
           </React.Fragment>
         ))}

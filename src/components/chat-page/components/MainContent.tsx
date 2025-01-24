@@ -33,15 +33,11 @@ export default function MainContent() {
     apis.submitUserInputs
   );
 
-  const { data: chatsData } = useChatChannels({
-    organizationId: '4aba77788ae94eca8d6ff330506af944',
-  });
-
-  console.log('chatsData', chatsData);
+  const { data: chatsData } = useChatChannels(
+    { organizationId: '4aba77788ae94eca8d6ff330506af944' },
+  );
 
   const moveToChannelDetail = (channel: OrganizationChannelData) => {
-    console.log('channel', channel);
-
     setSelectedChannel(channel);
     const searchParams = new URLSearchParams({
       organizationChannelId: channel.organizationChannelId,
@@ -80,16 +76,6 @@ export default function MainContent() {
       description:
         'Provides you with medical case coping strategies and resource links.',
     },
-    {
-      id: 6,
-      title: 'Employment Assistance Consultant',
-      description: 'Supports your job search and career planning.',
-    },
-    {
-      id: 7,
-      title: 'Financial Case Consultant',
-      description: 'Offers savings, investment, and debt advice.',
-    },
   ];
 
   if (selectedChannel || selectedChannelId || chatResponses.length)
@@ -107,16 +93,6 @@ export default function MainContent() {
           channel={selectedChannel}
           chatResponses={chatResponses}
         />
-        {isInteractingInChat && (
-          <Skeleton
-            variant="text"
-            sx={{
-              width: '100%',
-              fontSize: '32px',
-              maxWidth: isMobile ? '50%' : '760px',
-            }}
-          />
-        )}
         <TextInput
           submitUserInputs={submitUserInputs}
           isInteracting={isInteracting}
@@ -127,13 +103,13 @@ export default function MainContent() {
   return (
     <Box
       sx={{
-        height: '100%',
+        height: isMobile ? 'auto' : 'calc(100vh - 10px)',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: isMobile ? 'flex-end' : 'center',
         alignItems: 'center',
         textAlign: 'center',
-        px: '24px',
+        px: '16px',
       }}
     >
       {isMobile ? (
@@ -169,7 +145,7 @@ export default function MainContent() {
                   mb: isMobile ? '' : '319px',
                 }}
               >
-                我能為你做些什麼？
+                我能為您做些什麼？
               </Typography>
             </>
           )}
@@ -196,7 +172,7 @@ export default function MainContent() {
                 mb: '24px',
               }}
             >
-              嗨！我能為你做些什麼？
+              嗨！我能為您做些什麼？
             </Typography>
           )}
         </>
@@ -227,7 +203,9 @@ export default function MainContent() {
           }}
         />
       </Box>
-      <Box sx={{ marginTop: '12px', width: '100%', maxWidth: '780px' }}>
+      <Box
+        sx={{ marginTop: '12px', width: '100%', maxWidth: '780px', mb: '12px' }}
+      >
         <HistoryChats
           chats={chatsData || []}
           moveToChannelDetail={moveToChannelDetail}

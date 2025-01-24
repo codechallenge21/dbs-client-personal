@@ -124,7 +124,7 @@ export default function DataSourceDialog({
 
   return (
     <Drawer
-      anchor="right"
+      anchor={isMobile ? 'bottom' : 'right'}
       open={open}
       onClose={onClose}
       sx={{
@@ -136,32 +136,47 @@ export default function DataSourceDialog({
           alignItems: 'flex-start',
           flexShrink: 0,
           top: isMobile ? '112px' : '',
-          borderRadius: isMobile ? '8px 8px 0 0' : '8px 0 0 8px',
+          borderRadius: isMobile ? '8px 8px 0 0' : '8px',
           alignSelf: 'stretch',
-          backgroundColor: '#f5f5f5',
+          backgroundColor: '#ffffff',
+          marginTop: isMobile ? '0' : '16px',
+          marginRight: isMobile ? '0' : '16px',
+          height: isMobile ? 'auto' : 'calc(100vh - 32px)',
         },
       }}
+      variant={isMobile ? 'temporary' : 'persistent'}
     >
       <Box
         sx={{
           width: '100%',
-          pt: isMobile ? 1 : 2,
+          pt: isMobile ? 1 : 0,
           pb: isMobile ? 1 : 0,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          px: isMobile ? 1.5 : 2,
-          borderBottom: '1px solid rgba(0, 0, 0, 0.12)',
+          height: isMobile ? '48px' : '62px',
+          pl: '8px',
+          pr: '4px',
+          gap: '8px',
         }}
       >
-        <Typography variant={isMobile ? 'subtitle1' : 'h6'}>{title}</Typography>
+        <Typography
+          variant={isMobile ? 'subtitle1' : 'h6'}
+          sx={{
+            color: 'var(--Primary-Black, #212B36)',
+            fontFamily: 'DFPHeiBold-B5',
+            fontSize: '24px',
+          }}
+        >
+          {title}
+        </Typography>
         <IconButton onClick={onClose} size={isMobile ? 'small' : 'medium'}>
           <CloseIcon />
         </IconButton>
       </Box>
       <List
         sx={{
-          p: 0,
+          p: '16px 12px',
           width: '100%',
           height: '100%',
           overflowY: 'auto',
@@ -177,9 +192,11 @@ export default function DataSourceDialog({
         <Typography
           variant={isMobile ? 'body2' : 'subtitle1'}
           sx={{
-            px: isMobile ? 1.5 : 2,
-            pt: isMobile ? 1.5 : 2,
-            pb: 1,
+            color: 'var(--Primary-Black, #212B36)',
+            fontFamily: 'DFPHeiBold-B5',
+            fontSize: '14px',
+            lineHeight: 'normal',
+            pb: '8px',
           }}
         >
           本地上傳
@@ -189,8 +206,7 @@ export default function DataSourceDialog({
             key={index}
             onClick={file.onClick}
             sx={{
-              mx: isMobile ? 1 : '8px',
-              my: '4px',
+              mb: '8px',
               width: 'auto',
               backgroundColor: '#EBE3DD',
               borderRadius: '4px',
@@ -224,7 +240,6 @@ export default function DataSourceDialog({
         <Typography
           variant={isMobile ? 'body2' : 'subtitle1'}
           sx={{
-            px: isMobile ? 1.5 : 2,
             pt: 2,
             pb: 1,
           }}
@@ -236,8 +251,7 @@ export default function DataSourceDialog({
             key={index}
             onClick={file.onClick}
             sx={{
-              mx: isMobile ? 1 : '8px',
-              my: '4px',
+              mb: '8px',
               width: 'auto',
               backgroundColor: '#EBE3DD',
               borderRadius: '4px',

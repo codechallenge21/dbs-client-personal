@@ -94,7 +94,7 @@ export default function ChannelSearchCombined() {
       const formattedChannels = chatsData.map((chat: OrganizationChannel) => ({
         ...chat,
         id: chat.organizationChannelId,
-        date: chat.organizationChannelCreateDate,
+        date: new Date(chat.organizationChannelCreateDate).toLocaleString(),
         selected: false,
       }));
       setChannels(formattedChannels);
@@ -188,7 +188,7 @@ export default function ChannelSearchCombined() {
                     },
                   }}
                 >
-                  你目前有 <span>{filteredChannels.length ?? 0}</span> 個頻道
+                  您目前有 <span>{filteredChannels.length ?? 0}</span> 個頻道
                 </Typography>
                 <Button
                   variant="text"
@@ -292,7 +292,7 @@ export default function ChannelSearchCombined() {
                       lineHeight: 'normal',
                     }}
                   >
-                    {channel.organizationChannelCreateDate}
+                    {new Date(channel.organizationChannelCreateDate).toLocaleString()}
                   </Typography>
                   {/* {channel.selected && (
                     <IconButton
@@ -478,7 +478,7 @@ export default function ChannelSearchCombined() {
                       lineHeight: 'normal',
                     }}
                   >
-                    {channel.organizationChannelCreateDate}
+                    {new Date(channel.organizationChannelCreateDate).toLocaleString()}
                   </Typography>
                   <IconButton
                     size="small"

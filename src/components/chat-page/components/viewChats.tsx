@@ -1,5 +1,11 @@
 import React from 'react';
-import { Box, Button, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 
@@ -8,6 +14,8 @@ interface ViewChatsProps {
 }
 
 const ViewChats: React.FC<ViewChatsProps> = ({ onClick }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   return (
     <Button
       onClick={onClick}
@@ -40,7 +48,7 @@ const ViewChats: React.FC<ViewChatsProps> = ({ onClick }) => {
             lineHeight: 'normal',
           }}
         >
-          歷史紀錄
+          {isMobile ? '歷史...' : '歷史紀錄'}
         </Typography>
       </Box>
       <Box
@@ -52,7 +60,7 @@ const ViewChats: React.FC<ViewChatsProps> = ({ onClick }) => {
           gap: '8px',
         }}
       >
-        View All
+        查看全部
         <ArrowForwardIosIcon sx={{ fontSize: '12px' }} />
       </Box>
     </Button>
