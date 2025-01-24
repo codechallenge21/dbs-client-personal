@@ -100,7 +100,7 @@ export default function DeleteConfirmationModal({
             variant="contained"
             onClick={onDelete}
             sx={{
-              bgcolor: 'error.main',
+              bgcolor: '#CC0000',
               '&:hover': {
                 bgcolor: 'error.dark',
               },

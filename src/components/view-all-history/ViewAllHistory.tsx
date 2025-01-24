@@ -380,7 +380,7 @@ export default function ChannelSearchCombined() {
                   variant="text"
                   onClick={handleSelectAll}
                   sx={{
-                    color: 'error.main',
+                    color: '#CC0000',
                     fontFamily: 'Open Sans',
                     fontSize: '14px',
                     fontStyle: 'normal',
@@ -430,7 +430,27 @@ export default function ChannelSearchCombined() {
                 </Button>
               </Stack>
             </Box>
-
+            {/* <Box
+              sx={{
+                width: '100%',
+                overflowY: 'auto',
+                paddingRight: '4px',
+                '&::-webkit-scrollbar': {
+                  width: '4px',
+                },
+                '&::-webkit-scrollbar-thumb': {
+                  backgroundColor: '#c1c1c1',
+                  borderRadius: '4px',
+                },
+                '&::-webkit-scrollbar-thumb:hover': {
+                  backgroundColor: '#a8a8a8',
+                },
+                '&::-webkit-scrollbar-track': {
+                  backgroundColor: '#f1f1f1',
+                  borderRadius: '4px',
+                },
+              }}
+            > */}
             {/* Channel List */}
             <Stack spacing={1} sx={{ width: '100%' }}>
               {filteredChannels.map((channel) => (
@@ -514,7 +534,7 @@ export default function ChannelSearchCombined() {
                   <IconButton
                     size="small"
                     sx={{
-                      color: 'error.main',
+                      color: '#CC0000',
                       position: 'absolute',
                       top: '5px',
                       right: '4px',
@@ -528,6 +548,7 @@ export default function ChannelSearchCombined() {
                 </Paper>
               ))}
             </Stack>
+            {/* </Box> */}
           </>
         )}
         <DeleteConfirmationModal
