@@ -164,7 +164,8 @@ export default function DropdownMenu({
               fontFamily: 'DFPHeiBold-B5',
             }}
             onClick={
-              chatResponses[1]?.organizationChannelTitle
+              chatResponses[1]?.organizationChannelTitle ||
+              selectedChannel?.organizationChannelTitle
                 ? handleClick
                 : undefined
             }
@@ -172,8 +173,8 @@ export default function DropdownMenu({
             {chatResponses[1]?.organizationChannelTitle ||
             selectedChannel?.organizationChannelTitle ? (
               <>
-                {chatResponses[1]?.organizationChannelTitle}{' '}
-                {selectedChannel?.organizationChannelTitle}
+                {chatResponses[1]?.organizationChannelTitle ||
+                  selectedChannel?.organizationChannelTitle}
                 <ArrowDropDown
                   sx={{ width: '32px', height: '32px', color: 'black' }}
                 />

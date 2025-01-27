@@ -102,6 +102,7 @@ function ClientContent() {
         }}
       >
         <Header
+          key={isOpenDrawer ? 'open' : 'closed'}
           isChat
           toggleDrawer={toggleDrawer}
           open={isOpenDrawer}

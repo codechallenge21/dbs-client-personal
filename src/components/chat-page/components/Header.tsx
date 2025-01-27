@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useContext } from 'react';
+import React, { useContext, useCallback } from 'react';
 import DropdownMenu from './DropdownMenu';
 import { Box, IconButton, useMediaQuery, useTheme } from '@mui/material';
 import {
@@ -48,6 +48,13 @@ export default function Header({
     if (setOpenUpload) setOpenUpload(false);
   };
 
+  const memoizedToggleDrawer = useCallback(
+    (open: boolean) => {
+      toggleDrawer(open);
+    },
+    [toggleDrawer]
+  );
+
   return (
     <Box
       sx={{
@@ -55,7 +62,9 @@ export default function Header({
         top: 0,
         width: isMobile
           ? '100%'
-          : `calc(100% - 287px - ${openDataSource ? 446 : 0}px)`,
+          : open
+          ? `calc(100% - 287px - ${openDataSource ? 446 : 0}px)`
+          : `calc(100% - 107px - ${openDataSource ? 446 : 0}px)`,
         mt: isMobile ? 0 : '16px',
         pt: isMobile ? '16px' : 0,
         px: isMobile ? '16px' : 0,
@@ -74,7 +83,7 @@ export default function Header({
           }}
         >
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <IconButton onClick={() => toggleDrawer(true)}>
+            <IconButton onClick={() => memoizedToggleDrawer(true)}>
               <MenuRounded sx={{ color: 'black' }} />
             </IconButton>
             {isChat && (
@@ -119,7 +128,7 @@ export default function Header({
                 justifyContent: 'flex-start',
               }}
             >
-              <IconButton onClick={() => toggleDrawer(true)}>
+              <IconButton onClick={() => memoizedToggleDrawer(true)}>
                 <MenuRounded sx={{ color: 'black' }} />
               </IconButton>
               {!isChat && (
