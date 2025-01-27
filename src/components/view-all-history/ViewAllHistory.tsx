@@ -86,8 +86,6 @@ export default function ChannelSearchCombined() {
   );
 
   const moveToChannelDetail = (channel: OrganizationChannelData) => {
-    console.log('channel', channel);
-
     setSelectedChannel(channel);
     const searchParams = new URLSearchParams({
       organizationChannelId: channel.organizationChannelId,
@@ -95,8 +93,6 @@ export default function ChannelSearchCombined() {
 
     router.push(`/chat?${searchParams.toString()}`);
   };
-
-  console.log('selectedChannel', selectedChannel);
 
   useEffect(() => {
     if (chatsData) {
