@@ -3,7 +3,11 @@
 import { useMemo } from 'react';
 // @mui
 import CssBaseline from '@mui/material/CssBaseline';
-import { createTheme, ThemeProvider as MuiThemeProvider, ThemeOptions } from '@mui/material/styles';
+import {
+  createTheme,
+  ThemeProvider as MuiThemeProvider,
+  ThemeOptions,
+} from '@mui/material/styles';
 // system
 import { palette } from './palette';
 import { usePathname } from 'next/navigation';
@@ -29,8 +33,8 @@ export default function ThemeProvider({ children }: Props) {
 
   return (
     <MuiThemeProvider theme={theme}>
-        <CssBaseline />
-        {children}
+      <CssBaseline />
+      {children}
     </MuiThemeProvider>
   );
 }

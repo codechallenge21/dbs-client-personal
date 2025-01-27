@@ -169,9 +169,11 @@ export default function DropdownMenu({
                 : undefined
             }
           >
-            {chatResponses[1]?.organizationChannelTitle ? (
+            {chatResponses[1]?.organizationChannelTitle ||
+            selectedChannel?.organizationChannelTitle ? (
               <>
-                {chatResponses[1]?.organizationChannelTitle}
+                {chatResponses[1]?.organizationChannelTitle}{' '}
+                {selectedChannel?.organizationChannelTitle}
                 <ArrowDropDown
                   sx={{ width: '32px', height: '32px', color: 'black' }}
                 />
