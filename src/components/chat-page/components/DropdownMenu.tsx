@@ -300,14 +300,17 @@ export default function DropdownMenu({
         onClose={() => setIsDeleteDialogOpen(false)}
         onDelete={handleConfirmDelete}
         channelName={
-          selectedChannel
+          selectedChannel || chatResponses[1]
             ? [
                 {
                   ...selectedChannel,
+                  ...chatResponses[1],
                   organizationChannelId:
-                    selectedChannel.organizationChannelId || '',
+                    selectedChannel?.organizationChannelId ||
+                    chatResponses[1].organizationChannelMessageId ||
+                    '',
                   selected: true,
-                  organization: selectedChannel.organization || {},
+                  organization: selectedChannel?.organization || {},
                 },
               ]
             : []

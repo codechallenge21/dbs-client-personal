@@ -8,7 +8,7 @@ interface DeleteConfirmationModalProps {
   open: boolean;
   onClose: () => void;
   onDelete: () => void;
-  channelName: OrganizationChannelData[];
+  channelName: OrganizationChannelData[] | object[];
 }
 
 export default function DeleteConfirmationModal({
@@ -18,7 +18,9 @@ export default function DeleteConfirmationModal({
   channelName,
 }: DeleteConfirmationModalProps) {
   const singleChannelTitle =
-    channelName.length === 1 ? channelName[0].organizationChannelTitle : null;
+    channelName.length === 1 && 'organizationChannelTitle' in channelName[0]
+      ? (channelName[0] as OrganizationChannelData).organizationChannelTitle
+      : null;
   return (
     <Modal
       open={open}

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useContext, useCallback } from 'react';
+import React, { useContext, useCallback, memo, useMemo } from 'react';
 import DropdownMenu from './DropdownMenu';
 import { Box, IconButton, useMediaQuery, useTheme } from '@mui/material';
 import {
@@ -16,8 +16,8 @@ import ChannelContentContext from '../../channel-context-provider/ChannelContent
 import { useRouter } from 'next/navigation';
 
 interface HeaderProps {
-  open?: boolean;
-  setIsopen?: boolean;
+  open: boolean;
+  setIsopen?: (isOpen: boolean) => void;
   advisor: AdvisorType;
   isChat?: boolean;
   toggleDrawer?: (open: boolean) => void;
@@ -27,7 +27,7 @@ interface HeaderProps {
   openDataSource: boolean;
 }
 
-export default function Header({
+const Header: React.FC<HeaderProps> = ({
   open,
   toggleDrawer = () => {},
   advisor,
@@ -36,7 +36,7 @@ export default function Header({
   setOpenUpload = () => {},
   setOpenDataSource,
   openDataSource,
-}: HeaderProps) {
+}) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const { selectedChannelId, selectedChannel, chatResponses } = useContext(
@@ -44,27 +44,30 @@ export default function Header({
   );
   const router = useRouter();
 
-  const handleOpenUpload = () => {
-    if (setOpenUpload) setOpenUpload(false);
-  };
+  const handleOpenUpload = useCallback(() => {
+    setOpenUpload(false);
+  }, [setOpenUpload]);
 
   const memoizedToggleDrawer = useCallback(
-    (open: boolean) => {
-      toggleDrawer(open);
+    (drawerOpen: boolean) => {
+      toggleDrawer(drawerOpen);
     },
     [toggleDrawer]
   );
+
+  const headerWidth = useMemo(() => {
+    if (isMobile) return '100%';
+    return open
+      ? `calc(100% - 287px - ${openDataSource ? 446 : 0}px)`
+      : `calc(100% - 107px - ${openDataSource ? 446 : 0}px)`;
+  }, [isMobile, open, openDataSource]);
 
   return (
     <Box
       sx={{
         position: 'fixed',
         top: 0,
-        width: isMobile
-          ? '100%'
-          : open
-          ? `calc(100% - 287px - ${openDataSource ? 446 : 0}px)`
-          : `calc(100% - 107px - ${openDataSource ? 446 : 0}px)`,
+        width: headerWidth,
         mt: isMobile ? 0 : '16px',
         pt: isMobile ? '16px' : 0,
         px: isMobile ? '16px' : 0,
@@ -93,7 +96,7 @@ export default function Header({
             )}
           </Box>
           {!isChat && (
-            <IconButton onClick={() => (isChat ? null : setOpenUpload(true))}>
+            <IconButton onClick={() => setOpenUpload(true)}>
               <FileUploadIcon sx={{ color: 'black' }} />
             </IconButton>
           )}
@@ -132,9 +135,7 @@ export default function Header({
                 <MenuRounded sx={{ color: 'black' }} />
               </IconButton>
               {!isChat && (
-                <IconButton
-                  onClick={() => (isChat ? null : setOpenUpload(true))}
-                >
+                <IconButton onClick={() => setOpenUpload(true)}>
                   <FileUploadIcon sx={{ color: 'black' }} />
                 </IconButton>
               )}
@@ -159,15 +160,11 @@ export default function Header({
                 chatResponses.length ? (
                   <IconButton
                     sx={{ padding: '0px' }}
-                    onClick={() => {
-                      router.push('/allchat');
-                    }}
+                    onClick={() => router.push('/allchat')}
                   >
                     <HistoryRounded sx={{ color: 'black', margin: '8px' }} />
                   </IconButton>
-                ) : (
-                  <></>
-                )}
+                ) : null}
                 <IconButton
                   sx={{ padding: '0px' }}
                   onClick={() => setOpenDataSource(true)}
@@ -184,4 +181,6 @@ export default function Header({
       {!isChat && <UploadDialog open={openUpload} onClose={handleOpenUpload} />}
     </Box>
   );
-}
+};
+
+export default memo(Header);
