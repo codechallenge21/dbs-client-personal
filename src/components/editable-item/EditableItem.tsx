@@ -74,7 +74,10 @@ const EditableItem: React.FC<{
 }) => {
   return (
     <>
-      <IconButton onClick={(event) => handleMenuOpen(event, index)}>
+      <IconButton
+        sx={{ padding: 0 }}
+        onClick={(event) => handleMenuOpen(event, index)}
+      >
         <MoreVertRounded sx={{ color: 'black' }} />
       </IconButton>
       <Menu
