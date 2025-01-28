@@ -30,13 +30,11 @@ export default function ChannelSearchCombined() {
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const { setSelectedChannel, selectedChannel } = useContext(
-    ChannelContentContext
-  );
+  const { setSelectedChannel } = useContext(ChannelContentContext);
 
   const [isV2, setIsV2] = useState(true);
   const [channels, setChannels] = useState<OrganizationChannelData[]>([]);
-  const [hoveredChannelId, setHoveredChannelId] = useState(null);
+  const [hoveredChannelId, setHoveredChannelId] = useState<string | null>();
   const [searchQuery, setSearchQuery] = useState('');
   const [open, setOpen] = useState(false);
 
@@ -44,7 +42,7 @@ export default function ChannelSearchCombined() {
     organizationId: '4aba77788ae94eca8d6ff330506af944',
   });
 
-  const handleMouseEnter = (id) => {
+  const handleMouseEnter = (id: string) => {
     setHoveredChannelId(id);
   };
 
