@@ -30,6 +30,28 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
+  const sortedData = channel?.organizationChannelMessageList.sort((a, b) => {
+    const dateA = new Date(a.organizationChannelMessageCreateDate ?? '');
+    const dateB = new Date(b.organizationChannelMessageCreateDate ?? '');
+
+    if (dateA < dateB) return -1;
+    if (dateA > dateB) return 1;
+
+    // If the dates are the same, prioritize USER over AI
+    if (
+      a.organizationChannelMessageType === 'USER' &&
+      b.organizationChannelMessageType === 'AI'
+    )
+      return -1;
+    if (
+      a.organizationChannelMessageType === 'AI' &&
+      b.organizationChannelMessageType === 'USER'
+    )
+      return 1;
+
+    return 0;
+  });
+
   return (
     <Container
       maxWidth={false}
@@ -67,128 +89,126 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
           flexDirection: 'column',
         }}
       >
-        {channel?.organizationChannelMessageList.map(
-          (message, messageIndex) => (
-            <Box
-              key={`channelMessage-${messageIndex}`}
-              sx={{
-                width: 'fit-content',
-                marginLeft: 'auto',
-                marginBottom: '20px',
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: '20px',
-                flexDirection: 'row',
-                backgroundColor:
-                  message.organizationChannelMessageType === 'AI'
-                    ? 'transparent'
-                    : 'var(--Secondary-Lite-Gray, #F5F5F5)',
-                borderRadius:
-                  message.organizationChannelMessageType === 'AI'
-                    ? 'none'
-                    : '12px',
-              }}
-            >
-              {message.organizationChannelMessageType !== 'AI' ? (
-                <Avatar
-                  sx={{
-                    bgcolor: '#6B5D52',
-                    ml: '20px',
-                    mt: '10px',
-                    width: 36,
-                    height: 36,
-                  }}
-                >
-                  <PermIdentityRounded sx={{ color: 'white' }} />
-                </Avatar>
-              ) : (
-                <Box sx={{ width: 36, height: 36 }} /> // Placeholder for spacing
-              )}
-              <Box
+        {sortedData?.map((message, messageIndex) => (
+          <Box
+            key={`channelMessage-${messageIndex}`}
+            sx={{
+              width: 'fit-content',
+              marginLeft: 'auto',
+              marginBottom: '20px',
+              display: 'flex',
+              alignItems: 'flex-start',
+              gap: '20px',
+              flexDirection: 'row',
+              backgroundColor:
+                message.organizationChannelMessageType === 'AI'
+                  ? 'transparent'
+                  : 'var(--Secondary-Lite-Gray, #F5F5F5)',
+              borderRadius:
+                message.organizationChannelMessageType === 'AI'
+                  ? 'none'
+                  : '12px',
+            }}
+          >
+            {message.organizationChannelMessageType !== 'AI' ? (
+              <Avatar
                 sx={{
-                  flex: 1,
-                  py: 2,
-                  pr: 2,
-                  width: '100%',
-                  maxWidth: '710px',
-                  color: '#212B36',
-                  wordBreak: 'break-word',
-                  '& p': {
-                    marginBottom:
-                      message.organizationChannelMessageType === 'AI' ? 1 : 0,
-                  },
+                  bgcolor: '#6B5D52',
+                  ml: '20px',
+                  mt: '10px',
+                  width: 36,
+                  height: 36,
                 }}
               >
-                {message.organizationChannelMessageType === 'AI' && (
+                <PermIdentityRounded sx={{ color: 'white' }} />
+              </Avatar>
+            ) : (
+              <Box sx={{ width: 36, height: 36 }} /> // Placeholder for spacing
+            )}
+            <Box
+              sx={{
+                flex: 1,
+                py: 2,
+                pr: 2,
+                width: '100%',
+                maxWidth: '710px',
+                color: '#212B36',
+                wordBreak: 'break-word',
+                '& p': {
+                  marginBottom:
+                    message.organizationChannelMessageType === 'AI' ? 1 : 0,
+                },
+              }}
+            >
+              {message.organizationChannelMessageType === 'AI' && (
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    width: '100%',
+                    mb: 1,
+                  }}
+                >
                   <Box
                     sx={{
                       display: 'flex',
-                      justifyContent: 'space-between',
-                      width: '100%',
-                      mb: 1,
+                      alignItems: 'center',
+                      gap: '12px',
+                      cursor: 'pointer',
                     }}
                   >
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '12px',
-                        cursor: 'pointer',
-                      }}
-                    >
-                      <LibraryBooksRounded sx={{ fontSize: 20 }} />
-                      回覆
-                    </Box>
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 0.5,
-                        cursor: 'pointer',
-                      }}
-                    >
-                      <ContentCopy sx={{ fontSize: 20 }} />
-                    </Box>
+                    <LibraryBooksRounded sx={{ fontSize: 20 }} />
+                    回覆
                   </Box>
-                )}
-                <ReactMarkdown>
-                  {message.organizationChannelMessageContent}
-                </ReactMarkdown>
-                {message.organizationChannelMessageType === 'AI' && (
                   <Box
                     sx={{
                       display: 'flex',
-                      justifyContent: 'flex-end',
-                      gap: 1,
-                      mt: 2,
+                      alignItems: 'center',
+                      gap: 0.5,
+                      cursor: 'pointer',
                     }}
                   >
-                    <ThumbUp
-                      sx={{
-                        fontSize: 20,
-                        cursor: 'pointer',
-                        color: 'text.secondary',
-                        '&:hover': {
-                          color: 'primary.main',
-                        },
-                      }}
-                    />
-                    <ThumbDown
-                      sx={{
-                        fontSize: 20,
-                        cursor: 'pointer',
-                        color: 'text.secondary',
-                        '&:hover': {
-                          color: 'primary.main',
-                        },
-                      }}
-                    />
+                    <ContentCopy sx={{ fontSize: 20 }} />
                   </Box>
-                )}
-              </Box>
+                </Box>
+              )}
+              <ReactMarkdown>
+                {message.organizationChannelMessageContent}
+              </ReactMarkdown>
+              {message.organizationChannelMessageType === 'AI' && (
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    gap: 1,
+                    mt: 2,
+                  }}
+                >
+                  <ThumbUp
+                    sx={{
+                      fontSize: 20,
+                      cursor: 'pointer',
+                      color: 'text.secondary',
+                      '&:hover': {
+                        color: 'primary.main',
+                      },
+                    }}
+                  />
+                  <ThumbDown
+                    sx={{
+                      fontSize: 20,
+                      cursor: 'pointer',
+                      color: 'text.secondary',
+                      '&:hover': {
+                        color: 'primary.main',
+                      },
+                    }}
+                  />
+                </Box>
+              )}
             </Box>
-          )
-        )}
+          </Box>
+        ))}
         {chatResponses?.map((message, messageIndex) => (
           <React.Fragment key={`chatResponse-${messageIndex}`}>
             {(message.organizationChannelFiles?.length ?? 0) > 0 && (
