@@ -40,13 +40,15 @@ const EditDialog: React.FC<EditDialogProps> = ({
     <Dialog
       open={open}
       onClose={onClose}
-      PaperProps={{
-        sx: {
-          width: '100%',
-          maxWidth: '460px',
-          minHeight: '80px',
-          maxHeight: 'calc(100% - 64px)',
-          borderRadius: '16px',
+      slotProps={{
+        paper: {
+          sx: {
+            width: '100%',
+            maxWidth: '460px',
+            minHeight: '80px',
+            maxHeight: 'calc(100% - 64px)',
+            borderRadius: '16px',
+          },
         },
       }}
     >
@@ -57,12 +59,12 @@ const EditDialog: React.FC<EditDialogProps> = ({
           paddingLeft: '24px',
           paddingRight: '11px',
           paddingBottom: '8px',
+          alignItems: 'center',
           justifyContent: 'space-between',
         }}
       >
         <Typography
           sx={{
-            height: '40px',
             color: '#000',
             fontSize: '24px',
             fontWeight: '400',
@@ -75,7 +77,10 @@ const EditDialog: React.FC<EditDialogProps> = ({
         </Typography>
         <IconButton
           aria-label="close"
-          onClick={onClose}
+          onClick={(e) => {
+            if (onClose) onClose(e);
+            setInputValue(editableName || '');
+          }}
           sx={{
             color: 'black',
           }}
@@ -84,12 +89,41 @@ const EditDialog: React.FC<EditDialogProps> = ({
         </IconButton>
       </DialogTitle>
 
-      <DialogContent>
+      <DialogContent sx={{ padding: 0 }}>
         <TextField
           id="edit-dialog-name-input"
           data-tid="edit-dialog-name-input"
-          variant="standard"
-          sx={{ width: '100%', pt: 2 }}
+          sx={{
+            pt: 2,
+            gap: '8px',
+            width: '100%',
+            padding: '0px',
+            display: 'flex',
+            borderRadius: '8px',
+            alignItems: 'center',
+            alignSelf: 'stretch',
+            '& .MuiInputBase-root': {
+              width: '85%',
+              padding: '16px 14px',
+              '& input': {
+                padding: '0px',
+              },
+            },
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': {
+                borderColor:
+                  'var(--Components-Input-Outlined, rgba(145, 158, 171, 0.20))',
+              },
+              '&:hover fieldset': {
+                borderColor:
+                  'var(--Components-Input-Outlined, rgba(145, 158, 171, 0.20))',
+              },
+              '&.Mui-focused fieldset': {
+                borderColor:
+                  'var(--Components-Input-Outlined, rgba(145, 158, 171, 0.20))',
+              },
+            },
+          }}
           placeholder="請輸入名稱以刪除"
           value={inputValue}
           onChange={(e) => {
@@ -101,6 +135,7 @@ const EditDialog: React.FC<EditDialogProps> = ({
       </DialogContent>
       <DialogActions
         sx={{
+          mt: '12px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'flex-end',

@@ -1146,6 +1146,7 @@ const ChannelSummary = () => {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
+              onClick={handleBackButtonClick}
             >
               <ArrowBackIosNewRounded sx={{ color: '#212B36' }} />
             </IconButton>

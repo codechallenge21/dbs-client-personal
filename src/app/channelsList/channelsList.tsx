@@ -203,22 +203,6 @@ const ChannelsList = () => {
           </Box>
         ) : ( */}
             <>
-              <DeleteDialog
-                open={isDeleteDialogOpen}
-                onClose={handleCloseDeleteDialog}
-                onConfirm={handleDeleteChannelConfirm}
-                deletableName={
-                  channelsData?.[activeIndex!]?.organizationChannelTitle || ''
-                }
-              />
-              <EditDialog
-                open={isEditDialogOpen}
-                onClose={handleCloseEditDialog}
-                onConfirm={handleEditChannelConfirm}
-                editableName={
-                  channelsData?.[activeIndex!]?.organizationChannelTitle || ''
-                }
-              />
               <Box
                 sx={{
                   minHeight: '96vh',
@@ -808,6 +792,22 @@ const ChannelsList = () => {
           ))}
         </Box>
       )}
+      <DeleteDialog
+        open={isDeleteDialogOpen}
+        onClose={handleCloseDeleteDialog}
+        onConfirm={handleDeleteChannelConfirm}
+        deletableName={
+          channelsData?.[activeIndex!]?.organizationChannelTitle || ''
+        }
+      />
+      <EditDialog
+        open={isEditDialogOpen}
+        onClose={handleCloseEditDialog}
+        onConfirm={handleEditChannelConfirm}
+        editableName={
+          channelsData?.[activeIndex!]?.organizationChannelTitle || ''
+        }
+      />
     </>
   );
 };
