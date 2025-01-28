@@ -519,10 +519,6 @@ const ChannelsList = () => {
                     </TableBody>
                   </Table>
                 </TableContainer>
-                <UploadDialog
-                  open={openUpload}
-                  onClose={handleCloseUploadDialog}
-                />
               </Box>
             </>
             {/* )} */}
@@ -807,6 +803,8 @@ const ChannelsList = () => {
           ))}
         </Box>
       )}
+
+      <UploadDialog open={openUpload} onClose={handleCloseUploadDialog} />
     </>
   );
 };
