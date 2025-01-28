@@ -45,6 +45,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
         'audio/wav',
         'audio/webm',
         'audio/x-m4a',
+        'video/mp4',
       ];
       const maxFileSize = 100 * 1024 * 1024; // 100MB
 
