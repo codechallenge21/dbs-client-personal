@@ -710,6 +710,7 @@ const ChannelsList = () => {
                 boxShadow:
                   '0px 12px 24px -4px rgba(17, 68, 85, 0.12), 0px 0px 2px 0px rgba(17, 68, 85, 0.12)',
               }}
+              onClick={() => handleRowClick(channel)}
             >
               <CardContent
                 sx={{
