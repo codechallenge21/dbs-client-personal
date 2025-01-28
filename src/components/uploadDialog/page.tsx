@@ -70,11 +70,11 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
 
       const { data } = res;
 
-      const searchParams = new URLSearchParams({
-        organizationChannelId: data.organizationChannelId,
-      });
+      console.log('data', data);
 
-      router.push(`/summary?${searchParams.toString()}`);
+      router.push(
+        `/channelSummary?organizationChannelId=${data.organizationChannelId}`
+      );
     } catch (error) {
       setError('上傳失敗');
       console.error(error);

@@ -148,11 +148,24 @@ const ChannelSummary = () => {
   });
 
   useEffect(() => {
-    if (channel) {
-      if (channel?.organizationChannelTranscriptList.length > 0) {
-        setSelectedChannel(channel);
+    const updateChannelData = async () => {
+      if (channel) {
+        const isDataIncomplete =
+          !channel.organizationChannelTranscriptList?.length;
+        console.log('channel', channel);
+
+        if (isDataIncomplete) {
+          try {
+            await mutateChannel();
+          } catch (error) {
+            console.error('Error re-fetching channel data:', error);
+          }
+        } else {
+          setSelectedChannel(channel);
+        }
       }
-    }
+    };
+    updateChannelData();
   }, [channel, mutateChannel]);
 
   const handleBackButtonClick = () => {
