@@ -14,6 +14,7 @@ import {
   PermIdentityRounded,
   LocalFireDepartmentRounded,
   AddRounded,
+  LoginRounded,
 } from '@mui/icons-material';
 import {
   Box,
@@ -27,6 +28,7 @@ import {
 import { styled, Theme, CSSObject } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 import { usePathname, useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
 
 interface ToolbarDrawerProps {
   open: boolean;
@@ -81,6 +83,8 @@ const drawerItems = [
 ];
 
 const drawerWidth = 240;
+
+const tId = Cookies.get('tid') || null;
 
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
@@ -220,7 +224,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               sx={{
                 gap: '8px',
                 width: '100%',
-                color: 'black',
+                color: 'var(--Primary-Black, #212B36)',
                 height: '38px',
                 padding: '8px',
                 display: 'flex',
@@ -242,6 +246,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
         {!isExpanded && (
           <IconButton
             sx={{
+              mb: '10px',
               padding: '8px',
               display: 'flex',
               alignItems: 'center',
@@ -313,32 +318,52 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
       >
         {isExpanded && (
           <>
-            <Box
-              sx={{
-                display: 'flex',
-                padding: '16px',
-                alignItems: 'center',
-              }}
-            >
-              <PermIdentityRounded
-                sx={{ color: 'black', marginRight: '8px' }}
-              />
-              <Typography
+            {tId ? (
+              <Box
                 sx={{
-                  fontWeight: 400,
-                  fontSize: '16px',
-                  overflow: 'hidden',
-                  fontStyle: 'normal',
-                  lineHeight: 'normal',
-                  whiteSpace: 'nowrap',
-                  textOverflow: 'ellipsis',
-                  fontFamily: 'DFPHeiBold-B5',
-                  color: 'var(--Primary-Black, #212B36)',
+                  display: 'flex',
+                  padding: '16px',
+                  alignItems: 'center',
                 }}
               >
-                UserName
-              </Typography>
-            </Box>
+                <PermIdentityRounded
+                  sx={{ color: 'black', marginRight: '8px' }}
+                />
+                <Typography
+                  sx={{
+                    fontWeight: 400,
+                    fontSize: '16px',
+                    overflow: 'hidden',
+                    fontStyle: 'normal',
+                    lineHeight: 'normal',
+                    whiteSpace: 'nowrap',
+                    textOverflow: 'ellipsis',
+                    fontFamily: 'DFPHeiBold-B5',
+                    color: 'var(--Primary-Black, #212B36)',
+                  }}
+                >
+                  UserName
+                </Typography>
+              </Box>
+            ) : (
+              <Button
+                sx={{
+                  gap: '8px',
+                  color: 'black',
+                  display: 'flex',
+                  padding: '4px 8px',
+                  borderRadius: '8px',
+                  alignSelf: 'stretch',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: '2px solid var(--Primary-Black, #212B36)',
+                  background: 'var(--Primary-White, #FFF)',
+                }}
+              >
+                <LoginRounded sx={{ color: 'black' }} />
+                登入
+              </Button>
+            )}
             <Button
               sx={{
                 gap: '8px',
@@ -374,6 +399,29 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
         )}
         {!isExpanded && (
           <>
+            {!tId && (
+              <IconButton
+                sx={{
+                  width: '36px',
+                  height: '36px',
+                  padding: '8px',
+                  display: 'flex',
+                  borderRadius: '50px',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: '2px solid var(--Primary-Black, #212B36)',
+                  background: 'var(--Primary-White, #FFF)',
+                  '&:hover': {
+                    background: 'rgba(92, 68, 58, 0.8)',
+                  },
+                  '&:active': {
+                    background: 'rgba(92, 68, 58, 0.6)',
+                  },
+                }}
+              >
+                <LoginRounded sx={{ color: 'black' }} />
+              </IconButton>
+            )}
             <IconButton
               sx={{
                 width: '36px',
@@ -394,28 +442,26 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             >
               <PermIdentityRounded sx={{ color: 'white' }} />
             </IconButton>
-            {isExpanded && (
-              <IconButton
-                sx={{
-                  width: '36px',
-                  height: '36px',
-                  padding: '8px',
-                  display: 'flex',
-                  borderRadius: '50px',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  background: 'var(--Secondary-, #5C443A)',
-                  '&:hover': {
-                    background: 'rgba(92, 68, 58, 0.8)',
-                  },
-                  '&:active': {
-                    background: 'rgba(92, 68, 58, 0.6)',
-                  },
-                }}
-              >
-                <EmojiObjectsRounded sx={{ color: 'white' }} />
-              </IconButton>
-            )}
+            <IconButton
+              sx={{
+                width: '36px',
+                height: '36px',
+                padding: '8px',
+                display: 'flex',
+                borderRadius: '50px',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'var(--Secondary-, #5C443A)',
+                '&:hover': {
+                  background: 'rgba(92, 68, 58, 0.8)',
+                },
+                '&:active': {
+                  background: 'rgba(92, 68, 58, 0.6)',
+                },
+              }}
+            >
+              <EmojiObjectsRounded sx={{ color: 'white' }} />
+            </IconButton>
             <IconButton
               sx={{
                 width: '36px',
