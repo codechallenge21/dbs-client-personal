@@ -212,11 +212,12 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             <MenuOpenRounded />
           </IconButton>
         </ListItem>
-        {isExpanded && (
+        {(isExpanded || isMobile) && (
           <ListItem
             sx={{
               display: 'flex',
-              padding: ' 8px',
+              padding: '0',
+              pb: '8px',
               justifyContent: 'space-between',
             }}
           >
@@ -296,9 +297,18 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                   fontFamily: 'DFPHeiBold-B5',
                 }}
               >
-                <span>{item.icon}</span>
-                {isExpanded && (
-                  <span style={{ marginLeft: 8 }}>{item.text}</span>
+                <span
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}
+                >
+                  {item.icon}
+                </span>
+                {(isExpanded || isMobile) && (
+                  <span style={{ marginLeft: index === 0 ? '0px' : '8px' }}>
+                    {item.text}
+                  </span>
                 )}
               </Typography>
             </ListItem>
@@ -316,13 +326,13 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
           justifyContent: 'flex-end',
         }}
       >
-        {isExpanded && (
+        {(isExpanded || isMobile) && (
           <>
             {tId ? (
               <Box
                 sx={{
                   display: 'flex',
-                  padding: '16px',
+                  // padding: '16px',
                   alignItems: 'center',
                 }}
               >
@@ -356,6 +366,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                   alignSelf: 'stretch',
                   alignItems: 'center',
                   justifyContent: 'center',
+                  fontFamily: 'Public Sans',
                   border: '2px solid var(--Primary-Black, #212B36)',
                   background: 'var(--Primary-White, #FFF)',
                 }}
@@ -374,6 +385,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 alignSelf: 'stretch',
                 alignItems: 'center',
                 justifyContent: 'center',
+                fontFamily: 'Public Sans',
                 background: 'var(--Secondary-, #5C443A)',
               }}
             >
@@ -390,6 +402,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 alignSelf: 'stretch',
                 alignItems: 'center',
                 justifyContent: 'center',
+                fontFamily: 'Public Sans',
                 background: 'var(--Secondary-, #5C443A)',
               }}
             >
@@ -397,7 +410,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             </Button>
           </>
         )}
-        {!isExpanded && (
+        {!isExpanded && !isMobile && (
           <>
             {!tId && (
               <IconButton
@@ -508,7 +521,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
           sx={{
             flexShrink: 0,
             '& .MuiDrawer-paper': {
-              width: isExpanded ? drawerWidth : 56,
+              width: isExpanded || isMobile ? drawerWidth : 56,
               height: '97%',
               margin: '16px',
               borderRadius: '8px',
@@ -525,7 +538,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
           sx={{
             flexShrink: 0,
             '& .MuiDrawer-paper': {
-              width: isExpanded ? drawerWidth : 72,
+              width: isExpanded || isMobile ? drawerWidth : 72,
               height: '96%',
               margin: '16px',
               borderRadius: '8px',
