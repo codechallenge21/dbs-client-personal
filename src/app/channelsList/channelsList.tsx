@@ -25,6 +25,9 @@ import {
   SearchRounded,
   UploadRounded,
   MenuRounded,
+  CheckCircleRounded,
+  RotateRightRounded,
+  PendingActionsRounded,
   StarBorderRounded,
 } from '@mui/icons-material';
 import { useRouter } from 'next/navigation';
@@ -49,6 +52,9 @@ const ChannelsList = () => {
   const [toolsAnchor, setToolsAnchor] = useState<null | HTMLElement>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState<boolean>(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
+  const [favoriteChannels, setFavoriteChannels] = useState<{
+    [key: string]: boolean;
+  }>({});
   const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(
     isMobile ? false : true
   );
@@ -78,6 +84,17 @@ const ChannelsList = () => {
       setToolsAnchor(null);
       event.stopPropagation();
       setIsDeleteDialogOpen(true);
+    },
+    []
+  );
+
+  const handleStarClick = useCallback(
+    (event: React.MouseEvent, channelId: string) => {
+      event.stopPropagation();
+      setFavoriteChannels((prev) => ({
+        ...prev,
+        [channelId]: !prev[channelId],
+      }));
     },
     []
   );
@@ -594,10 +611,6 @@ const ChannelsList = () => {
                     </TableBody>
                   </Table>
                 </TableContainer>
-                <UploadDialog
-                  open={openUpload}
-                  onClose={handleCloseUploadDialog}
-                />
               </Box>
             </>
             {/* )} */}
@@ -849,8 +862,17 @@ const ChannelsList = () => {
                   }}
                 >
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <IconButton sx={{ mr: '8px', padding: '0px' }}>
-                      <StarRounded sx={{ color: '#212B36' }} />
+                    <IconButton
+                      sx={{ mr: '8px', padding: '0px' }}
+                      onClick={(e) =>
+                        handleStarClick(e, channel.organizationChannelId)
+                      }
+                    >
+                      {favoriteChannels[channel.organizationChannelId] ? (
+                        <StarRounded sx={{ color: '#212B36' }} />
+                      ) : (
+                        <StarBorderRounded sx={{ color: '#212B36' }} />
+                      )}
                     </IconButton>
                     <Typography
                       sx={{
@@ -869,7 +891,7 @@ const ChannelsList = () => {
                         .replace(/-/g, '/')}
                     </Typography>
                   </Box>
-                  <Typography
+                  <Box
                     sx={{
                       fontWeight: 400,
                       fontSize: '16px',
@@ -881,17 +903,50 @@ const ChannelsList = () => {
                       color: 'var(--Primary-Black, #212B36)',
                     }}
                   >
-                    {
-                      channel.organizationChannelTranscriptList[0]
-                        ?.organizationChannelTranscriptStatus
-                    }
-                  </Typography>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                      }}
+                    >
+                      {channel.organizationChannelTranscriptList[0]
+                        ?.organizationChannelTranscriptStatus === 'COMPLETE' ? (
+                        <CheckCircleRounded
+                          sx={{ color: ' rgba(52, 199, 89, 1)' }}
+                        />
+                      ) : channel.organizationChannelTranscriptList[0]
+                          ?.organizationChannelTranscriptStatus ===
+                        'PROCESSING' ? (
+                        <RotateRightRounded
+                          sx={{ color: 'rgba(0, 102, 204, 1)' }}
+                        />
+                      ) : channel.organizationChannelTranscriptList[0]
+                          ?.organizationChannelTranscriptStatus ===
+                        'PENDING' ? (
+                        <PendingActionsRounded
+                          sx={{ color: 'rgba(33, 43, 54, 1)' }}
+                        />
+                      ) : (
+                        <PendingActionsRounded
+                          sx={{ color: 'rgba(33, 43, 54, 1)' }}
+                        />
+                      )}
+                      <span>
+                        {
+                          channel.organizationChannelTranscriptList[0]
+                            ?.organizationChannelTranscriptStatus
+                        }
+                      </span>
+                    </Box>
+                  </Box>
                 </Box>
               </CardContent>
             </Card>
           ))}
         </Box>
       )}
+
+      <UploadDialog open={openUpload} onClose={handleCloseUploadDialog} />
       <DeleteDialog
         open={isDeleteDialogOpen}
         onClose={handleCloseDeleteDialog}
