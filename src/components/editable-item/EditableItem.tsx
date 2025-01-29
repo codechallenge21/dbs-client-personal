@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Menu,
   MenuItem,
@@ -6,67 +6,67 @@ import {
   IconButton,
   ListItemText,
   ListItemIcon,
-} from "@mui/material";
+} from '@mui/material';
 import {
   EditRounded,
   DeleteRounded,
   MoreVertRounded,
-} from "@mui/icons-material";
+} from '@mui/icons-material';
 
 const menuActions = [
   {
     title: (
       <Typography
         sx={{
-          fontSize: "16px",
-          fontWeight: "400",
-          overflow: "hidden",
-          fontStyle: "normal",
-          lineHeight: "normal",
-          textOverflow: "ellipsis",
-          fontFamily: "DFPHeiBold-B5",
-          color: "var(--Primary-Black, #000)",
+          fontSize: '16px',
+          fontWeight: '400',
+          overflow: 'hidden',
+          fontStyle: 'normal',
+          lineHeight: 'normal',
+          textOverflow: 'ellipsis',
+          fontFamily: 'DFPHeiBold-B5',
+          color: 'var(--Primary-Black, #000)',
         }}
       >
         重新命名
       </Typography>
     ),
-    icon: <EditRounded sx={{ color: "black" }} />,
+    icon: <EditRounded sx={{ color: 'black' }} />,
   },
   {
     title: (
       <Typography
         sx={{
-          color: "red",
-          fontSize: "16px",
-          fontWeight: "400",
-          overflow: "hidden",
-          fontStyle: "normal",
-          lineHeight: "normal",
-          textOverflow: "ellipsis",
-          fontFamily: "DFPHeiBold-B5",
+          color: 'red',
+          fontSize: '16px',
+          fontWeight: '400',
+          overflow: 'hidden',
+          fontStyle: 'normal',
+          lineHeight: 'normal',
+          textOverflow: 'ellipsis',
+          fontFamily: 'DFPHeiBold-B5',
         }}
       >
         刪除
       </Typography>
     ),
-    icon: <DeleteRounded sx={{ color: "red" }} />,
+    icon: <DeleteRounded sx={{ color: 'red' }} />,
   },
 ];
 
 const EditableItem: React.FC<{
   index: number;
-  toolsAnchor: HTMLElement | null;
   activeIndex: number | null;
+  toolsAnchor: HTMLElement | null;
   handleCloseToolsMenu: () => void;
-  handleOpenEditChannelDialog?: () => void;
-  handleDeleteChannelOpenConfirmDialog: () => void;
-  handleMenuOpen: (event: React.MouseEvent<HTMLElement>, index: number) => void;
+  handleOpenEditChannelDialog?: (event: React.MouseEvent) => void;
+  handleDeleteChannelOpenConfirmDialog: (event: React.MouseEvent) => void;
   setToolsAnchor: React.Dispatch<React.SetStateAction<HTMLElement | null>>;
+  handleMenuOpen: (event: React.MouseEvent<HTMLElement>, index: number) => void;
 }> = ({
   index,
-  toolsAnchor,
   activeIndex,
+  toolsAnchor,
   handleMenuOpen,
   handleCloseToolsMenu,
   handleOpenEditChannelDialog,
@@ -74,30 +74,33 @@ const EditableItem: React.FC<{
 }) => {
   return (
     <>
-      <IconButton onClick={(event) => handleMenuOpen(event, index)}>
-        <MoreVertRounded sx={{ color: "black" }} />
+      <IconButton
+        sx={{ padding: 0 }}
+        onClick={(event) => handleMenuOpen(event, index)}
+      >
+        <MoreVertRounded sx={{ color: 'black' }} />
       </IconButton>
       <Menu
         anchorEl={toolsAnchor}
         open={Boolean(toolsAnchor) && activeIndex === index}
         onClose={handleCloseToolsMenu}
         anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right",
+          vertical: 'bottom',
+          horizontal: 'right',
         }}
         transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
+          vertical: 'top',
+          horizontal: 'right',
         }}
         slotProps={{
           paper: {
             sx: {
-              maxWidth: "199px",
-              minHeight: "80px",
-              padding: "4px",
-              borderRadius: "12px",
-              "& .MuiList-root": {
-                padding: "0px",
+              maxWidth: '199px',
+              minHeight: '80px',
+              padding: '4px',
+              borderRadius: '12px',
+              '& .MuiList-root': {
+                padding: '0px',
               },
             },
           },
@@ -107,14 +110,14 @@ const EditableItem: React.FC<{
           <MenuItem
             key={index}
             sx={{
-              width: "175px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-start",
-              padding: "6px 8px",
-              "&:hover": {
-                backgroundColor: "#F5F5F5",
-                borderRadius: "6px",
+              width: '175px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'flex-start',
+              padding: '6px 8px',
+              '&:hover': {
+                backgroundColor: '#F5F5F5',
+                borderRadius: '6px',
               },
             }}
             onClick={

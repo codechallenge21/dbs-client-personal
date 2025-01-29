@@ -10,7 +10,7 @@ import {
 import { WorkRounded } from '@mui/icons-material';
 import Image from 'next/image';
 import boxImage from '../../../public/assets/images/box.png';
-import ToolboxDrawer from './components/ToolboxDrawer';
+import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
 
 export default function PopularArea() {
   const focusRef = useRef<HTMLDivElement>(null);
@@ -68,10 +68,6 @@ export default function PopularArea() {
   const focusItems = Array.from({ length: 10 });
   const recommendedItems = Array.from({ length: 10 });
 
-  const toggleDrawer = (newOpen: boolean) => {
-    setIsOpenDrawer(newOpen);
-  };
-
   return (
     <Box
       sx={{
@@ -79,7 +75,7 @@ export default function PopularArea() {
         background: 'var(--Primary-, #EBE3DD)',
       }}
     >
-      <ToolboxDrawer open={isOpenDrawer} toggleDrawer={toggleDrawer}>
+      <ToolbarDrawer open={isOpenDrawer} setIsOpenDrawer={setIsOpenDrawer}>
         <Box
           sx={{
             minHeight: '96vh',
@@ -353,7 +349,7 @@ export default function PopularArea() {
             ))}
           </Box>
         </Box>
-      </ToolboxDrawer>
+      </ToolbarDrawer>
     </Box>
   );
 }
