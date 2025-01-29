@@ -57,8 +57,6 @@ const Header: React.FC<HeaderProps> = ({
 
   const headerWidth = useMemo(() => {
     if (isMobile) return '100%';
-    // console.log('open', open);
-    // console.log('openDataSource', openDataSource);
     return open
       ? `calc(100% - 303px - ${openDataSource ? 446 : 0}px)`
       : `calc(100% - 128px - ${openDataSource ? 446 : 0}px)`;

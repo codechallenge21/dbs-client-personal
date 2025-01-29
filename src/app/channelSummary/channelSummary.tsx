@@ -38,6 +38,7 @@ import { useAudioChannel } from '@/utils/hooks/useAudioChannel';
 import { useRouter, useSearchParams } from 'next/navigation';
 import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
 import UploadDialog from '@/components/uploadDialog/page';
+import DataSourceDialog from '@/components/chat-page/components/chatDataStore';
 
 function TabPanel(props: {
   value: number;
@@ -124,6 +125,7 @@ const ChannelSummary = () => {
   const [tabValue, setTabValue] = React.useState(0);
   const [selectedChannel, setSelectedChannel] =
     React.useState<OrganizationChannel | null>(null);
+  const [openDataSource, setOpenDataSource] = useState(false);
   const [aIAnalysisTabValue, setAIAnalysisTabValue] = React.useState(0);
   const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(
     isMobile ? false : true
@@ -194,6 +196,11 @@ const ChannelSummary = () => {
                 borderRadius: '8px',
                 padding: '16px 32px',
                 backgroundColor: 'white',
+                width: openDataSource
+                  ? isOpenDrawer
+                    ? '73.5%'
+                    : '76%'
+                  : '100%',
               }}
             >
               {/* {isloadingChannelData ? (
@@ -317,7 +324,9 @@ const ChannelSummary = () => {
                     <IconButton>
                       <StarBorderRounded sx={{ color: 'black' }} />
                     </IconButton>
-                    <IconButton>
+                    <IconButton
+                      onClick={() => setOpenDataSource(!openDataSource)}
+                    >
                       <SettingsInputComponentRounded sx={{ color: 'black' }} />
                     </IconButton>
                   </Box>
@@ -1907,6 +1916,10 @@ const ChannelSummary = () => {
           </Box>
         </Box>
       )}
+      <DataSourceDialog
+        open={openDataSource}
+        onClose={() => setOpenDataSource(false)}
+      />
     </>
   );
 };
