@@ -286,6 +286,7 @@ const TextInput: React.FC<TextInputProps> = ({
           flexDirection: 'column',
           width: '100%',
           maxWidth: '760px',
+          minHeight: '116px',
           maxHeight: '760px',
           position: 'relative',
           bottom: 0,
