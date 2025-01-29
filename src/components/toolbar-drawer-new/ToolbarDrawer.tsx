@@ -641,7 +641,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             },
           }}
           onClose={() => setIsOpenDrawer(false)}
-          variant={'persistent'}
+          variant={'temporary'}
         >
           {DrawerList}
         </Drawer>

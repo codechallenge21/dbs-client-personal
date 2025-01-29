@@ -117,7 +117,7 @@ export default function DataSourceDialog({
 
   const displayFiles = files.length > 0 ? files : defaultFiles;
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const localFiles = displayFiles.filter((file) => file.isLocal);
   const sourceFiles = displayFiles.filter((file) => !file.isLocal);
@@ -141,6 +141,7 @@ export default function DataSourceDialog({
           marginTop: isMobile ? '0' : '16px',
           marginRight: isMobile ? '0' : '16px',
           height: isMobile ? 'auto' : 'calc(100vh - 32px)',
+          top: isMobile ? '112px' : '',
         },
       }}
       variant={isMobile ? 'temporary' : 'persistent'}
