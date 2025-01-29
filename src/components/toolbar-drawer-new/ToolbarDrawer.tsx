@@ -288,6 +288,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                   fontSize: '16px',
                   alignItems: 'center',
                   color: index === 0 ? '#CC0000' : 'black',
+                  fontFamily: 'DFPHeiBold-B5',
                 }}
               >
                 <span>{item.icon}</span>
