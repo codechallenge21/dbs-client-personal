@@ -99,3 +99,7 @@ a {
 .mic-icon {
   animation: micPulse 1s infinite;
 }
+
+.textarea-autosize::placeholder {
+  color: #9b9b9b;
+}

@@ -9,6 +9,7 @@ import {
   MenuItem,
   useTheme,
   useMediaQuery,
+  Box,
 } from '@mui/material';
 import {
   AccountBalanceWalletRounded,
@@ -129,11 +130,13 @@ export default function DropdownMenu({
   return (
     <>
       {isTextInput ? (
-        <div
+        <Box
           onClick={(e) => setToolsAnchor(e.currentTarget)}
-          style={{
+          sx={{
             background: 'none',
             cursor: 'pointer',
+            width: '24px',
+            height: '24px',
           }}
         >
           {listItems
@@ -141,12 +144,17 @@ export default function DropdownMenu({
             .map((item) => (
               <SupportAgentIcon
                 key={item.value}
-                sx={{ color: 'black', minWidth: 'auto' }}
+                sx={{
+                  color: 'black',
+                  minWidth: 'auto',
+                  width: '24px',
+                  height: '24px',
+                }}
               >
                 {item.icon}
               </SupportAgentIcon>
             ))}
-        </div>
+        </Box>
       ) : (
         <>
           <Typography
