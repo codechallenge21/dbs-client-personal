@@ -824,8 +824,17 @@ const ChannelsList = () => {
                   }}
                 >
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <IconButton sx={{ mr: '8px', padding: '0px' }}>
-                      <StarRounded sx={{ color: '#212B36' }} />
+                    <IconButton
+                      sx={{ mr: '8px', padding: '0px' }}
+                      onClick={(e) =>
+                        handleStarClick(e, channel.organizationChannelId)
+                      }
+                    >
+                      {favoriteChannels[channel.organizationChannelId] ? (
+                        <StarRounded sx={{ color: '#212B36' }} />
+                      ) : (
+                        <StarBorderRounded sx={{ color: '#212B36' }} />
+                      )}
                     </IconButton>
                     <Typography
                       sx={{
