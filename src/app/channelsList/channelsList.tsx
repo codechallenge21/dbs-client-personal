@@ -52,16 +52,13 @@ const ChannelsList = () => {
   const [toolsAnchor, setToolsAnchor] = useState<null | HTMLElement>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState<boolean>(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
-  const [favoriteChannels, setFavoriteChannels] = useState<{
-    [key: string]: boolean;
-  }>({});
   const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(
     isMobile ? false : true
   );
   const [openUpload, setOpenUpload] = React.useState(false);
-  const [toggledRows, setToggledRows] = useState<{ [key: number]: boolean }>(
-    {}
-  );
+  const [favoriteChannels, setFavoriteChannels] = useState<{
+    [key: number]: boolean;
+  }>({});
 
   const {
     data: channelsData,
@@ -84,17 +81,6 @@ const ChannelsList = () => {
       setToolsAnchor(null);
       event.stopPropagation();
       setIsDeleteDialogOpen(true);
-    },
-    []
-  );
-
-  const handleStarClick = useCallback(
-    (event: React.MouseEvent, channelId: string) => {
-      event.stopPropagation();
-      setFavoriteChannels((prev) => ({
-        ...prev,
-        [channelId]: !prev[channelId],
-      }));
     },
     []
   );
@@ -185,7 +171,7 @@ const ChannelsList = () => {
   };
 
   const handleToggle = (index: number) => {
-    setToggledRows((prev) => ({
+    setFavoriteChannels((prev) => ({
       ...prev,
       [index]: !prev[index],
     }));
@@ -358,7 +344,7 @@ const ChannelsList = () => {
                         border: '1px solid var(--Secondary-, #5C443A)',
                       }}
                     >
-                      <MicRounded />
+                      <MicRounded sx={{ color: '#5C443A' }} />
                       <Typography>開始錄音</Typography>
                     </IconButton>
                     <IconButton
@@ -370,6 +356,12 @@ const ChannelsList = () => {
                         alignItems: 'center',
                         justifyContent: 'center',
                         background: 'var(--Secondary-, #5C443A)',
+                        '&:hover': {
+                          background: 'rgba(92, 68, 58, 0.8)',
+                        },
+                        '&:active': {
+                          background: 'rgba(92, 68, 58, 0.6)',
+                        },
                       }}
                       onClick={() => setOpenUpload(true)}
                     >
@@ -516,22 +508,43 @@ const ChannelsList = () => {
                               width: '18%',
                             }}
                           >
-                            <Typography
+                            <Box
                               sx={{
-                                fontWeight: 400,
-                                fontSize: '16px',
-                                fontStyle: 'normal',
-                                padding: '16px 0px',
-                                lineHeight: 'normal',
-                                fontFamily: 'DFPHeiBold-B5',
-                                color: 'var(--Text-Primary, #212B36)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 2,
                               }}
                             >
-                              {
-                                channel.organizationChannelTranscriptList[0]
-                                  ?.organizationChannelTranscriptStatus
-                              }
-                            </Typography>
+                              {channel.organizationChannelTranscriptList[0]
+                                ?.organizationChannelTranscriptStatus ===
+                              'COMPLETE' ? (
+                                <CheckCircleRounded
+                                  sx={{ color: ' rgba(17, 141, 87, 1)' }}
+                                />
+                              ) : channel.organizationChannelTranscriptList[0]
+                                  ?.organizationChannelTranscriptStatus ===
+                                'PROCESSING' ? (
+                                <RotateRightRounded
+                                  sx={{ color: 'rgba(0, 102, 204, 1)' }}
+                                />
+                              ) : channel.organizationChannelTranscriptList[0]
+                                  ?.organizationChannelTranscriptStatus ===
+                                'PENDING' ? (
+                                <PendingActionsRounded
+                                  sx={{ color: 'rgba(33, 43, 54, 1)' }}
+                                />
+                              ) : (
+                                <PendingActionsRounded
+                                  sx={{ color: 'rgba(33, 43, 54, 1)' }}
+                                />
+                              )}
+                              <span>
+                                {
+                                  channel.organizationChannelTranscriptList[0]
+                                    ?.organizationChannelTranscriptStatus
+                                }
+                              </span>
+                            </Box>
                           </TableCell>
                           <TableCell
                             sx={{
@@ -571,7 +584,7 @@ const ChannelsList = () => {
                             }}
                           >
                             <IconButton sx={{ padding: '0px' }}>
-                              {toggledRows[index] ? (
+                              {favoriteChannels[index] ? (
                                 <StarRounded sx={{ color: 'black' }} />
                               ) : (
                                 <StarBorderRounded sx={{ color: 'black' }} />
@@ -756,7 +769,7 @@ const ChannelsList = () => {
                 justifyContent: 'center',
                 border: '1px solid var(--Secondary-, #5C443A)',
               }}
-              startIcon={<MicRounded />}
+              startIcon={<MicRounded sx={{ color: '#5C443A' }} />}
             >
               <Typography
                 sx={{
@@ -775,6 +788,7 @@ const ChannelsList = () => {
             <Button
               sx={{
                 gap: '8px',
+                color: '#FFF',
                 display: 'flex',
                 boxShadow: 'none',
                 padding: '6px 12px',
@@ -783,7 +797,7 @@ const ChannelsList = () => {
                 justifyContent: 'center',
                 background: 'var(--Secondary-, #5C443A)',
               }}
-              startIcon={<UploadRounded />}
+              startIcon={<UploadRounded sx={{ color: '#FFF' }} />}
               onClick={() => setOpenUpload(true)}
             >
               上傳檔案
@@ -813,7 +827,7 @@ const ChannelsList = () => {
                 sx={{
                   padding: 0,
                   width: '100%',
-                  height: '90%',
+                  height: '100%',
                   display: 'flex',
                   flexDirection: 'column',
                   paddingBottom: '0 !important',
@@ -823,6 +837,7 @@ const ChannelsList = () => {
                 <Box
                   sx={{
                     mb: '8px',
+                    width: '100%',
                     display: 'flex',
                     alignItems: 'start',
                     justifyContent: 'space-between',
@@ -834,6 +849,8 @@ const ChannelsList = () => {
                       fontSize: '24px',
                       fontStyle: 'normal',
                       lineHeight: 'normal',
+                      whiteSpace: 'normal',
+                      wordBreak: 'break-word',
                       fontFamily: 'DFPHeiBold-B5',
                       color: 'var(--Primary-Black, #212B36)',
                     }}
@@ -861,17 +878,23 @@ const ChannelsList = () => {
                     justifyContent: 'space-between',
                   }}
                 >
-                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}
+                  >
                     <IconButton
-                      sx={{ mr: '8px', padding: '0px' }}
-                      onClick={(e) =>
-                        handleStarClick(e, channel.organizationChannelId)
-                      }
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleToggle(index);
+                      }}
+                      sx={{ padding: '0px', marginRight: '8px' }}
                     >
-                      {favoriteChannels[channel.organizationChannelId] ? (
-                        <StarRounded sx={{ color: '#212B36' }} />
+                      {favoriteChannels[index] ? (
+                        <StarRounded sx={{ color: 'black' }} />
                       ) : (
-                        <StarBorderRounded sx={{ color: '#212B36' }} />
+                        <StarBorderRounded sx={{ color: 'black' }} />
                       )}
                     </IconButton>
                     <Typography
@@ -881,6 +904,7 @@ const ChannelsList = () => {
                         overflow: 'hidden',
                         lineHeight: '24px',
                         fontStyle: 'normal',
+                        textAlign: 'center',
                         textOverflow: 'ellipsis',
                         fontFamily: 'DFPHeiMedium-B5',
                         color: 'var(--Primary-Black, #212B36)',
@@ -893,51 +917,48 @@ const ChannelsList = () => {
                   </Box>
                   <Box
                     sx={{
-                      fontWeight: 400,
-                      fontSize: '16px',
-                      lineHeight: '24px',
-                      overflow: 'hidden',
-                      fontStyle: 'normal',
-                      textOverflow: 'ellipsis',
-                      fontFamily: 'DFPHeiMedium-B5',
-                      color: 'var(--Primary-Black, #212B36)',
+                      display: 'flex',
+                      alignItems: 'center',
                     }}
                   >
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        alignItems: 'center',
+                    {channel.organizationChannelTranscriptList[0]
+                      ?.organizationChannelTranscriptStatus === 'COMPLETE' ? (
+                      <CheckCircleRounded
+                        sx={{ color: ' rgba(52, 199, 89, 1)' }}
+                      />
+                    ) : channel.organizationChannelTranscriptList[0]
+                        ?.organizationChannelTranscriptStatus ===
+                      'PROCESSING' ? (
+                      <RotateRightRounded
+                        sx={{ color: 'rgba(0, 102, 204, 1)' }}
+                      />
+                    ) : channel.organizationChannelTranscriptList[0]
+                        ?.organizationChannelTranscriptStatus === 'PENDING' ? (
+                      <PendingActionsRounded
+                        sx={{ color: 'rgba(33, 43, 54, 1)' }}
+                      />
+                    ) : (
+                      <PendingActionsRounded
+                        sx={{ color: 'rgba(33, 43, 54, 1)' }}
+                      />
+                    )}
+                    <span
+                      style={{
+                        fontWeight: 400,
+                        fontSize: '16px',
+                        lineHeight: '24px',
+                        overflow: 'hidden',
+                        fontStyle: 'normal',
+                        textOverflow: 'ellipsis',
+                        fontFamily: 'DFPHeiMedium-B5',
+                        color: 'var(--Primary-Black, #212B36)',
                       }}
                     >
-                      {channel.organizationChannelTranscriptList[0]
-                        ?.organizationChannelTranscriptStatus === 'COMPLETE' ? (
-                        <CheckCircleRounded
-                          sx={{ color: ' rgba(52, 199, 89, 1)' }}
-                        />
-                      ) : channel.organizationChannelTranscriptList[0]
-                          ?.organizationChannelTranscriptStatus ===
-                        'PROCESSING' ? (
-                        <RotateRightRounded
-                          sx={{ color: 'rgba(0, 102, 204, 1)' }}
-                        />
-                      ) : channel.organizationChannelTranscriptList[0]
-                          ?.organizationChannelTranscriptStatus ===
-                        'PENDING' ? (
-                        <PendingActionsRounded
-                          sx={{ color: 'rgba(33, 43, 54, 1)' }}
-                        />
-                      ) : (
-                        <PendingActionsRounded
-                          sx={{ color: 'rgba(33, 43, 54, 1)' }}
-                        />
-                      )}
-                      <span>
-                        {
-                          channel.organizationChannelTranscriptList[0]
-                            ?.organizationChannelTranscriptStatus
-                        }
-                      </span>
-                    </Box>
+                      {
+                        channel.organizationChannelTranscriptList[0]
+                          ?.organizationChannelTranscriptStatus
+                      }
+                    </span>
                   </Box>
                 </Box>
               </CardContent>

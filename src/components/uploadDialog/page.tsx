@@ -207,9 +207,6 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
             sx={{
               zIndex: 1,
               gap: '8px',
-              mb: isMobile ? '32px' : '65px',
-              width: isMobile ? '180px' : '294px',
-              height: isMobile ? '46px' : '46px',
               display: 'flex',
               fontWeight: 400,
               fontSize: '16px',
@@ -220,6 +217,9 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
               alignItems: 'center',
               justifyContent: 'center',
               fontFamily: 'DFPHeiBold-B5',
+              mb: isMobile ? '32px' : '65px',
+              height: isMobile ? '46px' : '46px',
+              width: isMobile ? '180px' : '294px',
               color: 'var(--Info-ContrastText, #FFF)',
               background: 'var(--Secondary-Dark-Gray, #4A4A4A)',
             }}
