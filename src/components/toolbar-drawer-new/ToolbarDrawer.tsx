@@ -145,10 +145,6 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
     setIsClient(true);
   }, []);
 
-  // useEffect(() => {
-  //   if (!isMobile) setIsOpenDrawer(true);
-  // }, [isMobile, setIsOpenDrawer]);
-
   if (!isClient) {
     return null;
   }
@@ -203,11 +199,8 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               if (isMobile) {
                 setIsOpenDrawer(!open);
               } else {
-                setIsExpanded((prev) => {
-                  const newState = !prev;
-                  setIsOpenDrawer(newState);
-                  return newState;
-                });
+                setIsOpenDrawer(!isExpanded);
+                setIsExpanded((prev) => !prev);
               }
             }}
             sx={{ color: 'black', padding: '8px' }}
