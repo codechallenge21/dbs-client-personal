@@ -207,7 +207,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
             sx={{
               zIndex: 1,
               gap: '8px',
-              mb: isMobile ? '40px' : '65px',
+              mb: isMobile ? '32px' : '65px',
               width: isMobile ? '180px' : '294px',
               height: isMobile ? '46px' : '46px',
               display: 'flex',
@@ -239,7 +239,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
             <Typography
               sx={{
                 color: 'grey.600',
-                fontSize: 14,
+                fontSize: isMobile ? 14 : 16,
                 mb: 0.5,
                 width: '100%',
                 height: 'auto',
@@ -252,7 +252,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
             <Typography
               sx={{
                 color: 'grey.600',
-                fontSize: 14,
+                fontSize: isMobile ? 14 : 16,
               }}
             >
               限制大小：100MB
