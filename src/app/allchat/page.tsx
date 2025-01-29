@@ -30,11 +30,7 @@ export default function Home() {
   }, [isMobile]);
 
   return (
-    <ToolbarDrawer
-      open={isOpenDrawer}
-      setIsOpenDrawer={toggleDrawer}
-      openDataSource
-    >
+    <ToolbarDrawer open={isOpenDrawer} setIsOpenDrawer={toggleDrawer}>
       <Box
         sx={{
           display: 'flex',

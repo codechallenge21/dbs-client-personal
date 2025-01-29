@@ -197,6 +197,10 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
     setIsClient(true);
   }, []);
 
+  useEffect(() => {
+    if (!isMobile) setIsOpenDrawer(true);
+  }, [isMobile, setIsOpenDrawer]);
+
   if (!isClient) {
     return null;
   }
@@ -293,7 +297,6 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                   setOpenUpload(true);
                 } else {
                   resetChat();
-                  setIsOpenDrawer(false);
                 }
               }}
             >
@@ -306,7 +309,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                   fontStyle: 'normal',
                   fontWeight: 700,
                   alignItems: 'center',
-                  lineHeight: '18px',
+                  lineHeight: 'normal',
                 }}
               >
                 New Chat
@@ -325,6 +328,13 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               justifyContent: 'center',
               border: '1px solid var(--Primary-Black, #212B36)',
               mt: '8px',
+            }}
+            onClick={() => {
+              if (setOpenUpload) {
+                setOpenUpload(true);
+              } else {
+                resetChat();
+              }
             }}
           >
             <AddRounded sx={{ color: '#212B36', fontSize: '20px' }} />

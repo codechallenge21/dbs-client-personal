@@ -166,7 +166,11 @@ export default function DropdownMenu({
               color: toolsAnchor ? '#0066cc' : 'black',
               backgroundColor: toolsAnchor ? '#F5F5F5' : 'white',
               borderRadius: toolsAnchor ? '10px' : '0px',
-              cursor: 'pointer',
+              cursor:
+                chatResponses[1]?.organizationChannelTitle ||
+                selectedChannel?.organizationChannelTitle
+                  ? 'pointer'
+                  : 'default',
               height: '40px',
               fontSize: '16px',
               fontFamily: 'DFPHeiBold-B5',
