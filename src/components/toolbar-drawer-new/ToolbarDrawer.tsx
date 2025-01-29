@@ -634,6 +634,8 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
           open={open}
           sx={{
             flexShrink: 0,
+            zIndex: !open ? 0 : 1200,
+            transition: 'z-index 225ms',
             '& .MuiDrawer-paper': {
               width: isExpanded || isMobile ? drawerWidth : 72,
               height: '100%',
