@@ -25,6 +25,9 @@ import {
   SearchRounded,
   UploadRounded,
   MenuRounded,
+  CheckCircleRounded,
+  RotateRightRounded,
+  PendingActionsRounded,
 } from '@mui/icons-material';
 import { useRouter } from 'next/navigation';
 import { OrganizationChannel } from '@/interfaces/entities';
@@ -471,10 +474,43 @@ const ChannelsList = () => {
                               color: 'var(--Text-Primary, #212B36)',
                             }}
                           >
-                            {
-                              channel.organizationChannelTranscriptList[0]
-                                ?.organizationChannelTranscriptStatus
-                            }
+                            <Box
+                              sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 2,
+                              }}
+                            >
+                              {channel.organizationChannelTranscriptList[0]
+                                ?.organizationChannelTranscriptStatus ===
+                              'COMPLETE' ? (
+                                <CheckCircleRounded
+                                  sx={{ color: ' rgba(17, 141, 87, 1)' }}
+                                />
+                              ) : channel.organizationChannelTranscriptList[0]
+                                  ?.organizationChannelTranscriptStatus ===
+                                'PROCESSING' ? (
+                                <RotateRightRounded
+                                  sx={{ color: 'rgba(0, 102, 204, 1)' }}
+                                />
+                              ) : channel.organizationChannelTranscriptList[0]
+                                  ?.organizationChannelTranscriptStatus ===
+                                'PENDING' ? (
+                                <PendingActionsRounded
+                                  sx={{ color: 'rgba(33, 43, 54, 1)' }}
+                                />
+                              ) : (
+                                <PendingActionsRounded
+                                  sx={{ color: 'rgba(33, 43, 54, 1)' }}
+                                />
+                              )}
+                              <span>
+                                {
+                                  channel.organizationChannelTranscriptList[0]
+                                    ?.organizationChannelTranscriptStatus
+                                }
+                              </span>
+                            </Box>
                           </TableCell>
                           <TableCell
                             sx={{
