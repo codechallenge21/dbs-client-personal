@@ -25,6 +25,7 @@ import {
   SearchRounded,
   UploadRounded,
   MenuRounded,
+  StarBorderRounded,
 } from '@mui/icons-material';
 import { useRouter } from 'next/navigation';
 import { OrganizationChannel } from '@/interfaces/entities';
@@ -52,6 +53,9 @@ const ChannelsList = () => {
     isMobile ? false : true
   );
   const [openUpload, setOpenUpload] = React.useState(false);
+  const [toggledRows, setToggledRows] = useState<{ [key: number]: boolean }>(
+    {}
+  );
 
   const {
     data: channelsData,
@@ -161,6 +165,13 @@ const ChannelsList = () => {
     router.push(
       `/channelSummary?organizationChannelId=${channel?.organizationChannelId}`
     );
+  };
+
+  const handleToggle = (index: number) => {
+    setToggledRows((prev) => ({
+      ...prev,
+      [index]: !prev[index],
+    }));
   };
 
   useEffect(() => {
@@ -317,7 +328,7 @@ const ChannelsList = () => {
                     >
                       <SearchRounded />
                     </IconButton>
-                    <Button
+                    <IconButton
                       sx={{
                         gap: '8px',
                         display: 'flex',
@@ -329,28 +340,25 @@ const ChannelsList = () => {
                         justifyContent: 'center',
                         border: '1px solid var(--Secondary-, #5C443A)',
                       }}
-                      variant="contained"
-                      startIcon={<MicRounded />}
                     >
-                      開始錄音
-                    </Button>
-                    <Button
+                      <MicRounded />
+                      <Typography>開始錄音</Typography>
+                    </IconButton>
+                    <IconButton
                       sx={{
+                        gap: '8px',
                         display: 'flex',
                         padding: '6px 12px',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        gap: '8px',
                         borderRadius: '8px',
+                        alignItems: 'center',
+                        justifyContent: 'center',
                         background: 'var(--Secondary-, #5C443A)',
                       }}
-                      variant="contained"
-                      color="primary"
-                      startIcon={<UploadRounded />}
                       onClick={() => setOpenUpload(true)}
                     >
-                      上傳檔案
-                    </Button>
+                      <UploadRounded sx={{ color: '#fff' }} />
+                      <Typography sx={{ color: '#fff' }}>上傳檔案</Typography>
+                    </IconButton>
                   </Box>
                 </Box>
 
@@ -540,9 +548,17 @@ const ChannelsList = () => {
                               textAlign: 'center',
                               height: '51px !important',
                             }}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleToggle(index);
+                            }}
                           >
                             <IconButton sx={{ padding: '0px' }}>
-                              <StarRounded sx={{ color: 'black' }} />
+                              {toggledRows[index] ? (
+                                <StarRounded sx={{ color: 'black' }} />
+                              ) : (
+                                <StarBorderRounded sx={{ color: 'black' }} />
+                              )}
                             </IconButton>
                           </TableCell>
                           <TableCell
@@ -552,6 +568,9 @@ const ChannelsList = () => {
                               padding: '0px 16px',
                               textAlign: 'center',
                               height: '51px !important',
+                            }}
+                            onClick={(e) => {
+                              e.stopPropagation();
                             }}
                           >
                             <EditableItem
