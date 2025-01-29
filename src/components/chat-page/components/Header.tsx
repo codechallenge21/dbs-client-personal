@@ -4,10 +4,10 @@ import React, { useContext, useCallback, memo, useMemo } from 'react';
 import DropdownMenu from './DropdownMenu';
 import { Box, IconButton, useMediaQuery, useTheme } from '@mui/material';
 import {
-  HistoryRounded,
   MenuRounded,
-  SettingsInputComponentRounded,
+  HistoryRounded,
   StarBorderRounded,
+  SettingsInputComponentRounded,
 } from '@mui/icons-material';
 import UploadDialog from '@/components/uploadDialog/page';
 import { AdvisorType } from '../../../app/chat/types';
@@ -20,7 +20,7 @@ interface HeaderProps {
   setIsopen?: (isOpen: boolean) => void;
   advisor: AdvisorType;
   isChat?: boolean;
-  toggleDrawer?: (open: boolean) => void;
+  setIsOpenDrawer?: (open: boolean) => void;
   openUpload?: boolean;
   setOpenUpload?: React.Dispatch<React.SetStateAction<boolean>>;
   setOpenDataSource: React.Dispatch<React.SetStateAction<boolean>>;
@@ -29,7 +29,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({
   open,
-  toggleDrawer = () => {},
+  setIsOpenDrawer = () => {},
   advisor,
   isChat = false,
   openUpload = false,
@@ -50,16 +50,18 @@ const Header: React.FC<HeaderProps> = ({
 
   const memoizedToggleDrawer = useCallback(
     (drawerOpen: boolean) => {
-      toggleDrawer(drawerOpen);
+      setIsOpenDrawer(drawerOpen);
     },
-    [toggleDrawer]
+    [setIsOpenDrawer]
   );
 
   const headerWidth = useMemo(() => {
     if (isMobile) return '100%';
+    // console.log('open', open);
+    // console.log('openDataSource', openDataSource);
     return open
-      ? `calc(100% - 287px - ${openDataSource ? 446 : 0}px)`
-      : `calc(100% - 107px - ${openDataSource ? 446 : 0}px)`;
+      ? `calc(100% - 303px - ${openDataSource ? 446 : 0}px)`
+      : `calc(100% - 128px - ${openDataSource ? 446 : 0}px)`;
   }, [isMobile, open, openDataSource]);
 
   return (
@@ -131,9 +133,6 @@ const Header: React.FC<HeaderProps> = ({
                 justifyContent: 'flex-start',
               }}
             >
-              <IconButton onClick={() => memoizedToggleDrawer(true)}>
-                <MenuRounded sx={{ color: 'black' }} />
-              </IconButton>
               {!isChat && (
                 <IconButton onClick={() => setOpenUpload(true)}>
                   <FileUploadIcon sx={{ color: 'black' }} />

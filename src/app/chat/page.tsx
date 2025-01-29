@@ -18,7 +18,7 @@ import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import apis from '@/utils/hooks/apis/apis';
 import DataSourceDialog from '@/components/chat-page/components/chatDataStore';
 
-export default function Home() {
+export default function ChatHomePage() {
   return (
     <Suspense fallback={<CircularProgress />}>
       <ClientContent />
@@ -47,10 +47,6 @@ function ClientContent() {
 
   const handleClose = useCallback(() => setIsOpen(false), []);
   const handleConfirm = useCallback(() => setIsOpen(false), []);
-  const toggleDrawer = useCallback(
-    (newOpen: boolean) => setIsOpenDrawer(newOpen),
-    []
-  );
 
   const fetchChannelDetail = useCallback(
     async (organizationChannelId: string) => {
@@ -92,23 +88,24 @@ function ClientContent() {
   }, [isMobile]);
 
   return (
-    <ToolbarDrawer open={isOpenDrawer} toggleDrawer={toggleDrawer}>
+    <ToolbarDrawer open={isOpenDrawer} setIsOpenDrawer={setIsOpenDrawer}>
       <Box
         sx={{
           display: 'flex',
-          flexDirection: 'column',
-          height: isMobile ? '100vh' : 'calc(100vh - 32px)',
-          backgroundColor: '#FFFFFF',
           borderRadius: '8px',
+          flexDirection: 'column',
+          backgroundColor: '#FFF',
           overflowY: isMobile ? 'auto' : 'unset',
+          height: isMobile ? '100vh' : 'calc(100vh - 32px)',
+          width: openDataSource ? (isOpenDrawer ? '65%' : '69%') : '100%',
         }}
       >
         <Header
           isChat
-          toggleDrawer={toggleDrawer}
           open={isOpenDrawer}
           advisor={advisorType}
           openDataSource={openDataSource}
+          setIsOpenDrawer={setIsOpenDrawer}
           setOpenDataSource={setOpenDataSource}
         />
         <Box

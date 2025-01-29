@@ -163,10 +163,6 @@ const ChannelsList = () => {
     );
   };
 
-  const toggleDrawer = (newOpen: boolean) => {
-    setIsOpenDrawer(newOpen);
-  };
-
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -186,8 +182,8 @@ const ChannelsList = () => {
         >
           <ToolbarDrawer
             open={isOpenDrawer}
-            toggleDrawer={toggleDrawer}
             setOpenUpload={setOpenUpload}
+            setIsOpenDrawer={setIsOpenDrawer}
           >
             {/* {isLoadingChannels ? (
           <Box

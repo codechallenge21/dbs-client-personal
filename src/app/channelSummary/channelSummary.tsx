@@ -168,10 +168,6 @@ const ChannelSummary = () => {
     setAIAnalysisTabValue(newValue);
   };
 
-  const toggleDrawer = (newOpen: boolean) => {
-    setIsOpenDrawer(newOpen);
-  };
-
   const handleCloseUploadDialog = () => {
     setOpenUpload(false);
   };
@@ -187,8 +183,8 @@ const ChannelSummary = () => {
         >
           <ToolbarDrawer
             open={isOpenDrawer}
-            toggleDrawer={toggleDrawer}
             setOpenUpload={setOpenUpload}
+            setIsOpenDrawer={setIsOpenDrawer}
           >
             <Box
               sx={{

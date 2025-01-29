@@ -31,8 +31,8 @@ import { usePathname, useRouter } from 'next/navigation';
 interface ToolbarDrawerProps {
   open: boolean;
   children: React.ReactNode;
-  toggleDrawer: (open: boolean) => void;
   setOpenUpload?: (open: boolean) => void;
+  setIsOpenDrawer: (open: boolean) => void;
 }
 
 const drawerItems = [
@@ -131,8 +131,8 @@ const CustomDrawer = styled(MuiDrawer, {
 const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
   open,
   children,
-  toggleDrawer,
   setOpenUpload,
+  setIsOpenDrawer,
 }) => {
   const pathname = usePathname();
   const router = useRouter();
@@ -145,9 +145,9 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
     setIsClient(true);
   }, []);
 
-  useEffect(() => {
-    if (!isMobile) toggleDrawer(true);
-  }, [isMobile, toggleDrawer]);
+  // useEffect(() => {
+  //   if (!isMobile) setIsOpenDrawer(true);
+  // }, [isMobile, setIsOpenDrawer]);
 
   if (!isClient) {
     return null;
@@ -201,11 +201,11 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
           <IconButton
             onClick={() => {
               if (isMobile) {
-                toggleDrawer(!open);
+                setIsOpenDrawer(!open);
               } else {
                 setIsExpanded((prev) => {
                   const newState = !prev;
-                  toggleDrawer(newState);
+                  setIsOpenDrawer(newState);
                   return newState;
                 });
               }
@@ -473,7 +473,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               borderRadius: '8px',
             },
           }}
-          onClose={() => toggleDrawer(!open)}
+          onClose={() => setIsOpenDrawer(!open)}
           variant={isMobile ? 'temporary' : 'permanent'}
         >
           {DrawerList}
@@ -490,7 +490,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               borderRadius: '8px',
             },
           }}
-          onClose={() => toggleDrawer(false)}
+          onClose={() => setIsOpenDrawer(false)}
           variant={isMobile ? 'temporary' : 'persistent'}
         >
           {DrawerList}

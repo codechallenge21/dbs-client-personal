@@ -17,9 +17,8 @@ import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import apis from '@/utils/hooks/apis/apis';
 import { useChatChannels } from '@/utils/hooks/useChatChannels';
 import { OrganizationChannelData } from '@/interfaces/entities';
-// import InformationPage from './chatResponsePlaceholder';
 
-export default function MainContent() {
+const MainContent = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const router = useRouter();
@@ -107,15 +106,15 @@ export default function MainContent() {
   return (
     <Box
       sx={{
-        height: isMobile ? 'auto' : '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        pt: isMobile ? '128px' : '0px',
-        justifyContent: isMobile ? 'flex-end' : 'center',
-        alignItems: 'center',
-        textAlign: 'center',
         px: '16px',
+        display: 'flex',
+        textAlign: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
         pb: isMobile ? '16px' : '0px',
+        pt: isMobile ? '128px' : '0px',
+        height: isMobile ? 'auto' : '100%',
+        justifyContent: isMobile ? 'flex-end' : 'center',
       }}
     >
       {isMobile ? (
@@ -223,4 +222,6 @@ export default function MainContent() {
       </Box>
     </Box>
   );
-}
+};
+
+export default MainContent;

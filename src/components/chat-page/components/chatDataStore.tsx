@@ -135,7 +135,6 @@ export default function DataSourceDialog({
           flexDirection: 'column',
           alignItems: 'flex-start',
           flexShrink: 0,
-          top: isMobile ? '112px' : '',
           borderRadius: isMobile ? '8px 8px 0 0' : '8px',
           alignSelf: 'stretch',
           backgroundColor: '#ffffff',
