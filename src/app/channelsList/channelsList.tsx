@@ -853,7 +853,7 @@ const ChannelsList = () => {
                         .replace(/-/g, '/')}
                     </Typography>
                   </Box>
-                  <Typography
+                  <Box
                     sx={{
                       fontWeight: 400,
                       fontSize: '16px',
@@ -865,11 +865,42 @@ const ChannelsList = () => {
                       color: 'var(--Primary-Black, #212B36)',
                     }}
                   >
-                    {
-                      channel.organizationChannelTranscriptList[0]
-                        ?.organizationChannelTranscriptStatus
-                    }
-                  </Typography>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                      }}
+                    >
+                      {channel.organizationChannelTranscriptList[0]
+                        ?.organizationChannelTranscriptStatus === 'COMPLETE' ? (
+                        <CheckCircleRounded
+                          sx={{ color: ' rgba(52, 199, 89, 1)' }}
+                        />
+                      ) : channel.organizationChannelTranscriptList[0]
+                          ?.organizationChannelTranscriptStatus ===
+                        'PROCESSING' ? (
+                        <RotateRightRounded
+                          sx={{ color: 'rgba(0, 102, 204, 1)' }}
+                        />
+                      ) : channel.organizationChannelTranscriptList[0]
+                          ?.organizationChannelTranscriptStatus ===
+                        'PENDING' ? (
+                        <PendingActionsRounded
+                          sx={{ color: 'rgba(33, 43, 54, 1)' }}
+                        />
+                      ) : (
+                        <PendingActionsRounded
+                          sx={{ color: 'rgba(33, 43, 54, 1)' }}
+                        />
+                      )}
+                      <span>
+                        {
+                          channel.organizationChannelTranscriptList[0]
+                            ?.organizationChannelTranscriptStatus
+                        }
+                      </span>
+                    </Box>
+                  </Box>
                 </Box>
               </CardContent>
             </Card>
