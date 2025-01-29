@@ -28,6 +28,7 @@ import {
   CheckCircleRounded,
   RotateRightRounded,
   PendingActionsRounded,
+  StarBorderRounded,
 } from '@mui/icons-material';
 import { useRouter } from 'next/navigation';
 import { OrganizationChannel } from '@/interfaces/entities';
@@ -51,6 +52,9 @@ const ChannelsList = () => {
   const [toolsAnchor, setToolsAnchor] = useState<null | HTMLElement>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState<boolean>(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
+  const [favoriteChannels, setFavoriteChannels] = useState<{
+    [key: string]: boolean;
+  }>({});
   const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(
     isMobile ? false : true
   );
@@ -77,6 +81,17 @@ const ChannelsList = () => {
       setToolsAnchor(null);
       event.stopPropagation();
       setIsDeleteDialogOpen(true);
+    },
+    []
+  );
+
+  const handleStarClick = useCallback(
+    (event: React.MouseEvent, channelId: string) => {
+      event.stopPropagation();
+      setFavoriteChannels((prev) => ({
+        ...prev,
+        [channelId]: !prev[channelId],
+      }));
     },
     []
   );
@@ -529,8 +544,21 @@ const ChannelsList = () => {
                             ).toLocaleString()}
                           </TableCell>
                           <TableCell>
-                            <IconButton>
-                              <StarRounded sx={{ color: 'black' }} />
+                            <IconButton
+                              onClick={(e) =>
+                                handleStarClick(
+                                  e,
+                                  channel.organizationChannelId
+                                )
+                              }
+                            >
+                              {favoriteChannels[
+                                channel.organizationChannelId
+                              ] ? (
+                                <StarRounded sx={{ color: 'black' }} />
+                              ) : (
+                                <StarBorderRounded sx={{ color: 'black' }} />
+                              )}
                             </IconButton>
                           </TableCell>
                           <TableCell>
