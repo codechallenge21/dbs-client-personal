@@ -42,7 +42,7 @@ const drawerItems = [
     icon: (
       <LocalFireDepartmentRounded
         sx={{
-          color: 'red',
+          color: '#CC0000',
           marginRight: '16px',
         }}
       />
@@ -208,7 +208,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
         <ListItem
           sx={{
             display: 'flex',
-            padding: '8px 0',
+            padding: '16px 0 8px 0',
             flexDirection: isExpanded || isMobile ? 'row' : 'column',
             alignItems: isExpanded || isMobile ? 'center' : 'stretch',
             justifyContent: isExpanded || isMobile ? 'space-between' : 'center',
@@ -218,7 +218,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             <Typography
               sx={{
                 color: 'var(--Primary-Black, #212B36)',
-                fontFamily: 'DFPHeiUBold-B5',
+                fontFamily: 'DFPHeiBold-B5',
                 fontSize: '20px',
                 fontWeight: 800,
               }}
@@ -232,7 +232,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 fontWeight: 800,
                 fontSize: '20px',
                 textAlign: 'center',
-                fontFamily: 'DFPHeiUBold-B5',
+                fontFamily: 'DFPHeiBold-B5',
                 color: 'var(--Primary-Black, #212B36)',
               }}
             >
@@ -295,7 +295,6 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
         {!isExpanded && !isMobile && (
           <IconButton
             sx={{
-              mb: '10px',
               padding: '8px',
               display: 'flex',
               alignItems: 'center',
@@ -343,7 +342,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                   fontWeight: 400,
                   fontSize: '16px',
                   alignItems: 'center',
-                  color: index === 0 ? 'red' : 'black',
+                  color: index === 0 ? '#CC0000' : 'black',
                 }}
               >
                 <span
@@ -458,26 +457,28 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             >
               <PermIdentityRounded sx={{ color: 'white' }} />
             </IconButton>
-            <IconButton
-              sx={{
-                width: '36px',
-                height: '36px',
-                padding: '8px',
-                display: 'flex',
-                borderRadius: '50px',
-                alignItems: 'center',
-                justifyContent: 'center',
-                background: 'var(--Secondary-, #5C443A)',
-                '&:hover': {
-                  background: 'rgba(92, 68, 58, 0.8)',
-                },
-                '&:active': {
-                  background: 'rgba(92, 68, 58, 0.6)',
-                },
-              }}
-            >
-              <EmojiObjectsRounded sx={{ color: 'white' }} />
-            </IconButton>
+            {isExpanded && (
+              <IconButton
+                sx={{
+                  width: '36px',
+                  height: '36px',
+                  padding: '8px',
+                  display: 'flex',
+                  borderRadius: '50px',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: 'var(--Secondary-, #5C443A)',
+                  '&:hover': {
+                    background: 'rgba(92, 68, 58, 0.8)',
+                  },
+                  '&:active': {
+                    background: 'rgba(92, 68, 58, 0.6)',
+                  },
+                }}
+              >
+                <EmojiObjectsRounded sx={{ color: 'white' }} />
+              </IconButton>
+            )}
             <IconButton
               sx={{
                 width: '36px',
