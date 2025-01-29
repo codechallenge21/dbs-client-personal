@@ -38,20 +38,33 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@eslint/js": "^9.19.0",
     "@types/cookie": "^1.0.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "eslint": "^9",
+    "eslint": "^9.19.0",
     "eslint-config-next": "15.1.0",
+    "eslint-plugin-react": "^7.37.4",
+    "globals": "^15.14.0",
     "husky": ">=7",
-    "lint-staged": ">=10",
-    "typescript": "^5"
+    "lint-staged": "^15.4.3",
+    "typescript": "^5",
+    "typescript-eslint": "^8.22.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn test && lint-staged",
+      "pre-push": "yarn lint && yarn snyk-test"
+    }
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": "eslint --cache --fix",
-    "*.{ts,tsx}": [
+    "**/*.{ts,tsx,json,md}": [
       "prettier --write"
+    ],
+    "**/*.{ts,tsx}": [
+      "eslint",
+      "tsc-files globals.d.ts components/App/App.tsx --noEmit"
     ]
   }
 }

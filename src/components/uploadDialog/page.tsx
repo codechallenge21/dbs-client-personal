@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   Dialog,
@@ -12,14 +12,15 @@ import {
   Snackbar,
   useTheme,
   useMediaQuery,
-} from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import FileUploadIcon from "@mui/icons-material/FileUpload";
-import { useRouter } from "next/navigation";
-import useAxiosApi from "@eGroupAI/hooks/apis/useAxiosApi";
-import apiExports from "@/utils/hooks/apis/apis";
-import { useState } from "react";
-import LoadingScreen from "../loading/page";
+} from '@mui/material';
+import React from 'react';
+import CloseIcon from '@mui/icons-material/Close';
+import FileUploadIcon from '@mui/icons-material/FileUpload';
+import { useRouter } from 'next/navigation';
+import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
+import apiExports from '@/utils/hooks/apis/apis';
+import { useState } from 'react';
+import LoadingScreen from '../loading/page';
 
 interface UploadDialogProps {
   open: boolean;
@@ -29,7 +30,7 @@ interface UploadDialogProps {
 export default function UploadDialog({ open, onClose }: UploadDialogProps) {
   const router = useRouter();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [, setFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
   const { excute: createChannelByAudio, isLoading: isCreating } = useAxiosApi(
@@ -39,32 +40,32 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     if (e.target.files && e.target.files.length > 0) {
-      validateFile(e.target.files[0]);
-      e.target.value = "";
+      if (e.target.files[0]) validateFile(e.target.files[0]);
+      e.target.value = '';
     }
   };
 
   const validateFile = async (file: File) => {
     try {
       const allowedFormats = [
-        "audio/mpeg",
-        "audio/mp4",
-        "audio/mpga",
-        "audio/wav",
-        "audio/webm",
-        "audio/x-m4a",
+        'audio/mpeg',
+        'audio/mp4',
+        'audio/mpga',
+        'audio/wav',
+        'audio/webm',
+        'audio/x-m4a',
       ];
       const maxFileSize = 100 * 1024 * 1024; // 100MB
 
       if (!allowedFormats.includes(file.type)) {
         setError(
-          "不支援的檔案格式，請選擇 mp3, mp4, mpeg, mpga, m4a, wav 或 webm 格式"
+          '不支援的檔案格式，請選擇 mp3, mp4, mpeg, mpga, m4a, wav 或 webm 格式'
         );
         return;
       }
 
       if (file.size > maxFileSize) {
-        setError("檔案大小超過 100MB 限制");
+        setError('檔案大小超過 100MB 限制');
         return;
       }
 
@@ -83,7 +84,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
 
       router.push(`/summary?${searchParams.toString()}`);
     } catch (error) {
-      setError("上傳失敗");
+      setError('上傳失敗');
       console.error(error);
     }
   };
@@ -96,15 +97,15 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
     return (
       <Box
         sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          position: "fixed",
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          position: 'fixed',
           top: 0,
           left: 0,
-          height: "100vh",
-          width: "100vw",
-          bgcolor: "#fff",
+          height: '100vh',
+          width: '100vw',
+          bgcolor: '#fff',
           zIndex: 1300,
         }}
       >
@@ -120,11 +121,11 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
         onClose={onClose}
         PaperProps={{
           sx: {
-            maxWidth: "600px",
-            bgcolor: "#fff",
-            borderRadius: "16px",
-            width: isMobile ? "324px" : "100%",
-            justifyContent: "center",
+            maxWidth: '600px',
+            bgcolor: '#fff',
+            borderRadius: '16px',
+            width: isMobile ? '324px' : '100%',
+            justifyContent: 'center',
           },
         }}
       >
@@ -134,11 +135,11 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
             fontWeight: 500,
           }}
         >
-          {isMobile ? "上傳檔案" : "AI 語音轉文字"}
+          {isMobile ? '上傳檔案' : 'AI 語音轉文字'}
           <IconButton
             onClick={onClose}
             sx={{
-              position: "absolute",
+              position: 'absolute',
               right: 8,
               top: 8,
               color: (theme) => theme.palette.grey[500],
@@ -150,29 +151,34 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
 
         <DialogContent
           sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            borderRadius: "16px",
-            border: "2px dashed #2196f3",
-            margin: "32px",
-            justifyContent: "center",
-            height: "352px",
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            borderRadius: '16px',
+            border: '2px dashed #2196f3',
+            margin: '32px',
+            justifyContent: 'center',
+            height: '352px',
           }}
         >
           {!isMobile && (
-            <Typography align="center" sx={{
-              mb: 2,
-            }}>請將音訊檔案拖曳到這裡上傳</Typography>
+            <Typography
+              align="center"
+              sx={{
+                mb: 2,
+              }}
+            >
+              請將音訊檔案拖曳到這裡上傳
+            </Typography>
           )}
           <Button
             component="label"
             sx={{
-              bgcolor: "#2196f3",
-              color: "white",
-              mb: "40px",
-              "&:hover": {
-                bgcolor: "#1976d2",
+              bgcolor: '#2196f3',
+              color: 'white',
+              mb: '40px',
+              '&:hover': {
+                bgcolor: '#1976d2',
               },
               zIndex: 1,
             }}
@@ -184,25 +190,25 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
               type="file"
               onChange={handleFileUpload}
               accept=".mp3, .mp4, .mpeg, .mpga, .m4a, .wav, .webm"
-              style={{ display: "none" }}
+              style={{ display: 'none' }}
             />
           </Button>
 
-          <Box sx={{ textAlign: "center" }}>
+          <Box sx={{ textAlign: 'center' }}>
             <Typography
               sx={{
-                color: "grey.600",
+                color: 'grey.600',
                 fontSize: 14,
                 mb: 0.5,
-                width: "100%",
-                height: "auto",
+                width: '100%',
+                height: 'auto',
               }}
             >
               支援檔案格式：mp3, mp4, mpeg, mpga, m4a, wav, webm
             </Typography>
             <Typography
               sx={{
-                color: "grey.600",
+                color: 'grey.600',
                 fontSize: 14,
               }}
             >
@@ -215,12 +221,12 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
         open={!!error} // Opens if error is set
         autoHideDuration={6000}
         onClose={handleCloseError}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
         <Alert
           onClose={handleCloseError}
           severity="error"
-          sx={{ width: "100%" }}
+          sx={{ width: '100%' }}
         >
           {error}
         </Alert>

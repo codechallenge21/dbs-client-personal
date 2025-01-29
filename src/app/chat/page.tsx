@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Header from './components/Header';
 import MainContent from './components/MainContent';
 import SwitchDialog from './components/SwitchDialog';
