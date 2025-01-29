@@ -3,10 +3,13 @@
 import { useMemo } from 'react';
 // @mui
 import CssBaseline from '@mui/material/CssBaseline';
-import { createTheme, ThemeProvider as MuiThemeProvider, ThemeOptions } from '@mui/material/styles';
+import {
+  createTheme,
+  ThemeProvider as MuiThemeProvider,
+  ThemeOptions,
+} from '@mui/material/styles';
 // system
 import { palette } from './palette';
-import { usePathname } from 'next/navigation';
 
 // ----------------------------------------------------------------------
 
@@ -15,22 +18,24 @@ type Props = {
 };
 
 export default function ThemeProvider({ children }: Props) {
-  const pathname = usePathname();
-  const isHomePage = pathname === '/';
+  const theme = useMemo(() => {
+    if (typeof window !== 'undefined') {
+      const pathname = window.location.pathname;
+      const isHomePage = pathname === '/';
 
-  const baseOption = useMemo(
-    () => ({
-      palette: isHomePage ? palette('light') : palette('light'),
-    }),
-    [isHomePage]
-  );
+      const baseOption = {
+        palette: isHomePage ? palette('light') : palette('light'),
+      };
 
-  const theme = createTheme(baseOption as ThemeOptions);
+      return createTheme(baseOption as ThemeOptions);
+    }
+    return createTheme();
+  }, []);
 
   return (
     <MuiThemeProvider theme={theme}>
-        <CssBaseline />
-        {children}
+      <CssBaseline />
+      {children}
     </MuiThemeProvider>
   );
 }

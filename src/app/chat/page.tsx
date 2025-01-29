@@ -1,5 +1,12 @@
 'use client';
-import { Suspense, useCallback, useContext, useEffect, useState } from 'react';
+
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+  Suspense,
+} from 'react';
 import Header from '@/components/chat-page/components/Header';
 import MainContent from '@/components/chat-page/components/MainContent';
 import SwitchDialog from '@/components/dialogs/SwitchDialog';
@@ -31,24 +38,19 @@ function ClientContent() {
     advisorType,
     setSelectedChannel,
   } = useContext(ChannelContentContext);
+
   const { excute: getChannelDetail } = useAxiosApi(apis.getChannelDetail);
 
   const [openDataSource, setOpenDataSource] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenDrawer, setIsOpenDrawer] = useState(!isMobile);
 
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(
-    isMobile ? false : true
+  const handleClose = useCallback(() => setIsOpen(false), []);
+  const handleConfirm = useCallback(() => setIsOpen(false), []);
+  const toggleDrawer = useCallback(
+    (newOpen: boolean) => setIsOpenDrawer(newOpen),
+    []
   );
-
-  const handleClose = () => setIsOpen(false);
-
-  const handleConfirm = () => {
-    setIsOpen(false);
-  };
-
-  const toggleDrawer = (newOpen: boolean) => {
-    setIsOpenDrawer(newOpen);
-  };
 
   const fetchChannelDetail = useCallback(
     async (organizationChannelId: string) => {
@@ -57,32 +59,36 @@ function ClientContent() {
         setSelectedChannelId(undefined);
         return;
       }
-      const res = await getChannelDetail({
-        organizationId: '4aba77788ae94eca8d6ff330506af944',
-        organizationChannelId,
-      });
-      console.log('22222');
-      setSelectedChannel(res.data);
-      setSelectedChannelId(organizationChannelId);
+
+      try {
+        const res = await getChannelDetail({
+          organizationId: '4aba77788ae94eca8d6ff330506af944',
+          organizationChannelId,
+        });
+        setSelectedChannel(res.data);
+        setSelectedChannelId(organizationChannelId);
+      } catch (error) {
+        console.error('Failed to fetch channel details:', error);
+      }
     },
     [getChannelDetail, setSelectedChannel, setSelectedChannelId]
   );
 
   useEffect(() => {
     if (selectedChannel) {
-      setSelectedChannelId(selectedChannel?.organizationChannelId);
+      setSelectedChannelId(selectedChannel.organizationChannelId);
     } else {
       fetchChannelDetail(organizationChannelId);
     }
   }, [
     selectedChannel,
+    organizationChannelId,
     setSelectedChannelId,
     fetchChannelDetail,
-    organizationChannelId,
   ]);
 
   useEffect(() => {
-    toggleDrawer(isMobile ? false : true);
+    setIsOpenDrawer(!isMobile);
   }, [isMobile]);
 
   return (
@@ -107,9 +113,9 @@ function ClientContent() {
         />
         <Box
           sx={{
-            marginTop: isMobile ? '60px' : '8px',
+            marginTop: isMobile ? '60px' : '0px',
           }}
-        ></Box>
+        />
         <MainContent />
         <SwitchDialog
           open={isOpen}

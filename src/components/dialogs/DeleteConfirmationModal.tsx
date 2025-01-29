@@ -8,7 +8,7 @@ interface DeleteConfirmationModalProps {
   open: boolean;
   onClose: () => void;
   onDelete: () => void;
-  channelName: OrganizationChannelData[];
+  channelName: OrganizationChannelData[] | object[];
 }
 
 export default function DeleteConfirmationModal({
@@ -17,6 +17,10 @@ export default function DeleteConfirmationModal({
   onDelete,
   channelName,
 }: DeleteConfirmationModalProps) {
+  const singleChannelTitle =
+    channelName.length === 1 && 'organizationChannelTitle' in channelName[0]
+      ? (channelName[0] as OrganizationChannelData).organizationChannelTitle
+      : null;
   return (
     <Modal
       open={open}
@@ -85,7 +89,10 @@ export default function DeleteConfirmationModal({
               lineHeight: 'normal',
             }}
           >
-            即將刪除 {channelName.length} 個頻道
+            {singleChannelTitle
+              ? `这将删除
+ ${singleChannelTitle}.`
+              : `即將刪除 ${channelName.length} 個頻道`}
           </Typography>
         </Box>
 
@@ -100,7 +107,7 @@ export default function DeleteConfirmationModal({
             variant="contained"
             onClick={onDelete}
             sx={{
-              bgcolor: 'error.main',
+              bgcolor: '#CC0000',
               '&:hover': {
                 bgcolor: 'error.dark',
               },

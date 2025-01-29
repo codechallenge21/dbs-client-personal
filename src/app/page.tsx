@@ -61,7 +61,6 @@ function ClientContent() {
         organizationId: '4aba77788ae94eca8d6ff330506af944',
         organizationChannelId,
       });
-      console.log('22222');
       setSelectedChannel(res.data);
       setSelectedChannelId(organizationChannelId);
     },
@@ -107,7 +106,7 @@ function ClientContent() {
         />
         <Box
           sx={{
-            marginTop: isMobile ? '60px' : '8px',
+            marginTop: isMobile ? '60px' : '0px',
           }}
         ></Box>
         <MainContent />

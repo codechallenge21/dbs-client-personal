@@ -17,6 +17,7 @@ import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import apis from '@/utils/hooks/apis/apis';
 import { useChatChannels } from '@/utils/hooks/useChatChannels';
 import { OrganizationChannelData } from '@/interfaces/entities';
+// import InformationPage from './chatResponsePlaceholder';
 
 export default function MainContent() {
   const theme = useTheme();
@@ -33,9 +34,9 @@ export default function MainContent() {
     apis.submitUserInputs
   );
 
-  const { data: chatsData } = useChatChannels(
-    { organizationId: '4aba77788ae94eca8d6ff330506af944' },
-  );
+  const { data: chatsData } = useChatChannels({
+    organizationId: '4aba77788ae94eca8d6ff330506af944',
+  });
 
   const moveToChannelDetail = (channel: OrganizationChannelData) => {
     setSelectedChannel(channel);
@@ -86,6 +87,8 @@ export default function MainContent() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
+          pb: '16px',
+          px: '32px',
           justifyContent: isMobile ? 'flex-end' : 'center',
         }}
       >
@@ -93,6 +96,7 @@ export default function MainContent() {
           channel={selectedChannel}
           chatResponses={chatResponses}
         />
+        {/* {isInteractingInChat && <InformationPage />} */}
         <TextInput
           submitUserInputs={submitUserInputs}
           isInteracting={isInteracting}
@@ -103,13 +107,15 @@ export default function MainContent() {
   return (
     <Box
       sx={{
-        height: isMobile ? 'auto' : 'calc(100vh - 10px)',
+        height: isMobile ? 'auto' : '100%',
         display: 'flex',
         flexDirection: 'column',
+        pt: isMobile ? '128px' : '0px',
         justifyContent: isMobile ? 'flex-end' : 'center',
         alignItems: 'center',
         textAlign: 'center',
         px: '16px',
+        pb: isMobile ? '16px' : '0px',
       }}
     >
       {isMobile ? (
@@ -196,16 +202,20 @@ export default function MainContent() {
           <Suggestions key={suggestion.id} title={suggestion.title} />
         ))}
       </Box>
-      <Box sx={{ marginTop: '40px', width: '100%', maxWidth: '760px' }}>
+      <Box
+        sx={{
+          marginTop: isMobile ? '32px' : '40px',
+          width: '100%',
+          maxWidth: '760px',
+        }}
+      >
         <ViewChats
           onClick={() => {
             router.push('/allchat');
           }}
         />
       </Box>
-      <Box
-        sx={{ marginTop: '12px', width: '100%', maxWidth: '780px', mb: '12px' }}
-      >
+      <Box sx={{ marginTop: '12px', width: '100%', maxWidth: '760px' }}>
         <HistoryChats
           chats={chatsData || []}
           moveToChannelDetail={moveToChannelDetail}

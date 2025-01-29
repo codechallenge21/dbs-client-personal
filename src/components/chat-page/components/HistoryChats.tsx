@@ -25,22 +25,26 @@ const HistoryChats: React.FC<HistoryChatsProps> = ({
         gap: '12px',
         justifyContent: 'center',
         alignItems: 'center',
+        alignSelf: 'stretch',
       }}
     >
       {chats.slice(0, 6).map((chat, index) => (
         <Box
           key={index}
           sx={{
-            width: isMobile ? '100%' : 'calc(33.33% - 16px)', // Adjusting width to fit 3 items per row on desktop
-            padding: '8px 16px',
+            width: isMobile ? '100%' : 'calc(33.33% - 8px)', // Adjusting width to fit 3 items per row on desktop
+            padding: isMobile ? '8px 16px' : '16px',
             border: '1px solid #ccc',
             borderRadius: '8px',
             textAlign: 'left',
             boxSizing: 'border-box', // Ensuring padding and border are included in width
             display: 'flex',
             flexDirection: 'column',
-            gap: '16px',
+            gap: isMobile ? '4px' : '16px',
             cursor: 'pointer',
+            '&:hover': {
+              backgroundColor: '#FFF5F5',
+            },
           }}
           onClick={() => moveToChannelDetail({ ...chat, selected: false })}
         >

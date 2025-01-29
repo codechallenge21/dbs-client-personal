@@ -19,20 +19,20 @@ import {
   PhishingRounded,
   WorkRounded,
 } from '@mui/icons-material';
-import AutoFixNormalIcon from '@mui/icons-material/AutoFixNormal';
 import { AdvisorType } from '../../../app/chat/types';
 import ChannelContentContext from '../../channel-context-provider/ChannelContentContext';
 import EditDeleteModal from '../../dialogs/EditDeleteModal';
 import DeleteConfirmationModal from '@/components/dialogs/DeleteConfirmationModal';
 import RenameDialog from './renameChat';
 import { useRouter } from 'next/navigation';
+import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 
 const listItems = [
   {
     title: '萬事通',
     value: AdvisorType.DEFAULT,
     description: '提供應對策略與資源連結。',
-    icon: <AutoFixNormalIcon />,
+    icon: <SupportAgentIcon />,
   },
   {
     title: '債務案件顧問',
@@ -139,12 +139,12 @@ export default function DropdownMenu({
           {listItems
             .filter((item) => item.value === advisor)
             .map((item) => (
-              <ListItemIcon
+              <SupportAgentIcon
                 key={item.value}
                 sx={{ color: 'black', minWidth: 'auto' }}
               >
                 {item.icon}
-              </ListItemIcon>
+              </SupportAgentIcon>
             ))}
         </div>
       ) : (
@@ -164,14 +164,17 @@ export default function DropdownMenu({
               fontFamily: 'DFPHeiBold-B5',
             }}
             onClick={
-              chatResponses[1]?.organizationChannelTitle
+              chatResponses[1]?.organizationChannelTitle ||
+              selectedChannel?.organizationChannelTitle
                 ? handleClick
                 : undefined
             }
           >
-            {chatResponses[1]?.organizationChannelTitle ? (
+            {chatResponses[1]?.organizationChannelTitle ||
+            selectedChannel?.organizationChannelTitle ? (
               <>
-                {chatResponses[1]?.organizationChannelTitle}
+                {chatResponses[1]?.organizationChannelTitle ||
+                  selectedChannel?.organizationChannelTitle}
                 <ArrowDropDown
                   sx={{ width: '32px', height: '32px', color: 'black' }}
                 />
@@ -297,14 +300,17 @@ export default function DropdownMenu({
         onClose={() => setIsDeleteDialogOpen(false)}
         onDelete={handleConfirmDelete}
         channelName={
-          selectedChannel
+          selectedChannel || chatResponses[1]
             ? [
                 {
                   ...selectedChannel,
+                  ...chatResponses[1],
                   organizationChannelId:
-                    selectedChannel.organizationChannelId || '',
+                    selectedChannel?.organizationChannelId ||
+                    chatResponses[1].organizationChannelMessageId ||
+                    '',
                   selected: true,
-                  organization: selectedChannel.organization || {},
+                  organization: selectedChannel?.organization || {},
                 },
               ]
             : []

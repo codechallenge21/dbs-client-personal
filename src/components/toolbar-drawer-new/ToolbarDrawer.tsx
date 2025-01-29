@@ -200,8 +200,15 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
           )}
           <IconButton
             onClick={() => {
-              if (isMobile) toggleDrawer(!open);
-              setIsExpanded((prev) => !prev); // Toggle expanded/collapsed state
+              if (isMobile) {
+                toggleDrawer(!open);
+              } else {
+                setIsExpanded((prev) => {
+                  const newState = !prev;
+                  toggleDrawer(newState);
+                  return newState;
+                });
+              }
             }}
             sx={{ color: 'black', padding: '8px' }}
           >

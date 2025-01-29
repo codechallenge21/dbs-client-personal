@@ -197,6 +197,8 @@ const TextInput: React.FC<TextInputProps> = ({
   const handleClickSubmitOrAudioFileUpload = useCallback(() => {
     if (userInputValue !== '') {
       handleSendMessage();
+      setFiles([]);
+      setUserInputValue('');
     }
   }, [handleSendMessage, userInputValue]);
 
@@ -214,6 +216,8 @@ const TextInput: React.FC<TextInputProps> = ({
         if (userInputValue.trim() !== '') {
           e.preventDefault();
           handleSendMessage();
+          setFiles([]);
+          setUserInputValue('');
         }
       }
     },
@@ -280,7 +284,7 @@ const TextInput: React.FC<TextInputProps> = ({
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          width: isMobile ? '90%' : '100%',
+          width: '100%',
           maxWidth: '760px',
           maxHeight: '760px',
           minHeight: '108px',
@@ -289,7 +293,7 @@ const TextInput: React.FC<TextInputProps> = ({
           backgroundColor: '#F5F5F5',
           borderRadius: 2,
           zIndex: 10,
-          margin: isMobile ? 3 : 0,
+          marginTop: isMobile ? 3 : 0,
           overflow: 'hidden',
           justifyContent: 'flex-end',
         }}
