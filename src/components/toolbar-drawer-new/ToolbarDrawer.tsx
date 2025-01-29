@@ -495,7 +495,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
       <Box
         sx={{
           overflow: 'auto',
-          marginRight: '16px',
+          marginRight: '8px',
           marginBottom: '16px',
           transition: 'margin-left 0.3s',
           marginLeft: isExpanded && !isMobile ? '255px' : '80px',
