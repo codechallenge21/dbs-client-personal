@@ -205,26 +205,11 @@ const ChannelsList = () => {
             <>
               <Box
                 sx={{
-                  minHeight: '96vh',
-                  maxHeight: '96vh',
-                  overflowY: 'auto',
+                  minHeight: '97vh',
+                  maxHeight: '97vh',
                   borderRadius: '8px',
                   padding: '16px 32px',
                   backgroundColor: 'white',
-                  '&::-webkit-scrollbar': {
-                    width: '8px',
-                  },
-                  '&::-webkit-scrollbar-track': {
-                    borderRadius: '10px',
-                    background: '#f1f1f1',
-                  },
-                  '&::-webkit-scrollbar-thumb': {
-                    borderRadius: '10px',
-                    background: '#888',
-                  },
-                  '&::-webkit-scrollbar-thumb:hover': {
-                    background: '#555',
-                  },
                 }}
               >
                 <Tabs
@@ -374,7 +359,25 @@ const ChannelsList = () => {
                 </Box>
 
                 <TableContainer>
-                  <Table>
+                  <Table
+                    sx={{
+                      overflowY: 'auto',
+                      '&::-webkit-scrollbar': {
+                        width: '8px',
+                      },
+                      '&::-webkit-scrollbar-track': {
+                        borderRadius: '10px',
+                        background: '#f1f1f1',
+                      },
+                      '&::-webkit-scrollbar-thumb': {
+                        borderRadius: '10px',
+                        background: '#888',
+                      },
+                      '&::-webkit-scrollbar-thumb:hover': {
+                        background: '#555',
+                      },
+                    }}
+                  >
                     <TableHead>
                       <TableRow>
                         <TableCell
@@ -387,6 +390,9 @@ const ChannelsList = () => {
                             textOverflow: 'ellipsis',
                             fontFamily: 'DFPHeiBold-B5',
                             color: 'var(--Text-Primary, #212B36)',
+                            borderBottom:
+                              '1px dashed var(--Components-Divider, rgba(145, 158, 171, 0.20))',
+                            background: 'var(--Background-Paper, #FFF)',
                           }}
                         >
                           標題
@@ -401,6 +407,9 @@ const ChannelsList = () => {
                             textOverflow: 'ellipsis',
                             fontFamily: 'DFPHeiBold-B5',
                             color: 'var(--Text-Primary, #212B36)',
+                            borderBottom:
+                              '1px dashed var(--Components-Divider, rgba(145, 158, 171, 0.20))',
+                            background: 'var(--Background-Paper, #FFF)',
                           }}
                         >
                           狀態
@@ -415,73 +424,140 @@ const ChannelsList = () => {
                             textOverflow: 'ellipsis',
                             fontFamily: 'DFPHeiBold-B5',
                             color: 'var(--Text-Primary, #212B36)',
+                            borderBottom:
+                              '1px dashed var(--Components-Divider, rgba(145, 158, 171, 0.20))',
+                            background: 'var(--Background-Paper, #FFF)',
                           }}
                         >
                           建立時間
                         </TableCell>
+                        <TableCell
+                          sx={{
+                            borderBottom:
+                              '1px dashed var(--Components-Divider, rgba(145, 158, 171, 0.20))',
+                            background: 'var(--Background-Paper, #FFF)',
+                          }}
+                        ></TableCell>
+                        <TableCell
+                          sx={{
+                            borderBottom:
+                              '1px dashed var(--Components-Divider, rgba(145, 158, 171, 0.20))',
+                            background: 'var(--Background-Paper, #FFF)',
+                          }}
+                        ></TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
                       {channelsData?.map((channel, index) => (
                         <TableRow
                           key={index}
-                          sx={{ cursor: 'pointer' }}
                           onClick={() => handleRowClick(channel)}
-                          // onClick={() => handleRowClick(channel?.organizationChannelId)}
+                          sx={{
+                            cursor: 'pointer',
+                            height: '56px !important',
+                            borderBottom:
+                              '1px dashed var(--Components-Divider, rgba(145, 158, 171, 0.20))',
+                            background: 'var(--Background-Paper, #FFF)',
+                          }}
                         >
                           <TableCell
                             sx={{
-                              fontWeight: 600,
-                              fontSize: '16px',
-                              overflow: 'hidden',
-                              fontStyle: 'normal',
-                              lineHeight: 'normal',
-                              textOverflow: 'ellipsis',
-                              fontFamily: 'Public Sans',
-                              color: 'var(--Text-Primary, #212B36)',
+                              height: '51px !important',
+                              padding: '0px',
+                              border: 'none',
+                              width: '50%',
                             }}
                           >
-                            {channel?.organizationChannelTitle}
+                            <Typography
+                              sx={{
+                                fontWeight: 400,
+                                fontSize: '16px',
+                                WebkitLineClamp: 1,
+                                overflow: 'hidden',
+                                padding: '16px 0px',
+                                fontStyle: 'normal',
+                                lineHeight: 'normal',
+                                display: '-webkit-box',
+                                textOverflow: 'ellipsis',
+                                fontFamily: 'Public Sans',
+                                WebkitBoxOrient: 'vertical',
+                                color: 'var(--Text-Primary, #212B36)',
+                              }}
+                            >
+                              {channel?.organizationChannelTitle}
+                            </Typography>
                           </TableCell>
                           <TableCell
                             sx={{
-                              fontWeight: 400,
-                              fontSize: '16px',
-                              overflow: 'hidden',
-                              fontStyle: 'normal',
-                              lineHeight: 'normal',
-                              textOverflow: 'ellipsis',
-                              fontFamily: 'DFPHeiBold-B5',
-                              color: 'var(--Text-Primary, #212B36)',
+                              height: '51px !important',
+                              padding: '0px',
+                              border: 'none',
+                              width: '18%',
                             }}
                           >
-                            {
-                              channel.organizationChannelTranscriptList[0]
-                                ?.organizationChannelTranscriptStatus
-                            }
+                            <Typography
+                              sx={{
+                                fontWeight: 400,
+                                fontSize: '16px',
+                                fontStyle: 'normal',
+                                padding: '16px 0px',
+                                lineHeight: 'normal',
+                                fontFamily: 'DFPHeiBold-B5',
+                                color: 'var(--Text-Primary, #212B36)',
+                              }}
+                            >
+                              {
+                                channel.organizationChannelTranscriptList[0]
+                                  ?.organizationChannelTranscriptStatus
+                              }
+                            </Typography>
                           </TableCell>
                           <TableCell
                             sx={{
-                              fontWeight: 400,
-                              fontSize: '16px',
-                              overflow: 'hidden',
-                              fontStyle: 'normal',
-                              lineHeight: 'normal',
-                              textOverflow: 'ellipsis',
-                              fontFamily: 'DFPHeiBold-B5',
-                              color: 'var(--Text-Primary, #212B36)',
+                              height: '51px !important',
+                              padding: '0px',
+                              border: 'none',
+                              width: '18%',
                             }}
                           >
-                            {new Date(
-                              channel.organizationChannelCreateDate
-                            ).toLocaleString()}
+                            <Typography
+                              sx={{
+                                fontWeight: 400,
+                                fontSize: '16px',
+                                fontStyle: 'normal',
+                                padding: '16px 0px',
+                                lineHeight: 'normal',
+                                fontFamily: 'DFPHeiBold-B5',
+                                color: 'var(--Text-Primary, #212B36)',
+                              }}
+                            >
+                              {new Date(channel.organizationChannelCreateDate)
+                                .toLocaleDateString('en-CA')
+                                .replace(/-/g, '/')}
+                            </Typography>
                           </TableCell>
-                          <TableCell>
-                            <IconButton>
+                          <TableCell
+                            sx={{
+                              width: '7%',
+                              border: 'none',
+                              padding: '0px 16px',
+                              textAlign: 'center',
+                              height: '51px !important',
+                            }}
+                          >
+                            <IconButton sx={{ padding: '0px' }}>
                               <StarRounded sx={{ color: 'black' }} />
                             </IconButton>
                           </TableCell>
-                          <TableCell>
+                          <TableCell
+                            sx={{
+                              width: '7%',
+                              border: 'none',
+                              padding: '0px 16px',
+                              textAlign: 'center',
+                              height: '51px !important',
+                            }}
+                          >
                             <EditableItem
                               key={channel.organizationChannelId}
                               index={index}
@@ -645,31 +721,40 @@ const ChannelsList = () => {
               sx={{
                 gap: '8px',
                 display: 'flex',
-                color: '#5C443A',
-                padding: '6px 12px',
-                background: 'white',
+                boxShadow: 'none',
                 borderRadius: '8px',
+                padding: '6px 12px',
                 alignItems: 'center',
                 justifyContent: 'center',
                 border: '1px solid var(--Secondary-, #5C443A)',
               }}
-              variant="contained"
               startIcon={<MicRounded />}
             >
-              開始錄音
+              <Typography
+                sx={{
+                  fontWeight: 400,
+                  fontSize: '16px',
+                  lineHeight: '24px',
+                  textAlign: 'center',
+                  fontStyle: 'normal',
+                  fontFamily: 'DFPHeiBold-B5',
+                  color: 'var(--Secondary-, #5C443A)',
+                }}
+              >
+                開始錄音
+              </Typography>
             </Button>
             <Button
               sx={{
-                display: 'flex',
-                padding: '6px 12px',
-                justifyContent: 'center',
-                alignItems: 'center',
                 gap: '8px',
+                display: 'flex',
+                boxShadow: 'none',
+                padding: '6px 12px',
                 borderRadius: '8px',
+                alignItems: 'center',
+                justifyContent: 'center',
                 background: 'var(--Secondary-, #5C443A)',
               }}
-              variant="contained"
-              color="primary"
               startIcon={<UploadRounded />}
               onClick={() => setOpenUpload(true)}
             >
