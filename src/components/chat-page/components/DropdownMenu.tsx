@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import {
   AccountBalanceWalletRounded,
-  ArrowDropDown,
+  ArrowDropDownRounded,
   BusinessCenterRounded,
   LocalHospitalRounded,
   MoneyOffRounded,
@@ -142,7 +142,7 @@ export default function DropdownMenu({
           {listItems
             .filter((item) => item.value === advisor)
             .map((item) => (
-              <SupportAgentIcon
+              <ListItemIcon
                 key={item.value}
                 sx={{
                   color: 'black',
@@ -152,7 +152,7 @@ export default function DropdownMenu({
                 }}
               >
                 {item.icon}
-              </SupportAgentIcon>
+              </ListItemIcon>
             ))}
         </Box>
       ) : (
@@ -163,7 +163,7 @@ export default function DropdownMenu({
               alignItems: 'center',
               justifyContent: 'center',
               padding: '4px 8px',
-              color: toolsAnchor ? '#0066cc' : 'black',
+              color: toolsAnchor ? '#0066cc' : '#4A4A4A',
               backgroundColor: toolsAnchor ? '#F5F5F5' : 'white',
               borderRadius: toolsAnchor ? '10px' : '0px',
               cursor:
@@ -187,7 +187,7 @@ export default function DropdownMenu({
               <>
                 {chatResponses[1]?.organizationChannelTitle ||
                   selectedChannel?.organizationChannelTitle}
-                <ArrowDropDown
+                <ArrowDropDownRounded
                   sx={{ width: '32px', height: '32px', color: 'black' }}
                 />
               </>

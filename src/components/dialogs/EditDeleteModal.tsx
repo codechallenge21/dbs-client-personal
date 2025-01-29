@@ -69,7 +69,16 @@ export default function EditDeleteModal({
         '& .MuiPaper-root': {
           minWidth: '160px',
           boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+          ml: '-36px',
         },
+      }}
+      anchorOrigin={{
+        vertical: 'bottom', // Align vertically to the center
+        horizontal: 'right', // Align to the right side of the anchor element
+      }}
+      transformOrigin={{
+        vertical: 'top', // Transform origin to match the vertical alignment
+        horizontal: 'left', // Ensure the menu starts from the left edge of its anchor
       }}
     >
       {menuActions.map((item, index) => (
