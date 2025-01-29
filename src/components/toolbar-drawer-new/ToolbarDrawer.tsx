@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Drawer from '@mui/material/Drawer';
 import ListItem from '@mui/material/ListItem';
 import {
@@ -29,12 +29,14 @@ import { styled, Theme, CSSObject } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 import { usePathname, useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
+import ChannelContentContext from '../channel-context-provider/ChannelContentContext';
 
 interface ToolbarDrawerProps {
   open: boolean;
   children: React.ReactNode;
   setOpenUpload?: (open: boolean) => void;
   setIsOpenDrawer: (open: boolean) => void;
+  openDataSource?: boolean;
 }
 
 const drawerItems = [
@@ -52,39 +54,70 @@ const drawerItems = [
   },
   {
     text: '我的最愛',
-    icon: <StarRounded sx={{ color: 'black', marginRight: '8px' }} />,
+    icon: <StarRounded sx={{ color: '#212B36' }} />,
     route: '/favorite',
   },
   {
     text: '活動公告',
-    icon: <CampaignRounded sx={{ color: 'black', marginRight: '8px' }} />,
+    icon: <CampaignRounded sx={{ color: '#212B36' }} />,
     route: '/events',
   },
   {
     text: '解決麻煩事',
-    icon: <PsychologyRounded sx={{ color: 'black', marginRight: '8px' }} />,
+    icon: <PsychologyRounded sx={{ color: '#212B36' }} />,
     route: '/chat',
   },
   {
     text: '工具箱',
-    icon: <BuildRounded sx={{ color: 'black', marginRight: '8px' }} />,
+    icon: <BuildRounded sx={{ color: '#212B36' }} />,
     route: '/toolbox',
   },
   {
     text: '財務快篩',
-    icon: <PaidRounded sx={{ color: 'black', marginRight: '8px' }} />,
+    icon: <PaidRounded sx={{ color: '#212B36' }} />,
     route: '/financial-screening',
   },
   {
     text: '知識庫',
-    icon: <AutoStoriesRounded sx={{ color: 'black', marginRight: '8px' }} />,
+    icon: <AutoStoriesRounded sx={{ color: '#212B36' }} />,
     route: '/knowledge-base',
   },
 ];
 
+const MainBox = styled('div', {
+  shouldForwardProp: (prop) => prop !== 'open',
+})<{
+  open?: boolean;
+}>(({ theme }) => ({
+  flexGrow: 1,
+  transition: theme.transitions.create('margin', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  /**
+   * This is necessary to enable the selection of content. In the DOM, the stacking order is determined
+   * by the order of appearance. Following this rule, elements appearing later in the markup will overlay
+   * those that appear earlier. Since the Drawer comes after the Main content, this adjustment ensures
+   * proper interaction with the underlying content.
+   */
+  position: 'relative',
+  variants: [
+    {
+      props: ({ open }) => open,
+      style: {
+        transition: theme.transitions.create('margin', {
+          easing: theme.transitions.easing.easeOut,
+          duration: theme.transitions.duration.enteringScreen,
+        }),
+      },
+    },
+  ],
+}));
+
 const drawerWidth = 240;
 
 const tId = Cookies.get('tid') || null;
+console.log('tId', tId);
 
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
@@ -137,6 +170,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
   children,
   setOpenUpload,
   setIsOpenDrawer,
+  openDataSource = false,
 }) => {
   const pathname = usePathname();
   const router = useRouter();
@@ -144,6 +178,20 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
   const [isClient, setIsClient] = useState(false);
   const [isExpanded, setIsExpanded] = useState(true); // Track expanded/collapsed state
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const {
+    setSelectedChannelId,
+    setSelectedChannel,
+    setChatResponses,
+    setIsInteractingInChat,
+  } = useContext(ChannelContentContext);
+
+  const resetChat = () => {
+    setSelectedChannelId(undefined);
+    setSelectedChannel(undefined);
+    setChatResponses([]);
+    setIsInteractingInChat(false);
+    router.push('/chat');
+  };
 
   useEffect(() => {
     setIsClient(true);
@@ -167,13 +215,14 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
         <ListItem
           sx={{
             display: 'flex',
-            padding: '16px 0 8px 0',
-            flexDirection: isExpanded ? 'row' : 'column',
-            alignItems: isExpanded ? 'center' : 'stretch',
-            justifyContent: isExpanded ? 'space-between' : 'center',
+            padding: !isExpanded && !isMobile ? '16px 0px 8px 0px' : '8px 0',
+            flexDirection: isExpanded || isMobile ? 'row' : 'column',
+            alignItems: isExpanded || isMobile ? 'center' : 'stretch',
+            justifyContent: isExpanded || isMobile ? 'space-between' : 'center',
+            gap: isExpanded || isMobile ? '0' : '8px',
           }}
         >
-          {isExpanded && (
+          {(isExpanded || isMobile) && (
             <Typography
               sx={{
                 color: 'var(--Primary-Black, #212B36)',
@@ -185,7 +234,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               好理家在
             </Typography>
           )}
-          {!isExpanded && (
+          {!isExpanded && !isMobile && (
             <Typography
               sx={{
                 fontWeight: 800,
@@ -193,6 +242,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 textAlign: 'center',
                 fontFamily: 'DFPHeiBold-B5',
                 color: 'var(--Primary-Black, #212B36)',
+                lineHeight: 'normal',
               }}
             >
               好
@@ -207,7 +257,11 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 setIsExpanded((prev) => !prev);
               }
             }}
-            sx={{ color: 'black', padding: '8px' }}
+            sx={{
+              color: '#212B36',
+              padding: '8px',
+              transform: !isExpanded && !isMobile ? 'rotate(180deg)' : 'none',
+            }}
           >
             <MenuOpenRounded />
           </IconButton>
@@ -217,46 +271,63 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             sx={{
               display: 'flex',
               padding: '0',
-              pb: '8px',
+              py: '8px',
               justifyContent: 'space-between',
             }}
           >
             <Button
               sx={{
                 gap: '8px',
+                height: '40px',
                 width: '100%',
-                color: 'var(--Primary-Black, #212B36)',
-                height: '38px',
                 padding: '8px',
                 display: 'flex',
                 borderRadius: '8px',
                 alignItems: 'center',
-                alignSelf: 'stretch',
                 justifyContent: 'center',
                 border: '1px solid var(--Primary-Black, #212B36)',
+                color: 'var(--Primary-Black, #212B36)',
               }}
               onClick={() => {
-                if (setOpenUpload) setOpenUpload(true);
+                if (setOpenUpload) {
+                  setOpenUpload(true);
+                } else {
+                  resetChat();
+                  setIsOpenDrawer(false);
+                }
               }}
             >
-              + New Chat
+              <AddRounded sx={{ color: '#212B36', fontSize: '18px' }} />
+              <Typography
+                sx={{
+                  display: 'flex',
+                  fontFamily: 'Public Sans',
+                  fontSize: '13px',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  alignItems: 'center',
+                  lineHeight: '18px',
+                }}
+              >
+                New Chat
+              </Typography>
             </Button>
           </ListItem>
         )}
 
-        {!isExpanded && (
+        {!isExpanded && !isMobile && (
           <IconButton
             sx={{
-              mb: '10px',
               padding: '8px',
               display: 'flex',
               alignItems: 'center',
               borderRadius: '50px',
               justifyContent: 'center',
               border: '1px solid var(--Primary-Black, #212B36)',
+              mt: '8px',
             }}
           >
-            <AddRounded sx={{ color: 'black' }} />
+            <AddRounded sx={{ color: '#212B36', fontSize: '20px' }} />
           </IconButton>
         )}
 
@@ -267,6 +338,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             flexDirection: 'column',
             alignItems: 'flex-start',
             justifyContent: 'flex-end',
+            marginTop: '8px',
           }}
         >
           {drawerItems.map((item, index) => (
@@ -281,9 +353,10 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                     ? 'var(--Action-Selected, rgba(204, 0, 0, 0.20))'
                     : 'transparent',
                 '&:hover': {
-                  backgroundColor: '#f5f5f5',
+                  backgroundColor: '#FBEDED',
                 },
                 cursor: 'pointer',
+                height: isExpanded || isMobile ? '48px' : 'auto',
               }}
               onClick={() => router.push(item.route)}
             >
@@ -293,7 +366,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                   fontWeight: 400,
                   fontSize: '16px',
                   alignItems: 'center',
-                  color: index === 0 ? '#CC0000' : 'black',
+                  color: index === 0 ? '#CC0000' : '#212B36',
                   fontFamily: 'DFPHeiBold-B5',
                 }}
               >
@@ -337,7 +410,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 }}
               >
                 <PermIdentityRounded
-                  sx={{ color: 'black', marginRight: '8px' }}
+                  sx={{ color: '#212B36', marginRight: '8px' }}
                 />
                 <Typography
                   sx={{
@@ -359,19 +432,22 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               <Button
                 sx={{
                   gap: '8px',
-                  color: 'black',
+                  color: '#212B36',
                   display: 'flex',
-                  padding: '4px 8px',
+                  padding: '11px 16px',
                   borderRadius: '8px',
                   alignSelf: 'stretch',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  fontFamily: 'Public Sans',
                   border: '2px solid var(--Primary-Black, #212B36)',
                   background: 'var(--Primary-White, #FFF)',
+                  fontFamily: 'Public Sans',
+                  fontSize: '15px',
+                  fontWeight: 700,
+                  lineHeight: 'normal',
                 }}
               >
-                <LoginRounded sx={{ color: 'black' }} />
+                <LoginRounded sx={{ color: '#212B36' }} />
                 登入
               </Button>
             )}
@@ -385,11 +461,15 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 alignSelf: 'stretch',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontFamily: 'Public Sans',
                 background: 'var(--Secondary-, #5C443A)',
+                fontFamily: 'Public Sans',
+                fontSize: '13px',
+                fontWeight: 700,
+                lineHeight: 'normal',
+                height: '30px',
               }}
             >
-              <EmojiObjectsRounded sx={{ color: 'white' }} />
+              <EmojiObjectsRounded sx={{ color: 'white', fontSize: '18px' }} />
               許願池
             </Button>
             <Button
@@ -402,8 +482,12 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 alignSelf: 'stretch',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontFamily: 'Public Sans',
                 background: 'var(--Secondary-, #5C443A)',
+                fontFamily: 'Public Sans',
+                fontSize: '13px',
+                fontWeight: 700,
+                lineHeight: 'normal',
+                height: '30px',
               }}
             >
               諮詢師專區
@@ -412,7 +496,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
         )}
         {!isExpanded && !isMobile && (
           <>
-            {!tId && (
+            {!tId ? (
               <IconButton
                 sx={{
                   width: '36px',
@@ -432,7 +516,30 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                   },
                 }}
               >
-                <LoginRounded sx={{ color: 'black' }} />
+                <LoginRounded sx={{ color: '#212B36', fontSize: '20px' }} />
+              </IconButton>
+            ) : (
+              <IconButton
+                sx={{
+                  width: '36px',
+                  height: '36px',
+                  padding: '8px',
+                  display: 'flex',
+                  borderRadius: '50px',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: 'var(--Secondary-, #5C443A)',
+                  '&:hover': {
+                    background: 'rgba(92, 68, 58, 0.8)',
+                  },
+                  '&:active': {
+                    background: 'rgba(92, 68, 58, 0.6)',
+                  },
+                }}
+              >
+                <PermIdentityRounded
+                  sx={{ color: 'white', fontSize: '20px' }}
+                />
               </IconButton>
             )}
             <IconButton
@@ -453,27 +560,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 },
               }}
             >
-              <PermIdentityRounded sx={{ color: 'white' }} />
-            </IconButton>
-            <IconButton
-              sx={{
-                width: '36px',
-                height: '36px',
-                padding: '8px',
-                display: 'flex',
-                borderRadius: '50px',
-                alignItems: 'center',
-                justifyContent: 'center',
-                background: 'var(--Secondary-, #5C443A)',
-                '&:hover': {
-                  background: 'rgba(92, 68, 58, 0.8)',
-                },
-                '&:active': {
-                  background: 'rgba(92, 68, 58, 0.6)',
-                },
-              }}
-            >
-              <EmojiObjectsRounded sx={{ color: 'white' }} />
+              <EmojiObjectsRounded sx={{ color: 'white', fontSize: '20px' }} />
             </IconButton>
             <IconButton
               sx={{
@@ -517,12 +604,12 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
     <Box>
       {!isMobile ? (
         <CustomDrawer
-          open={true}
+          open={open}
           sx={{
             flexShrink: 0,
             '& .MuiDrawer-paper': {
-              width: isExpanded || isMobile ? drawerWidth : 56,
-              height: '97%',
+              width: isExpanded || isMobile ? drawerWidth : 56, // Adjust drawer width
+              height: 'calc(100vh - 32px)',
               margin: '16px',
               borderRadius: '8px',
             },
@@ -539,29 +626,30 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             flexShrink: 0,
             '& .MuiDrawer-paper': {
               width: isExpanded || isMobile ? drawerWidth : 72,
-              height: '96%',
-              margin: '16px',
-              borderRadius: '8px',
+              height: '100%',
+              borderRadius: '0 8px 8px 0',
             },
           }}
           onClose={() => setIsOpenDrawer(false)}
-          variant={isMobile ? 'temporary' : 'persistent'}
+          variant={'persistent'}
         >
           {DrawerList}
         </Drawer>
       )}
 
-      <Box
+      <MainBox
+        open={openDataSource}
         sx={{
+          marginRight: isMobile ? 0 : openDataSource ? '446px' : 0,
           overflow: 'auto',
-          marginRight: '8px',
           marginBottom: '16px',
           transition: 'margin-left 0.3s',
-          marginLeft: isExpanded && !isMobile ? '255px' : '80px',
+          marginLeft:
+            isExpanded && !isMobile ? '255px' : isMobile ? '0' : '75px',
         }}
       >
         {children}
-      </Box>
+      </MainBox>
     </Box>
   );
 };
