@@ -234,9 +234,7 @@ export default function DataSourceDialog({
               px: '8px',
             }}
           >
-            <ListItemIcon sx={{ minWidth: isMobile ? 32 : 36 }}>
-              {file.icon}
-            </ListItemIcon>
+            <ListItemIcon sx={{ minWidth: 36 }}>{file.icon}</ListItemIcon>
             <ListItemText
               primary={file.name}
               sx={{
