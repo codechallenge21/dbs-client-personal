@@ -84,32 +84,32 @@ export default function PopularArea() {
     <Box
       sx={{
         minHeight: '100vh',
-        '&::-webkit-scrollbar': {
-          width: '8px',
-        },
-        '&::-webkit-scrollbar-track': {
-          borderRadius: '10px',
-          background: '#f1f1f1',
-        },
-        '&::-webkit-scrollbar-thumb': {
-          borderRadius: '10px',
-          background: '#888',
-        },
-        '&::-webkit-scrollbar-thumb:hover': {
-          background: '#555',
-        },
         background: 'var(--Primary-, #EBE3DD)',
       }}
     >
       <ToolboxDrawer open={isOpenDrawer} toggleDrawer={toggleDrawer}>
         <Box
           sx={{
-            minHeight: '96vh',
-            maxHeight: '96vh',
+            minHeight: '97vh',
+            maxHeight: '97vh',
             overflow: 'auto',
             borderRadius: '8px',
             padding: '16px 32px',
             backgroundColor: 'white',
+            '&::-webkit-scrollbar': {
+              width: '8px',
+            },
+            '&::-webkit-scrollbar-track': {
+              borderRadius: '10px',
+              background: '#f1f1f1',
+            },
+            '&::-webkit-scrollbar-thumb': {
+              borderRadius: '10px',
+              background: '#888',
+            },
+            '&::-webkit-scrollbar-thumb:hover': {
+              background: '#555',
+            },
           }}
         >
           <Box sx={{ position: 'relative', marginBottom: '40px' }}>
