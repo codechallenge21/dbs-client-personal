@@ -207,10 +207,10 @@ export default function DropdownMenu({
             borderRadius: '12px',
             width: {
               xs: '100%',
-              sm: '358px',
+              sm: '360px',
             },
-            maxWidth: '358px',
-            minHeight: '392px',
+            maxWidth: isMobile ? '89%' : '358px',
+            minHeight: isMobile ? 'auto' : '392px',
             ml: chatResponses.length || selectedChannel ? 1 : -1,
             mt: chatResponses.length || selectedChannel ? 0 : 1,
             boxShadow:
@@ -271,7 +271,12 @@ export default function DropdownMenu({
               {item.icon}
             </ListItemIcon>
             <ListItemText
-              sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '8px',
+                textOverflow: 'ellipsis',
+              }}
               primary={
                 <Typography
                   sx={{
@@ -282,6 +287,7 @@ export default function DropdownMenu({
                     fontSize: '16px',
                     fontStyle: 'normal',
                     fontWeight: '400',
+                    whiteSpace: 'nowrap',
                     lineHeight: 'normal',
                   }}
                 >
