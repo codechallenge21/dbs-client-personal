@@ -45,6 +45,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
         'audio/wav',
         'audio/webm',
         'audio/x-m4a',
+        'video/mp4',
       ];
       const maxFileSize = 100 * 1024 * 1024; // 100MB
 
@@ -69,11 +70,11 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
 
       const { data } = res;
 
-      const searchParams = new URLSearchParams({
-        organizationChannelId: data.organizationChannelId,
-      });
+      console.log('data', data);
 
-      router.push(`/summary?${searchParams.toString()}`);
+      router.push(
+        `/channelSummary?organizationChannelId=${data.organizationChannelId}`
+      );
     } catch (error) {
       setError('上傳失敗');
       console.error(error);
@@ -138,13 +139,15 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
             maxWidth: '800px',
             borderRadius: '16px',
             justifyContent: 'center',
-            width: isMobile ? '324px' : '716px',
+            width: isMobile ? '324px' : '780px',
+            height: isMobile ? '448px' : '581px',
+            m: 0,
           },
         }}
       >
         <DialogTitle
           sx={{
-            fontSize: '32px',
+            fontSize: isMobile ? '24px' : '32px',
             fontWeight: 400,
             fontStyle: 'normal',
             lineHeight: 'normal',
@@ -168,14 +171,14 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
 
         <DialogContent
           sx={{
-            margin: '32px',
-            height: '453px',
+            margin: isMobile ? '16px' : '32px',
+            height: isMobile ? '352px !important' : '453px !important',
             display: 'flex',
             alignItems: 'center',
             borderRadius: '16px',
             flexDirection: 'column',
-            justifyContent: 'flex-end',
-            padding: '160px 0px 80px 0px',
+            justifyContent: isMobile ? 'center' : 'flex-end',
+            padding: isMobile ? '20px' : '160px 0px 80px 0px',
             border: '2px dashed #2196f3',
             ...(isDragActive && { backgroundColor: '#e0f7fa' }),
           }}
@@ -204,8 +207,6 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
             sx={{
               zIndex: 1,
               gap: '8px',
-              mb: '65px',
-              width: '294px',
               display: 'flex',
               fontWeight: 400,
               fontSize: '16px',
@@ -216,13 +217,16 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
               alignItems: 'center',
               justifyContent: 'center',
               fontFamily: 'DFPHeiBold-B5',
+              mb: isMobile ? '32px' : '65px',
+              height: isMobile ? '46px' : '46px',
+              width: isMobile ? '180px' : '294px',
               color: 'var(--Info-ContrastText, #FFF)',
-              background: 'var(--Secondary-, #5C443A)',
+              background: 'var(--Secondary-Dark-Gray, #4A4A4A)',
             }}
             variant="contained"
             startIcon={<UploadRounded />}
           >
-            選擇檔案
+            {isMobile ? ' 選擇檔案' : '選擇檔案'}
             <input
               type="file"
               onChange={handleFileUpload}
@@ -235,18 +239,20 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
             <Typography
               sx={{
                 color: 'grey.600',
-                fontSize: 14,
+                fontSize: isMobile ? 14 : 16,
                 mb: 0.5,
                 width: '100%',
                 height: 'auto',
               }}
             >
-              支援檔案格式：mp3, mp4, mpeg, mpga, m4a, wav, webm
+              {isMobile
+                ? '支援檔案格式：mp3, wav, m4a'
+                : '支援檔案格式：mp3, mp4, mpeg, mpga, m4a, wav, webm'}
             </Typography>
             <Typography
               sx={{
                 color: 'grey.600',
-                fontSize: 14,
+                fontSize: isMobile ? 14 : 16,
               }}
             >
               限制大小：100MB
