@@ -14,9 +14,11 @@ import {
   useTheme,
 } from '@mui/material';
 import {
-  Description as DescriptionIcon,
-  InsertDriveFile as FileIcon,
   Close as CloseIcon,
+  FilePresentRounded,
+  ImageRounded,
+  PictureAsPdfRounded,
+  ArticleRounded,
 } from '@mui/icons-material';
 
 interface DataSourceDialogFile {
@@ -24,6 +26,7 @@ interface DataSourceDialogFile {
   type: string;
   isLocal?: boolean;
   onClick?: () => void;
+  icon?: React.ReactNode;
 }
 
 interface DataSourceDialogProps {
@@ -36,7 +39,7 @@ interface DataSourceDialogProps {
 export default function DataSourceDialog({
   open,
   onClose,
-  title = '詳細内容',
+  title = '詳細內容',
   files = [],
 }: DataSourceDialogProps) {
   // If no files are provided, use these default files
@@ -46,78 +49,90 @@ export default function DataSourceDialog({
       type: 'text',
       isLocal: true,
       onClick: () => console.log('clicked'),
+      icon: <FilePresentRounded />,
     },
     {
       name: 'LocalsIFile_name_01.aff',
       type: 'file',
       isLocal: true,
       onClick: () => console.log('clicked'),
+      icon: <ImageRounded />,
     },
     {
       name: 'LocalsIFile_name_02.img',
       type: 'image',
       isLocal: true,
       onClick: () => console.log('clicked'),
+      icon: <ImageRounded />,
     },
     {
       name: 'LocalsIFile_name_03.pdf',
       type: 'pdf',
       isLocal: true,
       onClick: () => console.log('clicked'),
+      icon: <PictureAsPdfRounded />,
     },
     {
       name: 'LocalsIFile_name_04.tsx',
       type: 'code',
       isLocal: true,
       onClick: () => console.log('clicked'),
+      icon: <FilePresentRounded />,
     },
     {
       name: 'LocalsIFile_name_05.docx',
-      type: 'doc',
-      isLocal: false,
+      type: 'code',
+      isLocal: true,
       onClick: () => console.log('clicked'),
+      icon: <FilePresentRounded />,
     },
     {
       name: '技術資料01',
       type: 'doc',
       isLocal: false,
       onClick: () => console.log('clicked'),
+      icon: <ArticleRounded />,
     },
     {
       name: '技術資料02',
       type: 'doc',
       isLocal: false,
       onClick: () => console.log('clicked'),
+      icon: <ArticleRounded />,
     },
     {
       name: '技術資料03',
       type: 'doc',
       isLocal: false,
       onClick: () => console.log('clicked'),
+      icon: <ArticleRounded />,
     },
     {
       name: '技術資料04',
       type: 'doc',
       isLocal: false,
       onClick: () => console.log('clicked'),
+      icon: <ArticleRounded />,
     },
     {
       name: '技術資料05',
       type: 'doc',
       isLocal: false,
       onClick: () => console.log('clicked'),
+      icon: <ArticleRounded />,
     },
     {
       name: '技術資料06',
       type: 'doc',
       isLocal: false,
       onClick: () => console.log('clicked'),
+      icon: <ArticleRounded />,
     },
   ];
 
   const displayFiles = files.length > 0 ? files : defaultFiles;
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const localFiles = displayFiles.filter((file) => file.isLocal);
   const sourceFiles = displayFiles.filter((file) => !file.isLocal);
@@ -141,6 +156,7 @@ export default function DataSourceDialog({
           marginTop: isMobile ? '0' : '16px',
           marginRight: isMobile ? '0' : '16px',
           height: isMobile ? 'auto' : 'calc(100vh - 32px)',
+          top: isMobile ? '112px' : '',
         },
       }}
       variant={isMobile ? 'temporary' : 'persistent'}
@@ -155,7 +171,6 @@ export default function DataSourceDialog({
           justifyContent: 'space-between',
           height: isMobile ? '48px' : '62px',
           pl: '8px',
-          pr: '4px',
           gap: '8px',
         }}
       >
@@ -184,7 +199,7 @@ export default function DataSourceDialog({
           },
           '&::-webkit-scrollbar-thumb': {
             backgroundColor: 'rgba(0,0,0,0.2)',
-            borderRadius: '4px',
+            borderRadius: '8px',
           },
         }}
       >
@@ -195,6 +210,8 @@ export default function DataSourceDialog({
             fontFamily: 'DFPHeiBold-B5',
             fontSize: '14px',
             lineHeight: 'normal',
+            fontStyle: 'normal',
+            fontWeight: 400,
             pb: '8px',
           }}
         >
@@ -213,24 +230,23 @@ export default function DataSourceDialog({
                 backgroundColor: 'rgba(0, 0, 0, 0.04)',
               },
               cursor: 'pointer',
-              py: isMobile ? 0.75 : 1,
+              py: '16px',
+              px: '8px',
             }}
           >
-            <ListItemIcon sx={{ minWidth: isMobile ? 32 : 36 }}>
-              {file.type === 'doc' ? (
-                <DescriptionIcon fontSize={isMobile ? 'small' : 'medium'} />
-              ) : (
-                <FileIcon fontSize={isMobile ? 'small' : 'medium'} />
-              )}
-            </ListItemIcon>
+            <ListItemIcon sx={{ minWidth: 36 }}>{file.icon}</ListItemIcon>
             <ListItemText
               primary={file.name}
               sx={{
                 '& .MuiListItemText-primary': {
-                  fontSize: isMobile ? '0.813rem' : '0.875rem',
+                  fontSize: '16px',
                   whiteSpace: 'nowrap',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
+                  fontFamily: 'DFPHeiBold-B5',
+                  fontStyle: 'normal',
+                  fontWeight: 400,
+                  lineHeight: 'normal',
                 },
               }}
             />
@@ -239,8 +255,14 @@ export default function DataSourceDialog({
         <Typography
           variant={isMobile ? 'body2' : 'subtitle1'}
           sx={{
-            pt: 2,
-            pb: 1,
+            color: 'var(--Primary-Black, #212B36)',
+            fontFamily: 'DFPHeiBold-B5',
+            fontSize: '14px',
+            fontStyle: 'normal',
+            fontWeight: 400,
+            lineHeight: 'normal',
+            pb: '8px',
+            pt: '16px',
           }}
         >
           資料來源
@@ -258,21 +280,16 @@ export default function DataSourceDialog({
                 backgroundColor: 'rgba(0, 0, 0, 0.04)',
               },
               cursor: 'pointer',
-              py: isMobile ? 0.75 : 1,
+              py: '16px',
+              px: '8px',
             }}
           >
-            <ListItemIcon sx={{ minWidth: isMobile ? 32 : 36 }}>
-              {file.type === 'doc' ? (
-                <DescriptionIcon fontSize={isMobile ? 'small' : 'medium'} />
-              ) : (
-                <FileIcon fontSize={isMobile ? 'small' : 'medium'} />
-              )}
-            </ListItemIcon>
+            <ListItemIcon sx={{ minWidth: 36 }}>{file.icon}</ListItemIcon>
             <ListItemText
               primary={file.name}
               sx={{
                 '& .MuiListItemText-primary': {
-                  fontSize: isMobile ? '0.813rem' : '0.875rem',
+                  fontSize: '16px',
                   whiteSpace: 'nowrap',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',

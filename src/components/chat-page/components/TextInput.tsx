@@ -286,12 +286,12 @@ const TextInput: React.FC<TextInputProps> = ({
           flexDirection: 'column',
           width: '100%',
           maxWidth: '760px',
+          minHeight: '116px',
           maxHeight: '760px',
-          minHeight: '108px',
           position: 'relative',
           bottom: 0,
           backgroundColor: '#F5F5F5',
-          borderRadius: 2,
+          borderRadius: '16px',
           zIndex: 10,
           marginTop: isMobile ? 3 : 0,
           overflow: 'hidden',
@@ -381,8 +381,9 @@ const TextInput: React.FC<TextInputProps> = ({
         <Box
           sx={{
             width: '100%',
-            paddingTop: '8px',
-            paddingInline: '20px',
+            paddingTop: '16px',
+            paddingBottom: '10px',
+            paddingInline: '10px',
             overflowY: 'auto',
             maxHeight: '200px',
             minHeight: '40px',
@@ -415,10 +416,11 @@ const TextInput: React.FC<TextInputProps> = ({
               outline: 'none',
               resize: 'none',
               fontSize: '16px',
-              color: '#000',
+              color: '#212B36',
               backgroundColor: '#F5F5F5',
               overflow: 'auto',
             }}
+            className="textarea-autosize"
             value={userInputValue}
             onChange={handleOnChangeUserInput}
             onKeyDown={handleOnKeyDownUserInput}
@@ -427,14 +429,13 @@ const TextInput: React.FC<TextInputProps> = ({
         <Box
           sx={{
             width: '100%',
-            marginTop: '12px',
+            marginTop: '16px',
             justifyContent: 'space-between',
             display: 'flex',
             gap: '16px',
             flexWrap: 'wrap',
             padding: '22px',
             position: 'relative',
-            bottom: '-4px',
           }}
         >
           <Box
@@ -450,7 +451,7 @@ const TextInput: React.FC<TextInputProps> = ({
               onDragOver={handleDragOver}
               sx={{
                 position: 'absolute',
-                bottom: '12px',
+                bottom: '10px',
                 left: '10px',
               }}
             >
@@ -469,9 +470,8 @@ const TextInput: React.FC<TextInputProps> = ({
             <IconButton
               sx={{
                 position: 'absolute',
-                bottom: '12px',
-                left: '49px',
-                padding: '4px',
+                bottom: '10px',
+                left: '58px',
               }}
             >
               <DropdownMenu isTextInput advisor={advisorType} />
@@ -482,7 +482,7 @@ const TextInput: React.FC<TextInputProps> = ({
             <Box
               sx={{
                 position: 'absolute',
-                bottom: '12px',
+                bottom: '10px',
                 right: '10px',
               }}
             >
@@ -492,7 +492,7 @@ const TextInput: React.FC<TextInputProps> = ({
             <IconButton
               sx={{
                 position: 'absolute',
-                bottom: '12px',
+                bottom: '10px',
                 right: '10px',
               }}
               onClick={handleClickSubmitOrAudioFileUpload}
@@ -505,7 +505,7 @@ const TextInput: React.FC<TextInputProps> = ({
               className={isListening ? 'mic-listening' : ''}
               sx={{
                 position: 'absolute',
-                bottom: '12px',
+                bottom: '10px',
                 right: '10px',
               }}
             >

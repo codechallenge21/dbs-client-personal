@@ -9,10 +9,11 @@ import {
   MenuItem,
   useTheme,
   useMediaQuery,
+  Box,
 } from '@mui/material';
 import {
   AccountBalanceWalletRounded,
-  ArrowDropDown,
+  ArrowDropDownRounded,
   BusinessCenterRounded,
   LocalHospitalRounded,
   MoneyOffRounded,
@@ -129,24 +130,31 @@ export default function DropdownMenu({
   return (
     <>
       {isTextInput ? (
-        <div
+        <Box
           onClick={(e) => setToolsAnchor(e.currentTarget)}
-          style={{
+          sx={{
             background: 'none',
             cursor: 'pointer',
+            width: '24px',
+            height: '24px',
           }}
         >
           {listItems
             .filter((item) => item.value === advisor)
             .map((item) => (
-              <SupportAgentIcon
+              <ListItemIcon
                 key={item.value}
-                sx={{ color: 'black', minWidth: 'auto' }}
+                sx={{
+                  color: 'black',
+                  minWidth: 'auto',
+                  width: '24px',
+                  height: '24px',
+                }}
               >
                 {item.icon}
-              </SupportAgentIcon>
+              </ListItemIcon>
             ))}
-        </div>
+        </Box>
       ) : (
         <>
           <Typography
@@ -155,10 +163,14 @@ export default function DropdownMenu({
               alignItems: 'center',
               justifyContent: 'center',
               padding: '4px 8px',
-              color: toolsAnchor ? '#0066cc' : 'black',
+              color: toolsAnchor ? '#0066cc' : '#4A4A4A',
               backgroundColor: toolsAnchor ? '#F5F5F5' : 'white',
               borderRadius: toolsAnchor ? '10px' : '0px',
-              cursor: 'pointer',
+              cursor:
+                chatResponses[1]?.organizationChannelTitle ||
+                selectedChannel?.organizationChannelTitle
+                  ? 'pointer'
+                  : 'default',
               height: '40px',
               fontSize: '16px',
               fontFamily: 'DFPHeiBold-B5',
@@ -175,7 +187,7 @@ export default function DropdownMenu({
               <>
                 {chatResponses[1]?.organizationChannelTitle ||
                   selectedChannel?.organizationChannelTitle}
-                <ArrowDropDown
+                <ArrowDropDownRounded
                   sx={{ width: '32px', height: '32px', color: 'black' }}
                 />
               </>
@@ -195,10 +207,10 @@ export default function DropdownMenu({
             borderRadius: '12px',
             width: {
               xs: '100%',
-              sm: '358px',
+              sm: '360px',
             },
-            maxWidth: '358px',
-            minHeight: '392px',
+            maxWidth: isMobile ? '89%' : '358px',
+            minHeight: isMobile ? 'auto' : '392px',
             ml: chatResponses.length || selectedChannel ? 1 : -1,
             mt: chatResponses.length || selectedChannel ? 0 : 1,
             boxShadow:
@@ -259,7 +271,12 @@ export default function DropdownMenu({
               {item.icon}
             </ListItemIcon>
             <ListItemText
-              sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '8px',
+                textOverflow: 'ellipsis',
+              }}
               primary={
                 <Typography
                   sx={{
@@ -270,6 +287,7 @@ export default function DropdownMenu({
                     fontSize: '16px',
                     fontStyle: 'normal',
                     fontWeight: '400',
+                    whiteSpace: 'nowrap',
                     lineHeight: 'normal',
                   }}
                 >

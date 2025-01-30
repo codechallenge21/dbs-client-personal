@@ -58,8 +58,8 @@ const Header: React.FC<HeaderProps> = ({
   const headerWidth = useMemo(() => {
     if (isMobile) return '100%';
     return open
-      ? `calc(100% - 303px - ${openDataSource ? 446 : 0}px)`
-      : `calc(100% - 128px - ${openDataSource ? 446 : 0}px)`;
+      ? `calc(100% - 287px - ${openDataSource ? 446 : 0}px)`
+      : `calc(100% - 107px - ${openDataSource ? 446 : 0}px)`;
   }, [isMobile, open, openDataSource]);
 
   return (
@@ -69,7 +69,7 @@ const Header: React.FC<HeaderProps> = ({
         top: 0,
         width: headerWidth,
         mt: isMobile ? 0 : '16px',
-        pt: isMobile ? '16px' : 0,
+        py: isMobile ? '8px' : 0,
         px: isMobile ? '16px' : 0,
         zIndex: 11,
         marginRight: 'auto',
@@ -87,29 +87,25 @@ const Header: React.FC<HeaderProps> = ({
         >
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <IconButton onClick={() => memoizedToggleDrawer(true)}>
-              <MenuRounded sx={{ color: 'black' }} />
+              <MenuRounded sx={{ color: '#212B36' }} />
             </IconButton>
-            {isChat && (
-              <Box sx={{ marginLeft: '8px' }}>
-                <DropdownMenu advisor={advisor} />
-              </Box>
-            )}
+            {isChat && <DropdownMenu advisor={advisor} />}
           </Box>
           {!isChat && (
             <IconButton onClick={() => setOpenUpload(true)}>
-              <FileUploadIcon sx={{ color: 'black' }} />
+              <FileUploadIcon sx={{ color: '#212B36' }} />
             </IconButton>
           )}
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <IconButton sx={{ padding: '0px' }}>
-              <StarBorderRounded sx={{ color: 'black', margin: '8px' }} />
+              <StarBorderRounded sx={{ color: '#212B36', margin: '8px' }} />
             </IconButton>
             <IconButton
               sx={{ padding: '0px' }}
               onClick={() => setOpenDataSource(true)}
             >
               <SettingsInputComponentRounded
-                sx={{ color: 'black', margin: '8px' }}
+                sx={{ color: '#212B36', margin: '8px' }}
               />
             </IconButton>
           </Box>
@@ -133,7 +129,7 @@ const Header: React.FC<HeaderProps> = ({
             >
               {!isChat && (
                 <IconButton onClick={() => setOpenUpload(true)}>
-                  <FileUploadIcon sx={{ color: 'black' }} />
+                  <FileUploadIcon sx={{ color: '#212B36' }} />
                 </IconButton>
               )}
             </Box>
@@ -150,7 +146,7 @@ const Header: React.FC<HeaderProps> = ({
               <DropdownMenu advisor={advisor} />
               <Box>
                 <IconButton sx={{ padding: '0px' }}>
-                  <StarBorderRounded sx={{ color: 'black', margin: '8px' }} />
+                  <StarBorderRounded sx={{ color: '#212B36', margin: '8px' }} />
                 </IconButton>
                 {selectedChannel ||
                 selectedChannelId ||
@@ -159,7 +155,7 @@ const Header: React.FC<HeaderProps> = ({
                     sx={{ padding: '0px' }}
                     onClick={() => router.push('/allchat')}
                   >
-                    <HistoryRounded sx={{ color: 'black', margin: '8px' }} />
+                    <HistoryRounded sx={{ color: '#212B36', margin: '8px' }} />
                   </IconButton>
                 ) : null}
                 <IconButton
@@ -167,7 +163,7 @@ const Header: React.FC<HeaderProps> = ({
                   onClick={() => setOpenDataSource(true)}
                 >
                   <SettingsInputComponentRounded
-                    sx={{ color: 'black', margin: '8px' }}
+                    sx={{ color: '#212B36', margin: '8px' }}
                   />
                 </IconButton>
               </Box>
