@@ -382,7 +382,6 @@ const TextInput: React.FC<TextInputProps> = ({
           sx={{
             width: '100%',
             paddingTop: '16px',
-            paddingBottom: '10px',
             paddingInline: '10px',
             overflowY: 'auto',
             maxHeight: '200px',

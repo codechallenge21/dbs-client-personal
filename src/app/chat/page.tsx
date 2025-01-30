@@ -37,6 +37,8 @@ function ClientContent() {
     setSelectedChannelId,
     advisorType,
     setSelectedChannel,
+    setChatResponses,
+    setIsInteractingInChat,
   } = useContext(ChannelContentContext);
 
   const { excute: getChannelDetail } = useAxiosApi(apis.getChannelDetail);
@@ -50,12 +52,6 @@ function ClientContent() {
 
   const fetchChannelDetail = useCallback(
     async (organizationChannelId: string) => {
-      if (!organizationChannelId) {
-        setSelectedChannel(undefined);
-        setSelectedChannelId(undefined);
-        return;
-      }
-
       try {
         const res = await getChannelDetail({
           organizationId: '4aba77788ae94eca8d6ff330506af944',
@@ -71,8 +67,14 @@ function ClientContent() {
   );
 
   useEffect(() => {
-    if (selectedChannel) {
+    if (selectedChannel && organizationChannelId) {
       setSelectedChannelId(selectedChannel.organizationChannelId);
+    } else if (!organizationChannelId) {
+      setSelectedChannel(undefined);
+      setSelectedChannelId(undefined);
+      setChatResponses([]);
+      setIsInteractingInChat(false);
+      return;
     } else {
       fetchChannelDetail(organizationChannelId);
     }
@@ -81,6 +83,9 @@ function ClientContent() {
     organizationChannelId,
     setSelectedChannelId,
     fetchChannelDetail,
+    setChatResponses,
+    setIsInteractingInChat,
+    setSelectedChannel,
   ]);
 
   useEffect(() => {
@@ -119,7 +124,7 @@ function ClientContent() {
         />
         <Box
           sx={{
-            marginTop: isMobile ? '60px' : '8px',
+            marginTop: isMobile ? '60px' : '0px',
           }}
         />
         <MainContent />

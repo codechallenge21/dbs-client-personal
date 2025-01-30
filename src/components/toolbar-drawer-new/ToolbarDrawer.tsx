@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import Drawer from '@mui/material/Drawer';
 import ListItem from '@mui/material/ListItem';
 import {
@@ -27,9 +27,8 @@ import {
 } from '@mui/material';
 import { styled, Theme, CSSObject } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Cookies from 'js-cookie';
-import ChannelContentContext from '../channel-context-provider/ChannelContentContext';
 
 interface ToolbarDrawerProps {
   open: boolean;
@@ -116,8 +115,7 @@ const MainBox = styled('div', {
 
 const drawerWidth = 240;
 
-const tId = Cookies.get('tid') || null;
-console.log('tId', tId);
+const isLogin = Cookies.get('isLogin') || null;
 
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
@@ -174,22 +172,15 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
 }) => {
   const pathname = usePathname();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const theme = useTheme();
   const [isClient, setIsClient] = useState(false);
   const [isExpanded, setIsExpanded] = useState(true); // Track expanded/collapsed state
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const {
-    setSelectedChannelId,
-    setSelectedChannel,
-    setChatResponses,
-    setIsInteractingInChat,
-  } = useContext(ChannelContentContext);
 
   const resetChat = () => {
-    setSelectedChannelId(undefined);
-    setSelectedChannel(undefined);
-    setChatResponses([]);
-    setIsInteractingInChat(false);
+    const params = new URLSearchParams(searchParams);
+    params.delete('organizationChannelId');
     router.push('/chat');
   };
 
@@ -411,7 +402,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
       >
         {(isExpanded || isMobile) && (
           <>
-            {tId ? (
+            {isLogin ? (
               <Box
                 sx={{
                   display: 'flex',
@@ -506,7 +497,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
         )}
         {!isExpanded && !isMobile && (
           <>
-            {!tId ? (
+            {!isLogin ? (
               <IconButton
                 sx={{
                   width: '36px',
