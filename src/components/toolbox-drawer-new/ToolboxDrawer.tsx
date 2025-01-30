@@ -455,10 +455,10 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
           sx={{
             flexShrink: 0,
             '& .MuiDrawer-paper': {
-              width: isExpanded ? drawerWidth : 56, // Adjust drawer width
               height: '97%',
               margin: '16px',
               borderRadius: '8px',
+              width: isExpanded ? drawerWidth : 56,
             },
           }}
           onClose={() => toggleDrawer(!open)}
@@ -492,7 +492,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
           marginRight: '16px',
           marginBottom: '16px',
           transition: 'margin-left 0.3s',
-          marginLeft: isExpanded && !isMobile ? '265px' : '80px',
+          marginLeft: isExpanded && !isMobile ? '265px' : '16px',
         }}
       >
         {children}

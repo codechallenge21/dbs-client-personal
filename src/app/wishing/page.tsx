@@ -1,12 +1,22 @@
 'use client';
 import React, { useRef, useState } from 'react';
-import { Box, Typography, IconButton, Grid2 } from '@mui/material';
-import { ArrowForwardIosRounded } from '@mui/icons-material';
+import {
+  Box,
+  Grid2,
+  useTheme,
+  Typography,
+  IconButton,
+  useMediaQuery,
+} from '@mui/material';
+import { ArrowForwardIosRounded, MenuRounded } from '@mui/icons-material';
 import Image from 'next/image';
 import boxImage from '../../../public/assets/images/box.png';
 import ToolboxDrawer from '@/components/toolbox-drawer-new/ToolboxDrawer';
 
 export default function Home() {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   const focusRef = useRef<HTMLDivElement>(null);
   const recommendationsRef = useRef<HTMLDivElement>(null);
   const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(true);
@@ -105,20 +115,26 @@ export default function Home() {
         >
           <Box>
             <Box sx={{ position: 'relative', marginBottom: '40px' }}>
-              <Typography
-                gutterBottom
-                sx={{
-                  fontWeight: 400,
-                  fontSize: '24px',
-                  fontStyle: 'normal',
-                  lineHeight: 'normal',
-                  marginBottom: '16px',
-                  fontFamily: 'DFPHeiBold-B5',
-                  color: 'var(--Primary-Black, #212B36)',
-                }}
-              >
-                你可能感興趣
-              </Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: '16px' }}>
+                {isMobile && (
+                  <IconButton>
+                    <MenuRounded />
+                  </IconButton>
+                )}
+                <Typography
+                  sx={{
+                    fontWeight: 400,
+                    fontSize: '24px',
+                    fontStyle: 'normal',
+                    textAlign: 'center',
+                    lineHeight: 'normal',
+                    fontFamily: 'DFPHeiBold-B5',
+                    color: 'var(--Primary-Black, #212B36)',
+                  }}
+                >
+                  你可能感興趣
+                </Typography>
+              </Box>
               <Box
                 sx={{
                   display: 'flex',
