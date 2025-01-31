@@ -632,6 +632,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               height: '100%',
               borderRadius: '0 8px 8px 0',
             },
+            pointerEvents: !open ? 'none' : 'auto',
           }}
           onClose={() => setIsOpenDrawer(false)}
           variant={'temporary'}

@@ -82,7 +82,8 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
       <Box
         sx={{
           maxWidth: '760px',
-          height: 'calc(100% - 81px)',
+          minWidth: isMobile ? '100%' : '',
+          height: isMobile ? '100%' : 'calc(100% - 81px)',
           display: 'flex',
           pt: '16px',
           flexDirection: 'column',

@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   AppBar,
   Box,
@@ -17,26 +17,26 @@ import {
   Toolbar,
   Typography,
   Stack,
-} from "@mui/material";
-import { Menu as MenuIcon } from "@mui/icons-material";
-import ArrowRightIcon from "@mui/icons-material/ArrowRight";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import { usePathname } from "next/navigation";
-import Link from "next/link";
+} from '@mui/material';
+import { Menu as MenuIcon } from '@mui/icons-material';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import { usePathname } from 'next/navigation';
+import Link from 'next/link';
 
 const menuItems = [
-  { text: "知識庫", href: "#" },
-  { text: "財務快報", href: "#" },
-  { text: "工具箱", href: "/toolbox" },
-  { text: "解決麻煩事", href: "/chat" },
+  { text: '知識庫', href: '#' },
+  { text: '財務快報', href: '#' },
+  { text: '工具箱', href: '/toolbox' },
+  { text: '解決麻煩事', href: '/chat' },
 ];
 
 const toolItems = [
-  { text: "語音摘要", href: "/toolbox" },
-  { text: "家系圖", href: "/toolbox/family-tree" },
-  { text: "財務盤點表", href: "/toolbox/financial-statement" },
-  { text: "債務試算模擬器", href: "/toolbox/debt-calculator" },
-  { text: "生活紀錄", href: "/toolbox/life-record" },
+  { text: '語音摘要', href: '/toolbox' },
+  { text: '家系圖', href: '/toolbox/family-tree' },
+  { text: '財務盤點表', href: '/toolbox/financial-statement' },
+  { text: '債務試算模擬器', href: '/toolbox/debt-calculator' },
+  { text: '生活紀錄', href: '/toolbox/life-record' },
 ];
 
 export default function Header() {
@@ -70,9 +70,9 @@ export default function Header() {
     <Box
       sx={{
         width: 250,
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
       }}
     >
       <List sx={{ flexGrow: 1 }}>
@@ -83,8 +83,8 @@ export default function Header() {
                 onClick={() => handleExpandItem(item.text)}
                 sx={{
                   color: pathname.startsWith(item.href)
-                    ? "primary.main"
-                    : "text.primary",
+                    ? 'primary.main'
+                    : 'text.primary',
                 }}
               >
                 <Link
@@ -96,14 +96,14 @@ export default function Header() {
                   <ListItemText primary={item.text} />
                 </Link>
                 {index === menuItems.length - 2 &&
-                  (expandedItem === "工具箱" ? (
+                  (expandedItem === '工具箱' ? (
                     <ArrowDropDownIcon />
                   ) : (
                     <ArrowRightIcon />
                   ))}
               </ListItemButton>
             </ListItem>
-            {item.text === "工具箱" && expandedItem === "工具箱" && (
+            {item.text === '工具箱' && expandedItem === '工具箱' && (
               <List component="div" disablePadding>
                 {toolItems.map((tool) => (
                   <Link
@@ -122,14 +122,14 @@ export default function Header() {
           </React.Fragment>
         ))}
       </List>
-      <Stack spacing={2} sx={{ p: 2, borderColor: "divider" }}>
+      <Stack spacing={2} sx={{ p: 2, borderColor: 'divider' }}>
         <Button
           fullWidth
           variant="contained"
           sx={{
-            bgcolor: "error.main",
-            "&:hover": { bgcolor: "error.dark" },
-            borderRadius: "8px",
+            bgcolor: 'error.main',
+            '&:hover': { bgcolor: 'error.dark' },
+            borderRadius: '8px',
           }}
         >
           登入
@@ -141,7 +141,7 @@ export default function Header() {
           target="_blank"
           rel="noopener noreferrer"
           sx={{
-            borderRadius: "8px",
+            borderRadius: '8px',
           }}
         >
           意見回饋
@@ -153,14 +153,14 @@ export default function Header() {
   return (
     <AppBar
       position="static"
-      sx={{ bgcolor: "background.paper", boxShadow: 1 }}
+      sx={{ bgcolor: 'background.paper', boxShadow: 1 }}
     >
       <Container
         maxWidth="xl"
         sx={{
-          "&.MuiContainer-root": {
-            paddingLeft: "16px",
-            paddingRight: "16px",
+          '&.MuiContainer-root': {
+            paddingLeft: '16px',
+            paddingRight: '16px',
           },
         }}
       >
@@ -170,9 +170,9 @@ export default function Header() {
             component="div"
             sx={{
               flexGrow: 1,
-              color: "text.primary",
-              fontSize: "24px",
-              fontWeight: "bold",
+              color: 'text.primary',
+              fontSize: '24px',
+              fontWeight: 'bold',
             }}
           >
             好理家在
@@ -182,20 +182,20 @@ export default function Header() {
             sx={{
               gap: 2,
               flexGrow: 1,
-              display: { xs: "none", md: "flex" },
+              display: { xs: 'none', md: 'flex' },
             }}
           >
             {menuItems.map((item) => (
               <Button
                 key={item.text}
-                endIcon={item.text !== "解決麻煩事" && <ArrowDropDownIcon />}
-                onClick={(e) => handleMenuOpen(e, item.text !== "解決麻煩事")}
+                endIcon={item.text !== '解決麻煩事' && <ArrowDropDownIcon />}
+                onClick={(e) => handleMenuOpen(e, item.text !== '解決麻煩事')}
                 sx={{
                   color: pathname.startsWith(item.href)
-                    ? "primary.main"
-                    : "text.primary",
+                    ? 'primary.main'
+                    : 'text.primary',
                 }}
-                href={item.text === "解決麻煩事" ? item.href : undefined}
+                href={item.text === '解決麻煩事' ? item.href : undefined}
               >
                 {item.text}
               </Button>
@@ -220,7 +220,7 @@ export default function Header() {
           <Stack
             direction="row"
             spacing={2}
-            sx={{ display: { xs: "none", md: "flex" } }}
+            sx={{ display: { xs: 'none', md: 'flex' } }}
           >
             <Button
               variant="outlined"
@@ -237,8 +237,8 @@ export default function Header() {
             <Button
               variant="contained"
               sx={{
-                bgcolor: "error.main",
-                "&:hover": { bgcolor: "error.dark" },
+                bgcolor: 'error.main',
+                '&:hover': { bgcolor: 'error.dark' },
                 borderRadius: 0,
                 px: 3,
               }}
@@ -252,9 +252,9 @@ export default function Header() {
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ display: { xs: "block", md: "none" } }}
+            sx={{ display: { xs: 'block', md: 'none' } }}
           >
-            <MenuIcon sx={{ color: "text.primary" }} />
+            <MenuIcon sx={{ color: 'text.primary' }} />
           </IconButton>
         </Toolbar>
       </Container>
@@ -267,11 +267,11 @@ export default function Header() {
           keepMounted: true,
         }}
         sx={{
-          display: { xs: "block", md: "none" },
-          "& .MuiDrawer-paper": {
-            boxSizing: "border-box",
+          display: { xs: 'block', md: 'none' },
+          '& .MuiDrawer-paper': {
+            boxSizing: 'border-box',
             width: 250,
-            height: "100%",
+            height: '100%',
           },
         }}
       >
