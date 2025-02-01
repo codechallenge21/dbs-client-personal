@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   Dialog,
@@ -12,14 +12,14 @@ import {
   Snackbar,
   useTheme,
   useMediaQuery,
-} from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import FileUploadIcon from "@mui/icons-material/FileUpload";
-import { useRouter } from "next/navigation";
-import useAxiosApi from "@eGroupAI/hooks/apis/useAxiosApi";
-import apiExports from "@/utils/hooks/apis/apis";
-import { useState } from "react";
-import LoadingScreen from "../loading/page";
+} from '@mui/material';
+import { useRouter } from 'next/navigation';
+import { useDropzone } from 'react-dropzone';
+import apiExports from '@/utils/hooks/apis/apis';
+import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
+import { useState } from 'react';
+import LoadingScreen from '../loading/page';
+import { CloseRounded, UploadRounded } from '@mui/icons-material';
 
 interface UploadDialogProps {
   open: boolean;
@@ -29,42 +29,35 @@ interface UploadDialogProps {
 export default function UploadDialog({ open, onClose }: UploadDialogProps) {
   const router = useRouter();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [, setFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
   const { excute: createChannelByAudio, isLoading: isCreating } = useAxiosApi(
     apiExports.createChannelByAudio
   );
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    if (e.target.files && e.target.files.length > 0) {
-      validateFile(e.target.files[0]);
-      e.target.value = "";
-    }
-  };
-
   const validateFile = async (file: File) => {
     try {
       const allowedFormats = [
-        "audio/mpeg",
-        "audio/mp4",
-        "audio/mpga",
-        "audio/wav",
-        "audio/webm",
-        "audio/x-m4a",
+        'audio/mpeg',
+        'audio/mp4',
+        'audio/mpga',
+        'audio/wav',
+        'audio/webm',
+        'audio/x-m4a',
+        'video/mp4',
       ];
       const maxFileSize = 100 * 1024 * 1024; // 100MB
 
       if (!allowedFormats.includes(file.type)) {
         setError(
-          "不支援的檔案格式，請選擇 mp3, mp4, mpeg, mpga, m4a, wav 或 webm 格式"
+          '不支援的檔案格式，請選擇 mp3, mp4, mpeg, mpga, m4a, wav 或 webm 格式'
         );
         return;
       }
 
       if (file.size > maxFileSize) {
-        setError("檔案大小超過 100MB 限制");
+        setError('檔案大小超過 100MB 限制');
         return;
       }
 
@@ -77,16 +70,38 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
 
       const { data } = res;
 
-      const searchParams = new URLSearchParams({
-        organizationChannelId: data.organizationChannelId,
-      });
+      console.log('data', data);
 
-      router.push(`/summary?${searchParams.toString()}`);
+      router.push(
+        `/channelSummary?organizationChannelId=${data.organizationChannelId}`
+      );
     } catch (error) {
-      setError("上傳失敗");
+      setError('上傳失敗');
       console.error(error);
     }
   };
+
+  const handleDrop = (acceptedFiles: File[]) => {
+    if (acceptedFiles && acceptedFiles.length > 0) {
+      validateFile(acceptedFiles[0]);
+    }
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    if (e.target.files && e.target.files.length > 0) {
+      validateFile(e.target.files[0]);
+      e.target.value = '';
+    }
+  };
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop: handleDrop,
+    accept: {
+      'audio/*': ['.mp3', '.mp4', '.mpeg', '.mpga', '.m4a', '.wav', '.webm'],
+    },
+    maxSize: 100 * 1024 * 1024, // 100MB
+  });
 
   const handleCloseError = () => {
     setError(null);
@@ -96,15 +111,15 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
     return (
       <Box
         sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          position: "fixed",
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          position: 'fixed',
           top: 0,
           left: 0,
-          height: "100vh",
-          width: "100vw",
-          bgcolor: "#fff",
+          height: '100vh',
+          width: '100vw',
+          bgcolor: '#fff',
           zIndex: 1300,
         }}
       >
@@ -120,90 +135,124 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
         onClose={onClose}
         PaperProps={{
           sx: {
-            maxWidth: "600px",
-            bgcolor: "#fff",
-            borderRadius: "16px",
-            width: isMobile ? "324px" : "100%",
-            justifyContent: "center",
+            bgcolor: '#fff',
+            maxWidth: '800px',
+            borderRadius: '16px',
+            justifyContent: 'center',
+            width: isMobile ? '324px' : '780px',
+            height: isMobile ? '448px' : '581px',
+            m: 0,
           },
         }}
       >
         <DialogTitle
           sx={{
-            fontSize: 16,
-            fontWeight: 500,
+            fontSize: isMobile ? '24px' : '32px',
+            fontWeight: 400,
+            fontStyle: 'normal',
+            lineHeight: 'normal',
+            fontFamily: 'DFPHeiBold-B5',
+            color: 'var(--Primary-Black, #212B36)',
           }}
         >
-          {isMobile ? "上傳檔案" : "AI 語音轉文字"}
+          {isMobile ? '上傳檔案' : 'AI 語音轉文字'}
           <IconButton
             onClick={onClose}
             sx={{
-              position: "absolute",
+              position: 'absolute',
               right: 8,
               top: 8,
               color: (theme) => theme.palette.grey[500],
             }}
           >
-            <CloseIcon />
+            <CloseRounded sx={{ color: 'black' }} />
           </IconButton>
         </DialogTitle>
 
         <DialogContent
           sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            borderRadius: "16px",
-            border: "2px dashed #2196f3",
-            margin: "32px",
-            justifyContent: "center",
-            height: "352px",
+            margin: isMobile ? '16px' : '32px',
+            height: isMobile ? '352px !important' : '453px !important',
+            display: 'flex',
+            alignItems: 'center',
+            borderRadius: '16px',
+            flexDirection: 'column',
+            justifyContent: isMobile ? 'center' : 'flex-end',
+            padding: isMobile ? '20px' : '160px 0px 80px 0px',
+            border: '2px dashed #2196f3',
+            ...(isDragActive && { backgroundColor: '#e0f7fa' }),
           }}
+          {...getRootProps()}
         >
+          <input {...getInputProps()} />
           {!isMobile && (
-            <Typography align="center" sx={{
-              mb: 2,
-            }}>請將音訊檔案拖曳到這裡上傳</Typography>
+            <Typography
+              sx={{
+                color: 'var(--Primary-Black, #212B36)',
+                fontFamily: 'DFPHeiBold-B5',
+                fontSize: '24px',
+                fontStyle: 'normal',
+                fontWeight: 400,
+                lineHeight: 'normal',
+                mb: '40px',
+              }}
+            >
+              {isDragActive
+                ? '放開檔案以進行上傳'
+                : '請將音訊檔案拖曳到這裡上傳'}
+            </Typography>
           )}
           <Button
             component="label"
             sx={{
-              bgcolor: "#2196f3",
-              color: "white",
-              mb: "40px",
-              "&:hover": {
-                bgcolor: "#1976d2",
-              },
               zIndex: 1,
+              gap: '8px',
+              display: 'flex',
+              fontWeight: 400,
+              fontSize: '16px',
+              borderRadius: '8px',
+              fontStyle: 'normal',
+              lineHeight: 'normal',
+              padding: '11px 16px',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontFamily: 'DFPHeiBold-B5',
+              mb: isMobile ? '32px' : '65px',
+              height: isMobile ? '46px' : '46px',
+              width: isMobile ? '180px' : '294px',
+              color: 'var(--Info-ContrastText, #FFF)',
+              background: 'var(--Secondary-Dark-Gray, #4A4A4A)',
             }}
             variant="contained"
-            startIcon={<FileUploadIcon />}
+            startIcon={<UploadRounded />}
           >
-            選擇檔案
+            {isMobile ? ' 選擇檔案' : '選擇檔案'}
             <input
               type="file"
               onChange={handleFileUpload}
               accept=".mp3, .mp4, .mpeg, .mpga, .m4a, .wav, .webm"
-              style={{ display: "none" }}
+              style={{ display: 'none' }}
             />
           </Button>
 
-          <Box sx={{ textAlign: "center" }}>
+          <Box sx={{ textAlign: 'center' }}>
             <Typography
               sx={{
-                color: "grey.600",
-                fontSize: 14,
+                color: 'grey.600',
+                fontSize: isMobile ? 14 : 16,
                 mb: 0.5,
-                width: "100%",
-                height: "auto",
+                width: '100%',
+                height: 'auto',
               }}
             >
-              支援檔案格式：mp3, mp4, mpeg, mpga, m4a, wav, webm
+              {isMobile
+                ? '支援檔案格式：mp3, wav, m4a'
+                : '支援檔案格式：mp3, mp4, mpeg, mpga, m4a, wav, webm'}
             </Typography>
             <Typography
               sx={{
-                color: "grey.600",
-                fontSize: 14,
+                color: 'grey.600',
+                fontSize: isMobile ? 14 : 16,
               }}
             >
               限制大小：100MB
@@ -215,12 +264,12 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
         open={!!error} // Opens if error is set
         autoHideDuration={6000}
         onClose={handleCloseError}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
         <Alert
           onClose={handleCloseError}
           severity="error"
-          sx={{ width: "100%" }}
+          sx={{ width: '100%' }}
         >
           {error}
         </Alert>

@@ -1,6 +1,6 @@
-import { AdvisorType } from "@/app/chat/components/types";
-import { Locale } from "@eGroupAI/typings/apis";
-import { Outcome } from "@eGroupAI/utils/getDeviceInfo";
+import { AdvisorType } from '@/app/chat/types';
+import { Locale } from '@eGroupAI/typings/apis';
+import { Outcome } from '@eGroupAI/utils/getDeviceInfo';
 
 export interface UploadFileApiPayload {
   file: File;
@@ -15,7 +15,7 @@ export type LogApiPayload = {
     deviceInfo?: Outcome[];
     data?: unknown;
   };
-  level: "ERROR" | "INFO";
+  level: 'ERROR' | 'INFO';
   message?: string;
 };
 

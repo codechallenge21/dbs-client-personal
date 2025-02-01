@@ -1,7 +1,6 @@
-import ToolboxPage from "./toolbox/page";
+'use client';
+import ChatHomePage from './chat/page';
 
 export default function Home() {
-  return (
-    <ToolboxPage />
-  );
+  return <ChatHomePage />;
 }

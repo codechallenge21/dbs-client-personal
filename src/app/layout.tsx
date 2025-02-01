@@ -1,46 +1,76 @@
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import ThemeProvider from "@/theme";
-import { Box } from "@mui/material";
-import { Header } from "@/components/header";
+import {
+  Geist,
+  Geist_Mono,
+  Open_Sans,
+  Public_Sans,
+  Inter,
+} from 'next/font/google';
+import './globals.css';
+import ThemeProvider from '@/theme';
+import ChannelContextProvider from '@/components/channel-context-provider/ChannelContextProvider';
+// import { Box } from "@mui/material";
+// import { Header } from "@/components/header";
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
+});
+
+const openSansFont = Open_Sans({
+  weight: ['300', '400', '500', '600', '700', '800'],
+  subsets: ['latin'],
+  variable: '--font-open-sans',
+  adjustFontFallback: false,
+  display: 'swap',
+});
+
+const publicSansFont = Public_Sans({
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+  subsets: ['latin'],
+  variable: '--font-public-sans',
+  adjustFontFallback: false,
+  display: 'swap',
+});
+
+const interFont = Inter({
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+  subsets: ['latin'],
+  variable: '--font-inter',
+  adjustFontFallback: false,
+  display: 'swap',
 });
 
 export const metadata = {
-  title: "好理家在｜好好理財，家就會在",
-  description: "好理家在官方網站",
-  keywords: "react,material,kit,application,dashboard,admin,template",
-  themeColor: "#000000",
-  manifest: "/manifest.json",
+  title: '好理家在｜好好理財，家就會在',
+  description: '好理家在官方網站',
+  keywords: 'react,material,kit,application,dashboard,admin,template',
+  manifest: '/manifest.json',
   icons: [
     {
-      rel: "icon",
-      url: "/favicon/favicon.svg",
+      rel: 'icon',
+      url: '/favicon/favicon.svg',
     },
     {
-      rel: "icon",
-      type: "image/svg",
-      sizes: "16x16",
-      url: "/favicon/favicon.svg",
+      rel: 'icon',
+      type: 'image/svg',
+      sizes: '16x16',
+      url: '/favicon/favicon.svg',
     },
     {
-      rel: "icon",
-      type: "image/svg",
-      sizes: "32x32",
-      url: "/favicon/favicon.svg",
+      rel: 'icon',
+      type: 'image/svg',
+      sizes: '32x32',
+      url: '/favicon/favicon.svg',
     },
     {
-      rel: "apple-touch-icon",
-      sizes: "180x180",
-      url: "/favicon/favicon.svg",
+      rel: 'apple-touch-icon',
+      sizes: '180x180',
+      url: '/favicon/favicon.svg',
     },
   ],
 };
@@ -52,11 +82,16 @@ type Props = {
 export default function RootLayout({ children }: Props) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <Box>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} ${publicSansFont.variable} ${openSansFont.variable} ${interFont.variable}`}
+      >
+        {/* <Box>
           <Header />
-        </Box>
-        <ThemeProvider>{children}</ThemeProvider>
+        </Box> */}
+        <ThemeProvider>
+          {' '}
+          <ChannelContextProvider>{children}</ChannelContextProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
