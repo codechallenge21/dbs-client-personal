@@ -6,6 +6,10 @@ import SwitchDialog from '../../components/dialogs/SwitchDialog';
 import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
 import { Box, useMediaQuery, useTheme } from '@mui/material';
 
+const LoadingComponent = () => {
+  return <div>Loading...</div>;
+};
+
 export default function Home() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -30,25 +34,28 @@ export default function Home() {
   }, [isMobile]);
 
   return (
-    <ToolbarDrawer open={isOpenDrawer} setIsOpenDrawer={toggleDrawer}>
-      <Suspense fallback={<div>Loading...</div>}></Suspense>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          height: isMobile ? '100vh' : 'calc(100vh - 32px)',
-          backgroundColor: '#FFFFFF',
-          borderRadius: '16px',
-        }}
-      >
-        <Header />
-        <ChannelSearch />
-        <SwitchDialog
-          open={isOpen}
-          onClose={handleClose}
-          onConfirm={handleConfirm}
-        />
-      </Box>
-    </ToolbarDrawer>
+    <Suspense fallback={<LoadingComponent />}>
+      <ToolbarDrawer open={isOpenDrawer} setIsOpenDrawer={toggleDrawer}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            height: isMobile ? '100vh' : 'calc(100vh - 32px)',
+            backgroundColor: '#FFFFFF',
+            borderRadius: '16px',
+          }}
+        >
+          <Header />
+          <Suspense fallback={<LoadingComponent />}>
+            <ChannelSearch />
+          </Suspense>
+          <SwitchDialog
+            open={isOpen}
+            onClose={handleClose}
+            onConfirm={handleConfirm}
+          />
+        </Box>
+      </ToolbarDrawer>
+    </Suspense>
   );
 }

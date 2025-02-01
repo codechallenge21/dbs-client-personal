@@ -350,7 +350,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 borderRadius: '8px',
                 backgroundColor:
                   pathname === item.route ||
-                  (pathname === '/' && item.route === '/chat')
+                    (pathname === '/' && item.route === '/chat')
                     ? 'var(--Action-Selected, rgba(204, 0, 0, 0.20))'
                     : 'transparent',
                 '&:hover': {
