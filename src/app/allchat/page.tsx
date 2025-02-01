@@ -4,11 +4,8 @@ import ChannelSearch from '../../components/view-all-history/ViewAllHistory';
 import Header from '../../components/all-chat-header/Header';
 import SwitchDialog from '../../components/dialogs/SwitchDialog';
 import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
-import { Box, useMediaQuery, useTheme } from '@mui/material';
+import { Box, useMediaQuery, useTheme, CircularProgress } from '@mui/material';
 
-const LoadingComponent = () => {
-  return <div>Loading...</div>;
-};
 
 export default function Home() {
   const theme = useTheme();
@@ -34,7 +31,7 @@ export default function Home() {
   }, [isMobile]);
 
   return (
-    <Suspense fallback={<LoadingComponent />}>
+    <Suspense fallback={<CircularProgress />}>
       <ToolbarDrawer open={isOpenDrawer} setIsOpenDrawer={toggleDrawer}>
         <Box
           sx={{
@@ -46,7 +43,7 @@ export default function Home() {
           }}
         >
           <Header />
-          <Suspense fallback={<LoadingComponent />}>
+          <Suspense fallback={<CircularProgress />}>
             <ChannelSearch />
           </Suspense>
           <SwitchDialog

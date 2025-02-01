@@ -1,15 +1,12 @@
 "use client";
 import React, { Suspense } from "react";
+import { CircularProgress } from '@mui/material';
 import PopularArea from "@/app/popular/PopularArea";
 
 
-const LoadingComponent = () => {
-  return <div>Loading...</div>;
-};
-
 export default function PopularPageWrapper() {
   return (
-    <Suspense fallback={<LoadingComponent />}>
+    <Suspense fallback={<CircularProgress />}>
       <PopularArea />
     </Suspense>
   );
