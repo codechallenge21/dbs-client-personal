@@ -49,84 +49,84 @@ export default function DataSourceDialog({
       type: 'text',
       isLocal: true,
       onClick: () => console.log('clicked'),
-      icon: <FilePresentRounded />,
+      icon: <FilePresentRounded sx={{ color: '#212B36' }} />,
     },
     {
       name: 'LocalsIFile_name_01.aff',
       type: 'file',
       isLocal: true,
       onClick: () => console.log('clicked'),
-      icon: <ImageRounded />,
+      icon: <ImageRounded sx={{ color: '#212B36' }} />,
     },
     {
       name: 'LocalsIFile_name_02.img',
       type: 'image',
       isLocal: true,
       onClick: () => console.log('clicked'),
-      icon: <ImageRounded />,
+      icon: <ImageRounded sx={{ color: '#212B36' }} />,
     },
     {
       name: 'LocalsIFile_name_03.pdf',
       type: 'pdf',
       isLocal: true,
       onClick: () => console.log('clicked'),
-      icon: <PictureAsPdfRounded />,
+      icon: <PictureAsPdfRounded sx={{ color: '#212B36' }} />,
     },
     {
       name: 'LocalsIFile_name_04.tsx',
       type: 'code',
       isLocal: true,
       onClick: () => console.log('clicked'),
-      icon: <FilePresentRounded />,
+      icon: <FilePresentRounded sx={{ color: '#212B36' }} />,
     },
     {
       name: 'LocalsIFile_name_05.docx',
       type: 'code',
       isLocal: true,
       onClick: () => console.log('clicked'),
-      icon: <FilePresentRounded />,
+      icon: <FilePresentRounded sx={{ color: '#212B36' }} />,
     },
     {
       name: '技術資料01',
       type: 'doc',
       isLocal: false,
       onClick: () => console.log('clicked'),
-      icon: <ArticleRounded />,
+      icon: <ArticleRounded sx={{ color: '#212B36' }} />,
     },
     {
       name: '技術資料02',
       type: 'doc',
       isLocal: false,
       onClick: () => console.log('clicked'),
-      icon: <ArticleRounded />,
+      icon: <ArticleRounded sx={{ color: '#212B36' }} />,
     },
     {
       name: '技術資料03',
       type: 'doc',
       isLocal: false,
       onClick: () => console.log('clicked'),
-      icon: <ArticleRounded />,
+      icon: <ArticleRounded sx={{ color: '#212B36' }} />,
     },
     {
       name: '技術資料04',
       type: 'doc',
       isLocal: false,
       onClick: () => console.log('clicked'),
-      icon: <ArticleRounded />,
+      icon: <ArticleRounded sx={{ color: '#212B36' }} />,
     },
     {
       name: '技術資料05',
       type: 'doc',
       isLocal: false,
       onClick: () => console.log('clicked'),
-      icon: <ArticleRounded />,
+      icon: <ArticleRounded sx={{ color: '#212B36' }} />,
     },
     {
       name: '技術資料06',
       type: 'doc',
       isLocal: false,
       onClick: () => console.log('clicked'),
-      icon: <ArticleRounded />,
+      icon: <ArticleRounded sx={{ color: '#212B36' }} />,
     },
   ];
 
@@ -185,7 +185,7 @@ export default function DataSourceDialog({
           {title}
         </Typography>
         <IconButton onClick={onClose} size={isMobile ? 'small' : 'medium'}>
-          <CloseIcon />
+          <CloseIcon sx={{ color: '#212B36' }} />
         </IconButton>
       </Box>
       <List
@@ -225,7 +225,7 @@ export default function DataSourceDialog({
               mb: '8px',
               width: 'auto',
               backgroundColor: '#EBE3DD',
-              borderRadius: '4px',
+              borderRadius: '8px',
               '&:hover': {
                 backgroundColor: 'rgba(0, 0, 0, 0.04)',
               },
@@ -234,7 +234,9 @@ export default function DataSourceDialog({
               px: '8px',
             }}
           >
-            <ListItemIcon sx={{ minWidth: 36 }}>{file.icon}</ListItemIcon>
+            <ListItemIcon sx={{ minWidth: '0px', pr: '16px' }}>
+              {file.icon}
+            </ListItemIcon>
             <ListItemText
               primary={file.name}
               sx={{
@@ -275,7 +277,7 @@ export default function DataSourceDialog({
               mb: '8px',
               width: 'auto',
               backgroundColor: '#EBE3DD',
-              borderRadius: '4px',
+              borderRadius: '8px',
               '&:hover': {
                 backgroundColor: 'rgba(0, 0, 0, 0.04)',
               },
@@ -284,7 +286,9 @@ export default function DataSourceDialog({
               px: '8px',
             }}
           >
-            <ListItemIcon sx={{ minWidth: 36 }}>{file.icon}</ListItemIcon>
+            <ListItemIcon sx={{ minWidth: '0px', pr: '16px' }}>
+              {file.icon}
+            </ListItemIcon>
             <ListItemText
               primary={file.name}
               sx={{
@@ -293,6 +297,8 @@ export default function DataSourceDialog({
                   whiteSpace: 'nowrap',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
+                  fontFamily: 'DFPHeiBold-B5',
+                  color: 'var(--Primary-Black, #212B36)',
                 },
               }}
             />
