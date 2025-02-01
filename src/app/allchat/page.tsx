@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import ChannelSearch from '../../components/view-all-history/ViewAllHistory';
 import Header from '../../components/all-chat-header/Header';
 import SwitchDialog from '../../components/dialogs/SwitchDialog';
@@ -12,7 +12,7 @@ export default function Home() {
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(
-    isMobile ? false : true
+    !isMobile
   );
 
   const handleClose = () => setIsOpen(false);
@@ -26,11 +26,12 @@ export default function Home() {
   };
 
   useEffect(() => {
-    toggleDrawer(isMobile ? false : true);
+    toggleDrawer(!isMobile);
   }, [isMobile]);
 
   return (
     <ToolbarDrawer open={isOpenDrawer} setIsOpenDrawer={toggleDrawer}>
+      <Suspense fallback={<div>Loading...</div>}></Suspense>
       <Box
         sx={{
           display: 'flex',
