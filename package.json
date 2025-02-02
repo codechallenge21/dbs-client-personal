@@ -74,7 +74,7 @@
   "lint-staged": {
     "**/*.{ts,tsx}": [
       "eslint --fix --cache --max-warnings=-1",
-      "tsc-files --noEmit"
+      "tsc-files globals.d.ts components/App/App.tsx --noEmit"
     ]
   }
 }
