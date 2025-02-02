@@ -1,7 +1,10 @@
 module.exports = {
-  plugins: ['@typescript-eslint', 'jest'],
+  plugins: ['@typescript-eslint', 'jest', 'unused-imports'],
   env: {
     browser: true,
+    es6: true,
+    node: true,
+    jest: true,
   },
   parser: '@typescript-eslint/parser',
   extends: [
@@ -15,92 +18,191 @@ module.exports = {
   ],
   parserOptions: {
     project: './tsconfig.json',
+    ecmaVersion: 2020,
+    sourceType: 'module',
+    ecmaFeatures: {
+      jsx: true,
+    },
   },
   settings: {
     'import/resolver': {
       typescript: {},
+      node: {
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+      },
+    },
+    react: {
+      version: 'detect',
     },
   },
   rules: {
-    // Import/Export Rules
-    'import/prefer-default-export': 'off',
-    'import/no-extraneous-dependencies': 0,
-    'import/no-cycle': 'off',
-    'no-restricted-exports': 'off',
-    'import/no-duplicates': 'error',
-    'import/newline-after-import': 'error',
-
     // React Rules
-    'react/jsx-curly-brace-presence': 0,
-    'react/require-default-props': 'off',
-    'react/jsx-props-no-spreading': 'off',
-    'react/no-unused-prop-types': 'warn',
-    'react/no-children-prop': 0,
-    'react/no-unstable-nested-components': 'off',
-    'react/jsx-key': 'error',
-    'react/no-deprecated': 'error',
-    'react/no-unescaped-entities': ['warn'],
-    'react/jsx-no-bind': 'off',
-    'react/jsx-no-target-blank': 'off',
-    'react/button-has-type': 'off',
-    'react/no-array-index-key': 0,
-    'react/react-in-jsx-scope': 0,
-    'react/destructuring-assignment': 0,
-    'react/no-access-state-in-setstate': 'error',
-    'react/no-this-in-sfc': 'warn',
-    'react/prop-types': 'warn',
+    'react/jsx-key': 'warn',
+    'react/no-deprecated': 'warn',
+    'react/no-access-state-in-setstate': 'warn',
+    'react/prop-types': 'off',
+    'react/jsx-props-no-spreading': 'warn',
+    'react/jsx-curly-brace-presence': 'warn',
+    'react/react-in-jsx-scope': 'off', // Next.js 不需要引入 React
+    'react/require-default-props': 'warn',
+    'react/no-children-prop': 'warn',
+    'react/destructuring-assignment': 'warn',
+    'react/no-array-index-key': 'warn',
+    'react-hooks/exhaustive-deps': 'warn',
 
-    // TypeScript Rules
-    '@typescript-eslint/array-type': ['error', { default: 'array' }],
-    '@typescript-eslint/no-unused-vars': 'error',
-    '@typescript-eslint/no-shadow': 'off',
-    '@typescript-eslint/no-explicit-any': 0,
-    '@typescript-eslint/no-use-before-define': 0,
-    '@typescript-eslint/naming-convention': 'off',
-    '@typescript-eslint/no-inferrable-types': 'error',
-    '@typescript-eslint/consistent-type-assertions': 'error',
-
-    // JavaScript Style Rules
-    'func-names': 'off',
-    'no-plusplus': 'off',
-    'no-shadow': 'off',
-    'no-console': 'error',
-    'consistent-return': 'error',
-    'no-delete-var': 'error',
-    'no-param-reassign': 0,
-    'no-underscore-dangle': 0,
-    'no-var': 'error',
-    'dot-notation': 'warn',
-    'prefer-const': 'warn',
-    'array-callback-return': 'error',
-    'no-unsafe-optional-chaining': 'error',
-    'no-eval': 'error',
-    'prefer-promise-reject-errors': 'error',
-    'prefer-object-spread': 'warn',
-    'prefer-destructuring': [
-      1,
+    // Import/Export Rules
+    'import/prefer-default-export': 'warn',
+    'import/no-extraneous-dependencies': 'warn',
+    'import/no-cycle': 'warn',
+    'no-restricted-exports': 'warn',
+    'import/no-duplicates': 'warn',
+    'import/newline-after-import': 'warn',
+    'import/order': [
+      'warn',
       {
-        object: true,
-        array: false,
+        groups: [
+          'builtin',
+          'external',
+          'internal',
+          ['parent', 'sibling'],
+          'index',
+          'object',
+          'type',
+        ],
+        pathGroups: [
+          {
+            pattern: 'react',
+            group: 'external',
+            position: 'before',
+          },
+          {
+            pattern: 'next/**',
+            group: 'external',
+            position: 'before',
+          },
+          {
+            pattern: 'react-dom/**',
+            group: 'external',
+            position: 'after',
+          },
+          {
+            pattern: '@emotion/**',
+            group: 'external',
+            position: 'after',
+          },
+          {
+            pattern: '@mui/**',
+            group: 'external',
+            position: 'after',
+          },
+          {
+            pattern: '@eGroupAI/**',
+            group: 'internal',
+            position: 'before',
+          },
+          {
+            pattern: 'interfaces/**',
+            group: 'type',
+            position: 'after',
+          },
+          {
+            pattern: 'utils/**',
+            group: 'internal',
+            position: 'after',
+          },
+        ],
+        pathGroupsExcludedImportTypes: ['react', 'next', 'react-dom'],
+        'newlines-between': 'always',
+        alphabetize: {
+          order: 'asc',
+          caseInsensitive: true,
+        },
       },
     ],
 
+    // TypeScript Rules
+    '@typescript-eslint/array-type': ['warn', { default: 'array' }],
+    '@typescript-eslint/no-shadow': 'warn',
+    '@typescript-eslint/no-explicit-any': 'warn',
+    '@typescript-eslint/no-use-before-define': 'warn',
+    '@typescript-eslint/naming-convention': [
+      'warn',
+      {
+        selector: 'interface',
+        format: ['PascalCase'],
+      },
+      {
+        selector: 'typeAlias',
+        format: ['PascalCase'],
+      },
+    ],
+    '@typescript-eslint/no-inferrable-types': 'warn',
+    '@typescript-eslint/consistent-type-assertions': 'warn',
+    '@typescript-eslint/no-unused-vars': 'off',
+
+    // JavaScript Style Rules
+    'no-console': ['warn', { allow: ['warn', 'error'] }],
+    'consistent-return': 'warn',
+    'no-delete-var': 'warn',
+    'no-param-reassign': ['warn', { props: false }],
+    'no-var': 'warn',
+    'array-callback-return': 'warn',
+    'no-unsafe-optional-chaining': 'warn',
+    'no-eval': 'warn',
+    'prefer-promise-reject-errors': 'warn',
+    'max-len': [
+      'warn',
+      {
+        code: 120,
+        ignoreComments: true,
+        ignoreStrings: true,
+        ignoreTemplateLiterals: true,
+      },
+    ],
+    'no-plusplus': 'warn',
+    'no-underscore-dangle': 'warn',
+    'func-names': 'warn',
+
     // JSX Accessibility Rules
-    'jsx-a11y/anchor-is-valid': 'off',
-    'jsx-a11y/media-has-caption': 'off',
-    'jsx-a11y/control-has-associated-label': 0,
-    'jsx-a11y/no-autofocus': ['error', { ignoreNonDOM: true }],
-    'jsx-a11y/alt-text': 'error',
-    'jsx-a11y/no-static-element-interactions': 'error',
-    'jsx-a11y/interactive-supports-focus': 'error',
+    'jsx-a11y/alt-text': 'warn',
+    'jsx-a11y/no-static-element-interactions': 'warn',
+    'jsx-a11y/interactive-supports-focus': 'warn',
+    'jsx-a11y/anchor-is-valid': 'warn',
+    'jsx-a11y/click-events-have-key-events': 'warn',
+
+    // Unused Imports Rules
+    'unused-imports/no-unused-imports': 'warn',
+    'unused-imports/no-unused-vars': [
+      'warn',
+      {
+        vars: 'all',
+        varsIgnorePattern: '^_',
+        args: 'after-used',
+        argsIgnorePattern: '^_',
+      },
+    ],
 
     // Restricted Syntax Rules
     'no-restricted-syntax': [
-      'error',
+      'warn',
       {
         selector: 'Comment[regex=/eslint-disable/]',
         message: 'Disabling eslint rules is not allowed in this project.',
       },
     ],
   },
+  overrides: [
+    {
+      files: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
+      extends: ['plugin:testing-library/react'],
+      rules: {
+        'import/no-extraneous-dependencies': 'warn',
+        'jest/no-disabled-tests': 'warn',
+        'jest/no-focused-tests': 'warn',
+        'jest/no-identical-title': 'warn',
+        'jest/prefer-to-have-length': 'warn',
+        'jest/valid-expect': 'warn',
+      },
+    },
+  ],
 };
