@@ -1,9 +1,0 @@
-export const enum AdvisorType {
-  DEFAULT = "DEFAULT",
-  DEBT = "DEBT",
-  CONTINGENCY = "CONTINGENCY",
-  FRAUD = "FRAUD",
-  MEDICAL = "MEDICAL",
-  EMPLOYMENT = "EMPLOYMENT",
-  FINANCIAL = "FINANCIAL",
-}
