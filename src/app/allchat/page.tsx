@@ -1,10 +1,11 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import ChannelSearch from '../../components/view-all-history/ViewAllHistory';
 import Header from '../../components/all-chat-header/Header';
 import SwitchDialog from '../../components/dialogs/SwitchDialog';
 import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
-import { Box, useMediaQuery, useTheme } from '@mui/material';
+import { Box, useMediaQuery, useTheme, CircularProgress } from '@mui/material';
+
 
 export default function Home() {
   const theme = useTheme();
@@ -12,7 +13,7 @@ export default function Home() {
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(
-    isMobile ? false : true
+    !isMobile
   );
 
   const handleClose = () => setIsOpen(false);
@@ -26,28 +27,32 @@ export default function Home() {
   };
 
   useEffect(() => {
-    toggleDrawer(isMobile ? false : true);
+    toggleDrawer(!isMobile);
   }, [isMobile]);
 
   return (
-    <ToolbarDrawer open={isOpenDrawer} setIsOpenDrawer={toggleDrawer}>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          height: isMobile ? '100vh' : 'calc(100vh - 32px)',
-          backgroundColor: '#FFFFFF',
-          borderRadius: '16px',
-        }}
-      >
-        <Header />
-        <ChannelSearch />
-        <SwitchDialog
-          open={isOpen}
-          onClose={handleClose}
-          onConfirm={handleConfirm}
-        />
-      </Box>
-    </ToolbarDrawer>
+    <Suspense fallback={<CircularProgress />}>
+      <ToolbarDrawer open={isOpenDrawer} setIsOpenDrawer={toggleDrawer}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            height: isMobile ? '100vh' : 'calc(100vh - 32px)',
+            backgroundColor: '#FFFFFF',
+            borderRadius: '16px',
+          }}
+        >
+          <Header />
+          <Suspense fallback={<CircularProgress />}>
+            <ChannelSearch />
+          </Suspense>
+          <SwitchDialog
+            open={isOpen}
+            onClose={handleClose}
+            onConfirm={handleConfirm}
+          />
+        </Box>
+      </ToolbarDrawer>
+    </Suspense>
   );
 }
