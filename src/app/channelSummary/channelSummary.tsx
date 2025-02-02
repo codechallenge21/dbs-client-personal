@@ -66,17 +66,17 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const dataRow1 = [
   {
-    title: '延伸资料A',
+    title: '延伸資料A',
     description:
       '社工在財務類別的知識中，了解如何幫助客戶管理個人財務是至關重要的。這不僅包括制定預算和儲蓄計劃',
   },
   {
-    title: '延伸资料B',
+    title: '延伸資料B',
     description:
       '社工在財務類別的知識中，了解如何幫助客戶管理個人財務是至關重要的。這不僅包括制定預算和儲蓄計劃',
   },
   {
-    title: '延伸资料C',
+    title: '延伸資料C',
     description:
       '社工在財務類別的知識中，了解如何幫助客戶管理個人財務是至關重要的。這不僅包括制定預算和儲蓄計劃',
   },
@@ -84,34 +84,34 @@ const dataRow1 = [
 
 const dataRow2 = [
   {
-    title: '延伸资料D',
+    title: '延伸資料D',
     description:
       '社工在財務類別的知識中，了解如何幫助客戶管理個人財務是至關重要的。這不僅包括制定預算和儲蓄計劃',
   },
   {
-    title: '延伸资料E',
+    title: '延伸資料E',
     description:
       '社工在財務類別的知識中，了解如何幫助客戶管理個人財務是至關重要的。這不僅包括制定預算和儲蓄計劃',
   },
   {
-    title: '延伸资料F',
+    title: '延伸資料F',
     description:
       '社工在財務類別的知識中，了解如何幫助客戶管理個人財務是至關重要的。這不僅包括制定預算和儲蓄計劃',
   },
 ];
 const dataRow3 = [
   {
-    title: '延伸资料G',
+    title: '延伸資料G',
     description:
       '社工在財務類別的知識中，了解如何幫助客戶管理個人財務是至關重要的。這不僅包括制定預算和儲蓄計劃',
   },
   {
-    title: '延伸资料H',
+    title: '延伸資料H',
     description:
       '社工在財務類別的知識中，了解如何幫助客戶管理個人財務是至關重要的。這不僅包括制定預算和儲蓄計劃',
   },
   {
-    title: '延伸资料I',
+    title: '延伸資料I',
     description:
       '社工在財務類別的知識中，了解如何幫助客戶管理個人財務是至關重要的。這不僅包括制定預算和儲蓄計劃',
   },
@@ -127,16 +127,14 @@ const ChannelSummary = () => {
     React.useState<OrganizationChannel | null>(null);
   const [openDataSource, setOpenDataSource] = useState(false);
   const [aIAnalysisTabValue, setAIAnalysisTabValue] = React.useState(0);
-  const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(
-    isMobile ? false : true
-  );
+  const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(!isMobile);
   const [openUpload, setOpenUpload] = React.useState(false);
   /**
    * @useSearchParams hook requires Suspense Boundary Component wrapping
    * Reference: https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout
    ** */
   const searchParams = useSearchParams();
-  const organizationChannelId = searchParams.get('organizationChannelId') || '';
+  const organizationChannelId = searchParams.get('organizationChannelId') ?? '';
 
   const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
@@ -176,7 +174,7 @@ const ChannelSummary = () => {
   }, [channel, mutateChannel]);
 
   const handleBackButtonClick = () => {
-    router.push('/channelsList');
+    router.push('/toolbox');
   };
 
   const handleAIAnalysisTabChange = (

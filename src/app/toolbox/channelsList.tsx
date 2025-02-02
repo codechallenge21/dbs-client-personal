@@ -106,7 +106,7 @@ const ChannelsList = () => {
             mutateAudioChannels();
           }
         })
-        .catch(() => {});
+        .catch(() => { });
     },
     [
       activeIndex,
@@ -213,82 +213,149 @@ const ChannelsList = () => {
           </Box>
         ) : ( */}
             <>
-              <Box
+              <Tabs
+                value={tabValue}
+                onChange={handleTabChange}
                 sx={{
-                  minHeight: '97vh',
-                  maxHeight: '97vh',
-                  borderRadius: '8px',
-                  padding: '16px 32px',
-                  backgroundColor: 'white',
+                  gap: '40px',
+                  height: '48px',
+                  display: 'flex',
+                  padding: '0px 20px',
+                  alignItems: 'center',
+                  alignSelf: 'stretch',
+                  borderTopLeftRadius: '8px',
+                  borderTopRightRadius: '8px',
+                  borderBottom:
+                    '2px solid var(--transparent-grey-8, rgba(145, 158, 171, 0.08))',
+                  background: 'var(--Primary-White, #FFF)',
+                  '& .MuiTabs-flexContainer': {
+                    gap: '40px',
+                  },
+                }}
+                TabIndicatorProps={{
+                  style: {
+                    height: '3px',
+                    backgroundColor: '#212B36',
+                  },
                 }}
               >
-                <Tabs
-                  value={tabValue}
-                  onChange={handleTabChange}
-                  sx={{ mb: 2 }}
-                  TabIndicatorProps={{
-                    style: {
-                      backgroundColor: '#212B36',
+                <Tab
+                  disableRipple
+                  label="智能生活轉文字"
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    padding: '13px 0px 12px 0px',
+                    fontSize: '14px',
+                    fontWeight: 700,
+                    fontStyle: 'normal',
+                    lineHeight: 'normal',
+                    fontFamily: 'Open Sans',
+                    color: 'var(--Text-Secondary, #637381)',
+                    '&.Mui-selected': {
+                      fontWeight: 400,
+                      fontSize: '14px',
+                      lineHeight: '22px',
+                      fontStyle: 'normal',
+                      fontFamily: 'DFPHeiBold-B5',
+                      color: 'var(--Text-Secondary, #212B36)',
                     },
                   }}
-                >
-                  <Tab
-                    label="智能生活轉文字"
-                    sx={{
+                />
+                <Tab
+                  disableRipple
+                  label="家系圖"
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    padding: '13px 0px 12px 0px',
+                    fontSize: '14px',
+                    fontWeight: 700,
+                    fontStyle: 'normal',
+                    lineHeight: 'normal',
+                    fontFamily: 'Open Sans',
+                    color: 'var(--Text-Secondary, #637381)',
+                    '&.Mui-selected': {
                       fontWeight: 400,
                       fontSize: '14px',
                       lineHeight: '22px',
                       fontStyle: 'normal',
                       fontFamily: 'DFPHeiBold-B5',
-                      color: 'var(--Text-Secondary, #637381))',
-                      '&.Mui-selected': {
-                        color: 'var(--Primary-Black, #212B36)',
-                      },
-                    }}
-                  />
-                  <Tab
-                    label="家系圖"
-                    sx={{
+                      color: 'var(--Text-Secondary, #212B36)',
+                    },
+                  }}
+                />
+                <Tab
+                  disableRipple
+                  label="問答語音錄音"
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    padding: '13px 0px 12px 0px',
+                    fontSize: '14px',
+                    fontWeight: 700,
+                    fontStyle: 'normal',
+                    lineHeight: 'normal',
+                    fontFamily: 'Open Sans',
+                    color: 'var(--Text-Secondary, #637381)',
+                    '&.Mui-selected': {
                       fontWeight: 400,
                       fontSize: '14px',
                       lineHeight: '22px',
                       fontStyle: 'normal',
                       fontFamily: 'DFPHeiBold-B5',
-                      color: 'var(--Text-Secondary, #637381)',
-                      '&.Mui-selected': {
-                        color: 'var(--Primary-Black, #212B36)',
-                      },
-                    }}
-                  />
-                  <Tab
-                    label="問答語音錄音"
-                    sx={{
+                      color: 'var(--Text-Secondary, #212B36)',
+                    },
+                  }}
+                />
+                <Tab
+                  disableRipple
+                  label="個別與實時錄音"
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    padding: '13px 0px 12px 0px',
+                    fontSize: '14px',
+                    fontWeight: 700,
+                    fontStyle: 'normal',
+                    lineHeight: 'normal',
+                    fontFamily: 'Open Sans',
+                    color: 'var(--Text-Secondary, #637381)',
+                    '&.Mui-selected': {
                       fontWeight: 400,
                       fontSize: '14px',
                       lineHeight: '22px',
                       fontStyle: 'normal',
                       fontFamily: 'DFPHeiBold-B5',
-                      color: 'var(--Text-Secondary, #637381)',
-                      '&.Mui-selected': {
-                        color: 'var(--Primary-Black, #212B36)',
-                      },
-                    }}
-                  />
-                  <Tab
-                    label="個別與實時錄音"
-                    sx={{
-                      fontWeight: 400,
-                      fontSize: '14px',
-                      lineHeight: '22px',
-                      fontStyle: 'normal',
-                      fontFamily: 'DFPHeiBold-B5',
-                      color: 'var(--Text-Secondary, #637381)',
-                      '&.Mui-selected': {
-                        color: 'var(--Primary-Black, #212B36)',
-                      },
-                    }}
-                  />
-                </Tabs>
+                      color: 'var(--Text-Secondary, #212B36)',
+                    },
+                  }}
+                />
+              </Tabs>
+              <Box
+                sx={{
+                  gap: '40px',
+                  flex: '1 0 0',
+                  display: 'flex',
+                  minHeight: '91vh',
+                  maxHeight: '91vh',
+                  padding: '16px 32px',
+                  alignItems: 'center',
+                  alignSelf: 'stretch',
+                  flexDirection: 'column',
+                  backgroundColor: 'white',
+                  borderBottomLeftRadius: '8px',
+                  borderBottomRightRadius: '8px',
+                }}
+              >
                 <Box
                   sx={{
                     display: 'flex',
@@ -299,7 +366,7 @@ const ChannelsList = () => {
                 >
                   <Typography
                     sx={{
-                      fontWeight: 400,
+                      fontWeight: 700,
                       fontSize: '32px',
                       fontStyle: 'normal',
                       lineHeight: 'normal',
@@ -322,11 +389,11 @@ const ChannelsList = () => {
                   >
                     <IconButton
                       sx={{
-                        display: 'flex',
                         padding: '8px',
-                        justifyContent: 'center',
+                        display: 'flex',
                         alignItems: 'center',
                         borderRadius: '50px',
+                        justifyContent: 'center',
                       }}
                     >
                       <SearchRounded />
@@ -395,6 +462,7 @@ const ChannelsList = () => {
                       <TableRow>
                         <TableCell
                           sx={{
+                            padding: '0px',
                             fontWeight: 400,
                             fontSize: '16px',
                             overflow: 'hidden',
@@ -408,10 +476,25 @@ const ChannelsList = () => {
                             background: 'var(--Background-Paper, #FFF)',
                           }}
                         >
-                          標題
+                          <Typography
+                            sx={{
+                              fontWeight: 400,
+                              fontSize: '16px',
+                              overflow: 'hidden',
+                              padding: '16px 0px',
+                              fontStyle: 'normal',
+                              lineHeight: 'normal',
+                              textOverflow: 'ellipsis',
+                              fontFamily: 'DFPHeiBold-B5',
+                              color: 'var(--Text-Primary, #212B36)',
+                            }}
+                          >
+                            標題
+                          </Typography>
                         </TableCell>
                         <TableCell
                           sx={{
+                            padding: '0px',
                             fontWeight: 400,
                             fontSize: '16px',
                             overflow: 'hidden',
@@ -425,10 +508,25 @@ const ChannelsList = () => {
                             background: 'var(--Background-Paper, #FFF)',
                           }}
                         >
-                          狀態
+                          <Typography
+                            sx={{
+                              fontWeight: 400,
+                              fontSize: '16px',
+                              overflow: 'hidden',
+                              padding: '16px 0px',
+                              fontStyle: 'normal',
+                              lineHeight: 'normal',
+                              textOverflow: 'ellipsis',
+                              fontFamily: 'DFPHeiBold-B5',
+                              color: 'var(--Text-Primary, #212B36)',
+                            }}
+                          >
+                            狀態
+                          </Typography>
                         </TableCell>
                         <TableCell
                           sx={{
+                            padding: '0px',
                             fontWeight: 400,
                             fontSize: '16px',
                             overflow: 'hidden',
@@ -442,22 +540,70 @@ const ChannelsList = () => {
                             background: 'var(--Background-Paper, #FFF)',
                           }}
                         >
-                          建立時間
+                          <Typography
+                            sx={{
+                              fontWeight: 400,
+                              fontSize: '16px',
+                              overflow: 'hidden',
+                              padding: '16px 0px',
+                              fontStyle: 'normal',
+                              lineHeight: 'normal',
+                              textOverflow: 'ellipsis',
+                              fontFamily: 'DFPHeiBold-B5',
+                              color: 'var(--Text-Primary, #212B36)',
+                            }}
+                          >
+                            建立時間
+                          </Typography>
                         </TableCell>
                         <TableCell
                           sx={{
+                            padding: '0px',
                             borderBottom:
                               '1px dashed var(--Components-Divider, rgba(145, 158, 171, 0.20))',
                             background: 'var(--Background-Paper, #FFF)',
                           }}
-                        ></TableCell>
+                        >
+                          <Typography
+                            sx={{
+                              fontWeight: 400,
+                              fontSize: '16px',
+                              overflow: 'hidden',
+                              padding: '16px 0px',
+                              fontStyle: 'normal',
+                              lineHeight: 'normal',
+                              textOverflow: 'ellipsis',
+                              fontFamily: 'DFPHeiBold-B5',
+                              color: 'var(--Text-Primary, #212B36)',
+                            }}
+                          >
+                            收藏
+                          </Typography>
+                        </TableCell>
                         <TableCell
                           sx={{
+                            padding: '0px',
                             borderBottom:
                               '1px dashed var(--Components-Divider, rgba(145, 158, 171, 0.20))',
                             background: 'var(--Background-Paper, #FFF)',
                           }}
-                        ></TableCell>
+                        >
+                          <Typography
+                            sx={{
+                              fontWeight: 400,
+                              fontSize: '16px',
+                              overflow: 'hidden',
+                              padding: '16px 0px',
+                              fontStyle: 'normal',
+                              lineHeight: 'normal',
+                              textOverflow: 'ellipsis',
+                              fontFamily: 'DFPHeiBold-B5',
+                              color: 'var(--Text-Primary, #212B36)',
+                            }}
+                          >
+                            更多選擇
+                          </Typography>
+                        </TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -475,10 +621,10 @@ const ChannelsList = () => {
                         >
                           <TableCell
                             sx={{
-                              height: '51px !important',
+                              width: '50%',
                               padding: '0px',
                               border: 'none',
-                              width: '50%',
+                              height: '51px !important',
                             }}
                           >
                             <Typography
@@ -502,10 +648,10 @@ const ChannelsList = () => {
                           </TableCell>
                           <TableCell
                             sx={{
-                              height: '51px !important',
+                              width: '18%',
                               padding: '0px',
                               border: 'none',
-                              width: '18%',
+                              height: '51px !important',
                             }}
                           >
                             <Box
@@ -517,18 +663,18 @@ const ChannelsList = () => {
                             >
                               {channel.organizationChannelTranscriptList[0]
                                 ?.organizationChannelTranscriptStatus ===
-                              'COMPLETE' ? (
+                                'COMPLETE' ? (
                                 <CheckCircleRounded
                                   sx={{ color: ' rgba(17, 141, 87, 1)' }}
                                 />
                               ) : channel.organizationChannelTranscriptList[0]
-                                  ?.organizationChannelTranscriptStatus ===
+                                ?.organizationChannelTranscriptStatus ===
                                 'PROCESSING' ? (
                                 <RotateRightRounded
                                   sx={{ color: 'rgba(0, 102, 204, 1)' }}
                                 />
                               ) : channel.organizationChannelTranscriptList[0]
-                                  ?.organizationChannelTranscriptStatus ===
+                                ?.organizationChannelTranscriptStatus ===
                                 'PENDING' ? (
                                 <PendingActionsRounded
                                   sx={{ color: 'rgba(33, 43, 54, 1)' }}
@@ -548,10 +694,10 @@ const ChannelsList = () => {
                           </TableCell>
                           <TableCell
                             sx={{
-                              height: '51px !important',
+                              width: '18%',
                               padding: '0px',
                               border: 'none',
-                              width: '18%',
+                              height: '51px !important',
                             }}
                           >
                             <Typography
@@ -927,13 +1073,13 @@ const ChannelsList = () => {
                         sx={{ color: ' rgba(52, 199, 89, 1)' }}
                       />
                     ) : channel.organizationChannelTranscriptList[0]
-                        ?.organizationChannelTranscriptStatus ===
+                      ?.organizationChannelTranscriptStatus ===
                       'PROCESSING' ? (
                       <RotateRightRounded
                         sx={{ color: 'rgba(0, 102, 204, 1)' }}
                       />
                     ) : channel.organizationChannelTranscriptList[0]
-                        ?.organizationChannelTranscriptStatus === 'PENDING' ? (
+                      ?.organizationChannelTranscriptStatus === 'PENDING' ? (
                       <PendingActionsRounded
                         sx={{ color: 'rgba(33, 43, 54, 1)' }}
                       />

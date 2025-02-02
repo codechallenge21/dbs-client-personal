@@ -92,8 +92,8 @@ export default function DeleteConfirmationModal({
             }}
           >
             {singleChannelTitle
-              ? `这将删除
- ${singleChannelTitle}.`
+              ? `即將刪除
+ ${singleChannelTitle}`
               : `即將刪除 ${channelName.length} 個頻道`}
           </Typography>
         </Box>
