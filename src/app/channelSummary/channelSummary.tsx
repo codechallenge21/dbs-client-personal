@@ -127,9 +127,7 @@ const ChannelSummary = () => {
     React.useState<OrganizationChannel | null>(null);
   const [openDataSource, setOpenDataSource] = useState(false);
   const [aIAnalysisTabValue, setAIAnalysisTabValue] = React.useState(0);
-  const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(
-    !isMobile
-  );
+  const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(!isMobile);
   const [openUpload, setOpenUpload] = React.useState(false);
   /**
    * @useSearchParams hook requires Suspense Boundary Component wrapping
@@ -176,7 +174,7 @@ const ChannelSummary = () => {
   }, [channel, mutateChannel]);
 
   const handleBackButtonClick = () => {
-    router.push('/channelsList');
+    router.push('/toolbox');
   };
 
   const handleAIAnalysisTabChange = (
