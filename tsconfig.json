@@ -15,6 +15,7 @@
     "isolatedModules": true,
     "strictNullChecks": true,
     "noUnusedLocals": true,
+    "declaration": true,
     "allowSyntheticDefaultImports": true,
     "noUncheckedIndexedAccess": true,
     "downlevelIteration": true,
