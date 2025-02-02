@@ -106,7 +106,7 @@ const ChannelsList = () => {
             mutateAudioChannels();
           }
         })
-        .catch(() => {});
+        .catch(() => { });
     },
     [
       activeIndex,
@@ -577,7 +577,7 @@ const ChannelsList = () => {
                               color: 'var(--Text-Primary, #212B36)',
                             }}
                           >
-                            最喜欢的
+                            收藏
                           </Typography>
                         </TableCell>
                         <TableCell
@@ -601,7 +601,7 @@ const ChannelsList = () => {
                               color: 'var(--Text-Primary, #212B36)',
                             }}
                           >
-                            更多选择
+                            更多選擇
                           </Typography>
                         </TableCell>
                       </TableRow>
@@ -663,18 +663,18 @@ const ChannelsList = () => {
                             >
                               {channel.organizationChannelTranscriptList[0]
                                 ?.organizationChannelTranscriptStatus ===
-                              'COMPLETE' ? (
+                                'COMPLETE' ? (
                                 <CheckCircleRounded
                                   sx={{ color: ' rgba(17, 141, 87, 1)' }}
                                 />
                               ) : channel.organizationChannelTranscriptList[0]
-                                  ?.organizationChannelTranscriptStatus ===
+                                ?.organizationChannelTranscriptStatus ===
                                 'PROCESSING' ? (
                                 <RotateRightRounded
                                   sx={{ color: 'rgba(0, 102, 204, 1)' }}
                                 />
                               ) : channel.organizationChannelTranscriptList[0]
-                                  ?.organizationChannelTranscriptStatus ===
+                                ?.organizationChannelTranscriptStatus ===
                                 'PENDING' ? (
                                 <PendingActionsRounded
                                   sx={{ color: 'rgba(33, 43, 54, 1)' }}
@@ -1073,13 +1073,13 @@ const ChannelsList = () => {
                         sx={{ color: ' rgba(52, 199, 89, 1)' }}
                       />
                     ) : channel.organizationChannelTranscriptList[0]
-                        ?.organizationChannelTranscriptStatus ===
+                      ?.organizationChannelTranscriptStatus ===
                       'PROCESSING' ? (
                       <RotateRightRounded
                         sx={{ color: 'rgba(0, 102, 204, 1)' }}
                       />
                     ) : channel.organizationChannelTranscriptList[0]
-                        ?.organizationChannelTranscriptStatus === 'PENDING' ? (
+                      ?.organizationChannelTranscriptStatus === 'PENDING' ? (
                       <PendingActionsRounded
                         sx={{ color: 'rgba(33, 43, 54, 1)' }}
                       />
