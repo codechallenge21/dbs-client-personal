@@ -97,7 +97,7 @@ const ChannelsList = () => {
       deleteChannel({
         organizationId: '4aba77788ae94eca8d6ff330506af944',
         organizationChannelId:
-          channelsData?.[activeIndex!].organizationChannelId || '',
+          channelsData?.[activeIndex!]?.organizationChannelId || '',
       })
         .then(() => {
           setIsDeleteDialogOpen(false);

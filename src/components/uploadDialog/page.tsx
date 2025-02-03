@@ -82,14 +82,14 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
   };
 
   const handleDrop = (acceptedFiles: File[]) => {
-    if (acceptedFiles && acceptedFiles.length > 0) {
+    if (acceptedFiles && acceptedFiles.length > 0 && acceptedFiles?.[0]) {
       validateFile(acceptedFiles[0]);
     }
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    if (e.target.files && e.target.files.length > 0) {
+    if (e.target.files && e.target.files.length > 0 && e.target.files?.[0]) {
       validateFile(e.target.files[0]);
       e.target.value = '';
     }

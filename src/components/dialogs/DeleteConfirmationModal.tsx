@@ -18,7 +18,9 @@ export default function DeleteConfirmationModal({
   channelName,
 }: DeleteConfirmationModalProps) {
   const singleChannelTitle =
-    channelName.length === 1 && 'organizationChannelTitle' in channelName[0]
+    channelName.length === 1 &&
+    channelName?.[0] &&
+    'organizationChannelTitle' in channelName[0]
       ? (channelName[0] as OrganizationChannelData).organizationChannelTitle
       : null;
   return (

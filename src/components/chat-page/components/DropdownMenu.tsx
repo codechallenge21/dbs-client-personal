@@ -325,7 +325,7 @@ export default function DropdownMenu({
                   ...chatResponses[1],
                   organizationChannelId:
                     selectedChannel?.organizationChannelId ||
-                    chatResponses[1].organizationChannelMessageId ||
+                    chatResponses[1]?.organizationChannelMessageId ||
                     '',
                   selected: true,
                   organization: selectedChannel?.organization || {},

@@ -240,7 +240,7 @@ const TextInput: React.FC<TextInputProps> = ({
 
         recognitionRef.current.onresult = (event: SpeechRecognitionEvent) => {
           const finalTranscript = Array.from(event.results)
-            .map((result) => result[0].transcript)
+            .map((result) => result[0]?.transcript)
             .join('');
           setUserInputValue(finalTranscript);
         };
