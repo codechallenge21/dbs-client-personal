@@ -28,7 +28,6 @@ import {
   ContentCopyRounded,
   PermIdentityRounded,
   ArrowBackIosRounded,
-  ArrowDropDownRounded,
   ArrowForwardIosRounded,
   ThumbDownOffAltRounded,
   SettingsInputComponentRounded,
@@ -60,7 +59,6 @@ const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: '#fff',
   ...theme.typography.body2,
   padding: theme.spacing(1),
-  textAlign: 'center',
   color: theme.palette.text.secondary,
   ...theme.applyStyles('dark', {
     backgroundColor: '#1A2027',
@@ -341,7 +339,6 @@ const ChannelSummary = () => {
                         fontSize: '16px',
                         overflow: 'hidden',
                         fontStyle: 'normal',
-                        textAlign: 'center',
                         fontFamily: 'Inter',
                         lineHeight: 'normal',
                         textOverflow: 'ellipsis',
@@ -350,9 +347,6 @@ const ChannelSummary = () => {
                     >
                       {selectedChannel?.organizationChannelTitle}
                     </Typography>
-                    <IconButton>
-                      <ArrowDropDownRounded sx={{ color: 'black' }} />
-                    </IconButton>
                   </Box>
                   <Box>
                     <IconButton>
@@ -392,7 +386,6 @@ const ChannelSummary = () => {
                         variant="outlined"
                         sx={{
                           padding: '16px 16px 16px 32px',
-                          textAlign: 'start',
                         }}
                       >
                         <Typography
@@ -524,7 +517,6 @@ const ChannelSummary = () => {
                         variant="outlined"
                         sx={{
                           padding: '16px 16px 16px 32px',
-                          textAlign: 'start',
                         }}
                       >
                         {' '}
@@ -627,25 +619,13 @@ const ChannelSummary = () => {
                               padding: '0',
                               display: 'flex',
                               alignItems: 'center',
-                              justifyContent: 'space-between',
+                              justifyContent: 'flex-end',
                             }}
                           >
-                            <Typography
-                              sx={{
-                                fontWeight: 400,
-                                fontSize: '16px',
-                                fontStyle: 'normal',
-                                lineHeight: 'normal',
-                                fontFamily: 'DFPHeiBold-B5',
-                                color: 'var(--Primary-Black, #212B36)',
-                              }}
-                            >
-                              原稿
-                            </Typography>
                             <Box
                               sx={{
                                 display: 'flex',
-                                alignItems: 'center',
+                                // alignItems: 'center',
                                 justifyContent: 'space-between',
                               }}
                             >
@@ -1281,9 +1261,6 @@ const ChannelSummary = () => {
               >
                 {selectedChannel?.organizationChannelTitle}
               </Typography>
-              <IconButton edge="end" color="inherit">
-                <ArrowDropDownRounded />
-              </IconButton>
             </Box>
             <Box>
               <IconButton>
@@ -1314,22 +1291,10 @@ const ChannelSummary = () => {
             <Box
               sx={{
                 display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
+                // alignItems: 'center',
+                justifyContent: 'flex-end',
               }}
             >
-              <Typography
-                sx={{
-                  fontWeight: 400,
-                  fontSize: '16px',
-                  fontStyle: 'normal',
-                  lineHeight: 'normal',
-                  fontFamily: 'DFPHeiBold-B5',
-                  color: 'var(--Primary-Black, #212B36)',
-                }}
-              >
-                原稿
-              </Typography>
               <Box>
                 <Tooltip
                   title={
