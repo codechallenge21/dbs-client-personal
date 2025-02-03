@@ -15,9 +15,11 @@ import {
   CardContent,
   useMediaQuery,
   TextareaAutosize,
+  Tooltip,
   // CircularProgress,
 } from '@mui/material';
 import {
+  Done as DoneIcon,
   MicRounded,
   SyncRounded,
   ReplayRounded,
@@ -39,6 +41,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
 import UploadDialog from '@/components/uploadDialog/page';
 import DataSourceDialog from '@/components/chat-page/components/chatDataStore';
+import ReactMarkdown from 'react-markdown';
 
 function TabPanel(props: {
   value: number;
@@ -135,6 +138,9 @@ const ChannelSummary = () => {
    ** */
   const searchParams = useSearchParams();
   const organizationChannelId = searchParams.get('organizationChannelId') ?? '';
+  const [copiedMessageId, setCopiedMessageId] = React.useState<string | null>(
+    null
+  );
 
   const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
@@ -148,6 +154,20 @@ const ChannelSummary = () => {
     organizationChannelId,
     organizationId: '4aba77788ae94eca8d6ff330506af944',
   });
+
+  const copyPrompt = (text: string, messageId: string) => {
+    navigator.clipboard.writeText(text).then(
+      () => {
+        setCopiedMessageId(messageId);
+        setTimeout(() => {
+          setCopiedMessageId(null);
+        }, 1000);
+      },
+      (err) => {
+        console.error('Failed to copy to clipboard', err);
+      }
+    );
+  };
 
   useEffect(() => {
     const updateChannelData = async () => {
@@ -368,7 +388,13 @@ const ChannelSummary = () => {
                     }}
                   >
                     <Item>
-                      <Paper variant="outlined" sx={{ padding: '16px' }}>
+                      <Paper
+                        variant="outlined"
+                        sx={{
+                          padding: '16px 16px 16px 32px',
+                          textAlign: 'start',
+                        }}
+                      >
                         <Typography
                           sx={{
                             fontWeight: 400,
@@ -409,9 +435,45 @@ const ChannelSummary = () => {
                               justifyContent: 'space-between',
                             }}
                           >
-                            <IconButton>
-                              <ContentCopyRounded sx={{ color: 'black' }} />
-                            </IconButton>
+                            <Tooltip
+                              title={
+                                copiedMessageId ===
+                                selectedChannel
+                                  ?.organizationChannelTranscriptList[0]
+                                  ?.organizationChannelTranscriptId
+                                  ? 'Copied'
+                                  : 'Copy'
+                              }
+                              placement="top"
+                              arrow
+                            >
+                              <IconButton
+                                onClick={() =>
+                                  selectedChannel
+                                    ?.organizationChannelTranscriptList[0]
+                                    ?.organizationChannelTranscriptId &&
+                                  copyPrompt(
+                                    selectedChannel
+                                      ?.organizationChannelTranscriptList[0]
+                                      ?.organizationChannelTranscriptContent,
+                                    selectedChannel
+                                      ?.organizationChannelTranscriptList[0]
+                                      ?.organizationChannelTranscriptId
+                                  )
+                                }
+                              >
+                                {copiedMessageId ===
+                                selectedChannel
+                                  ?.organizationChannelTranscriptList[0]
+                                  ?.organizationChannelTranscriptId ? (
+                                  <DoneIcon />
+                                ) : (
+                                  <ContentCopyRounded
+                                    sx={{ color: '#212B36', fontSize: 20 }}
+                                  />
+                                )}
+                              </IconButton>
+                            </Tooltip>
                             <IconButton>
                               <ThumbDownOffAltRounded
                                 sx={{
@@ -426,22 +488,13 @@ const ChannelSummary = () => {
                             </IconButton>
                           </Box>
                         </Box>
-                        <Typography
-                          sx={{
-                            fontWeight: 400,
-                            fontSize: '16px',
-                            lineHeight: '24px',
-                            fontStyle: 'normal',
-                            fontFamily: 'DFPHeiMedium-B5',
-                            color: 'var(--Primary-Black, #212B36)',
-                          }}
-                        >
+                        <ReactMarkdown>
                           {
                             selectedChannel
                               ?.organizationChannelTranscriptList[0]
                               ?.organizationChannelTranscriptContent
                           }
-                        </Typography>
+                        </ReactMarkdown>
                       </Paper>
                     </Item>
                   </Grid2>
@@ -467,7 +520,14 @@ const ChannelSummary = () => {
                     }}
                   >
                     <Item>
-                      <Paper variant="outlined" sx={{ padding: '16px' }}>
+                      <Paper
+                        variant="outlined"
+                        sx={{
+                          padding: '16px 16px 16px 32px',
+                          textAlign: 'start',
+                        }}
+                      >
+                        {' '}
                         <Box
                           sx={{
                             display: 'flex',
@@ -560,7 +620,6 @@ const ChannelSummary = () => {
                             }}
                           />
                         </Tabs>
-
                         <TabPanel value={aIAnalysisTabValue} index={0}>
                           <Box
                             sx={{
@@ -590,9 +649,48 @@ const ChannelSummary = () => {
                                 justifyContent: 'space-between',
                               }}
                             >
-                              <IconButton>
-                                <ContentCopyRounded sx={{ color: 'black' }} />
-                              </IconButton>
+                              <Tooltip
+                                title={
+                                  copiedMessageId ===
+                                  selectedChannel
+                                    ?.organizationChannelMessageList[0]
+                                    ?.organizationChannelMessageId
+                                    ? 'Copied'
+                                    : 'Copy'
+                                }
+                                placement="top"
+                                arrow
+                              >
+                                <IconButton
+                                  onClick={() =>
+                                    selectedChannel
+                                      ?.organizationChannelMessageList[0]
+                                      ?.organizationChannelMessageContent &&
+                                    selectedChannel
+                                      ?.organizationChannelMessageList[0]
+                                      ?.organizationChannelMessageId &&
+                                    copyPrompt(
+                                      selectedChannel
+                                        ?.organizationChannelMessageList[0]
+                                        ?.organizationChannelMessageContent,
+                                      selectedChannel
+                                        ?.organizationChannelMessageList[0]
+                                        ?.organizationChannelMessageId
+                                    )
+                                  }
+                                >
+                                  {copiedMessageId ===
+                                  selectedChannel
+                                    ?.organizationChannelMessageList[0]
+                                    ?.organizationChannelMessageId ? (
+                                    <DoneIcon />
+                                  ) : (
+                                    <ContentCopyRounded
+                                      sx={{ color: '#212B36', fontSize: 20 }}
+                                    />
+                                  )}
+                                </IconButton>
+                              </Tooltip>
                               <IconButton>
                                 <ThumbDownOffAltRounded
                                   sx={{
@@ -611,22 +709,12 @@ const ChannelSummary = () => {
                               </IconButton>
                             </Box>
                           </Box>
-                          <Typography
-                            sx={{
-                              mt: '10px',
-                              fontWeight: 400,
-                              fontSize: '16px',
-                              lineHeight: '24px',
-                              fontStyle: 'normal',
-                              fontFamily: 'DFPHeiMedium-B5',
-                              color: 'var(--Primary-Black, #212B36)',
-                            }}
-                          >
+                          <ReactMarkdown>
                             {
                               selectedChannel?.organizationChannelMessageList[0]
                                 ?.organizationChannelMessageContent
                             }
-                          </Typography>
+                          </ReactMarkdown>
                         </TabPanel>
                         <TabPanel value={aIAnalysisTabValue} index={1}>
                           <Box
@@ -1243,9 +1331,40 @@ const ChannelSummary = () => {
                 原稿
               </Typography>
               <Box>
-                <IconButton>
-                  <ContentCopyRounded sx={{ color: '#212B36' }} />
-                </IconButton>
+                <Tooltip
+                  title={
+                    copiedMessageId ===
+                    selectedChannel?.organizationChannelTranscriptList[0]
+                      ?.organizationChannelTranscriptId
+                      ? 'Copied'
+                      : 'Copy'
+                  }
+                  placement="top"
+                  arrow
+                >
+                  <IconButton
+                    onClick={() =>
+                      selectedChannel?.organizationChannelTranscriptList[0]
+                        ?.organizationChannelTranscriptId &&
+                      copyPrompt(
+                        selectedChannel?.organizationChannelTranscriptList[0]
+                          ?.organizationChannelTranscriptContent,
+                        selectedChannel?.organizationChannelTranscriptList[0]
+                          ?.organizationChannelTranscriptId
+                      )
+                    }
+                  >
+                    {copiedMessageId ===
+                    selectedChannel?.organizationChannelTranscriptList[0]
+                      ?.organizationChannelTranscriptId ? (
+                      <DoneIcon />
+                    ) : (
+                      <ContentCopyRounded
+                        sx={{ color: '#212B36', fontSize: 20 }}
+                      />
+                    )}
+                  </IconButton>
+                </Tooltip>
                 <IconButton>
                   <ThumbDownOffAltRounded
                     sx={{
@@ -1259,22 +1378,12 @@ const ChannelSummary = () => {
                 </IconButton>
               </Box>
             </Box>
-            <Typography
-              sx={{
-                mt: '10px',
-                fontWeight: 400,
-                fontSize: '16px',
-                lineHeight: '24px',
-                fontStyle: 'normal',
-                fontFamily: 'DFPHeiMedium-B5',
-                color: 'var(--Primary-Black, #212B36)',
-              }}
-            >
+            <ReactMarkdown>
               {
                 selectedChannel?.organizationChannelTranscriptList[0]
                   ?.organizationChannelTranscriptContent
               }
-            </Typography>
+            </ReactMarkdown>
           </Box>
           <Box sx={{ padding: '16px' }}>
             <Box
@@ -1399,9 +1508,42 @@ const ChannelSummary = () => {
                     justifyContent: 'space-between',
                   }}
                 >
-                  <IconButton>
-                    <ContentCopyRounded sx={{ color: 'black' }} />
-                  </IconButton>
+                  <Tooltip
+                    title={
+                      copiedMessageId ===
+                      selectedChannel?.organizationChannelMessageList[0]
+                        ?.organizationChannelMessageId
+                        ? 'Copied'
+                        : 'Copy'
+                    }
+                    placement="top"
+                    arrow
+                  >
+                    <IconButton
+                      onClick={() =>
+                        selectedChannel?.organizationChannelMessageList[0]
+                          ?.organizationChannelMessageContent &&
+                        selectedChannel?.organizationChannelMessageList[0]
+                          ?.organizationChannelMessageId &&
+                        copyPrompt(
+                          selectedChannel?.organizationChannelMessageList[0]
+                            ?.organizationChannelMessageContent,
+                          selectedChannel?.organizationChannelMessageList[0]
+                            ?.organizationChannelMessageId
+                        )
+                      }
+                    >
+                      {copiedMessageId ===
+                      selectedChannel?.organizationChannelMessageList[0]
+                        ?.organizationChannelMessageId ? (
+                        <DoneIcon />
+                      ) : (
+                        <ContentCopyRounded
+                          sx={{ color: '#212B36', fontSize: 20 }}
+                        />
+                      )}
+                    </IconButton>
+                  </Tooltip>
                   <IconButton>
                     <ThumbDownOffAltRounded
                       sx={{
@@ -1418,22 +1560,22 @@ const ChannelSummary = () => {
                   </IconButton>
                 </Box>
               </Box>
-              <Typography
-                sx={{
-                  mt: '10px',
-                  fontWeight: 400,
-                  fontSize: '16px',
-                  lineHeight: '24px',
-                  fontStyle: 'normal',
-                  fontFamily: 'DFPHeiMedium-B5',
-                  color: 'var(--Primary-Black, #212B36)',
-                }}
+              <ReactMarkdown
+              // sx={{
+              //   mt: '10px',
+              //   fontWeight: 400,
+              //   fontSize: '16px',
+              //   lineHeight: '24px',
+              //   fontStyle: 'normal',
+              //   fontFamily: 'DFPHeiMedium-B5',
+              //   color: 'var(--Primary-Black, #212B36)',
+              // }}
               >
                 {
                   selectedChannel?.organizationChannelMessageList[0]
                     ?.organizationChannelMessageContent
                 }
-              </Typography>
+              </ReactMarkdown>
             </TabPanel>
             <TabPanel value={aIAnalysisTabValue} index={1}>
               <Box
