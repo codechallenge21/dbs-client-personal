@@ -11,7 +11,7 @@ import {
 import { ArrowForwardIosRounded, WorkRounded } from '@mui/icons-material';
 import Image from 'next/image';
 import boxImage from '../../../public/assets/images/box.png';
-import ToolboxDrawer from './components/ToolboxDrawer';
+import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
 
 export default function PopularArea() {
   const focusRef = useRef<HTMLDivElement>(null);
@@ -87,8 +87,6 @@ export default function PopularArea() {
   return (
     <Box
       sx={{
-        minHeight: '100vh',
-        background: 'var(--Primary-, #EBE3DD)',
         minHeight: '100vh',
         background: 'var(--Primary-, #EBE3DD)',
       }}
