@@ -1560,17 +1560,7 @@ const ChannelSummary = () => {
                   </IconButton>
                 </Box>
               </Box>
-              <ReactMarkdown
-              // sx={{
-              //   mt: '10px',
-              //   fontWeight: 400,
-              //   fontSize: '16px',
-              //   lineHeight: '24px',
-              //   fontStyle: 'normal',
-              //   fontFamily: 'DFPHeiMedium-B5',
-              //   color: 'var(--Primary-Black, #212B36)',
-              // }}
-              >
+              <ReactMarkdown>
                 {
                   selectedChannel?.organizationChannelMessageList[0]
                     ?.organizationChannelMessageContent
