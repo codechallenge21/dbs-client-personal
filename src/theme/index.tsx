@@ -1,12 +1,14 @@
 'use client';
 
-import { useMemo } from 'react';
 // @mui
 import CssBaseline from '@mui/material/CssBaseline';
-import { createTheme, ThemeProvider as MuiThemeProvider, ThemeOptions } from '@mui/material/styles';
+import {
+  createTheme,
+  ThemeProvider as MuiThemeProvider,
+  ThemeOptions,
+} from '@mui/material/styles';
 // system
 import { palette } from './palette';
-import { usePathname } from 'next/navigation';
 
 // ----------------------------------------------------------------------
 
@@ -14,23 +16,29 @@ type Props = {
   children: React.ReactNode;
 };
 
+import { useEffect, useState } from 'react';
+
 export default function ThemeProvider({ children }: Props) {
-  const pathname = usePathname();
-  const isHomePage = pathname === '/';
+  const [theme, setTheme] = useState(createTheme());
 
-  const baseOption = useMemo(
-    () => ({
+  useEffect(() => {
+    let isHomePage = false;
+    if (typeof window !== 'undefined') {
+      const pathname = window.location.pathname;
+      isHomePage = pathname === '/';
+    }
+
+    const baseOption = {
       palette: isHomePage ? palette('light') : palette('light'),
-    }),
-    [isHomePage]
-  );
+    };
 
-  const theme = createTheme(baseOption as ThemeOptions);
+    setTheme(createTheme(baseOption as ThemeOptions));
+  }, []);
 
   return (
     <MuiThemeProvider theme={theme}>
-        <CssBaseline />
-        {children}
+      <CssBaseline />
+      {children}
     </MuiThemeProvider>
   );
 }

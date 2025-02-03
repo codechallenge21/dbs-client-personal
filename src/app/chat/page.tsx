@@ -1,83 +1,143 @@
-"use client";
-import { useEffect, useMemo, useState } from "react";
-import Header from "./components/Header";
-import MainContent from "./components/MainContent";
-import SwitchDialog from "./components/SwitchDialog";
-import ToolboxDrawer from "@/components/toolbox-drawer/ToolboxDrawer";
-import { OrganizationChannel, OrganizationChannelMessage } from "@/interfaces/entities";
-import ChannelContentContext from "./components/ChannelContentContext";
-import { AdvisorType } from "./components/types";
+'use client';
 
-export default function Home() {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(false);
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+  Suspense,
+} from 'react';
+import Header from '@/components/chat-page/components/Header';
+import MainContent from '@/components/chat-page/components/MainContent';
+import SwitchDialog from '@/components/dialogs/SwitchDialog';
+import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
+import { Box, CircularProgress, useMediaQuery, useTheme } from '@mui/material';
+import ChannelContentContext from '../../components/channel-context-provider/ChannelContentContext';
+import { useSearchParams } from 'next/navigation';
+import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
+import apis from '@/utils/hooks/apis/apis';
+import DataSourceDialog from '@/components/chat-page/components/chatDataStore';
 
-  const [isLoadingChannel, setIsLoadingChannel] = useState<boolean>(false);
-  const [selectedChannel, setSelectedChannel] = useState<OrganizationChannel>();
-  const [selectedChannelId, setSelectedChannelId] = useState<string>();
-  const [isInteractingInChat, setIsInteractingInChat] = useState<boolean>(false);
-  const [chatResponses, setChatResponses] = useState<OrganizationChannelMessage[]>([]);
-  const [advisorType, setAdvisorType] = useState<AdvisorType>(AdvisorType.DEFAULT);
+export default function ChatHomePage() {
+  return (
+    <Suspense fallback={<CircularProgress />}>
+      <ClientContent />
+    </Suspense>
+  );
+}
 
-  const handleClose = () => setIsOpen(false);
+function ClientContent() {
+  const searchParams = useSearchParams();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const handleConfirm = () => {
-    setIsOpen(false);
-  };
+  const organizationChannelId = searchParams.get('organizationChannelId') || '';
+  const {
+    selectedChannel,
+    setSelectedChannelId,
+    advisorType,
+    setSelectedChannel,
+    setChatResponses,
+    setIsInteractingInChat,
+  } = useContext(ChannelContentContext);
 
-  const toggleDrawer = (newOpen: boolean) => {
-    setIsOpenDrawer(newOpen);
-  };
+  const { excute: getChannelDetail } = useAxiosApi(apis.getChannelDetail);
 
-  const contextValue = useMemo(
-    () => ({
-      isLoadingChannel,
-      setIsLoadingChannel,
-      selectedChannel,
-      setSelectedChannel,
-      isInteractingInChat,
-      selectedChannelId,
-      setSelectedChannelId,
-      setIsInteractingInChat,
-      chatResponses,
-      setChatResponses,
-      advisorType,
-      setAdvisorType,
-    }),
-    [
-      isLoadingChannel,
-      selectedChannel,
-      selectedChannelId,
-      setSelectedChannelId,
-      isInteractingInChat,
-      setIsInteractingInChat,
-      chatResponses,
-      setChatResponses,
-      advisorType,
-      setAdvisorType,
-    ]
+  const [openDataSource, setOpenDataSource] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenDrawer, setIsOpenDrawer] = useState(!isMobile);
+
+  const handleClose = useCallback(() => setIsOpen(false), []);
+  const handleConfirm = useCallback(() => setIsOpen(false), []);
+
+  const fetchChannelDetail = useCallback(
+    async (organizationChannelId: string) => {
+      try {
+        const res = await getChannelDetail({
+          organizationId: '4aba77788ae94eca8d6ff330506af944',
+          organizationChannelId,
+        });
+        setSelectedChannel(res.data);
+        setSelectedChannelId(organizationChannelId);
+      } catch (error) {
+        console.error('Failed to fetch channel details:', error);
+      }
+    },
+    [getChannelDetail, setSelectedChannel, setSelectedChannelId]
   );
 
   useEffect(() => {
-    if (selectedChannel) setSelectedChannelId(selectedChannel?.organizationChannelId);
-    else setSelectedChannelId(undefined);
-  }, [selectedChannel]);
+    if (selectedChannel && organizationChannelId) {
+      setSelectedChannelId(selectedChannel.organizationChannelId);
+    } else if (!organizationChannelId) {
+      setSelectedChannel(undefined);
+      setSelectedChannelId(undefined);
+      setChatResponses([]);
+      setIsInteractingInChat(false);
+      return;
+    } else {
+      fetchChannelDetail(organizationChannelId);
+    }
+  }, [
+    selectedChannel,
+    organizationChannelId,
+    setSelectedChannelId,
+    fetchChannelDetail,
+    setChatResponses,
+    setIsInteractingInChat,
+    setSelectedChannel,
+  ]);
+
+  useEffect(() => {
+    setIsOpenDrawer(!isMobile);
+  }, [isMobile]);
 
   return (
-    <ChannelContentContext.Provider value={contextValue}>
-      <ToolboxDrawer
-        open={isOpenDrawer}
-        toggleDrawer={toggleDrawer}
+    <ToolbarDrawer
+      open={isOpenDrawer}
+      setIsOpenDrawer={setIsOpenDrawer}
+      openDataSource={openDataSource}
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          borderRadius: '8px',
+          flexDirection: 'column',
+          backgroundColor: '#FFF',
+          overflowY: isMobile ? 'auto' : 'unset',
+          height: isMobile ? '100vh' : 'calc(100vh - 32px)',
+          // width: {
+          //   xs: openDataSource ? (isOpenDrawer ? '85%' : '88%') : '100%',
+          //   sm: openDataSource ? (isOpenDrawer ? '80%' : '83%') : '100%',
+          //   md: openDataSource ? (isOpenDrawer ? '75%' : '78%') : '100%',
+          //   lg: openDataSource ? (isOpenDrawer ? '73%' : '76%') : '100%',
+          // },
+        }}
       >
         <Header
           isChat
-          toggleDrawer={toggleDrawer}
           open={isOpenDrawer}
           advisor={advisorType}
+          openDataSource={openDataSource}
+          setIsOpenDrawer={setIsOpenDrawer}
+          setOpenDataSource={setOpenDataSource}
+        />
+        <Box
+          sx={{
+            marginTop: isMobile ? '60px' : '0px',
+          }}
         />
         <MainContent />
-        <SwitchDialog open={isOpen} onClose={handleClose} onConfirm={handleConfirm} />
-      </ToolboxDrawer>
-    </ChannelContentContext.Provider>
+        <SwitchDialog
+          open={isOpen}
+          onClose={handleClose}
+          onConfirm={handleConfirm}
+        />
+        <DataSourceDialog
+          open={openDataSource}
+          onClose={() => setOpenDataSource(false)}
+        />
+      </Box>
+    </ToolbarDrawer>
   );
 }

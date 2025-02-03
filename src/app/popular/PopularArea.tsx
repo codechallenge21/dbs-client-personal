@@ -46,8 +46,16 @@ export default function PopularArea() {
     ref.current.addEventListener('mousemove', onMouseMove);
     ref.current.addEventListener('mouseup', onMouseUp);
     ref.current.addEventListener('mouseleave', onMouseUp);
+    ref.current.addEventListener('mousedown', onMouseDown);
+    ref.current.addEventListener('mousemove', onMouseMove);
+    ref.current.addEventListener('mouseup', onMouseUp);
+    ref.current.addEventListener('mouseleave', onMouseUp);
 
     return () => {
+      ref.current!.removeEventListener('mousedown', onMouseDown);
+      ref.current!.removeEventListener('mousemove', onMouseMove);
+      ref.current!.removeEventListener('mouseup', onMouseUp);
+      ref.current!.removeEventListener('mouseleave', onMouseUp);
       ref.current!.removeEventListener('mousedown', onMouseDown);
       ref.current!.removeEventListener('mousemove', onMouseMove);
       ref.current!.removeEventListener('mouseup', onMouseUp);
@@ -76,18 +84,16 @@ export default function PopularArea() {
   const focusItems = Array.from({ length: 10 });
   const recommendedItems = Array.from({ length: 10 });
 
-  const toggleDrawer = (newOpen: boolean) => {
-    setIsOpenDrawer(newOpen);
-  };
-
   return (
     <Box
       sx={{
         minHeight: '100vh',
         background: 'var(--Primary-, #EBE3DD)',
+        minHeight: '100vh',
+        background: 'var(--Primary-, #EBE3DD)',
       }}
     >
-      <ToolboxDrawer open={isOpenDrawer} toggleDrawer={toggleDrawer}>
+      <ToolbarDrawer open={isOpenDrawer} setIsOpenDrawer={setIsOpenDrawer}>
         <Box
           sx={{
             minHeight: '97vh',
@@ -265,7 +271,7 @@ export default function PopularArea() {
               color: 'var(--Primary-Black, #212B36)',
             }}
           >
-            為你推薦
+            為您推薦
           </Typography>
           <Box sx={{ position: 'relative', marginBottom: '40px' }}>
             <Box
@@ -441,7 +447,7 @@ export default function PopularArea() {
             ))}
           </Box>
         </Box>
-      </ToolboxDrawer>
+      </ToolbarDrawer>
     </Box>
   );
 }
