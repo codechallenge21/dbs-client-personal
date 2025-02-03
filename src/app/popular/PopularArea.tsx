@@ -30,6 +30,10 @@ export default function PopularArea() {
   const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(true);
   const [isFocusScrolledLeft, setIsFocusScrolledLeft] = useState(true);
   const [isFocusScrolledRight, setIsFocusScrolledRight] = useState(false);
+  const [isRecommendedScrolledLeft, setIsRecommendedScrolledLeft] =
+    useState(true);
+  const [isRecommendedScrolledRight, setIsRecommendedScrolledRight] =
+    useState(false);
 
   const handleFocusScrollRight = () => {
     if (focusRef.current) {
@@ -53,11 +57,42 @@ export default function PopularArea() {
     }
   };
 
+  const handleRecommendedScrollRight = () => {
+    if (recommendationsRef.current) {
+      const itemWidth = 260 + 16;
+      recommendationsRef.current.scrollBy({
+        behavior: 'smooth',
+        left: itemWidth * (isMobile ? 1 : 3),
+      });
+      setTimeout(handleFocusScroll, 30);
+    }
+  };
+
+  const handleRecommendedScrollLeft = () => {
+    if (recommendationsRef.current) {
+      const itemWidth = 260 + 16;
+      recommendationsRef.current.scrollBy({
+        behavior: 'smooth',
+        left: -itemWidth * (isMobile ? 1 : 3),
+      });
+      setTimeout(handleRecommendedScroll, 30);
+    }
+  };
+
   const handleFocusScroll = () => {
     if (focusRef.current) {
       const { scrollLeft, scrollWidth, clientWidth } = focusRef.current;
       setIsFocusScrolledLeft(scrollLeft === 0);
       setIsFocusScrolledRight(scrollLeft + clientWidth === scrollWidth);
+    }
+  };
+
+  const handleRecommendedScroll = () => {
+    if (recommendationsRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } =
+        recommendationsRef.current;
+      setIsRecommendedScrolledLeft(scrollLeft === 0);
+      setIsRecommendedScrolledRight(scrollLeft + clientWidth === scrollWidth);
     }
   };
 
@@ -72,6 +107,23 @@ export default function PopularArea() {
     }
   }, []);
 
+  useEffect(() => {
+    if (recommendationsRef.current) {
+      recommendationsRef.current.addEventListener(
+        'scroll',
+        handleRecommendedScroll
+      );
+      handleRecommendedScroll();
+
+      return () => {
+        recommendationsRef?.current?.removeEventListener(
+          'scroll',
+          handleRecommendedScroll
+        );
+      };
+    }
+  }, []);
+
   const FAQItems = Array.from({ length: 5 });
   const toolItems = Array.from({ length: 12 });
   const focusItems = Array.from({ length: 10 });
@@ -80,7 +132,10 @@ export default function PopularArea() {
   return (
     <Box
       sx={{
-        minHeight: '100vh',
+        height: '100vh',
+        display: 'flex',
+        overflow: 'hidden',
+        flexDirection: 'column',
         background: 'var(--Primary-, #EBE3DD)',
       }}
     >
@@ -142,14 +197,18 @@ export default function PopularArea() {
           sx={{
             gap: '20px',
             display: 'flex',
-            overflow: 'auto',
+            overflowY: 'auto',
             borderRadius: '8px',
+            // alignItems: 'center',
             flexDirection: 'column',
             backgroundColor: 'white',
             height: isMobile ? '100%' : '96vh',
             padding: isMobile ? '16px' : '16px 32px',
+            '@media (min-width: 600px)': {
+              flex: '1 0 0',
+            },
             '&::-webkit-scrollbar': {
-              width: '8px',
+              width: '6px',
             },
             '&::-webkit-scrollbar-track': {
               borderRadius: '10px',
@@ -164,6 +223,19 @@ export default function PopularArea() {
             },
           }}
         >
+          {/* <Box
+            sx={{
+              gap: '20px',
+              height: '100%',
+              display: 'flex',
+              alignSelf: 'stretch',
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+              '@media (min-width: 600px)': {
+                flex: '1 0 0',
+              },
+            }}
+          > */}
           <Box
             sx={{
               gap: '16px',
@@ -405,49 +477,76 @@ export default function PopularArea() {
                     key={index}
                     sx={{
                       flexShrink: 0,
+                      flex: '1 0 0',
                       width: '268px',
                       height: '146px',
                       padding: '16px',
+                      display: 'flex',
+                      minWidth: '300px',
+                      maxWidth: '384px',
+                      boxShadow: 'none',
                       minHeight: '114px',
+                      maxHeight: '146px',
                       borderRadius: '8px',
+                      flexDirection: 'column',
+                      alignItems: 'flex-start',
                       backgroundColor: 'var(--Primary-, #EBE3DD)',
                     }}
                   >
-                    <CardContent sx={{ padding: 0 }}>
-                      <Typography
-                        sx={{
-                          fontWeight: 400,
-                          fontSize: '14px',
-                          lineHeight: '22px',
-                          fontStyle: 'normal',
-                          fontFamily: 'DFPHeiMedium-B5',
-                          color: 'var(--Primary-Black, #212B36)',
-                        }}
-                      >
-                        類別
-                      </Typography>
+                    <CardContent
+                      sx={{
+                        gap: '20px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        padding: '0 !important',
+                        paddingBottom: '0 !important',
+                      }}
+                    >
                       <Box
                         sx={{
-                          mb: '20px',
+                          gap: '8px',
                           display: 'flex',
-                          alignItems: 'center',
+                          alignSelf: 'stretch',
+                          flexDirection: 'column',
+                          alignItems: 'flex-start',
                         }}
                       >
                         <Typography
                           sx={{
-                            fontWeight: 600,
-                            fontSize: '24px',
-                            fontFamily: 'Inter',
+                            fontWeight: 400,
+                            fontSize: '14px',
+                            lineHeight: '22px',
                             fontStyle: 'normal',
-                            lineHeight: 'normal',
+                            fontFamily: 'DFPHeiMedium-B5',
                             color: 'var(--Primary-Black, #212B36)',
                           }}
                         >
-                          標題
+                          類別
                         </Typography>
-                        <IconButton>
-                          <ArrowForwardIosRounded sx={{ color: 'black' }} />
-                        </IconButton>
+                        <Box
+                          sx={{
+                            gap: '4px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            alignSelf: 'stretch',
+                          }}
+                        >
+                          <Typography
+                            sx={{
+                              fontWeight: 600,
+                              fontSize: '24px',
+                              fontFamily: 'Inter',
+                              fontStyle: 'normal',
+                              lineHeight: 'normal',
+                              color: 'var(--Primary-Black, #212B36)',
+                            }}
+                          >
+                            標題
+                          </Typography>
+                          <IconButton sx={{ padding: '0' }}>
+                            <ArrowForwardIosRounded sx={{ color: 'black' }} />
+                          </IconButton>
+                        </Box>
                       </Box>
                       <Typography
                         sx={{
@@ -467,31 +566,54 @@ export default function PopularArea() {
                   </Card>
                 ))}
               </Box>
-              <IconButton
-                onClick={() => {
-                  if (recommendationsRef.current) {
-                    const itemWidth = 268 + 16;
-                    recommendationsRef.current.scrollBy({
-                      left: itemWidth * 3,
-                      behavior: 'smooth',
-                    });
-                  }
-                }}
-                sx={{
-                  top: '60px',
-                  right: '2px',
-                  '&:hover': {
-                    backgroundColor: 'rgba(204, 0, 0, 0.40)',
-                  },
-                  zIndex: 10,
-                  position: 'absolute',
-                  backgroundColor: 'rgba(204, 0, 0, 0.60)',
-                }}
-              >
-                <ArrowForwardIosRounded
-                  sx={{ width: '18px', height: '18px', color: 'white' }}
-                />
-              </IconButton>
+
+              {!isRecommendedScrolledRight && (
+                <IconButton
+                  onClick={handleRecommendedScrollRight}
+                  sx={{
+                    top: '50px',
+                    right: '2px',
+                    '&:hover': {
+                      backgroundColor: 'rgba(204, 0, 0, 0.40)',
+                    },
+                    zIndex: 10,
+                    position: 'absolute',
+                    backgroundColor: 'rgba(204, 0, 0, 0.60)',
+                  }}
+                >
+                  <ArrowForwardIosRounded
+                    sx={{
+                      width: '18px',
+                      height: '18px',
+                      color: 'white',
+                    }}
+                  />
+                </IconButton>
+              )}
+              {!isRecommendedScrolledLeft && (
+                <IconButton
+                  onClick={handleRecommendedScrollLeft}
+                  sx={{
+                    top: '50px',
+                    left: '20px',
+                    '&:hover': {
+                      backgroundColor: 'rgba(204, 0, 0, 0.40)',
+                    },
+                    zIndex: 10,
+                    position: 'absolute',
+                    backgroundColor: 'rgba(204, 0, 0, 0.60)',
+                  }}
+                >
+                  <ArrowForwardIosRounded
+                    sx={{
+                      width: '18px',
+                      height: '18px',
+                      color: 'white',
+                      transform: 'scaleX(-1)',
+                    }}
+                  />
+                </IconButton>
+              )}
             </Box>
           </Box>
 
@@ -639,6 +761,7 @@ export default function PopularArea() {
               ))}
             </Box>
           </Box>
+          {/* </Box> */}
         </Box>
       </ToolbarDrawer>
     </Box>
