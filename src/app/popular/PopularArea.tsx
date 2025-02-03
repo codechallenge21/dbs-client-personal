@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Box,
   Card,
@@ -28,67 +28,49 @@ export default function PopularArea() {
   const focusRef = useRef<HTMLDivElement>(null);
   const recommendationsRef = useRef<HTMLDivElement>(null);
   const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(true);
+  const [isFocusScrolledLeft, setIsFocusScrolledLeft] = useState(true);
+  const [isFocusScrolledRight, setIsFocusScrolledRight] = useState(false);
 
-  // Function to handle mouse drag scrolling
-  const enableDragScroll = (ref: React.RefObject<HTMLDivElement | null>) => {
-    if (!ref.current) return;
-
-    let isDragging = false;
-    let startX = 0;
-    let scrollLeft = 0;
-
-    const onMouseDown = (e: MouseEvent) => {
-      isDragging = true;
-      startX = e.pageX - ref.current!.offsetLeft;
-      scrollLeft = ref.current!.scrollLeft;
-    };
-
-    const onMouseMove = (e: MouseEvent) => {
-      if (!isDragging) return;
-      e.preventDefault();
-      const x = e.pageX - ref.current!.offsetLeft;
-      const walk = (x - startX) * 1.5; // Adjust scrolling speed
-      ref.current!.scrollLeft = scrollLeft - walk;
-    };
-
-    const onMouseUp = () => (isDragging = false);
-
-    ref.current.addEventListener('mousedown', onMouseDown);
-    ref.current.addEventListener('mousemove', onMouseMove);
-    ref.current.addEventListener('mouseup', onMouseUp);
-    ref.current.addEventListener('mouseleave', onMouseUp);
-    ref.current.addEventListener('mousedown', onMouseDown);
-    ref.current.addEventListener('mousemove', onMouseMove);
-    ref.current.addEventListener('mouseup', onMouseUp);
-    ref.current.addEventListener('mouseleave', onMouseUp);
-
-    return () => {
-      ref.current!.removeEventListener('mousedown', onMouseDown);
-      ref.current!.removeEventListener('mousemove', onMouseMove);
-      ref.current!.removeEventListener('mouseup', onMouseUp);
-      ref.current!.removeEventListener('mouseleave', onMouseUp);
-      ref.current!.removeEventListener('mousedown', onMouseDown);
-      ref.current!.removeEventListener('mousemove', onMouseMove);
-      ref.current!.removeEventListener('mouseup', onMouseUp);
-      ref.current!.removeEventListener('mouseleave', onMouseUp);
-    };
-  };
-
-  React.useEffect(() => {
-    if (focusRef.current) {
-      enableDragScroll(focusRef);
-    }
-    if (recommendationsRef.current) {
-      enableDragScroll(recommendationsRef);
-    }
-  }, []);
-
-  const handleScrollRight = () => {
+  const handleFocusScrollRight = () => {
     if (focusRef.current) {
       const itemWidth = 260 + 16;
-      focusRef.current.scrollBy({ left: itemWidth * 3, behavior: 'smooth' });
+      focusRef.current.scrollBy({
+        behavior: 'smooth',
+        left: itemWidth * (isMobile ? 1 : 3),
+      });
+      setTimeout(handleFocusScroll, 30);
     }
   };
+
+  const handleFocusScrollLeft = () => {
+    if (focusRef.current) {
+      const itemWidth = 260 + 16;
+      focusRef.current.scrollBy({
+        behavior: 'smooth',
+        left: -itemWidth * (isMobile ? 1 : 3),
+      });
+      setTimeout(handleFocusScroll, 30);
+    }
+  };
+
+  const handleFocusScroll = () => {
+    if (focusRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = focusRef.current;
+      setIsFocusScrolledLeft(scrollLeft === 0);
+      setIsFocusScrolledRight(scrollLeft + clientWidth === scrollWidth);
+    }
+  };
+
+  useEffect(() => {
+    if (focusRef.current) {
+      focusRef.current.addEventListener('scroll', handleFocusScroll);
+      handleFocusScroll();
+
+      return () => {
+        focusRef?.current?.removeEventListener('scroll', handleFocusScroll);
+      };
+    }
+  }, []);
 
   const FAQItems = Array.from({ length: 5 });
   const toolItems = Array.from({ length: 12 });
@@ -144,7 +126,6 @@ export default function PopularArea() {
                 sx={{
                   fontWeight: 400,
                   fontSize: '16px',
-                  overflow: 'hidden',
                   fontStyle: 'normal',
                   lineHeight: 'normal',
                   textOverflow: 'ellipsis',
@@ -165,7 +146,6 @@ export default function PopularArea() {
             borderRadius: '8px',
             flexDirection: 'column',
             backgroundColor: 'white',
-            WebkitOverflowScrolling: 'touch',
             height: isMobile ? '100%' : '96vh',
             padding: isMobile ? '16px' : '16px 32px',
             '&::-webkit-scrollbar': {
@@ -218,10 +198,8 @@ export default function PopularArea() {
                 sx={{
                   gap: '16px',
                   width: '100%',
-                  cursor: 'grab',
                   display: 'flex',
                   minHeight: '220px',
-                  overflow: 'hidden',
                 }}
               >
                 {focusItems.map((_, index) => (
@@ -249,16 +227,25 @@ export default function PopularArea() {
                     />
                     <Box
                       sx={{
-                        width: '100%',
+                        gap: '4px',
+                        display: 'flex',
+                        alignSelf: 'stretch',
+                        flexDirection: 'column',
+                        alignItems: 'flex-start',
                         borderBottomLeftRadius: '8px',
+                        padding: '24px 16px 16px 16px',
                         borderBottomRightRadius: '8px',
                         backgroundColor: 'var(--Primary-, #EBE3DD)',
                       }}
                     >
                       <Typography
                         sx={{
-                          marginLeft: '20px',
-                          marginTop: '10px',
+                          fontWeight: 400,
+                          fontSize: '24px',
+                          overflow: 'hidden',
+                          fontStyle: 'normal',
+                          lineHeight: 'normal',
+                          textOverflow: 'ellipsis',
                           fontFamily: 'DFPHeiBold-B5',
                           color: 'var(--Primary-Black, #212B36)',
                         }}
@@ -268,7 +255,14 @@ export default function PopularArea() {
                       <Typography
                         variant="body2"
                         color="textSecondary"
-                        sx={{ marginLeft: '20px', marginBottom: '20px' }}
+                        sx={{
+                          fontWeight: 400,
+                          fontSize: '16px',
+                          lineHeight: '24px',
+                          fontStyle: 'normal',
+                          fontFamily: 'DFPHeiMedium-B5',
+                          color: 'var(--Text-, #454A4D)',
+                        }}
                       >
                         説明文字
                       </Typography>
@@ -276,45 +270,49 @@ export default function PopularArea() {
                   </Box>
                 ))}
               </Box>
-              <IconButton
-                onClick={handleScrollRight}
-                sx={{
-                  top: '80px',
-                  right: '2px',
-                  '&:hover': {
-                    backgroundColor: 'rgba(204, 0, 0, 0.40)',
-                  },
-                  zIndex: 10,
-                  position: 'absolute',
-                  backgroundColor: 'rgba(204, 0, 0, 0.60)',
-                }}
-              >
-                <ArrowForwardIosRounded
-                  sx={{ width: '18px', height: '18px', color: 'white' }}
-                />
-              </IconButton>
-              <IconButton
-                onClick={handleScrollRight}
-                sx={{
-                  top: '80px',
-                  left: '2px',
-                  '&:hover': {
-                    backgroundColor: 'rgba(204, 0, 0, 0.40)',
-                  },
-                  zIndex: 10,
-                  position: 'absolute',
-                  backgroundColor: 'rgba(204, 0, 0, 0.60)',
-                }}
-              >
-                <ArrowForwardIosRounded
+              {!isFocusScrolledRight && (
+                <IconButton
+                  onClick={handleFocusScrollRight}
                   sx={{
-                    width: '18px',
-                    height: '18px',
-                    color: 'white',
-                    transform: 'scaleX(-1)',
+                    top: '80px',
+                    right: '2px',
+                    '&:hover': {
+                      backgroundColor: 'rgba(204, 0, 0, 0.40)',
+                    },
+                    zIndex: 10,
+                    position: 'absolute',
+                    backgroundColor: 'rgba(204, 0, 0, 0.60)',
                   }}
-                />
-              </IconButton>
+                >
+                  <ArrowForwardIosRounded
+                    sx={{ width: '18px', height: '18px', color: 'white' }}
+                  />
+                </IconButton>
+              )}
+              {!isFocusScrolledLeft && (
+                <IconButton
+                  onClick={handleFocusScrollLeft}
+                  sx={{
+                    top: '80px',
+                    left: '2px',
+                    '&:hover': {
+                      backgroundColor: 'rgba(204, 0, 0, 0.40)',
+                    },
+                    zIndex: 10,
+                    position: 'absolute',
+                    backgroundColor: 'rgba(204, 0, 0, 0.60)',
+                  }}
+                >
+                  <ArrowForwardIosRounded
+                    sx={{
+                      width: '18px',
+                      height: '18px',
+                      color: 'white',
+                      transform: 'scaleX(-1)',
+                    }}
+                  />
+                </IconButton>
+              )}
             </Box>
           </Box>
 
@@ -399,9 +397,7 @@ export default function PopularArea() {
                 sx={{
                   gap: '16px',
                   width: '100%',
-                  cursor: 'grab',
                   display: 'flex',
-                  overflow: 'hidden',
                 }}
               >
                 {recommendedItems.map((_, index) => (
@@ -455,15 +451,14 @@ export default function PopularArea() {
                       </Box>
                       <Typography
                         sx={{
-                          overflow: 'hidden',
-                          color: 'var(--Primary-Black, #212B36)',
-                          textOverflow: 'ellipsis',
-                          whiteSpace: 'nowrap',
-                          fontFamily: 'Open Sans',
+                          fontWeight: 400,
                           fontSize: '16px',
                           fontStyle: 'normal',
-                          fontWeight: 400,
                           lineHeight: 'normal',
+                          whiteSpace: 'nowrap',
+                          fontFamily: 'Open Sans',
+                          textOverflow: 'ellipsis',
+                          color: 'var(--Primary-Black, #212B36)',
                         }}
                       >
                         社工在財務類別的知識中，了解如何...
@@ -587,26 +582,28 @@ export default function PopularArea() {
                           sx={{ padding: '0' }}
                           primary="標題"
                           secondary="內容"
-                          primaryTypographyProps={{
-                            sx: {
-                              fontWeight: 400,
-                              fontSize: '20px',
-                              fontStyle: 'normal',
-                              alignSelf: 'stretch',
-                              lineHeight: 'normal',
-                              fontFamily: 'DFPHeiBold-B5',
-                              color: 'var(--Primary-Black, #212B36)',
+                          slotProps={{
+                            primary: {
+                              sx: {
+                                fontWeight: 400,
+                                fontSize: '20px',
+                                fontStyle: 'normal',
+                                alignSelf: 'stretch',
+                                lineHeight: 'normal',
+                                fontFamily: 'DFPHeiBold-B5',
+                                color: 'var(--Primary-Black, #212B36)',
+                              },
                             },
-                          }}
-                          secondaryTypographyProps={{
-                            sx: {
-                              fontWeight: 400,
-                              fontSize: '16px',
-                              lineHeight: '24px',
-                              fontStyle: 'normal',
-                              alignSelf: 'stretch',
-                              fontFamily: 'DFPHeiMedium-B5',
-                              color: 'var(--Secondary-Dark-Gray, #4A4A4A)',
+                            secondary: {
+                              sx: {
+                                fontWeight: 400,
+                                fontSize: '16px',
+                                lineHeight: '24px',
+                                fontStyle: 'normal',
+                                alignSelf: 'stretch',
+                                fontFamily: 'DFPHeiMedium-B5',
+                                color: 'var(--Secondary-Dark-Gray, #4A4A4A)',
+                              },
                             },
                           }}
                         />
