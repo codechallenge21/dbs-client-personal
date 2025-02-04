@@ -213,7 +213,7 @@ const ChannelSummary = () => {
         })
         .catch(() => {});
     },
-    [selectedChannel, deleteChannel, mutateChannel, handleCloseToolsMenu]
+    [deleteChannel, mutateChannel, handleCloseToolsMenu, organizationChannelId]
   );
 
   const handleEditChannelConfirm = useCallback(
