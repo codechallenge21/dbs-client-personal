@@ -33,6 +33,7 @@ import {
   SettingsInputComponentRounded,
   ArrowBackIosNewRounded,
   HistoryRounded,
+  ArrowDropDownRounded,
 } from '@mui/icons-material';
 import { OrganizationChannel } from '@/interfaces/entities';
 import { useAudioChannel } from '@/utils/hooks/useAudioChannel';
@@ -41,6 +42,9 @@ import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
 import UploadDialog from '@/components/uploadDialog/page';
 import DataSourceDialog from '@/components/chat-page/components/chatDataStore';
 import ReactMarkdown from 'react-markdown';
+import EditDeleteModal from '@/components/dialogs/EditDeleteModal';
+import RenameDialog from '@/components/chat-page/components/renameChat';
+import DeleteConfirmationModal from '@/components/dialogs/DeleteConfirmationModal';
 
 function TabPanel(props: {
   value: number;
@@ -139,6 +143,10 @@ const ChannelSummary = () => {
   const [copiedMessageId, setCopiedMessageId] = React.useState<string | null>(
     null
   );
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [openEditDeleteModal, setOpenEditDeleteModal] =
+    useState<HTMLElement | null>(null);
+  const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
 
   const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
@@ -165,6 +173,30 @@ const ChannelSummary = () => {
         console.error('Failed to copy to clipboard', err);
       }
     );
+  };
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setOpenEditDeleteModal(event.currentTarget);
+  };
+  const handleSave = (newName: string) => {
+    console.log('New name:', newName);
+  };
+
+  const handleClose = () => {
+    setOpenEditDeleteModal(null);
+  };
+
+  const handleConfirmDelete = () => {
+    router.push('/toolbox');
+    setIsDeleteDialogOpen(false);
+  };
+
+  const handleEdit = () => {
+    setIsRenameDialogOpen(true);
+  };
+
+  const handleDelete = () => {
+    setIsDeleteDialogOpen(true);
   };
 
   useEffect(() => {
@@ -347,6 +379,9 @@ const ChannelSummary = () => {
                     >
                       {selectedChannel?.organizationChannelTitle}
                     </Typography>
+                    <IconButton onClick={handleClick}>
+                      <ArrowDropDownRounded sx={{ color: 'black' }} />
+                    </IconButton>
                   </Box>
                   <Box>
                     <IconButton>
@@ -1261,6 +1296,9 @@ const ChannelSummary = () => {
               >
                 {selectedChannel?.organizationChannelTitle}
               </Typography>
+              <IconButton edge="end" color="inherit" onClick={handleClick}>
+                <ArrowDropDownRounded />
+              </IconButton>
             </Box>
             <Box>
               <IconButton>
@@ -2030,6 +2068,36 @@ const ChannelSummary = () => {
       <DataSourceDialog
         open={openDataSource}
         onClose={() => setOpenDataSource(false)}
+      />
+      <DeleteConfirmationModal
+        open={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        onDelete={handleConfirmDelete}
+        channelName={
+          selectedChannel
+            ? [
+                {
+                  ...selectedChannel,
+                  organizationChannelId:
+                    selectedChannel?.organizationChannelId || '',
+                  selected: true,
+                  organization: selectedChannel?.organization || {},
+                },
+              ]
+            : []
+        }
+      />
+      <EditDeleteModal
+        anchorEl={openEditDeleteModal}
+        onClose={handleClose}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+      />
+      <RenameDialog
+        open={isRenameDialogOpen}
+        onClose={() => setIsRenameDialogOpen(false)}
+        onSave={handleSave}
+        initialName=""
       />
     </>
   );
