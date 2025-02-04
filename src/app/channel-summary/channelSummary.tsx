@@ -33,7 +33,6 @@ import {
   SettingsInputComponentRounded,
   ArrowBackIosNewRounded,
   HistoryRounded,
-  ArrowDropDownRounded,
 } from '@mui/icons-material';
 import { OrganizationChannel } from '@/interfaces/entities';
 import { useAudioChannel } from '@/utils/hooks/useAudioChannel';
@@ -42,11 +41,11 @@ import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
 import UploadDialog from '@/components/uploadDialog/page';
 import DataSourceDialog from '@/components/chat-page/components/chatDataStore';
 import ReactMarkdown from 'react-markdown';
-import EditDeleteModal from '@/components/dialogs/EditDeleteModal';
-import RenameDialog from '@/components/chat-page/components/renameChat';
-import DeleteConfirmationModal from '@/components/dialogs/DeleteConfirmationModal';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import apis from '@/utils/hooks/apis/apis';
+import EditableItem from '@/components/editable-item/EditableItem';
+import EditDialog from '@/components/dialogs/EditDialog';
+import DeleteDialog from '@/components/dialogs/DeleteDialog';
 
 function TabPanel(props: {
   value: number;
@@ -145,10 +144,10 @@ const ChannelSummary = () => {
   const [copiedMessageId, setCopiedMessageId] = React.useState<string | null>(
     null
   );
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [openEditDeleteModal, setOpenEditDeleteModal] =
-    useState<HTMLElement | null>(null);
-  const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [toolsAnchor, setToolsAnchor] = useState<null | HTMLElement>(null);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState<boolean>(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
   const { excute: deleteChannel } = useAxiosApi(apis.deleteChannel);
 
   const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
@@ -164,6 +163,8 @@ const ChannelSummary = () => {
     organizationId: '4aba77788ae94eca8d6ff330506af944',
   });
 
+  const { excute: updateChannelDetail } = useAxiosApi(apis.updateChannelDetail);
+
   const copyPrompt = (text: string, messageId: string) => {
     navigator.clipboard.writeText(text).then(
       () => {
@@ -178,35 +179,75 @@ const ChannelSummary = () => {
     );
   };
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setOpenEditDeleteModal(event.currentTarget);
-  };
-  const handleSave = (newName: string) => {
-    console.log('New name:', newName);
-  };
+  const handleCloseToolsMenu = useCallback(() => {
+    setToolsAnchor(null);
+    setActiveIndex(null);
+  }, []);
 
-  const handleClose = () => {
-    setOpenEditDeleteModal(null);
-  };
+  const handleDeleteChannelOpenConfirmDialog = useCallback(
+    (event: React.MouseEvent) => {
+      setToolsAnchor(null);
+      event.stopPropagation();
+      setIsDeleteDialogOpen(true);
+    },
+    []
+  );
 
-  const handleConfirmDelete = useCallback(async () => {
-    deleteChannel({
-      organizationId: '4aba77788ae94eca8d6ff330506af944',
-      organizationChannelId: organizationChannelId || '',
-    })
-      .then(() => {
-        router.push('/toolbox');
-        setIsDeleteDialogOpen(false);
+  const handleCloseDeleteDialog = useCallback((event: React.MouseEvent) => {
+    setToolsAnchor(null);
+    event.stopPropagation();
+    setIsDeleteDialogOpen(false);
+  }, []);
+
+  const handleDeleteChannelConfirm = useCallback(
+    async (event: React.MouseEvent) => {
+      event.stopPropagation();
+      deleteChannel({
+        organizationId: '4aba77788ae94eca8d6ff330506af944',
+        organizationChannelId: organizationChannelId || '',
       })
-      .catch(() => {});
-  }, [deleteChannel, organizationChannelId]);
+        .then(() => {
+          router.push('/toolbox');
+          setIsDeleteDialogOpen(false);
+          handleCloseToolsMenu();
+        })
+        .catch(() => {});
+    },
+    [selectedChannel, deleteChannel, mutateChannel, handleCloseToolsMenu]
+  );
 
-  const handleEdit = () => {
-    setIsRenameDialogOpen(true);
-  };
+  const handleEditChannelConfirm = useCallback(
+    async (newTitle: string) => {
+      await updateChannelDetail({
+        organizationId: '4aba77788ae94eca8d6ff330506af944',
+        organizationChannelId: selectedChannel?.organizationChannelId || '',
+        organizationChannelTitle: newTitle,
+      });
+      setIsEditDialogOpen(false);
+      if (mutateChannel) mutateChannel();
+    },
+    [updateChannelDetail, selectedChannel, mutateChannel]
+  );
 
-  const handleDelete = () => {
-    setIsDeleteDialogOpen(true);
+  const handleOpenEditChannelDialog = useCallback((event: React.MouseEvent) => {
+    event.stopPropagation();
+    setIsEditDialogOpen(true);
+    setToolsAnchor(null);
+  }, []);
+
+  const handleCloseEditDialog = useCallback((event: React.MouseEvent) => {
+    event.stopPropagation();
+    setIsEditDialogOpen(false);
+    setToolsAnchor(null);
+  }, []);
+
+  const handleMenuOpen = (
+    event: React.MouseEvent<HTMLElement>,
+    index: number
+  ) => {
+    event.stopPropagation();
+    setToolsAnchor(event.currentTarget);
+    setActiveIndex(index);
   };
 
   useEffect(() => {
@@ -389,9 +430,20 @@ const ChannelSummary = () => {
                     >
                       {selectedChannel?.organizationChannelTitle}
                     </Typography>
-                    <IconButton onClick={handleClick}>
-                      <ArrowDropDownRounded sx={{ color: 'black' }} />
-                    </IconButton>
+                    <EditableItem
+                      index={0}
+                      isChannelSummary
+                      toolsAnchor={toolsAnchor}
+                      activeIndex={activeIndex}
+                      key={organizationChannelId}
+                      handleMenuOpen={handleMenuOpen}
+                      setToolsAnchor={setToolsAnchor}
+                      handleCloseToolsMenu={handleCloseToolsMenu}
+                      handleOpenEditChannelDialog={handleOpenEditChannelDialog}
+                      handleDeleteChannelOpenConfirmDialog={
+                        handleDeleteChannelOpenConfirmDialog
+                      }
+                    />
                   </Box>
                   <Box>
                     <IconButton>
@@ -1306,9 +1358,20 @@ const ChannelSummary = () => {
               >
                 {selectedChannel?.organizationChannelTitle}
               </Typography>
-              <IconButton edge="end" color="inherit" onClick={handleClick}>
-                <ArrowDropDownRounded />
-              </IconButton>
+              <EditableItem
+                index={0}
+                isChannelSummary
+                toolsAnchor={toolsAnchor}
+                activeIndex={activeIndex}
+                key={organizationChannelId}
+                handleMenuOpen={handleMenuOpen}
+                setToolsAnchor={setToolsAnchor}
+                handleCloseToolsMenu={handleCloseToolsMenu}
+                handleOpenEditChannelDialog={handleOpenEditChannelDialog}
+                handleDeleteChannelOpenConfirmDialog={
+                  handleDeleteChannelOpenConfirmDialog
+                }
+              />
             </Box>
             <Box>
               <IconButton>
@@ -2079,35 +2142,17 @@ const ChannelSummary = () => {
         open={openDataSource}
         onClose={() => setOpenDataSource(false)}
       />
-      <DeleteConfirmationModal
+      <DeleteDialog
         open={isDeleteDialogOpen}
-        onClose={() => setIsDeleteDialogOpen(false)}
-        onDelete={handleConfirmDelete}
-        channelName={
-          selectedChannel
-            ? [
-                {
-                  ...selectedChannel,
-                  organizationChannelId:
-                    selectedChannel?.organizationChannelId || '',
-                  selected: true,
-                  organization: selectedChannel?.organization || {},
-                },
-              ]
-            : []
-        }
+        onClose={handleCloseDeleteDialog}
+        onConfirm={handleDeleteChannelConfirm}
+        deletableName={selectedChannel?.organizationChannelTitle || ''}
       />
-      <EditDeleteModal
-        anchorEl={openEditDeleteModal}
-        onClose={handleClose}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-      />
-      <RenameDialog
-        open={isRenameDialogOpen}
-        onClose={() => setIsRenameDialogOpen(false)}
-        onSave={handleSave}
-        initialName=""
+      <EditDialog
+        open={isEditDialogOpen}
+        onClose={handleCloseEditDialog}
+        onConfirm={handleEditChannelConfirm}
+        editableName={selectedChannel?.organizationChannelTitle || ''}
       />
     </>
   );

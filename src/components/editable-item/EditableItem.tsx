@@ -11,6 +11,7 @@ import {
   EditRounded,
   DeleteRounded,
   MoreVertRounded,
+  ArrowDropDownRounded,
 } from '@mui/icons-material';
 
 const menuActions = [
@@ -56,6 +57,7 @@ const menuActions = [
 
 const EditableItem: React.FC<{
   index: number;
+  isChannelSummary?: boolean;
   activeIndex: number | null;
   toolsAnchor: HTMLElement | null;
   handleCloseToolsMenu: () => void;
@@ -68,6 +70,7 @@ const EditableItem: React.FC<{
   activeIndex,
   toolsAnchor,
   handleMenuOpen,
+  isChannelSummary,
   handleCloseToolsMenu,
   handleOpenEditChannelDialog,
   handleDeleteChannelOpenConfirmDialog,
@@ -78,7 +81,11 @@ const EditableItem: React.FC<{
         sx={{ padding: 0 }}
         onClick={(event) => handleMenuOpen(event, index)}
       >
-        <MoreVertRounded sx={{ color: 'black' }} />
+        {isChannelSummary ? (
+          <ArrowDropDownRounded sx={{ color: 'black' }} />
+        ) : (
+          <MoreVertRounded sx={{ color: 'black' }} />
+        )}
       </IconButton>
       <Menu
         anchorEl={toolsAnchor}
