@@ -350,7 +350,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 borderRadius: '8px',
                 backgroundColor:
                   pathname === item.route ||
-                    (pathname === '/' && item.route === '/chat')
+                  (pathname === '/' && item.route === '/chat')
                     ? 'var(--Action-Selected, rgba(204, 0, 0, 0.20))'
                     : 'transparent',
                 '&:hover': {
@@ -644,6 +644,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
       <MainBox
         open={openDataSource}
         sx={{
+          height: '100vh',
           marginRight: isMobile ? 0 : openDataSource ? '446px' : 0,
           overflow: 'auto',
           marginBottom: '16px',
