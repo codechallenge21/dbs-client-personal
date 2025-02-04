@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Tab,
   Box,
@@ -45,6 +45,8 @@ import ReactMarkdown from 'react-markdown';
 import EditDeleteModal from '@/components/dialogs/EditDeleteModal';
 import RenameDialog from '@/components/chat-page/components/renameChat';
 import DeleteConfirmationModal from '@/components/dialogs/DeleteConfirmationModal';
+import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
+import apis from '@/utils/hooks/apis/apis';
 
 function TabPanel(props: {
   value: number;
@@ -147,6 +149,7 @@ const ChannelSummary = () => {
   const [openEditDeleteModal, setOpenEditDeleteModal] =
     useState<HTMLElement | null>(null);
   const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
+  const { excute: deleteChannel } = useAxiosApi(apis.deleteChannel);
 
   const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
@@ -186,10 +189,17 @@ const ChannelSummary = () => {
     setOpenEditDeleteModal(null);
   };
 
-  const handleConfirmDelete = () => {
-    router.push('/toolbox');
-    setIsDeleteDialogOpen(false);
-  };
+  const handleConfirmDelete = useCallback(async () => {
+    deleteChannel({
+      organizationId: '4aba77788ae94eca8d6ff330506af944',
+      organizationChannelId: organizationChannelId || '',
+    })
+      .then(() => {
+        router.push('/toolbox');
+        setIsDeleteDialogOpen(false);
+      })
+      .catch(() => {});
+  }, [deleteChannel, organizationChannelId]);
 
   const handleEdit = () => {
     setIsRenameDialogOpen(true);
