@@ -15,6 +15,7 @@ import {
 } from '@mui/material';
 import {
   ArrowForwardIosRounded,
+  DownloadRounded,
   MenuRounded,
   WorkRounded,
 } from '@mui/icons-material';
@@ -284,6 +285,11 @@ export default function PopularArea() {
                       alignItems: 'center',
                       flexDirection: 'column',
                       justifyContent: 'center',
+                      '&:hover': {
+                        '& .hover-text': {
+                          color: '#990000',
+                        },
+                      },
                     }}
                   >
                     <Image
@@ -311,6 +317,7 @@ export default function PopularArea() {
                       }}
                     >
                       <Typography
+                        className="hover-text"
                         sx={{
                           fontWeight: 400,
                           fontSize: '24px',
@@ -418,8 +425,17 @@ export default function PopularArea() {
                       display: 'flex',
                       padding: '16px',
                       textAlign: 'center',
+                      borderRadius: '8px',
                       alignItems: 'center',
+                      position: 'relative',
                       flexDirection: 'column',
+                      backgroundColor: 'white',
+                      '&:hover': {
+                        backgroundColor: '#CC00000D',
+                        '& .download-icon': {
+                          display: 'block',
+                        },
+                      },
                     }}
                   >
                     <WorkRounded
@@ -430,6 +446,16 @@ export default function PopularArea() {
                       }}
                     />
                     <Typography variant="body2">工具名称</Typography>
+                    <DownloadRounded
+                      className="download-icon"
+                      sx={{
+                        display: 'none',
+                        position: 'absolute',
+                        top: '8px',
+                        right: '8px',
+                        color: 'black',
+                      }}
+                    />
                   </Box>
                 </Grid2>
               ))}
@@ -491,6 +517,15 @@ export default function PopularArea() {
                       flexDirection: 'column',
                       alignItems: 'flex-start',
                       backgroundColor: 'var(--Primary-, #EBE3DD)',
+                      '&:hover': {
+                        '& .hover-text': {
+                          color: '#990000',
+                        },
+                        '& .hover-icon': {
+                          color: '#990000',
+                          marginLeft: '5px',
+                        },
+                      },
                     }}
                   >
                     <CardContent
@@ -512,6 +547,7 @@ export default function PopularArea() {
                         }}
                       >
                         <Typography
+                          className="hover-text"
                           sx={{
                             fontWeight: 400,
                             fontSize: '14px',
@@ -532,6 +568,7 @@ export default function PopularArea() {
                           }}
                         >
                           <Typography
+                            className="hover-text"
                             sx={{
                               fontWeight: 600,
                               fontSize: '24px',
@@ -544,7 +581,10 @@ export default function PopularArea() {
                             標題
                           </Typography>
                           <IconButton sx={{ padding: '0' }}>
-                            <ArrowForwardIosRounded sx={{ color: 'black' }} />
+                            <ArrowForwardIosRounded
+                              className="hover-icon"
+                              sx={{ color: 'black' }}
+                            />
                           </IconButton>
                         </Box>
                       </Box>
