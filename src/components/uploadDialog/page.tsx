@@ -73,7 +73,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
       console.log('data', data);
 
       router.push(
-        `/channelSummary?organizationChannelId=${data.organizationChannelId}`
+        `/channel-summary?organizationChannelId=${data.organizationChannelId}`
       );
     } catch (error) {
       setError('上傳失敗');
