@@ -422,6 +422,8 @@ export default function PopularArea() {
                   <Box
                     sx={{
                       gap: '20px',
+                      width: '173px',
+                      height: '140px',
                       display: 'flex',
                       padding: '16px',
                       textAlign: 'center',
