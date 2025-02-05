@@ -1,6 +1,15 @@
-import { Geist, Geist_Mono } from 'next/font/google';
+import {
+  Geist,
+  Geist_Mono,
+  Open_Sans,
+  Public_Sans,
+  Inter,
+} from 'next/font/google';
 import './globals.css';
 import ThemeProvider from '@/theme';
+import ChannelContextProvider from '@/components/channel-context-provider/ChannelContextProvider';
+// import { Box } from "@mui/material";
+// import { Header } from "@/components/header";
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -12,11 +21,34 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
+const openSansFont = Open_Sans({
+  weight: ['300', '400', '500', '600', '700', '800'],
+  subsets: ['latin'],
+  variable: '--font-open-sans',
+  adjustFontFallback: false,
+  display: 'swap',
+});
+
+const publicSansFont = Public_Sans({
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+  subsets: ['latin'],
+  variable: '--font-public-sans',
+  adjustFontFallback: false,
+  display: 'swap',
+});
+
+const interFont = Inter({
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+  subsets: ['latin'],
+  variable: '--font-inter',
+  adjustFontFallback: false,
+  display: 'swap',
+});
+
 export const metadata = {
   title: '好理家在｜好好理財，家就會在',
   description: '好理家在官方網站',
   keywords: 'react,material,kit,application,dashboard,admin,template',
-  themeColor: '#000000',
   manifest: '/manifest.json',
   icons: [
     {
@@ -50,8 +82,16 @@ type Props = {
 export default function RootLayout({ children }: Props) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <ThemeProvider>{children}</ThemeProvider>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} ${publicSansFont.variable} ${openSansFont.variable} ${interFont.variable}`}
+      >
+        {/* <Box>
+          <Header />
+        </Box> */}
+        <ThemeProvider>
+          {' '}
+          <ChannelContextProvider>{children}</ChannelContextProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

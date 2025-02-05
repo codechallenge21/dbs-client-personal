@@ -1,7 +1,12 @@
-import { Toolbox } from "@/components/toolbox";
+'use client';
+import React, { Suspense } from 'react';
+import { CircularProgress } from '@mui/material';
+import ChannelsList from './channelsList';
 
-export default function ToolboxPage() {
+export default function SummaryPageWrapper() {
   return (
-   <Toolbox />
+    <Suspense fallback={<CircularProgress />}>
+      <ChannelsList />
+    </Suspense>
   );
 }
