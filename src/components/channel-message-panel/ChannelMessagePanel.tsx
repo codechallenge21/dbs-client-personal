@@ -4,7 +4,15 @@ import type {
   OrganizationChannel,
   OrganizationChannelMessage,
 } from '@/interfaces/entities';
-import { Box, Container, useTheme, useMediaQuery, Avatar } from '@mui/material';
+import {
+  Box,
+  Container,
+  useTheme,
+  useMediaQuery,
+  Avatar,
+  IconButton,
+  Tooltip,
+} from '@mui/material';
 import type { FC } from 'react';
 import ReactMarkdown from 'react-markdown';
 import Image from 'next/image';
@@ -13,8 +21,9 @@ import React from 'react';
 import {
   PermIdentityRounded,
   LibraryBooksRounded,
-  ContentCopy,
+  ContentCopyRounded,
   ThumbUp,
+  Done as DoneIcon,
   ThumbDown,
 } from '@mui/icons-material';
 
@@ -29,6 +38,23 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const [copiedMessageId, setCopiedMessageId] = React.useState<string | null>(
+    null
+  );
+
+  const copyPrompt = (text: string, messageId: string) => {
+    navigator.clipboard.writeText(text).then(
+      () => {
+        setCopiedMessageId(messageId);
+        setTimeout(() => {
+          setCopiedMessageId(null);
+        }, 1000);
+      },
+      (err) => {
+        console.error('Failed to copy to clipboard', err);
+      }
+    );
+  };
 
   const sortedData = channel?.organizationChannelMessageList.sort((a, b) => {
     const dateA = new Date(a.organizationChannelMessageCreateDate ?? '');
@@ -160,16 +186,40 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                     <LibraryBooksRounded sx={{ fontSize: 20 }} />
                     回覆
                   </Box>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 0.5,
-                      cursor: 'pointer',
-                    }}
+                  <Tooltip
+                    title={
+                      copiedMessageId === message.organizationChannelMessageId
+                        ? 'Copied'
+                        : 'Copy'
+                    }
+                    placement="top"
+                    arrow
                   >
-                    <ContentCopy sx={{ fontSize: 20 }} />
-                  </Box>
+                    <IconButton
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 0.5,
+                        cursor: 'pointer',
+                        padding: 0,
+                      }}
+                      onClick={() =>
+                        copyPrompt(
+                          message.organizationChannelMessageContent,
+                          message.organizationChannelMessageId!
+                        )
+                      }
+                    >
+                      {copiedMessageId ===
+                      message.organizationChannelMessageId ? (
+                        <DoneIcon />
+                      ) : (
+                        <ContentCopyRounded
+                          sx={{ color: '#212B36', fontSize: 20 }}
+                        />
+                      )}
+                    </IconButton>
+                  </Tooltip>
                 </Box>
               )}
               <ReactMarkdown>
@@ -278,16 +328,41 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                   <LibraryBooksRounded sx={{ fontSize: 20 }} />
                   回覆
                 </Box>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 0.5,
-                    cursor: 'pointer',
-                  }}
+                <Tooltip
+                  title={
+                    copiedMessageId ===
+                    message.organizationChannelMessageContent
+                      ? 'Copied'
+                      : 'Copy'
+                  }
+                  placement="top"
+                  arrow
                 >
-                  <ContentCopy sx={{ fontSize: 20 }} />
-                </Box>
+                  <IconButton
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 0.5,
+                      cursor: 'pointer',
+                      padding: 0,
+                    }}
+                    onClick={() =>
+                      copyPrompt(
+                        message.organizationChannelMessageContent,
+                        message.organizationChannelMessageContent
+                      )
+                    }
+                  >
+                    {copiedMessageId ===
+                    message.organizationChannelMessageContent ? (
+                      <DoneIcon sx={{ color: '#212B36', fontSize: 20 }} />
+                    ) : (
+                      <ContentCopyRounded
+                        sx={{ color: '#212B36', fontSize: 20 }}
+                      />
+                    )}
+                  </IconButton>
+                </Tooltip>
               </Box>
             )}
             <Box
