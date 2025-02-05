@@ -106,12 +106,6 @@ function ClientContent() {
           backgroundColor: '#FFF',
           overflowY: isMobile ? 'auto' : 'unset',
           height: isMobile ? '100vh' : 'calc(100vh - 32px)',
-          // width: {
-          //   xs: openDataSource ? (isOpenDrawer ? '85%' : '88%') : '100%',
-          //   sm: openDataSource ? (isOpenDrawer ? '80%' : '83%') : '100%',
-          //   md: openDataSource ? (isOpenDrawer ? '75%' : '78%') : '100%',
-          //   lg: openDataSource ? (isOpenDrawer ? '73%' : '76%') : '100%',
-          // },
         }}
       >
         <Header
