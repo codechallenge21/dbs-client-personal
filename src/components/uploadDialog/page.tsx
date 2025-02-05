@@ -17,7 +17,7 @@ import { useRouter } from 'next/navigation';
 import { useDropzone } from 'react-dropzone';
 import apiExports from '@/utils/hooks/apis/apis';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import LoadingScreen from '../loading/page';
 import { CloseRounded, UploadRounded } from '@mui/icons-material';
 
@@ -30,6 +30,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
   const router = useRouter();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [, setFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
   const { excute: createChannelByAudio, isLoading: isCreating } = useAxiosApi(
@@ -88,10 +89,25 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log('handleFileUpload', e.target.files);
     e.preventDefault();
     if (e.target.files && e.target.files.length > 0 && e.target.files?.[0]) {
       validateFile(e.target.files[0]);
       e.target.value = '';
+    }
+  };
+
+  const handleClick = (event: React.MouseEvent) => {
+    event.stopPropagation();
+    if (
+      fileInputRef?.current &&
+      !fileInputRef.current.hasAttribute('data-clicked')
+    ) {
+      fileInputRef.current.setAttribute('data-clicked', 'true');
+      fileInputRef.current.click();
+      setTimeout(() => {
+        fileInputRef?.current?.removeAttribute('data-clicked');
+      }, 1000);
     }
   };
 
@@ -203,7 +219,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
             </Typography>
           )}
           <Button
-            component="label"
+            onClick={handleClick}
             sx={{
               zIndex: 1,
               gap: '8px',
@@ -228,6 +244,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
           >
             {isMobile ? ' 選擇檔案' : '選擇檔案'}
             <input
+              ref={fileInputRef}
               type="file"
               onChange={handleFileUpload}
               accept=".mp3, .mp4, .mpeg, .mpga, .m4a, .wav, .webm"
