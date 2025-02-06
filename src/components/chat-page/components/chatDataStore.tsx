@@ -185,6 +185,7 @@ export default function DataSourceDialog({
           {title}
         </Typography>
         <IconButton
+          role="button"
           aria-label="close"
           onClick={onClose}
           size={isMobile ? 'small' : 'medium'}

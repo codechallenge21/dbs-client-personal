@@ -26,6 +26,7 @@ export default function Header() {
           }}
         >
           <IconButton
+            role="button"
             aria-label="back"
             sx={{ padding: '0px' }}
             onClick={() => {

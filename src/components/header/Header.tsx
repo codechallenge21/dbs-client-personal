@@ -124,6 +124,7 @@ export default function Header() {
       </List>
       <Stack spacing={2} sx={{ p: 2, borderColor: 'divider' }}>
         <Button
+          role="button"
           aria-label="login"
           fullWidth
           variant="contained"
@@ -136,6 +137,7 @@ export default function Header() {
           登入
         </Button>
         <Button
+          role="button"
           aria-label="feedback"
           fullWidth
           variant="outlined"
@@ -189,6 +191,7 @@ export default function Header() {
           >
             {menuItems.map((item) => (
               <Button
+                role="button"
                 aria-label={item.text}
                 key={item.text}
                 endIcon={item.text !== '解決麻煩事' && <ArrowDropDownIcon />}
@@ -226,6 +229,7 @@ export default function Header() {
             sx={{ display: { xs: 'none', md: 'flex' } }}
           >
             <Button
+              role="button"
               aria-label="feedback"
               variant="outlined"
               href="https://forms.gle/Jrq5bDjKzqmp82gQ8"
@@ -239,6 +243,7 @@ export default function Header() {
               意見回饋
             </Button>
             <Button
+              role="button"
               aria-label="login"
               variant="contained"
               sx={{
@@ -253,6 +258,7 @@ export default function Header() {
           </Stack>
 
           <IconButton
+            role="button"
             color="inherit"
             aria-label="open drawer"
             edge="start"

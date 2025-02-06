@@ -77,7 +77,7 @@ export default function InformationPage() {
           <ArrowBack />
           <Typography>回覆</Typography>
         </Box>
-        <IconButton aria-label="copy">
+        <IconButton role="button" aria-label="copy">
           <ContentCopy />
         </IconButton>
       </Box>

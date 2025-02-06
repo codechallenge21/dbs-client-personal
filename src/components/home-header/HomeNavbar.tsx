@@ -24,7 +24,12 @@ export const HomeNavBar = () => {
       >
         <Toolbar disableGutters sx={{ justifyContent: 'space-between' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <IconButton edge="start" color="inherit" aria-label="menu">
+            <IconButton
+              role="button"
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+            >
               <MenuIcon />
             </IconButton>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -48,10 +53,10 @@ export const HomeNavBar = () => {
             </Box>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <IconButton aria-label="search" color="inherit">
+            <IconButton role="button" aria-label="search" color="inherit">
               <SearchIcon />
             </IconButton>
-            <IconButton aria-label="apps" color="inherit">
+            <IconButton role="button" aria-label="apps" color="inherit">
               <AppsIcon />
             </IconButton>
             <Avatar

@@ -384,6 +384,7 @@ const ChannelsList = () => {
                     }}
                   >
                     <IconButton
+                      role="button"
                       aria-label="search"
                       sx={{
                         padding: '8px',
@@ -396,6 +397,7 @@ const ChannelsList = () => {
                       <SearchRounded />
                     </IconButton>
                     <IconButton
+                      role="button"
                       aria-label="Start Recording"
                       sx={{
                         gap: '8px',
@@ -413,6 +415,7 @@ const ChannelsList = () => {
                       <Typography>開始錄音</Typography>
                     </IconButton>
                     <IconButton
+                      role="button"
                       aria-label="Upload File"
                       sx={{
                         gap: '8px',
@@ -729,6 +732,7 @@ const ChannelsList = () => {
                             }}
                           >
                             <IconButton
+                              role="button"
                               aria-label="favorite"
                               sx={{ padding: '0px' }}
                             >
@@ -799,7 +803,7 @@ const ChannelsList = () => {
               background: 'var(--Primary-White, #FFF)',
             }}
           >
-            <IconButton aria-label="menu">
+            <IconButton role="button" aria-label="menu">
               <MenuRounded sx={{ color: 'black' }} />
             </IconButton>
             <Typography
@@ -903,10 +907,11 @@ const ChannelsList = () => {
               justifyContent: 'flex-end',
             }}
           >
-            <IconButton aria-label="search">
+            <IconButton role="button" aria-label="search">
               <SearchRounded sx={{ color: '#212B36' }} />
             </IconButton>
             <Button
+              role="button"
               aria-label="Start Recording"
               sx={{
                 gap: '8px',
@@ -935,6 +940,7 @@ const ChannelsList = () => {
               </Typography>
             </Button>
             <Button
+              role="button"
               aria-label="Upload File"
               sx={{
                 gap: '8px',
@@ -1035,6 +1041,7 @@ const ChannelsList = () => {
                     }}
                   >
                     <IconButton
+                      role="button"
                       aria-label="favorite"
                       onClick={(e) => {
                         e.stopPropagation();

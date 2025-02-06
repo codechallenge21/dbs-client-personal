@@ -109,21 +109,33 @@ const SingleComment = ({ comment }: SingleCommentProps) => (
     {/* Action Buttons */}
     <Stack direction="row" alignItems="center" spacing={2}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-        <IconButton aria-label="Like" sx={{ color: 'white', py: 0, pl: 0 }}>
+        <IconButton
+          role="button"
+          aria-label="Like"
+          sx={{ color: 'white', py: 0, pl: 0 }}
+        >
           <ThumbUpOutlinedIcon />
         </IconButton>
         <Typography>{comment.likes}</Typography>
       </Box>
 
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-        <IconButton aria-label="Dislike" sx={{ color: 'white', py: 0 }}>
+        <IconButton
+          role="button"
+          aria-label="Dislike"
+          sx={{ color: 'white', py: 0 }}
+        >
           <ThumbDownOutlinedIcon />
         </IconButton>
         <Typography>{comment.dislikes}</Typography>
       </Box>
 
       <Box>
-        <IconButton aria-label="Comment" sx={{ color: 'white', py: 0 }}>
+        <IconButton
+          role="button"
+          aria-label="Comment"
+          sx={{ color: 'white', py: 0 }}
+        >
           <ChatBubbleOutlineOutlinedIcon />
         </IconButton>
       </Box>

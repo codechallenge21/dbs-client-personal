@@ -33,6 +33,7 @@ const DeleteDialog: React.FC<DeleteDialogProps> = ({
 
   return (
     <Dialog
+      role="dialog"
       open={open}
       onClose={onClose}
       slotProps={{
@@ -71,6 +72,7 @@ const DeleteDialog: React.FC<DeleteDialogProps> = ({
           刪除紀錄
         </Typography>
         <IconButton
+          role="button"
           aria-label="close"
           onClick={onClose}
           sx={{
@@ -108,6 +110,7 @@ const DeleteDialog: React.FC<DeleteDialogProps> = ({
         }}
       >
         <Button
+          role="button"
           aria-label="Delete"
           variant="contained"
           color="primary"

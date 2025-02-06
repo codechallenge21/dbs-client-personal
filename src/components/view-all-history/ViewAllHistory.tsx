@@ -194,6 +194,7 @@ export default function ChannelSearchCombined() {
                   您目前有 <span>{filteredChannels.length ?? 0}</span> 個頻道
                 </Typography>
                 <Button
+                  role="button"
                   aria-label="Select"
                   variant="text"
                   onClick={handleToggleV2}
@@ -334,6 +335,7 @@ export default function ChannelSearchCombined() {
                       </Typography>
                       {isHoveredOrSelected && (
                         <IconButton
+                          role="button"
                           size="small"
                           sx={{
                             color: '#CC0000',
@@ -417,6 +419,7 @@ export default function ChannelSearchCombined() {
                   全選
                 </Box>
                 <Button
+                  role="button"
                   aria-label="Cancel"
                   variant="outlined"
                   sx={{
@@ -435,6 +438,7 @@ export default function ChannelSearchCombined() {
                   取消
                 </Button>
                 <Button
+                  role="button"
                   aria-label="Delete"
                   variant="contained"
                   disabled={selectedChannels.length === 0}
@@ -561,6 +565,7 @@ export default function ChannelSearchCombined() {
                       ).toLocaleString()}
                     </Typography>
                     <IconButton
+                      role="button"
                       size="small"
                       sx={{
                         color: '#CC0000',

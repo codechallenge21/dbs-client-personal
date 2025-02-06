@@ -410,6 +410,7 @@ const ChannelSummary = () => {
                     }}
                   >
                     <IconButton
+                      role="button"
                       aria-label="back"
                       onClick={handleBackButtonClick}
                     >
@@ -445,10 +446,11 @@ const ChannelSummary = () => {
                     />
                   </Box>
                   <Box>
-                    <IconButton aria-label="Add Favorite">
+                    <IconButton role="button" aria-label="Add Favorite">
                       <StarBorderRounded sx={{ color: 'black' }} />
                     </IconButton>
                     <IconButton
+                      role="button"
                       aria-label="Open Data Source"
                       onClick={() => setOpenDataSource(!openDataSource)}
                     >
@@ -536,6 +538,7 @@ const ChannelSummary = () => {
                               arrow
                             >
                               <IconButton
+                                role="button"
                                 aria-label="Copy"
                                 onClick={() =>
                                   selectedChannel
@@ -563,7 +566,7 @@ const ChannelSummary = () => {
                                 )}
                               </IconButton>
                             </Tooltip>
-                            <IconButton aria-label="Like">
+                            <IconButton role="button" aria-label="Like">
                               <ThumbDownOffAltRounded
                                 sx={{
                                   color: 'black',
@@ -572,7 +575,7 @@ const ChannelSummary = () => {
                               />
                             </IconButton>
 
-                            <IconButton aria-label="Dislike">
+                            <IconButton role="button" aria-label="Dislike">
                               <ThumbDownOffAltRounded sx={{ color: 'black' }} />
                             </IconButton>
                           </Box>
@@ -639,6 +642,7 @@ const ChannelSummary = () => {
                           </Typography>
                           {aIAnalysisTabValue === 1 && (
                             <Button
+                              role="button"
                               aria-label="Regenerate"
                               sx={{
                                 gap: '8px',
@@ -739,6 +743,7 @@ const ChannelSummary = () => {
                                 arrow
                               >
                                 <IconButton
+                                  role="button"
                                   aria-label="Copy"
                                   onClick={() =>
                                     selectedChannel
@@ -769,7 +774,7 @@ const ChannelSummary = () => {
                                   )}
                                 </IconButton>
                               </Tooltip>
-                              <IconButton aria-label="Like">
+                              <IconButton role="button" aria-label="Like">
                                 <ThumbDownOffAltRounded
                                   sx={{
                                     color: 'black',
@@ -777,12 +782,12 @@ const ChannelSummary = () => {
                                   }}
                                 />
                               </IconButton>
-                              <IconButton aria-label="Dislike">
+                              <IconButton role="button" aria-label="Dislike">
                                 <ThumbDownOffAltRounded
                                   sx={{ color: 'black' }}
                                 />
                               </IconButton>
-                              <IconButton aria-label="Regenerate">
+                              <IconButton role="button" aria-label="Regenerate">
                                 <SyncRounded sx={{ color: 'black' }} />
                               </IconButton>
                             </Box>
@@ -883,10 +888,10 @@ const ChannelSummary = () => {
                                   justifyContent: 'space-between',
                                 }}
                               >
-                                <IconButton aria-label="Copy">
+                                <IconButton role="button" aria-label="Copy">
                                   <ContentCopyRounded sx={{ color: 'black' }} />
                                 </IconButton>
-                                <IconButton aria-label="Like">
+                                <IconButton role="button" aria-label="Like">
                                   <ThumbDownOffAltRounded
                                     sx={{
                                       color: 'black',
@@ -894,12 +899,12 @@ const ChannelSummary = () => {
                                     }}
                                   />
                                 </IconButton>
-                                <IconButton aria-label="Dislike">
+                                <IconButton role="button" aria-label="Dislike">
                                   <ThumbDownOffAltRounded
                                     sx={{ color: 'black' }}
                                   />
                                 </IconButton>
-                                <IconButton aria-label="Pin">
+                                <IconButton role="button" aria-label="Pin">
                                   <PushPinRounded sx={{ color: 'black' }} />
                                 </IconButton>
                               </Box>
@@ -1042,6 +1047,7 @@ const ChannelSummary = () => {
                                           {item.title}
                                         </Typography>
                                         <IconButton
+                                          role="button"
                                           aria-label="More Details"
                                           sx={{ padding: '0px' }}
                                         >
@@ -1155,6 +1161,7 @@ const ChannelSummary = () => {
                                           {item.title}
                                         </Typography>
                                         <IconButton
+                                          role="button"
                                           aria-label="More Details"
                                           sx={{ padding: '0px' }}
                                         >
@@ -1268,6 +1275,7 @@ const ChannelSummary = () => {
                                           {item.title}
                                         </Typography>
                                         <IconButton
+                                          role="button"
                                           aria-label="More Details"
                                           sx={{ padding: '0px' }}
                                         >
@@ -1334,6 +1342,7 @@ const ChannelSummary = () => {
             }}
           >
             <IconButton
+              role="button"
               aria-label="back"
               sx={{
                 padding: '8px',
@@ -1385,13 +1394,13 @@ const ChannelSummary = () => {
               />
             </Box>
             <Box>
-              <IconButton aria-label="Add Favorite">
+              <IconButton role="button" aria-label="Add Favorite">
                 <StarBorderRounded sx={{ color: '#212B36' }} />
               </IconButton>
-              <IconButton aria-label="History">
+              <IconButton role="button" aria-label="History">
                 <HistoryRounded sx={{ color: '#212B36' }} />
               </IconButton>
-              <IconButton aria-label="Open Data Source">
+              <IconButton role="button" aria-label="Open Data Source">
                 <SettingsInputComponentRounded sx={{ color: '#212B36' }} />
               </IconButton>
             </Box>
@@ -1430,6 +1439,7 @@ const ChannelSummary = () => {
                   arrow
                 >
                   <IconButton
+                    role="button"
                     aria-label="Copy"
                     onClick={() =>
                       selectedChannel?.organizationChannelTranscriptList[0]
@@ -1453,7 +1463,7 @@ const ChannelSummary = () => {
                     )}
                   </IconButton>
                 </Tooltip>
-                <IconButton aria-label="Like">
+                <IconButton role="button" aria-label="Like">
                   <ThumbDownOffAltRounded
                     sx={{
                       color: '#212B36',
@@ -1461,7 +1471,7 @@ const ChannelSummary = () => {
                     }}
                   />
                 </IconButton>
-                <IconButton aria-label="Dislike">
+                <IconButton role="button" aria-label="Dislike">
                   <ThumbDownOffAltRounded sx={{ color: '#212B36' }} />
                 </IconButton>
               </Box>
@@ -1496,6 +1506,7 @@ const ChannelSummary = () => {
               </Typography>
               {aIAnalysisTabValue === 1 && (
                 <Button
+                  role="button"
                   aria-label="Regenerate"
                   sx={{
                     gap: '8px',
@@ -1609,6 +1620,7 @@ const ChannelSummary = () => {
                     arrow
                   >
                     <IconButton
+                      role="button"
                       aria-label="Copy"
                       onClick={() =>
                         selectedChannel?.organizationChannelMessageList[0]
@@ -1634,7 +1646,7 @@ const ChannelSummary = () => {
                       )}
                     </IconButton>
                   </Tooltip>
-                  <IconButton aria-label="Like">
+                  <IconButton role="button" aria-label="Like">
                     <ThumbDownOffAltRounded
                       sx={{
                         color: 'black',
@@ -1642,10 +1654,10 @@ const ChannelSummary = () => {
                       }}
                     />
                   </IconButton>
-                  <IconButton aria-label="Dislike">
+                  <IconButton role="button" aria-label="Dislike">
                     <ThumbDownOffAltRounded sx={{ color: 'black' }} />
                   </IconButton>
-                  <IconButton aria-label="Regenerate">
+                  <IconButton role="button" aria-label="Regenerate">
                     <SyncRounded sx={{ color: 'black' }} />
                   </IconButton>
                 </Box>
@@ -1744,10 +1756,10 @@ const ChannelSummary = () => {
                       justifyContent: 'space-between',
                     }}
                   >
-                    <IconButton aria-label="Copy">
+                    <IconButton role="button" aria-label="Copy">
                       <ContentCopyRounded sx={{ color: 'black' }} />
                     </IconButton>
-                    <IconButton aria-label="Like">
+                    <IconButton role="button" aria-label="Like">
                       <ThumbDownOffAltRounded
                         sx={{
                           color: 'black',
@@ -1755,10 +1767,10 @@ const ChannelSummary = () => {
                         }}
                       />
                     </IconButton>
-                    <IconButton aria-label="Dislike">
+                    <IconButton role="button" aria-label="Dislike">
                       <ThumbDownOffAltRounded sx={{ color: 'black' }} />
                     </IconButton>
-                    <IconButton aria-label="Pin">
+                    <IconButton role="button" aria-label="Pin">
                       <PushPinRounded sx={{ color: 'black' }} />
                     </IconButton>
                   </Box>
@@ -1902,6 +1914,7 @@ const ChannelSummary = () => {
                               {item.title}
                             </Typography>
                             <IconButton
+                              role="button"
                               aria-label="More Details"
                               sx={{ padding: '0px' }}
                             >
@@ -2013,6 +2026,7 @@ const ChannelSummary = () => {
                               {item.title}
                             </Typography>
                             <IconButton
+                              role="button"
                               aria-label="More Details"
                               sx={{ padding: '0px' }}
                             >
@@ -2124,6 +2138,7 @@ const ChannelSummary = () => {
                               {item.title}
                             </Typography>
                             <IconButton
+                              role="button"
                               aria-label="More Details"
                               sx={{ padding: '0px' }}
                             >

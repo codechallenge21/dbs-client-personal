@@ -25,6 +25,7 @@ export default function DeleteConfirmationModal({
       : null;
   return (
     <Modal
+      role="dialog"
       open={open}
       onClose={onClose}
       aria-labelledby="delete-modal-title"
@@ -48,6 +49,7 @@ export default function DeleteConfirmationModal({
       >
         {/* Close Button */}
         <IconButton
+          role="button"
           onClick={onClose}
           sx={{
             position: 'absolute',
@@ -106,6 +108,7 @@ export default function DeleteConfirmationModal({
           }}
         >
           <Button
+            role="button"
             aria-label="Delete"
             variant="contained"
             onClick={onDelete}
