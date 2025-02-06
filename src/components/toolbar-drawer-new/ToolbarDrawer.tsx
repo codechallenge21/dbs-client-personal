@@ -297,7 +297,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                   lineHeight: 'normal',
                 }}
               >
-                New Chat
+                AI問答
               </Typography>
             </Button>
           </ListItem>
@@ -340,8 +340,8 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 borderRadius: '8px',
                 backgroundColor:
                   pathname === item.route ||
-                  (pathname === '/' && item.route === '/chat') ||
-                  (pathname === '/channel-summary' && item.route === '/toolbox')
+                    (pathname === '/' && item.route === '/chat') ||
+                    (pathname === '/channel-summary' && item.route === '/toolbox')
                     ? 'var(--Action-Selected, rgba(204, 0, 0, 0.20))'
                     : 'transparent',
                 '&:hover': {
