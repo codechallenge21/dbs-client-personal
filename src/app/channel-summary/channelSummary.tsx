@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Tab,
   Box,
@@ -28,7 +28,6 @@ import {
   ContentCopyRounded,
   PermIdentityRounded,
   ArrowBackIosRounded,
-  ArrowDropDownRounded,
   ArrowForwardIosRounded,
   ThumbDownOffAltRounded,
   SettingsInputComponentRounded,
@@ -42,6 +41,11 @@ import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
 import UploadDialog from '@/components/uploadDialog/page';
 import DataSourceDialog from '@/components/chat-page/components/chatDataStore';
 import ReactMarkdown from 'react-markdown';
+import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
+import apis from '@/utils/hooks/apis/apis';
+import EditableItem from '@/components/editable-item/EditableItem';
+import EditDialog from '@/components/dialogs/EditDialog';
+import DeleteDialog from '@/components/dialogs/DeleteDialog';
 
 function TabPanel(props: {
   value: number;
@@ -60,7 +64,6 @@ const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: '#fff',
   ...theme.typography.body2,
   padding: theme.spacing(1),
-  textAlign: 'center',
   color: theme.palette.text.secondary,
   ...theme.applyStyles('dark', {
     backgroundColor: '#1A2027',
@@ -141,6 +144,11 @@ const ChannelSummary = () => {
   const [copiedMessageId, setCopiedMessageId] = React.useState<string | null>(
     null
   );
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [toolsAnchor, setToolsAnchor] = useState<null | HTMLElement>(null);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState<boolean>(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
+  const { excute: deleteChannel } = useAxiosApi(apis.deleteChannel);
 
   const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
@@ -155,6 +163,8 @@ const ChannelSummary = () => {
     organizationId: '4aba77788ae94eca8d6ff330506af944',
   });
 
+  const { excute: updateChannelDetail } = useAxiosApi(apis.updateChannelDetail);
+
   const copyPrompt = (text: string, messageId: string) => {
     navigator.clipboard.writeText(text).then(
       () => {
@@ -167,6 +177,77 @@ const ChannelSummary = () => {
         console.error('Failed to copy to clipboard', err);
       }
     );
+  };
+
+  const handleCloseToolsMenu = useCallback(() => {
+    setToolsAnchor(null);
+    setActiveIndex(null);
+  }, []);
+
+  const handleDeleteChannelOpenConfirmDialog = useCallback(
+    (event: React.MouseEvent) => {
+      setToolsAnchor(null);
+      event.stopPropagation();
+      setIsDeleteDialogOpen(true);
+    },
+    []
+  );
+
+  const handleCloseDeleteDialog = useCallback((event: React.MouseEvent) => {
+    setToolsAnchor(null);
+    event.stopPropagation();
+    setIsDeleteDialogOpen(false);
+  }, []);
+
+  const handleDeleteChannelConfirm = useCallback(
+    async (event: React.MouseEvent) => {
+      event.stopPropagation();
+      deleteChannel({
+        organizationId: '4aba77788ae94eca8d6ff330506af944',
+        organizationChannelId: organizationChannelId || '',
+      })
+        .then(() => {
+          router.push('/toolbox');
+          setIsDeleteDialogOpen(false);
+          handleCloseToolsMenu();
+        })
+        .catch(() => { });
+    },
+    [deleteChannel, mutateChannel, handleCloseToolsMenu, organizationChannelId]
+  );
+
+  const handleEditChannelConfirm = useCallback(
+    async (newTitle: string) => {
+      await updateChannelDetail({
+        organizationId: '4aba77788ae94eca8d6ff330506af944',
+        organizationChannelId: selectedChannel?.organizationChannelId || '',
+        organizationChannelTitle: newTitle,
+      });
+      setIsEditDialogOpen(false);
+      if (mutateChannel) mutateChannel();
+    },
+    [updateChannelDetail, selectedChannel, mutateChannel]
+  );
+
+  const handleOpenEditChannelDialog = useCallback((event: React.MouseEvent) => {
+    event.stopPropagation();
+    setIsEditDialogOpen(true);
+    setToolsAnchor(null);
+  }, []);
+
+  const handleCloseEditDialog = useCallback((event: React.MouseEvent) => {
+    event.stopPropagation();
+    setIsEditDialogOpen(false);
+    setToolsAnchor(null);
+  }, []);
+
+  const handleMenuOpen = (
+    event: React.MouseEvent<HTMLElement>,
+    index: number
+  ) => {
+    event.stopPropagation();
+    setToolsAnchor(event.currentTarget);
+    setActiveIndex(index);
   };
 
   useEffect(() => {
@@ -341,7 +422,6 @@ const ChannelSummary = () => {
                         fontSize: '16px',
                         overflow: 'hidden',
                         fontStyle: 'normal',
-                        textAlign: 'center',
                         fontFamily: 'Inter',
                         lineHeight: 'normal',
                         textOverflow: 'ellipsis',
@@ -350,9 +430,20 @@ const ChannelSummary = () => {
                     >
                       {selectedChannel?.organizationChannelTitle}
                     </Typography>
-                    <IconButton>
-                      <ArrowDropDownRounded sx={{ color: 'black' }} />
-                    </IconButton>
+                    <EditableItem
+                      index={0}
+                      isChannelSummary
+                      toolsAnchor={toolsAnchor}
+                      activeIndex={activeIndex}
+                      key={organizationChannelId}
+                      handleMenuOpen={handleMenuOpen}
+                      setToolsAnchor={setToolsAnchor}
+                      handleCloseToolsMenu={handleCloseToolsMenu}
+                      handleOpenEditChannelDialog={handleOpenEditChannelDialog}
+                      handleDeleteChannelOpenConfirmDialog={
+                        handleDeleteChannelOpenConfirmDialog
+                      }
+                    />
                   </Box>
                   <Box>
                     <IconButton>
@@ -392,7 +483,6 @@ const ChannelSummary = () => {
                         variant="outlined"
                         sx={{
                           padding: '16px 16px 16px 32px',
-                          textAlign: 'start',
                         }}
                       >
                         <Typography
@@ -426,7 +516,6 @@ const ChannelSummary = () => {
                               color: 'var(--Primary-Black, #212B36)',
                             }}
                           >
-                            原稿
                           </Typography>
                           <Box
                             sx={{
@@ -438,9 +527,9 @@ const ChannelSummary = () => {
                             <Tooltip
                               title={
                                 copiedMessageId ===
-                                selectedChannel
-                                  ?.organizationChannelTranscriptList[0]
-                                  ?.organizationChannelTranscriptId
+                                  selectedChannel
+                                    ?.organizationChannelTranscriptList[0]
+                                    ?.organizationChannelTranscriptId
                                   ? 'Copied'
                                   : 'Copy'
                               }
@@ -463,9 +552,9 @@ const ChannelSummary = () => {
                                 }
                               >
                                 {copiedMessageId ===
-                                selectedChannel
-                                  ?.organizationChannelTranscriptList[0]
-                                  ?.organizationChannelTranscriptId ? (
+                                  selectedChannel
+                                    ?.organizationChannelTranscriptList[0]
+                                    ?.organizationChannelTranscriptId ? (
                                   <DoneIcon />
                                 ) : (
                                   <ContentCopyRounded
@@ -524,7 +613,6 @@ const ChannelSummary = () => {
                         variant="outlined"
                         sx={{
                           padding: '16px 16px 16px 32px',
-                          textAlign: 'start',
                         }}
                       >
                         {' '}
@@ -627,34 +715,22 @@ const ChannelSummary = () => {
                               padding: '0',
                               display: 'flex',
                               alignItems: 'center',
-                              justifyContent: 'space-between',
+                              justifyContent: 'flex-end',
                             }}
                           >
-                            <Typography
-                              sx={{
-                                fontWeight: 400,
-                                fontSize: '16px',
-                                fontStyle: 'normal',
-                                lineHeight: 'normal',
-                                fontFamily: 'DFPHeiBold-B5',
-                                color: 'var(--Primary-Black, #212B36)',
-                              }}
-                            >
-                              原稿
-                            </Typography>
                             <Box
                               sx={{
                                 display: 'flex',
-                                alignItems: 'center',
+                                // alignItems: 'center',
                                 justifyContent: 'space-between',
                               }}
                             >
                               <Tooltip
                                 title={
                                   copiedMessageId ===
-                                  selectedChannel
-                                    ?.organizationChannelMessageList[0]
-                                    ?.organizationChannelMessageId
+                                    selectedChannel
+                                      ?.organizationChannelMessageList[0]
+                                      ?.organizationChannelMessageId
                                     ? 'Copied'
                                     : 'Copy'
                                 }
@@ -680,9 +756,9 @@ const ChannelSummary = () => {
                                   }
                                 >
                                   {copiedMessageId ===
-                                  selectedChannel
-                                    ?.organizationChannelMessageList[0]
-                                    ?.organizationChannelMessageId ? (
+                                    selectedChannel
+                                      ?.organizationChannelMessageList[0]
+                                      ?.organizationChannelMessageId ? (
                                     <DoneIcon />
                                   ) : (
                                     <ContentCopyRounded
@@ -1281,9 +1357,20 @@ const ChannelSummary = () => {
               >
                 {selectedChannel?.organizationChannelTitle}
               </Typography>
-              <IconButton edge="end" color="inherit">
-                <ArrowDropDownRounded />
-              </IconButton>
+              <EditableItem
+                index={0}
+                isChannelSummary
+                toolsAnchor={toolsAnchor}
+                activeIndex={activeIndex}
+                key={organizationChannelId}
+                handleMenuOpen={handleMenuOpen}
+                setToolsAnchor={setToolsAnchor}
+                handleCloseToolsMenu={handleCloseToolsMenu}
+                handleOpenEditChannelDialog={handleOpenEditChannelDialog}
+                handleDeleteChannelOpenConfirmDialog={
+                  handleDeleteChannelOpenConfirmDialog
+                }
+              />
             </Box>
             <Box>
               <IconButton>
@@ -1314,28 +1401,16 @@ const ChannelSummary = () => {
             <Box
               sx={{
                 display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
+                // alignItems: 'center',
+                justifyContent: 'flex-end',
               }}
             >
-              <Typography
-                sx={{
-                  fontWeight: 400,
-                  fontSize: '16px',
-                  fontStyle: 'normal',
-                  lineHeight: 'normal',
-                  fontFamily: 'DFPHeiBold-B5',
-                  color: 'var(--Primary-Black, #212B36)',
-                }}
-              >
-                原稿
-              </Typography>
               <Box>
                 <Tooltip
                   title={
                     copiedMessageId ===
-                    selectedChannel?.organizationChannelTranscriptList[0]
-                      ?.organizationChannelTranscriptId
+                      selectedChannel?.organizationChannelTranscriptList[0]
+                        ?.organizationChannelTranscriptId
                       ? 'Copied'
                       : 'Copy'
                   }
@@ -1355,8 +1430,8 @@ const ChannelSummary = () => {
                     }
                   >
                     {copiedMessageId ===
-                    selectedChannel?.organizationChannelTranscriptList[0]
-                      ?.organizationChannelTranscriptId ? (
+                      selectedChannel?.organizationChannelTranscriptList[0]
+                        ?.organizationChannelTranscriptId ? (
                       <DoneIcon />
                     ) : (
                       <ContentCopyRounded
@@ -1511,8 +1586,8 @@ const ChannelSummary = () => {
                   <Tooltip
                     title={
                       copiedMessageId ===
-                      selectedChannel?.organizationChannelMessageList[0]
-                        ?.organizationChannelMessageId
+                        selectedChannel?.organizationChannelMessageList[0]
+                          ?.organizationChannelMessageId
                         ? 'Copied'
                         : 'Copy'
                     }
@@ -1534,8 +1609,8 @@ const ChannelSummary = () => {
                       }
                     >
                       {copiedMessageId ===
-                      selectedChannel?.organizationChannelMessageList[0]
-                        ?.organizationChannelMessageId ? (
+                        selectedChannel?.organizationChannelMessageList[0]
+                          ?.organizationChannelMessageId ? (
                         <DoneIcon />
                       ) : (
                         <ContentCopyRounded
@@ -2065,6 +2140,18 @@ const ChannelSummary = () => {
       <DataSourceDialog
         open={openDataSource}
         onClose={() => setOpenDataSource(false)}
+      />
+      <DeleteDialog
+        open={isDeleteDialogOpen}
+        onClose={handleCloseDeleteDialog}
+        onConfirm={handleDeleteChannelConfirm}
+        deletableName={selectedChannel?.organizationChannelTitle || ''}
+      />
+      <EditDialog
+        open={isEditDialogOpen}
+        onClose={handleCloseEditDialog}
+        onConfirm={handleEditChannelConfirm}
+        editableName={selectedChannel?.organizationChannelTitle || ''}
       />
     </>
   );
