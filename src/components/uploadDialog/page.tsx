@@ -71,8 +71,6 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
 
       const { data } = res;
 
-      console.log('data', data);
-
       router.push(
         `/channel-summary?organizationChannelId=${data.organizationChannelId}`
       );
@@ -89,7 +87,6 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('handleFileUpload', e.target.files);
     e.preventDefault();
     if (e.target.files && e.target.files.length > 0 && e.target.files?.[0]) {
       validateFile(e.target.files[0]);
