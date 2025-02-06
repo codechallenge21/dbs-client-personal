@@ -931,6 +931,7 @@ const ChannelSummary = () => {
                                 }}
                               >
                                 <TextareaAutosize
+                                  aria-label="Ask the AI"
                                   minRows={1}
                                   maxRows={10}
                                   style={{
@@ -1798,6 +1799,7 @@ const ChannelSummary = () => {
                     }}
                   >
                     <TextareaAutosize
+                      aria-label="Ask the AI"
                       minRows={1}
                       maxRows={10}
                       style={{

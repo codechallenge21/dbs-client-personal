@@ -135,6 +135,7 @@ export default function ChannelSearchCombined() {
       >
         {/* Search Input */}
         <TextField
+          aria-label="Search Channel"
           fullWidth
           placeholder="搜尋頻道"
           value={searchQuery}

@@ -74,6 +74,7 @@ export default function RenameDialog({
       </DialogTitle>
       <DialogContent sx={{ padding: '0 24px' }}>
         <TextField
+          aria-label="Add New Name"
           fullWidth
           placeholder="新名字"
           value={newName}

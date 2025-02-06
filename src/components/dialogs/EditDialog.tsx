@@ -93,6 +93,7 @@ const EditDialog: React.FC<EditDialogProps> = ({
 
       <DialogContent sx={{ padding: 0 }}>
         <TextField
+          aria-label="Edit Name"
           id="edit-dialog-name-input"
           data-tid="edit-dialog-name-input"
           sx={{

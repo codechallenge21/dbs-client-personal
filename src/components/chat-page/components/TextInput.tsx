@@ -405,6 +405,7 @@ const TextInput: React.FC<TextInputProps> = ({
           }}
         >
           <TextareaAutosize
+            aria-label="Ask the AI"
             minRows={1}
             // maxRows={10}
             placeholder="傳訊息給智能顧問"
