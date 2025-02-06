@@ -13,7 +13,6 @@ import {
 } from '@mui/material';
 import {
   AccountBalanceWalletRounded,
-  ArrowDropDownRounded,
   BusinessCenterRounded,
   LocalHospitalRounded,
   MoneyOffRounded,
@@ -22,11 +21,13 @@ import {
 } from '@mui/icons-material';
 import { AdvisorType } from '../../../app/chat/types';
 import ChannelContentContext from '../../channel-context-provider/ChannelContentContext';
-import EditDeleteModal from '../../dialogs/EditDeleteModal';
-import DeleteConfirmationModal from '@/components/dialogs/DeleteConfirmationModal';
-import RenameDialog from './renameChat';
 import { useRouter } from 'next/navigation';
 import SupportAgentIcon from '@mui/icons-material/SupportAgent';
+import EditableItem from '@/components/editable-item/EditableItem';
+import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
+import apis from '@/utils/hooks/apis/apis';
+import DeleteDialog from '@/components/dialogs/DeleteDialog';
+import EditDialog from '@/components/dialogs/EditDialog';
 
 const listItems = [
   {
@@ -84,48 +85,127 @@ export default function DropdownMenu({
   const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const { setAdvisorType, chatResponses, selectedChannel } = useContext(
-    ChannelContentContext
-  );
+  const {
+    setAdvisorType,
+    chatResponses,
+    selectedChannel,
+    selectedChannelId,
+    setSelectedChannel,
+    setSelectedChannelId,
+  } = useContext(ChannelContentContext);
 
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [toolsAnchor, setToolsAnchor] = useState<null | HTMLElement>(null);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [openEditDeleteModal, setOpenEditDeleteModal] =
-    useState<HTMLElement | null>(null);
-  const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
+  const [toolsAnchorDeleteEdit, setToolsAnchorDeleteEdit] =
+    useState<null | HTMLElement>(null);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState<boolean>(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
+  const { excute: deleteChannel } = useAxiosApi(apis.deleteChannel);
+  const { excute: updateChannelDetail } = useAxiosApi(apis.updateChannelDetail);
+  const { excute: getChannelDetail } = useAxiosApi(apis.getChannelDetail);
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setOpenEditDeleteModal(event.currentTarget);
-  };
-
-  const handleSave = (newName: string) => {
-    console.log('New name:', newName);
-  };
-
-  const handleClose = () => {
-    setOpenEditDeleteModal(null);
-  };
-
-  const handleConfirmDelete = () => {
-    router.push('/');
-    setIsDeleteDialogOpen(false);
-  };
-
-  const handleEdit = () => {
-    setIsRenameDialogOpen(true);
-  };
-
-  const handleDelete = () => {
-    setIsDeleteDialogOpen(true);
-  };
+  const fetchChannelDetail = useCallback(
+    async (organizationChannelId: string) => {
+      try {
+        const res = await getChannelDetail({
+          organizationId: '4aba77788ae94eca8d6ff330506af944',
+          organizationChannelId,
+        });
+        setSelectedChannel(res.data);
+        setSelectedChannelId(organizationChannelId);
+      } catch (error) {
+        console.error('Failed to fetch channel details:', error);
+      }
+    },
+    [getChannelDetail, setSelectedChannel, setSelectedChannelId]
+  );
 
   const handleOnClickMenuItem = useCallback(
     (value: AdvisorType) => {
       if (setAdvisorType) setAdvisorType(value);
-      setToolsAnchor(null);
+      setToolsAnchorDeleteEdit(null);
     },
     [setAdvisorType]
   );
+
+  const handleCloseToolsMenu = useCallback(() => {
+    setToolsAnchorDeleteEdit(null);
+    setActiveIndex(null);
+  }, []);
+
+  const handleCloseDeleteDialog = useCallback((event: React.MouseEvent) => {
+    setToolsAnchorDeleteEdit(null);
+    event.stopPropagation();
+    setIsDeleteDialogOpen(false);
+  }, []);
+
+  const handleDeleteChannelOpenConfirmDialog = useCallback(
+    (event: React.MouseEvent) => {
+      setToolsAnchorDeleteEdit(null);
+      event.stopPropagation();
+      setIsDeleteDialogOpen(true);
+    },
+    []
+  );
+
+  const handleDeleteChannelConfirm = useCallback(
+    async (event: React.MouseEvent) => {
+      event.stopPropagation();
+      try {
+        await deleteChannel({
+          organizationId: '4aba77788ae94eca8d6ff330506af944',
+          organizationChannelId: selectedChannelId || '',
+        });
+        window.location.href = '/chat';
+        setIsDeleteDialogOpen(false);
+        handleCloseToolsMenu();
+      } catch (error) {
+        console.error('Error deleting the channel', error);
+      }
+    },
+    [deleteChannel, handleCloseToolsMenu, selectedChannelId]
+  );
+
+  const handleEditChannelConfirm = useCallback(
+    async (newTitle: string) => {
+      try {
+        await updateChannelDetail({
+          organizationId: '4aba77788ae94eca8d6ff330506af944',
+          organizationChannelId: selectedChannelId || '',
+          organizationChannelTitle: newTitle,
+        });
+        if (selectedChannelId) {
+          await fetchChannelDetail(selectedChannelId);
+          router.push(`/chat?organizationChannelId=${selectedChannelId}`);
+        }
+        setIsEditDialogOpen(false);
+      } catch (error) {
+        console.error('Error updating channel title', error);
+      }
+    },
+    [updateChannelDetail, selectedChannelId, fetchChannelDetail]
+  );
+
+  const handleOpenEditChannelDialog = useCallback((event: React.MouseEvent) => {
+    event.stopPropagation();
+    setIsEditDialogOpen(true);
+    setToolsAnchorDeleteEdit(null);
+  }, []);
+
+  const handleCloseEditDialog = useCallback((event: React.MouseEvent) => {
+    event.stopPropagation();
+    setIsEditDialogOpen(false);
+    setToolsAnchorDeleteEdit(null);
+  }, []);
+
+  const handleMenuOpen = (
+    event: React.MouseEvent<HTMLElement>,
+    index: number
+  ) => {
+    event.stopPropagation();
+    setToolsAnchorDeleteEdit(event.currentTarget);
+    setActiveIndex(index);
+  };
 
   return (
     <>
@@ -175,20 +255,25 @@ export default function DropdownMenu({
               fontSize: '16px',
               fontFamily: 'DFPHeiBold-B5',
             }}
-            onClick={
-              chatResponses[1]?.organizationChannelTitle ||
-              selectedChannel?.organizationChannelTitle
-                ? handleClick
-                : undefined
-            }
           >
             {chatResponses[1]?.organizationChannelTitle ||
             selectedChannel?.organizationChannelTitle ? (
               <>
                 {chatResponses[1]?.organizationChannelTitle ||
                   selectedChannel?.organizationChannelTitle}
-                <ArrowDropDownRounded
-                  sx={{ width: '32px', height: '32px', color: 'black' }}
+                <EditableItem
+                  index={0}
+                  isChannelSummary
+                  toolsAnchor={toolsAnchorDeleteEdit}
+                  activeIndex={activeIndex}
+                  key={selectedChannelId}
+                  handleMenuOpen={handleMenuOpen}
+                  setToolsAnchor={setToolsAnchorDeleteEdit}
+                  handleCloseToolsMenu={handleCloseToolsMenu}
+                  handleOpenEditChannelDialog={handleOpenEditChannelDialog}
+                  handleDeleteChannelOpenConfirmDialog={
+                    handleDeleteChannelOpenConfirmDialog
+                  }
                 />
               </>
             ) : (
@@ -313,38 +398,25 @@ export default function DropdownMenu({
           </MenuItem>
         ))}
       </Menu>
-      <DeleteConfirmationModal
+      <DeleteDialog
         open={isDeleteDialogOpen}
-        onClose={() => setIsDeleteDialogOpen(false)}
-        onDelete={handleConfirmDelete}
-        channelName={
-          selectedChannel || chatResponses[1]
-            ? [
-                {
-                  ...selectedChannel,
-                  ...chatResponses[1],
-                  organizationChannelId:
-                    selectedChannel?.organizationChannelId ||
-                    chatResponses[1]?.organizationChannelMessageId ||
-                    '',
-                  selected: true,
-                  organization: selectedChannel?.organization || {},
-                },
-              ]
-            : []
+        onClose={handleCloseDeleteDialog}
+        onConfirm={handleDeleteChannelConfirm}
+        deletableName={
+          selectedChannel?.organizationChannelTitle ||
+          chatResponses[1]?.organizationChannelTitle ||
+          ''
         }
       />
-      <EditDeleteModal
-        anchorEl={openEditDeleteModal}
-        onClose={handleClose}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-      />
-      <RenameDialog
-        open={isRenameDialogOpen}
-        onClose={() => setIsRenameDialogOpen(false)}
-        onSave={handleSave}
-        initialName=""
+      <EditDialog
+        open={isEditDialogOpen}
+        onClose={handleCloseEditDialog}
+        onConfirm={handleEditChannelConfirm}
+        editableName={
+          selectedChannel?.organizationChannelTitle ||
+          chatResponses[1]?.organizationChannelTitle ||
+          ''
+        }
       />
     </>
   );
