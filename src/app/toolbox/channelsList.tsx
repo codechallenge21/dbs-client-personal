@@ -194,11 +194,7 @@ const ChannelsList = () => {
             background: 'var(--Primary-, #EBE3DD)',
           }}
         >
-          <ToolbarDrawer
-            open={isOpenDrawer}
-            setOpenUpload={setOpenUpload}
-            setIsOpenDrawer={setIsOpenDrawer}
-          >
+          <ToolbarDrawer open={isOpenDrawer} setIsOpenDrawer={setIsOpenDrawer}>
             {/* {isLoadingChannels ? (
           <Box
             sx={{

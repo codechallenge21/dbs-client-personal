@@ -32,10 +32,9 @@ import Cookies from 'js-cookie';
 
 interface ToolbarDrawerProps {
   open: boolean;
-  children: React.ReactNode;
-  setOpenUpload?: (open: boolean) => void;
-  setIsOpenDrawer: (open: boolean) => void;
   openDataSource?: boolean;
+  children: React.ReactNode;
+  setIsOpenDrawer: (open: boolean) => void;
 }
 
 const drawerItems = [
@@ -166,7 +165,6 @@ const CustomDrawer = styled(MuiDrawer, {
 const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
   open,
   children,
-  setOpenUpload,
   setIsOpenDrawer,
   openDataSource = false,
 }) => {
@@ -284,11 +282,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 color: 'var(--Primary-Black, #212B36)',
               }}
               onClick={() => {
-                if (setOpenUpload) {
-                  setOpenUpload(true);
-                } else {
-                  resetChat();
-                }
+                resetChat();
               }}
             >
               <AddRounded sx={{ color: '#212B36', fontSize: '18px' }} />
@@ -303,7 +297,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                   lineHeight: 'normal',
                 }}
               >
-                New Chat
+                AI問答
               </Typography>
             </Button>
           </ListItem>
@@ -321,11 +315,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               mt: '8px',
             }}
             onClick={() => {
-              if (setOpenUpload) {
-                setOpenUpload(true);
-              } else {
-                resetChat();
-              }
+              resetChat();
             }}
           >
             <AddRounded sx={{ color: '#212B36', fontSize: '20px' }} />
@@ -350,8 +340,8 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 borderRadius: '8px',
                 backgroundColor:
                   pathname === item.route ||
-                  (pathname === '/' && item.route === '/chat') ||
-                  (pathname === '/channel-summary' && item.route === '/toolbox')
+                    (pathname === '/' && item.route === '/chat') ||
+                    (pathname === '/channel-summary' && item.route === '/toolbox')
                     ? 'var(--Action-Selected, rgba(204, 0, 0, 0.20))'
                     : 'transparent',
                 '&:hover': {
