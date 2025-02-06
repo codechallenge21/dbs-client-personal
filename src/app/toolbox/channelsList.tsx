@@ -384,6 +384,7 @@ const ChannelsList = () => {
                     }}
                   >
                     <IconButton
+                      aria-label="search"
                       sx={{
                         padding: '8px',
                         display: 'flex',
@@ -395,6 +396,7 @@ const ChannelsList = () => {
                       <SearchRounded />
                     </IconButton>
                     <IconButton
+                      aria-label="Start Recording"
                       sx={{
                         gap: '8px',
                         display: 'flex',
@@ -411,6 +413,7 @@ const ChannelsList = () => {
                       <Typography>開始錄音</Typography>
                     </IconButton>
                     <IconButton
+                      aria-label="Upload File"
                       sx={{
                         gap: '8px',
                         display: 'flex',
@@ -725,7 +728,10 @@ const ChannelsList = () => {
                               handleToggle(index);
                             }}
                           >
-                            <IconButton sx={{ padding: '0px' }}>
+                            <IconButton
+                              aria-label="favorite"
+                              sx={{ padding: '0px' }}
+                            >
                               {favoriteChannels[index] ? (
                                 <StarRounded sx={{ color: 'black' }} />
                               ) : (
@@ -793,7 +799,7 @@ const ChannelsList = () => {
               background: 'var(--Primary-White, #FFF)',
             }}
           >
-            <IconButton>
+            <IconButton aria-label="menu">
               <MenuRounded sx={{ color: 'black' }} />
             </IconButton>
             <Typography
@@ -897,10 +903,11 @@ const ChannelsList = () => {
               justifyContent: 'flex-end',
             }}
           >
-            <IconButton>
+            <IconButton aria-label="search">
               <SearchRounded sx={{ color: '#212B36' }} />
             </IconButton>
             <Button
+              aria-label="Start Recording"
               sx={{
                 gap: '8px',
                 display: 'flex',
@@ -928,6 +935,7 @@ const ChannelsList = () => {
               </Typography>
             </Button>
             <Button
+              aria-label="Upload File"
               sx={{
                 gap: '8px',
                 color: '#FFF',
@@ -1027,6 +1035,7 @@ const ChannelsList = () => {
                     }}
                   >
                     <IconButton
+                      aria-label="favorite"
                       onClick={(e) => {
                         e.stopPropagation();
                         handleToggle(index);

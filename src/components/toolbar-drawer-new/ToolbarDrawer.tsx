@@ -242,6 +242,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             </Typography>
           )}
           <IconButton
+            aria-label="Expand/Collapse"
             onClick={() => {
               if (isMobile) {
                 setIsOpenDrawer(!open);
@@ -269,6 +270,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             }}
           >
             <Button
+              aria-label="New Chat"
               sx={{
                 gap: '8px',
                 height: '40px',
@@ -305,6 +307,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
 
         {!isExpanded && !isMobile && (
           <IconButton
+            aria-label="New Chat"
             sx={{
               padding: '8px',
               display: 'flex',
@@ -322,14 +325,12 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
           </IconButton>
         )}
 
-        <Box
+        <List
           sx={{
             gap: '8px',
+            padding: '8px',
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'flex-start',
-            justifyContent: 'flex-end',
-            marginTop: '8px',
           }}
         >
           {drawerItems.map((item, index) => (
@@ -378,7 +379,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               </Typography>
             </ListItem>
           ))}
-        </Box>
+        </List>
       </List>
       <Box
         sx={{
@@ -394,7 +395,8 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
         {(isExpanded || isMobile) && (
           <>
             {isLogin ? (
-              <Box
+              <Button
+                aria-label="Logout"
                 sx={{
                   display: 'flex',
                   // padding: '16px',
@@ -419,9 +421,10 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 >
                   UserName
                 </Typography>
-              </Box>
+              </Button>
             ) : (
               <Button
+                aria-label="Logout"
                 sx={{
                   gap: '8px',
                   color: '#212B36',
@@ -444,6 +447,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               </Button>
             )}
             <Button
+              aria-label="Wishing Pool"
               sx={{
                 gap: '8px',
                 color: 'white',
@@ -465,6 +469,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               許願池
             </Button>
             <Button
+              aria-label="Consultant Area"
               sx={{
                 gap: '8px',
                 color: 'white',
@@ -490,6 +495,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
           <>
             {!isLogin ? (
               <IconButton
+                aria-label="Login"
                 sx={{
                   width: '36px',
                   height: '36px',
@@ -512,6 +518,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               </IconButton>
             ) : (
               <IconButton
+                aria-label="Logout"
                 sx={{
                   width: '36px',
                   height: '36px',
@@ -535,6 +542,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               </IconButton>
             )}
             <IconButton
+              aria-label="Wsihing Pool"
               sx={{
                 width: '36px',
                 height: '36px',
@@ -555,6 +563,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               <EmojiObjectsRounded sx={{ color: 'white', fontSize: '20px' }} />
             </IconButton>
             <IconButton
+              aria-label="Consultant Area"
               sx={{
                 width: '36px',
                 height: '36px',

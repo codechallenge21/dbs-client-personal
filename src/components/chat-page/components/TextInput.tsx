@@ -358,6 +358,7 @@ const TextInput: React.FC<TextInputProps> = ({
                   {file.file.name}
                 </Typography>
                 <IconButton
+                  aria-label="remove file"
                   sx={{
                     position: 'absolute',
                     top: '0px',
@@ -445,6 +446,7 @@ const TextInput: React.FC<TextInputProps> = ({
             }}
           >
             <IconButton
+              aria-label="attach file"
               component="span"
               onDrop={handleDrop}
               onDragOver={handleDragOver}
@@ -467,6 +469,7 @@ const TextInput: React.FC<TextInputProps> = ({
               style={{ display: 'none' }}
             />
             <IconButton
+              aria-label="attach file"
               sx={{
                 position: 'absolute',
                 bottom: '10px',
@@ -489,6 +492,7 @@ const TextInput: React.FC<TextInputProps> = ({
             </Box>
           ) : userInputValue !== '' && !isListening ? (
             <IconButton
+              aria-label="send message"
               sx={{
                 position: 'absolute',
                 bottom: '10px',
@@ -500,6 +504,7 @@ const TextInput: React.FC<TextInputProps> = ({
             </IconButton>
           ) : (
             <IconButton
+              aria-label="Audio Message"
               onClick={handleListening}
               className={isListening ? 'mic-listening' : ''}
               sx={{

@@ -146,6 +146,7 @@ const EditDialog: React.FC<EditDialogProps> = ({
         }}
       >
         <Button
+          aria-label="Confirm"
           variant="contained"
           onClick={() => {
             if (inputValue?.trim()) {

@@ -108,6 +108,7 @@ const DeleteDialog: React.FC<DeleteDialogProps> = ({
         }}
       >
         <Button
+          aria-label="Delete"
           variant="contained"
           color="primary"
           onClick={onConfirm}

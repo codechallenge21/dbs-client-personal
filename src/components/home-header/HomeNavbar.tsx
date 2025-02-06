@@ -1,6 +1,6 @@
-import AppsIcon from "@mui/icons-material/Apps";
-import MenuIcon from "@mui/icons-material/Menu";
-import SearchIcon from "@mui/icons-material/Search";
+import AppsIcon from '@mui/icons-material/Apps';
+import MenuIcon from '@mui/icons-material/Menu';
+import SearchIcon from '@mui/icons-material/Search';
 import {
   AppBar,
   Avatar,
@@ -9,25 +9,25 @@ import {
   IconButton,
   Toolbar,
   Typography,
-} from "@mui/material";
-import Image from "next/image";
-import React from "react";
+} from '@mui/material';
+import Image from 'next/image';
+import React from 'react';
 
 export const HomeNavBar = () => {
   return (
-    <AppBar position="static" sx={{ backgroundColor: "#0d0402" }}>
+    <AppBar position="static" sx={{ backgroundColor: '#0d0402' }}>
       <Container
         sx={{
-          maxWidth: "1200px",
-          textAlign: "center",
+          maxWidth: '1200px',
+          textAlign: 'center',
         }}
       >
-        <Toolbar disableGutters sx={{ justifyContent: "space-between" }}>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+        <Toolbar disableGutters sx={{ justifyContent: 'space-between' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <IconButton edge="start" color="inherit" aria-label="menu">
               <MenuIcon />
             </IconButton>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <Image
                 src="/assets/images/logomark.png"
                 alt="Logomark"
@@ -39,19 +39,19 @@ export const HomeNavBar = () => {
                 variant="h6"
                 sx={{
                   fontFamily: "'Epilogue-Bold', Helvetica",
-                  fontWeight: "bold",
-                  color: "#ff5733",
+                  fontWeight: 'bold',
+                  color: '#ff5733',
                 }}
               >
                 HelpNet
               </Typography>
             </Box>
           </Box>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            <IconButton color="inherit">
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <IconButton aria-label="search" color="inherit">
               <SearchIcon />
             </IconButton>
-            <IconButton color="inherit">
+            <IconButton aria-label="apps" color="inherit">
               <AppsIcon />
             </IconButton>
             <Avatar

@@ -1,7 +1,7 @@
-import { Avatar, Box, Typography, IconButton, Stack } from "@mui/material";
-import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
-import ThumbDownOutlinedIcon from "@mui/icons-material/ThumbDownOutlined";
-import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
+import { Avatar, Box, Typography, IconButton, Stack } from '@mui/material';
+import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
+import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
+import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
 
 type Comment = {
   user: string;
@@ -18,20 +18,20 @@ type SingleCommentProps = {
 const SingleComment = ({ comment }: SingleCommentProps) => (
   <Box
     sx={{
-      display: "flex",
-      padding: "20px 0px",
-      flexDirection: "column",
-      alignItems: "flex-start",
-      gap: "14px",
+      display: 'flex',
+      padding: '20px 0px',
+      flexDirection: 'column',
+      alignItems: 'flex-start',
+      gap: '14px',
     }}
   >
     {/* User Profile */}
     <Box
       sx={{
-        display: "flex",
-        alignItems: "center",
-        gap: "12px",
-        alignSelf: "stretch",
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        alignSelf: 'stretch',
       }}
     >
       <Avatar
@@ -41,29 +41,29 @@ const SingleComment = ({ comment }: SingleCommentProps) => (
       />
       <Box
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "flex-start",
-          justifyContent: "center",
-          alignSelf: "stretch",
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+          justifyContent: 'center',
+          alignSelf: 'stretch',
         }}
       >
         <Typography
           variant="subtitle1"
           fontWeight="bold"
           sx={{
-            display: "-webkit-box",
-            WebkitBoxOrient: "vertical",
+            display: '-webkit-box',
+            WebkitBoxOrient: 'vertical',
             WebkitLineClamp: 1,
-            overflow: "hidden",
-            color: "#E4DAD7",
-            textOverflow: "ellipsis",
-            fontFamily: "Public Sans",
-            fontSize: "13px",
-            fontStyle: "normal",
+            overflow: 'hidden',
+            color: '#E4DAD7',
+            textOverflow: 'ellipsis',
+            fontFamily: 'Public Sans',
+            fontSize: '13px',
+            fontStyle: 'normal',
             fontWeight: 700,
-            lineHeight: "16px", // 123.077%
-            letterSpacing: "-0.065px",
+            lineHeight: '16px', // 123.077%
+            letterSpacing: '-0.065px',
           }}
         >
           {comment.user}
@@ -71,18 +71,18 @@ const SingleComment = ({ comment }: SingleCommentProps) => (
         <Typography
           variant="caption"
           sx={{
-            display: "-webkit-box",
-            WebkitBoxOrient: "vertical",
+            display: '-webkit-box',
+            WebkitBoxOrient: 'vertical',
             WebkitLineClamp: 1,
-            overflow: "hidden",
-            color: "rgba(235, 213, 209, 0.62)",
-            textOverflow: "ellipsis",
-            fontFamily: "Public Sans",
-            fontSize: "13px",
-            fontStyle: "normal",
+            overflow: 'hidden',
+            color: 'rgba(235, 213, 209, 0.62)',
+            textOverflow: 'ellipsis',
+            fontFamily: 'Public Sans',
+            fontSize: '13px',
+            fontStyle: 'normal',
             fontWeight: 400,
-            lineHeight: "16px", // 123.077%
-            letterSpacing: "-0.065px",
+            lineHeight: '16px', // 123.077%
+            letterSpacing: '-0.065px',
           }}
         >
           {comment.role}
@@ -94,13 +94,13 @@ const SingleComment = ({ comment }: SingleCommentProps) => (
     <Typography
       variant="body1"
       sx={{
-        color: "#E4DAD7",
-        fontFamily: "Public Sans",
-        fontSize: "15px",
-        fontStyle: "normal",
+        color: '#E4DAD7',
+        fontFamily: 'Public Sans',
+        fontSize: '15px',
+        fontStyle: 'normal',
         fontWeight: 400,
-        lineHeight: "20px", // 133.333%
-        letterSpacing: "-0.075px",
+        lineHeight: '20px', // 133.333%
+        letterSpacing: '-0.075px',
       }}
     >
       {comment.comment}
@@ -108,22 +108,22 @@ const SingleComment = ({ comment }: SingleCommentProps) => (
 
     {/* Action Buttons */}
     <Stack direction="row" alignItems="center" spacing={2}>
-      <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-        <IconButton sx={{ color: "white", py: 0, pl: 0 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+        <IconButton aria-label="Like" sx={{ color: 'white', py: 0, pl: 0 }}>
           <ThumbUpOutlinedIcon />
         </IconButton>
         <Typography>{comment.likes}</Typography>
       </Box>
 
-      <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-        <IconButton sx={{ color: "white", py: 0 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+        <IconButton aria-label="Dislike" sx={{ color: 'white', py: 0 }}>
           <ThumbDownOutlinedIcon />
         </IconButton>
         <Typography>{comment.dislikes}</Typography>
       </Box>
 
       <Box>
-        <IconButton sx={{ color: "white", py: 0 }}>
+        <IconButton aria-label="Comment" sx={{ color: 'white', py: 0 }}>
           <ChatBubbleOutlineOutlinedIcon />
         </IconButton>
       </Box>

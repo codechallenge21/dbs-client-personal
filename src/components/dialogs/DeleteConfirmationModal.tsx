@@ -54,7 +54,7 @@ export default function DeleteConfirmationModal({
             right: 8,
             top: 8,
           }}
-          aria-label="關閉"
+          aria-label="Close"
         >
           <CloseIcon />
         </IconButton>
@@ -106,6 +106,7 @@ export default function DeleteConfirmationModal({
           }}
         >
           <Button
+            aria-label="Delete"
             variant="contained"
             onClick={onDelete}
             sx={{

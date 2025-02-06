@@ -196,6 +196,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                     arrow
                   >
                     <IconButton
+                      aria-label="copy"
                       sx={{
                         display: 'flex',
                         alignItems: 'center',
@@ -339,6 +340,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                   arrow
                 >
                   <IconButton
+                    aria-label="copy"
                     sx={{
                       display: 'flex',
                       alignItems: 'center',

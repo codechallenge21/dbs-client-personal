@@ -170,6 +170,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
         >
           {isMobile ? '上傳檔案' : 'AI 語音轉文字'}
           <IconButton
+            aria-label="close"
             onClick={onClose}
             sx={{
               position: 'absolute',
@@ -216,6 +217,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
             </Typography>
           )}
           <Button
+            aria-label="Upload File"
             onClick={handleClick}
             sx={{
               zIndex: 1,

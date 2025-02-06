@@ -92,6 +92,7 @@ const SwitchDialog: React.FC<SwitchDialogProps> = ({
       </DialogContent>
       <DialogActions>
         <Button
+          aria-label="confirm"
           variant="contained"
           color="primary"
           onClick={onConfirm}

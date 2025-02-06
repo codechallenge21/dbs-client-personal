@@ -78,6 +78,7 @@ const EditableItem: React.FC<{
   return (
     <>
       <IconButton
+        aria-label="Menu"
         sx={{ padding: 0 }}
         onClick={(event) => handleMenuOpen(event, index)}
       >

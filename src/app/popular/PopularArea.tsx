@@ -327,6 +327,7 @@ export default function PopularArea() {
                   </Typography>
                 </Box>
                 <Button
+                  aria-label="more"
                   variant="outlined"
                   sx={{
                     color: 'red',

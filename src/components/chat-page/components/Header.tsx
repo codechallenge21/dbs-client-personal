@@ -86,21 +86,28 @@ const Header: React.FC<HeaderProps> = ({
           }}
         >
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <IconButton onClick={() => memoizedToggleDrawer(true)}>
+            <IconButton
+              aria-label="Menu"
+              onClick={() => memoizedToggleDrawer(true)}
+            >
               <MenuRounded sx={{ color: '#212B36' }} />
             </IconButton>
             {isChat && <DropdownMenu advisor={advisor} />}
           </Box>
           {!isChat && (
-            <IconButton onClick={() => setOpenUpload(true)}>
+            <IconButton
+              aria-label="File Upload"
+              onClick={() => setOpenUpload(true)}
+            >
               <FileUploadIcon sx={{ color: '#212B36' }} />
             </IconButton>
           )}
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <IconButton sx={{ padding: '0px' }}>
+            <IconButton aria-label="Add Favorite" sx={{ padding: '0px' }}>
               <StarBorderRounded sx={{ color: '#212B36', margin: '8px' }} />
             </IconButton>
             <IconButton
+              aria-label="Data Source"
               sx={{ padding: '0px' }}
               onClick={() => setOpenDataSource(true)}
             >
@@ -128,7 +135,10 @@ const Header: React.FC<HeaderProps> = ({
               }}
             >
               {!isChat && (
-                <IconButton onClick={() => setOpenUpload(true)}>
+                <IconButton
+                  aria-label="File Upload"
+                  onClick={() => setOpenUpload(true)}
+                >
                   <FileUploadIcon sx={{ color: '#212B36' }} />
                 </IconButton>
               )}
@@ -145,13 +155,14 @@ const Header: React.FC<HeaderProps> = ({
             >
               <DropdownMenu advisor={advisor} />
               <Box>
-                <IconButton sx={{ padding: '0px' }}>
+                <IconButton aria-label="Add Favorite" sx={{ padding: '0px' }}>
                   <StarBorderRounded sx={{ color: '#212B36', margin: '8px' }} />
                 </IconButton>
                 {selectedChannel ||
                 selectedChannelId ||
                 chatResponses.length ? (
                   <IconButton
+                    aria-label="All Chats"
                     sx={{ padding: '0px' }}
                     onClick={() => router.push('/allchat')}
                   >
@@ -159,6 +170,7 @@ const Header: React.FC<HeaderProps> = ({
                   </IconButton>
                 ) : null}
                 <IconButton
+                  aria-label="Data Source"
                   sx={{ padding: '0px' }}
                   onClick={() => setOpenDataSource(true)}
                 >

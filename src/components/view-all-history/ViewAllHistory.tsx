@@ -194,6 +194,7 @@ export default function ChannelSearchCombined() {
                   您目前有 <span>{filteredChannels.length ?? 0}</span> 個頻道
                 </Typography>
                 <Button
+                  aria-label="Select"
                   variant="text"
                   onClick={handleToggleV2}
                   sx={{
@@ -416,6 +417,7 @@ export default function ChannelSearchCombined() {
                   全選
                 </Box>
                 <Button
+                  aria-label="Cancel"
                   variant="outlined"
                   sx={{
                     fontFamily: 'Open Sans',
@@ -433,6 +435,7 @@ export default function ChannelSearchCombined() {
                   取消
                 </Button>
                 <Button
+                  aria-label="Delete"
                   variant="contained"
                   disabled={selectedChannels.length === 0}
                   onClick={handleDelete}
