@@ -269,7 +269,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
                 fontSize: isMobile ? 14 : 16,
               }}
             >
-              限制大小：100MB
+              限制大小：200MB
             </Typography>
           </Box>
         </DialogContent>
