@@ -29,6 +29,7 @@ import { styled, Theme, CSSObject } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Cookies from 'js-cookie';
+import { jwtDecode } from 'jwt-decode';
 
 interface ToolbarDrawerProps {
   open: boolean;
@@ -114,7 +115,10 @@ const MainBox = styled('div', {
 
 const drawerWidth = 240;
 
-const isLogin = Cookies.get('isLogin') || null;
+const isLogin = Cookies.get('tid') || null;
+const token = Cookies.get('m_info') || null;
+const decodedHeader = token ? jwtDecode(token, { header: true }) : null;
+const loginName = decodedHeader ? (decodedHeader as any).loginName : null;
 
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
@@ -340,8 +344,8 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 borderRadius: '8px',
                 backgroundColor:
                   pathname === item.route ||
-                    (pathname === '/' && item.route === '/chat') ||
-                    (pathname === '/channel-summary' && item.route === '/toolbox')
+                  (pathname === '/' && item.route === '/chat') ||
+                  (pathname === '/channel-summary' && item.route === '/toolbox')
                     ? 'var(--Action-Selected, rgba(204, 0, 0, 0.20))'
                     : 'transparent',
                 '&:hover': {
@@ -417,7 +421,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                     color: 'var(--Primary-Black, #212B36)',
                   }}
                 >
-                  UserName
+                  {loginName}
                 </Typography>
               </Box>
             ) : (
