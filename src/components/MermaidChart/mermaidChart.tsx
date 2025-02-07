@@ -86,10 +86,16 @@ export default function MermaidChart({ chart }: MermaidChartProps) {
     <div
       style={{
         position: 'relative',
+        height: 'auto',
       }}
     >
-      <div ref={containerRef} />
-
+      <div
+        style={{
+          width: 'auto',
+          height: 'auto',
+        }}
+        ref={containerRef}
+      />
       <div
         style={{
           position: 'absolute',
