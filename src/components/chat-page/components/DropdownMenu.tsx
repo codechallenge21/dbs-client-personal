@@ -33,43 +33,43 @@ const listItems = [
   {
     title: '萬事通',
     value: AdvisorType.DEFAULT,
-    description: '提供應對策略與資源連結。',
+    description: '提供個案跨領域資源評估與整合方案',
     icon: <SupportAgentIcon />,
   },
   {
     title: '債務案件顧問',
     value: AdvisorType.DEBT,
-    description: '提供債務管理與還款建議，幫助改善財務壓力。',
+    description: '提供個案債務評估與紓困整合規劃',
     icon: <MoneyOffRounded />,
-  },
-  {
-    title: '意外案件顧問',
-    value: AdvisorType.CONTINGENCY,
-    description: '快速提供應急策略與風險評估。',
-    icon: <BusinessCenterRounded />,
   },
   {
     title: '詐騙案件顧問',
     value: AdvisorType.FRAUD,
-    description: '快速辨識詐騙風險，提供建議與後續行動指引。',
+    description: '提供個案受騙評估與緊急處理建議',
     icon: <PhishingRounded />,
   },
   {
-    title: '醫療案件顧問',
-    value: AdvisorType.MEDICAL,
-    description: '提供您醫療案件應對策略與資源連結。',
-    icon: <LocalHospitalRounded />,
-  },
-  {
-    title: '就業協助顧問',
+    title: '就業案件顧問',
     value: AdvisorType.EMPLOYMENT,
-    description: '支援您求職與職涯規劃。',
+    description: '提供個案就業評估與職涯輔導規劃',
     icon: <WorkRounded />,
   },
   {
-    title: '財務案件顧問',
-    value: AdvisorType.FINANCIAL,
-    description: '提供儲蓄、投資與債務建議。',
+    title: '家庭負擔案件顧問',
+    value: AdvisorType.FAMILY,
+    description: '提供個案家庭經濟評估與扶助方案',
+    icon: <BusinessCenterRounded />,
+  },
+  {
+    title: '醫療及意外案件顧問',
+    value: AdvisorType.MEDICAL_CONTINGENCY,
+    description: '提供個案醫療評估與資源連結規劃',
+    icon: <LocalHospitalRounded />,
+  },
+  {
+    title: '保險案件顧問',
+    value: AdvisorType.INSURANCE,
+    description: '提供個案保險評估與權益申請規劃',
     icon: <AccountBalanceWalletRounded />,
   },
 ];
@@ -248,7 +248,7 @@ export default function DropdownMenu({
               borderRadius: toolsAnchor ? '10px' : '0px',
               cursor:
                 chatResponses[1]?.organizationChannelTitle ||
-                selectedChannel?.organizationChannelTitle
+                  selectedChannel?.organizationChannelTitle
                   ? 'pointer'
                   : 'default',
               height: '40px',
@@ -257,7 +257,7 @@ export default function DropdownMenu({
             }}
           >
             {chatResponses[1]?.organizationChannelTitle ||
-            selectedChannel?.organizationChannelTitle ? (
+              selectedChannel?.organizationChannelTitle ? (
               <>
                 {chatResponses[1]?.organizationChannelTitle ||
                   selectedChannel?.organizationChannelTitle}
@@ -344,7 +344,10 @@ export default function DropdownMenu({
             }}
             disabled={
               item.value !== AdvisorType.DEFAULT &&
-              item.value !== AdvisorType.DEBT
+              item.value !== AdvisorType.DEBT &&
+              item.value !== AdvisorType.FRAUD &&
+              item.value !== AdvisorType.EMPLOYMENT &&
+              item.value !== AdvisorType.MEDICAL_CONTINGENCY
             }
             onClick={() => handleOnClickMenuItem(item.value)}
           >
