@@ -48,7 +48,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
         'audio/x-m4a',
         'video/mp4',
       ];
-      const maxFileSize = 100 * 1024 * 1024; // 100MB
+      const maxFileSize = 200 * 1024 * 1024; // 200MB
 
       if (!allowedFormats.includes(file.type)) {
         setError(
@@ -58,7 +58,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
       }
 
       if (file.size > maxFileSize) {
-        setError('檔案大小超過 100MB 限制');
+        setError('檔案大小超過 200MB 限制');
         return;
       }
 
@@ -113,7 +113,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
     accept: {
       'audio/*': ['.mp3', '.mp4', '.mpeg', '.mpga', '.m4a', '.wav', '.webm'],
     },
-    maxSize: 100 * 1024 * 1024, // 100MB
+    maxSize: 200 * 1024 * 1024, // 100MB
   });
 
   const handleCloseError = () => {
