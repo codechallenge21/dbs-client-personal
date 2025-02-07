@@ -1,8 +1,6 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import mermaid from 'mermaid';
-import svgPanZoom from 'svg-pan-zoom';
 import { IconButton } from '@mui/material';
 import ZoomInSharpIcon from '@mui/icons-material/ZoomInSharp';
 import ZoomOutIcon from '@mui/icons-material/ZoomOut';
@@ -25,10 +23,14 @@ export default function MermaidChart({ chart }: MermaidChartProps) {
 
   useEffect(() => {
     let isMounted = true;
-    mermaid.initialize({ startOnLoad: false });
 
-    async function renderChart() {
+    const loadLibrariesAndRenderChart = async () => {
       try {
+        const mermaid = (await import('mermaid')).default;
+        const svgPanZoom = (await import('svg-pan-zoom')).default;
+
+        mermaid.initialize({ startOnLoad: false });
+
         const { svg } = await mermaid.render(uniqueIdRef.current, chart);
 
         if (isMounted && containerRef.current) {
@@ -73,12 +75,15 @@ export default function MermaidChart({ chart }: MermaidChartProps) {
       } catch (error) {
         console.error('Error rendering Mermaid chart:', error);
       }
-    }
+    };
 
-    renderChart();
+    loadLibrariesAndRenderChart();
 
     return () => {
       isMounted = false;
+      if (panZoomRef.current) {
+        panZoomRef.current.destroy();
+      }
     };
   }, [chart]);
 
