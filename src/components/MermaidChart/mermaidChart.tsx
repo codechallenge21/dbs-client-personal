@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import mermaid from 'mermaid';
 import svgPanZoom from 'svg-pan-zoom';
 import { IconButton } from '@mui/material';
@@ -22,9 +22,19 @@ export default function MermaidChart({ chart }: MermaidChartProps) {
   const uniqueIdRef = useRef(
     `mermaid-${Math.random().toString(36).substring(2, 10)}`
   );
+  const [hasDiagram, setHasDiagram] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
+
+    if (!chart || !chart.trim()) {
+      setHasDiagram(false);
+      if (containerRef.current) {
+        containerRef.current.innerHTML = '';
+      }
+      return;
+    }
+
     mermaid.initialize({ startOnLoad: false });
 
     async function renderChart() {
@@ -86,82 +96,90 @@ export default function MermaidChart({ chart }: MermaidChartProps) {
     <div
       style={{
         position: 'relative',
+        height: 'auto',
       }}
     >
-      <div ref={containerRef} />
-
       <div
         style={{
-          position: 'absolute',
-          bottom: 20,
-          right: 20,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '0.5rem',
-          zIndex: 1000,
+          width: 'auto',
+          height: 'auto',
         }}
-      >
-        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'auto auto auto',
-              gridTemplateRows: 'auto auto auto',
-              gridTemplateAreas: `
+        ref={containerRef}
+      />
+      {hasDiagram && (
+        <div
+          style={{
+            position: 'absolute',
+            bottom: 20,
+            right: 20,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '0.5rem',
+            zIndex: 1000,
+          }}
+        >
+          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'auto auto auto',
+                gridTemplateRows: 'auto auto auto',
+                gridTemplateAreas: `
                 ". up zoomIn"
                 "left center right"
                 ". down zoomOut"
               `,
-              gap: '0.5rem',
-            }}
-          >
-            <div style={{ gridArea: 'up' }}>
-              <IconButton
-                onClick={() => panZoomRef.current?.panBy({ x: 0, y: -20 })}
-              >
-                <ExpandLessSharpIcon />
-              </IconButton>
-            </div>
-            <div style={{ gridArea: 'left' }}>
-              <IconButton
-                onClick={() => panZoomRef.current?.panBy({ x: -20, y: 0 })}
-              >
-                <ChevronLeftSharpIcon />
-              </IconButton>
-            </div>
-            <div style={{ gridArea: 'center' }}>
-              <IconButton onClick={() => panZoomRef.current?.reset()}>
-                <RefreshIcon />
-              </IconButton>
-            </div>
-            <div style={{ gridArea: 'right' }}>
-              <IconButton
-                onClick={() => panZoomRef.current?.panBy({ x: 20, y: 0 })}
-              >
-                <ChevronRightSharpIcon />
-              </IconButton>
-            </div>
-            <div style={{ gridArea: 'down' }}>
-              <IconButton
-                onClick={() => panZoomRef.current?.panBy({ x: 0, y: 20 })}
-              >
-                <ExpandMoreSharpIcon />
-              </IconButton>
-            </div>
-            <div style={{ gridArea: 'zoomIn' }}>
-              <IconButton onClick={() => panZoomRef.current?.zoomIn()}>
-                <ZoomInSharpIcon />
-              </IconButton>
-            </div>
-            <div style={{ gridArea: 'zoomOut' }}>
-              <IconButton onClick={() => panZoomRef.current?.zoomOut()}>
-                <ZoomOutIcon />
-              </IconButton>
+                gap: '0.5rem',
+              }}
+            >
+              <div style={{ gridArea: 'up' }}>
+                <IconButton
+                  onClick={() => panZoomRef.current?.panBy({ x: 0, y: -20 })}
+                >
+                  <ExpandLessSharpIcon />
+                </IconButton>
+              </div>
+              <div style={{ gridArea: 'left' }}>
+                <IconButton
+                  onClick={() => panZoomRef.current?.panBy({ x: -20, y: 0 })}
+                >
+                  <ChevronLeftSharpIcon />
+                </IconButton>
+              </div>
+              <div style={{ gridArea: 'center' }}>
+                <IconButton onClick={() => panZoomRef.current?.reset()}>
+                  <RefreshIcon />
+                </IconButton>
+              </div>
+              <div style={{ gridArea: 'right' }}>
+                <IconButton
+                  onClick={() => panZoomRef.current?.panBy({ x: 20, y: 0 })}
+                >
+                  <ChevronRightSharpIcon />
+                </IconButton>
+              </div>
+              <div style={{ gridArea: 'down' }}>
+                <IconButton
+                  onClick={() => panZoomRef.current?.panBy({ x: 0, y: 20 })}
+                >
+                  <ExpandMoreSharpIcon />
+                </IconButton>
+              </div>
+              <div style={{ gridArea: 'zoomIn' }}>
+                <IconButton onClick={() => panZoomRef.current?.zoomIn()}>
+                  <ZoomInSharpIcon />
+                </IconButton>
+              </div>
+              <div style={{ gridArea: 'zoomOut' }}>
+                <IconButton onClick={() => panZoomRef.current?.zoomOut()}>
+                  <ZoomOutIcon />
+                </IconButton>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
