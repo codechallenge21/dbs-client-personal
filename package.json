@@ -31,6 +31,7 @@
     "dayjs": "^1.11.13",
     "js-cookie": "^3.0.5",
     "mermaid": "^11.4.1",
+    "jwt-decode": "^4.0.0",
     "mobile-detect": "^1.4.5",
     "next": "15.1.0",
     "query-string": "^9.1.1",
