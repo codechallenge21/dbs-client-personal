@@ -19,6 +19,7 @@ import imagePerview from '@/assets/Images/Image Icon.svg';
 import docPerview from '@/assets/Images/Doc Icon.svg';
 import DropdownMenu from './DropdownMenu';
 import { SubmitUserInputsApiPayload } from '@/interfaces/payloads';
+import Cookies from 'js-cookie';
 
 interface SpeechRecognition extends EventTarget {
   continuous: boolean;
@@ -70,11 +71,13 @@ type TextInputProps = {
     };
   }>;
   isInteracting: boolean;
+  setIsLoginOpen?: (value: boolean) => void;
 };
 
 const TextInput: React.FC<TextInputProps> = ({
   submitUserInputs,
   isInteracting,
+  setIsLoginOpen,
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -204,6 +207,11 @@ const TextInput: React.FC<TextInputProps> = ({
 
   const handleOnChangeUserInput = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      const isLoggedin = Cookies.get('m_info');
+      if (!isLoggedin) {
+        if (setIsLoginOpen) setIsLoginOpen(true);
+        return;
+      }
       const { value } = e.target;
       setUserInputValue(value);
     },

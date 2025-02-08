@@ -17,6 +17,8 @@ import { useSearchParams } from 'next/navigation';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import apis from '@/utils/hooks/apis/apis';
 import DataSourceDialog from '@/components/chat-page/components/chatDataStore';
+import LoginDialog from '@/components/dialogs/LoginDialog';
+import SignupDialog from '@/components/dialogs/SignupDialog';
 
 export default function ChatHomePage() {
   return (
@@ -46,6 +48,8 @@ function ClientContent() {
   const [openDataSource, setOpenDataSource] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenDrawer, setIsOpenDrawer] = useState(!isMobile);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isSignupOpen, setIsSignupOpen] = useState(false);
 
   const handleClose = useCallback(() => setIsOpen(false), []);
   const handleConfirm = useCallback(() => setIsOpen(false), []);
@@ -121,7 +125,7 @@ function ClientContent() {
             marginTop: isMobile ? '60px' : '0px',
           }}
         />
-        <MainContent />
+        <MainContent setIsLoginOpen={setIsLoginOpen} />
         <SwitchDialog
           open={isOpen}
           onClose={handleClose}
@@ -132,6 +136,16 @@ function ClientContent() {
           onClose={() => setOpenDataSource(false)}
         />
       </Box>
+      <LoginDialog
+        open={isLoginOpen}
+        setIsSignupOpen={setIsSignupOpen}
+        onClose={() => setIsLoginOpen(false)}
+      />
+      <SignupDialog
+        open={isSignupOpen}
+        setIsLoginOpen={setIsLoginOpen}
+        onClose={() => setIsSignupOpen(false)}
+      />
     </ToolbarDrawer>
   );
 }

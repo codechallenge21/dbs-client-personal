@@ -18,7 +18,7 @@ import apis from '@/utils/hooks/apis/apis';
 import { useChatChannels } from '@/utils/hooks/useChatChannels';
 import { OrganizationChannelData } from '@/interfaces/entities';
 
-const MainContent = () => {
+const MainContent = ({ setIsLoginOpen }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const router = useRouter();
@@ -185,6 +185,7 @@ const MainContent = () => {
       <TextInput
         submitUserInputs={submitUserInputs}
         isInteracting={isInteracting}
+        setIsLoginOpen={setIsLoginOpen}
       />
       <Box
         sx={{
