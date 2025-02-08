@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Drawer from '@mui/material/Drawer';
 import ListItem from '@mui/material/ListItem';
 import {
@@ -30,6 +30,7 @@ import MuiDrawer from '@mui/material/Drawer';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
+import ChannelContentContext from '../channel-context-provider/ChannelContentContext';
 
 interface ToolbarDrawerProps {
   open: boolean;
@@ -180,7 +181,15 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
   const [isExpanded, setIsExpanded] = useState(true); // Track expanded/collapsed state
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
+  const { selectedChannel, selectedChannelId, isInteractingInChat } =
+    useContext(ChannelContentContext);
+
   const resetChat = () => {
+    if (selectedChannel || selectedChannelId || isInteractingInChat) {
+      console.log('reset chat');
+      window.location.reload();
+      return;
+    }
     const params = new URLSearchParams(searchParams);
     params.delete('organizationChannelId');
     router.push('/chat');
@@ -354,7 +363,20 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 cursor: 'pointer',
                 height: isExpanded || isMobile ? '48px' : 'auto',
               }}
-              onClick={() => router.push(item.route)}
+              onClick={() => {
+                if (index === 3) {
+                  if (
+                    selectedChannel ||
+                    selectedChannelId ||
+                    isInteractingInChat
+                  ) {
+                    console.log('reset chat');
+                    window.location.reload();
+                    return;
+                  }
+                }
+                router.push(item.route);
+              }}
             >
               <Typography
                 sx={{
