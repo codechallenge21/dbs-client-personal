@@ -7,7 +7,7 @@ import {
   useTheme,
   useMediaQuery,
   Typography,
-  Button,
+  // Button,
 } from '@mui/material';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import RotateRightRounded from '@mui/icons-material/RotateRightRounded';
@@ -15,8 +15,8 @@ import ChannelContentContext from '../../channel-context-provider/ChannelContent
 import {
   SendRounded,
   CloseRounded,
-  PersonPinRounded,
-  ArrowDropDownRounded,
+  // PersonPinRounded,
+  // ArrowDropDownRounded,
 } from '@mui/icons-material';
 import Image from 'next/image';
 import pdfPreview from '@/assets/Images/Pdf Icon.svg';
@@ -34,11 +34,11 @@ interface SpeechRecognition extends EventTarget {
   start(): void;
   stop(): void;
   onresult:
-    | ((this: SpeechRecognition, ev: SpeechRecognitionEvent) => void)
-    | null;
+  | ((this: SpeechRecognition, ev: SpeechRecognitionEvent) => void)
+  | null;
   onerror:
-    | ((this: SpeechRecognition, ev: SpeechRecognitionErrorEvent) => void)
-    | null;
+  | ((this: SpeechRecognition, ev: SpeechRecognitionErrorEvent) => void)
+  | null;
   onend: ((this: SpeechRecognition, ev: Event) => void) | null;
 }
 
@@ -522,7 +522,7 @@ const TextInput: React.FC<TextInputProps> = ({
               style={{ display: 'none' }}
             />
           </Box>
-          <Button
+          {/* <Button
             sx={{
               gap: '8px',
               width: '150px',
@@ -546,7 +546,7 @@ const TextInput: React.FC<TextInputProps> = ({
             >
               關聯個案
             </Typography>
-          </Button>
+          </Button> */}
         </Box>
       </Box>
     </>
