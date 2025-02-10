@@ -482,15 +482,14 @@ const TextInput: React.FC<TextInputProps> = ({
       <Box
         sx={{
           gap: '10px',
-          width: '760px',
           height: '58px',
           paddingLeft: '16px',
           paddingRight: '16px',
+          width: isMobile ? '100%' : '760px',
         }}
       >
         <Box
           sx={{
-            width: '728px',
             height: '58px',
             display: 'flex',
             paddingTop: '10px',
@@ -501,6 +500,7 @@ const TextInput: React.FC<TextInputProps> = ({
             borderBottomLeftRadius: '16px',
             borderBottomRightRadius: '16px',
             justifyContent: 'space-between',
+            width: isMobile ? '100%' : '728px',
           }}
         >
           <Box>
