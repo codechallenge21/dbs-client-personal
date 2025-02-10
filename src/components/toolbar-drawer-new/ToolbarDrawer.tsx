@@ -186,8 +186,11 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
 
   const resetChat = () => {
     if (selectedChannel || selectedChannelId || isInteractingInChat) {
-      console.log('reset chat');
-      window.location.reload();
+      if (pathname === '/chat' && !searchParams.has('organizationChannelId')) {
+        window.location.reload();
+      } else {
+        router.push('/chat');
+      }
       return;
     }
     const params = new URLSearchParams(searchParams);
@@ -370,8 +373,14 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                     selectedChannelId ||
                     isInteractingInChat
                   ) {
-                    console.log('reset chat');
-                    window.location.reload();
+                    if (
+                      pathname === '/chat' &&
+                      !searchParams.has('organizationChannelId')
+                    ) {
+                      window.location.reload();
+                    } else {
+                      router.push('/chat');
+                    }
                     return;
                   }
                 }
