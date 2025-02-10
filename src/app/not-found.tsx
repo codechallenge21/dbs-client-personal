@@ -98,7 +98,7 @@ export default function NotFound() {
         href="/"
         sx={{
           backgroundColor: '#5C443A',
-          color: 'FFFFFF',
+          color: '#FFFFFF',
           fontWeight: 400,
           fontFamily: 'DFPHeiUBold-B5',
           px: isMobile ? 2 : isTablet ? 3 : '12px',
