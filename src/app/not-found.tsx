@@ -62,7 +62,8 @@ export default function NotFound() {
           fontFamily: 'DFPHeiUBold-B5',
         }}
       >
-        我們找不到這個頁面，但 AI 奶可幫助您！
+        抱歉，找不到該網頁。<br />請確認輸入正確，或點擊下方按鈕返回首頁。<br />
+        如需幫助，歡迎聯繫我們。
       </Typography>
 
       <Box
