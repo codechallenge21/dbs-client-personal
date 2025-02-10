@@ -7,11 +7,17 @@ import {
   useTheme,
   useMediaQuery,
   Typography,
+  Button,
 } from '@mui/material';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import RotateRightRounded from '@mui/icons-material/RotateRightRounded';
 import ChannelContentContext from '../../channel-context-provider/ChannelContentContext';
-import { SendRounded, CloseRounded } from '@mui/icons-material';
+import {
+  SendRounded,
+  CloseRounded,
+  PersonPinRounded,
+  ArrowDropDownRounded,
+} from '@mui/icons-material';
 import Image from 'next/image';
 import pdfPreview from '@/assets/Images/Pdf Icon.svg';
 import txtPerview from '@/assets/Images/Txt Icon.svg';
@@ -290,20 +296,18 @@ const TextInput: React.FC<TextInputProps> = ({
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <Box
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
+          zIndex: 10,
           width: '100%',
+          display: 'flex',
           maxWidth: '760px',
           minHeight: '116px',
           maxHeight: '760px',
-          position: 'relative',
-          bottom: 0,
-          backgroundColor: '#F5F5F5',
-          borderRadius: '16px',
-          zIndex: 10,
-          marginTop: isMobile ? 3 : 0,
           overflow: 'hidden',
-          justifyContent: 'flex-end',
+          borderRadius: '16px',
+          flexDirection: 'column',
+          backgroundColor: '#F5F5F5',
+          marginTop: isMobile ? 3 : 0,
+          justifyContent: 'space-between',
         }}
       >
         {files.length > 0 && (
@@ -388,12 +392,12 @@ const TextInput: React.FC<TextInputProps> = ({
         )}
         <Box
           sx={{
+            gap: '10px',
             width: '100%',
-            paddingTop: '16px',
-            paddingInline: '10px',
             overflowY: 'auto',
-            maxHeight: '200px',
             minHeight: '40px',
+            maxHeight: '200px',
+            padding: '16px 8px',
             '&::-webkit-scrollbar': {
               width: '8px',
             },
@@ -412,55 +416,98 @@ const TextInput: React.FC<TextInputProps> = ({
         >
           <TextareaAutosize
             minRows={1}
-            // maxRows={10}
-            placeholder="傳訊息給智能顧問"
             style={{
               width: '100%',
-              paddingTop: isMobile ? '20px' : '2px',
-              paddingBottom: isMobile ? '20px' : '',
-              borderRadius: '8px',
               border: 'none',
-              outline: 'none',
               resize: 'none',
+              outline: 'none',
               fontSize: '16px',
               color: '#212B36',
-              backgroundColor: '#F5F5F5',
               overflow: 'auto',
+              borderRadius: '8px',
+              backgroundColor: '#F5F5F5',
+              paddingTop: isMobile ? '20px' : '2px',
+              paddingBottom: isMobile ? '20px' : '',
             }}
-            className="textarea-autosize"
             value={userInputValue}
+            placeholder="傳訊息給智能顧問"
             onChange={handleOnChangeUserInput}
             onKeyDown={handleOnKeyDownUserInput}
           />
         </Box>
         <Box
           sx={{
+            gap: '10px',
             width: '100%',
-            marginTop: '16px',
-            justifyContent: 'space-between',
             display: 'flex',
-            gap: '16px',
-            flexWrap: 'wrap',
-            padding: '22px',
-            position: 'relative',
+            paddingTop: '10px',
+            paddingLeft: '6px',
+            paddingRight: '16px',
+            paddingBottom: '10px',
           }}
         >
           <Box
             sx={{
+              gap: '16px',
               width: '100%',
               display: 'flex',
-              gap: '16px',
+              justifyContent: 'space-between',
             }}
           >
+            <DropdownMenu isTextInput advisor={advisorType} />
+
+            {isInteracting ? (
+              <Box>
+                <RotateRightRounded sx={{ color: '#1877F2', fontSize: 24 }} />
+              </Box>
+            ) : userInputValue !== '' && !isListening ? (
+              <IconButton onClick={handleClickSubmitOrAudioFileUpload}>
+                <SendRounded sx={{ color: 'black' }} />
+              </IconButton>
+            ) : (
+              <IconButton
+                onClick={handleListening}
+                className={isListening ? 'mic-listening' : ''}
+              >
+                <MicRoundedIcon
+                  className={isListening ? 'mic-icon' : ''}
+                  sx={{ color: isListening ? 'white' : 'black' }}
+                />
+              </IconButton>
+            )}
+          </Box>
+        </Box>
+      </Box>
+
+      <Box
+        sx={{
+          gap: '10px',
+          width: '760px',
+          height: '58px',
+          paddingLeft: '16px',
+          paddingRight: '16px',
+        }}
+      >
+        <Box
+          sx={{
+            width: '728px',
+            height: '58px',
+            display: 'flex',
+            paddingTop: '10px',
+            paddingLeft: '10px',
+            paddingRight: '10px',
+            paddingBottom: '8px',
+            background: '#EBE3DD',
+            borderBottomLeftRadius: '16px',
+            borderBottomRightRadius: '16px',
+            justifyContent: 'space-between',
+          }}
+        >
+          <Box>
             <IconButton
               component="span"
               onDrop={handleDrop}
               onDragOver={handleDragOver}
-              sx={{
-                position: 'absolute',
-                bottom: '10px',
-                left: '10px',
-              }}
             >
               <AttachFileRoundedIcon
                 sx={{ transform: 'rotate(180deg)', color: 'black' }}
@@ -474,54 +521,32 @@ const TextInput: React.FC<TextInputProps> = ({
               onChange={handleFileSelect}
               style={{ display: 'none' }}
             />
-            <IconButton
-              sx={{
-                position: 'absolute',
-                bottom: '10px',
-                left: '58px',
-              }}
-            >
-              <DropdownMenu isTextInput advisor={advisorType} />
-            </IconButton>
           </Box>
-
-          {isInteracting ? (
-            <Box
+          <Button
+            sx={{
+              gap: '8px',
+              width: '150px',
+              height: '40px',
+              padding: '8px',
+              borderRadius: '8px',
+            }}
+            startIcon={<PersonPinRounded sx={{ color: '#212B36' }} />}
+            endIcon={<ArrowDropDownRounded sx={{ color: '#212B36' }} />}
+          >
+            <Typography
               sx={{
-                position: 'absolute',
-                bottom: '10px',
-                right: '10px',
+                fontWeight: 700,
+                fontSize: '14px',
+                color: '#212B36',
+                lineHeight: '24px',
+                textAlign: 'center',
+                letterSpacing: '0px',
+                fontFamily: 'Public Sans',
               }}
             >
-              <RotateRightRounded sx={{ color: '#1877F2', fontSize: 24 }} />
-            </Box>
-          ) : userInputValue !== '' && !isListening ? (
-            <IconButton
-              sx={{
-                position: 'absolute',
-                bottom: '10px',
-                right: '10px',
-              }}
-              onClick={handleClickSubmitOrAudioFileUpload}
-            >
-              <SendRounded sx={{ color: 'black' }} />
-            </IconButton>
-          ) : (
-            <IconButton
-              onClick={handleListening}
-              className={isListening ? 'mic-listening' : ''}
-              sx={{
-                position: 'absolute',
-                bottom: '10px',
-                right: '10px',
-              }}
-            >
-              <MicRoundedIcon
-                className={isListening ? 'mic-icon' : ''}
-                sx={{ color: isListening ? 'white' : 'black' }}
-              />
-            </IconButton>
-          )}
+              關聯個案
+            </Typography>
+          </Button>
         </Box>
       </Box>
     </>

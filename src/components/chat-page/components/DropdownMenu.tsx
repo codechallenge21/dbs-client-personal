@@ -12,29 +12,29 @@ import {
   Box,
 } from '@mui/material';
 import {
-  AccountBalanceWalletRounded,
-  BusinessCenterRounded,
-  LocalHospitalRounded,
-  MoneyOffRounded,
-  PhishingRounded,
   WorkRounded,
+  PhishingRounded,
+  MoneyOffRounded,
+  LocalHospitalRounded,
+  SupportAgentOutlined,
+  BusinessCenterRounded,
+  AccountBalanceWalletRounded,
 } from '@mui/icons-material';
-import { AdvisorType } from '../../../app/chat/types';
-import ChannelContentContext from '../../channel-context-provider/ChannelContentContext';
-import { useRouter } from 'next/navigation';
-import SupportAgentIcon from '@mui/icons-material/SupportAgent';
-import EditableItem from '@/components/editable-item/EditableItem';
-import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import apis from '@/utils/hooks/apis/apis';
-import DeleteDialog from '@/components/dialogs/DeleteDialog';
+import { useRouter } from 'next/navigation';
+import { AdvisorType } from '../../../app/chat/types';
 import EditDialog from '@/components/dialogs/EditDialog';
+import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
+import DeleteDialog from '@/components/dialogs/DeleteDialog';
+import EditableItem from '@/components/editable-item/EditableItem';
+import ChannelContentContext from '../../channel-context-provider/ChannelContentContext';
 
 const listItems = [
   {
     title: '萬事通',
     value: AdvisorType.DEFAULT,
     description: '提供個案跨領域資源評估與整合方案',
-    icon: <SupportAgentIcon />,
+    icon: <SupportAgentOutlined />,
   },
   {
     title: '債務案件顧問',
@@ -213,26 +213,44 @@ export default function DropdownMenu({
         <Box
           onClick={(e) => setToolsAnchor(e.currentTarget)}
           sx={{
-            background: 'none',
-            cursor: 'pointer',
             width: '24px',
             height: '24px',
+            cursor: 'pointer',
+            background: 'none',
           }}
         >
           {listItems
             .filter((item) => item.value === advisor)
-            .map((item) => (
-              <ListItemIcon
-                key={item.value}
+            .map((item, index) => (
+              <Box
                 sx={{
-                  color: 'black',
-                  minWidth: 'auto',
-                  width: '24px',
-                  height: '24px',
+                  gap: '8px',
+                  width: '200px',
+                  height: '38px',
+                  display: 'flex',
+                  paddingTop: '7px',
+                  borderRadius: '8px',
+                  paddingLeft: '10px',
+                  paddingRight: '10px',
+                  paddingBottom: '7px',
+                  alignItems: 'center',
                 }}
+                key={index}
               >
-                {item.icon}
-              </ListItemIcon>
+                <ListItemIcon
+                  sx={{
+                    width: '24px',
+                    height: '24px',
+                    color: 'black',
+                    minWidth: 'auto',
+                  }}
+                >
+                  {item.icon}
+                </ListItemIcon>
+                <ListItemText sx={{ textAlign: 'start' }}>
+                  {item.title}
+                </ListItemText>
+              </Box>
             ))}
         </Box>
       ) : (
@@ -248,7 +266,7 @@ export default function DropdownMenu({
               borderRadius: toolsAnchor ? '10px' : '0px',
               cursor:
                 chatResponses[1]?.organizationChannelTitle ||
-                  selectedChannel?.organizationChannelTitle
+                selectedChannel?.organizationChannelTitle
                   ? 'pointer'
                   : 'default',
               height: '40px',
@@ -257,7 +275,7 @@ export default function DropdownMenu({
             }}
           >
             {chatResponses[1]?.organizationChannelTitle ||
-              selectedChannel?.organizationChannelTitle ? (
+            selectedChannel?.organizationChannelTitle ? (
               <>
                 {chatResponses[1]?.organizationChannelTitle ||
                   selectedChannel?.organizationChannelTitle}
