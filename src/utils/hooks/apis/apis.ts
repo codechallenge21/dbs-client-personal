@@ -1,10 +1,10 @@
-import { fetcher, fetcherConfig, uploadFetcher } from "./fetchers";
-import axios from "axios";
+import { fetcher, fetcherConfig, uploadFetcher } from './fetchers';
+import axios from 'axios';
 import {
   OrganizationChannel,
   OrganizationChannelResponse,
   OrganizationChannelChatInteractResponse,
-} from "@/interfaces/entities";
+} from '@/interfaces/entities';
 import {
   LogApiPayload,
   GetChannelsApiPayload,
@@ -13,8 +13,8 @@ import {
   SubmitUserInputsApiPayload,
   DeleteChannelApiPayload,
   UpdateChannelApiPayload,
-} from "@/interfaces/payloads";
-import { AxiosRequestConfig } from "axios";
+} from '@/interfaces/payloads';
+import { AxiosRequestConfig } from 'axios';
 // import { fetcher, fetcherConfig, uploadFetcher } from "@eGroupAI/hooks/apis/fetchers";
 
 // import Cookies from "universal-cookie";
@@ -25,11 +25,11 @@ const tools = {
   /**
    * Log errors.
    */
-  createLog: (payload?: LogApiPayload) => fetcher.post("/logs", payload),
+  createLog: (payload?: LogApiPayload) => fetcher.post('/logs', payload),
 };
 
 const baseURL =
-  process.env.NODE_ENV === "production"
+  process.env.NODE_ENV === 'production'
     ? `${process.env.URL_FOR_NEXTJS_SERVER_SIDE_API}/api/v1/`
     : `${process.env.NEXT_PUBLIC_PROXY_URL}/api/v1/`;
 
@@ -62,7 +62,7 @@ const apis = {
 
     const formData = new FormData();
     if (file) {
-      formData.append("file", file);
+      formData.append('file', file);
     }
 
     return uploadFetcher.post<OrganizationChannelResponse>(
@@ -71,28 +71,33 @@ const apis = {
       config
     );
   },
-  submitUserInputs: (payload?: SubmitUserInputsApiPayload) => {
-    const { organizationId, organizationChannelId, query, advisorType } = payload || {};
+  submitUserInputs: (
+    payload?: SubmitUserInputsApiPayload,
+    config?: AxiosRequestConfig
+  ) => {
+    const { organizationId, organizationChannelId, query, advisorType } =
+      payload || {};
+    const url = `/organizations/${organizationId}/channels/chat`;
+
+    const dataWithoutChannel = { query, advisorType };
+    const dataWithChannel = { organizationChannelId, query, advisorType };
+
     if (!organizationChannelId) {
       return fetcher.post<OrganizationChannelChatInteractResponse>(
-        `/organizations/${organizationId}/channels/chat`,
-        {
-          query,
-          advisorType,
-        }
+        url,
+        dataWithoutChannel,
+        config
       );
     }
     return fetcher.post<OrganizationChannelChatInteractResponse>(
-      `/organizations/${organizationId}/channels/chat`,
-      {
-        organizationChannelId,
-        query,
-        advisorType,
-      }
+      url,
+      dataWithChannel,
+      config
     );
   },
   updateChannelDetail: (payload?: UpdateChannelApiPayload) => {
-    const { organizationId, organizationChannelId, organizationChannelTitle } = payload || {};
+    const { organizationId, organizationChannelId, organizationChannelTitle } =
+      payload || {};
     return fetcher.patch<OrganizationChannel>(
       `/organizations/${organizationId}/channels/${organizationChannelId}`,
       {

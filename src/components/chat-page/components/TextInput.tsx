@@ -9,7 +9,6 @@ import {
   Typography,
 } from '@mui/material';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import RotateRightRounded from '@mui/icons-material/RotateRightRounded';
 import ChannelContentContext from '../../channel-context-provider/ChannelContentContext';
 import { SendRounded, CloseRounded } from '@mui/icons-material';
 import Image from 'next/image';
@@ -19,6 +18,8 @@ import imagePerview from '@/assets/Images/Image Icon.svg';
 import docPerview from '@/assets/Images/Doc Icon.svg';
 import DropdownMenu from './DropdownMenu';
 import { SubmitUserInputsApiPayload } from '@/interfaces/payloads';
+import StopCircleRounded from '@mui/icons-material/StopCircleRounded';
+import axios, { AxiosRequestConfig } from 'axios';
 
 interface SpeechRecognition extends EventTarget {
   continuous: boolean;
@@ -62,7 +63,10 @@ interface SpeechRecognitionErrorEvent extends Event {
 }
 
 type TextInputProps = {
-  submitUserInputs: (input: SubmitUserInputsApiPayload) => Promise<{
+  submitUserInputs: (
+    input: SubmitUserInputsApiPayload,
+    config?: AxiosRequestConfig
+  ) => Promise<{
     data: {
       response: string;
       organizationChannelTitle: string;
@@ -144,43 +148,57 @@ const TextInput: React.FC<TextInputProps> = ({
     advisorType,
   } = useContext(ChannelContentContext);
 
+  const abortControllerRef = useRef<AbortController | null>(null);
   const handleSendMessage = useCallback(async () => {
+    if (isInteracting) return;
+
+    // Create a new AbortController for each request
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
+    // Update your UI immediately if needed
+    setChatResponses((prev) => [
+      ...prev,
+      {
+        organizationChannelMessageType: 'USER',
+        organizationChannelMessageContent: userInputValue,
+        organizationChannelFiles: files,
+      },
+    ]);
+
+    const payload = {
+      organizationId: '4aba77788ae94eca8d6ff330506af944',
+      query: userInputValue,
+      advisorType,
+      organizationChannelId: selectedChannelId,
+    };
+
     try {
-      if (isInteracting) {
-        return;
-      }
-      setChatResponses((prev) => [
-        ...prev,
-        {
-          organizationChannelMessageType: 'USER',
-          organizationChannelMessageContent: userInputValue,
-          organizationChannelFiles: files,
-        },
-      ]);
-      const response = await submitUserInputs({
-        organizationId: '4aba77788ae94eca8d6ff330506af944',
-        query: userInputValue,
-        advisorType,
-        organizationChannelId: selectedChannelId,
+      // Now you can pass two arguments:
+      const response = await submitUserInputs(payload, {
+        signal: controller.signal, // Pass the abort signal here
       });
+
       if (response.data.response) {
         setChatResponses((prev) => [
           ...prev,
           {
             organizationChannelMessageType: 'AI',
-            organizationChannelMessageContent: response?.data?.response,
-            organizationChannelTitle: response?.data?.organizationChannelTitle,
+            organizationChannelMessageContent: response.data.response,
+            organizationChannelTitle: response.data.organizationChannelTitle,
           },
         ]);
-        setSelectedChannelId(response?.data?.organizationChannelId);
-        if (channelsMutate) {
-          channelsMutate();
-        }
+        setSelectedChannelId(response.data.organizationChannelId);
+        channelsMutate && channelsMutate();
         setUserInputValue('');
         setFiles([]);
       }
-    } catch (error) {
-      console.error('Error sending message:', error);
+    } catch (error: any) {
+      if (axios.isCancel(error) || error.code === 'ERR_CANCELED') {
+        console.log('Request was canceled by the user.');
+      } else {
+        console.error('Request error:', error);
+      }
     }
   }, [
     channelsMutate,
@@ -193,6 +211,13 @@ const TextInput: React.FC<TextInputProps> = ({
     advisorType,
     files,
   ]);
+
+  const handleCancel = () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      console.log('Request canceled by user.');
+    }
+  };
 
   const handleClickSubmitOrAudioFileUpload = useCallback(() => {
     if (userInputValue !== '') {
@@ -478,15 +503,20 @@ const TextInput: React.FC<TextInputProps> = ({
           </Box>
 
           {isInteracting ? (
-            <Box
+            <IconButton
+              onClick={handleCancel}
+              className={isInteracting ? 'interacting' : ''}
               sx={{
                 position: 'absolute',
                 bottom: '10px',
                 right: '10px',
               }}
             >
-              <RotateRightRounded sx={{ color: '#1877F2', fontSize: 24 }} />
-            </Box>
+              <StopCircleRounded
+                className={'interactingIcon'}
+                sx={{ color: '#0066CC' }}
+              />
+            </IconButton>
           ) : userInputValue !== '' && !isListening ? (
             <IconButton
               sx={{

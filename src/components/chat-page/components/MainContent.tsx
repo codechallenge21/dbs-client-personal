@@ -94,8 +94,8 @@ const MainContent = () => {
         <ChannelMessagePanel
           channel={selectedChannel}
           chatResponses={chatResponses}
+          isInteractingInChat={isInteractingInChat}
         />
-        {/* {isInteractingInChat && <InformationPage />} */}
         <TextInput
           submitUserInputs={submitUserInputs}
           isInteracting={isInteracting}

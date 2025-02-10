@@ -26,15 +26,18 @@ import {
   Done as DoneIcon,
   ThumbDown,
 } from '@mui/icons-material';
+import CustomLoader from '../loader/page';
 
 export interface ChannelMessagePanelProps {
   channel?: OrganizationChannel;
   chatResponses: OrganizationChannelMessage[];
+  isInteractingInChat: boolean;
 }
 
 const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
   channel,
   chatResponses,
+  isInteractingInChat,
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -459,6 +462,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
             </Box>
           </React.Fragment>
         ))}
+        {isInteractingInChat && <CustomLoader />}
       </Box>
     </Container>
   );
