@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Drawer from '@mui/material/Drawer';
 import ListItem from '@mui/material/ListItem';
 import {
@@ -29,13 +29,14 @@ import { styled, Theme, CSSObject } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Cookies from 'js-cookie';
+import { jwtDecode } from 'jwt-decode';
+import ChannelContentContext from '../channel-context-provider/ChannelContentContext';
 
 interface ToolbarDrawerProps {
   open: boolean;
-  children: React.ReactNode;
-  setOpenUpload?: (open: boolean) => void;
-  setIsOpenDrawer: (open: boolean) => void;
   openDataSource?: boolean;
+  children: React.ReactNode;
+  setIsOpenDrawer: (open: boolean) => void;
 }
 
 const drawerItems = [
@@ -115,7 +116,10 @@ const MainBox = styled('div', {
 
 const drawerWidth = 240;
 
-const isLogin = Cookies.get('isLogin') || null;
+const isLogin = Cookies.get('tid') || null;
+const token = Cookies.get('m_info') || null;
+const decodedHeader = token ? jwtDecode(token, { header: true }) : null;
+const loginName = decodedHeader ? (decodedHeader as any).loginName : null;
 
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
@@ -166,7 +170,6 @@ const CustomDrawer = styled(MuiDrawer, {
 const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
   open,
   children,
-  setOpenUpload,
   setIsOpenDrawer,
   openDataSource = false,
 }) => {
@@ -178,7 +181,18 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
   const [isExpanded, setIsExpanded] = useState(true); // Track expanded/collapsed state
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
+  const { selectedChannel, selectedChannelId, isInteractingInChat } =
+    useContext(ChannelContentContext);
+
   const resetChat = () => {
+    if (selectedChannel || selectedChannelId || isInteractingInChat) {
+      if (pathname === '/chat' && !searchParams.has('organizationChannelId')) {
+        window.location.reload();
+      } else {
+        router.push('/chat');
+      }
+      return;
+    }
     const params = new URLSearchParams(searchParams);
     params.delete('organizationChannelId');
     router.push('/chat');
@@ -284,11 +298,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 color: 'var(--Primary-Black, #212B36)',
               }}
               onClick={() => {
-                if (setOpenUpload) {
-                  setOpenUpload(true);
-                } else {
-                  resetChat();
-                }
+                resetChat();
               }}
             >
               <AddRounded sx={{ color: '#212B36', fontSize: '18px' }} />
@@ -303,7 +313,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                   lineHeight: 'normal',
                 }}
               >
-                New Chat
+                AI問答
               </Typography>
             </Button>
           </ListItem>
@@ -321,11 +331,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               mt: '8px',
             }}
             onClick={() => {
-              if (setOpenUpload) {
-                setOpenUpload(true);
-              } else {
-                resetChat();
-              }
+              resetChat();
             }}
           >
             <AddRounded sx={{ color: '#212B36', fontSize: '20px' }} />
@@ -360,7 +366,26 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 cursor: 'pointer',
                 height: isExpanded || isMobile ? '48px' : 'auto',
               }}
-              onClick={() => router.push(item.route)}
+              onClick={() => {
+                if (index === 3) {
+                  if (
+                    selectedChannel ||
+                    selectedChannelId ||
+                    isInteractingInChat
+                  ) {
+                    if (
+                      pathname === '/chat' &&
+                      !searchParams.has('organizationChannelId')
+                    ) {
+                      window.location.reload();
+                    } else {
+                      router.push('/chat');
+                    }
+                    return;
+                  }
+                }
+                router.push(item.route);
+              }}
             >
               <Typography
                 sx={{
@@ -427,7 +452,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                     color: 'var(--Primary-Black, #212B36)',
                   }}
                 >
-                  UserName
+                  {loginName}
                 </Typography>
               </Box>
             ) : (

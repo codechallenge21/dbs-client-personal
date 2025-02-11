@@ -13,7 +13,6 @@ import {
 } from '@mui/material';
 import {
   AccountBalanceWalletRounded,
-  ArrowDropDownRounded,
   BusinessCenterRounded,
   LocalHospitalRounded,
   MoneyOffRounded,
@@ -22,53 +21,55 @@ import {
 } from '@mui/icons-material';
 import { AdvisorType } from '../../../app/chat/types';
 import ChannelContentContext from '../../channel-context-provider/ChannelContentContext';
-import EditDeleteModal from '../../dialogs/EditDeleteModal';
-import DeleteConfirmationModal from '@/components/dialogs/DeleteConfirmationModal';
-import RenameDialog from './renameChat';
 import { useRouter } from 'next/navigation';
 import SupportAgentIcon from '@mui/icons-material/SupportAgent';
+import EditableItem from '@/components/editable-item/EditableItem';
+import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
+import apis from '@/utils/hooks/apis/apis';
+import DeleteDialog from '@/components/dialogs/DeleteDialog';
+import EditDialog from '@/components/dialogs/EditDialog';
 
 const listItems = [
   {
     title: '萬事通',
     value: AdvisorType.DEFAULT,
-    description: '提供應對策略與資源連結。',
+    description: '提供個案跨領域資源評估與整合方案',
     icon: <SupportAgentIcon />,
   },
   {
     title: '債務案件顧問',
     value: AdvisorType.DEBT,
-    description: '提供債務管理與還款建議，幫助改善財務壓力。',
+    description: '提供個案債務評估與紓困整合規劃',
     icon: <MoneyOffRounded />,
-  },
-  {
-    title: '意外案件顧問',
-    value: AdvisorType.CONTINGENCY,
-    description: '快速提供應急策略與風險評估。',
-    icon: <BusinessCenterRounded />,
   },
   {
     title: '詐騙案件顧問',
     value: AdvisorType.FRAUD,
-    description: '快速辨識詐騙風險，提供建議與後續行動指引。',
+    description: '提供個案受騙評估與緊急處理建議',
     icon: <PhishingRounded />,
   },
   {
-    title: '醫療案件顧問',
-    value: AdvisorType.MEDICAL,
-    description: '提供您醫療案件應對策略與資源連結。',
-    icon: <LocalHospitalRounded />,
-  },
-  {
-    title: '就業協助顧問',
+    title: '就業案件顧問',
     value: AdvisorType.EMPLOYMENT,
-    description: '支援您求職與職涯規劃。',
+    description: '提供個案就業評估與職涯輔導規劃',
     icon: <WorkRounded />,
   },
   {
-    title: '財務案件顧問',
-    value: AdvisorType.FINANCIAL,
-    description: '提供儲蓄、投資與債務建議。',
+    title: '家庭負擔案件顧問',
+    value: AdvisorType.FAMILY,
+    description: '提供個案家庭經濟評估與扶助方案',
+    icon: <BusinessCenterRounded />,
+  },
+  {
+    title: '醫療及意外案件顧問',
+    value: AdvisorType.MEDICAL_CONTINGENCY,
+    description: '提供個案醫療評估與資源連結規劃',
+    icon: <LocalHospitalRounded />,
+  },
+  {
+    title: '保險案件顧問',
+    value: AdvisorType.INSURANCE,
+    description: '提供個案保險評估與權益申請規劃',
     icon: <AccountBalanceWalletRounded />,
   },
 ];
@@ -84,48 +85,127 @@ export default function DropdownMenu({
   const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const { setAdvisorType, chatResponses, selectedChannel } = useContext(
-    ChannelContentContext
-  );
+  const {
+    setAdvisorType,
+    chatResponses,
+    selectedChannel,
+    selectedChannelId,
+    setSelectedChannel,
+    setSelectedChannelId,
+  } = useContext(ChannelContentContext);
 
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [toolsAnchor, setToolsAnchor] = useState<null | HTMLElement>(null);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [openEditDeleteModal, setOpenEditDeleteModal] =
-    useState<HTMLElement | null>(null);
-  const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
+  const [toolsAnchorDeleteEdit, setToolsAnchorDeleteEdit] =
+    useState<null | HTMLElement>(null);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState<boolean>(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
+  const { excute: deleteChannel } = useAxiosApi(apis.deleteChannel);
+  const { excute: updateChannelDetail } = useAxiosApi(apis.updateChannelDetail);
+  const { excute: getChannelDetail } = useAxiosApi(apis.getChannelDetail);
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setOpenEditDeleteModal(event.currentTarget);
-  };
-
-  const handleSave = (newName: string) => {
-    console.log('New name:', newName);
-  };
-
-  const handleClose = () => {
-    setOpenEditDeleteModal(null);
-  };
-
-  const handleConfirmDelete = () => {
-    router.push('/');
-    setIsDeleteDialogOpen(false);
-  };
-
-  const handleEdit = () => {
-    setIsRenameDialogOpen(true);
-  };
-
-  const handleDelete = () => {
-    setIsDeleteDialogOpen(true);
-  };
+  const fetchChannelDetail = useCallback(
+    async (organizationChannelId: string) => {
+      try {
+        const res = await getChannelDetail({
+          organizationId: '4aba77788ae94eca8d6ff330506af944',
+          organizationChannelId,
+        });
+        setSelectedChannel(res.data);
+        setSelectedChannelId(organizationChannelId);
+      } catch (error) {
+        console.error('Failed to fetch channel details:', error);
+      }
+    },
+    [getChannelDetail, setSelectedChannel, setSelectedChannelId]
+  );
 
   const handleOnClickMenuItem = useCallback(
     (value: AdvisorType) => {
       if (setAdvisorType) setAdvisorType(value);
-      setToolsAnchor(null);
+      setToolsAnchorDeleteEdit(null);
     },
     [setAdvisorType]
   );
+
+  const handleCloseToolsMenu = useCallback(() => {
+    setToolsAnchorDeleteEdit(null);
+    setActiveIndex(null);
+  }, []);
+
+  const handleCloseDeleteDialog = useCallback((event: React.MouseEvent) => {
+    setToolsAnchorDeleteEdit(null);
+    event.stopPropagation();
+    setIsDeleteDialogOpen(false);
+  }, []);
+
+  const handleDeleteChannelOpenConfirmDialog = useCallback(
+    (event: React.MouseEvent) => {
+      setToolsAnchorDeleteEdit(null);
+      event.stopPropagation();
+      setIsDeleteDialogOpen(true);
+    },
+    []
+  );
+
+  const handleDeleteChannelConfirm = useCallback(
+    async (event: React.MouseEvent) => {
+      event.stopPropagation();
+      try {
+        await deleteChannel({
+          organizationId: '4aba77788ae94eca8d6ff330506af944',
+          organizationChannelId: selectedChannelId || '',
+        });
+        window.location.href = '/chat';
+        setIsDeleteDialogOpen(false);
+        handleCloseToolsMenu();
+      } catch (error) {
+        console.error('Error deleting the channel', error);
+      }
+    },
+    [deleteChannel, handleCloseToolsMenu, selectedChannelId]
+  );
+
+  const handleEditChannelConfirm = useCallback(
+    async (newTitle: string) => {
+      try {
+        await updateChannelDetail({
+          organizationId: '4aba77788ae94eca8d6ff330506af944',
+          organizationChannelId: selectedChannelId || '',
+          organizationChannelTitle: newTitle,
+        });
+        if (selectedChannelId) {
+          await fetchChannelDetail(selectedChannelId);
+          router.push(`/chat?organizationChannelId=${selectedChannelId}`);
+        }
+        setIsEditDialogOpen(false);
+      } catch (error) {
+        console.error('Error updating channel title', error);
+      }
+    },
+    [updateChannelDetail, selectedChannelId, fetchChannelDetail]
+  );
+
+  const handleOpenEditChannelDialog = useCallback((event: React.MouseEvent) => {
+    event.stopPropagation();
+    setIsEditDialogOpen(true);
+    setToolsAnchorDeleteEdit(null);
+  }, []);
+
+  const handleCloseEditDialog = useCallback((event: React.MouseEvent) => {
+    event.stopPropagation();
+    setIsEditDialogOpen(false);
+    setToolsAnchorDeleteEdit(null);
+  }, []);
+
+  const handleMenuOpen = (
+    event: React.MouseEvent<HTMLElement>,
+    index: number
+  ) => {
+    event.stopPropagation();
+    setToolsAnchorDeleteEdit(event.currentTarget);
+    setActiveIndex(index);
+  };
 
   return (
     <>
@@ -168,27 +248,32 @@ export default function DropdownMenu({
               borderRadius: toolsAnchor ? '10px' : '0px',
               cursor:
                 chatResponses[1]?.organizationChannelTitle ||
-                selectedChannel?.organizationChannelTitle
+                  selectedChannel?.organizationChannelTitle
                   ? 'pointer'
                   : 'default',
               height: '40px',
               fontSize: '16px',
               fontFamily: 'DFPHeiBold-B5',
             }}
-            onClick={
-              chatResponses[1]?.organizationChannelTitle ||
-              selectedChannel?.organizationChannelTitle
-                ? handleClick
-                : undefined
-            }
           >
             {chatResponses[1]?.organizationChannelTitle ||
-            selectedChannel?.organizationChannelTitle ? (
+              selectedChannel?.organizationChannelTitle ? (
               <>
                 {chatResponses[1]?.organizationChannelTitle ||
                   selectedChannel?.organizationChannelTitle}
-                <ArrowDropDownRounded
-                  sx={{ width: '32px', height: '32px', color: 'black' }}
+                <EditableItem
+                  index={0}
+                  isChannelSummary
+                  toolsAnchor={toolsAnchorDeleteEdit}
+                  activeIndex={activeIndex}
+                  key={selectedChannelId}
+                  handleMenuOpen={handleMenuOpen}
+                  setToolsAnchor={setToolsAnchorDeleteEdit}
+                  handleCloseToolsMenu={handleCloseToolsMenu}
+                  handleOpenEditChannelDialog={handleOpenEditChannelDialog}
+                  handleDeleteChannelOpenConfirmDialog={
+                    handleDeleteChannelOpenConfirmDialog
+                  }
                 />
               </>
             ) : (
@@ -259,7 +344,10 @@ export default function DropdownMenu({
             }}
             disabled={
               item.value !== AdvisorType.DEFAULT &&
-              item.value !== AdvisorType.DEBT
+              item.value !== AdvisorType.DEBT &&
+              item.value !== AdvisorType.FRAUD &&
+              item.value !== AdvisorType.EMPLOYMENT &&
+              item.value !== AdvisorType.MEDICAL_CONTINGENCY
             }
             onClick={() => handleOnClickMenuItem(item.value)}
           >
@@ -313,38 +401,25 @@ export default function DropdownMenu({
           </MenuItem>
         ))}
       </Menu>
-      <DeleteConfirmationModal
+      <DeleteDialog
         open={isDeleteDialogOpen}
-        onClose={() => setIsDeleteDialogOpen(false)}
-        onDelete={handleConfirmDelete}
-        channelName={
-          selectedChannel || chatResponses[1]
-            ? [
-                {
-                  ...selectedChannel,
-                  ...chatResponses[1],
-                  organizationChannelId:
-                    selectedChannel?.organizationChannelId ||
-                    chatResponses[1]?.organizationChannelMessageId ||
-                    '',
-                  selected: true,
-                  organization: selectedChannel?.organization || {},
-                },
-              ]
-            : []
+        onClose={handleCloseDeleteDialog}
+        onConfirm={handleDeleteChannelConfirm}
+        deletableName={
+          selectedChannel?.organizationChannelTitle ||
+          chatResponses[1]?.organizationChannelTitle ||
+          ''
         }
       />
-      <EditDeleteModal
-        anchorEl={openEditDeleteModal}
-        onClose={handleClose}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-      />
-      <RenameDialog
-        open={isRenameDialogOpen}
-        onClose={() => setIsRenameDialogOpen(false)}
-        onSave={handleSave}
-        initialName=""
+      <EditDialog
+        open={isEditDialogOpen}
+        onClose={handleCloseEditDialog}
+        onConfirm={handleEditChannelConfirm}
+        editableName={
+          selectedChannel?.organizationChannelTitle ||
+          chatResponses[1]?.organizationChannelTitle ||
+          ''
+        }
       />
     </>
   );
