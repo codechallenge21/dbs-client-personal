@@ -38,6 +38,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
   const [copiedMessageId, setCopiedMessageId] = React.useState<string | null>(
     null
   );
@@ -107,12 +108,12 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
     >
       <Box
         sx={{
-          maxWidth: '760px',
-          minWidth: isMobile ? '100%' : '',
-          height: isMobile ? '100%' : 'calc(100% - 81px)',
-          display: 'flex',
           pt: '16px',
+          display: 'flex',
+          maxWidth: '760px',
           flexDirection: 'column',
+          height: isMobile ? '100%' : 'calc(100% - 81px)',
+          minWidth: isMobile ? '100%' : isTablet ? '350px' : '760px',
         }}
       >
         {sortedData?.map((message, messageIndex) => (

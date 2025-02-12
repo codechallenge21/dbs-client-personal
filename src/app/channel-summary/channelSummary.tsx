@@ -211,7 +211,7 @@ const ChannelSummary = () => {
           setIsDeleteDialogOpen(false);
           handleCloseToolsMenu();
         })
-        .catch(() => {});
+        .catch(() => { });
     },
     [deleteChannel, mutateChannel, handleCloseToolsMenu, organizationChannelId]
   );
@@ -339,7 +339,7 @@ const ChannelSummary = () => {
                   }}
                 >
                   <Tab
-                    label="智能生活轉文字"
+                    label="智能語音轉文字"
                     sx={{
                       fontWeight: 400,
                       fontSize: '14px',
@@ -528,9 +528,9 @@ const ChannelSummary = () => {
                             <Tooltip
                               title={
                                 copiedMessageId ===
-                                selectedChannel
-                                  ?.organizationChannelTranscriptList[0]
-                                  ?.organizationChannelTranscriptId
+                                  selectedChannel
+                                    ?.organizationChannelTranscriptList[0]
+                                    ?.organizationChannelTranscriptId
                                   ? 'Copied'
                                   : 'Copy'
                               }
@@ -555,9 +555,9 @@ const ChannelSummary = () => {
                                 }
                               >
                                 {copiedMessageId ===
-                                selectedChannel
-                                  ?.organizationChannelTranscriptList[0]
-                                  ?.organizationChannelTranscriptId ? (
+                                  selectedChannel
+                                    ?.organizationChannelTranscriptList[0]
+                                    ?.organizationChannelTranscriptId ? (
                                   <DoneIcon />
                                 ) : (
                                   <ContentCopyRounded
@@ -733,9 +733,9 @@ const ChannelSummary = () => {
                               <Tooltip
                                 title={
                                   copiedMessageId ===
-                                  selectedChannel
-                                    ?.organizationChannelMessageList[0]
-                                    ?.organizationChannelMessageId
+                                    selectedChannel
+                                      ?.organizationChannelMessageList[0]
+                                      ?.organizationChannelMessageId
                                     ? 'Copied'
                                     : 'Copy'
                                 }
@@ -763,9 +763,9 @@ const ChannelSummary = () => {
                                   }
                                 >
                                   {copiedMessageId ===
-                                  selectedChannel
-                                    ?.organizationChannelMessageList[0]
-                                    ?.organizationChannelMessageId ? (
+                                    selectedChannel
+                                      ?.organizationChannelMessageList[0]
+                                      ?.organizationChannelMessageId ? (
                                     <DoneIcon />
                                   ) : (
                                     <ContentCopyRounded
@@ -1431,8 +1431,8 @@ const ChannelSummary = () => {
                 <Tooltip
                   title={
                     copiedMessageId ===
-                    selectedChannel?.organizationChannelTranscriptList[0]
-                      ?.organizationChannelTranscriptId
+                      selectedChannel?.organizationChannelTranscriptList[0]
+                        ?.organizationChannelTranscriptId
                       ? 'Copied'
                       : 'Copy'
                   }
@@ -1454,8 +1454,8 @@ const ChannelSummary = () => {
                     }
                   >
                     {copiedMessageId ===
-                    selectedChannel?.organizationChannelTranscriptList[0]
-                      ?.organizationChannelTranscriptId ? (
+                      selectedChannel?.organizationChannelTranscriptList[0]
+                        ?.organizationChannelTranscriptId ? (
                       <DoneIcon />
                     ) : (
                       <ContentCopyRounded
@@ -1612,8 +1612,8 @@ const ChannelSummary = () => {
                   <Tooltip
                     title={
                       copiedMessageId ===
-                      selectedChannel?.organizationChannelMessageList[0]
-                        ?.organizationChannelMessageId
+                        selectedChannel?.organizationChannelMessageList[0]
+                          ?.organizationChannelMessageId
                         ? 'Copied'
                         : 'Copy'
                     }
@@ -1637,8 +1637,8 @@ const ChannelSummary = () => {
                       }
                     >
                       {copiedMessageId ===
-                      selectedChannel?.organizationChannelMessageList[0]
-                        ?.organizationChannelMessageId ? (
+                        selectedChannel?.organizationChannelMessageList[0]
+                          ?.organizationChannelMessageId ? (
                         <DoneIcon />
                       ) : (
                         <ContentCopyRounded

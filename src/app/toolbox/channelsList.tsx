@@ -106,7 +106,7 @@ const ChannelsList = () => {
             mutateAudioChannels();
           }
         })
-        .catch(() => {});
+        .catch(() => { });
     },
     [
       activeIndex,
@@ -237,7 +237,7 @@ const ChannelsList = () => {
               >
                 <Tab
                   disableRipple
-                  label="智能生活轉文字"
+                  label="智能語音轉文字"
                   sx={{
                     display: 'flex',
                     alignItems: 'center',
@@ -371,7 +371,7 @@ const ChannelsList = () => {
                     }}
                     gutterBottom
                   >
-                    歡迎使用 語音轉文字
+                    智能語音轉文字
                   </Typography>
 
                   <Box
@@ -665,18 +665,18 @@ const ChannelsList = () => {
                             >
                               {channel.organizationChannelTranscriptList[0]
                                 ?.organizationChannelTranscriptStatus ===
-                              'COMPLETE' ? (
+                                'COMPLETE' ? (
                                 <CheckCircleRounded
                                   sx={{ color: ' rgba(17, 141, 87, 1)' }}
                                 />
                               ) : channel.organizationChannelTranscriptList[0]
-                                  ?.organizationChannelTranscriptStatus ===
+                                ?.organizationChannelTranscriptStatus ===
                                 'PROCESSING' ? (
                                 <RotateRightRounded
                                   sx={{ color: 'rgba(0, 102, 204, 1)' }}
                                 />
                               ) : channel.organizationChannelTranscriptList[0]
-                                  ?.organizationChannelTranscriptStatus ===
+                                ?.organizationChannelTranscriptStatus ===
                                 'PENDING' ? (
                                 <PendingActionsRounded
                                   sx={{ color: 'rgba(33, 43, 54, 1)' }}
@@ -830,7 +830,7 @@ const ChannelsList = () => {
             }}
           >
             <Tab
-              label="智能生活轉文字"
+              label="智能語音轉文字"
               sx={{
                 fontWeight: 400,
                 fontSize: '14px',
@@ -896,7 +896,7 @@ const ChannelsList = () => {
               color: 'var(--Primary-Black, #212B36)',
             }}
           >
-            歡迎使用 語音轉文字
+            智能語音轉文字
           </Typography>
           <Box
             sx={{
@@ -1085,13 +1085,13 @@ const ChannelsList = () => {
                         sx={{ color: ' rgba(52, 199, 89, 1)' }}
                       />
                     ) : channel.organizationChannelTranscriptList[0]
-                        ?.organizationChannelTranscriptStatus ===
+                      ?.organizationChannelTranscriptStatus ===
                       'PROCESSING' ? (
                       <RotateRightRounded
                         sx={{ color: 'rgba(0, 102, 204, 1)' }}
                       />
                     ) : channel.organizationChannelTranscriptList[0]
-                        ?.organizationChannelTranscriptStatus === 'PENDING' ? (
+                      ?.organizationChannelTranscriptStatus === 'PENDING' ? (
                       <PendingActionsRounded
                         sx={{ color: 'rgba(33, 43, 54, 1)' }}
                       />
