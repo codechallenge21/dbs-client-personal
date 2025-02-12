@@ -239,7 +239,6 @@ export default function PopularArea() {
             display: 'flex',
             overflowY: 'auto',
             borderRadius: '8px',
-            // alignItems: 'center',
             flexDirection: 'column',
             backgroundColor: 'white',
             height: isMobile ? '100%' : '96vh',
@@ -263,19 +262,6 @@ export default function PopularArea() {
             },
           }}
         >
-          {/* <Box
-            sx={{
-              gap: '20px',
-              height: '100%',
-              display: 'flex',
-              alignSelf: 'stretch',
-              flexDirection: 'column',
-              alignItems: 'flex-start',
-              '@media (min-width: 600px)': {
-                flex: '1 0 0',
-              },
-            }}
-          > */}
           <Box
             sx={{
               gap: '16px',
@@ -353,6 +339,9 @@ export default function PopularArea() {
                         padding: '24px 16px 16px 16px',
                         borderBottomRightRadius: '8px',
                         backgroundColor: 'var(--Primary-, #EBE3DD)',
+                        '&:hover': {
+                          backgroundColor: '#CC00000D',
+                        },
                       }}
                     >
                       <Typography
@@ -445,8 +434,8 @@ export default function PopularArea() {
           <Box
             sx={{
               gap: '16px',
+              height: 'auto',
               display: 'flex',
-              minHeight: '320px',
               overflow: 'visible',
               flexDirection: 'column',
             }}
@@ -575,12 +564,14 @@ export default function PopularArea() {
                       alignItems: 'flex-start',
                       backgroundColor: 'var(--Primary-, #EBE3DD)',
                       '&:hover': {
+                        backgroundColor: '#CC00000D',
                         '& .hover-text': {
                           color: '#990000',
                         },
                         '& .hover-icon': {
                           color: '#990000',
                           marginLeft: '5px',
+                          transition: 'margin-left 300ms ease-in-out',
                         },
                       },
                     }}
@@ -866,7 +857,6 @@ export default function PopularArea() {
               ))}
             </Box>
           </Box>
-          {/* </Box> */}
         </Box>
       </ToolbarDrawer>
     </Box>
