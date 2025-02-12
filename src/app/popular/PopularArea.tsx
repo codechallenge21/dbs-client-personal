@@ -35,56 +35,93 @@ export default function PopularArea() {
     useState(true);
   const [isRecommendedScrolledRight, setIsRecommendedScrolledRight] =
     useState(false);
+  const tolerance = 5; // Adjust if necessary
 
   const handleFocusScrollRight = () => {
     if (focusRef.current) {
       const itemWidth = 260 + 16;
+      const scrollDelta = itemWidth * (isMobile ? 1 : 3);
+      const newScrollLeft = focusRef.current.scrollLeft + scrollDelta;
+
+      // Trigger smooth scrolling
       focusRef.current.scrollBy({
         behavior: 'smooth',
-        left: itemWidth * (isMobile ? 1 : 3),
+        left: scrollDelta,
       });
-      setTimeout(handleFocusScroll, 30);
+
+      const { clientWidth, scrollWidth } = focusRef.current;
+      // Optimistically update state
+      setIsFocusScrolledLeft(newScrollLeft <= tolerance);
+      setIsFocusScrolledRight(
+        newScrollLeft >= scrollWidth - clientWidth - tolerance
+      );
     }
   };
 
   const handleFocusScrollLeft = () => {
     if (focusRef.current) {
       const itemWidth = 260 + 16;
+      const scrollDelta = itemWidth * (isMobile ? 1 : 3);
+      const newScrollLeft = focusRef.current.scrollLeft - scrollDelta;
+
       focusRef.current.scrollBy({
         behavior: 'smooth',
-        left: -itemWidth * (isMobile ? 1 : 3),
+        left: -scrollDelta,
       });
-      setTimeout(handleFocusScroll, 30);
+
+      const { clientWidth, scrollWidth } = focusRef.current;
+      setIsFocusScrolledLeft(newScrollLeft <= tolerance);
+      setIsFocusScrolledRight(
+        newScrollLeft >= scrollWidth - clientWidth - tolerance
+      );
     }
   };
 
   const handleRecommendedScrollRight = () => {
     if (recommendationsRef.current) {
       const itemWidth = 260 + 16;
+      const scrollDelta = itemWidth * (isMobile ? 1 : 3);
+      const newScrollLeft = recommendationsRef.current.scrollLeft + scrollDelta;
+
       recommendationsRef.current.scrollBy({
         behavior: 'smooth',
-        left: itemWidth * (isMobile ? 1 : 3),
+        left: scrollDelta,
       });
-      setTimeout(handleFocusScroll, 30);
+
+      const { clientWidth, scrollWidth } = recommendationsRef.current;
+      setIsRecommendedScrolledLeft(newScrollLeft <= tolerance);
+      setIsRecommendedScrolledRight(
+        newScrollLeft >= scrollWidth - clientWidth - tolerance
+      );
     }
   };
 
   const handleRecommendedScrollLeft = () => {
     if (recommendationsRef.current) {
       const itemWidth = 260 + 16;
+      const scrollDelta = itemWidth * (isMobile ? 1 : 3);
+      const newScrollLeft = recommendationsRef.current.scrollLeft - scrollDelta;
+
       recommendationsRef.current.scrollBy({
         behavior: 'smooth',
-        left: -itemWidth * (isMobile ? 1 : 3),
+        left: -scrollDelta,
       });
-      setTimeout(handleRecommendedScroll, 30);
+
+      const { clientWidth, scrollWidth } = recommendationsRef.current;
+      setIsRecommendedScrolledLeft(newScrollLeft <= tolerance);
+      setIsRecommendedScrolledRight(
+        newScrollLeft >= scrollWidth - clientWidth - tolerance
+      );
     }
   };
 
   const handleFocusScroll = () => {
     if (focusRef.current) {
       const { scrollLeft, scrollWidth, clientWidth } = focusRef.current;
-      setIsFocusScrolledLeft(scrollLeft === 0);
-      setIsFocusScrolledRight(scrollLeft + clientWidth === scrollWidth);
+      setIsFocusScrolledLeft(scrollLeft <= tolerance);
+      setIsFocusScrolledRight(
+        scrollLeft >= scrollWidth - clientWidth - tolerance
+      );
     }
   };
 
@@ -92,8 +129,10 @@ export default function PopularArea() {
     if (recommendationsRef.current) {
       const { scrollLeft, scrollWidth, clientWidth } =
         recommendationsRef.current;
-      setIsRecommendedScrolledLeft(scrollLeft === 0);
-      setIsRecommendedScrolledRight(scrollLeft + clientWidth === scrollWidth);
+      setIsRecommendedScrolledLeft(scrollLeft <= tolerance);
+      setIsRecommendedScrolledRight(
+        scrollLeft >= scrollWidth - clientWidth - tolerance
+      );
     }
   };
 
@@ -353,8 +392,12 @@ export default function PopularArea() {
                 <IconButton
                   onClick={handleFocusScrollRight}
                   sx={{
-                    top: '80px',
-                    right: '2px',
+                    top: '90px',
+                    right: '5px',
+                    width: '28px',
+                    height: '28px',
+                    padding: '5px',
+                    borderRadius: '50px',
                     '&:hover': {
                       backgroundColor: 'rgba(204, 0, 0, 0.40)',
                     },
@@ -372,8 +415,12 @@ export default function PopularArea() {
                 <IconButton
                   onClick={handleFocusScrollLeft}
                   sx={{
-                    top: '80px',
-                    left: '2px',
+                    top: '90px',
+                    left: '5px',
+                    width: '28px',
+                    height: '28px',
+                    padding: '5px',
+                    borderRadius: '50px',
                     '&:hover': {
                       backgroundColor: 'rgba(204, 0, 0, 0.40)',
                     },
@@ -418,7 +465,15 @@ export default function PopularArea() {
             </Typography>
             <Grid2 container>
               {toolItems.map((_, index) => (
-                <Grid2 key={index} size={{ xs: 6, sm: 4, md: 3, lg: 2 }}>
+                <Grid2
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                  key={index}
+                  size={{ xs: 6, sm: 4, md: 3, lg: 2 }}
+                >
                   <Box
                     sx={{
                       gap: '20px',
@@ -426,9 +481,9 @@ export default function PopularArea() {
                       height: '140px',
                       display: 'flex',
                       padding: '16px',
-                      textAlign: 'center',
                       borderRadius: '8px',
                       alignItems: 'center',
+                      justifyContent: 'center',
                       position: 'relative',
                       flexDirection: 'column',
                       backgroundColor: 'white',
@@ -613,8 +668,12 @@ export default function PopularArea() {
                 <IconButton
                   onClick={handleRecommendedScrollRight}
                   sx={{
-                    top: '50px',
-                    right: '2px',
+                    top: '60px',
+                    right: '8px',
+                    width: '28px',
+                    height: '28px',
+                    padding: '5px',
+                    borderRadius: '50px',
                     '&:hover': {
                       backgroundColor: 'rgba(204, 0, 0, 0.40)',
                     },
@@ -636,8 +695,12 @@ export default function PopularArea() {
                 <IconButton
                   onClick={handleRecommendedScrollLeft}
                   sx={{
-                    top: '50px',
-                    left: '20px',
+                    top: '60px',
+                    left: '8px',
+                    width: '28px',
+                    height: '28px',
+                    padding: '5px',
+                    borderRadius: '50px',
                     '&:hover': {
                       backgroundColor: 'rgba(204, 0, 0, 0.40)',
                     },
