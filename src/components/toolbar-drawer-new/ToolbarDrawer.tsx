@@ -344,80 +344,84 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
           </IconButton>
         )}
 
-        <List
-          sx={{
-            gap: '8px',
-            padding: '8px',
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        >
-          {drawerItems.map((item, index) => (
-            <ListItem
-              key={index}
-              sx={{
-                padding: '8px',
-                borderRadius: '8px',
-                backgroundColor:
-                  pathname === item.route ||
-                  (pathname === '/' && item.route === '/chat') ||
-                  (pathname === '/channel-summary' && item.route === '/toolbox')
-                    ? 'var(--Action-Selected, rgba(204, 0, 0, 0.20))'
-                    : 'transparent',
-                '&:hover': {
-                  backgroundColor: '#FBEDED',
-                },
-                cursor: 'pointer',
-                height: isExpanded || isMobile ? '48px' : 'auto',
-              }}
-              onClick={() => {
-                if (index === 3) {
-                  if (
-                    selectedChannel ||
-                    selectedChannelId ||
-                    isInteractingInChat
-                  ) {
-                    if (
-                      pathname === '/chat' &&
-                      !searchParams.has('organizationChannelId')
-                    ) {
-                      window.location.reload();
-                    } else {
-                      router.push('/chat');
-                    }
-                    return;
-                  }
-                }
-                router.push(item.route);
-              }}
-            >
-              <Typography
+        <ListItem sx={{ padding: '0px' }}>
+          <List
+            sx={{
+              gap: '8px',
+              width: '100%',
+              padding: '8px',
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            {drawerItems.map((item, index) => (
+              <ListItem
+                key={index}
                 sx={{
-                  display: 'flex',
-                  fontWeight: 400,
-                  fontSize: '16px',
-                  alignItems: 'center',
-                  color: index === 0 ? '#CC0000' : '#212B36',
-                  fontFamily: 'DFPHeiBold-B5',
+                  padding: '8px',
+                  borderRadius: '8px',
+                  backgroundColor:
+                    pathname === item.route ||
+                    (pathname === '/' && item.route === '/chat') ||
+                    (pathname === '/channel-summary' &&
+                      item.route === '/toolbox')
+                      ? 'var(--Action-Selected, rgba(204, 0, 0, 0.20))'
+                      : 'transparent',
+                  '&:hover': {
+                    backgroundColor: '#FBEDED',
+                  },
+                  cursor: 'pointer',
+                  height: isExpanded || isMobile ? '48px' : 'auto',
+                }}
+                onClick={() => {
+                  if (index === 3) {
+                    if (
+                      selectedChannel ||
+                      selectedChannelId ||
+                      isInteractingInChat
+                    ) {
+                      if (
+                        pathname === '/chat' &&
+                        !searchParams.has('organizationChannelId')
+                      ) {
+                        window.location.reload();
+                      } else {
+                        router.push('/chat');
+                      }
+                      return;
+                    }
+                  }
+                  router.push(item.route);
                 }}
               >
-                <span
-                  style={{
+                <Typography
+                  sx={{
                     display: 'flex',
+                    fontWeight: 400,
+                    fontSize: '16px',
                     alignItems: 'center',
+                    color: index === 0 ? '#CC0000' : '#212B36',
+                    fontFamily: 'DFPHeiBold-B5',
                   }}
                 >
-                  {item.icon}
-                </span>
-                {(isExpanded || isMobile) && (
-                  <span style={{ marginLeft: index === 0 ? '0px' : '8px' }}>
-                    {item.text}
+                  <span
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}
+                  >
+                    {item.icon}
                   </span>
-                )}
-              </Typography>
-            </ListItem>
-          ))}
-        </List>
+                  {(isExpanded || isMobile) && (
+                    <span style={{ marginLeft: index === 0 ? '0px' : '8px' }}>
+                      {item.text}
+                    </span>
+                  )}
+                </Typography>
+              </ListItem>
+            ))}
+          </List>
+        </ListItem>
       </List>
       <Box
         sx={{
