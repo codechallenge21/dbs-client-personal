@@ -34,11 +34,11 @@ interface SpeechRecognition extends EventTarget {
   start(): void;
   stop(): void;
   onresult:
-  | ((this: SpeechRecognition, ev: SpeechRecognitionEvent) => void)
-  | null;
+    | ((this: SpeechRecognition, ev: SpeechRecognitionEvent) => void)
+    | null;
   onerror:
-  | ((this: SpeechRecognition, ev: SpeechRecognitionErrorEvent) => void)
-  | null;
+    | ((this: SpeechRecognition, ev: SpeechRecognitionErrorEvent) => void)
+    | null;
   onend: ((this: SpeechRecognition, ev: Event) => void) | null;
 }
 
@@ -482,10 +482,11 @@ const TextInput: React.FC<TextInputProps> = ({
       <Box
         sx={{
           gap: '10px',
+          width: '100%',
           height: '58px',
+          maxWidth: '728px',
           paddingLeft: '16px',
           paddingRight: '16px',
-          width: isMobile ? '100%' : '760px',
         }}
       >
         <Box
@@ -500,7 +501,6 @@ const TextInput: React.FC<TextInputProps> = ({
             borderBottomLeftRadius: '16px',
             borderBottomRightRadius: '16px',
             justifyContent: 'space-between',
-            width: isMobile ? '100%' : '728px',
           }}
         >
           <Box>
