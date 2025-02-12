@@ -84,38 +84,46 @@ export default function Home() {
   return (
     <Box
       sx={{
-        minHeight: '100vh',
-        '&::-webkit-scrollbar': {
-          width: '8px',
-        },
-        '&::-webkit-scrollbar-track': {
-          borderRadius: '10px',
-          background: '#f1f1f1',
-        },
-        '&::-webkit-scrollbar-thumb': {
-          borderRadius: '10px',
-          background: '#888',
-        },
-        '&::-webkit-scrollbar-thumb:hover': {
-          background: '#555',
-        },
+        height: '100vh',
+        display: 'flex',
+        overflow: 'hidden',
+        flexDirection: 'column',
         background: 'var(--Primary-, #EBE3DD)',
       }}
     >
       <ToolboxDrawer open={isOpenDrawer} toggleDrawer={toggleDrawer}>
         <Box
           sx={{
-            minHeight: '96vh',
-            maxHeight: '96vh',
-            overflow: 'auto',
+            gap: '20px',
+            display: 'flex',
+            overflowY: 'auto',
             borderRadius: '8px',
-            padding: '16px 32px',
+            flexDirection: 'column',
             backgroundColor: 'white',
+            height: isMobile ? '100%' : '96vh',
+            padding: isMobile ? '16px' : '16px 32px',
+            '@media (min-width: 600px)': {
+              flex: '1 0 0',
+            },
+            '&::-webkit-scrollbar': {
+              width: '6px',
+            },
+            '&::-webkit-scrollbar-track': {
+              borderRadius: '10px',
+              background: '#f1f1f1',
+            },
+            '&::-webkit-scrollbar-thumb': {
+              borderRadius: '10px',
+              background: '#888',
+            },
+            '&::-webkit-scrollbar-thumb:hover': {
+              background: '#555',
+            },
           }}
         >
           <Box>
-            <Box sx={{ position: 'relative', marginBottom: '40px' }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: '16px' }}>
+            <Box>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 {isMobile && (
                   <IconButton>
                     <MenuRounded />
