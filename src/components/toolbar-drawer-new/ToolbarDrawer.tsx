@@ -495,6 +495,9 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 lineHeight: 'normal',
                 height: '30px',
               }}
+              onClick={() => {
+                router.push('/wishing');
+              }}
             >
               <EmojiObjectsRounded sx={{ color: 'white', fontSize: '18px' }} />
               許願池
