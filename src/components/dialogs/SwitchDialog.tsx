@@ -25,6 +25,7 @@ const SwitchDialog: React.FC<SwitchDialogProps> = ({
 }) => {
   return (
     <Dialog
+      role="dialog"
       open={open}
       onClose={onClose}
       maxWidth="sm"
@@ -57,6 +58,7 @@ const SwitchDialog: React.FC<SwitchDialogProps> = ({
           切換顧問
         </Typography>
         <IconButton
+          role="button"
           aria-label="close"
           onClick={onClose}
           sx={{
@@ -92,6 +94,8 @@ const SwitchDialog: React.FC<SwitchDialogProps> = ({
       </DialogContent>
       <DialogActions>
         <Button
+          role="button"
+          aria-label="confirm"
           variant="contained"
           color="primary"
           onClick={onConfirm}

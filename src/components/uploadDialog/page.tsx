@@ -144,6 +144,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
   return (
     <>
       <Dialog
+        role="dialog"
         open={open}
         onClose={onClose}
         PaperProps={{
@@ -159,6 +160,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
         }}
       >
         <DialogTitle
+          aria-label="Dialog Title"
           sx={{
             fontSize: isMobile ? '24px' : '32px',
             fontWeight: 400,
@@ -170,6 +172,8 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
         >
           {isMobile ? '上傳檔案' : 'AI 語音轉文字'}
           <IconButton
+            role="button"
+            aria-label="close"
             onClick={onClose}
             sx={{
               position: 'absolute',
@@ -216,6 +220,8 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
             </Typography>
           )}
           <Button
+            role="button"
+            aria-label="Upload File"
             onClick={handleClick}
             sx={{
               zIndex: 1,

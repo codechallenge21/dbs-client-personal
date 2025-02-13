@@ -184,7 +184,12 @@ export default function DataSourceDialog({
         >
           {title}
         </Typography>
-        <IconButton onClick={onClose} size={isMobile ? 'small' : 'medium'}>
+        <IconButton
+          role="button"
+          aria-label="close"
+          onClick={onClose}
+          size={isMobile ? 'small' : 'medium'}
+        >
           <CloseIcon sx={{ color: '#212B36' }} />
         </IconButton>
       </Box>
