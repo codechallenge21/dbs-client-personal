@@ -65,15 +65,15 @@ const Header: React.FC<HeaderProps> = ({
   return (
     <Box
       sx={{
-        position: 'fixed',
-        top: 0,
-        width: headerWidth,
-        mt: isMobile ? 0 : '16px',
+        // position: 'fixed',
+        // top: 0,
+        width: '100%',
+        // mt: isMobile ? 0 : '16px',
         py: isMobile ? '8px' : 0,
         px: isMobile ? '16px' : 0,
-        zIndex: 11,
-        marginRight: 'auto',
-        backgroundColor: 'white',
+        // zIndex: 11,
+        // marginRight: 'auto',
+        // backgroundColor: 'black',
         borderRadius: isMobile ? 0 : '8px',
       }}
     >

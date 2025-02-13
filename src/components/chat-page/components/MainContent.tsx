@@ -108,16 +108,28 @@ const MainContent = () => {
       sx={{
         px: '16px',
         display: 'flex',
-        textAlign: 'center',
+        width: '100%',
+        // textAlign: 'center',
         alignItems: 'center',
         flexDirection: 'column',
-        pb: isMobile ? '16px' : '0px',
-        pt: isMobile ? '128px' : '0px',
+        // pb: isMobile ? '16px' : '0px',
+        // pt: isMobile ? '128px' : '0px',
         height: isMobile ? 'auto' : '100%',
         justifyContent: isMobile ? 'flex-end' : 'center',
+        // overflowY: 'auto',
+        // backgroundColor: 'red',
       }}
     >
-      {isMobile ? (
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          height: '100%',
+          overflow: 'auto',
+        }}
+      >
+        {/* {isMobile ? (
         <>
           {isInteractingInChat && (
             <Skeleton
@@ -181,44 +193,59 @@ const MainContent = () => {
             </Typography>
           )}
         </>
-      )}
-      <TextInput
-        submitUserInputs={submitUserInputs}
-        isInteracting={isInteracting}
-      />
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          flexDirection: 'row',
-          marginTop: '24px',
-          gap: '16px',
-          flexWrap: 'wrap',
-          maxWidth: '760px',
-        }}
-      >
-        {SuggestionsData.map((suggestion) => (
-          <Suggestions key={suggestion.id} title={suggestion.title} />
-        ))}
-      </Box>
-      <Box
-        sx={{
-          marginTop: isMobile ? '32px' : '40px',
-          width: '100%',
-          maxWidth: '760px',
-        }}
-      >
-        <ViewChats
-          onClick={() => {
-            router.push('/allchat');
+      )} */}
+        <Typography
+          sx={{
+            mb: '24px',
+            color: '#000',
+            fontSize: '32px',
+            fontWeight: '400',
+            overflow: 'visible',
+            fontFamily: 'DFPHeiBold-B5',
           }}
+        >
+          嗨！我能為您做些什麼？
+        </Typography>
+        <TextInput
+          submitUserInputs={submitUserInputs}
+          isInteracting={isInteracting}
         />
-      </Box>
-      <Box sx={{ marginTop: '12px', width: '100%', maxWidth: '760px' }}>
-        <HistoryChats
-          chats={chatsData || []}
-          moveToChannelDetail={moveToChannelDetail}
-        />
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            flexDirection: 'row',
+            marginTop: '24px',
+            gap: '16px',
+            flexWrap: 'wrap',
+            maxWidth: '760px',
+          }}
+        >
+          {SuggestionsData.map((suggestion) => (
+            <Suggestions key={suggestion.id} title={suggestion.title} />
+          ))}
+        </Box>
+        <Box
+          sx={{
+            marginTop: isMobile ? '32px' : '40px',
+            width: '100%',
+            maxWidth: '760px',
+          }}
+        >
+          <ViewChats
+            onClick={() => {
+              router.push('/allchat');
+            }}
+          />
+        </Box>
+        {/* {useMediaQuery('(min-height:671px)') && ( */}
+        <Box sx={{ marginTop: '12px', width: '100%', maxWidth: '760px' }}>
+          <HistoryChats
+            chats={chatsData || []}
+            moveToChannelDetail={moveToChannelDetail}
+          />
+        </Box>
+        {/* )} */}
       </Box>
     </Box>
   );

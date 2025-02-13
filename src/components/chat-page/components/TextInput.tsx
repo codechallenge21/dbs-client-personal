@@ -278,114 +278,35 @@ const TextInput: React.FC<TextInputProps> = ({
   }, [handleSendMessage, isListening, userInputValue]);
 
   return (
-    <>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          width: '100%',
-          maxWidth: '760px',
-          minHeight: '116px',
-          maxHeight: '760px',
-          position: 'relative',
-          bottom: 0,
-          backgroundColor: '#F5F5F5',
-          borderRadius: '16px',
-          zIndex: 10,
-          marginTop: isMobile ? 3 : 0,
-          overflow: 'hidden',
-          justifyContent: 'flex-end',
-        }}
-      >
-        {files.length > 0 && (
-          <Box
-            sx={{
-              display: 'flex',
-              gap: '12px',
-              flexWrap: 'wrap',
-              padding: '12px',
-              maxHeight: '180px',
-              overflowY: 'auto',
-              '&::-webkit-scrollbar': {
-                width: '8px',
-              },
-              '&::-webkit-scrollbar-thumb': {
-                backgroundColor: '#c1c1c1',
-                borderRadius: '4px',
-              },
-              '&::-webkit-scrollbar-thumb:hover': {
-                backgroundColor: '#a8a8a8',
-              },
-              '&::-webkit-scrollbar-track': {
-                backgroundColor: '#f1f1f1',
-                borderRadius: '4px',
-              },
-            }}
-          >
-            {files.map((file, index) => (
-              <Box
-                key={index}
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  textAlign: 'center',
-                  position: 'relative',
-                  width: 80,
-                  paddingTop: '10px',
-                }}
-              >
-                <Image
-                  src={file.preview ?? imagePerview}
-                  alt={file.file.name}
-                  width={64}
-                  height={64}
-                  style={{
-                    objectFit: 'cover',
-                    borderRadius: '4px',
-                  }}
-                />
-                <Typography
-                  sx={{
-                    mt: 1,
-                    fontSize: '14px',
-                    fontFamily: 'DFPHeiBold-B5',
-                    wordBreak: 'break-word',
-                    textAlign: 'center',
-                  }}
-                >
-                  {file.file.name}
-                </Typography>
-                <IconButton
-                  sx={{
-                    position: 'absolute',
-                    top: '0px',
-                    left: '6px', // Adjusted for top-left placement
-                    backgroundColor: 'red',
-                    width: '16px', // Smaller size for the button
-                    height: '16px',
-                    color: 'white',
-                    '&:hover': {
-                      backgroundColor: 'darkred', // Optional hover effect
-                    },
-                  }}
-                  onClick={() => handleRemoveFile(index)} // Your event handler
-                >
-                  <CloseRounded sx={{ fontSize: '14px' }} />
-                </IconButton>
-              </Box>
-            ))}
-          </Box>
-        )}
+    // <>
+    //   {error && <p style={{ color: 'red' }}>{error}</p>}
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        width: '100%',
+        maxWidth: '760px',
+        minHeight: '116px',
+        maxHeight: '760px',
+        position: 'relative',
+        bottom: 0,
+        backgroundColor: '#F5F5F5',
+        borderRadius: '16px',
+        // zIndex: 10,
+        marginTop: isMobile ? 3 : 0,
+        overflow: 'hidden',
+        justifyContent: 'flex-end',
+      }}
+    >
+      {files.length > 0 && (
         <Box
           sx={{
-            width: '100%',
-            paddingTop: '16px',
-            paddingInline: '10px',
+            display: 'flex',
+            gap: '12px',
+            flexWrap: 'wrap',
+            padding: '12px',
+            maxHeight: '180px',
             overflowY: 'auto',
-            maxHeight: '200px',
-            minHeight: '40px',
             '&::-webkit-scrollbar': {
               width: '8px',
             },
@@ -402,121 +323,200 @@ const TextInput: React.FC<TextInputProps> = ({
             },
           }}
         >
-          <TextareaAutosize
-            minRows={1}
-            // maxRows={10}
-            placeholder="傳訊息給智能顧問"
-            style={{
-              width: '100%',
-              paddingTop: isMobile ? '20px' : '2px',
-              paddingBottom: isMobile ? '20px' : '',
-              borderRadius: '8px',
-              border: 'none',
-              outline: 'none',
-              resize: 'none',
-              fontSize: '16px',
-              color: '#212B36',
-              backgroundColor: '#F5F5F5',
-              overflow: 'auto',
-            }}
-            className="textarea-autosize"
-            value={userInputValue}
-            onChange={handleOnChangeUserInput}
-            onKeyDown={handleOnKeyDownUserInput}
-          />
+          {files.map((file, index) => (
+            <Box
+              key={index}
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                textAlign: 'center',
+                position: 'relative',
+                width: 80,
+                paddingTop: '10px',
+              }}
+            >
+              <Image
+                src={file.preview ?? imagePerview}
+                alt={file.file.name}
+                width={64}
+                height={64}
+                style={{
+                  objectFit: 'cover',
+                  borderRadius: '4px',
+                }}
+              />
+              <Typography
+                sx={{
+                  mt: 1,
+                  fontSize: '14px',
+                  fontFamily: 'DFPHeiBold-B5',
+                  wordBreak: 'break-word',
+                  textAlign: 'center',
+                }}
+              >
+                {file.file.name}
+              </Typography>
+              <IconButton
+                sx={{
+                  position: 'absolute',
+                  top: '0px',
+                  left: '6px', // Adjusted for top-left placement
+                  backgroundColor: 'red',
+                  width: '16px', // Smaller size for the button
+                  height: '16px',
+                  color: 'white',
+                  '&:hover': {
+                    backgroundColor: 'darkred', // Optional hover effect
+                  },
+                }}
+                onClick={() => handleRemoveFile(index)} // Your event handler
+              >
+                <CloseRounded sx={{ fontSize: '14px' }} />
+              </IconButton>
+            </Box>
+          ))}
         </Box>
+      )}
+      <Box
+        sx={{
+          width: '100%',
+          paddingTop: '16px',
+          paddingInline: '10px',
+          overflowY: 'auto',
+          maxHeight: '200px',
+          minHeight: '40px',
+          '&::-webkit-scrollbar': {
+            width: '8px',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: '#c1c1c1',
+            borderRadius: '4px',
+          },
+          '&::-webkit-scrollbar-thumb:hover': {
+            backgroundColor: '#a8a8a8',
+          },
+          '&::-webkit-scrollbar-track': {
+            backgroundColor: '#f1f1f1',
+            borderRadius: '4px',
+          },
+        }}
+      >
+        <TextareaAutosize
+          minRows={1}
+          // maxRows={10}
+          placeholder="傳訊息給智能顧問"
+          style={{
+            width: '100%',
+            paddingTop: isMobile ? '20px' : '2px',
+            paddingBottom: isMobile ? '20px' : '',
+            borderRadius: '8px',
+            border: 'none',
+            outline: 'none',
+            resize: 'none',
+            fontSize: '16px',
+            color: '#212B36',
+            backgroundColor: '#F5F5F5',
+            overflow: 'auto',
+          }}
+          className="textarea-autosize"
+          value={userInputValue}
+          onChange={handleOnChangeUserInput}
+          onKeyDown={handleOnKeyDownUserInput}
+        />
+      </Box>
+      <Box
+        sx={{
+          width: '100%',
+          marginTop: '16px',
+          justifyContent: 'space-between',
+          display: 'flex',
+          gap: '16px',
+          flexWrap: 'wrap',
+          padding: '22px',
+          position: 'relative',
+        }}
+      >
         <Box
           sx={{
             width: '100%',
-            marginTop: '16px',
-            justifyContent: 'space-between',
             display: 'flex',
             gap: '16px',
-            flexWrap: 'wrap',
-            padding: '22px',
-            position: 'relative',
           }}
         >
-          <Box
+          <IconButton
+            component="span"
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
             sx={{
-              width: '100%',
-              display: 'flex',
-              gap: '16px',
+              position: 'absolute',
+              bottom: '10px',
+              left: '10px',
             }}
           >
-            <IconButton
-              component="span"
-              onDrop={handleDrop}
-              onDragOver={handleDragOver}
-              sx={{
-                position: 'absolute',
-                bottom: '10px',
-                left: '10px',
-              }}
-            >
-              <AttachFileRoundedIcon
-                sx={{ transform: 'rotate(180deg)', color: 'black' }}
-                onClick={() => document.getElementById('file-upload')?.click()}
-              />
-            </IconButton>
-            <input
-              type="file"
-              id="file-upload"
-              multiple
-              onChange={handleFileSelect}
-              style={{ display: 'none' }}
+            <AttachFileRoundedIcon
+              sx={{ transform: 'rotate(180deg)', color: 'black' }}
+              onClick={() => document.getElementById('file-upload')?.click()}
             />
-            <IconButton
-              sx={{
-                position: 'absolute',
-                bottom: '10px',
-                left: '58px',
-              }}
-            >
-              <DropdownMenu isTextInput advisor={advisorType} />
-            </IconButton>
-          </Box>
-
-          {isInteracting ? (
-            <Box
-              sx={{
-                position: 'absolute',
-                bottom: '10px',
-                right: '10px',
-              }}
-            >
-              <RotateRightRounded sx={{ color: '#1877F2', fontSize: 24 }} />
-            </Box>
-          ) : userInputValue !== '' && !isListening ? (
-            <IconButton
-              sx={{
-                position: 'absolute',
-                bottom: '10px',
-                right: '10px',
-              }}
-              onClick={handleClickSubmitOrAudioFileUpload}
-            >
-              <SendRounded sx={{ color: 'black' }} />
-            </IconButton>
-          ) : (
-            <IconButton
-              onClick={handleListening}
-              className={isListening ? 'mic-listening' : ''}
-              sx={{
-                position: 'absolute',
-                bottom: '10px',
-                right: '10px',
-              }}
-            >
-              <MicRoundedIcon
-                className={isListening ? 'mic-icon' : ''}
-                sx={{ color: isListening ? 'white' : 'black' }}
-              />
-            </IconButton>
-          )}
+          </IconButton>
+          <input
+            type="file"
+            id="file-upload"
+            multiple
+            onChange={handleFileSelect}
+            style={{ display: 'none' }}
+          />
+          <IconButton
+            sx={{
+              position: 'absolute',
+              bottom: '10px',
+              left: '58px',
+            }}
+          >
+            <DropdownMenu isTextInput advisor={advisorType} />
+          </IconButton>
         </Box>
+
+        {isInteracting ? (
+          <Box
+            sx={{
+              position: 'absolute',
+              bottom: '10px',
+              right: '10px',
+            }}
+          >
+            <RotateRightRounded sx={{ color: '#1877F2', fontSize: 24 }} />
+          </Box>
+        ) : userInputValue !== '' && !isListening ? (
+          <IconButton
+            sx={{
+              position: 'absolute',
+              bottom: '10px',
+              right: '10px',
+            }}
+            onClick={handleClickSubmitOrAudioFileUpload}
+          >
+            <SendRounded sx={{ color: 'black' }} />
+          </IconButton>
+        ) : (
+          <IconButton
+            onClick={handleListening}
+            className={isListening ? 'mic-listening' : ''}
+            sx={{
+              position: 'absolute',
+              bottom: '10px',
+              right: '10px',
+            }}
+          >
+            <MicRoundedIcon
+              className={isListening ? 'mic-icon' : ''}
+              sx={{ color: isListening ? 'white' : 'black' }}
+            />
+          </IconButton>
+        )}
       </Box>
-    </>
+    </Box>
+    // </>
   );
 };
 

@@ -100,11 +100,13 @@ function ClientContent() {
     >
       <Box
         sx={{
+          // gap: '20px',
           display: 'flex',
           borderRadius: '8px',
           flexDirection: 'column',
           backgroundColor: '#FFF',
-          overflowY: isMobile ? 'auto' : 'unset',
+          overflow: 'hidden',
+          // overflowY: isMobile ? 'auto' : 'unset',
           height: isMobile ? '100vh' : 'calc(100vh - 32px)',
         }}
       >
@@ -116,11 +118,11 @@ function ClientContent() {
           setIsOpenDrawer={setIsOpenDrawer}
           setOpenDataSource={setOpenDataSource}
         />
-        <Box
+        {/* <Box
           sx={{
             marginTop: isMobile ? '60px' : '0px',
           }}
-        />
+        /> */}
         <MainContent />
         <SwitchDialog
           open={isOpen}
