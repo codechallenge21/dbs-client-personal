@@ -91,8 +91,8 @@ export default function NotFound() {
           color: '#FFFFFF',
           fontWeight: 400,
           fontFamily: 'DFPHeiBold-B5',
-          px: isMobile ? 2 : 3,
-          py: isMobile ? 0.5 : 1,
+          px: isMobile ? 1.3 : 2.2,
+          py: isMobile ? 0.2 : 0.5,
           borderRadius: '8px',
           fontSize: '14px',
           '&:hover': {
