@@ -21,6 +21,31 @@ import { useRef, useState } from 'react';
 import LoadingScreen from '../loading/page';
 import { CloseRounded, UploadRounded } from '@mui/icons-material';
 
+// File Upload Configuration
+const FILE_CONFIG = {
+  maxSize: 200 * 1024 * 1024, // 200MB
+  allowedFormats: [
+    'audio/mpeg',
+    'audio/mp4',
+    'audio/mpga',
+    'audio/wav',
+    'audio/webm',
+    'audio/x-m4a',
+    'audio/vnd.dlna.adts', // 'audio/aac',
+    'video/mp4',
+  ] as const,
+  allowedExtensions: ['.mp3', '.mp4', '.mpeg', '.mpga', '.m4a', '.wav', '.aac', '.webm'] as const,
+  errorMessages: {
+    invalidFormat: '不支援的檔案格式，請選擇 mp3, mp4, mpeg, mpga, m4a, wav, aac 或 webm 格式',
+    sizeExceeded: '檔案大小超過 200MB 限制',
+    uploadFailed: '上傳失敗',
+  },
+  supportedFormats: {
+    mobile: '支援檔案格式：mp3, mp4, mpeg, mpga, m4a, wav, aac, webm',
+    desktop: '支援檔案格式：mp3, mp4, mpeg, mpga, m4a, wav, aac, webm',
+  },
+} as const;
+
 interface UploadDialogProps {
   open: boolean;
   onClose: () => void;
@@ -39,26 +64,13 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
 
   const validateFile = async (file: File) => {
     try {
-      const allowedFormats = [
-        'audio/mpeg',
-        'audio/mp4',
-        'audio/mpga',
-        'audio/wav',
-        'audio/webm',
-        'audio/x-m4a',
-        'video/mp4',
-      ];
-      const maxFileSize = 200 * 1024 * 1024; // 200MB
-
-      if (!allowedFormats.includes(file.type)) {
-        setError(
-          '不支援的檔案格式，請選擇 mp3, mp4, mpeg, mpga, m4a, wav 或 webm 格式'
-        );
+      if (!FILE_CONFIG.allowedFormats.includes(file.type as typeof FILE_CONFIG.allowedFormats[number])) {
+        setError(FILE_CONFIG.errorMessages.invalidFormat);
         return;
       }
 
-      if (file.size > maxFileSize) {
-        setError('檔案大小超過 200MB 限制');
+      if (file.size > FILE_CONFIG.maxSize) {
+        setError(FILE_CONFIG.errorMessages.sizeExceeded);
         return;
       }
 
@@ -70,25 +82,22 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
       });
 
       const { data } = res;
-
-      router.push(
-        `/channel-summary?organizationChannelId=${data.organizationChannelId}`
-      );
+      router.push(`/channel-summary?organizationChannelId=${data.organizationChannelId}`);
     } catch (error) {
-      setError('上傳失敗');
+      setError(FILE_CONFIG.errorMessages.uploadFailed);
       console.error(error);
     }
   };
 
   const handleDrop = (acceptedFiles: File[]) => {
-    if (acceptedFiles && acceptedFiles.length > 0 && acceptedFiles?.[0]) {
+    if (acceptedFiles?.[0]) {
       validateFile(acceptedFiles[0]);
     }
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    if (e.target.files && e.target.files.length > 0 && e.target.files?.[0]) {
+    if (e.target.files?.[0]) {
       validateFile(e.target.files[0]);
       e.target.value = '';
     }
@@ -96,10 +105,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
 
   const handleClick = (event: React.MouseEvent) => {
     event.stopPropagation();
-    if (
-      fileInputRef?.current &&
-      !fileInputRef.current.hasAttribute('data-clicked')
-    ) {
+    if (fileInputRef?.current && !fileInputRef.current.hasAttribute('data-clicked')) {
       fileInputRef.current.setAttribute('data-clicked', 'true');
       fileInputRef.current.click();
       setTimeout(() => {
@@ -111,9 +117,9 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop: handleDrop,
     accept: {
-      'audio/*': ['.mp3', '.mp4', '.mpeg', '.mpga', '.m4a', '.wav', '.webm'],
+      'audio/*': FILE_CONFIG.allowedExtensions,
     },
-    maxSize: 200 * 1024 * 1024, // 100MB
+    maxSize: FILE_CONFIG.maxSize,
   });
 
   const handleCloseError = () => {
@@ -214,9 +220,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
                 mb: '40px',
               }}
             >
-              {isDragActive
-                ? '放開檔案以進行上傳'
-                : '請將音訊檔案拖曳到這裡上傳'}
+              {isDragActive ? '放開檔案以進行上傳' : '請將音訊檔案拖曳到這裡上傳'}
             </Typography>
           )}
           <Button
@@ -245,12 +249,12 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
             variant="contained"
             startIcon={<UploadRounded />}
           >
-            {isMobile ? ' 選擇檔案' : '選擇檔案'}
+            {isMobile ? '選擇檔案' : '選擇檔案'}
             <input
               ref={fileInputRef}
               type="file"
               onChange={handleFileUpload}
-              accept=".mp3, .mp4, .mpeg, .mpga, .m4a, .wav, .webm"
+              accept={FILE_CONFIG.allowedExtensions.join(',')}
               style={{ display: 'none' }}
             />
           </Button>
@@ -265,9 +269,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
                 height: 'auto',
               }}
             >
-              {isMobile
-                ? '支援檔案格式：mp3, wav, m4a'
-                : '支援檔案格式：mp3, mp4, mpeg, mpga, m4a, wav, webm'}
+              {isMobile ? FILE_CONFIG.supportedFormats.mobile : FILE_CONFIG.supportedFormats.desktop}
             </Typography>
             <Typography
               sx={{
@@ -275,22 +277,18 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
                 fontSize: isMobile ? 14 : 16,
               }}
             >
-              限制大小：200MB
+              限制大小：{FILE_CONFIG.maxSize / (1024 * 1024)}MB
             </Typography>
           </Box>
         </DialogContent>
       </Dialog>
       <Snackbar
-        open={!!error} // Opens if error is set
+        open={!!error}
         autoHideDuration={6000}
         onClose={handleCloseError}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        <Alert
-          onClose={handleCloseError}
-          severity="error"
-          sx={{ width: '100%' }}
-        >
+        <Alert onClose={handleCloseError} severity="error" sx={{ width: '100%' }}>
           {error}
         </Alert>
       </Snackbar>
