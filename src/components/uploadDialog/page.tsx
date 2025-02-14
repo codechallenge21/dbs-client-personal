@@ -63,7 +63,6 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
   );
 
   const validateFile = async (file: File) => {
-    console.log(file.type)
     try {
       if (!FILE_CONFIG.allowedFormats.includes(file.type as typeof FILE_CONFIG.allowedFormats[number])) {
         setError(FILE_CONFIG.errorMessages.invalidFormat);
