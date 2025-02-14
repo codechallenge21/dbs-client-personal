@@ -14,7 +14,6 @@ export default function NotFound() {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
 
-  // Smaller sizes for better centering
   const titleFontSize = isMobile ? '48px' : isTablet ? '64px' : '80px';
   const titleLineHeight = isMobile ? '56px' : isTablet ? '72px' : '90px';
   const subtitleFontSize = isMobile ? '18px' : isTablet ? '22px' : '26px';
@@ -28,10 +27,10 @@ export default function NotFound() {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: isMobile ? '16px' : '24px',
+        px: { xs: 2, sm: 4, md: 6 },
         backgroundColor: '#fff',
         borderRadius: '8px',
-        gap: '24px',
+        margin: { xs: '16px', sm: 0 },
       }}
     >
       <Typography
@@ -91,8 +90,7 @@ export default function NotFound() {
           color: '#FFFFFF',
           fontWeight: 400,
           fontFamily: 'DFPHeiBold-B5',
-          px: isMobile ? 1.3 : 2.2,
-          py: isMobile ? 0.2 : 0.5,
+          padding: '6px 12px',
           borderRadius: '8px',
           fontSize: '14px',
           '&:hover': {
