@@ -80,22 +80,30 @@ export default function Header() {
           <React.Fragment key={item.text}>
             <ListItem disablePadding>
               <ListItemButton
-                onClick={() => handleExpandItem(item.text)}
+                onClick={() =>
+                  item.text === '工具箱'
+                    ? handleExpandItem(item.text)
+                    : handleDrawerToggle()
+                }
                 sx={{
                   color: pathname.startsWith(item.href)
                     ? 'primary.main'
                     : 'text.primary',
                 }}
               >
-                <Link
-                  href={item.href}
-                  passHref
-                  key={item.text}
-                  onClick={handleDrawerToggle}
-                >
+                {item.text === '工具箱' ? (
                   <ListItemText primary={item.text} />
-                </Link>
-                {index === menuItems.length - 2 &&
+                ) : (
+                  <Link
+                    href={item.href}
+                    passHref
+                    onClick={handleDrawerToggle}
+                    style={{ textDecoration: 'none', color: 'inherit' }}
+                  >
+                    <ListItemText primary={item.text} />
+                  </Link>
+                )}
+                {item.text === '工具箱' &&
                   (expandedItem === '工具箱' ? (
                     <ArrowDropDownIcon />
                   ) : (
@@ -111,8 +119,9 @@ export default function Header() {
                     passHref
                     key={tool.text}
                     onClick={handleDrawerToggle}
+                    style={{ textDecoration: 'none', color: 'inherit' }}
                   >
-                    <ListItemButton key={tool.text} sx={{ pl: 4 }}>
+                    <ListItemButton sx={{ pl: 4 }}>
                       <ListItemText primary={tool.text} />
                     </ListItemButton>
                   </Link>
