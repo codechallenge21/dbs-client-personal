@@ -81,14 +81,18 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
   };
 
   const handleDrop = (acceptedFiles: File[]) => {
-    if (acceptedFiles && acceptedFiles.length > 0 && acceptedFiles?.[0]) {
+    if (acceptedFiles && acceptedFiles.length > 0 && acceptedFiles[0]) {
       validateFile(acceptedFiles[0]);
     }
   };
 
+  const handleDropRejected = (fileRejections: any[]) => {
+    setError('檔案格式錯誤或檔案大小超過 200MB 限制');
+  };
+
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    if (e.target.files && e.target.files.length > 0 && e.target.files?.[0]) {
+    if (e.target.files && e.target.files.length > 0 && e.target.files[0]) {
       validateFile(e.target.files[0]);
       e.target.value = '';
     }
@@ -110,6 +114,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop: handleDrop,
+    onDropRejected: handleDropRejected,
     accept: {
       'audio/*': ['.mp3', '.mp4', '.mpeg', '.mpga', '.m4a', '.wav', '.webm'],
     },
