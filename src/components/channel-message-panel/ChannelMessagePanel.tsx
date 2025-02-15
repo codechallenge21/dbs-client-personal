@@ -87,22 +87,23 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
         marginTop: isMobile ? '16px' : '0px',
         mb: '16px',
         height: isMobile ? '65vh' : 'calc(100vh - 32px)',
-        overflow: 'auto !important',
+        overflowY: 'auto',
+        overflowX: 'hidden',
         alignItems: 'center',
         justifyContent: 'center',
         '&::-webkit-scrollbar': {
-          width: '5px',
-        },
-        '&::-webkit-scrollbar-thumb': {
-          backgroundColor: '#c1c1c1',
-          borderRadius: '4px',
-        },
-        '&::-webkit-scrollbar-thumb:hover': {
-          backgroundColor: '#a8a8a8',
+          width: '8px',
+          height: '8px',
         },
         '&::-webkit-scrollbar-track': {
-          backgroundColor: '#f1f1f1',
-          borderRadius: '4px',
+          background: 'transparent',
+        },
+        '&::-webkit-scrollbar-thumb': {
+          backgroundColor: 'rgba(0, 0, 0, 0.2)',
+          borderRadius: '2px',
+        },
+        '&::-webkit-scrollbar-thumb:hover': {
+          backgroundColor: 'rgba(0, 0, 0, 0.4)',
         },
       }}
     >
@@ -110,6 +111,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
         sx={{
           pt: '16px',
           display: 'flex',
+          width: '100%',
           maxWidth: '760px',
           flexDirection: 'column',
           height: isMobile ? '100%' : 'calc(100% - 81px)',
@@ -120,8 +122,9 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
           <Box
             key={`channelMessage-${messageIndex}`}
             sx={{
-              width: 'fit-content',
-              marginLeft: 'auto',
+              width: { xs: '100%', sm: 'fit-content' },
+              marginLeft:
+                message.organizationChannelMessageType === 'AI' ? '0' : 'auto',
               marginBottom: '20px',
               display: 'flex',
               alignItems: 'flex-start',
@@ -157,7 +160,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                 flex: 1,
                 py: 2,
                 pr: 2,
-                width: '100%',
+                width: { xs: '100%', sm: '100%' },
                 maxWidth: '710px',
                 color: '#212B36',
                 wordBreak: 'break-word',
@@ -372,10 +375,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
             )}
             <Box
               sx={{
-                width:
-                  message.organizationChannelMessageType === 'AI'
-                    ? '100%'
-                    : 'fit-content',
+                width: { xs: '100%', sm: 'fit-content' },
                 marginLeft:
                   message.organizationChannelMessageType === 'AI'
                     ? '0'
@@ -410,7 +410,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                   <PermIdentityRounded sx={{ color: 'white' }} />
                 </Avatar>
               ) : (
-                <Box sx={{ width: 36, height: 36, ml: '20px', mt: '20px' }} /> // Placeholder for spacing
+                <Box sx={{ width: 36, height: 36, ml: '20px', mt: '20px' }} />
               )}
               <Box
                 sx={{

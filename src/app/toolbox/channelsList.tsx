@@ -106,7 +106,7 @@ const ChannelsList = () => {
             mutateAudioChannels();
           }
         })
-        .catch(() => { });
+        .catch(() => {});
     },
     [
       activeIndex,
@@ -355,9 +355,11 @@ const ChannelsList = () => {
                 <Box
                   sx={{
                     display: 'flex',
-                    justifyContent: 'space-between',
+                    justifyContent: 'space-between', // Keep title on left & icons on right for big screens
                     alignItems: 'center',
                     alignSelf: 'stretch',
+                    flexWrap: 'wrap', // Allows wrapping when screen is small
+                    gap: '16px',
                   }}
                 >
                   <Typography
@@ -368,6 +370,8 @@ const ChannelsList = () => {
                       lineHeight: 'normal',
                       fontFamily: 'DFPHeiBold-B5',
                       color: 'var(--Primary-Black, #212B36)',
+                      textAlign: 'left', // Always left-aligned
+                      flex: '1 1 auto', // Makes sure title takes available space
                     }}
                     gutterBottom
                   >
@@ -377,10 +381,11 @@ const ChannelsList = () => {
                   <Box
                     sx={{
                       display: 'flex',
-                      width: '458px',
-                      justifyContent: 'flex-end',
+                      width: { xs: '100%', md: 'auto' }, // Full width on small screens, auto on big screens
+                      justifyContent: { xs: 'flex-start', md: 'flex-end' }, // Left-align when wrapped, right-align on big screens
                       alignItems: 'center',
                       gap: '16px',
+                      flexWrap: 'wrap',
                     }}
                   >
                     <IconButton
@@ -651,7 +656,7 @@ const ChannelsList = () => {
                           <TableCell
                             sx={{
                               width: '18%',
-                              padding: '0px',
+                              padding: '0px 8px 0px 0px ',
                               border: 'none',
                               height: '51px !important',
                             }}
@@ -665,18 +670,18 @@ const ChannelsList = () => {
                             >
                               {channel.organizationChannelTranscriptList[0]
                                 ?.organizationChannelTranscriptStatus ===
-                                'COMPLETE' ? (
+                              'COMPLETE' ? (
                                 <CheckCircleRounded
                                   sx={{ color: ' rgba(17, 141, 87, 1)' }}
                                 />
                               ) : channel.organizationChannelTranscriptList[0]
-                                ?.organizationChannelTranscriptStatus ===
+                                  ?.organizationChannelTranscriptStatus ===
                                 'PROCESSING' ? (
                                 <RotateRightRounded
                                   sx={{ color: 'rgba(0, 102, 204, 1)' }}
                                 />
                               ) : channel.organizationChannelTranscriptList[0]
-                                ?.organizationChannelTranscriptStatus ===
+                                  ?.organizationChannelTranscriptStatus ===
                                 'PENDING' ? (
                                 <PendingActionsRounded
                                   sx={{ color: 'rgba(33, 43, 54, 1)' }}
@@ -697,7 +702,7 @@ const ChannelsList = () => {
                           <TableCell
                             sx={{
                               width: '18%',
-                              padding: '0px',
+                              padding: '0px 0px 0px 8px',
                               border: 'none',
                               height: '51px !important',
                             }}
@@ -1085,13 +1090,13 @@ const ChannelsList = () => {
                         sx={{ color: ' rgba(52, 199, 89, 1)' }}
                       />
                     ) : channel.organizationChannelTranscriptList[0]
-                      ?.organizationChannelTranscriptStatus ===
+                        ?.organizationChannelTranscriptStatus ===
                       'PROCESSING' ? (
                       <RotateRightRounded
                         sx={{ color: 'rgba(0, 102, 204, 1)' }}
                       />
                     ) : channel.organizationChannelTranscriptList[0]
-                      ?.organizationChannelTranscriptStatus === 'PENDING' ? (
+                        ?.organizationChannelTranscriptStatus === 'PENDING' ? (
                       <PendingActionsRounded
                         sx={{ color: 'rgba(33, 43, 54, 1)' }}
                       />
