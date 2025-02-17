@@ -38,6 +38,7 @@ const EditDialog: React.FC<EditDialogProps> = ({
 
   return (
     <Dialog
+      role="dialog"
       open={open}
       onClose={onClose}
       slotProps={{
@@ -76,6 +77,7 @@ const EditDialog: React.FC<EditDialogProps> = ({
           重新命名
         </Typography>
         <IconButton
+          role="button"
           aria-label="close"
           onClick={(e) => {
             if (onClose) onClose(e);
@@ -91,6 +93,7 @@ const EditDialog: React.FC<EditDialogProps> = ({
 
       <DialogContent sx={{ padding: 0 }}>
         <TextField
+          aria-label="Edit Name"
           id="edit-dialog-name-input"
           data-tid="edit-dialog-name-input"
           sx={{
@@ -146,6 +149,8 @@ const EditDialog: React.FC<EditDialogProps> = ({
         }}
       >
         <Button
+          role="button"
+          aria-label="Confirm"
           variant="contained"
           onClick={() => {
             if (inputValue?.trim()) {

@@ -314,6 +314,9 @@ export default function PopularArea() {
                         '& .hover-text': {
                           color: '#990000',
                         },
+                        '& .hover-box': {
+                          backgroundColor: '#CC00000D',
+                        },
                       },
                     }}
                   >
@@ -329,6 +332,7 @@ export default function PopularArea() {
                       }}
                     />
                     <Box
+                      className="hover-box"
                       sx={{
                         gap: '4px',
                         display: 'flex',
@@ -628,7 +632,14 @@ export default function PopularArea() {
                           >
                             標題
                           </Typography>
-                          <IconButton sx={{ padding: '0' }}>
+                          <IconButton
+                            sx={{
+                              padding: '0',
+                              '&:hover': {
+                                backgroundColor: 'transparent',
+                              },
+                            }}
+                          >
                             <ArrowForwardIosRounded
                               className="hover-icon"
                               sx={{ color: 'black' }}

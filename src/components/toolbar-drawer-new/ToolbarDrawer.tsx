@@ -258,6 +258,8 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             </Typography>
           )}
           <IconButton
+            role="button"
+            aria-label="Expand/Collapse"
             onClick={() => {
               if (isMobile) {
                 setIsOpenDrawer(!open);
@@ -285,8 +287,9 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             }}
           >
             <Button
+              role="button"
+              aria-label="New Chat"
               sx={{
-                gap: '8px',
                 height: '40px',
                 width: '100%',
                 padding: '8px',
@@ -321,6 +324,8 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
 
         {!isExpanded && !isMobile && (
           <IconButton
+            role="button"
+            aria-label="New Chat"
             sx={{
               padding: '8px',
               display: 'flex',
@@ -338,82 +343,84 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
           </IconButton>
         )}
 
-        <Box
-          sx={{
-            gap: '8px',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-start',
-            justifyContent: 'flex-end',
-            marginTop: '8px',
-          }}
-        >
-          {drawerItems.map((item, index) => (
-            <ListItem
-              key={index}
-              sx={{
-                padding: '8px',
-                borderRadius: '8px',
-                backgroundColor:
-                  pathname === item.route ||
-                  (pathname === '/' && item.route === '/chat') ||
-                  (pathname === '/channel-summary' && item.route === '/toolbox')
-                    ? 'var(--Action-Selected, rgba(204, 0, 0, 0.20))'
-                    : 'transparent',
-                '&:hover': {
-                  backgroundColor: '#FBEDED',
-                },
-                cursor: 'pointer',
-                height: isExpanded || isMobile ? '48px' : 'auto',
-              }}
-              onClick={() => {
-                if (index === 3) {
-                  if (
-                    selectedChannel ||
-                    selectedChannelId ||
-                    isInteractingInChat
-                  ) {
-                    if (
-                      pathname === '/chat' &&
-                      !searchParams.has('organizationChannelId')
-                    ) {
-                      window.location.reload();
-                    } else {
-                      router.push('/chat');
-                    }
-                    return;
-                  }
-                }
-                router.push(item.route);
-              }}
-            >
-              <Typography
+        <ListItem sx={{ padding: '0px' }}>
+          <List
+            sx={{
+              gap: '8px',
+              width: '100%',
+              padding: '8px',
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            {drawerItems.map((item, index) => (
+              <ListItem
+                key={index}
                 sx={{
-                  display: 'flex',
-                  fontWeight: 400,
-                  fontSize: '16px',
-                  alignItems: 'center',
-                  color: index === 0 ? '#CC0000' : '#212B36',
-                  fontFamily: 'DFPHeiBold-B5',
+                  padding: '8px',
+                  borderRadius: '8px',
+                  backgroundColor:
+                    pathname === item.route ||
+                    (pathname === '/' && item.route === '/chat') ||
+                    (pathname === '/channel-summary' &&
+                      item.route === '/toolbox')
+                      ? 'var(--Action-Selected, rgba(204, 0, 0, 0.20))'
+                      : 'transparent',
+                  '&:hover': {
+                    backgroundColor: '#FBEDED',
+                  },
+                  cursor: 'pointer',
+                  height: isExpanded || isMobile ? '48px' : 'auto',
+                }}
+                onClick={() => {
+                  if (index === 3) {
+                    if (
+                      selectedChannel ||
+                      selectedChannelId ||
+                      isInteractingInChat
+                    ) {
+                      if (
+                        pathname === '/chat' &&
+                        !searchParams.has('organizationChannelId')
+                      ) {
+                        window.location.reload();
+                      } else {
+                        router.push('/chat');
+                      }
+                      return;
+                    }
+                  }
+                  router.push(item.route);
                 }}
               >
-                <span
-                  style={{
+                <Typography
+                  sx={{
                     display: 'flex',
+                    fontWeight: 400,
+                    fontSize: '16px',
                     alignItems: 'center',
+                    color: index === 0 ? '#CC0000' : '#212B36',
+                    fontFamily: 'DFPHeiBold-B5',
                   }}
                 >
-                  {item.icon}
-                </span>
-                {(isExpanded || isMobile) && (
-                  <span style={{ marginLeft: index === 0 ? '0px' : '8px' }}>
-                    {item.text}
+                  <span
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}
+                  >
+                    {item.icon}
                   </span>
-                )}
-              </Typography>
-            </ListItem>
-          ))}
-        </Box>
+                  {(isExpanded || isMobile) && (
+                    <span style={{ marginLeft: index === 0 ? '0px' : '8px' }}>
+                      {item.text}
+                    </span>
+                  )}
+                </Typography>
+              </ListItem>
+            ))}
+          </List>
+        </ListItem>
       </List>
       <Box
         sx={{
@@ -429,7 +436,9 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
         {(isExpanded || isMobile) && (
           <>
             {isLogin ? (
-              <Box
+              <Button
+                role="button"
+                aria-label="Logout"
                 sx={{
                   display: 'flex',
                   // padding: '16px',
@@ -454,9 +463,11 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 >
                   {loginName}
                 </Typography>
-              </Box>
+              </Button>
             ) : (
               <Button
+                role="button"
+                aria-label="Logout"
                 sx={{
                   gap: '8px',
                   color: '#212B36',
@@ -479,6 +490,8 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               </Button>
             )}
             <Button
+              role="button"
+              aria-label="Wishing Pool"
               sx={{
                 gap: '8px',
                 color: 'white',
@@ -503,6 +516,8 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               許願池
             </Button>
             <Button
+              role="button"
+              aria-label="Consultant Area"
               sx={{
                 gap: '8px',
                 color: 'white',
@@ -528,6 +543,8 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
           <>
             {!isLogin ? (
               <IconButton
+                role="button"
+                aria-label="Login"
                 sx={{
                   width: '36px',
                   height: '36px',
@@ -550,6 +567,8 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               </IconButton>
             ) : (
               <IconButton
+                role="button"
+                aria-label="Logout"
                 sx={{
                   width: '36px',
                   height: '36px',
@@ -573,6 +592,8 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               </IconButton>
             )}
             <IconButton
+              role="button"
+              aria-label="Wsihing Pool"
               sx={{
                 width: '36px',
                 height: '36px',
@@ -593,6 +614,8 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               <EmojiObjectsRounded sx={{ color: 'white', fontSize: '20px' }} />
             </IconButton>
             <IconButton
+              role="button"
+              aria-label="Consultant Area"
               sx={{
                 width: '36px',
                 height: '36px',
