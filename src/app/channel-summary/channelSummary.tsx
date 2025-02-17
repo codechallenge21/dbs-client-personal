@@ -33,7 +33,6 @@ import {
   SettingsInputComponentRounded,
   ArrowBackIosNewRounded,
   HistoryRounded,
-  Margin,
 } from '@mui/icons-material';
 import { OrganizationChannel } from '@/interfaces/entities';
 import { useAudioChannel } from '@/utils/hooks/useAudioChannel';
