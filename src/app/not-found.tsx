@@ -22,7 +22,7 @@ export default function NotFound() {
   return (
     <Box
       sx={{
-        minHeight: '97vh',
+        minHeight: '96vh',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
