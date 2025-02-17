@@ -62,6 +62,7 @@ export default function EditDeleteModal({
 }: EditDeleteModalProps) {
   return (
     <Menu
+      role="dialog"
       anchorEl={anchorEl}
       open={Boolean(anchorEl)}
       onClose={onClose}

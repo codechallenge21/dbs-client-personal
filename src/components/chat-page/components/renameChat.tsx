@@ -63,6 +63,8 @@ export default function RenameDialog({
       >
         重新命名
         <IconButton
+          role="button"
+          aria-label="Close"
           onClick={onClose}
           size="small"
           sx={{ color: 'text.secondary', padding: '8px' }}
@@ -72,6 +74,7 @@ export default function RenameDialog({
       </DialogTitle>
       <DialogContent sx={{ padding: '0 24px' }}>
         <TextField
+          aria-label="Add New Name"
           fullWidth
           placeholder="新名字"
           value={newName}
@@ -103,6 +106,8 @@ export default function RenameDialog({
       </DialogContent>
       <DialogActions sx={{ padding: '4px 24px 16px 24px' }}>
         <button
+          role="button"
+          aria-label="Save"
           onClick={handleSave}
           style={{
             backgroundColor: '#6B584C',
