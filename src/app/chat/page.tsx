@@ -116,11 +116,6 @@ function ClientContent() {
           setIsOpenDrawer={setIsOpenDrawer}
           setOpenDataSource={setOpenDataSource}
         />
-        <Box
-          sx={{
-            marginTop: isMobile ? '60px' : '0px',
-          }}
-        />
         <MainContent />
         <SwitchDialog
           open={isOpen}

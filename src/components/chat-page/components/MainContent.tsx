@@ -6,7 +6,7 @@ import {
   Skeleton,
 } from '@mui/material';
 import TextInput from './TextInput';
-import { useContext } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import ChannelContentContext from '../../channel-context-provider/ChannelContentContext';
 import ChannelMessagePanel from '../../channel-message-panel/ChannelMessagePanel';
 import Suggestions from './Suggestions';
@@ -78,7 +78,15 @@ const MainContent = () => {
     },
   ];
 
-  if (selectedChannel || selectedChannelId || chatResponses.length)
+  const boxRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (boxRef.current) {
+      boxRef.current.scrollTop = boxRef.current.scrollHeight;
+    }
+  }, [selectedChannel, chatResponses]);
+
+  if (selectedChannel || selectedChannelId || chatResponses.length) {
     return (
       <Box
         sx={{
@@ -87,21 +95,44 @@ const MainContent = () => {
           flexDirection: 'column',
           alignItems: 'center',
           pb: '16px',
-          px: '32px',
           justifyContent: isMobile ? 'flex-end' : 'center',
+          marginTop: '56px',
         }}
       >
-        <ChannelMessagePanel
-          channel={selectedChannel}
-          chatResponses={chatResponses}
-        />
-        {/* {isInteractingInChat && <InformationPage />} */}
-        <TextInput
-          submitUserInputs={submitUserInputs}
-          isInteracting={isInteracting}
-        />
+        <Box
+          ref={boxRef}
+          sx={{
+            width: '100%',
+            height: 'calc(100vh - 105px)',
+            overflow: 'auto !important',
+            '&::-webkit-scrollbar': {
+              width: '5px',
+            },
+            '&::-webkit-scrollbar-thumb': {
+              backgroundColor: '#c1c1c1',
+              borderRadius: '4px',
+            },
+            '&::-webkit-scrollbar-thumb:hover': {
+              backgroundColor: '#a8a8a8',
+            },
+            '&::-webkit-scrollbar-track': {
+              backgroundColor: '#f1f1f1',
+              borderRadius: '4px',
+            },
+          }}
+        >
+          <ChannelMessagePanel
+            channel={selectedChannel}
+            chatResponses={chatResponses}
+          />
+          <TextInput
+            submitUserInputs={submitUserInputs}
+            isInteracting={isInteracting}
+          />
+        </Box>
       </Box>
     );
+  }
 
   return (
     <Box
@@ -112,7 +143,7 @@ const MainContent = () => {
         alignItems: 'center',
         flexDirection: 'column',
         pb: isMobile ? '16px' : '0px',
-        pt: isMobile ? '128px' : '0px',
+        pt: isMobile ? '72px' : '0px',
         height: isMobile ? 'auto' : '100%',
         justifyContent: isMobile ? 'flex-end' : 'center',
       }}

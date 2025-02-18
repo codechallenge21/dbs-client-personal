@@ -282,20 +282,17 @@ const TextInput: React.FC<TextInputProps> = ({
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <Box
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
+          margin: 'auto',
           width: '100%',
           maxWidth: '760px',
-          minHeight: '116px',
           maxHeight: '760px',
-          position: 'relative',
+          position: 'sticky',
           bottom: 0,
           backgroundColor: '#F5F5F5',
           borderRadius: '16px',
           zIndex: 10,
           marginTop: isMobile ? 3 : 0,
           overflow: 'hidden',
-          justifyContent: 'flex-end',
         }}
       >
         {files.length > 0 && (
@@ -358,7 +355,6 @@ const TextInput: React.FC<TextInputProps> = ({
                   {file.file.name}
                 </Typography>
                 <IconButton
-                  role="button"
                   aria-label="remove file"
                   sx={{
                     position: 'absolute',
@@ -382,9 +378,7 @@ const TextInput: React.FC<TextInputProps> = ({
         )}
         <Box
           sx={{
-            width: '100%',
-            paddingTop: '16px',
-            paddingInline: '10px',
+            margin: '8px 0px 8px 16px',
             overflowY: 'auto',
             maxHeight: '200px',
             minHeight: '40px',
@@ -431,39 +425,17 @@ const TextInput: React.FC<TextInputProps> = ({
         <Box
           sx={{
             width: '100%',
-            marginTop: '16px',
             justifyContent: 'space-between',
             display: 'flex',
-            gap: '16px',
-            flexWrap: 'wrap',
-            padding: '22px',
-            position: 'relative',
+            padding: '10px 16px 10px 6px',
           }}
         >
           <Box
             sx={{
               width: '100%',
               display: 'flex',
-              gap: '16px',
             }}
           >
-            <IconButton
-              role="button"
-              aria-label="attach file"
-              component="span"
-              onDrop={handleDrop}
-              onDragOver={handleDragOver}
-              sx={{
-                position: 'absolute',
-                bottom: '10px',
-                left: '10px',
-              }}
-            >
-              <AttachFileRoundedIcon
-                sx={{ transform: 'rotate(180deg)', color: 'black' }}
-                onClick={() => document.getElementById('file-upload')?.click()}
-              />
-            </IconButton>
             <input
               type="file"
               id="file-upload"
@@ -471,53 +443,47 @@ const TextInput: React.FC<TextInputProps> = ({
               onChange={handleFileSelect}
               style={{ display: 'none' }}
             />
-            <IconButton
-              role="button"
-              aria-label="attach file"
-              sx={{
-                position: 'absolute',
-                bottom: '10px',
-                left: '58px',
-              }}
-            >
-              <DropdownMenu isTextInput advisor={advisorType} />
-            </IconButton>
+            <Box sx={{ display: 'flex' }}>
+              <IconButton
+                aria-label="attach file"
+                component="span"
+                onDrop={handleDrop}
+                onDragOver={handleDragOver}
+                sx={{ padding: '8px' }}
+              >
+                <AttachFileRoundedIcon
+                  sx={{ transform: 'rotate(180deg)', color: 'black' }}
+                  onClick={() =>
+                    document.getElementById('file-upload')?.click()
+                  }
+                />
+              </IconButton>
+              <IconButton
+                aria-label="attach file"
+                sx={{ padding: '8px', borderRadius: '7px 10px' }}
+              >
+                <DropdownMenu isTextInput advisor={advisorType} />
+              </IconButton>
+            </Box>
           </Box>
 
           {isInteracting ? (
-            <Box
-              sx={{
-                position: 'absolute',
-                bottom: '10px',
-                right: '10px',
-              }}
-            >
+            <Box>
               <RotateRightRounded sx={{ color: '#1877F2', fontSize: 24 }} />
             </Box>
           ) : userInputValue !== '' && !isListening ? (
             <IconButton
-              role="button"
               aria-label="send message"
-              sx={{
-                position: 'absolute',
-                bottom: '10px',
-                right: '10px',
-              }}
               onClick={handleClickSubmitOrAudioFileUpload}
             >
               <SendRounded sx={{ color: 'black' }} />
             </IconButton>
           ) : (
             <IconButton
-              role="button"
               aria-label="Audio Message"
               onClick={handleListening}
               className={isListening ? 'mic-listening' : ''}
-              sx={{
-                position: 'absolute',
-                bottom: '10px',
-                right: '10px',
-              }}
+              sx={{ padding: '8px' }}
             >
               <MicRoundedIcon
                 className={isListening ? 'mic-icon' : ''}

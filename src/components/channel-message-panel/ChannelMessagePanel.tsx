@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import type {
   OrganizationChannel,
   OrganizationChannelMessage,
@@ -17,7 +18,6 @@ import type { FC } from 'react';
 import ReactMarkdown from 'react-markdown';
 import Image from 'next/image';
 import imagePreview from '@/assets/Images/Image Icon.svg';
-import React from 'react';
 import {
   PermIdentityRounded,
   LibraryBooksRounded,
@@ -86,24 +86,8 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
         display: 'flex',
         marginTop: isMobile ? '16px' : '0px',
         mb: '16px',
-        height: isMobile ? '65vh' : 'calc(100vh - 32px)',
-        overflow: 'auto !important',
         alignItems: 'center',
         justifyContent: 'center',
-        '&::-webkit-scrollbar': {
-          width: '5px',
-        },
-        '&::-webkit-scrollbar-thumb': {
-          backgroundColor: '#c1c1c1',
-          borderRadius: '4px',
-        },
-        '&::-webkit-scrollbar-thumb:hover': {
-          backgroundColor: '#a8a8a8',
-        },
-        '&::-webkit-scrollbar-track': {
-          backgroundColor: '#f1f1f1',
-          borderRadius: '4px',
-        },
       }}
     >
       <Box
@@ -197,7 +181,6 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                     arrow
                   >
                     <IconButton
-                      role="button"
                       aria-label="copy"
                       sx={{
                         display: 'flex',
@@ -342,7 +325,6 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                   arrow
                 >
                   <IconButton
-                    role="button"
                     aria-label="copy"
                     sx={{
                       display: 'flex',
