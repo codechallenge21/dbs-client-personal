@@ -31,6 +31,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
 import ChannelContentContext from '../channel-context-provider/ChannelContentContext';
+import WishPoolDialog from '../dialogs/WishPoolDialog';
 
 interface ToolbarDrawerProps {
   open: boolean;
@@ -707,6 +708,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
       >
         {children}
       </MainBox>
+      <WishPoolDialog open={true} onClose={() => {}} />
     </Box>
   );
 };

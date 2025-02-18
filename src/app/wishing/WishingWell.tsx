@@ -160,7 +160,7 @@ const WishingWell = () => {
                   fontFamily: 'DFPHeiBold-B5',
                 }}
               >
-                Title
+                活動公告
               </Typography>
             </Button>
           </Box>
