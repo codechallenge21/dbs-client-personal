@@ -152,7 +152,6 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
       <Dialog
         role="dialog"
         open={open}
-        onClose={onClose}
         PaperProps={{
           sx: {
             bgcolor: '#fff',
