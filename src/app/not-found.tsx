@@ -22,7 +22,7 @@ export default function NotFound() {
   return (
     <Box
       sx={{
-        minHeight: '96vh',
+        minHeight: { xs: 'calc(100vh - 32px)', sm: '96vh' },
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -31,6 +31,7 @@ export default function NotFound() {
         backgroundColor: '#fff',
         borderRadius: '8px',
         margin: { xs: '16px', sm: 0 },
+        pb: { xs: '16px', sm: '32px' },
       }}
     >
       <Typography
