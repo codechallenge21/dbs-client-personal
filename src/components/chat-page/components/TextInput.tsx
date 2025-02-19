@@ -7,17 +7,11 @@ import {
   useTheme,
   useMediaQuery,
   Typography,
-  // Button,
 } from '@mui/material';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import RotateRightRounded from '@mui/icons-material/RotateRightRounded';
 import ChannelContentContext from '../../channel-context-provider/ChannelContentContext';
-import {
-  SendRounded,
-  CloseRounded,
-  // PersonPinRounded,
-  // ArrowDropDownRounded,
-} from '@mui/icons-material';
+import { SendRounded, CloseRounded } from '@mui/icons-material';
 import Image from 'next/image';
 import pdfPreview from '@/assets/Images/Pdf Icon.svg';
 import txtPerview from '@/assets/Images/Txt Icon.svg';
@@ -296,19 +290,21 @@ const TextInput: React.FC<TextInputProps> = ({
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <Box
         sx={{
-          zIndex: 10,
-          width: '100%',
           display: 'flex',
+          flexDirection: 'column',
+          width: '100%',
           maxWidth: '760px',
           minHeight: '116px',
-          maxHeight: '760px',
-          overflow: 'hidden',
-          borderRadius: '16px',
-          flexDirection: 'column',
+          position: 'relative',
+          bottom: 0,
           backgroundColor: '#F5F5F5',
+          borderRadius: '16px',
+          zIndex: 10,
           marginTop: isMobile ? 3 : 0,
-          justifyContent: 'space-between',
+          overflow: 'hidden',
+          justifyContent: 'flex-end',
         }}
+        className="chat-text-input"
       >
         {files.length > 0 && (
           <Box
@@ -370,6 +366,8 @@ const TextInput: React.FC<TextInputProps> = ({
                   {file.file.name}
                 </Typography>
                 <IconButton
+                  role="button"
+                  aria-label="remove file"
                   sx={{
                     position: 'absolute',
                     top: '0px',
@@ -392,12 +390,12 @@ const TextInput: React.FC<TextInputProps> = ({
         )}
         <Box
           sx={{
-            gap: '10px',
             width: '100%',
+            paddingTop: '16px',
+            paddingInline: '10px',
             overflowY: 'auto',
             minHeight: '40px',
             maxHeight: '200px',
-            padding: '16px 8px',
             '&::-webkit-scrollbar': {
               width: '8px',
             },
@@ -415,7 +413,9 @@ const TextInput: React.FC<TextInputProps> = ({
           }}
         >
           <TextareaAutosize
+            aria-label="Ask the AI"
             minRows={1}
+            placeholder="傳訊息給智能顧問"
             style={{
               width: '100%',
               border: 'none',
@@ -426,127 +426,90 @@ const TextInput: React.FC<TextInputProps> = ({
               overflow: 'auto',
               borderRadius: '8px',
               backgroundColor: '#F5F5F5',
-              paddingTop: isMobile ? '20px' : '2px',
-              paddingBottom: isMobile ? '20px' : '',
+              paddingTop: '2px',
+              paddingBottom: '',
             }}
+            className="textarea-autosize"
             value={userInputValue}
-            placeholder="傳訊息給智能顧問"
             onChange={handleOnChangeUserInput}
             onKeyDown={handleOnKeyDownUserInput}
           />
         </Box>
         <Box
           sx={{
-            gap: '10px',
             width: '100%',
+            marginTop: '8px',
+            // justifyContent: 'space-between',
             display: 'flex',
-            paddingTop: '10px',
-            paddingLeft: '6px',
-            paddingRight: '16px',
-            paddingBottom: '10px',
+            gap: '4px',
+            flexWrap: 'wrap',
+            padding: '10px',
+            position: 'relative',
           }}
         >
-          <Box
-            sx={{
-              gap: '16px',
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'space-between',
-            }}
+          <IconButton
+            role="button"
+            aria-label="attach file"
+            component="span"
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
           >
-            <DropdownMenu isTextInput advisor={advisorType} />
-
-            {isInteracting ? (
-              <Box>
-                <RotateRightRounded sx={{ color: '#1877F2', fontSize: 24 }} />
-              </Box>
-            ) : userInputValue !== '' && !isListening ? (
-              <IconButton onClick={handleClickSubmitOrAudioFileUpload}>
-                <SendRounded sx={{ color: 'black' }} />
-              </IconButton>
-            ) : (
-              <IconButton
-                onClick={handleListening}
-                className={isListening ? 'mic-listening' : ''}
-              >
-                <MicRoundedIcon
-                  className={isListening ? 'mic-icon' : ''}
-                  sx={{ color: isListening ? 'white' : 'black' }}
-                />
-              </IconButton>
-            )}
-          </Box>
-        </Box>
-      </Box>
-
-      <Box
-        sx={{
-          gap: '10px',
-          width: '100%',
-          height: '58px',
-          maxWidth: '728px',
-          paddingLeft: '16px',
-          paddingRight: '16px',
-        }}
-      >
-        <Box
-          sx={{
-            height: '58px',
-            display: 'flex',
-            paddingTop: '10px',
-            paddingLeft: '10px',
-            paddingRight: '10px',
-            paddingBottom: '8px',
-            background: '#EBE3DD',
-            borderBottomLeftRadius: '16px',
-            borderBottomRightRadius: '16px',
-            justifyContent: 'space-between',
-          }}
-        >
-          <Box>
-            <IconButton
-              component="span"
-              onDrop={handleDrop}
-              onDragOver={handleDragOver}
-            >
-              <AttachFileRoundedIcon
-                sx={{ transform: 'rotate(180deg)', color: 'black' }}
-                onClick={() => document.getElementById('file-upload')?.click()}
-              />
-            </IconButton>
-            <input
-              type="file"
-              id="file-upload"
-              multiple
-              onChange={handleFileSelect}
-              style={{ display: 'none' }}
+            <AttachFileRoundedIcon
+              sx={{ transform: 'rotate(180deg)', color: 'black' }}
+              onClick={() => document.getElementById('file-upload')?.click()}
             />
-          </Box>
-          {/* <Button
-            sx={{
-              gap: '8px',
-              width: '150px',
-              height: '40px',
-              padding: '8px',
-              borderRadius: '8px',
-            }}
-            startIcon={<PersonPinRounded sx={{ color: '#212B36' }} />}
-            endIcon={<ArrowDropDownRounded sx={{ color: '#212B36' }} />}
-          >
-            <Typography
+          </IconButton>
+          <DropdownMenu isTextInput advisor={advisorType} />
+
+          <input
+            type="file"
+            id="file-upload"
+            multiple
+            onChange={handleFileSelect}
+            style={{ display: 'none' }}
+          />
+
+          {isInteracting ? (
+            <Box
               sx={{
-                fontWeight: 700,
-                fontSize: '14px',
-                color: '#212B36',
-                lineHeight: '24px',
-                textAlign: 'center',
-                letterSpacing: '0px',
-                fontFamily: 'Public Sans',
+                position: 'absolute',
+                bottom: '10px',
+                right: '10px',
               }}
             >
-              關聯個案
-            </Typography>
-          </Button> */}
+              <RotateRightRounded sx={{ color: '#1877F2', fontSize: 24 }} />
+            </Box>
+          ) : userInputValue !== '' && !isListening ? (
+            <IconButton
+              role="button"
+              aria-label="send message"
+              sx={{
+                position: 'absolute',
+                bottom: '10px',
+                right: '10px',
+              }}
+              onClick={handleClickSubmitOrAudioFileUpload}
+            >
+              <SendRounded sx={{ color: 'black' }} />
+            </IconButton>
+          ) : (
+            <IconButton
+              role="button"
+              aria-label="Audio Message"
+              onClick={handleListening}
+              className={isListening ? 'mic-listening' : ''}
+              sx={{
+                position: 'absolute',
+                bottom: '10px',
+                right: '10px',
+              }}
+            >
+              <MicRoundedIcon
+                className={isListening ? 'mic-icon' : ''}
+                sx={{ color: isListening ? 'white' : 'black' }}
+              />
+            </IconButton>
+          )}
         </Box>
       </Box>
     </>

@@ -10,6 +10,7 @@ import {
   useTheme,
   useMediaQuery,
   Box,
+  Button,
 } from '@mui/material';
 import {
   WorkRounded,
@@ -19,6 +20,7 @@ import {
   SupportAgentOutlined,
   BusinessCenterRounded,
   AccountBalanceWalletRounded,
+  PersonPinRounded,
 } from '@mui/icons-material';
 import apis from '@/utils/hooks/apis/apis';
 import { useRouter } from 'next/navigation';
@@ -124,6 +126,7 @@ export default function DropdownMenu({
     (value: AdvisorType) => {
       if (setAdvisorType) setAdvisorType(value);
       setToolsAnchorDeleteEdit(null);
+      setToolsAnchor(null);
     },
     [setAdvisorType]
   );
@@ -213,8 +216,6 @@ export default function DropdownMenu({
         <Box
           onClick={(e) => setToolsAnchor(e.currentTarget)}
           sx={{
-            width: '24px',
-            height: '24px',
             cursor: 'pointer',
             background: 'none',
           }}
@@ -222,35 +223,30 @@ export default function DropdownMenu({
           {listItems
             .filter((item) => item.value === advisor)
             .map((item, index) => (
-              <Box
+              <Button
                 sx={{
-                  gap: '8px',
-                  width: '200px',
-                  height: '38px',
-                  display: 'flex',
-                  paddingTop: '7px',
+                  gap: '2px',
+                  height: '40px',
+                  padding: '8px',
                   borderRadius: '8px',
-                  paddingLeft: '10px',
-                  paddingRight: '10px',
-                  paddingBottom: '7px',
-                  alignItems: 'center',
                 }}
+                startIcon={<PersonPinRounded sx={{ color: '#212B36' }} />}
                 key={index}
               >
-                <ListItemIcon
+                <Typography
                   sx={{
-                    width: '24px',
-                    height: '24px',
-                    color: 'black',
-                    minWidth: 'auto',
+                    fontWeight: 700,
+                    fontSize: '14px',
+                    color: '#212B36',
+                    lineHeight: '24px',
+                    textAlign: 'center',
+                    letterSpacing: '0px',
+                    fontFamily: 'Public Sans',
                   }}
                 >
-                  {item.icon}
-                </ListItemIcon>
-                <ListItemText sx={{ textAlign: 'start' }}>
                   {item.title}
-                </ListItemText>
-              </Box>
+                </Typography>
+              </Button>
             ))}
         </Box>
       ) : (
