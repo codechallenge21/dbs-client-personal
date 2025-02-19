@@ -17,7 +17,7 @@ import type { FC } from 'react';
 import ReactMarkdown from 'react-markdown';
 import Image from 'next/image';
 import imagePreview from '@/assets/Images/Image Icon.svg';
-import React from 'react';
+import React, { useState } from 'react';
 import {
   PermIdentityRounded,
   LibraryBooksRounded,
@@ -42,9 +42,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
-  const [copiedMessageId, setCopiedMessageId] = React.useState<string | null>(
-    null
-  );
+  const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
 
   const copyPrompt = (text: string, messageId: string) => {
     navigator.clipboard.writeText(text).then(
@@ -87,10 +85,11 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
       maxWidth={false}
       sx={{
         display: 'flex',
-        marginTop: isMobile ? '16px' : '0px',
-        mb: '16px',
-        height: isMobile ? '65vh' : 'calc(100vh - 32px)',
-        overflow: 'auto !important',
+        marginTop: '0px',
+        mb: '74px',
+        overflow: 'hidden',
+        flex: 1,
+        transform: 'matrix(1, 0, 0, 1, 0, 74)',
         alignItems: 'center',
         justifyContent: 'center',
         '&::-webkit-scrollbar': {
@@ -111,19 +110,22 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
     >
       <Box
         sx={{
-          pt: '16px',
           display: 'flex',
           maxWidth: '760px',
           flexDirection: 'column',
-          height: isMobile ? '100%' : 'calc(100% - 81px)',
           minWidth: isMobile ? '100%' : isTablet ? '350px' : '760px',
+          overflow: 'auto',
+          height: '100%',
         }}
       >
         {sortedData?.map((message, messageIndex) => (
           <Box
             key={`channelMessage-${messageIndex}`}
             sx={{
-              width: 'fit-content',
+              width:
+                message.organizationChannelMessageType !== 'AI'
+                  ? 'fit-content'
+                  : '100%',
               marginLeft: 'auto',
               marginBottom: '20px',
               display: 'flex',
@@ -200,6 +202,8 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                     arrow
                   >
                     <IconButton
+                      role="button"
+                      aria-label="copy"
                       sx={{
                         display: 'flex',
                         alignItems: 'center',
@@ -343,6 +347,8 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                   arrow
                 >
                   <IconButton
+                    role="button"
+                    aria-label="copy"
                     sx={{
                       display: 'flex',
                       alignItems: 'center',

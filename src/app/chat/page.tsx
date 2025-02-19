@@ -17,6 +17,7 @@ import { useSearchParams } from 'next/navigation';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import apis from '@/utils/hooks/apis/apis';
 import DataSourceDialog from '@/components/chat-page/components/chatDataStore';
+import { useChatChannels } from '@/utils/hooks/useChatChannels';
 
 export default function ChatHomePage() {
   return (
@@ -46,6 +47,9 @@ function ClientContent() {
   const [openDataSource, setOpenDataSource] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenDrawer, setIsOpenDrawer] = useState(!isMobile);
+  const { data: chatsData } = useChatChannels({
+    organizationId: '4aba77788ae94eca8d6ff330506af944',
+  });
 
   const handleClose = useCallback(() => setIsOpen(false), []);
   const handleConfirm = useCallback(() => setIsOpen(false), []);
@@ -104,7 +108,11 @@ function ClientContent() {
           borderRadius: '8px',
           flexDirection: 'column',
           backgroundColor: '#FFF',
-          overflowY: isMobile ? 'auto' : 'unset',
+          justifyContent: isMobile
+            ? chatsData?.length
+              ? 'flex-end'
+              : 'center'
+            : 'center',
           height: isMobile ? '100vh' : 'calc(100vh - 32px)',
         }}
       >
@@ -116,12 +124,7 @@ function ClientContent() {
           setIsOpenDrawer={setIsOpenDrawer}
           setOpenDataSource={setOpenDataSource}
         />
-        <Box
-          sx={{
-            marginTop: isMobile ? '60px' : '0px',
-          }}
-        />
-        <MainContent />
+        <MainContent chatsData={chatsData} />
         <SwitchDialog
           open={isOpen}
           onClose={handleClose}
