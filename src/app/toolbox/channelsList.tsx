@@ -708,9 +708,9 @@ const ChannelsList = () => {
                                 color: 'var(--Text-Primary, #212B36)',
                               }}
                             >
-                              {new Date(channel.organizationChannelCreateDate)
-                                .toLocaleDateString('en-CA')
-                                .replace(/-/g, '/')}
+                              {new Date(
+                        channel.organizationChannelCreateDate
+                      ).toLocaleString()}
                             </Typography>
                           </TableCell>
                           <TableCell
@@ -1077,9 +1077,9 @@ const ChannelsList = () => {
                         color: 'var(--Primary-Black, #212B36)',
                       }}
                     >
-                      {new Date(channel.organizationChannelCreateDate)
-                        .toLocaleDateString('en-CA')
-                        .replace(/-/g, '/')}
+                      {new Date(
+                        channel.organizationChannelCreateDate
+                      ).toLocaleString()}
                     </Typography>
                   </Box>
                   <Box
