@@ -49,12 +49,13 @@ const WishPoolDialog: React.FC<WishPoolDialogProps> = ({ open, onClose }) => {
       {/* {Header} */}
       <Box
         sx={{
-          display: 'flex',
-          width: '824px',
           height: '64px',
+          width: '824px',
+          display: 'flex',
           paddingTop: '8px',
           paddingLeft: '32px',
           flexDirection: 'row',
+          alignItems: 'center',
           paddingRight: '16px',
           paddingBottom: '8px',
           justifyContent: 'space-between',
@@ -75,8 +76,17 @@ const WishPoolDialog: React.FC<WishPoolDialogProps> = ({ open, onClose }) => {
           許願池
         </Typography>
 
-        <IconButton>
-          <CloseRounded sx={{ color: 'black' }} />
+        <IconButton
+          sx={{
+            width: '48px',
+            height: '48px',
+            padding: '8px',
+            borderRadius: '50px',
+          }}
+        >
+          <CloseRounded
+            sx={{ width: '32px', height: '32px', color: '#212B36' }}
+          />
         </IconButton>
       </Box>
       {/* {Frame2} */}
@@ -105,47 +115,55 @@ const WishPoolDialog: React.FC<WishPoolDialogProps> = ({ open, onClose }) => {
           {/* {User Text} */}
           <Box
             sx={{
-              gap: '16px',
-              width: '366px',
+              width: '760px',
               height: '68px',
               display: 'flex',
-              padding: '16px',
-              borderRadius: '8px',
-              alignItems: 'center',
-              backgroundColor: '#F5F5F5',
+              justifyContent: 'flex-end',
             }}
           >
-            <PermIdentityRounded
+            <Box
               sx={{
-                width: '36px',
-                height: '36px',
-                padding: '8px',
-                color: 'white',
-                borderRadius: '50px',
-                backgroundColor: '#5C443A',
-              }}
-            />
-            <Typography
-              sx={{
-                fontWeight: 400,
-                color: '#212B36',
-                fontSize: '16px',
-                lineHeight: '16px',
-                letterSpacing: '0%',
-                fontFamily: 'DFPHeiBold-B5',
+                gap: '16px',
+                width: '366px',
+                height: '68px',
+                display: 'flex',
+                padding: '16px',
+                borderRadius: '8px',
+                alignItems: 'center',
+                backgroundColor: '#F5F5F5',
               }}
             >
-              我想要幫我的個案進行財務狀況的分析
-            </Typography>
+              <PermIdentityRounded
+                sx={{
+                  width: '36px',
+                  height: '36px',
+                  padding: '8px',
+                  color: 'white',
+                  borderRadius: '50px',
+                  backgroundColor: '#5C443A',
+                }}
+              />
+              <Typography
+                sx={{
+                  fontWeight: 400,
+                  color: '#212B36',
+                  fontSize: '16px',
+                  lineHeight: '16px',
+                  letterSpacing: '0%',
+                  fontFamily: 'DFPHeiBold-B5',
+                }}
+              >
+                我想要幫我的個案進行財務狀況的分析
+              </Typography>
+            </Box>
           </Box>
-
           {/* {Response Main Container} */}
           <Box
             sx={{
               gap: '20px',
               width: '760px',
               display: 'flex',
-              minHeight: '318px',
+              height: '330px',
               flexDirection: 'column',
             }}
           >
@@ -154,7 +172,7 @@ const WishPoolDialog: React.FC<WishPoolDialogProps> = ({ open, onClose }) => {
               sx={{
                 gap: '12px',
                 width: '760px',
-                height: '136px',
+                height: '148px',
                 display: 'flex',
                 flexDirection: 'column',
               }}
@@ -164,27 +182,39 @@ const WishPoolDialog: React.FC<WishPoolDialogProps> = ({ open, onClose }) => {
                 sx={{
                   gap: '16px',
                   width: '760px',
-                  height: '24px',
+                  height: '36px',
                   display: 'flex',
                 }}
               >
-                <IconButton>
-                  <SearchRounded sx={{ color: '#212B36' }} />
-                </IconButton>
-                <Typography
+                <Box
                   sx={{
-                    width: '120px',
-                    height: '24px',
-                    fontWeight: 400,
-                    color: '#212B36',
-                    fontSize: '24px',
-                    lineHeight: '24px',
-                    letterSpacing: '0%',
-                    fontFamily: 'DFPHeiBold-B5',
+                    gap: '12px',
+                    width: '156',
+                    height: '36px',
+                    display: 'flex',
+                    alignItems: 'center',
                   }}
                 >
-                  你可能在找
-                </Typography>
+                  <IconButton
+                    sx={{ width: '24px', height: '24px', padding: '0px' }}
+                  >
+                    <SearchRounded sx={{ color: '#212B36' }} />
+                  </IconButton>
+                  <Typography
+                    sx={{
+                      width: '120px',
+                      height: '24px',
+                      fontWeight: 400,
+                      color: '#212B36',
+                      fontSize: '24px',
+                      lineHeight: '24px',
+                      letterSpacing: '0%',
+                      fontFamily: 'DFPHeiBold-B5',
+                    }}
+                  >
+                    你可能在找
+                  </Typography>
+                </Box>
               </Box>
 
               {/* {Card Container Box} */}
