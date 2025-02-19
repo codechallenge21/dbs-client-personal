@@ -287,7 +287,6 @@ const TextInput: React.FC<TextInputProps> = ({
           width: '100%',
           maxWidth: '760px',
           minHeight: '116px',
-          maxHeight: '760px',
           position: 'relative',
           bottom: 0,
           backgroundColor: '#F5F5F5',
@@ -297,6 +296,7 @@ const TextInput: React.FC<TextInputProps> = ({
           overflow: 'hidden',
           justifyContent: 'flex-end',
         }}
+        className="chat-text-input"
       >
         {files.length > 0 && (
           <Box
@@ -411,8 +411,8 @@ const TextInput: React.FC<TextInputProps> = ({
             placeholder="傳訊息給智能顧問"
             style={{
               width: '100%',
-              paddingTop: isMobile ? '20px' : '2px',
-              paddingBottom: isMobile ? '20px' : '',
+              paddingTop: '2px',
+              paddingBottom: '',
               borderRadius: '8px',
               border: 'none',
               outline: 'none',

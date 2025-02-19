@@ -31,6 +31,7 @@ import {
   StarBorderRounded,
 } from '@mui/icons-material';
 import { useRouter } from 'next/navigation';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { OrganizationChannel } from '@/interfaces/entities';
 import apis from '@/utils/hooks/apis/apis';
 import EditDialog from '@/components/dialogs/EditDialog';
@@ -106,7 +107,7 @@ const ChannelsList = () => {
             mutateAudioChannels();
           }
         })
-        .catch(() => { });
+        .catch(() => {});
     },
     [
       activeIndex,
@@ -263,6 +264,7 @@ const ChannelsList = () => {
                 <Tab
                   disableRipple
                   label="家系圖"
+                  disabled
                   sx={{
                     display: 'flex',
                     alignItems: 'center',
@@ -287,6 +289,7 @@ const ChannelsList = () => {
                 />
                 <Tab
                   disableRipple
+                  disabled
                   label="問答語音錄音"
                   sx={{
                     display: 'flex',
@@ -313,6 +316,7 @@ const ChannelsList = () => {
                 <Tab
                   disableRipple
                   label="個別與實時錄音"
+                  disabled
                   sx={{
                     display: 'flex',
                     alignItems: 'center',
@@ -565,23 +569,7 @@ const ChannelsList = () => {
                               '1px dashed var(--Components-Divider, rgba(145, 158, 171, 0.20))',
                             background: 'var(--Background-Paper, #FFF)',
                           }}
-                        >
-                          <Typography
-                            sx={{
-                              fontWeight: 400,
-                              fontSize: '16px',
-                              overflow: 'hidden',
-                              padding: '16px 0px',
-                              fontStyle: 'normal',
-                              lineHeight: 'normal',
-                              textOverflow: 'ellipsis',
-                              fontFamily: 'DFPHeiBold-B5',
-                              color: 'var(--Text-Primary, #212B36)',
-                            }}
-                          >
-                            收藏
-                          </Typography>
-                        </TableCell>
+                        ></TableCell>
                         <TableCell
                           sx={{
                             padding: '0px',
@@ -589,23 +577,7 @@ const ChannelsList = () => {
                               '1px dashed var(--Components-Divider, rgba(145, 158, 171, 0.20))',
                             background: 'var(--Background-Paper, #FFF)',
                           }}
-                        >
-                          <Typography
-                            sx={{
-                              fontWeight: 400,
-                              fontSize: '16px',
-                              overflow: 'hidden',
-                              padding: '16px 0px',
-                              fontStyle: 'normal',
-                              lineHeight: 'normal',
-                              textOverflow: 'ellipsis',
-                              fontFamily: 'DFPHeiBold-B5',
-                              color: 'var(--Text-Primary, #212B36)',
-                            }}
-                          >
-                            更多選擇
-                          </Typography>
-                        </TableCell>
+                        ></TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -631,16 +603,18 @@ const ChannelsList = () => {
                           >
                             <Typography
                               sx={{
+                                fontFamily: 'DFPHeiBold-B5',
                                 fontWeight: 400,
                                 fontSize: '16px',
+                                lineHeight: '16px',
+                                letterSpacing: '0%',
+                                textAlign: 'left',
                                 WebkitLineClamp: 1,
                                 overflow: 'hidden',
                                 padding: '16px 0px',
                                 fontStyle: 'normal',
-                                lineHeight: 'normal',
                                 display: '-webkit-box',
                                 textOverflow: 'ellipsis',
-                                fontFamily: 'Public Sans',
                                 WebkitBoxOrient: 'vertical',
                                 color: 'var(--Text-Primary, #212B36)',
                               }}
@@ -660,23 +634,22 @@ const ChannelsList = () => {
                               sx={{
                                 display: 'flex',
                                 alignItems: 'center',
-                                gap: 2,
                               }}
                             >
                               {channel.organizationChannelTranscriptList[0]
                                 ?.organizationChannelTranscriptStatus ===
-                                'COMPLETE' ? (
+                              'COMPLETE' ? (
                                 <CheckCircleRounded
-                                  sx={{ color: ' rgba(17, 141, 87, 1)' }}
+                                  sx={{ color: ' #118D57' }}
                                 />
                               ) : channel.organizationChannelTranscriptList[0]
-                                ?.organizationChannelTranscriptStatus ===
+                                  ?.organizationChannelTranscriptStatus ===
                                 'PROCESSING' ? (
                                 <RotateRightRounded
                                   sx={{ color: 'rgba(0, 102, 204, 1)' }}
                                 />
                               ) : channel.organizationChannelTranscriptList[0]
-                                ?.organizationChannelTranscriptStatus ===
+                                  ?.organizationChannelTranscriptStatus ===
                                 'PENDING' ? (
                                 <PendingActionsRounded
                                   sx={{ color: 'rgba(33, 43, 54, 1)' }}
@@ -686,11 +659,33 @@ const ChannelsList = () => {
                                   sx={{ color: 'rgba(33, 43, 54, 1)' }}
                                 />
                               )}
-                              <span>
-                                {
-                                  channel.organizationChannelTranscriptList[0]
-                                    ?.organizationChannelTranscriptStatus
-                                }
+                              <span
+                                style={{
+                                  fontFamily: 'DFPHeiBold-B5',
+                                  fontWeight: 400,
+                                  fontSize: '16px',
+                                  lineHeight: '16px',
+                                  letterSpacing: '0%',
+                                  overflow: 'hidden',
+                                  fontStyle: 'normal',
+                                  textOverflow: 'ellipsis',
+                                  marginLeft: '12px',
+                                  color: 'var(--Primary-Black, #212B36)',
+                                }}
+                              >
+                                {channel.organizationChannelTranscriptList[0]
+                                  ?.organizationChannelTranscriptStatus ===
+                                'COMPLETE'
+                                  ? '完成'
+                                  : channel.organizationChannelTranscriptList[0]
+                                      ?.organizationChannelTranscriptStatus ===
+                                    'PROCESSING'
+                                  ? ' 上傳中...'
+                                  : channel.organizationChannelTranscriptList[0]
+                                      ?.organizationChannelTranscriptStatus ===
+                                    'PENDING'
+                                  ? '正在摘要...'
+                                  : ''}
                               </span>
                             </Box>
                           </TableCell>
@@ -713,16 +708,16 @@ const ChannelsList = () => {
                                 color: 'var(--Text-Primary, #212B36)',
                               }}
                             >
-                              {new Date(channel.organizationChannelCreateDate)
-                                .toLocaleDateString('en-CA')
-                                .replace(/-/g, '/')}
+                              {new Date(
+                        channel.organizationChannelCreateDate
+                      ).toLocaleString()}
                             </Typography>
                           </TableCell>
                           <TableCell
                             sx={{
                               width: '7%',
                               border: 'none',
-                              padding: '0px 16px',
+                              padding: '0px 0px 0px 40px',
                               textAlign: 'center',
                               height: '51px !important',
                             }}
@@ -747,7 +742,7 @@ const ChannelsList = () => {
                             sx={{
                               width: '7%',
                               border: 'none',
-                              padding: '0px 16px',
+                              padding: '0px 18px 0px 0px',
                               textAlign: 'center',
                               height: '51px !important',
                             }}
@@ -797,7 +792,7 @@ const ChannelsList = () => {
               height: '64px',
               width: '375px',
               display: 'flex',
-              padding: '8px 16px',
+              padding: '8px 6px',
               alignItems: 'center',
               borderRadius: '8px 0px 0px 8px',
               background: 'var(--Primary-White, #FFF)',
@@ -814,9 +809,16 @@ const ChannelsList = () => {
                 minHeight: '32px',
                 alignItems: 'center',
                 padding: '4px 0px 4px 8px',
+                fontWeight: 400,
+                fontSize: '16px',
+                lineHeight: '16px',
+                letterSpacing: '0%',
               }}
             >
               工具箱
+              <ArrowDropDownIcon
+                sx={{ marginLeft: '5px', marginBottom: '3px' }}
+              />
             </Typography>
           </Box>
           <Tabs
@@ -845,6 +847,7 @@ const ChannelsList = () => {
             />
             <Tab
               label="家系圖"
+              disabled
               sx={{
                 fontWeight: 400,
                 fontSize: '14px',
@@ -859,6 +862,7 @@ const ChannelsList = () => {
             />
             <Tab
               label="問答語音錄音"
+              disabled
               sx={{
                 fontWeight: 400,
                 fontSize: '14px',
@@ -873,6 +877,7 @@ const ChannelsList = () => {
             />
             <Tab
               label="個別與實時錄音"
+              disabled
               sx={{
                 fontWeight: 400,
                 fontSize: '14px',
@@ -888,12 +893,16 @@ const ChannelsList = () => {
           </Tabs>
           <Typography
             sx={{
-              fontWeight: 400,
+              fontWeight: 900,
               fontSize: '32px',
               fontStyle: 'normal',
               lineHeight: 'normal',
-              fontFamily: 'DFPHeiUBold-B5',
-              color: 'var(--Primary-Black, #212B36)',
+              fontFamily:
+                'DFPHeiUBold-B5, Heiti TC, PingFang TC, Noto Sans TC, sans-serif',
+              color: '#212B36',
+              letterSpacing: '0.3px',
+              WebkitTextStroke: '0.5px #212B36',
+              textShadow: '0.5px 0.5px 0px #212B36',
             }}
           >
             智能語音轉文字
@@ -1068,9 +1077,9 @@ const ChannelsList = () => {
                         color: 'var(--Primary-Black, #212B36)',
                       }}
                     >
-                      {new Date(channel.organizationChannelCreateDate)
-                        .toLocaleDateString('en-CA')
-                        .replace(/-/g, '/')}
+                      {new Date(
+                        channel.organizationChannelCreateDate
+                      ).toLocaleString()}
                     </Typography>
                   </Box>
                   <Box
@@ -1085,13 +1094,13 @@ const ChannelsList = () => {
                         sx={{ color: ' rgba(52, 199, 89, 1)' }}
                       />
                     ) : channel.organizationChannelTranscriptList[0]
-                      ?.organizationChannelTranscriptStatus ===
+                        ?.organizationChannelTranscriptStatus ===
                       'PROCESSING' ? (
                       <RotateRightRounded
                         sx={{ color: 'rgba(0, 102, 204, 1)' }}
                       />
                     ) : channel.organizationChannelTranscriptList[0]
-                      ?.organizationChannelTranscriptStatus === 'PENDING' ? (
+                        ?.organizationChannelTranscriptStatus === 'PENDING' ? (
                       <PendingActionsRounded
                         sx={{ color: 'rgba(33, 43, 54, 1)' }}
                       />
@@ -1102,20 +1111,29 @@ const ChannelsList = () => {
                     )}
                     <span
                       style={{
+                        fontFamily: 'DFPHeiMedium-B5',
                         fontWeight: 400,
                         fontSize: '16px',
                         lineHeight: '24px',
+                        letterSpacing: '0%',
                         overflow: 'hidden',
                         fontStyle: 'normal',
                         textOverflow: 'ellipsis',
-                        fontFamily: 'DFPHeiMedium-B5',
+                        marginLeft: '12px',
                         color: 'var(--Primary-Black, #212B36)',
                       }}
                     >
-                      {
-                        channel.organizationChannelTranscriptList[0]
-                          ?.organizationChannelTranscriptStatus
-                      }
+                      {channel.organizationChannelTranscriptList[0]
+                        ?.organizationChannelTranscriptStatus === 'COMPLETE'
+                        ? '完成'
+                        : channel.organizationChannelTranscriptList[0]
+                            ?.organizationChannelTranscriptStatus ===
+                          'PROCESSING'
+                        ? ' 上傳中...'
+                        : channel.organizationChannelTranscriptList[0]
+                            ?.organizationChannelTranscriptStatus === 'PENDING'
+                        ? '正在摘要...'
+                        : ''}
                     </span>
                   </Box>
                 </Box>
