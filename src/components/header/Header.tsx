@@ -80,22 +80,30 @@ export default function Header() {
           <React.Fragment key={item.text}>
             <ListItem disablePadding>
               <ListItemButton
-                onClick={() => handleExpandItem(item.text)}
+                onClick={() =>
+                  item.text === '工具箱'
+                    ? handleExpandItem(item.text)
+                    : handleDrawerToggle()
+                }
                 sx={{
                   color: pathname.startsWith(item.href)
                     ? 'primary.main'
                     : 'text.primary',
                 }}
               >
-                <Link
-                  href={item.href}
-                  passHref
-                  key={item.text}
-                  onClick={handleDrawerToggle}
-                >
+                {item.text === '工具箱' ? (
                   <ListItemText primary={item.text} />
-                </Link>
-                {index === menuItems.length - 2 &&
+                ) : (
+                  <Link
+                    href={item.href}
+                    passHref
+                    onClick={handleDrawerToggle}
+                    style={{ textDecoration: 'none', color: 'inherit' }}
+                  >
+                    <ListItemText primary={item.text} />
+                  </Link>
+                )}
+                {item.text === '工具箱' &&
                   (expandedItem === '工具箱' ? (
                     <ArrowDropDownIcon />
                   ) : (
@@ -111,8 +119,9 @@ export default function Header() {
                     passHref
                     key={tool.text}
                     onClick={handleDrawerToggle}
+                    style={{ textDecoration: 'none', color: 'inherit' }}
                   >
-                    <ListItemButton key={tool.text} sx={{ pl: 4 }}>
+                    <ListItemButton sx={{ pl: 4 }}>
                       <ListItemText primary={tool.text} />
                     </ListItemButton>
                   </Link>
@@ -124,6 +133,8 @@ export default function Header() {
       </List>
       <Stack spacing={2} sx={{ p: 2, borderColor: 'divider' }}>
         <Button
+          role="button"
+          aria-label="login"
           fullWidth
           variant="contained"
           sx={{
@@ -135,6 +146,8 @@ export default function Header() {
           登入
         </Button>
         <Button
+          role="button"
+          aria-label="feedback"
           fullWidth
           variant="outlined"
           href="https://forms.gle/Jrq5bDjKzqmp82gQ8"
@@ -187,6 +200,8 @@ export default function Header() {
           >
             {menuItems.map((item) => (
               <Button
+                role="button"
+                aria-label={item.text}
                 key={item.text}
                 endIcon={item.text !== '解決麻煩事' && <ArrowDropDownIcon />}
                 onClick={(e) => handleMenuOpen(e, item.text !== '解決麻煩事')}
@@ -223,6 +238,8 @@ export default function Header() {
             sx={{ display: { xs: 'none', md: 'flex' } }}
           >
             <Button
+              role="button"
+              aria-label="feedback"
               variant="outlined"
               href="https://forms.gle/Jrq5bDjKzqmp82gQ8"
               target="_blank"
@@ -235,6 +252,8 @@ export default function Header() {
               意見回饋
             </Button>
             <Button
+              role="button"
+              aria-label="login"
               variant="contained"
               sx={{
                 bgcolor: 'error.main',
@@ -248,6 +267,7 @@ export default function Header() {
           </Stack>
 
           <IconButton
+            role="button"
             color="inherit"
             aria-label="open drawer"
             edge="start"

@@ -360,13 +360,6 @@ export default function DropdownMenu({
               },
               gap: '16px',
             }}
-            disabled={
-              item.value !== AdvisorType.DEFAULT &&
-              item.value !== AdvisorType.DEBT &&
-              item.value !== AdvisorType.FRAUD &&
-              item.value !== AdvisorType.EMPLOYMENT &&
-              item.value !== AdvisorType.MEDICAL_CONTINGENCY
-            }
             onClick={() => handleOnClickMenuItem(item.value)}
           >
             <ListItemIcon
