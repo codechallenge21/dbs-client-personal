@@ -53,7 +53,7 @@ const drawerItems = [
     route: '/popular'
   },
   {
-    text: '我的最愛',
+    text: '我的收藏',
     icon: <StarRounded sx={{ color: '#212B36' }} />,
     route: '/favorite'
   },
