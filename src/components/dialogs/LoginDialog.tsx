@@ -11,7 +11,9 @@ import {
   IconButton,
   useMediaQuery,
 } from '@mui/material';
-import { CloseRounded, Google } from '@mui/icons-material';
+import { CloseRounded } from '@mui/icons-material';
+import GoogleIcon from '../../assets/google.png';
+import Image from 'next/image';
 
 const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
   const theme = useTheme();
@@ -154,7 +156,7 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
         sx={{
           gap: '16px',
           width: '341px',
-          height: '248px',
+          height: '276px',
           display: 'flex',
           margin: '0px auto',
           alignItems: 'center',
@@ -167,7 +169,7 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
           data-tid="login-dialog-email-input"
           sx={{
             gap: '8px',
-            height: '54px',
+            minHeight: '54px',
             padding: '0px',
             display: 'flex',
             borderRadius: '8px ',
@@ -177,9 +179,12 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
               width: '341px',
               padding: '16px 14px',
               borderRadius: '8px',
-              '& input': {
+              '& .MuiOutlinedInput-input': {
                 padding: '0px',
                 borderRadius: '8px',
+                fontSize: '14px !important',
+                color: '#919EAB',
+
                 '&::placeholder': {
                   color: '#919EAB',
                   opacity: 1,
@@ -215,7 +220,7 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
           type="password"
           sx={{
             gap: '8px',
-            height: '54px',
+            minHeight: '54px',
             padding: '0px',
             display: 'flex',
             borderRadius: '8px',
@@ -225,9 +230,16 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
               width: '341px',
               padding: '16px 14px',
               borderRadius: '8px',
-              '& input': {
+              '& .MuiOutlinedInput-input': {
                 padding: '0px',
                 borderRadius: '8px',
+                fontSize: '14px !important',
+                color: '#919EAB',
+
+                '&::placeholder': {
+                  color: '#919EAB',
+                  opacity: 1,
+                },
               },
             },
             '& .MuiOutlinedInput-root': {
@@ -303,7 +315,9 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
         <Button
           variant="outlined"
           onClick={() => {}}
-          startIcon={<Google />}
+          startIcon={
+            <Image src={GoogleIcon} alt="Google" width={24} height={24} />
+          }
           sx={{
             gap: '8px',
             width: '341px',
@@ -313,6 +327,10 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
             border: '1px solid #212B36',
             justifyContent: 'center',
             alignItems: 'center',
+
+            '& .MuiButton-startIcon': {
+              margin: '0px !important',
+            },
           }}
         >
           <Typography
