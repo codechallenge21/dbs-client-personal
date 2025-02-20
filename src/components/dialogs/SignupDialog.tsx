@@ -12,8 +12,11 @@ import {
   IconButton,
   useMediaQuery,
   FormControlLabel,
+  InputAdornment,
 } from '@mui/material';
-import { CloseRounded, Google } from '@mui/icons-material';
+import { CloseRounded, Visibility, VisibilityOff } from '@mui/icons-material';
+import Image from 'next/image';
+import GoogleIcon from '../../assets/google.png';
 
 const SignupDialog = ({ open, onClose, setIsLoginOpen }) => {
   const theme = useTheme();
@@ -24,6 +27,8 @@ const SignupDialog = ({ open, onClose, setIsLoginOpen }) => {
   const [agree, setAgree] = useState(false);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword2, setShowPassword2] = useState(false);
 
   const handleClose = () => {
     setName('');
@@ -49,8 +54,8 @@ const SignupDialog = ({ open, onClose, setIsLoginOpen }) => {
             gap: '32px',
             left: '50%',
             margin: '0px',
-            width: '500px',
-            height: '678px',
+            width: '600px',
+            height: '696px',
             borderRadius: '8px',
             position: 'absolute',
             paddingBottom: '24px',
@@ -159,7 +164,11 @@ const SignupDialog = ({ open, onClose, setIsLoginOpen }) => {
           已經擁有帳戶?{' '}
           <span
             onClick={handleLoginClick}
-            style={{ color: 'red', cursor: 'pointer' }}
+            style={{
+              color: '#C00',
+              cursor: 'pointer',
+              fontFamily: 'DFPHeiBold-B5',
+            }}
           >
             登入
           </span>
@@ -182,17 +191,25 @@ const SignupDialog = ({ open, onClose, setIsLoginOpen }) => {
           data-tid="signup-dialog-name-input"
           sx={{
             gap: '8px',
-            height: '54px',
+            minHeight: '54px',
             padding: '0px',
             display: 'flex',
-            borderRadius: '8px',
+            borderRadius: '8px ',
             alignItems: 'center',
             alignSelf: 'stretch',
             '& .MuiInputBase-root': {
               width: '341px',
               padding: '16px 14px',
-              '& input': {
+              borderRadius: '8px',
+              '& .MuiOutlinedInput-input': {
                 padding: '0px',
+                borderRadius: '8px',
+                fontSize: '14px !important',
+
+                '&::placeholder': {
+                  color: '#919EAB',
+                  opacity: 1,
+                },
               },
             },
             '& .MuiOutlinedInput-root': {
@@ -210,7 +227,7 @@ const SignupDialog = ({ open, onClose, setIsLoginOpen }) => {
               },
             },
           }}
-          placeholder="姓名*"
+          placeholder="使用者名稱*"
           value={name}
           onChange={(e) => {
             e.preventDefault();
@@ -223,17 +240,25 @@ const SignupDialog = ({ open, onClose, setIsLoginOpen }) => {
           data-tid="signup-dialog-email-input"
           sx={{
             gap: '8px',
-            height: '54px',
+            minHeight: '54px',
             padding: '0px',
             display: 'flex',
-            borderRadius: '8px',
+            borderRadius: '8px ',
             alignItems: 'center',
             alignSelf: 'stretch',
             '& .MuiInputBase-root': {
               width: '341px',
               padding: '16px 14px',
-              '& input': {
+              borderRadius: '8px',
+              '& .MuiOutlinedInput-input': {
                 padding: '0px',
+                borderRadius: '8px',
+                fontSize: '14px !important',
+
+                '&::placeholder': {
+                  color: '#919EAB',
+                  opacity: 1,
+                },
               },
             },
             '& .MuiOutlinedInput-root': {
@@ -262,20 +287,51 @@ const SignupDialog = ({ open, onClose, setIsLoginOpen }) => {
         <TextField
           id="signup-dialog-password-input"
           data-tid="signup-dialog-password-input"
-          type="password"
+          type={showPassword ? 'text' : 'password'}
+          slotProps={{
+            input: {
+              endAdornment: (
+                <InputAdornment
+                  position="end"
+                  sx={{
+                    cursor: 'pointer',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <IconButton
+                    aria-label={
+                      showPassword ? 'Hide password' : 'Show password'
+                    }
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            },
+          }}
           sx={{
             gap: '8px',
-            height: '54px',
+            minHeight: '54px',
             padding: '0px',
             display: 'flex',
-            borderRadius: '8px',
+            borderRadius: '8px ',
             alignItems: 'center',
             alignSelf: 'stretch',
             '& .MuiInputBase-root': {
               width: '341px',
               padding: '16px 14px',
-              '& input': {
+              borderRadius: '8px',
+              '& .MuiOutlinedInput-input': {
                 padding: '0px',
+                borderRadius: '8px',
+                fontSize: '14px !important',
+
+                '&::placeholder': {
+                  color: '#919EAB',
+                  opacity: 1,
+                },
               },
             },
             '& .MuiOutlinedInput-root': {
@@ -304,20 +360,51 @@ const SignupDialog = ({ open, onClose, setIsLoginOpen }) => {
         <TextField
           id="signup-dialog-confirm-password-input"
           data-tid="signup-dialog-confirm-password-input"
-          type="password"
+          type={showPassword2 ? 'text' : 'password'}
+          slotProps={{
+            input: {
+              endAdornment: (
+                <InputAdornment
+                  position="end"
+                  sx={{
+                    cursor: 'pointer',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <IconButton
+                    aria-label={
+                      showPassword2 ? 'Hide password' : 'Show password'
+                    }
+                    onClick={() => setShowPassword2(!showPassword2)}
+                  >
+                    {showPassword2 ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            },
+          }}
           sx={{
             gap: '8px',
-            height: '54px',
+            minHeight: '54px',
             padding: '0px',
             display: 'flex',
-            borderRadius: '8px',
+            borderRadius: '8px ',
             alignItems: 'center',
             alignSelf: 'stretch',
             '& .MuiInputBase-root': {
               width: '341px',
               padding: '16px 14px',
-              '& input': {
+              borderRadius: '8px',
+              '& .MuiOutlinedInput-input': {
                 padding: '0px',
+                borderRadius: '8px',
+                fontSize: '14px !important',
+
+                '&::placeholder': {
+                  color: '#919EAB',
+                  opacity: 1,
+                },
               },
             },
             '& .MuiOutlinedInput-root': {
@@ -350,13 +437,9 @@ const SignupDialog = ({ open, onClose, setIsLoginOpen }) => {
             gap: '8px',
             width: '341px',
             height: '46px',
-            paddingTop: '11px',
             borderRadius: '8px',
-            paddingLeft: '12px',
-            paddingRight: '12px',
-            paddingBottom: '11px',
             background: 'var(--Secondary-, #5C443A)',
-            padding: isMobile ? '8px 16px' : '6px 12px',
+            padding: isMobile ? '8px 16px' : '11px 12px',
             border: '1px solid var(--Secondary-, #5C443A)',
           }}
         >
@@ -377,18 +460,22 @@ const SignupDialog = ({ open, onClose, setIsLoginOpen }) => {
         <Button
           variant="outlined"
           onClick={() => {}}
-          startIcon={<Google />}
+          startIcon={
+            <Image src={GoogleIcon} alt="Google" width={24} height={24} />
+          }
           sx={{
             gap: '8px',
             width: '341px',
-            height: '46px',
-            paddingTop: '11px',
+            minHeight: '46px',
             borderRadius: '8px',
-            paddingLeft: '12px',
-            paddingRight: '12px',
-            paddingBottom: '11px',
+            padding: isMobile ? '8px 16px' : '11px 12px',
             border: '1px solid #212B36',
-            padding: isMobile ? '8px 16px' : '6px 12px',
+            justifyContent: 'center',
+            alignItems: 'center',
+
+            '& .MuiButton-startIcon': {
+              margin: '0px !important',
+            },
           }}
         >
           <Typography
@@ -407,25 +494,57 @@ const SignupDialog = ({ open, onClose, setIsLoginOpen }) => {
         </Button>
       </Box>
       <FormControlLabel
-        sx={{ margin: '0px auto' }}
+        sx={{
+          margin: '0px auto',
+          width: '366px',
+          height: '28px',
+          alignItems: 'center',
+          display: 'flex',
+        }}
         control={
           <Checkbox
             checked={agree}
             onChange={(e) => setAgree(e.target.checked)}
+            sx={{
+              width: '24px',
+              height: '24px',
+              padding: '3px',
+              '& .MuiSvgIcon-root': {
+                fontSize: '18px',
+              },
+              '&:hover': {
+                backgroundColor: 'transparent',
+              },
+            }}
           />
         }
         label={
-          <Typography variant="body2">
+          <Typography
+            variant="body2"
+            sx={{ fontFamily: 'DFPHeiMedium-B5', fontSize: '14px' }}
+          >
             我同意{' '}
-            <Typography component="span" color="blue">
+            <Typography
+              component="span"
+              color="#06C"
+              sx={{ fontFamily: 'DFPHeiMedium-B5', fontSize: '14px' }}
+            >
               《服務條款》
             </Typography>
             、
-            <Typography component="span" color="blue">
+            <Typography
+              component="span"
+              color="#06C"
+              sx={{ fontFamily: 'DFPHeiMedium-B5', fontSize: '14px' }}
+            >
               《隱私政策》
             </Typography>{' '}
             和
-            <Typography component="span" color="blue">
+            <Typography
+              component="span"
+              color="#06C"
+              sx={{ fontFamily: 'DFPHeiMedium-B5', fontSize: '14px' }}
+            >
               《Cookie 政策》
             </Typography>
           </Typography>
