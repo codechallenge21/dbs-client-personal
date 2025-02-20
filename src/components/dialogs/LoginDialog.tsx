@@ -6,12 +6,10 @@ import {
   Button,
   Dialog,
   useTheme,
-  Checkbox,
   TextField,
   Typography,
   IconButton,
   useMediaQuery,
-  FormControlLabel,
 } from '@mui/material';
 import { CloseRounded, Google } from '@mui/icons-material';
 
@@ -21,7 +19,6 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [agree, setAgree] = useState(false);
 
   const handleClose = () => {
     setEmail('');
@@ -45,19 +42,20 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
             gap: '32px',
             left: '50%',
             margin: '0px',
-            width: '500px',
-            height: '538px',
+            width: '600px',
+            height: '532px',
             borderRadius: '8px',
             position: 'absolute',
             paddingBottom: '24px',
             transform: 'translate(-50%, -50%)',
+            overflow: 'hidden',
           },
         },
       }}
     >
       <Box
         sx={{
-          height: '64px',
+          minHeight: '64px',
           display: 'flex',
           paddingTop: '8px',
           overflow: 'hidden',
@@ -76,6 +74,7 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
             lineHeight: '32px',
             letterSpacing: '0%',
             fontFamily: 'DFPHeiBold-B5',
+            alignItems: 'center',
           }}
         >
           登入
@@ -141,7 +140,11 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
           還沒有帳戶嗎?{' '}
           <span
             onClick={handleRegisterClick}
-            style={{ color: 'red', cursor: 'pointer' }}
+            style={{
+              color: '#C00',
+              cursor: 'pointer',
+              fontFamily: 'DFPHeiBold-B5',
+            }}
           >
             註冊
           </span>
@@ -167,14 +170,20 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
             height: '54px',
             padding: '0px',
             display: 'flex',
-            borderRadius: '8px',
+            borderRadius: '8px ',
             alignItems: 'center',
             alignSelf: 'stretch',
             '& .MuiInputBase-root': {
               width: '341px',
               padding: '16px 14px',
+              borderRadius: '8px',
               '& input': {
                 padding: '0px',
+                borderRadius: '8px',
+                '&::placeholder': {
+                  color: '#919EAB',
+                  opacity: 1,
+                },
               },
             },
             '& .MuiOutlinedInput-root': {
@@ -215,8 +224,10 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
             '& .MuiInputBase-root': {
               width: '341px',
               padding: '16px 14px',
+              borderRadius: '8px',
               '& input': {
                 padding: '0px',
+                borderRadius: '8px',
               },
             },
             '& .MuiOutlinedInput-root': {
@@ -242,21 +253,35 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
             setPassword(value);
           }}
         />
+        <Typography
+          sx={{
+            color: 'var(--Primary-DBS-Red, #C00)',
+            fontSize: '14px',
+            lineHeight: '24px',
+            letterSpacing: 0,
+            fontFamily: 'DFPHeiBold-B5',
+            fontStyle: 'normal',
+            fontWeight: 400,
+            cursor: 'pointer',
+            width: '100%',
+            textAlign: 'right',
+            marginTop: '-12px',
+          }}
+        >
+          忘記密碼?
+        </Typography>
         <Button
           variant="contained"
           onClick={() => {}}
           sx={{
             gap: '8px',
             width: '341px',
-            height: '46px',
-            paddingTop: '11px',
+            minHeight: '46px',
             borderRadius: '8px',
-            paddingLeft: '12px',
-            paddingRight: '12px',
-            paddingBottom: '11px',
             background: 'var(--Secondary-, #5C443A)',
-            padding: isMobile ? '8px 16px' : '6px 12px',
+            padding: isMobile ? '8px 16px' : '11px 12px',
             border: '1px solid var(--Secondary-, #5C443A)',
+            justifyContent: 'center',
           }}
         >
           <Typography
@@ -268,9 +293,11 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
               lineHeight: 'normal',
               fontFamily: 'Open Sans',
               color: 'var(--Error-ContrastText, #FFF)',
+              justifyContent: 'center',
+              alignItems: 'center',
             }}
           >
-            確認
+            登入
           </Typography>
         </Button>
         <Button
@@ -280,14 +307,12 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
           sx={{
             gap: '8px',
             width: '341px',
-            height: '46px',
-            paddingTop: '11px',
+            minHeight: '46px',
             borderRadius: '8px',
-            paddingLeft: '12px',
-            paddingRight: '12px',
-            paddingBottom: '11px',
+            padding: isMobile ? '8px 16px' : '11px 12px',
             border: '1px solid #212B36',
-            padding: isMobile ? '8px 16px' : '6px 12px',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
         >
           <Typography
@@ -305,31 +330,6 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
           </Typography>
         </Button>
       </Box>
-      <FormControlLabel
-        sx={{ margin: '0px auto' }}
-        control={
-          <Checkbox
-            checked={agree}
-            onChange={(e) => setAgree(e.target.checked)}
-          />
-        }
-        label={
-          <Typography variant="body2">
-            我同意{' '}
-            <Typography component="span" color="blue">
-              《服務條款》
-            </Typography>
-            、
-            <Typography component="span" color="blue">
-              《隱私政策》
-            </Typography>{' '}
-            和
-            <Typography component="span" color="blue">
-              《Cookie 政策》
-            </Typography>
-          </Typography>
-        }
-      />
     </Dialog>
   );
 };
