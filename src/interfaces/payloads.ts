@@ -50,3 +50,10 @@ export interface UpdateChannelApiPayload {
   organizationChannelId: string;
   organizationChannelTitle: string;
 }
+
+export interface RegisterUserApiPayload {
+  organizationId: string;
+  organizationUserNameZh: string;
+  organizationUserEmail: string;
+  organizationUserPassword: string;
+}
