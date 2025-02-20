@@ -1,13 +1,13 @@
+import ChannelContextProvider from '@/components/channel-context-provider/ChannelContextProvider';
+import ThemeProvider from '@/theme';
 import {
   Geist,
   Geist_Mono,
+  Inter,
   Open_Sans,
   Public_Sans,
-  Inter,
 } from 'next/font/google';
 import './globals.css';
-import ThemeProvider from '@/theme';
-import ChannelContextProvider from '@/components/channel-context-provider/ChannelContextProvider';
 // import { Box } from "@mui/material";
 // import { Header } from "@/components/header";
 
@@ -46,8 +46,8 @@ const interFont = Inter({
 });
 
 export const metadata = {
-  title: '好理家在｜好好理財，家就會在',
-  description: '好理家在官方網站',
+  title: '好理家在-財務健檢網｜好好理財，家就會在',
+  description: '好理家在-財務健檢網官方網站',
   keywords: 'react,material,kit,application,dashboard,admin,template',
   manifest: '/manifest.json',
   icons: [
