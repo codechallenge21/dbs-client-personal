@@ -13,11 +13,6 @@ import {
   IconButton,
   Tooltip,
 } from '@mui/material';
-import type { FC } from 'react';
-import ReactMarkdown from 'react-markdown';
-import Image from 'next/image';
-import imagePreview from '@/assets/Images/Image Icon.svg';
-import React, { useState } from 'react';
 import {
   PermIdentityRounded,
   LibraryBooksRounded,
@@ -26,6 +21,10 @@ import {
   Done as DoneIcon,
   ThumbDown,
 } from '@mui/icons-material';
+import Image from 'next/image';
+import React, { type FC, useState } from 'react';
+import imagePreview from '@/assets/Images/Image Icon.svg';
+import MermaidMarkdown from '../MermaidChart/Mermaidmarkdown';
 
 export interface ChannelMessagePanelProps {
   channel?: OrganizationChannel;
@@ -227,9 +226,9 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                   </Tooltip>
                 </Box>
               )}
-              <ReactMarkdown>
-                {message.organizationChannelMessageContent}
-              </ReactMarkdown>
+              <MermaidMarkdown
+                chartData={message.organizationChannelMessageContent}
+              />
               {message.organizationChannelMessageType === 'AI' && (
                 <Box
                   sx={{
@@ -427,9 +426,9 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                   },
                 }}
               >
-                <ReactMarkdown>
-                  {message.organizationChannelMessageContent}
-                </ReactMarkdown>
+                <MermaidMarkdown
+                  chartData={message.organizationChannelMessageContent}
+                />
                 {message.organizationChannelMessageType === 'AI' && (
                   <Box
                     sx={{
