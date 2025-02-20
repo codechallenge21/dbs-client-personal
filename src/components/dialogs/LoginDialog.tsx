@@ -10,8 +10,9 @@ import {
   Typography,
   IconButton,
   useMediaQuery,
+  InputAdornment,
 } from '@mui/material';
-import { CloseRounded } from '@mui/icons-material';
+import { CloseRounded, Visibility, VisibilityOff } from '@mui/icons-material';
 import GoogleIcon from '../../assets/google.png';
 import Image from 'next/image';
 
@@ -21,6 +22,7 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleClose = () => {
     setEmail('');
@@ -183,7 +185,6 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
                 padding: '0px',
                 borderRadius: '8px',
                 fontSize: '14px !important',
-                color: '#919EAB',
 
                 '&::placeholder': {
                   color: '#919EAB',
@@ -217,7 +218,26 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
         <TextField
           id="login-dialog-password-input"
           data-tid="login-dialog-password-input"
-          type="password"
+          type={showPassword ? 'text' : 'password'}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment
+                position="end"
+                sx={{
+                  cursor: 'pointer',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <IconButton
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
           sx={{
             gap: '8px',
             minHeight: '54px',
@@ -234,7 +254,6 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
                 padding: '0px',
                 borderRadius: '8px',
                 fontSize: '14px !important',
-                color: '#919EAB',
 
                 '&::placeholder': {
                   color: '#919EAB',
