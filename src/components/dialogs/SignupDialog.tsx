@@ -14,9 +14,11 @@ import {
   FormControlLabel,
   InputAdornment,
 } from '@mui/material';
-import { CloseRounded, Visibility, VisibilityOff } from '@mui/icons-material';
+import { CloseRounded } from '@mui/icons-material';
 import Image from 'next/image';
 import GoogleIcon from '../../assets/google.png';
+import EyeCloseIcon from '@/assets/Images/EyeClose Icon.svg';
+import EyeOpenIcon from '@/assets/Images/EyeOpen Icon.svg';
 
 const SignupDialog = ({ open, onClose, setIsLoginOpen }) => {
   const theme = useTheme();
@@ -294,9 +296,10 @@ const SignupDialog = ({ open, onClose, setIsLoginOpen }) => {
                 <InputAdornment
                   position="end"
                   sx={{
-                    cursor: 'pointer',
-                    justifyContent: 'center',
-                    alignItems: 'center',
+                    position: 'absolute',
+                    right: '12px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
                   }}
                 >
                   <IconButton
@@ -304,8 +307,19 @@ const SignupDialog = ({ open, onClose, setIsLoginOpen }) => {
                       showPassword ? 'Hide password' : 'Show password'
                     }
                     onClick={() => setShowPassword(!showPassword)}
+                    sx={{
+                      backgroundColor: 'transparent',
+                      '&:hover': {
+                        backgroundColor: 'transparent',
+                      },
+                    }}
                   >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                    <Image
+                      src={showPassword ? EyeOpenIcon : EyeCloseIcon}
+                      alt={showPassword ? 'Hide password' : 'Show password'}
+                      width={24}
+                      height={24}
+                    />
                   </IconButton>
                 </InputAdornment>
               ),
@@ -367,9 +381,10 @@ const SignupDialog = ({ open, onClose, setIsLoginOpen }) => {
                 <InputAdornment
                   position="end"
                   sx={{
-                    cursor: 'pointer',
-                    justifyContent: 'center',
-                    alignItems: 'center',
+                    position: 'absolute',
+                    right: '12px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
                   }}
                 >
                   <IconButton
@@ -377,8 +392,19 @@ const SignupDialog = ({ open, onClose, setIsLoginOpen }) => {
                       showPassword2 ? 'Hide password' : 'Show password'
                     }
                     onClick={() => setShowPassword2(!showPassword2)}
+                    sx={{
+                      backgroundColor: 'transparent',
+                      '&:hover': {
+                        backgroundColor: 'transparent',
+                      },
+                    }}
                   >
-                    {showPassword2 ? <VisibilityOff /> : <Visibility />}
+                    <Image
+                      src={showPassword2 ? EyeOpenIcon : EyeCloseIcon}
+                      alt={showPassword2 ? 'Hide password' : 'Show password'}
+                      width={24}
+                      height={24}
+                    />
                   </IconButton>
                 </InputAdornment>
               ),
@@ -497,7 +523,7 @@ const SignupDialog = ({ open, onClose, setIsLoginOpen }) => {
         sx={{
           margin: '0px auto',
           width: isMobile ? '276px' : '366px',
-          height: isMobile ? '44px' : '28px',
+          minHeight: isMobile ? '44px' : '28px',
           alignItems: 'center',
           display: 'flex',
         }}
@@ -525,7 +551,6 @@ const SignupDialog = ({ open, onClose, setIsLoginOpen }) => {
               fontFamily: 'DFPHeiMedium-B5',
               fontSize: '14px',
               justifyContent: 'center',
-              height: 'full',
               textAlign: 'center',
             }}
           >

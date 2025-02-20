@@ -12,9 +12,11 @@ import {
   useMediaQuery,
   InputAdornment,
 } from '@mui/material';
-import { CloseRounded, Visibility, VisibilityOff } from '@mui/icons-material';
+import { CloseRounded } from '@mui/icons-material';
 import GoogleIcon from '../../assets/google.png';
 import Image from 'next/image';
+import EyeCloseIcon from '@/assets/Images/EyeClose Icon.svg';
+import EyeOpenIcon from '@/assets/Images/EyeOpen Icon.svg';
 
 const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
   const theme = useTheme();
@@ -225,9 +227,10 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
                 <InputAdornment
                   position="end"
                   sx={{
-                    cursor: 'pointer',
-                    justifyContent: 'center',
-                    alignItems: 'center',
+                    position: 'absolute',
+                    right: '12px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
                   }}
                 >
                   <IconButton
@@ -235,8 +238,19 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
                       showPassword ? 'Hide password' : 'Show password'
                     }
                     onClick={() => setShowPassword(!showPassword)}
+                    sx={{
+                      backgroundColor: 'transparent',
+                      '&:hover': {
+                        backgroundColor: 'transparent',
+                      },
+                    }}
                   >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                    <Image
+                      src={showPassword ? EyeOpenIcon : EyeCloseIcon}
+                      alt={showPassword ? 'Hide password' : 'Show password'}
+                      width={24}
+                      height={24}
+                    />
                   </IconButton>
                 </InputAdornment>
               ),
