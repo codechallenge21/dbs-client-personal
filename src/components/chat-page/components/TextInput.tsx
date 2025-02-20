@@ -19,6 +19,7 @@ import imagePerview from '@/assets/Images/Image Icon.svg';
 import docPerview from '@/assets/Images/Doc Icon.svg';
 import DropdownMenu from './DropdownMenu';
 import { SubmitUserInputsApiPayload } from '@/interfaces/payloads';
+import Cookies from 'js-cookie';
 
 interface SpeechRecognition extends EventTarget {
   continuous: boolean;
@@ -70,11 +71,13 @@ type TextInputProps = {
     };
   }>;
   isInteracting: boolean;
+  setIsLoginOpen?: (value: boolean) => void;
 };
 
 const TextInput: React.FC<TextInputProps> = ({
   submitUserInputs,
   isInteracting,
+  setIsLoginOpen,
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -204,6 +207,11 @@ const TextInput: React.FC<TextInputProps> = ({
 
   const handleOnChangeUserInput = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      const isLoggedin = Cookies.get('m_info');
+      if (!isLoggedin) {
+        if (setIsLoginOpen) setIsLoginOpen(true);
+        return;
+      }
       const { value } = e.target;
       setUserInputValue(value);
     },
@@ -287,7 +295,6 @@ const TextInput: React.FC<TextInputProps> = ({
           width: '100%',
           maxWidth: '760px',
           minHeight: '116px',
-          maxHeight: '760px',
           position: 'relative',
           bottom: 0,
           backgroundColor: '#F5F5F5',
@@ -297,6 +304,7 @@ const TextInput: React.FC<TextInputProps> = ({
           overflow: 'hidden',
           justifyContent: 'flex-end',
         }}
+        className="chat-text-input"
       >
         {files.length > 0 && (
           <Box
@@ -386,8 +394,8 @@ const TextInput: React.FC<TextInputProps> = ({
             paddingTop: '16px',
             paddingInline: '10px',
             overflowY: 'auto',
-            maxHeight: '200px',
             minHeight: '40px',
+            maxHeight: '200px',
             '&::-webkit-scrollbar': {
               width: '8px',
             },
@@ -407,20 +415,19 @@ const TextInput: React.FC<TextInputProps> = ({
           <TextareaAutosize
             aria-label="Ask the AI"
             minRows={1}
-            // maxRows={10}
             placeholder="傳訊息給智能顧問"
             style={{
               width: '100%',
-              paddingTop: isMobile ? '20px' : '2px',
-              paddingBottom: isMobile ? '20px' : '',
-              borderRadius: '8px',
               border: 'none',
-              outline: 'none',
               resize: 'none',
+              outline: 'none',
               fontSize: '16px',
               color: '#212B36',
-              backgroundColor: '#F5F5F5',
               overflow: 'auto',
+              borderRadius: '8px',
+              backgroundColor: '#F5F5F5',
+              paddingTop: '2px',
+              paddingBottom: '',
             }}
             className="textarea-autosize"
             value={userInputValue}
@@ -431,58 +438,36 @@ const TextInput: React.FC<TextInputProps> = ({
         <Box
           sx={{
             width: '100%',
-            marginTop: '16px',
-            justifyContent: 'space-between',
+            marginTop: '8px',
+            // justifyContent: 'space-between',
             display: 'flex',
-            gap: '16px',
+            gap: '4px',
             flexWrap: 'wrap',
-            padding: '22px',
+            padding: '10px',
             position: 'relative',
           }}
         >
-          <Box
-            sx={{
-              width: '100%',
-              display: 'flex',
-              gap: '16px',
-            }}
+          <IconButton
+            role="button"
+            aria-label="attach file"
+            component="span"
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
           >
-            <IconButton
-              role="button"
-              aria-label="attach file"
-              component="span"
-              onDrop={handleDrop}
-              onDragOver={handleDragOver}
-              sx={{
-                position: 'absolute',
-                bottom: '10px',
-                left: '10px',
-              }}
-            >
-              <AttachFileRoundedIcon
-                sx={{ transform: 'rotate(180deg)', color: 'black' }}
-                onClick={() => document.getElementById('file-upload')?.click()}
-              />
-            </IconButton>
-            <input
-              type="file"
-              id="file-upload"
-              multiple
-              onChange={handleFileSelect}
-              style={{ display: 'none' }}
+            <AttachFileRoundedIcon
+              sx={{ transform: 'rotate(180deg)', color: 'black' }}
+              onClick={() => document.getElementById('file-upload')?.click()}
             />
-            <IconButton
-              role="button"
-              aria-label="attach file"
-              sx={{
-                position: 'absolute',
-                bottom: '10px',
-                left: '58px',
-              }}
-            >
-              <DropdownMenu isTextInput advisor={advisorType} />
-            </IconButton>
-          </Box>
+          </IconButton>
+          <DropdownMenu isTextInput advisor={advisorType} />
+
+          <input
+            type="file"
+            id="file-upload"
+            multiple
+            onChange={handleFileSelect}
+            style={{ display: 'none' }}
+          />
 
           {isInteracting ? (
             <Box

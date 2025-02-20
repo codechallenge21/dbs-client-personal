@@ -75,13 +75,15 @@ export default function ChannelSearchCombined() {
       )
     );
 
-  const filteredChannels = channels.filter(
-    (ch) =>
-      ch.organizationChannelTitle
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase()) ||
-      ch.organizationChannelCreateDate.includes(searchQuery)
-  );
+  const filteredChannels = channels
+    .filter(
+      (ch) =>
+        ch.organizationChannelTitle
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase()) ||
+        ch.organizationChannelCreateDate.includes(searchQuery)
+    )
+    .slice(0, 5); // Limit to 5 channels
 
   const moveToChannelDetail = (channel: OrganizationChannelData) => {
     setSelectedChannel(channel);
@@ -256,7 +258,7 @@ export default function ChannelSearchCombined() {
                         p: 2,
                         border: '1px solid var(--Secondary-Dark-Gray, #4A4A4A)',
                         borderRadius: 2,
-                        bgcolor: 'rgba(255, 0, 0, 0.05)',
+                        bgcolor: 'white',
                         position: 'relative',
                         gap: '16px',
                         alignSelf: 'stretch',
@@ -264,7 +266,7 @@ export default function ChannelSearchCombined() {
                         cursor: 'pointer',
 
                         '&:hover': {
-                          bgcolor: '#FFF5F5',
+                          bgcolor: 'rgba(255, 0, 0, 0.05)',
                         },
                       }}
                       onClick={() => {
