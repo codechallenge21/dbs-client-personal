@@ -43,11 +43,11 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
         paper: {
           sx: {
             top: '50%',
-            gap: '32px',
+            gap: isMobile ? '16px' : '32px',
             left: '50%',
             margin: '0px',
-            width: '600px',
-            height: '532px',
+            width: isMobile ? '324px' : '600px',
+            height: isMobile ? '540px' : '532px',
             borderRadius: '8px',
             position: 'absolute',
             paddingBottom: '24px',
@@ -63,8 +63,8 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
           display: 'flex',
           paddingTop: '8px',
           overflow: 'hidden',
-          paddingLeft: '32px',
-          paddingRight: '16px',
+          paddingLeft: isMobile ? '16px' : '32px',
+          paddingRight: isMobile ? '8px' : '16px',
           paddingBottom: '8px',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -107,7 +107,7 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
         sx={{
           gap: '24px',
           // width: '128px',
-          height: '78px',
+          minHeight: isMobile ? '84px' : '78px',
           display: 'flex',
           margin: '0px auto',
           alignItems: 'center',
@@ -118,9 +118,9 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
         <Typography
           sx={{
             // width: '128px',
-            height: '32px',
+            minHeight: isMobile ? '36px' : '32px',
             fontWeight: 400,
-            fontSize: '32px',
+            fontSize: isMobile ? '24px' : '32px',
             color: '#212B36',
             lineHeight: '32px',
             letterSpacing: '0%',
@@ -132,7 +132,7 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
         <Typography
           sx={{
             // width: '124px',
-            height: '22px',
+            minHeight: '22px',
             fontWeight: 400,
             fontSize: '14px',
             color: '#212B36',
@@ -158,7 +158,7 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
         sx={{
           gap: '16px',
           width: '341px',
-          height: '276px',
+          minHeight: '276px',
           display: 'flex',
           margin: '0px auto',
           alignItems: 'center',
@@ -178,7 +178,7 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
             alignItems: 'center',
             alignSelf: 'stretch',
             '& .MuiInputBase-root': {
-              width: '341px',
+              width: isMobile ? '276px' : '341px',
               padding: '16px 14px',
               borderRadius: '8px',
               '& .MuiOutlinedInput-input': {
@@ -219,24 +219,28 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
           id="login-dialog-password-input"
           data-tid="login-dialog-password-input"
           type={showPassword ? 'text' : 'password'}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment
-                position="end"
-                sx={{
-                  cursor: 'pointer',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                <IconButton
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
-                  onClick={() => setShowPassword(!showPassword)}
+          slotProps={{
+            input: {
+              endAdornment: (
+                <InputAdornment
+                  position="end"
+                  sx={{
+                    cursor: 'pointer',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
                 >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            ),
+                  <IconButton
+                    aria-label={
+                      showPassword ? 'Hide password' : 'Show password'
+                    }
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            },
           }}
           sx={{
             gap: '8px',
@@ -247,7 +251,7 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
             alignItems: 'center',
             alignSelf: 'stretch',
             '& .MuiInputBase-root': {
-              width: '341px',
+              width: isMobile ? '276px' : '341px',
               padding: '16px 14px',
               borderRadius: '8px',
               '& .MuiOutlinedInput-input': {
@@ -294,7 +298,8 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
             fontStyle: 'normal',
             fontWeight: 400,
             cursor: 'pointer',
-            width: '100%',
+            width: isMobile ? '80%' : '100%',
+            minHeight: '24px',
             textAlign: 'right',
             marginTop: '-12px',
           }}
@@ -306,7 +311,7 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
           onClick={() => {}}
           sx={{
             gap: '8px',
-            width: '341px',
+            width: isMobile ? '276px' : '341px',
             minHeight: '46px',
             borderRadius: '8px',
             background: 'var(--Secondary-, #5C443A)',
@@ -339,7 +344,7 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
           }
           sx={{
             gap: '8px',
-            width: '341px',
+            width: isMobile ? '276px' : '341px',
             minHeight: '46px',
             borderRadius: '8px',
             padding: isMobile ? '8px 16px' : '11px 12px',

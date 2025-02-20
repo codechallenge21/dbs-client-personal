@@ -51,16 +51,16 @@ const SignupDialog = ({ open, onClose, setIsLoginOpen }) => {
         paper: {
           sx: {
             top: '50%',
-            gap: '32px',
+            gap: isMobile ? '16px' : '32px',
             left: '50%',
             margin: '0px',
-            width: '600px',
-            height: '696px',
+            width: isMobile ? '324px' : '600px',
+            height: isMobile ? '652px' : '696px',
             borderRadius: '8px',
             position: 'absolute',
             paddingBottom: '24px',
             transform: 'translate(-50%, -50%)',
-            overflowY: 'auto',
+            overflow: 'hidden',
             '&::-webkit-scrollbar': {
               width: '8px',
             },
@@ -81,11 +81,11 @@ const SignupDialog = ({ open, onClose, setIsLoginOpen }) => {
     >
       <Box
         sx={{
-          height: '64px',
+          minHeight: '64px',
           display: 'flex',
           paddingTop: '8px',
-          paddingLeft: '32px',
-          paddingRight: '16px',
+          paddingLeft: isMobile ? '16px' : '32px',
+          paddingRight: isMobile ? '8px' : '16px',
           paddingBottom: '8px',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -127,7 +127,7 @@ const SignupDialog = ({ open, onClose, setIsLoginOpen }) => {
         sx={{
           gap: '24px',
           // width: '128px',
-          height: '78px',
+          minHeight: isMobile ? '84px' : '78px',
           display: 'flex',
           margin: '0px auto',
           alignItems: 'center',
@@ -138,9 +138,9 @@ const SignupDialog = ({ open, onClose, setIsLoginOpen }) => {
         <Typography
           sx={{
             // width: '128px',
-            height: '32px',
+            minHeight: isMobile ? '36px' : '32px',
             fontWeight: 400,
-            fontSize: '32px',
+            fontSize: isMobile ? '24px' : '32px',
             color: '#212B36',
             lineHeight: '32px',
             letterSpacing: '0%',
@@ -152,7 +152,7 @@ const SignupDialog = ({ open, onClose, setIsLoginOpen }) => {
         <Typography
           sx={{
             // width: '124px',
-            height: '22px',
+            minHeight: '22px',
             fontWeight: 400,
             fontSize: '14px',
             color: '#212B36',
@@ -178,7 +178,7 @@ const SignupDialog = ({ open, onClose, setIsLoginOpen }) => {
         sx={{
           gap: '16px',
           width: '341px',
-          height: '388px',
+          minHeight: '388px',
           display: 'flex',
           margin: '0px auto',
           alignItems: 'center',
@@ -198,7 +198,7 @@ const SignupDialog = ({ open, onClose, setIsLoginOpen }) => {
             alignItems: 'center',
             alignSelf: 'stretch',
             '& .MuiInputBase-root': {
-              width: '341px',
+              width: isMobile ? '276px' : '341px',
               padding: '16px 14px',
               borderRadius: '8px',
               '& .MuiOutlinedInput-input': {
@@ -247,7 +247,7 @@ const SignupDialog = ({ open, onClose, setIsLoginOpen }) => {
             alignItems: 'center',
             alignSelf: 'stretch',
             '& .MuiInputBase-root': {
-              width: '341px',
+              width: isMobile ? '276px' : '341px',
               padding: '16px 14px',
               borderRadius: '8px',
               '& .MuiOutlinedInput-input': {
@@ -320,7 +320,7 @@ const SignupDialog = ({ open, onClose, setIsLoginOpen }) => {
             alignItems: 'center',
             alignSelf: 'stretch',
             '& .MuiInputBase-root': {
-              width: '341px',
+              width: isMobile ? '276px' : '341px',
               padding: '16px 14px',
               borderRadius: '8px',
               '& .MuiOutlinedInput-input': {
@@ -393,7 +393,7 @@ const SignupDialog = ({ open, onClose, setIsLoginOpen }) => {
             alignItems: 'center',
             alignSelf: 'stretch',
             '& .MuiInputBase-root': {
-              width: '341px',
+              width: isMobile ? '276px' : '341px',
               padding: '16px 14px',
               borderRadius: '8px',
               '& .MuiOutlinedInput-input': {
@@ -435,8 +435,8 @@ const SignupDialog = ({ open, onClose, setIsLoginOpen }) => {
           onClick={() => {}}
           sx={{
             gap: '8px',
-            width: '341px',
-            height: '46px',
+            width: isMobile ? '276px' : '341px',
+            minHeight: '46px',
             borderRadius: '8px',
             background: 'var(--Secondary-, #5C443A)',
             padding: isMobile ? '8px 16px' : '11px 12px',
@@ -465,7 +465,7 @@ const SignupDialog = ({ open, onClose, setIsLoginOpen }) => {
           }
           sx={{
             gap: '8px',
-            width: '341px',
+            width: isMobile ? '276px' : '341px',
             minHeight: '46px',
             borderRadius: '8px',
             padding: isMobile ? '8px 16px' : '11px 12px',
@@ -496,8 +496,8 @@ const SignupDialog = ({ open, onClose, setIsLoginOpen }) => {
       <FormControlLabel
         sx={{
           margin: '0px auto',
-          width: '366px',
-          height: '28px',
+          width: isMobile ? '276px' : '366px',
+          height: isMobile ? '44px' : '28px',
           alignItems: 'center',
           display: 'flex',
         }}
@@ -510,7 +510,7 @@ const SignupDialog = ({ open, onClose, setIsLoginOpen }) => {
               height: '24px',
               padding: '3px',
               '& .MuiSvgIcon-root': {
-                fontSize: '18px',
+                fontSize: isMobile ? '14px' : '18px',
               },
               '&:hover': {
                 backgroundColor: 'transparent',
@@ -521,7 +521,13 @@ const SignupDialog = ({ open, onClose, setIsLoginOpen }) => {
         label={
           <Typography
             variant="body2"
-            sx={{ fontFamily: 'DFPHeiMedium-B5', fontSize: '14px' }}
+            sx={{
+              fontFamily: 'DFPHeiMedium-B5',
+              fontSize: '14px',
+              justifyContent: 'center',
+              height: 'full',
+              textAlign: 'center',
+            }}
           >
             我同意{' '}
             <Typography
@@ -543,7 +549,10 @@ const SignupDialog = ({ open, onClose, setIsLoginOpen }) => {
             <Typography
               component="span"
               color="#06C"
-              sx={{ fontFamily: 'DFPHeiMedium-B5', fontSize: '14px' }}
+              sx={{
+                fontFamily: 'DFPHeiMedium-B5',
+                fontSize: '14px',
+              }}
             >
               《Cookie 政策》
             </Typography>
