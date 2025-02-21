@@ -36,6 +36,9 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>(
     'success'
   );
+  // Hook for calling the login API
+  const { excute: login, isLoading: isLogging } = useAxiosApi(apis.login);
+  const { excute: getGoogleLoginUrl } = useAxiosApi(apis.googleLoginUrl);
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
@@ -51,9 +54,6 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
     handleClose();
     setIsSignupOpen(true);
   };
-
-  // Hook for calling the login API
-  const { excute: login, isLoading: isLogging } = useAxiosApi(apis.login);
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -84,6 +84,24 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
       setSnackbarMessage('Login failed. Please try again.');
       setSnackbarSeverity('error');
       setSnackbarOpen(true);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      await getGoogleLoginUrl()
+        .then((response) => {
+          window.open(response.data as string, '_self');
+        })
+        .catch(() => {});
+      // console.log('response.data.url', response.data, response.data.url);
+      // if (response.status === 200) {
+      //   window.open(response.data as string, '_self');
+      // } else {
+      //   console.error('Failed to obtain Google login URL.');
+      // }
+    } catch (error) {
+      console.error('Error obtaining Google login URL:', error);
     }
   };
 
@@ -397,7 +415,7 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
           </Button>
           <Button
             variant="outlined"
-            onClick={() => {}}
+            onClick={handleGoogleLogin}
             startIcon={
               <Image src={GoogleIcon} alt="Google" width={24} height={24} />
             }

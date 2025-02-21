@@ -140,6 +140,11 @@ const apis = {
       `/organizations/4aba77788ae94eca8d6ff330506af944/users/logout`
     );
   },
+  googleLoginUrl: () => {
+    return fetcher.get(
+      `/organizations/4aba77788ae94eca8d6ff330506af944/users/google/login-url`
+    );
+  },
 };
 
 const apiExports = {

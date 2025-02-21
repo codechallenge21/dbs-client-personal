@@ -42,6 +42,7 @@ interface ToolbarDrawerProps {
   openDataSource?: boolean;
   children: React.ReactNode;
   setIsOpenDrawer: (open: boolean) => void;
+  setIsLoginOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const drawerItems = [
@@ -177,6 +178,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
   children,
   setIsOpenDrawer,
   openDataSource = false,
+  setIsLoginOpen,
 }) => {
   const pathname = usePathname();
   const router = useRouter();
@@ -545,6 +547,9 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               <Button
                 role="button"
                 aria-label="Logout"
+                onClick={() => {
+                  if (setIsLoginOpen) setIsLoginOpen(true);
+                }}
                 sx={{
                   gap: '8px',
                   color: '#212B36',
@@ -619,6 +624,9 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               <IconButton
                 role="button"
                 aria-label="Login"
+                onClick={() => {
+                  if (setIsLoginOpen) setIsLoginOpen(true);
+                }}
                 sx={{
                   width: '36px',
                   height: '36px',
@@ -643,6 +651,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               <IconButton
                 role="button"
                 aria-label="Logout"
+                onClick={handleLogout}
                 sx={{
                   width: '36px',
                   height: '36px',

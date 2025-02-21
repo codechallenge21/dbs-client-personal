@@ -117,6 +117,7 @@ function ClientContent() {
       open={isOpenDrawer}
       setIsOpenDrawer={setIsOpenDrawer}
       openDataSource={openDataSource}
+      setIsLoginOpen={setIsLoginOpen}
     >
       <Box
         sx={{

@@ -78,6 +78,15 @@ const SignupDialog: React.FC<SignupDialogProps> = ({
       return;
     }
 
+    if (!agree) {
+      setSnackbarMessage(
+        'You must agree to the terms, privacy policy, and cookie policy.'
+      );
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
+      return;
+    }
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setSnackbarMessage('Please enter a valid email address.');
