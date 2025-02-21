@@ -17,7 +17,6 @@ import {
   TableContainer,
   Card,
   CardContent,
-  // CircularProgress,
 } from '@mui/material';
 import {
   MicRounded,
@@ -41,6 +40,7 @@ import DeleteDialog from '@/components/dialogs/DeleteDialog';
 import { useAudioChannels } from '@/utils/hooks/useAudioChannels';
 import EditableItem from '@/components/editable-item/EditableItem';
 import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
+import UploadScreen from './UploadScreen';
 
 const ChannelsList = () => {
   const theme = useTheme();
@@ -62,7 +62,7 @@ const ChannelsList = () => {
   }>({});
 
   const {
-    data: channelsData,
+    data: channelsData = [],
     mutate: mutateAudioChannels,
     // isValidating: isLoadingChannels,
   } = useAudioChannels({
@@ -103,9 +103,9 @@ const ChannelsList = () => {
         .then(() => {
           setIsDeleteDialogOpen(false);
           handleCloseToolsMenu();
-          if (mutateAudioChannels) {
-            mutateAudioChannels();
-          }
+          // if (mutateAudioChannels) {
+          //   mutateAudioChannels();
+          // }
         })
         .catch(() => {});
     },
@@ -113,7 +113,7 @@ const ChannelsList = () => {
       activeIndex,
       channelsData,
       deleteChannel,
-      mutateAudioChannels,
+      // mutateAudioChannels,
       handleCloseToolsMenu,
     ]
   );
@@ -443,334 +443,347 @@ const ChannelsList = () => {
                     </IconButton>
                   </Box>
                 </Box>
-
-                <TableContainer>
-                  <Table
-                    sx={{
-                      overflowY: 'auto',
-                      '&::-webkit-scrollbar': {
-                        width: '8px',
-                      },
-                      '&::-webkit-scrollbar-track': {
-                        borderRadius: '10px',
-                        background: '#f1f1f1',
-                      },
-                      '&::-webkit-scrollbar-thumb': {
-                        borderRadius: '10px',
-                        background: '#888',
-                      },
-                      '&::-webkit-scrollbar-thumb:hover': {
-                        background: '#555',
-                      },
-                    }}
-                  >
-                    <TableHead>
-                      <TableRow>
-                        <TableCell
-                          sx={{
-                            padding: '0px',
-                            fontWeight: 400,
-                            fontSize: '16px',
-                            overflow: 'hidden',
-                            fontStyle: 'normal',
-                            lineHeight: 'normal',
-                            textOverflow: 'ellipsis',
-                            fontFamily: 'DFPHeiBold-B5',
-                            color: 'var(--Text-Primary, #212B36)',
-                            borderBottom:
-                              '1px dashed var(--Components-Divider, rgba(145, 158, 171, 0.20))',
-                            background: 'var(--Background-Paper, #FFF)',
-                          }}
-                        >
-                          <Typography
-                            sx={{
-                              fontWeight: 400,
-                              fontSize: '16px',
-                              overflow: 'hidden',
-                              padding: '16px 0px',
-                              fontStyle: 'normal',
-                              lineHeight: 'normal',
-                              textOverflow: 'ellipsis',
-                              fontFamily: 'DFPHeiBold-B5',
-                              color: 'var(--Text-Primary, #212B36)',
-                            }}
-                          >
-                            標題
-                          </Typography>
-                        </TableCell>
-                        <TableCell
-                          sx={{
-                            padding: '0px',
-                            fontWeight: 400,
-                            fontSize: '16px',
-                            overflow: 'hidden',
-                            fontStyle: 'normal',
-                            lineHeight: 'normal',
-                            textOverflow: 'ellipsis',
-                            fontFamily: 'DFPHeiBold-B5',
-                            color: 'var(--Text-Primary, #212B36)',
-                            borderBottom:
-                              '1px dashed var(--Components-Divider, rgba(145, 158, 171, 0.20))',
-                            background: 'var(--Background-Paper, #FFF)',
-                          }}
-                        >
-                          <Typography
-                            sx={{
-                              fontWeight: 400,
-                              fontSize: '16px',
-                              overflow: 'hidden',
-                              padding: '16px 0px',
-                              fontStyle: 'normal',
-                              lineHeight: 'normal',
-                              textOverflow: 'ellipsis',
-                              fontFamily: 'DFPHeiBold-B5',
-                              color: 'var(--Text-Primary, #212B36)',
-                            }}
-                          >
-                            狀態
-                          </Typography>
-                        </TableCell>
-                        <TableCell
-                          sx={{
-                            padding: '0px',
-                            fontWeight: 400,
-                            fontSize: '16px',
-                            overflow: 'hidden',
-                            fontStyle: 'normal',
-                            lineHeight: 'normal',
-                            textOverflow: 'ellipsis',
-                            fontFamily: 'DFPHeiBold-B5',
-                            color: 'var(--Text-Primary, #212B36)',
-                            borderBottom:
-                              '1px dashed var(--Components-Divider, rgba(145, 158, 171, 0.20))',
-                            background: 'var(--Background-Paper, #FFF)',
-                          }}
-                        >
-                          <Typography
-                            sx={{
-                              fontWeight: 400,
-                              fontSize: '16px',
-                              overflow: 'hidden',
-                              padding: '16px 0px',
-                              fontStyle: 'normal',
-                              lineHeight: 'normal',
-                              textOverflow: 'ellipsis',
-                              fontFamily: 'DFPHeiBold-B5',
-                              color: 'var(--Text-Primary, #212B36)',
-                            }}
-                          >
-                            建立時間
-                          </Typography>
-                        </TableCell>
-                        <TableCell
-                          sx={{
-                            padding: '0px',
-                            borderBottom:
-                              '1px dashed var(--Components-Divider, rgba(145, 158, 171, 0.20))',
-                            background: 'var(--Background-Paper, #FFF)',
-                          }}
-                        ></TableCell>
-                        <TableCell
-                          sx={{
-                            padding: '0px',
-                            borderBottom:
-                              '1px dashed var(--Components-Divider, rgba(145, 158, 171, 0.20))',
-                            background: 'var(--Background-Paper, #FFF)',
-                          }}
-                        ></TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {channelsData?.map((channel, index) => (
-                        <TableRow
-                          key={index}
-                          onClick={() => handleRowClick(channel)}
-                          sx={{
-                            cursor: 'pointer',
-                            height: '56px !important',
-                            borderBottom:
-                              '1px dashed var(--Components-Divider, rgba(145, 158, 171, 0.20))',
-                            background: 'var(--Background-Paper, #FFF)',
-                          }}
-                        >
-                          <TableCell
-                            sx={{
-                              width: '50%',
-                              padding: '0px',
-                              border: 'none',
-                              height: '51px !important',
-                            }}
-                          >
-                            <Typography
+                {channelsData?.length > 0 ? (
+                  (console.log('channelsData', channelsData),
+                  (
+                    <TableContainer>
+                      <Table
+                        sx={{
+                          overflowY: 'auto',
+                          '&::-webkit-scrollbar': {
+                            width: '8px',
+                          },
+                          '&::-webkit-scrollbar-track': {
+                            borderRadius: '10px',
+                            background: '#f1f1f1',
+                          },
+                          '&::-webkit-scrollbar-thumb': {
+                            borderRadius: '10px',
+                            background: '#888',
+                          },
+                          '&::-webkit-scrollbar-thumb:hover': {
+                            background: '#555',
+                          },
+                        }}
+                      >
+                        <TableHead>
+                          <TableRow>
+                            <TableCell
                               sx={{
-                                fontFamily: 'DFPHeiBold-B5',
+                                padding: '0px',
                                 fontWeight: 400,
                                 fontSize: '16px',
-                                lineHeight: '16px',
-                                letterSpacing: '0%',
-                                textAlign: 'left',
-                                WebkitLineClamp: 1,
                                 overflow: 'hidden',
-                                padding: '16px 0px',
                                 fontStyle: 'normal',
-                                display: '-webkit-box',
+                                lineHeight: 'normal',
                                 textOverflow: 'ellipsis',
-                                WebkitBoxOrient: 'vertical',
+                                fontFamily: 'DFPHeiBold-B5',
                                 color: 'var(--Text-Primary, #212B36)',
+                                borderBottom:
+                                  '1px dashed var(--Components-Divider, rgba(145, 158, 171, 0.20))',
+                                background: 'var(--Background-Paper, #FFF)',
                               }}
                             >
-                              {channel?.organizationChannelTitle}
-                            </Typography>
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              width: '18%',
-                              padding: '0px',
-                              border: 'none',
-                              height: '51px !important',
-                            }}
-                          >
-                            <Box
-                              sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                              }}
-                            >
-                              {channel.organizationChannelTranscriptList[0]
-                                ?.organizationChannelTranscriptStatus ===
-                              'COMPLETE' ? (
-                                <CheckCircleRounded
-                                  sx={{ color: ' #118D57' }}
-                                />
-                              ) : channel.organizationChannelTranscriptList[0]
-                                  ?.organizationChannelTranscriptStatus ===
-                                'PROCESSING' ? (
-                                <RotateRightRounded
-                                  sx={{ color: 'rgba(0, 102, 204, 1)' }}
-                                />
-                              ) : channel.organizationChannelTranscriptList[0]
-                                  ?.organizationChannelTranscriptStatus ===
-                                'PENDING' ? (
-                                <PendingActionsRounded
-                                  sx={{ color: 'rgba(33, 43, 54, 1)' }}
-                                />
-                              ) : (
-                                <PendingActionsRounded
-                                  sx={{ color: 'rgba(33, 43, 54, 1)' }}
-                                />
-                              )}
-                              <span
-                                style={{
-                                  fontFamily: 'DFPHeiBold-B5',
+                              <Typography
+                                sx={{
                                   fontWeight: 400,
                                   fontSize: '16px',
-                                  lineHeight: '16px',
-                                  letterSpacing: '0%',
                                   overflow: 'hidden',
+                                  padding: '16px 0px',
                                   fontStyle: 'normal',
+                                  lineHeight: 'normal',
                                   textOverflow: 'ellipsis',
-                                  marginLeft: '12px',
-                                  color: 'var(--Primary-Black, #212B36)',
+                                  fontFamily: 'DFPHeiBold-B5',
+                                  color: 'var(--Text-Primary, #212B36)',
                                 }}
                               >
-                                {channel.organizationChannelTranscriptList[0]
-                                  ?.organizationChannelTranscriptStatus ===
-                                'COMPLETE'
-                                  ? '完成'
-                                  : channel.organizationChannelTranscriptList[0]
-                                      ?.organizationChannelTranscriptStatus ===
-                                    'PROCESSING'
-                                  ? ' 上傳中...'
-                                  : channel.organizationChannelTranscriptList[0]
-                                      ?.organizationChannelTranscriptStatus ===
-                                    'PENDING'
-                                  ? '正在摘要...'
-                                  : ''}
-                              </span>
-                            </Box>
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              width: '18%',
-                              padding: '0px',
-                              border: 'none',
-                              height: '51px !important',
-                            }}
-                          >
-                            <Typography
+                                標題
+                              </Typography>
+                            </TableCell>
+                            <TableCell
                               sx={{
+                                padding: '0px',
                                 fontWeight: 400,
                                 fontSize: '16px',
+                                overflow: 'hidden',
                                 fontStyle: 'normal',
-                                padding: '16px 0px',
                                 lineHeight: 'normal',
+                                textOverflow: 'ellipsis',
                                 fontFamily: 'DFPHeiBold-B5',
                                 color: 'var(--Text-Primary, #212B36)',
+                                borderBottom:
+                                  '1px dashed var(--Components-Divider, rgba(145, 158, 171, 0.20))',
+                                background: 'var(--Background-Paper, #FFF)',
                               }}
                             >
-                              {new Date(
-                        channel.organizationChannelCreateDate
-                      ).toLocaleString()}
-                            </Typography>
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              width: '7%',
-                              border: 'none',
-                              padding: '0px 0px 0px 40px',
-                              textAlign: 'center',
-                              height: '51px !important',
-                            }}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleToggle(index);
-                            }}
-                          >
-                            <IconButton
-                              role="button"
-                              aria-label="favorite"
-                              sx={{ padding: '0px' }}
+                              <Typography
+                                sx={{
+                                  fontWeight: 400,
+                                  fontSize: '16px',
+                                  overflow: 'hidden',
+                                  padding: '16px 0px',
+                                  fontStyle: 'normal',
+                                  lineHeight: 'normal',
+                                  textOverflow: 'ellipsis',
+                                  fontFamily: 'DFPHeiBold-B5',
+                                  color: 'var(--Text-Primary, #212B36)',
+                                }}
+                              >
+                                狀態
+                              </Typography>
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                padding: '0px',
+                                fontWeight: 400,
+                                fontSize: '16px',
+                                overflow: 'hidden',
+                                fontStyle: 'normal',
+                                lineHeight: 'normal',
+                                textOverflow: 'ellipsis',
+                                fontFamily: 'DFPHeiBold-B5',
+                                color: 'var(--Text-Primary, #212B36)',
+                                borderBottom:
+                                  '1px dashed var(--Components-Divider, rgba(145, 158, 171, 0.20))',
+                                background: 'var(--Background-Paper, #FFF)',
+                              }}
                             >
-                              {favoriteChannels[index] ? (
-                                <StarRounded sx={{ color: 'black' }} />
-                              ) : (
-                                <StarBorderRounded sx={{ color: 'black' }} />
-                              )}
-                            </IconButton>
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              width: '7%',
-                              border: 'none',
-                              padding: '0px 18px 0px 0px',
-                              textAlign: 'center',
-                              height: '51px !important',
-                            }}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                            }}
-                          >
-                            <EditableItem
-                              key={channel.organizationChannelId}
-                              index={index}
-                              toolsAnchor={toolsAnchor}
-                              activeIndex={activeIndex}
-                              handleMenuOpen={handleMenuOpen}
-                              setToolsAnchor={setToolsAnchor}
-                              handleCloseToolsMenu={handleCloseToolsMenu}
-                              handleOpenEditChannelDialog={
-                                handleOpenEditChannelDialog
-                              }
-                              handleDeleteChannelOpenConfirmDialog={
-                                handleDeleteChannelOpenConfirmDialog
-                              }
-                            />
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+                              <Typography
+                                sx={{
+                                  fontWeight: 400,
+                                  fontSize: '16px',
+                                  overflow: 'hidden',
+                                  padding: '16px 0px',
+                                  fontStyle: 'normal',
+                                  lineHeight: 'normal',
+                                  textOverflow: 'ellipsis',
+                                  fontFamily: 'DFPHeiBold-B5',
+                                  color: 'var(--Text-Primary, #212B36)',
+                                }}
+                              >
+                                建立時間
+                              </Typography>
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                padding: '0px',
+                                borderBottom:
+                                  '1px dashed var(--Components-Divider, rgba(145, 158, 171, 0.20))',
+                                background: 'var(--Background-Paper, #FFF)',
+                              }}
+                            ></TableCell>
+                            <TableCell
+                              sx={{
+                                padding: '0px',
+                                borderBottom:
+                                  '1px dashed var(--Components-Divider, rgba(145, 158, 171, 0.20))',
+                                background: 'var(--Background-Paper, #FFF)',
+                              }}
+                            ></TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {channelsData?.map((channel, index) => (
+                            <TableRow
+                              key={index}
+                              onClick={() => handleRowClick(channel)}
+                              sx={{
+                                cursor: 'pointer',
+                                height: '56px !important',
+                                borderBottom:
+                                  '1px dashed var(--Components-Divider, rgba(145, 158, 171, 0.20))',
+                                background: 'var(--Background-Paper, #FFF)',
+                              }}
+                            >
+                              <TableCell
+                                sx={{
+                                  width: '50%',
+                                  padding: '0px',
+                                  border: 'none',
+                                  height: '51px !important',
+                                }}
+                              >
+                                <Typography
+                                  sx={{
+                                    fontFamily: 'DFPHeiBold-B5',
+                                    fontWeight: 400,
+                                    fontSize: '16px',
+                                    lineHeight: '16px',
+                                    letterSpacing: '0%',
+                                    textAlign: 'left',
+                                    WebkitLineClamp: 1,
+                                    overflow: 'hidden',
+                                    padding: '16px 0px',
+                                    fontStyle: 'normal',
+                                    display: '-webkit-box',
+                                    textOverflow: 'ellipsis',
+                                    WebkitBoxOrient: 'vertical',
+                                    color: 'var(--Text-Primary, #212B36)',
+                                  }}
+                                >
+                                  {channel?.organizationChannelTitle}
+                                </Typography>
+                              </TableCell>
+                              <TableCell
+                                sx={{
+                                  width: '18%',
+                                  padding: '0px',
+                                  border: 'none',
+                                  height: '51px !important',
+                                }}
+                              >
+                                <Box
+                                  sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                  }}
+                                >
+                                  {channel.organizationChannelTranscriptList[0]
+                                    ?.organizationChannelTranscriptStatus ===
+                                  'COMPLETE' ? (
+                                    <CheckCircleRounded
+                                      sx={{ color: ' #118D57' }}
+                                    />
+                                  ) : channel
+                                      .organizationChannelTranscriptList[0]
+                                      ?.organizationChannelTranscriptStatus ===
+                                    'PROCESSING' ? (
+                                    <RotateRightRounded
+                                      sx={{ color: 'rgba(0, 102, 204, 1)' }}
+                                    />
+                                  ) : channel
+                                      .organizationChannelTranscriptList[0]
+                                      ?.organizationChannelTranscriptStatus ===
+                                    'PENDING' ? (
+                                    <PendingActionsRounded
+                                      sx={{ color: 'rgba(33, 43, 54, 1)' }}
+                                    />
+                                  ) : (
+                                    <PendingActionsRounded
+                                      sx={{ color: 'rgba(33, 43, 54, 1)' }}
+                                    />
+                                  )}
+                                  <span
+                                    style={{
+                                      fontFamily: 'DFPHeiBold-B5',
+                                      fontWeight: 400,
+                                      fontSize: '16px',
+                                      lineHeight: '16px',
+                                      letterSpacing: '0%',
+                                      overflow: 'hidden',
+                                      fontStyle: 'normal',
+                                      textOverflow: 'ellipsis',
+                                      marginLeft: '12px',
+                                      color: 'var(--Primary-Black, #212B36)',
+                                    }}
+                                  >
+                                    {channel
+                                      .organizationChannelTranscriptList[0]
+                                      ?.organizationChannelTranscriptStatus ===
+                                    'COMPLETE'
+                                      ? '完成'
+                                      : channel
+                                          .organizationChannelTranscriptList[0]
+                                          ?.organizationChannelTranscriptStatus ===
+                                        'PROCESSING'
+                                      ? ' 上傳中...'
+                                      : channel
+                                          .organizationChannelTranscriptList[0]
+                                          ?.organizationChannelTranscriptStatus ===
+                                        'PENDING'
+                                      ? '正在摘要...'
+                                      : ''}
+                                  </span>
+                                </Box>
+                              </TableCell>
+                              <TableCell
+                                sx={{
+                                  width: '18%',
+                                  padding: '0px',
+                                  border: 'none',
+                                  height: '51px !important',
+                                }}
+                              >
+                                <Typography
+                                  sx={{
+                                    fontWeight: 400,
+                                    fontSize: '16px',
+                                    fontStyle: 'normal',
+                                    padding: '16px 0px',
+                                    lineHeight: 'normal',
+                                    fontFamily: 'DFPHeiBold-B5',
+                                    color: 'var(--Text-Primary, #212B36)',
+                                  }}
+                                >
+                                  {new Date(
+                                    channel.organizationChannelCreateDate
+                                  ).toLocaleString()}
+                                </Typography>
+                              </TableCell>
+                              <TableCell
+                                sx={{
+                                  width: '7%',
+                                  border: 'none',
+                                  padding: '0px 0px 0px 40px',
+                                  textAlign: 'center',
+                                  height: '51px !important',
+                                }}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleToggle(index);
+                                }}
+                              >
+                                <IconButton
+                                  role="button"
+                                  aria-label="favorite"
+                                  sx={{ padding: '0px' }}
+                                >
+                                  {favoriteChannels[index] ? (
+                                    <StarRounded sx={{ color: 'black' }} />
+                                  ) : (
+                                    <StarBorderRounded
+                                      sx={{ color: 'black' }}
+                                    />
+                                  )}
+                                </IconButton>
+                              </TableCell>
+                              <TableCell
+                                sx={{
+                                  width: '7%',
+                                  border: 'none',
+                                  padding: '0px 18px 0px 0px',
+                                  textAlign: 'center',
+                                  height: '51px !important',
+                                }}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                }}
+                              >
+                                <EditableItem
+                                  key={channel.organizationChannelId}
+                                  index={index}
+                                  toolsAnchor={toolsAnchor}
+                                  activeIndex={activeIndex}
+                                  handleMenuOpen={handleMenuOpen}
+                                  setToolsAnchor={setToolsAnchor}
+                                  handleCloseToolsMenu={handleCloseToolsMenu}
+                                  handleOpenEditChannelDialog={
+                                    handleOpenEditChannelDialog
+                                  }
+                                  handleDeleteChannelOpenConfirmDialog={
+                                    handleDeleteChannelOpenConfirmDialog
+                                  }
+                                />
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  ))
+                ) : (
+                  <UploadScreen />
+                )}
               </Box>
             </>
             {/* )} */}
@@ -968,178 +981,189 @@ const ChannelsList = () => {
               上傳檔案
             </Button>
           </Box>
-          {channelsData?.map((channel, index) => (
-            <Card
-              key={index}
-              sx={{
-                mb: '16px',
-                height: '146px',
-                padding: '16px',
-                display: 'flex',
-                maxWidth: '384px',
-                minWidth: '300px',
-                alignSelf: 'stretch',
-                flexDirection: 'column',
-                alignItems: 'flex-start',
-                borderRadius: '16px',
-                background: 'var(--Primary-White, #FFF)',
-                boxShadow:
-                  '0px 12px 24px -4px rgba(17, 68, 85, 0.12), 0px 0px 2px 0px rgba(17, 68, 85, 0.12)',
-              }}
-              onClick={() => handleRowClick(channel)}
-            >
-              <CardContent
-                sx={{
-                  padding: 0,
-                  width: '100%',
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  paddingBottom: '0 !important',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <Box
+          {channelsData?.length > 0 ? (
+            <>
+              {channelsData?.map((channel, index) => (
+                <Card
+                  key={index}
                   sx={{
-                    mb: '8px',
-                    width: '100%',
+                    mb: '16px',
+                    height: '146px',
+                    padding: '16px',
                     display: 'flex',
-                    alignItems: 'start',
-                    justifyContent: 'space-between',
+                    maxWidth: '384px',
+                    minWidth: '300px',
+                    alignSelf: 'stretch',
+                    flexDirection: 'column',
+                    alignItems: 'flex-start',
+                    borderRadius: '16px',
+                    background: 'var(--Primary-White, #FFF)',
+                    boxShadow:
+                      '0px 12px 24px -4px rgba(17, 68, 85, 0.12), 0px 0px 2px 0px rgba(17, 68, 85, 0.12)',
                   }}
+                  onClick={() => handleRowClick(channel)}
                 >
-                  <Typography
+                  <CardContent
                     sx={{
-                      fontWeight: 400,
-                      fontSize: '24px',
-                      fontStyle: 'normal',
-                      lineHeight: 'normal',
-                      whiteSpace: 'normal',
-                      wordBreak: 'break-word',
-                      fontFamily: 'DFPHeiBold-B5',
-                      color: 'var(--Primary-Black, #212B36)',
-                    }}
-                  >
-                    {channel?.organizationChannelTitle}
-                  </Typography>
-                  <EditableItem
-                    key={channel.organizationChannelId}
-                    index={index}
-                    toolsAnchor={toolsAnchor}
-                    activeIndex={activeIndex}
-                    handleMenuOpen={handleMenuOpen}
-                    setToolsAnchor={setToolsAnchor}
-                    handleCloseToolsMenu={handleCloseToolsMenu}
-                    handleOpenEditChannelDialog={handleOpenEditChannelDialog}
-                    handleDeleteChannelOpenConfirmDialog={
-                      handleDeleteChannelOpenConfirmDialog
-                    }
-                  />
-                </Box>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                  }}
-                >
-                  <Box
-                    sx={{
+                      padding: 0,
+                      width: '100%',
+                      height: '100%',
                       display: 'flex',
-                      alignItems: 'center',
+                      flexDirection: 'column',
+                      paddingBottom: '0 !important',
+                      justifyContent: 'space-between',
                     }}
                   >
-                    <IconButton
-                      role="button"
-                      aria-label="favorite"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleToggle(index);
-                      }}
-                      sx={{ padding: '0px', marginRight: '8px' }}
-                    >
-                      {favoriteChannels[index] ? (
-                        <StarRounded sx={{ color: 'black' }} />
-                      ) : (
-                        <StarBorderRounded sx={{ color: 'black' }} />
-                      )}
-                    </IconButton>
-                    <Typography
+                    <Box
                       sx={{
-                        fontWeight: 400,
-                        fontSize: '16px',
-                        overflow: 'hidden',
-                        lineHeight: '24px',
-                        fontStyle: 'normal',
-                        textAlign: 'center',
-                        textOverflow: 'ellipsis',
-                        fontFamily: 'DFPHeiMedium-B5',
-                        color: 'var(--Primary-Black, #212B36)',
+                        mb: '8px',
+                        width: '100%',
+                        display: 'flex',
+                        alignItems: 'start',
+                        justifyContent: 'space-between',
                       }}
                     >
-                      {new Date(
-                        channel.organizationChannelCreateDate
-                      ).toLocaleString()}
-                    </Typography>
-                  </Box>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                    }}
-                  >
-                    {channel.organizationChannelTranscriptList[0]
-                      ?.organizationChannelTranscriptStatus === 'COMPLETE' ? (
-                      <CheckCircleRounded
-                        sx={{ color: ' rgba(52, 199, 89, 1)' }}
+                      <Typography
+                        sx={{
+                          fontWeight: 400,
+                          fontSize: '24px',
+                          fontStyle: 'normal',
+                          lineHeight: 'normal',
+                          whiteSpace: 'normal',
+                          wordBreak: 'break-word',
+                          fontFamily: 'DFPHeiBold-B5',
+                          color: 'var(--Primary-Black, #212B36)',
+                        }}
+                      >
+                        {channel?.organizationChannelTitle}
+                      </Typography>
+                      <EditableItem
+                        key={channel.organizationChannelId}
+                        index={index}
+                        toolsAnchor={toolsAnchor}
+                        activeIndex={activeIndex}
+                        handleMenuOpen={handleMenuOpen}
+                        setToolsAnchor={setToolsAnchor}
+                        handleCloseToolsMenu={handleCloseToolsMenu}
+                        handleOpenEditChannelDialog={
+                          handleOpenEditChannelDialog
+                        }
+                        handleDeleteChannelOpenConfirmDialog={
+                          handleDeleteChannelOpenConfirmDialog
+                        }
                       />
-                    ) : channel.organizationChannelTranscriptList[0]
-                        ?.organizationChannelTranscriptStatus ===
-                      'PROCESSING' ? (
-                      <RotateRightRounded
-                        sx={{ color: 'rgba(0, 102, 204, 1)' }}
-                      />
-                    ) : channel.organizationChannelTranscriptList[0]
-                        ?.organizationChannelTranscriptStatus === 'PENDING' ? (
-                      <PendingActionsRounded
-                        sx={{ color: 'rgba(33, 43, 54, 1)' }}
-                      />
-                    ) : (
-                      <PendingActionsRounded
-                        sx={{ color: 'rgba(33, 43, 54, 1)' }}
-                      />
-                    )}
-                    <span
-                      style={{
-                        fontFamily: 'DFPHeiMedium-B5',
-                        fontWeight: 400,
-                        fontSize: '16px',
-                        lineHeight: '24px',
-                        letterSpacing: '0%',
-                        overflow: 'hidden',
-                        fontStyle: 'normal',
-                        textOverflow: 'ellipsis',
-                        marginLeft: '12px',
-                        color: 'var(--Primary-Black, #212B36)',
+                    </Box>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
                       }}
                     >
-                      {channel.organizationChannelTranscriptList[0]
-                        ?.organizationChannelTranscriptStatus === 'COMPLETE'
-                        ? '完成'
-                        : channel.organizationChannelTranscriptList[0]
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <IconButton
+                          role="button"
+                          aria-label="favorite"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleToggle(index);
+                          }}
+                          sx={{ padding: '0px', marginRight: '8px' }}
+                        >
+                          {favoriteChannels[index] ? (
+                            <StarRounded sx={{ color: 'black' }} />
+                          ) : (
+                            <StarBorderRounded sx={{ color: 'black' }} />
+                          )}
+                        </IconButton>
+                        <Typography
+                          sx={{
+                            fontWeight: 400,
+                            fontSize: '16px',
+                            overflow: 'hidden',
+                            lineHeight: '24px',
+                            fontStyle: 'normal',
+                            textAlign: 'center',
+                            textOverflow: 'ellipsis',
+                            fontFamily: 'DFPHeiMedium-B5',
+                            color: 'var(--Primary-Black, #212B36)',
+                          }}
+                        >
+                          {new Date(
+                            channel.organizationChannelCreateDate
+                          ).toLocaleString()}
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                        }}
+                      >
+                        {channel.organizationChannelTranscriptList[0]
+                          ?.organizationChannelTranscriptStatus ===
+                        'COMPLETE' ? (
+                          <CheckCircleRounded
+                            sx={{ color: ' rgba(52, 199, 89, 1)' }}
+                          />
+                        ) : channel.organizationChannelTranscriptList[0]
                             ?.organizationChannelTranscriptStatus ===
-                          'PROCESSING'
-                        ? ' 上傳中...'
-                        : channel.organizationChannelTranscriptList[0]
-                            ?.organizationChannelTranscriptStatus === 'PENDING'
-                        ? '正在摘要...'
-                        : ''}
-                    </span>
-                  </Box>
-                </Box>
-              </CardContent>
-            </Card>
-          ))}
+                          'PROCESSING' ? (
+                          <RotateRightRounded
+                            sx={{ color: 'rgba(0, 102, 204, 1)' }}
+                          />
+                        ) : channel.organizationChannelTranscriptList[0]
+                            ?.organizationChannelTranscriptStatus ===
+                          'PENDING' ? (
+                          <PendingActionsRounded
+                            sx={{ color: 'rgba(33, 43, 54, 1)' }}
+                          />
+                        ) : (
+                          <PendingActionsRounded
+                            sx={{ color: 'rgba(33, 43, 54, 1)' }}
+                          />
+                        )}
+                        <span
+                          style={{
+                            fontFamily: 'DFPHeiMedium-B5',
+                            fontWeight: 400,
+                            fontSize: '16px',
+                            lineHeight: '24px',
+                            letterSpacing: '0%',
+                            overflow: 'hidden',
+                            fontStyle: 'normal',
+                            textOverflow: 'ellipsis',
+                            marginLeft: '12px',
+                            color: 'var(--Primary-Black, #212B36)',
+                          }}
+                        >
+                          {channel.organizationChannelTranscriptList[0]
+                            ?.organizationChannelTranscriptStatus === 'COMPLETE'
+                            ? '完成'
+                            : channel.organizationChannelTranscriptList[0]
+                                ?.organizationChannelTranscriptStatus ===
+                              'PROCESSING'
+                            ? ' 上傳中...'
+                            : channel.organizationChannelTranscriptList[0]
+                                ?.organizationChannelTranscriptStatus ===
+                              'PENDING'
+                            ? '正在摘要...'
+                            : ''}
+                        </span>
+                      </Box>
+                    </Box>
+                  </CardContent>
+                </Card>
+              ))}
+            </>
+          ) : (
+            <UploadScreen />
+          )}
         </Box>
       )}
 
