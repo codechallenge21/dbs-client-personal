@@ -1,23 +1,23 @@
+import docPerview from '@/assets/Images/Doc Icon.svg';
+import imagePerview from '@/assets/Images/Image Icon.svg';
+import pdfPreview from '@/assets/Images/Pdf Icon.svg';
+import txtPerview from '@/assets/Images/Txt Icon.svg';
+import { SubmitUserInputsApiPayload } from '@/interfaces/payloads';
+import { CloseRounded, SendRounded } from '@mui/icons-material';
 import AttachFileRoundedIcon from '@mui/icons-material/AttachFileRounded';
 import MicRoundedIcon from '@mui/icons-material/MicRounded';
+import RotateRightRounded from '@mui/icons-material/RotateRightRounded';
 import {
   Box,
   IconButton,
   TextareaAutosize,
   Typography,
 } from '@mui/material';
-import { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import RotateRightRounded from '@mui/icons-material/RotateRightRounded';
-import ChannelContentContext from '../../channel-context-provider/ChannelContentContext';
-import { SendRounded, CloseRounded } from '@mui/icons-material';
-import Image from 'next/image';
-import pdfPreview from '@/assets/Images/Pdf Icon.svg';
-import txtPerview from '@/assets/Images/Txt Icon.svg';
-import imagePerview from '@/assets/Images/Image Icon.svg';
-import docPerview from '@/assets/Images/Doc Icon.svg';
-import DropdownMenu from './DropdownMenu';
-import { SubmitUserInputsApiPayload } from '@/interfaces/payloads';
 import Cookies from 'js-cookie';
+import Image from 'next/image';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import ChannelContentContext from '../../channel-context-provider/ChannelContentContext';
+import DropdownMenu from './DropdownMenu';
 
 interface SpeechRecognition extends EventTarget {
   continuous: boolean;
@@ -282,7 +282,6 @@ const TextInput: React.FC<TextInputProps> = ({
       }
     }
   }, [handleSendMessage, isListening, userInputValue]);
-  console.log(from);
   return (
     <>
       {error && <p style={{ color: 'red' }}>{error}</p>}
