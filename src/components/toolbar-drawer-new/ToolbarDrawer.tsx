@@ -180,6 +180,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
   const theme = useTheme();
   const [isClient, setIsClient] = useState(false);
   const [isExpanded, setIsExpanded] = useState(true); // Track expanded/collapsed state
+  const [isWishPoolDialogOpen, setIsWishPoolDialogOpen] = useState(false);
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const { selectedChannel, selectedChannelId, isInteractingInChat } =
@@ -510,7 +511,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 height: '30px',
               }}
               onClick={() => {
-                router.push('/wishing');
+                setIsWishPoolDialogOpen(true);
               }}
             >
               <EmojiObjectsRounded sx={{ color: 'white', fontSize: '18px' }} />
@@ -708,7 +709,12 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
       >
         {children}
       </MainBox>
-      <WishPoolDialog open={true} onClose={() => {}} />
+      <WishPoolDialog
+        open={isWishPoolDialogOpen}
+        onClose={() => {
+          setIsWishPoolDialogOpen(false);
+        }}
+      />
     </Box>
   );
 };

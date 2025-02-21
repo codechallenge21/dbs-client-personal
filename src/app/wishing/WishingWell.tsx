@@ -246,6 +246,9 @@ const WishingWell = () => {
                         '& .hover-text': {
                           color: '#990000',
                         },
+                        '& .hover-box': {
+                          backgroundColor: '#CC00000D',
+                        },
                       },
                     }}
                   >
@@ -261,6 +264,7 @@ const WishingWell = () => {
                       }}
                     />
                     <Box
+                      className="hover-box"
                       sx={{
                         gap: '4px',
                         display: 'flex',
@@ -271,9 +275,6 @@ const WishingWell = () => {
                         padding: '24px 16px 16px 16px',
                         borderBottomRightRadius: '8px',
                         backgroundColor: 'var(--Primary-, #EBE3DD)',
-                        '&:hover': {
-                          backgroundColor: '#CC00000D',
-                        },
                       }}
                     >
                       <Typography

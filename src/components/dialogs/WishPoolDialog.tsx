@@ -83,6 +83,7 @@ const WishPoolDialog: React.FC<WishPoolDialogProps> = ({ open, onClose }) => {
             padding: '8px',
             borderRadius: '50px',
           }}
+          onClick={onClose}
         >
           <CloseRounded
             sx={{ width: '32px', height: '32px', color: '#212B36' }}
