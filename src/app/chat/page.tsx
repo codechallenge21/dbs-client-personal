@@ -18,6 +18,8 @@ import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import apis from '@/utils/hooks/apis/apis';
 import DataSourceDialog from '@/components/chat-page/components/chatDataStore';
 import { useChatChannels } from '@/utils/hooks/useChatChannels';
+import LoginDialog from '@/components/dialogs/LoginDialog';
+import SignupDialog from '@/components/dialogs/SignupDialog';
 
 export default function ChatHomePage() {
   return (
@@ -32,7 +34,7 @@ function ClientContent() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const organizationChannelId = searchParams.get('organizationChannelId') || '';
+  const organizationChannelId = searchParams.get('organizationChannelId') ?? '';
   const {
     selectedChannel,
     setSelectedChannelId,
@@ -47,6 +49,8 @@ function ClientContent() {
   const [openDataSource, setOpenDataSource] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenDrawer, setIsOpenDrawer] = useState(!isMobile);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isSignupOpen, setIsSignupOpen] = useState(false);
   const { data: chatsData } = useChatChannels({
     organizationId: '4aba77788ae94eca8d6ff330506af944',
   });
@@ -108,11 +112,7 @@ function ClientContent() {
           borderRadius: '8px',
           flexDirection: 'column',
           backgroundColor: '#FFF',
-          justifyContent: isMobile
-            ? chatsData?.length
-              ? 'flex-end'
-              : 'center'
-            : 'center',
+          justifyContent: isMobile && chatsData?.length ? 'flex-end' : 'center',
           height: isMobile ? '100vh' : 'calc(100vh - 32px)',
         }}
       >
@@ -124,7 +124,7 @@ function ClientContent() {
           setIsOpenDrawer={setIsOpenDrawer}
           setOpenDataSource={setOpenDataSource}
         />
-        <MainContent chatsData={chatsData} />
+        <MainContent chatsData={chatsData} setIsLoginOpen={setIsLoginOpen} />
         <SwitchDialog
           open={isOpen}
           onClose={handleClose}
@@ -135,6 +135,16 @@ function ClientContent() {
           onClose={() => setOpenDataSource(false)}
         />
       </Box>
+      <LoginDialog
+        open={isLoginOpen}
+        setIsSignupOpen={setIsSignupOpen}
+        onClose={() => setIsLoginOpen(false)}
+      />
+      <SignupDialog
+        open={isSignupOpen}
+        setIsLoginOpen={setIsLoginOpen}
+        onClose={() => setIsSignupOpen(false)}
+      />
     </ToolbarDrawer>
   );
 }

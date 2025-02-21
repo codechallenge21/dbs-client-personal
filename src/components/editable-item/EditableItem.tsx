@@ -78,7 +78,6 @@ const EditableItem: React.FC<{
   return (
     <>
       <IconButton
-        role="button"
         aria-label="Menu"
         sx={{ padding: 0 }}
         onClick={(event) => handleMenuOpen(event, index)}
@@ -95,11 +94,11 @@ const EditableItem: React.FC<{
         onClose={handleCloseToolsMenu}
         anchorOrigin={{
           vertical: 'bottom',
-          horizontal: 'right',
+          horizontal: 'left',
         }}
         transformOrigin={{
           vertical: 'top',
-          horizontal: 'right',
+          horizontal: 'left',
         }}
         slotProps={{
           paper: {
