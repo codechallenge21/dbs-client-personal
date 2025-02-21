@@ -14,6 +14,7 @@ import {
   DeleteChannelApiPayload,
   UpdateChannelApiPayload,
   RegisterUserApiPayload,
+  VerifyAccountApiPayload,
 } from '@/interfaces/payloads';
 import { AxiosRequestConfig } from 'axios';
 
@@ -117,6 +118,13 @@ const apis = {
       organizationUserEmail,
       organizationUserPassword,
     });
+  },
+  verifyAccount: (payload?: VerifyAccountApiPayload) => {
+    const { emailTokenId } = payload || {};
+    return fetcher.post(
+      `/organizations/4aba77788ae94eca8d6ff330506af944/users/verify-account`,
+      { emailTokenId }
+    );
   },
 };
 

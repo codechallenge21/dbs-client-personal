@@ -57,3 +57,7 @@ export interface RegisterUserApiPayload {
   organizationUserEmail: string;
   organizationUserPassword: string;
 }
+
+export interface VerifyAccountApiPayload {
+  emailTokenId: string;
+}
