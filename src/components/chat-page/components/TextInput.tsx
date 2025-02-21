@@ -1,25 +1,23 @@
+import docPerview from '@/assets/Images/Doc Icon.svg';
+import imagePerview from '@/assets/Images/Image Icon.svg';
+import pdfPreview from '@/assets/Images/Pdf Icon.svg';
+import txtPerview from '@/assets/Images/Txt Icon.svg';
+import { SubmitUserInputsApiPayload } from '@/interfaces/payloads';
+import { CloseRounded, SendRounded } from '@mui/icons-material';
 import AttachFileRoundedIcon from '@mui/icons-material/AttachFileRounded';
 import MicRoundedIcon from '@mui/icons-material/MicRounded';
+import RotateRightRounded from '@mui/icons-material/RotateRightRounded';
 import {
   Box,
   IconButton,
   TextareaAutosize,
-  useTheme,
-  useMediaQuery,
   Typography,
 } from '@mui/material';
-import { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import RotateRightRounded from '@mui/icons-material/RotateRightRounded';
-import ChannelContentContext from '../../channel-context-provider/ChannelContentContext';
-import { SendRounded, CloseRounded } from '@mui/icons-material';
-import Image from 'next/image';
-import pdfPreview from '@/assets/Images/Pdf Icon.svg';
-import txtPerview from '@/assets/Images/Txt Icon.svg';
-import imagePerview from '@/assets/Images/Image Icon.svg';
-import docPerview from '@/assets/Images/Doc Icon.svg';
-import DropdownMenu from './DropdownMenu';
-import { SubmitUserInputsApiPayload } from '@/interfaces/payloads';
 import Cookies from 'js-cookie';
+import Image from 'next/image';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import ChannelContentContext from '../../channel-context-provider/ChannelContentContext';
+import DropdownMenu from './DropdownMenu';
 
 interface SpeechRecognition extends EventTarget {
   continuous: boolean;
@@ -72,15 +70,15 @@ type TextInputProps = {
   }>;
   isInteracting: boolean;
   setIsLoginOpen?: (value: boolean) => void;
+  from?: string;
 };
 
 const TextInput: React.FC<TextInputProps> = ({
   submitUserInputs,
   isInteracting,
   setIsLoginOpen,
+  from,
 }) => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [userInputValue, setUserInputValue] = useState('');
   const [isListening, setIsListening] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -284,25 +282,21 @@ const TextInput: React.FC<TextInputProps> = ({
       }
     }
   }, [handleSendMessage, isListening, userInputValue]);
-
   return (
     <>
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <Box
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
           width: '100%',
           maxWidth: '760px',
           minHeight: '116px',
-          position: 'relative',
+          position: from === 'mainContent' ? 'sticky' : 'relative',
           bottom: 0,
           backgroundColor: '#F5F5F5',
           borderRadius: '16px',
           zIndex: 10,
-          marginTop: isMobile ? 3 : 0,
           overflow: 'hidden',
-          justifyContent: 'flex-end',
+          margin: from === 'mainContent' ? 'auto' : '0',
         }}
         className="chat-text-input"
       >
@@ -366,21 +360,20 @@ const TextInput: React.FC<TextInputProps> = ({
                   {file.file.name}
                 </Typography>
                 <IconButton
-                  role="button"
                   aria-label="remove file"
                   sx={{
                     position: 'absolute',
                     top: '0px',
-                    left: '6px', // Adjusted for top-left placement
+                    left: '6px',
                     backgroundColor: 'red',
-                    width: '16px', // Smaller size for the button
+                    width: '16px',
                     height: '16px',
                     color: 'white',
                     '&:hover': {
-                      backgroundColor: 'darkred', // Optional hover effect
+                      backgroundColor: 'darkred',
                     },
                   }}
-                  onClick={() => handleRemoveFile(index)} // Your event handler
+                  onClick={() => handleRemoveFile(index)}
                 >
                   <CloseRounded sx={{ fontSize: '14px' }} />
                 </IconButton>
@@ -390,9 +383,7 @@ const TextInput: React.FC<TextInputProps> = ({
         )}
         <Box
           sx={{
-            width: '100%',
-            paddingTop: '16px',
-            paddingInline: '10px',
+            margin: '8px 0px 8px 16px',
             overflowY: 'auto',
             minHeight: '40px',
             maxHeight: '200px',
@@ -438,71 +429,65 @@ const TextInput: React.FC<TextInputProps> = ({
         <Box
           sx={{
             width: '100%',
-            marginTop: '8px',
-            // justifyContent: 'space-between',
+            justifyContent: 'space-between',
             display: 'flex',
-            gap: '4px',
-            flexWrap: 'wrap',
-            padding: '10px',
-            position: 'relative',
+            padding: '10px 16px 10px 6px',
           }}
         >
-          <IconButton
-            role="button"
-            aria-label="attach file"
-            component="span"
-            onDrop={handleDrop}
-            onDragOver={handleDragOver}
+          <Box
+            sx={{
+              width: '100%',
+              display: 'flex',
+            }}
           >
-            <AttachFileRoundedIcon
-              sx={{ transform: 'rotate(180deg)', color: 'black' }}
-              onClick={() => document.getElementById('file-upload')?.click()}
+            <input
+              type="file"
+              id="file-upload"
+              multiple
+              onChange={handleFileSelect}
+              style={{ display: 'none' }}
             />
-          </IconButton>
-          <DropdownMenu isTextInput advisor={advisorType} />
-
-          <input
-            type="file"
-            id="file-upload"
-            multiple
-            onChange={handleFileSelect}
-            style={{ display: 'none' }}
-          />
+            <Box sx={{ display: 'flex' }}>
+              <IconButton
+                aria-label="attach file"
+                component="span"
+                onDrop={handleDrop}
+                onDragOver={handleDragOver}
+                sx={{ padding: '8px' }}
+              >
+                <AttachFileRoundedIcon
+                  sx={{ transform: 'rotate(180deg)', color: 'black' }}
+                  onClick={() =>
+                    document.getElementById('file-upload')?.click()
+                  }
+                />
+              </IconButton>
+              <IconButton
+                aria-label="attach file"
+                sx={{ padding: '8px', borderRadius: '7px 10px' }}
+              >
+                <DropdownMenu isTextInput advisor={advisorType} />
+              </IconButton>
+            </Box>
+          </Box>
 
           {isInteracting ? (
-            <Box
-              sx={{
-                position: 'absolute',
-                bottom: '10px',
-                right: '10px',
-              }}
-            >
+            <Box>
               <RotateRightRounded sx={{ color: '#1877F2', fontSize: 24 }} />
             </Box>
           ) : userInputValue !== '' && !isListening ? (
             <IconButton
-              role="button"
               aria-label="send message"
-              sx={{
-                position: 'absolute',
-                bottom: '10px',
-                right: '10px',
-              }}
               onClick={handleClickSubmitOrAudioFileUpload}
             >
               <SendRounded sx={{ color: 'black' }} />
             </IconButton>
           ) : (
             <IconButton
-              role="button"
               aria-label="Audio Message"
               onClick={handleListening}
               className={isListening ? 'mic-listening' : ''}
-              sx={{
-                position: 'absolute',
-                bottom: '10px',
-                right: '10px',
-              }}
+              sx={{ padding: '8px' }}
             >
               <MicRoundedIcon
                 className={isListening ? 'mic-icon' : ''}

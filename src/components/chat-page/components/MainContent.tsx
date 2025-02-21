@@ -1,6 +1,6 @@
 import { Box, Typography, useTheme, useMediaQuery } from '@mui/material';
 import TextInput from './TextInput';
-import { useContext } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import ChannelContentContext from '../../channel-context-provider/ChannelContentContext';
 import ChannelMessagePanel from '../../channel-message-panel/ChannelMessagePanel';
 import Suggestions from './Suggestions';
@@ -77,7 +77,15 @@ const MainContent: React.FC<MainContentProps> = ({
     },
   ];
 
-  if (selectedChannel || selectedChannelId || chatResponses.length)
+  const boxRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (boxRef.current) {
+      boxRef.current.scrollTop = boxRef.current.scrollHeight;
+    }
+  }, [selectedChannel, chatResponses]);
+
+  if (selectedChannel || selectedChannelId || chatResponses.length) {
     return (
       <Box
         sx={{
@@ -86,21 +94,56 @@ const MainContent: React.FC<MainContentProps> = ({
           flexDirection: 'column',
           alignItems: 'center',
           pb: '16px',
-          px: '32px',
           justifyContent: isMobile ? 'flex-end' : 'center',
+          marginTop: '56px',
         }}
       >
-        <ChannelMessagePanel
-          channel={selectedChannel}
-          chatResponses={chatResponses}
-        />
-        {/* {isInteractingInChat && <InformationPage />} */}
-        <TextInput
-          submitUserInputs={submitUserInputs}
-          isInteracting={isInteracting}
-        />
+        <Box
+          ref={boxRef}
+          sx={{
+            width: '100%',
+            height: 'calc(100vh - 105px)',
+            overflow: 'auto !important',
+            '&::-webkit-scrollbar': {
+              width: '5px',
+            },
+            '&::-webkit-scrollbar-thumb': {
+              backgroundColor: '#c1c1c1',
+              borderRadius: '4px',
+            },
+            '&::-webkit-scrollbar-thumb:hover': {
+              backgroundColor: '#a8a8a8',
+            },
+            '&::-webkit-scrollbar-track': {
+              backgroundColor: '#f1f1f1',
+              borderRadius: '4px',
+            },
+          }}
+        >
+          <ChannelMessagePanel
+            channel={selectedChannel}
+            chatResponses={chatResponses}
+          />
+          <TextInput
+            from={'mainContent'}
+            submitUserInputs={submitUserInputs}
+            isInteracting={isInteracting}
+          />
+        </Box>
       </Box>
     );
+  }
+
+  const paddingTop = (() => {
+    if (isMobile) {
+      if (chatsData && chatsData.length > 0) {
+        return '30vh';
+      } else {
+        return '10vh';
+      }
+    }
+    return '0vh';
+  })();
 
   return (
     <Box
@@ -115,15 +158,7 @@ const MainContent: React.FC<MainContentProps> = ({
         minHeight: 0, // critical so that overflow can happen
         overflow: 'auto',
         justifyContent: 'center',
-        pt: isMobile
-          ? chatsData?.length
-            ? '50vh'
-            : '10vh'
-          : chatsData?.length
-          ? '20vh'
-          : '0vh',
-
-        mt: '10px',
+        pt: paddingTop,
       }}
     >
       <Typography
