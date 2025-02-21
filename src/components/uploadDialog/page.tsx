@@ -34,9 +34,19 @@ const FILE_CONFIG = {
     'audio/vnd.dlna.adts', // 'audio/aac',
     'video/mp4',
   ] as const,
-  allowedExtensions: ['.mp3', '.mp4', '.mpeg', '.mpga', '.m4a', '.wav', '.aac', '.webm'] as const,
+  allowedExtensions: [
+    '.mp3',
+    '.mp4',
+    '.mpeg',
+    '.mpga',
+    '.m4a',
+    '.wav',
+    '.aac',
+    '.webm',
+  ] as const,
   errorMessages: {
-    invalidFormat: '不支援的檔案格式，請選擇 mp3, mp4, mpeg, mpga, m4a, wav, aac 或 webm 格式',
+    invalidFormat:
+      '不支援的檔案格式，請選擇 mp3, mp4, mpeg, mpga, m4a, wav, aac 或 webm 格式',
     sizeExceeded: '檔案大小超過 200MB 限制',
     uploadFailed: '上傳失敗',
   },
@@ -64,7 +74,11 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
 
   const validateFile = async (file: File) => {
     try {
-      if (!FILE_CONFIG.allowedFormats.includes(file.type as typeof FILE_CONFIG.allowedFormats[number])) {
+      if (
+        !FILE_CONFIG.allowedFormats.includes(
+          file.type as (typeof FILE_CONFIG.allowedFormats)[number]
+        )
+      ) {
         setError(FILE_CONFIG.errorMessages.invalidFormat);
         return;
       }
@@ -82,7 +96,9 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
       });
 
       const { data } = res;
-      router.push(`/channel-summary?organizationChannelId=${data.organizationChannelId}`);
+      router.push(
+        `/channel-summary?organizationChannelId=${data.organizationChannelId}`
+      );
     } catch (error) {
       setError(FILE_CONFIG.errorMessages.uploadFailed);
       console.error(error);
@@ -90,14 +106,18 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
   };
 
   const handleDrop = (acceptedFiles: File[]) => {
-    if (acceptedFiles?.[0]) {
+    if (acceptedFiles && acceptedFiles.length > 0 && acceptedFiles[0]) {
       validateFile(acceptedFiles[0]);
     }
   };
 
+  const handleDropRejected = (fileRejections: any[]) => {
+    setError('檔案格式錯誤或檔案大小超過 200MB 限制');
+  };
+
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    if (e.target.files?.[0]) {
+    if (e.target.files && e.target.files.length > 0 && e.target.files[0]) {
       validateFile(e.target.files[0]);
       e.target.value = '';
     }
@@ -105,7 +125,10 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
 
   const handleClick = (event: React.MouseEvent) => {
     event.stopPropagation();
-    if (fileInputRef?.current && !fileInputRef.current.hasAttribute('data-clicked')) {
+    if (
+      fileInputRef?.current &&
+      !fileInputRef.current.hasAttribute('data-clicked')
+    ) {
       fileInputRef.current.setAttribute('data-clicked', 'true');
       fileInputRef.current.click();
       setTimeout(() => {
@@ -116,6 +139,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop: handleDrop,
+    onDropRejected: handleDropRejected,
     accept: {
       'audio/*': FILE_CONFIG.allowedExtensions,
     },
@@ -152,7 +176,6 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
       <Dialog
         role="dialog"
         open={open}
-        onClose={onClose}
         PaperProps={{
           sx: {
             bgcolor: '#fff',
@@ -220,7 +243,9 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
                 mb: '40px',
               }}
             >
-              {isDragActive ? '放開檔案以進行上傳' : '請將音訊檔案拖曳到這裡上傳'}
+              {isDragActive
+                ? '放開檔案以進行上傳'
+                : '請將音訊檔案拖曳到這裡上傳'}
             </Typography>
           )}
           <Button
@@ -269,7 +294,9 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
                 height: 'auto',
               }}
             >
-              {isMobile ? FILE_CONFIG.supportedFormats.mobile : FILE_CONFIG.supportedFormats.desktop}
+              {isMobile
+                ? FILE_CONFIG.supportedFormats.mobile
+                : FILE_CONFIG.supportedFormats.desktop}
             </Typography>
             <Typography
               sx={{
@@ -288,7 +315,11 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
         onClose={handleCloseError}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        <Alert onClose={handleCloseError} severity="error" sx={{ width: '100%' }}>
+        <Alert
+          onClose={handleCloseError}
+          severity="error"
+          sx={{ width: '100%' }}
+        >
           {error}
         </Alert>
       </Snackbar>

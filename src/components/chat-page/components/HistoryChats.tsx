@@ -26,6 +26,7 @@ const HistoryChats: React.FC<HistoryChatsProps> = ({
         justifyContent: 'center',
         alignItems: 'center',
         alignSelf: 'stretch',
+        pb: '16px',
       }}
     >
       {chats.slice(0, 6).map((chat, index) => (
