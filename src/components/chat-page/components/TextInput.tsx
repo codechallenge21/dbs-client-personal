@@ -207,7 +207,7 @@ const TextInput: React.FC<TextInputProps> = ({
 
   const handleOnChangeUserInput = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      const isLoggedin = Cookies.get('m_info');
+      const isLoggedin = Cookies.get('u_info');
       if (!isLoggedin) {
         if (setIsLoginOpen) setIsLoginOpen(true);
         return;
