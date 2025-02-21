@@ -53,7 +53,7 @@ const drawerItems = [
     route: '/popular'
   },
   {
-    text: '我的最愛',
+    text: '我的收藏',
     icon: <StarRounded sx={{ color: '#212B36' }} />,
     route: '/favorite'
   },
@@ -692,6 +692,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
       <MainBox
         open={openDataSource}
         sx={{
+          height: '100vh',
           marginRight: isMobile ? 0 : openDataSource ? '446px' : 0,
           overflow: 'auto',
           marginBottom: '16px',

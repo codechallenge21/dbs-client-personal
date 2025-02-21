@@ -1,5 +1,6 @@
 'use client';
 
+import React, { type FC, useState } from 'react';
 import type {
   OrganizationChannel,
   OrganizationChannelMessage,
@@ -13,11 +14,6 @@ import {
   IconButton,
   Tooltip,
 } from '@mui/material';
-import type { FC } from 'react';
-import ReactMarkdown from 'react-markdown';
-import Image from 'next/image';
-import imagePreview from '@/assets/Images/Image Icon.svg';
-import React from 'react';
 import {
   PermIdentityRounded,
   LibraryBooksRounded,
@@ -26,6 +22,9 @@ import {
   Done as DoneIcon,
   ThumbDown,
 } from '@mui/icons-material';
+import Image from 'next/image';
+import imagePreview from '@/assets/Images/Image Icon.svg';
+import MermaidMarkdown from '../MermaidChart/Mermaidmarkdown';
 
 export interface ChannelMessagePanelProps {
   channel?: OrganizationChannel;
@@ -39,9 +38,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
-  const [copiedMessageId, setCopiedMessageId] = React.useState<string | null>(
-    null
-  );
+  const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
 
   const copyPrompt = (text: string, messageId: string) => {
     navigator.clipboard.writeText(text).then(
@@ -109,13 +106,13 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
     >
       <Box
         sx={{
-          pt: '16px',
           display: 'flex',
           width: '100%',
           maxWidth: '760px',
           flexDirection: 'column',
-          height: isMobile ? '100%' : 'calc(100% - 81px)',
           minWidth: isMobile ? '100%' : isTablet ? '350px' : '760px',
+          overflow: 'auto',
+          height: '100%',
         }}
       >
         {sortedData?.map((message, messageIndex) => (
@@ -200,7 +197,6 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                     arrow
                   >
                     <IconButton
-                      role="button"
                       aria-label="copy"
                       sx={{
                         display: 'flex',
@@ -228,9 +224,9 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                   </Tooltip>
                 </Box>
               )}
-              <ReactMarkdown>
-                {message.organizationChannelMessageContent}
-              </ReactMarkdown>
+              <MermaidMarkdown
+                chartData={message.organizationChannelMessageContent}
+              />
               {message.organizationChannelMessageType === 'AI' && (
                 <Box
                   sx={{
@@ -345,7 +341,6 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                   arrow
                 >
                   <IconButton
-                    role="button"
                     aria-label="copy"
                     sx={{
                       display: 'flex',
@@ -425,9 +420,9 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                   },
                 }}
               >
-                <ReactMarkdown>
-                  {message.organizationChannelMessageContent}
-                </ReactMarkdown>
+                <MermaidMarkdown
+                  chartData={message.organizationChannelMessageContent}
+                />
                 {message.organizationChannelMessageType === 'AI' && (
                   <Box
                     sx={{

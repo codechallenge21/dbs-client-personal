@@ -1,65 +1,166 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Box,
-  Grid,
   Card,
+  List,
+  Grid2,
   Button,
+  useTheme,
+  ListItem,
+  IconButton,
   Typography,
   CardContent,
+  ListItemText,
+  useMediaQuery,
 } from '@mui/material';
-import { WorkRounded } from '@mui/icons-material';
+import {
+  ArrowForwardIosRounded,
+  DownloadRounded,
+  MenuRounded,
+  WorkRounded,
+} from '@mui/icons-material';
 import Image from 'next/image';
 import boxImage from '../../../public/assets/images/box.png';
 import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
 
 export default function PopularArea() {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const focusRef = useRef<HTMLDivElement>(null);
   const recommendationsRef = useRef<HTMLDivElement>(null);
   const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(true);
+  const [isFocusScrolledLeft, setIsFocusScrolledLeft] = useState(true);
+  const [isFocusScrolledRight, setIsFocusScrolledRight] = useState(false);
+  const [isRecommendedScrolledLeft, setIsRecommendedScrolledLeft] =
+    useState(true);
+  const [isRecommendedScrolledRight, setIsRecommendedScrolledRight] =
+    useState(false);
+  const tolerance = 5; // Adjust if necessary
 
-  // Function to handle mouse drag scrolling
-  const enableDragScroll = (ref: React.RefObject<HTMLDivElement | null>) => {
-    if (!ref.current) return;
+  const handleFocusScrollRight = () => {
+    if (focusRef.current) {
+      const itemWidth = 260 + 16;
+      const scrollDelta = itemWidth * (isMobile ? 1 : 3);
+      const newScrollLeft = focusRef.current.scrollLeft + scrollDelta;
 
-    let isDragging = false;
-    let startX = 0;
-    let scrollLeft = 0;
+      // Trigger smooth scrolling
+      focusRef.current.scrollBy({
+        behavior: 'smooth',
+        left: scrollDelta,
+      });
 
-    const onMouseDown = (e: MouseEvent) => {
-      isDragging = true;
-      startX = e.pageX - ref.current!.offsetLeft;
-      scrollLeft = ref.current!.scrollLeft;
-    };
-
-    const onMouseMove = (e: MouseEvent) => {
-      if (!isDragging) return;
-      e.preventDefault();
-      const x = e.pageX - ref.current!.offsetLeft;
-      const walk = (x - startX) * 1.5; // Adjust scrolling speed
-      ref.current!.scrollLeft = scrollLeft - walk;
-    };
-
-    const onMouseUp = () => (isDragging = false);
-
-    ref.current.addEventListener('mousedown', onMouseDown);
-    ref.current.addEventListener('mousemove', onMouseMove);
-    ref.current.addEventListener('mouseup', onMouseUp);
-    ref.current.addEventListener('mouseleave', onMouseUp);
-
-    return () => {
-      ref.current!.removeEventListener('mousedown', onMouseDown);
-      ref.current!.removeEventListener('mousemove', onMouseMove);
-      ref.current!.removeEventListener('mouseup', onMouseUp);
-      ref.current!.removeEventListener('mouseleave', onMouseUp);
-    };
+      const { clientWidth, scrollWidth } = focusRef.current;
+      // Optimistically update state
+      setIsFocusScrolledLeft(newScrollLeft <= tolerance);
+      setIsFocusScrolledRight(
+        newScrollLeft >= scrollWidth - clientWidth - tolerance
+      );
+    }
   };
 
-  React.useEffect(() => {
+  const handleFocusScrollLeft = () => {
     if (focusRef.current) {
-      enableDragScroll(focusRef);
+      const itemWidth = 260 + 16;
+      const scrollDelta = itemWidth * (isMobile ? 1 : 3);
+      const newScrollLeft = focusRef.current.scrollLeft - scrollDelta;
+
+      focusRef.current.scrollBy({
+        behavior: 'smooth',
+        left: -scrollDelta,
+      });
+
+      const { clientWidth, scrollWidth } = focusRef.current;
+      setIsFocusScrolledLeft(newScrollLeft <= tolerance);
+      setIsFocusScrolledRight(
+        newScrollLeft >= scrollWidth - clientWidth - tolerance
+      );
     }
+  };
+
+  const handleRecommendedScrollRight = () => {
     if (recommendationsRef.current) {
-      enableDragScroll(recommendationsRef);
+      const itemWidth = 260 + 16;
+      const scrollDelta = itemWidth * (isMobile ? 1 : 3);
+      const newScrollLeft = recommendationsRef.current.scrollLeft + scrollDelta;
+
+      recommendationsRef.current.scrollBy({
+        behavior: 'smooth',
+        left: scrollDelta,
+      });
+
+      const { clientWidth, scrollWidth } = recommendationsRef.current;
+      setIsRecommendedScrolledLeft(newScrollLeft <= tolerance);
+      setIsRecommendedScrolledRight(
+        newScrollLeft >= scrollWidth - clientWidth - tolerance
+      );
+    }
+  };
+
+  const handleRecommendedScrollLeft = () => {
+    if (recommendationsRef.current) {
+      const itemWidth = 260 + 16;
+      const scrollDelta = itemWidth * (isMobile ? 1 : 3);
+      const newScrollLeft = recommendationsRef.current.scrollLeft - scrollDelta;
+
+      recommendationsRef.current.scrollBy({
+        behavior: 'smooth',
+        left: -scrollDelta,
+      });
+
+      const { clientWidth, scrollWidth } = recommendationsRef.current;
+      setIsRecommendedScrolledLeft(newScrollLeft <= tolerance);
+      setIsRecommendedScrolledRight(
+        newScrollLeft >= scrollWidth - clientWidth - tolerance
+      );
+    }
+  };
+
+  const handleFocusScroll = () => {
+    if (focusRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = focusRef.current;
+      setIsFocusScrolledLeft(scrollLeft <= tolerance);
+      setIsFocusScrolledRight(
+        scrollLeft >= scrollWidth - clientWidth - tolerance
+      );
+    }
+  };
+
+  const handleRecommendedScroll = () => {
+    if (recommendationsRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } =
+        recommendationsRef.current;
+      setIsRecommendedScrolledLeft(scrollLeft <= tolerance);
+      setIsRecommendedScrolledRight(
+        scrollLeft >= scrollWidth - clientWidth - tolerance
+      );
+    }
+  };
+
+  useEffect(() => {
+    if (focusRef.current) {
+      focusRef.current.addEventListener('scroll', handleFocusScroll);
+      handleFocusScroll();
+
+      return () => {
+        focusRef?.current?.removeEventListener('scroll', handleFocusScroll);
+      };
+    }
+  }, []);
+
+  useEffect(() => {
+    if (recommendationsRef.current) {
+      recommendationsRef.current.addEventListener(
+        'scroll',
+        handleRecommendedScroll
+      );
+      handleRecommendedScroll();
+
+      return () => {
+        recommendationsRef?.current?.removeEventListener(
+          'scroll',
+          handleRecommendedScroll
+        );
+      };
     }
   }, []);
 
@@ -71,284 +172,701 @@ export default function PopularArea() {
   return (
     <Box
       sx={{
-        minHeight: '100vh',
+        height: '100vh',
+        display: 'flex',
+        overflow: 'hidden',
+        flexDirection: 'column',
         background: 'var(--Primary-, #EBE3DD)',
       }}
     >
       <ToolbarDrawer open={isOpenDrawer} setIsOpenDrawer={setIsOpenDrawer}>
+        {isMobile && (
+          <Box
+            sx={{
+              flexShrink: 0,
+              width: '100%',
+              height: '64px',
+              display: 'flex',
+              padding: '8px 16px',
+              alignItems: 'center',
+              borderRadius: '8px 0px 0px 8px',
+              background: 'var(--Primary-White, #FFF)',
+            }}
+          >
+            <IconButton
+              sx={{
+                padding: '8px',
+                display: 'flex',
+                alignItems: 'center',
+                borderRadius: '50px',
+                justifyContent: 'center',
+              }}
+              onClick={() => setIsOpenDrawer(true)}
+            >
+              <MenuRounded
+                sx={{ width: '24px', height: '24px', color: '#212B36' }}
+              />
+            </IconButton>
+            <Box
+              sx={{
+                flex: '1 0 0',
+                height: '40px',
+                display: 'flex',
+                minHeight: '32px',
+                alignItems: 'center',
+                padding: '4px 0px 4px 8px',
+              }}
+            >
+              <Typography
+                sx={{
+                  fontWeight: 400,
+                  fontSize: '16px',
+                  fontStyle: 'normal',
+                  lineHeight: 'normal',
+                  textOverflow: 'ellipsis',
+                  fontFamily: 'DFPHeiBold-B5',
+                  color: 'var(--Secondary-Dark-Gray, #4A4A4A)',
+                }}
+              >
+                發燒內容
+              </Typography>
+            </Box>
+          </Box>
+        )}
         <Box
           sx={{
-            minHeight: '96vh',
-            maxHeight: '96vh',
+            gap: '20px',
+            display: 'flex',
             overflowY: 'auto',
             borderRadius: '8px',
-            padding: '16px 32px',
+            flexDirection: 'column',
             backgroundColor: 'white',
+            height: isMobile ? '100%' : '96vh',
+            padding: isMobile ? '16px' : '16px 32px',
+            '@media (min-width: 600px)': {
+              flex: '1 0 0',
+            },
+            '&::-webkit-scrollbar': {
+              width: '6px',
+            },
+            '&::-webkit-scrollbar-track': {
+              borderRadius: '10px',
+              background: '#f1f1f1',
+            },
+            '&::-webkit-scrollbar-thumb': {
+              borderRadius: '10px',
+              background: '#888',
+            },
+            '&::-webkit-scrollbar-thumb:hover': {
+              background: '#555',
+            },
           }}
         >
-          <Typography
-            gutterBottom
-            sx={{
-              fontWeight: 400,
-              fontSize: '24px',
-              fontStyle: 'normal',
-              lineHeight: 'normal',
-              marginBottom: '16px',
-              fontFamily: 'DFPHeiBold-B5',
-              color: 'var(--Primary-Black, #212B36)',
-            }}
-          >
-            焦點
-          </Typography>
           <Box
-            ref={focusRef}
             sx={{
               gap: '16px',
-              cursor: 'grab',
               display: 'flex',
-              overflow: 'hidden',
-              marginBottom: '20px',
+              minHeight: '260px',
+              overflow: 'visible',
+              position: 'relative',
+              flexDirection: 'column',
             }}
           >
-            {focusItems.map((_, index) => (
-              <Box
-                key={index}
-                sx={{
-                  display: 'flex',
-                  minWidth: '255px',
-                  minHeight: '220px',
-                  alignItems: 'center',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                }}
-              >
-                <Image
-                  src={boxImage}
-                  alt="Boxed Image"
-                  style={{
-                    width: '100%',
-                    height: '130px',
-                    objectFit: 'cover',
-                    borderTopLeftRadius: '8px',
-                    borderTopRightRadius: '8px',
-                  }}
-                />
-                <Box
-                  sx={{
-                    width: '100%',
-                    borderBottomLeftRadius: '8px',
-                    borderBottomRightRadius: '8px',
-                    backgroundColor: 'var(--Primary-, #EBE3DD)',
-                  }}
-                >
-                  <Typography
-                    variant="h6"
-                    component="div"
-                    sx={{
-                      fontWeight: 'bold',
-                      marginLeft: '20px',
-                      marginTop: '10px',
-                    }}
-                  >
-                    標題
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="textSecondary"
-                    sx={{ marginLeft: '20px', marginBottom: '20px' }}
-                  >
-                    説明文字
-                  </Typography>
-                </Box>
-              </Box>
-            ))}
-          </Box>
-
-          <Typography
-            gutterBottom
-            sx={{
-              fontWeight: 400,
-              fontSize: '24px',
-              fontStyle: 'normal',
-              lineHeight: 'normal',
-              marginBottom: '16px',
-              fontFamily: 'DFPHeiBold-B5',
-              color: 'var(--Primary-Black, #212B36)',
-            }}
-          >
-            工具下載
-          </Typography>
-          <Grid
-            container
-            spacing={2}
-            sx={{
-              marginBottom: '20px',
-            }}
-          >
-            {toolItems.map((_, index) => (
-              <Grid key={index} component="div" xs={6} sm={4} md={3} lg={2}>
-                <Box sx={{ padding: '16px', textAlign: 'center' }}>
-                  <WorkRounded
-                    sx={{
-                      width: '71px',
-                      height: '72px',
-                      color: 'black',
-                      marginBottom: '20px',
-                    }}
-                  />
-                  <Typography variant="body2">工具名称</Typography>
-                </Box>
-              </Grid>
-            ))}
-          </Grid>
-          <Typography
-            gutterBottom
-            sx={{
-              fontWeight: 400,
-              fontSize: '24px',
-              fontStyle: 'normal',
-              lineHeight: 'normal',
-              marginBottom: '16px',
-              fontFamily: 'DFPHeiBold-B5',
-              color: 'var(--Primary-Black, #212B36)',
-            }}
-          >
-            為您推薦
-          </Typography>
-          <Box
-            ref={recommendationsRef}
-            sx={{
-              gap: '16px',
-              cursor: 'grab',
-              display: 'flex',
-              overflow: 'hidden',
-              marginBottom: '20px',
-            }}
-          >
-            {recommendedItems.map((_, index) => (
-              <Card
-                key={index}
-                sx={{
-                  flexShrink: 0,
-                  width: '268px',
-                  height: '114px',
-                  padding: '16px',
-                  borderRadius: '8px',
-                  backgroundColor: 'var(--Primary-, #EBE3DD)',
-                }}
-              >
-                <CardContent sx={{ padding: 0 }}>
-                  <Typography
-                    sx={{
-                      fontWeight: 400,
-                      fontSize: '14px',
-                      lineHeight: '22px',
-                      fontStyle: 'normal',
-                      fontFamily: 'DFPHeiMedium-B5',
-                      color: 'var(--Primary-Black, #212B36)',
-                    }}
-                  >
-                    類別
-                  </Typography>
-                  <Typography
-                    sx={{
-                      color: 'var(--Primary-Black, #212B36)',
-                      fontFamily: 'Inter',
-                      fontSize: '24px',
-                      fontStyle: 'normal',
-                      fontWeight: 600,
-                      lineHeight: 'normal',
-                    }}
-                  >
-                    標題
-                  </Typography>
-                  <Typography
-                    sx={{
-                      overflow: 'hidden',
-                      color: 'var(--Primary-Black, #212B36)',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap',
-                      fontFamily: 'Open Sans',
-                      fontSize: '16px',
-                      fontStyle: 'normal',
-                      fontWeight: 400,
-                      lineHeight: 'normal',
-                    }}
-                  >
-                    社工在財務類別的知識中，了解如何...
-                  </Typography>
-                </CardContent>
-              </Card>
-            ))}
-          </Box>
-          <Box sx={{ padding: '0px' }}>
             <Typography
-              gutterBottom
               sx={{
                 fontWeight: 400,
                 fontSize: '24px',
                 fontStyle: 'normal',
                 lineHeight: 'normal',
-                marginBottom: '16px',
+                fontFamily: 'DFPHeiBold-B5',
+                color: 'var(--Primary-Black, #212B36)',
+              }}
+            >
+              焦點
+            </Typography>
+            <Box
+              sx={{
+                display: 'flex',
+                minHeight: '220px',
+                position: 'relative',
+              }}
+            >
+              <Box
+                ref={focusRef}
+                sx={{
+                  gap: '16px',
+                  width: '100%',
+                  display: 'flex',
+                  minHeight: '220px',
+                }}
+              >
+                {focusItems.map((_, index) => (
+                  <Box
+                    key={index}
+                    sx={{
+                      display: 'flex',
+                      minWidth: '260px',
+                      minHeight: '220px',
+                      alignItems: 'center',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      '&:hover': {
+                        '& .hover-text': {
+                          color: '#990000',
+                        },
+                        '& .hover-box': {
+                          backgroundColor: '#CC00000D',
+                        },
+                      },
+                    }}
+                  >
+                    <Image
+                      src={boxImage}
+                      alt="Boxed Image"
+                      style={{
+                        width: '100%',
+                        height: '130px',
+                        objectFit: 'cover',
+                        borderTopLeftRadius: '8px',
+                        borderTopRightRadius: '8px',
+                      }}
+                    />
+                    <Box
+                      className="hover-box"
+                      sx={{
+                        gap: '4px',
+                        display: 'flex',
+                        alignSelf: 'stretch',
+                        flexDirection: 'column',
+                        alignItems: 'flex-start',
+                        borderBottomLeftRadius: '8px',
+                        padding: '24px 16px 16px 16px',
+                        borderBottomRightRadius: '8px',
+                        backgroundColor: 'var(--Primary-, #EBE3DD)',
+                        '&:hover': {
+                          backgroundColor: '#CC00000D',
+                        },
+                      }}
+                    >
+                      <Typography
+                        className="hover-text"
+                        sx={{
+                          fontWeight: 400,
+                          fontSize: '24px',
+                          overflow: 'hidden',
+                          fontStyle: 'normal',
+                          lineHeight: 'normal',
+                          textOverflow: 'ellipsis',
+                          fontFamily: 'DFPHeiBold-B5',
+                          color: 'var(--Primary-Black, #212B36)',
+                        }}
+                      >
+                        標題
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="textSecondary"
+                        sx={{
+                          fontWeight: 400,
+                          fontSize: '16px',
+                          lineHeight: '24px',
+                          fontStyle: 'normal',
+                          fontFamily: 'DFPHeiMedium-B5',
+                          color: 'var(--Text-, #454A4D)',
+                        }}
+                      >
+                        説明文字
+                      </Typography>
+                    </Box>
+                  </Box>
+                ))}
+              </Box>
+              {!isFocusScrolledRight && (
+                <IconButton
+                  onClick={handleFocusScrollRight}
+                  sx={{
+                    top: '90px',
+                    right: '5px',
+                    width: '28px',
+                    height: '28px',
+                    padding: '5px',
+                    borderRadius: '50px',
+                    '&:hover': {
+                      backgroundColor: 'rgba(204, 0, 0, 0.40)',
+                    },
+                    zIndex: 10,
+                    position: 'absolute',
+                    backgroundColor: 'rgba(204, 0, 0, 0.60)',
+                  }}
+                >
+                  <ArrowForwardIosRounded
+                    sx={{ width: '18px', height: '18px', color: 'white' }}
+                  />
+                </IconButton>
+              )}
+              {!isFocusScrolledLeft && (
+                <IconButton
+                  onClick={handleFocusScrollLeft}
+                  sx={{
+                    top: '90px',
+                    left: '5px',
+                    width: '28px',
+                    height: '28px',
+                    padding: '5px',
+                    borderRadius: '50px',
+                    '&:hover': {
+                      backgroundColor: 'rgba(204, 0, 0, 0.40)',
+                    },
+                    zIndex: 10,
+                    position: 'absolute',
+                    backgroundColor: 'rgba(204, 0, 0, 0.60)',
+                  }}
+                >
+                  <ArrowForwardIosRounded
+                    sx={{
+                      width: '18px',
+                      height: '18px',
+                      color: 'white',
+                      transform: 'scaleX(-1)',
+                    }}
+                  />
+                </IconButton>
+              )}
+            </Box>
+          </Box>
+
+          <Box
+            sx={{
+              gap: '16px',
+              height: 'auto',
+              display: 'flex',
+              overflow: 'visible',
+              flexDirection: 'column',
+            }}
+          >
+            <Typography
+              sx={{
+                fontWeight: 400,
+                fontSize: '24px',
+                fontStyle: 'normal',
+                lineHeight: 'normal',
+                fontFamily: 'DFPHeiBold-B5',
+                color: 'var(--Primary-Black, #212B36)',
+              }}
+            >
+              工具下載
+            </Typography>
+            <Grid2 container>
+              {toolItems.map((_, index) => (
+                <Grid2
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                  key={index}
+                  size={{ xs: 6, sm: 4, md: 3, lg: 2 }}
+                >
+                  <Box
+                    sx={{
+                      gap: '20px',
+                      width: '173px',
+                      height: '140px',
+                      display: 'flex',
+                      padding: '16px',
+                      borderRadius: '8px',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      position: 'relative',
+                      flexDirection: 'column',
+                      backgroundColor: 'white',
+                      '&:hover': {
+                        backgroundColor: '#CC00000D',
+                        '& .download-icon': {
+                          display: 'block',
+                        },
+                      },
+                    }}
+                  >
+                    <WorkRounded
+                      sx={{
+                        width: '71px',
+                        height: '72px',
+                        color: 'black',
+                      }}
+                    />
+                    <Typography variant="body2">工具名称</Typography>
+                    <DownloadRounded
+                      className="download-icon"
+                      sx={{
+                        display: 'none',
+                        position: 'absolute',
+                        top: '8px',
+                        right: '8px',
+                        color: 'black',
+                      }}
+                    />
+                  </Box>
+                </Grid2>
+              ))}
+            </Grid2>
+          </Box>
+
+          <Box
+            sx={{
+              gap: '16px',
+              display: 'flex',
+              minHeight: '186px',
+              flexDirection: 'column',
+            }}
+          >
+            <Typography
+              sx={{
+                fontWeight: 400,
+                fontSize: '24px',
+                fontStyle: 'normal',
+                lineHeight: 'normal',
+                fontFamily: 'DFPHeiBold-B5',
+                color: 'var(--Primary-Black, #212B36)',
+              }}
+            >
+              為您推薦
+            </Typography>
+            <Box
+              sx={{
+                gap: '16px',
+                display: 'flex',
+                minHeight: '146px',
+                position: 'relative',
+              }}
+            >
+              <Box
+                ref={recommendationsRef}
+                sx={{
+                  gap: '16px',
+                  width: '100%',
+                  display: 'flex',
+                }}
+              >
+                {recommendedItems.map((_, index) => (
+                  <Card
+                    key={index}
+                    sx={{
+                      flexShrink: 0,
+                      flex: '1 0 0',
+                      width: '268px',
+                      height: '146px',
+                      padding: '16px',
+                      display: 'flex',
+                      minWidth: '300px',
+                      maxWidth: '384px',
+                      boxShadow: 'none',
+                      minHeight: '114px',
+                      maxHeight: '146px',
+                      borderRadius: '8px',
+                      flexDirection: 'column',
+                      alignItems: 'flex-start',
+                      backgroundColor: 'var(--Primary-, #EBE3DD)',
+                      '&:hover': {
+                        backgroundColor: '#CC00000D',
+                        '& .hover-text': {
+                          color: '#990000',
+                        },
+                        '& .hover-icon': {
+                          color: '#990000',
+                          marginLeft: '5px',
+                          transition: 'margin-left 300ms ease-in-out',
+                        },
+                      },
+                    }}
+                  >
+                    <CardContent
+                      sx={{
+                        gap: '20px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        padding: '0 !important',
+                        paddingBottom: '0 !important',
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          gap: '8px',
+                          display: 'flex',
+                          alignSelf: 'stretch',
+                          flexDirection: 'column',
+                          alignItems: 'flex-start',
+                        }}
+                      >
+                        <Typography
+                          className="hover-text"
+                          sx={{
+                            fontWeight: 400,
+                            fontSize: '14px',
+                            lineHeight: '22px',
+                            fontStyle: 'normal',
+                            fontFamily: 'DFPHeiMedium-B5',
+                            color: 'var(--Primary-Black, #212B36)',
+                          }}
+                        >
+                          類別
+                        </Typography>
+                        <Box
+                          sx={{
+                            gap: '4px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            alignSelf: 'stretch',
+                          }}
+                        >
+                          <Typography
+                            className="hover-text"
+                            sx={{
+                              fontWeight: 600,
+                              fontSize: '24px',
+                              fontFamily: 'Inter',
+                              fontStyle: 'normal',
+                              lineHeight: 'normal',
+                              color: 'var(--Primary-Black, #212B36)',
+                            }}
+                          >
+                            標題
+                          </Typography>
+                          <IconButton
+                            sx={{
+                              padding: '0',
+                              '&:hover': {
+                                backgroundColor: 'transparent',
+                              },
+                            }}
+                          >
+                            <ArrowForwardIosRounded
+                              className="hover-icon"
+                              sx={{ color: 'black' }}
+                            />
+                          </IconButton>
+                        </Box>
+                      </Box>
+                      <Typography
+                        sx={{
+                          fontWeight: 400,
+                          fontSize: '16px',
+                          fontStyle: 'normal',
+                          lineHeight: 'normal',
+                          whiteSpace: 'nowrap',
+                          fontFamily: 'Open Sans',
+                          textOverflow: 'ellipsis',
+                          color: 'var(--Primary-Black, #212B36)',
+                        }}
+                      >
+                        社工在財務類別的知識中，了解如何...
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                ))}
+              </Box>
+
+              {!isRecommendedScrolledRight && (
+                <IconButton
+                  onClick={handleRecommendedScrollRight}
+                  sx={{
+                    top: '60px',
+                    right: '8px',
+                    width: '28px',
+                    height: '28px',
+                    padding: '5px',
+                    borderRadius: '50px',
+                    '&:hover': {
+                      backgroundColor: 'rgba(204, 0, 0, 0.40)',
+                    },
+                    zIndex: 10,
+                    position: 'absolute',
+                    backgroundColor: 'rgba(204, 0, 0, 0.60)',
+                  }}
+                >
+                  <ArrowForwardIosRounded
+                    sx={{
+                      width: '18px',
+                      height: '18px',
+                      color: 'white',
+                    }}
+                  />
+                </IconButton>
+              )}
+              {!isRecommendedScrolledLeft && (
+                <IconButton
+                  onClick={handleRecommendedScrollLeft}
+                  sx={{
+                    top: '60px',
+                    left: '8px',
+                    width: '28px',
+                    height: '28px',
+                    padding: '5px',
+                    borderRadius: '50px',
+                    '&:hover': {
+                      backgroundColor: 'rgba(204, 0, 0, 0.40)',
+                    },
+                    zIndex: 10,
+                    position: 'absolute',
+                    backgroundColor: 'rgba(204, 0, 0, 0.60)',
+                  }}
+                >
+                  <ArrowForwardIosRounded
+                    sx={{
+                      width: '18px',
+                      height: '18px',
+                      color: 'white',
+                      transform: 'scaleX(-1)',
+                    }}
+                  />
+                </IconButton>
+              )}
+            </Box>
+          </Box>
+
+          <Box
+            sx={{
+              gap: '16px',
+              padding: '0px',
+              display: 'flex',
+              overflow: 'visible',
+              alignSelf: 'stretch',
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+            }}
+          >
+            <Typography
+              sx={{
+                fontWeight: 400,
+                fontSize: '24px',
+                fontStyle: 'normal',
+                lineHeight: 'normal',
                 fontFamily: 'DFPHeiBold-B5',
                 color: 'var(--Primary-Black, #212B36)',
               }}
             >
               常見問題
             </Typography>
-            {FAQItems.map((_, index) => (
-              <Box
-                key={index}
-                sx={{
-                  display: 'flex',
-                  borderRadius: '8px',
-                  marginBottom: '16px',
-                  alignItems: 'center',
-                  padding: ' 12px 16px',
-                  justifyContent: 'space-between',
-                  backgroundColor: 'var(--Primary-, #EBE3DD)',
-                }}
-              >
-                <Box>
-                  <Typography variant="body2" sx={{ color: '#4f4f4f' }}>
-                    類別
-                  </Typography>
-                  <Typography
-                    variant="h6"
-                    sx={{ color: '#000', marginTop: '8px' }}
-                  >
-                    標題
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{ color: '#4f4f4f', marginTop: '4px' }}
-                  >
-                    內容
-                  </Typography>
-                </Box>
-                <Button
-                  role="button"
-                  aria-label="more"
-                  variant="outlined"
+
+            <Box
+              sx={{
+                gap: '16px',
+                display: 'flex',
+                alignItems: 'center',
+                alignSelf: 'stretch',
+                flexDirection: 'column',
+              }}
+            >
+              {FAQItems.map((_, index) => (
+                <Box
+                  key={index}
                   sx={{
-                    color: 'red',
-                    fontSize: '14px',
-                    borderColor: 'red',
+                    gap: '20px',
+                    display: 'flex',
                     borderRadius: '8px',
-                    padding: '6px 12px',
-                    fontStyle: 'normal',
-                    fontWeight: 700,
-                    lineHeight: '24px',
-                    '&:hover': {
-                      color: 'darkred',
-                      borderColor: 'darkred',
-                    },
+                    padding: '12px 16px',
+                    alignSelf: 'stretch',
+                    alignItems: 'center',
+                    background: 'var(--Primary-, #EBE3DD)',
                   }}
                 >
-                  更多
-                </Button>
-              </Box>
-            ))}
+                  <Box
+                    sx={{
+                      gap: '8px',
+                      flex: '1 0 0',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'flex-start',
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        height: '24px',
+                        display: 'flex',
+                        fontWeight: 400,
+                        fontSize: '14px',
+                        fontStyle: 'normal',
+                        lineHeight: 'normal',
+                        alignSelf: 'stretch',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        fontFamily: 'DFPHeiBold-B5',
+                        color: 'var(--Secondary-Dark-Gray, #4A4A4A)',
+                      }}
+                    >
+                      類別
+                    </Typography>
+                    <List sx={{ padding: '0' }}>
+                      <ListItem
+                        sx={{
+                          gap: '8px',
+                          padding: '0',
+                          display: 'flex',
+                          alignSelf: 'stretch',
+                          flexDirection: 'column',
+                          alignItems: 'flex-start',
+                        }}
+                      >
+                        <ListItemText
+                          sx={{ padding: '0' }}
+                          primary="標題"
+                          secondary="內容"
+                          slotProps={{
+                            primary: {
+                              sx: {
+                                fontWeight: 400,
+                                fontSize: '20px',
+                                fontStyle: 'normal',
+                                alignSelf: 'stretch',
+                                lineHeight: 'normal',
+                                fontFamily: 'DFPHeiBold-B5',
+                                color: 'var(--Primary-Black, #212B36)',
+                              },
+                            },
+                            secondary: {
+                              sx: {
+                                fontWeight: 400,
+                                fontSize: '16px',
+                                lineHeight: '24px',
+                                fontStyle: 'normal',
+                                alignSelf: 'stretch',
+                                fontFamily: 'DFPHeiMedium-B5',
+                                color: 'var(--Secondary-Dark-Gray, #4A4A4A)',
+                              },
+                            },
+                          }}
+                        />
+                      </ListItem>
+                    </List>
+                  </Box>
+                  <Button
+                    sx={{
+                      gap: '8px',
+                      display: 'flex',
+                      padding: '6px 12px',
+                      borderRadius: '8px',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      border: '1px solid var(--Primary-DBS-Red, #C00)',
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        fontWeight: 700,
+                        fontSize: '14px',
+                        lineHeight: '24px',
+                        textAlign: 'center',
+                        fontStyle: 'normal',
+                        fontFamily: 'Public Sans',
+                        color: 'var(--Primary-DBS-Red, #C00)',
+                      }}
+                    >
+                      更多
+                    </Typography>
+                  </Button>
+                </Box>
+              ))}
+            </Box>
           </Box>
         </Box>
       </ToolbarDrawer>
