@@ -2,50 +2,86 @@
 
 import { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { Container, CircularProgress, Typography } from '@mui/material';
+import { Container, CircularProgress, Snackbar, Alert } from '@mui/material';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import apis from '@/utils/hooks/apis/apis';
 
 const VerifyAccountPage = () => {
-  // Get the emailTokenId from the URL query string.
+  // Retrieve the emailTokenId query parameter
   const searchParams = useSearchParams();
   const emailTokenId = searchParams.get('emailTokenId');
-  console.log('emailTokenId:', emailTokenId);
   const router = useRouter();
-  // Use your custom hook to get the verifyAccount API function.
+  // Setup the verifyAccount API hook
   const { excute: verifyAccount, isLoading } = useAxiosApi(apis.verifyAccount);
 
-  const [message, setMessage] = useState('');
+  // Snackbar states
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>(
+    'success'
+  );
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
 
   useEffect(() => {
     if (emailTokenId) {
       verifyAccount({ emailTokenId })
         .then((response) => {
           if (response.status === 200) {
-            setMessage('Email is verified. Redirecting to home page...');
-            // After a short delay, redirect to home and open the login dialog.
+            setSnackbarMessage('Email is verified');
+            setSnackbarSeverity('success');
+            setSnackbarOpen(true);
+            // Redirect to home with login dialog open after a short delay
             setTimeout(() => {
               router.push('/?login=true');
-            }, 2000);
+            }, 2500);
           } else {
-            setMessage('Verification failed. Please try again.');
+            setSnackbarMessage('Verification failed. Please try again.');
+            setSnackbarSeverity('error');
+            setSnackbarOpen(true);
+            setTimeout(() => {
+              router.push('/');
+            }, 2500);
           }
         })
         .catch(() => {
-          setMessage('Verification failed. Please try again.');
+          setSnackbarMessage('Verification failed. Please try again.');
+          setSnackbarSeverity('error');
+          setSnackbarOpen(true);
+          setTimeout(() => {
+            router.push('/');
+          }, 2500);
         });
     } else {
-      setMessage('Invalid verification link.');
+      setSnackbarMessage('Invalid verification link.');
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
+      setTimeout(() => {
+        router.push('/');
+      }, 2500);
     }
   }, [emailTokenId, verifyAccount, router]);
 
   return (
     <Container sx={{ textAlign: 'center', marginTop: '2rem' }}>
-      {isLoading ? (
-        <CircularProgress />
-      ) : (
-        <Typography variant="h5">{message}</Typography>
-      )}
+      {isLoading && <CircularProgress />}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={2000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: '100%' }}
+          variant="filled"
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };

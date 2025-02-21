@@ -117,6 +117,7 @@ const SignupDialog: React.FC<SignupDialogProps> = ({
         setSnackbarSeverity('error');
         setSnackbarOpen(true);
       }
+      handleClose();
     } catch (error: any) {
       if (error.response && error.response.status === 409) {
         setSnackbarMessage('This account has already been registered.');
