@@ -15,6 +15,7 @@ import {
   LocalFireDepartmentRounded,
   AddRounded,
   LoginRounded,
+  ArrowDropUpRounded,
 } from '@mui/icons-material';
 import {
   Box,
@@ -24,6 +25,8 @@ import {
   IconButton,
   Typography,
   useMediaQuery,
+  Menu,
+  MenuItem,
 } from '@mui/material';
 import { styled, Theme, CSSObject } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
@@ -31,6 +34,8 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
 import ChannelContentContext from '../channel-context-provider/ChannelContentContext';
+import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
+import apis from '@/utils/hooks/apis/apis';
 
 interface ToolbarDrawerProps {
   open: boolean;
@@ -177,9 +182,12 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
   const router = useRouter();
   const searchParams = useSearchParams();
   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const { excute: logout } = useAxiosApi(apis.logout);
+
   const [isClient, setIsClient] = useState(false);
   const [isExpanded, setIsExpanded] = useState(true); // Track expanded/collapsed state
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const { selectedChannel, selectedChannelId, isInteractingInChat } =
     useContext(ChannelContentContext);
@@ -196,6 +204,44 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
     const params = new URLSearchParams(searchParams);
     params.delete('organizationChannelId');
     router.push('/chat');
+  };
+
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  // Helper function to delete a cookie by name
+  const deleteCookie = (name: string) => {
+    document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+  };
+
+  const handleLogout = async () => {
+    // Optionally, close any open menus/dialogs
+    handleClose();
+
+    try {
+      const response = await logout();
+
+      if (response.status === 200) {
+        // Clear authentication-related cookies
+        deleteCookie('u_lid');
+        deleteCookie('u_tid');
+        deleteCookie('u_info');
+        // Optionally, clear CSRF token cookie if applicable
+        deleteCookie('XSRF-TOKEN');
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      }
+    } catch (error) {
+      console.error('Failed to logout:', error);
+      // Optionally handle errors (e.g., log or display an error message)
+    }
   };
 
   useEffect(() => {
@@ -436,34 +482,65 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
         {(isExpanded || isMobile) && (
           <>
             {isLogin ? (
-              <Button
-                role="button"
-                aria-label="Logout"
-                sx={{
-                  display: 'flex',
-                  // padding: '16px',
-                  alignItems: 'center',
-                }}
-              >
-                <PermIdentityRounded
-                  sx={{ color: '#212B36', marginRight: '8px' }}
-                />
-                <Typography
+              <>
+                <Button
+                  role="button"
+                  aria-label="Logout"
+                  onClick={handleMenuOpen}
                   sx={{
-                    fontWeight: 400,
-                    fontSize: '16px',
-                    overflow: 'hidden',
-                    fontStyle: 'normal',
-                    lineHeight: 'normal',
-                    whiteSpace: 'nowrap',
-                    textOverflow: 'ellipsis',
-                    fontFamily: 'DFPHeiBold-B5',
-                    color: 'var(--Primary-Black, #212B36)',
+                    display: 'flex',
+                    width: '100%',
+                    minHeight: '44px',
+                    padding: '6px 8px',
+                    alignItems: 'center',
+                    gap: '8px',
+                    alignSelf: 'stretch',
                   }}
                 >
-                  {loginName}
-                </Typography>
-              </Button>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      flex: 1, // makes the left group take available space
+                    }}
+                  >
+                    <PermIdentityRounded sx={{ color: '#212B36' }} />
+                    <Typography
+                      sx={{
+                        display: '-webkit-box',
+                        WebkitBoxOrient: 'vertical',
+                        WebkitLineClamp: 1,
+                        flex: '1 0 0',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        color: 'var(--Primary-Black, #212B36)',
+                        fontFamily: 'DFPHeiBold-B5',
+                        fontSize: '16px',
+                        fontStyle: 'normal',
+                        fontWeight: 400,
+                        lineHeight: '24px',
+                        textAlign: 'left',
+                      }}
+                    >
+                      {loginName}
+                    </Typography>
+                  </Box>
+                  <ArrowDropUpRounded sx={{ color: '#212B36' }} />
+                </Button>
+                <Menu
+                  anchorEl={anchorEl}
+                  open={Boolean(anchorEl)}
+                  onClose={handleClose}
+                  anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                  transformOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                  // PaperProps={{
+                  //   sx: { width: anchorEl ? anchorEl.clientWidth : '226px' },
+                  // }}
+                >
+                  <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                </Menu>
+              </>
             ) : (
               <Button
                 role="button"

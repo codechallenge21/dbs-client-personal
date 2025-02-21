@@ -15,6 +15,8 @@ import {
   UpdateChannelApiPayload,
   RegisterUserApiPayload,
   VerifyAccountApiPayload,
+  LoginPayload,
+  LogoutPayload,
 } from '@/interfaces/payloads';
 import { AxiosRequestConfig } from 'axios';
 
@@ -124,6 +126,18 @@ const apis = {
     return fetcher.post(
       `/organizations/4aba77788ae94eca8d6ff330506af944/users/verify-account`,
       { emailTokenId }
+    );
+  },
+  login: (payload?: LoginPayload) => {
+    const { organizationUserAccount, organizationUserPassword } = payload || {};
+    return fetcher.post(
+      `/organizations/4aba77788ae94eca8d6ff330506af944/users/login`,
+      { organizationUserAccount, organizationUserPassword }
+    );
+  },
+  logout: (payload?: LogoutPayload) => {
+    return fetcher.post(
+      `/organizations/4aba77788ae94eca8d6ff330506af944/users/logout`
     );
   },
 };
