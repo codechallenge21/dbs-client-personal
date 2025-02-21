@@ -1,7 +1,7 @@
-import docPerview from '@/assets/Images/Doc Icon.svg';
-import imagePerview from '@/assets/Images/Image Icon.svg';
+import docPreview from '@/assets/Images/Doc Icon.svg';
+import imagePreview from '@/assets/Images/Image Icon.svg';
 import pdfPreview from '@/assets/Images/Pdf Icon.svg';
-import txtPerview from '@/assets/Images/Txt Icon.svg';
+import txtPreview from '@/assets/Images/Txt Icon.svg';
 import { SubmitUserInputsApiPayload } from '@/interfaces/payloads';
 import { CloseRounded, SendRounded } from '@mui/icons-material';
 import AttachFileRoundedIcon from '@mui/icons-material/AttachFileRounded';
@@ -120,19 +120,19 @@ const TextInput: React.FC<TextInputProps> = ({
       case 'pdf':
         return pdfPreview;
       case 'txt':
-        return txtPerview;
+        return txtPreview;
       case 'png':
       case 'jpg':
       case 'jpeg':
       case 'gif':
-        return imagePerview;
+        return imagePreview;
       case 'doc':
       case 'docx':
       case 'xlsx':
       case 'xls':
-        return docPerview;
+        return docPreview;
       default:
-        return imagePerview;
+        return imagePreview;
     }
   };
 
@@ -339,7 +339,7 @@ const TextInput: React.FC<TextInputProps> = ({
                 }}
               >
                 <Image
-                  src={file.preview ?? imagePerview}
+                  src={file.preview ?? imagePreview}
                   alt={file.file.name}
                   width={64}
                   height={64}
