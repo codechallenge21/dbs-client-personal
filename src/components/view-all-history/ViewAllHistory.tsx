@@ -92,13 +92,15 @@ export default function ChannelSearchCombined() {
       )
     );
 
-  const filteredChannels = channels.filter(
-    (ch) =>
-      ch.organizationChannelTitle
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase()) ||
-      ch.organizationChannelCreateDate.includes(searchQuery)
-  );
+  const filteredChannels = channels
+    .filter(
+      (ch) =>
+        ch.organizationChannelTitle
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase()) ||
+        ch.organizationChannelCreateDate.includes(searchQuery)
+    )
+    .slice(0, 5); // Limit to 5 channels
 
   const moveToChannelDetail = (channel: OrganizationChannelData) => {
     setSelectedChannel(channel);
@@ -338,7 +340,7 @@ export default function ChannelSearchCombined() {
                             fontWeight: 700,
                             lineHeight: 'normal',
                             marginBottom: '10px',
-                            '.group:hover &': { color: '#902118' },
+                            '.group:hover &': { color: '#990000' },
                           }}
                         >
                           {channel.organizationChannelTitle}
@@ -499,7 +501,7 @@ export default function ChannelSearchCombined() {
                 width: '100%',
                 overflowY: 'auto',
                 paddingRight: '8px',
-                paddingLeft: '10px',
+                paddingLeft: isMobile ? '0px' : '10px',
                 '&::-webkit-scrollbar': { width: '4px' },
                 '&::-webkit-scrollbar-thumb': {
                   backgroundColor: '#c1c1c1',
@@ -521,15 +523,15 @@ export default function ChannelSearchCombined() {
                     elevation={0}
                     sx={{
                       display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
                       p: 2,
                       borderRadius: 2,
                       bgcolor: 'rgba(255, 0, 0, 0.05)',
                       position: 'relative',
-                      alignItems: 'flex-start',
                       border: '1px solid var(--Secondary-Dark-Gray, #4A4A4A)',
                       gap: '16px',
                       alignSelf: 'stretch',
-                      flexDirection: 'column',
                       cursor: 'pointer',
                     }}
                   >
@@ -559,45 +561,45 @@ export default function ChannelSearchCombined() {
                         }}
                       />
                     </Box>
-                    <Typography
-                      sx={{
-                        color: '#990000',
-                        fontFamily: 'Open Sans',
-                        fontSize: '14px',
-                        fontStyle: 'normal',
-                        fontWeight: 700,
-                        lineHeight: 'normal',
-                      }}
-                    >
-                      {channel.organizationChannelTitle}
-                    </Typography>
-                    <Typography
-                      sx={{
-                        display: '-webkit-box',
-                        WebkitBoxOrient: 'vertical',
-                        WebkitLineClamp: 1,
-                        alignSelf: 'stretch',
-                        overflow: 'hidden',
-                        color: 'var(--Secondary-Dark-Gray, #4A4A4A)',
-                        textOverflow: 'ellipsis',
-                        fontFamily: 'DFPHeiMedium-B5',
-                        fontSize: '12px',
-                        fontStyle: 'normal',
-                        fontWeight: 400,
-                        lineHeight: 'normal',
-                      }}
-                    >
-                      {new Date(
-                        channel.organizationChannelCreateDate
-                      ).toLocaleString()}
-                    </Typography>
+                    <Box>
+                      <Typography
+                        sx={{
+                          color: '#990000',
+                          fontFamily: 'Open Sans',
+                          fontSize: '14px',
+                          fontStyle: 'normal',
+                          fontWeight: 700,
+                          lineHeight: 'normal',
+                          marginBottom: '10px',
+                        }}
+                      >
+                        {channel.organizationChannelTitle}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          display: '-webkit-box',
+                          WebkitBoxOrient: 'vertical',
+                          WebkitLineClamp: 1,
+                          alignSelf: 'stretch',
+                          overflow: 'hidden',
+                          color: 'var(--Secondary-Dark-Gray, #4A4A4A)',
+                          textOverflow: 'ellipsis',
+                          fontFamily: 'DFPHeiMedium-B5',
+                          fontSize: '12px',
+                          fontStyle: 'normal',
+                          fontWeight: 400,
+                          lineHeight: 'normal',
+                        }}
+                      >
+                        {new Date(
+                          channel.organizationChannelCreateDate
+                        ).toLocaleString()}
+                      </Typography>
+                    </Box>
                     <IconButton
                       size="small"
                       sx={{
                         color: '#CC0000',
-                        position: 'absolute',
-                        top: '5px',
-                        right: '4px',
                       }}
                       onClick={() => {
                         if (!channel.selected) {
@@ -606,7 +608,7 @@ export default function ChannelSearchCombined() {
                         handleDelete();
                       }}
                     >
-                      <DeleteIcon sx={{ width: '18px', height: '18px' }} />
+                      <DeleteIcon sx={{ width: '25px', height: '25px' }} />
                     </IconButton>
                   </Paper>
                 ))}

@@ -13,29 +13,29 @@ import {
   Button,
 } from '@mui/material';
 import {
-  AccountBalanceWalletRounded,
-  BusinessCenterRounded,
-  LocalHospitalRounded,
-  MoneyOffRounded,
-  PhishingRounded,
   WorkRounded,
+  PhishingRounded,
+  MoneyOffRounded,
+  LocalHospitalRounded,
+  SupportAgentOutlined,
+  BusinessCenterRounded,
+  AccountBalanceWalletRounded,
 } from '@mui/icons-material';
-import { AdvisorType } from '../../../app/chat/types';
-import ChannelContentContext from '../../channel-context-provider/ChannelContentContext';
-import { useRouter } from 'next/navigation';
-import SupportAgentIcon from '@mui/icons-material/SupportAgent';
-import EditableItem from '@/components/editable-item/EditableItem';
-import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import apis from '@/utils/hooks/apis/apis';
-import DeleteDialog from '@/components/dialogs/DeleteDialog';
+import { useRouter } from 'next/navigation';
+import { AdvisorType } from '../../../app/chat/types';
 import EditDialog from '@/components/dialogs/EditDialog';
+import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
+import DeleteDialog from '@/components/dialogs/DeleteDialog';
+import EditableItem from '@/components/editable-item/EditableItem';
+import ChannelContentContext from '../../channel-context-provider/ChannelContentContext';
 
 const listItems = [
   {
     title: '萬事通',
     value: AdvisorType.DEFAULT,
     description: '提供個案跨領域資源評估與整合方案',
-    icon: <SupportAgentIcon />,
+    icon: <SupportAgentOutlined />,
   },
   {
     title: '債務案件顧問',
@@ -127,6 +127,7 @@ export default function DropdownMenu({
     (value: AdvisorType) => {
       if (setAdvisorType) setAdvisorType(value);
       setToolsAnchorDeleteEdit(null);
+      setToolsAnchor(null);
     },
     [setAdvisorType]
   );
@@ -216,7 +217,6 @@ export default function DropdownMenu({
         <Box
           onClick={(e) => setToolsAnchor(e.currentTarget)}
           sx={{
-            background: 'none',
             cursor: 'pointer',
           }}
         >

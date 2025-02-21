@@ -4,8 +4,6 @@ import {
   Box,
   IconButton,
   TextareaAutosize,
-  useTheme,
-  useMediaQuery,
   Typography,
 } from '@mui/material';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
@@ -19,6 +17,7 @@ import imagePerview from '@/assets/Images/Image Icon.svg';
 import docPerview from '@/assets/Images/Doc Icon.svg';
 import DropdownMenu from './DropdownMenu';
 import { SubmitUserInputsApiPayload } from '@/interfaces/payloads';
+import Cookies from 'js-cookie';
 
 interface SpeechRecognition extends EventTarget {
   continuous: boolean;
@@ -70,14 +69,16 @@ type TextInputProps = {
     };
   }>;
   isInteracting: boolean;
+  setIsLoginOpen?: (value: boolean) => void;
+  from?: string;
 };
 
 const TextInput: React.FC<TextInputProps> = ({
   submitUserInputs,
   isInteracting,
+  setIsLoginOpen,
+  from,
 }) => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [userInputValue, setUserInputValue] = useState('');
   const [isListening, setIsListening] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -204,6 +205,11 @@ const TextInput: React.FC<TextInputProps> = ({
 
   const handleOnChangeUserInput = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      const isLoggedin = Cookies.get('m_info');
+      if (!isLoggedin) {
+        if (setIsLoginOpen) setIsLoginOpen(true);
+        return;
+      }
       const { value } = e.target;
       setUserInputValue(value);
     },
@@ -276,24 +282,24 @@ const TextInput: React.FC<TextInputProps> = ({
       }
     }
   }, [handleSendMessage, isListening, userInputValue]);
-
+  console.log(from);
   return (
     <>
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <Box
         sx={{
-          margin: 'auto',
           width: '100%',
           maxWidth: '760px',
-          maxHeight: '760px',
-          position: 'sticky',
+          minHeight: '116px',
+          position: from === 'mainContent' ? 'sticky' : 'relative',
           bottom: 0,
           backgroundColor: '#F5F5F5',
           borderRadius: '16px',
           zIndex: 10,
-          marginTop: isMobile ? 3 : 0,
           overflow: 'hidden',
+          margin: from === 'mainContent' ? 'auto' : '0',
         }}
+        className="chat-text-input"
       >
         {files.length > 0 && (
           <Box
@@ -359,16 +365,16 @@ const TextInput: React.FC<TextInputProps> = ({
                   sx={{
                     position: 'absolute',
                     top: '0px',
-                    left: '6px', // Adjusted for top-left placement
+                    left: '6px',
                     backgroundColor: 'red',
-                    width: '16px', // Smaller size for the button
+                    width: '16px',
                     height: '16px',
                     color: 'white',
                     '&:hover': {
-                      backgroundColor: 'darkred', // Optional hover effect
+                      backgroundColor: 'darkred',
                     },
                   }}
-                  onClick={() => handleRemoveFile(index)} // Your event handler
+                  onClick={() => handleRemoveFile(index)}
                 >
                   <CloseRounded sx={{ fontSize: '14px' }} />
                 </IconButton>
@@ -380,8 +386,8 @@ const TextInput: React.FC<TextInputProps> = ({
           sx={{
             margin: '8px 0px 8px 16px',
             overflowY: 'auto',
-            maxHeight: '200px',
             minHeight: '40px',
+            maxHeight: '200px',
             '&::-webkit-scrollbar': {
               width: '8px',
             },
@@ -401,20 +407,19 @@ const TextInput: React.FC<TextInputProps> = ({
           <TextareaAutosize
             aria-label="Ask the AI"
             minRows={1}
-            // maxRows={10}
             placeholder="傳訊息給智能顧問"
             style={{
               width: '100%',
-              paddingTop: isMobile ? '20px' : '2px',
-              paddingBottom: isMobile ? '20px' : '',
-              borderRadius: '8px',
               border: 'none',
-              outline: 'none',
               resize: 'none',
+              outline: 'none',
               fontSize: '16px',
               color: '#212B36',
-              backgroundColor: '#F5F5F5',
               overflow: 'auto',
+              borderRadius: '8px',
+              backgroundColor: '#F5F5F5',
+              paddingTop: '2px',
+              paddingBottom: '',
             }}
             className="textarea-autosize"
             value={userInputValue}
