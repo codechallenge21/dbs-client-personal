@@ -396,9 +396,11 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             sx={{
               gap: '8px',
               width: '100%',
-              padding: '8px',
               display: 'flex',
               flexDirection: 'column',
+              alignItems: 'flex-start',
+              justifyContent: 'flex-end',
+              marginTop: '8px',
             }}
           >
             {drawerItems.map((item, index) => (
@@ -779,7 +781,6 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
       <MainBox
         open={openDataSource}
         sx={{
-          height: '100vh',
           marginRight: isMobile ? 0 : openDataSource ? '446px' : 0,
           overflow: 'auto',
           marginBottom: '16px',
