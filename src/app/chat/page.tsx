@@ -12,7 +12,7 @@ import MainContent from '@/components/chat-page/components/MainContent';
 import SwitchDialog from '@/components/dialogs/SwitchDialog';
 import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
 import { Box, CircularProgress, useMediaQuery, useTheme } from '@mui/material';
-import ChannelContentContext from '../../components/channel-context-provider/ChannelContentContext';
+import ChannelContentContext from '../../components/context-provider/ChannelContentContext';
 import { useSearchParams, useRouter } from 'next/navigation';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import apis from '@/utils/hooks/apis/apis';

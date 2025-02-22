@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   Box,
   Button,
@@ -11,8 +11,6 @@ import {
   IconButton,
   useMediaQuery,
   InputAdornment,
-  Snackbar,
-  Alert,
 } from '@mui/material';
 import { CloseRounded } from '@mui/icons-material';
 import GoogleIcon from '../../assets/google.png';
@@ -21,6 +19,7 @@ import EyeCloseIcon from '@/assets/Images/EyeClose Icon.svg';
 import EyeOpenIcon from '@/assets/Images/EyeOpen Icon.svg';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import apis from '@/utils/hooks/apis/apis';
+import { SnackbarContext } from '@/components/context-provider/SnackbarContext';
 
 const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
   const theme = useTheme();
@@ -29,20 +28,10 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-
-  // Snackbar state for showing messages
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>(
-    'success'
-  );
+  const { showSnackbar } = useContext(SnackbarContext);
   // Hook for calling the login API
   const { excute: login, isLoading: isLogging } = useAxiosApi(apis.login);
   const { excute: getGoogleLoginUrl } = useAxiosApi(apis.googleLoginUrl);
-
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
-  };
 
   const handleClose = () => {
     setEmail('');
@@ -57,9 +46,7 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
 
   const handleLogin = async () => {
     if (!email || !password) {
-      setSnackbarMessage('Please fill in both email and password.');
-      setSnackbarSeverity('error');
-      setSnackbarOpen(true);
+      showSnackbar('Please fill in both email and password.', 'error');
       return;
     }
     try {
@@ -68,39 +55,27 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
         organizationUserPassword: password,
       });
       if (response.status === 200) {
-        // Server should set cookies (u_lid, u_tid, u_info)
-        setSnackbarMessage('Login successful.');
-        setSnackbarSeverity('success');
-        setSnackbarOpen(true);
+        showSnackbar('Login successful.', 'success');
         setTimeout(() => {
           window.location.reload();
         }, 2000);
       } else {
-        setSnackbarMessage('Login failed. Please check your credentials.');
-        setSnackbarSeverity('error');
-        setSnackbarOpen(true);
+        showSnackbar('Login failed. Please check your credentials.', 'error');
       }
     } catch (error) {
-      setSnackbarMessage('Login failed. Please try again.');
-      setSnackbarSeverity('error');
-      setSnackbarOpen(true);
+      showSnackbar('Login failed. Please try again.', 'error');
     }
   };
 
   const handleGoogleLogin = async () => {
     try {
-      await getGoogleLoginUrl()
-        .then((response) => {
-          window.open(response.data as string, '_self');
-        })
-        .catch(() => {});
-      // console.log('response.data.url', response.data, response.data.url);
-      // if (response.status === 200) {
-      //   window.open(response.data as string, '_self');
-      // } else {
-      //   console.error('Failed to obtain Google login URL.');
-      // }
+      const response = await getGoogleLoginUrl();
+      window.open(response.data as string, '_self');
     } catch (error) {
+      showSnackbar(
+        'Failed to obtain Google login URL. Please try again.',
+        'error'
+      );
       console.error('Error obtaining Google login URL:', error);
     }
   };
@@ -447,21 +422,6 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
           </Button>
         </Box>
       </Dialog>
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={6000}
-        onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert
-          onClose={handleSnackbarClose}
-          severity={snackbarSeverity}
-          sx={{ width: '100%' }}
-          variant="filled"
-        >
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
     </>
   );
 };

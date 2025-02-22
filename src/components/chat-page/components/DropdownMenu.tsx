@@ -29,7 +29,7 @@ import EditDialog from '@/components/dialogs/EditDialog';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import DeleteDialog from '@/components/dialogs/DeleteDialog';
 import EditableItem from '@/components/editable-item/EditableItem';
-import ChannelContentContext from '../../channel-context-provider/ChannelContentContext';
+import ChannelContentContext from '../../context-provider/ChannelContentContext';
 
 const listItems = [
   {

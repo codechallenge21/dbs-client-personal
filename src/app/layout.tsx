@@ -1,4 +1,4 @@
-import ChannelContextProvider from '@/components/channel-context-provider/ChannelContextProvider';
+import ChannelContextProvider from '@/components/context-provider/ChannelContextProvider';
 import ThemeProvider from '@/theme';
 import {
   Geist,
@@ -8,6 +8,7 @@ import {
   Public_Sans,
 } from 'next/font/google';
 import './globals.css';
+import { SnackbarProvider } from '@/components/context-provider/SnackbarContext';
 // import { Box } from "@mui/material";
 // import { Header } from "@/components/header";
 
@@ -90,7 +91,9 @@ export default function RootLayout({ children }: Props) {
         </Box> */}
         <ThemeProvider>
           {' '}
-          <ChannelContextProvider>{children}</ChannelContextProvider>
+          <SnackbarProvider>
+            <ChannelContextProvider>{children}</ChannelContextProvider>
+          </SnackbarProvider>
         </ThemeProvider>
       </body>
     </html>

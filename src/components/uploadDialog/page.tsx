@@ -8,8 +8,6 @@ import {
   IconButton,
   Box,
   Typography,
-  Alert,
-  Snackbar,
   useTheme,
   useMediaQuery,
 } from '@mui/material';
@@ -17,9 +15,10 @@ import { useRouter } from 'next/navigation';
 import { useDropzone } from 'react-dropzone';
 import apiExports from '@/utils/hooks/apis/apis';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
-import { useRef, useState } from 'react';
+import { useRef, useState, useContext } from 'react';
 import LoadingScreen from '../loading/page';
 import { CloseRounded, UploadRounded } from '@mui/icons-material';
+import { SnackbarContext } from '@/components/context-provider/SnackbarContext';
 
 // File Upload Configuration
 const FILE_CONFIG = {
@@ -67,10 +66,10 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [, setFile] = useState<File | null>(null);
-  const [error, setError] = useState<string | null>(null);
   const { excute: createChannelByAudio, isLoading: isCreating } = useAxiosApi(
     apiExports.createChannelByAudio
   );
+  const { showSnackbar } = useContext(SnackbarContext);
 
   const validateFile = async (file: File) => {
     try {
@@ -79,28 +78,25 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
           file.type as (typeof FILE_CONFIG.allowedFormats)[number]
         )
       ) {
-        setError(FILE_CONFIG.errorMessages.invalidFormat);
+        showSnackbar(FILE_CONFIG.errorMessages.invalidFormat, 'error');
         return;
       }
 
       if (file.size > FILE_CONFIG.maxSize) {
-        setError(FILE_CONFIG.errorMessages.sizeExceeded);
+        showSnackbar(FILE_CONFIG.errorMessages.sizeExceeded, 'error');
         return;
       }
 
       setFile(file);
       onClose();
 
-      const res = await createChannelByAudio({
-        file,
-      });
-
+      const res = await createChannelByAudio({ file });
       const { data } = res;
       router.push(
         `/channel-summary?organizationChannelId=${data.organizationChannelId}`
       );
     } catch (error) {
-      setError(FILE_CONFIG.errorMessages.uploadFailed);
+      showSnackbar(FILE_CONFIG.errorMessages.uploadFailed, 'error');
       console.error(error);
     }
   };
@@ -112,7 +108,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
   };
 
   const handleDropRejected = (fileRejections: any[]) => {
-    setError('檔案格式錯誤或檔案大小超過 200MB 限制');
+    showSnackbar('檔案格式錯誤或檔案大小超過 200MB 限制', 'error');
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -145,10 +141,6 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
     },
     maxSize: FILE_CONFIG.maxSize,
   });
-
-  const handleCloseError = () => {
-    setError(null);
-  };
 
   if (isCreating) {
     return (
@@ -309,20 +301,6 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
           </Box>
         </DialogContent>
       </Dialog>
-      <Snackbar
-        open={!!error}
-        autoHideDuration={6000}
-        onClose={handleCloseError}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert
-          onClose={handleCloseError}
-          severity="error"
-          sx={{ width: '100%' }}
-        >
-          {error}
-        </Alert>
-      </Snackbar>
     </>
   );
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   Box,
   Button,
@@ -13,8 +13,6 @@ import {
   useMediaQuery,
   FormControlLabel,
   InputAdornment,
-  Snackbar,
-  Alert,
 } from '@mui/material';
 import { CloseRounded } from '@mui/icons-material';
 import Image from 'next/image';
@@ -23,6 +21,7 @@ import EyeCloseIcon from '@/assets/Images/EyeClose Icon.svg';
 import EyeOpenIcon from '@/assets/Images/EyeOpen Icon.svg';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import apis from '@/utils/hooks/apis/apis';
+import { SnackbarContext } from '@/components/context-provider/SnackbarContext';
 
 interface SignupDialogProps {
   open: boolean;
@@ -37,6 +36,7 @@ const SignupDialog: React.FC<SignupDialogProps> = ({
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const { showSnackbar } = useContext(SnackbarContext);
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -45,15 +45,6 @@ const SignupDialog: React.FC<SignupDialogProps> = ({
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState<
-    'error' | 'success' | 'info'
-  >('error');
-
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
-  };
 
   const handleClose = () => {
     setName('');
@@ -72,34 +63,26 @@ const SignupDialog: React.FC<SignupDialogProps> = ({
 
   const handleRegister = async () => {
     if (!name || !email || !password || !confirmPassword) {
-      setSnackbarMessage('Please fill in all required fields.');
-      setSnackbarSeverity('error');
-      setSnackbarOpen(true);
+      showSnackbar('Please fill in all required fields.', 'error');
       return;
     }
 
     if (!agree) {
-      setSnackbarMessage(
-        'You must agree to the terms, privacy policy, and cookie policy.'
+      showSnackbar(
+        'You must agree to the terms, privacy policy, and cookie policy.',
+        'error'
       );
-      setSnackbarSeverity('error');
-      setSnackbarOpen(true);
       return;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      setSnackbarMessage('Please enter a valid email address.');
-      setSnackbarSeverity('error');
-      setSnackbarOpen(true);
+      showSnackbar('Please enter a valid email address.', 'error');
       return;
     }
 
-    // Check if passwords match
     if (password !== confirmPassword) {
-      setSnackbarMessage('Passwords do not match.');
-      setSnackbarSeverity('error');
-      setSnackbarOpen(true);
+      showSnackbar('Passwords do not match.', 'error');
       return;
     }
 
@@ -114,27 +97,22 @@ const SignupDialog: React.FC<SignupDialogProps> = ({
       });
 
       if (response.status === 200) {
-        setSnackbarMessage('Please verify your account through your email.');
-        setSnackbarSeverity('success');
-        setSnackbarOpen(true);
+        showSnackbar(
+          'Please verify your account through your email.',
+          'success'
+        );
       } else if (response.status === 409) {
-        setSnackbarMessage('This account has already been registered.');
-        setSnackbarSeverity('error');
-        setSnackbarOpen(true);
+        showSnackbar('This account has already been registered.', 'error');
       } else {
-        setSnackbarMessage('An error occurred. Please try again.');
-        setSnackbarSeverity('error');
-        setSnackbarOpen(true);
+        showSnackbar('An error occurred. Please try again.', 'error');
       }
       handleClose();
     } catch (error: any) {
       if (error.response && error.response.status === 409) {
-        setSnackbarMessage('This account has already been registered.');
+        showSnackbar('This account has already been registered.', 'error');
       } else {
-        setSnackbarMessage('An error occurred. Please try again.');
+        showSnackbar('An error occurred. Please try again.', 'error');
       }
-      setSnackbarSeverity('error');
-      setSnackbarOpen(true);
     }
   };
 
@@ -676,21 +654,6 @@ const SignupDialog: React.FC<SignupDialogProps> = ({
           }
         />
       </Dialog>
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={3000}
-        onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert
-          onClose={handleSnackbarClose}
-          severity={snackbarSeverity}
-          sx={{ width: '100%' }}
-          variant="filled"
-        >
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
     </>
   );
 };
