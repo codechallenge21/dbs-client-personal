@@ -83,25 +83,8 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
         display: 'flex',
         marginTop: isMobile ? '16px' : '0px',
         mb: '16px',
-        height: isMobile ? '65vh' : 'calc(100vh - 32px)',
-        overflowY: 'auto',
-        overflowX: 'hidden',
         alignItems: 'center',
         justifyContent: 'center',
-        '&::-webkit-scrollbar': {
-          width: '8px',
-          height: '8px',
-        },
-        '&::-webkit-scrollbar-track': {
-          background: 'transparent',
-        },
-        '&::-webkit-scrollbar-thumb': {
-          backgroundColor: 'rgba(0, 0, 0, 0.2)',
-          borderRadius: '2px',
-        },
-        '&::-webkit-scrollbar-thumb:hover': {
-          backgroundColor: 'rgba(0, 0, 0, 0.4)',
-        },
       }}
     >
       <Box
@@ -111,8 +94,27 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
           maxWidth: '760px',
           flexDirection: 'column',
           minWidth: isMobile ? '100%' : isTablet ? '350px' : '760px',
-          overflow: 'auto',
+          overflowY: 'auto',
+          overflowX: 'hidden', // prevent horizontal scroll
           height: '100%',
+          // ChatGPT-like scrollbar styling for Webkit browsers
+          '&::-webkit-scrollbar': {
+            width: '30px', // Increased scrollbar width
+          },
+          '&::-webkit-scrollbar-track': {
+            background: '#f1f1f1',
+            borderRadius: '3px',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: '#888',
+            borderRadius: '3px',
+          },
+          '&::-webkit-scrollbar-thumb:hover': {
+            backgroundColor: '#555',
+          },
+          // Firefox scrollbar styling
+          scrollbarWidth: 'thick', // Increased scrollbar width
+          scrollbarColor: '#888 #f1f1f1',
         }}
       >
         {sortedData?.map((message, messageIndex) => (
@@ -174,6 +176,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                     justifyContent: 'space-between',
                     width: '100%',
                     mb: 1,
+                    ml: { xs: '-25px', sm: '0px' }, // Shift to left by 10px on small screens
                   }}
                 >
                   <Box
@@ -234,6 +237,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                     justifyContent: 'flex-end',
                     gap: 1,
                     mt: 2,
+                    ml: { xs: '-30px', sm: '-20px' },
                   }}
                 >
                   <ThumbUp
