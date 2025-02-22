@@ -37,46 +37,6 @@ export default function PopularArea() {
     useState(false);
   const tolerance = 5; // Adjust if necessary
 
-  const handleFocusScrollRight = () => {
-    if (focusRef.current) {
-      const itemWidth = 260 + 16;
-      const scrollDelta = itemWidth * (isMobile ? 1 : 3);
-      const newScrollLeft = focusRef.current.scrollLeft + scrollDelta;
-
-      // Trigger smooth scrolling
-      focusRef.current.scrollBy({
-        behavior: 'smooth',
-        left: scrollDelta,
-      });
-
-      const { clientWidth, scrollWidth } = focusRef.current;
-      // Optimistically update state
-      setIsFocusScrolledLeft(newScrollLeft <= tolerance);
-      setIsFocusScrolledRight(
-        newScrollLeft >= scrollWidth - clientWidth - tolerance
-      );
-    }
-  };
-
-  const handleFocusScrollLeft = () => {
-    if (focusRef.current) {
-      const itemWidth = 260 + 16;
-      const scrollDelta = itemWidth * (isMobile ? 1 : 3);
-      const newScrollLeft = focusRef.current.scrollLeft - scrollDelta;
-
-      focusRef.current.scrollBy({
-        behavior: 'smooth',
-        left: -scrollDelta,
-      });
-
-      const { clientWidth, scrollWidth } = focusRef.current;
-      setIsFocusScrolledLeft(newScrollLeft <= tolerance);
-      setIsFocusScrolledRight(
-        newScrollLeft >= scrollWidth - clientWidth - tolerance
-      );
-    }
-  };
-
   const handleRecommendedScrollRight = () => {
     if (recommendationsRef.current) {
       const itemWidth = 260 + 16;
@@ -293,11 +253,21 @@ export default function PopularArea() {
             >
               <Box
                 ref={focusRef}
+                onMouseDown={(e) => e.preventDefault()}
+                onTouchStart={(e) => e.preventDefault()}
                 sx={{
                   gap: '16px',
                   width: '100%',
                   display: 'flex',
                   minHeight: '220px',
+                  overflowX: 'auto',
+                  scrollBehavior: 'smooth',
+                  touchAction: 'none', // disables touch-based scrolling
+                  scrollbarWidth: 'none', // for Firefox
+                  msOverflowStyle: 'none', // for IE and Edge
+                  '&::-webkit-scrollbar': {
+                    display: 'none', // for Chrome, Safari and Opera
+                  },
                 }}
               >
                 {focusItems.map((_, index) => (
@@ -381,9 +351,21 @@ export default function PopularArea() {
                   </Box>
                 ))}
               </Box>
+              {/* Scroll right button */}
               {!isFocusScrolledRight && (
                 <IconButton
-                  onClick={handleFocusScrollRight}
+                  onClick={() => {
+                    if (focusRef.current) {
+                      const itemWidth = 260 + 16;
+                      const scrollDelta = itemWidth * (isMobile ? 1 : 3);
+                      focusRef.current.scrollBy({
+                        left: scrollDelta,
+                        behavior: 'smooth',
+                      });
+                      // Wait for the animation and then update the state
+                      setTimeout(handleFocusScroll, 300);
+                    }
+                  }}
                   sx={{
                     top: '90px',
                     right: '5px',
@@ -392,7 +374,9 @@ export default function PopularArea() {
                     padding: '5px',
                     borderRadius: '50px',
                     '&:hover': {
-                      backgroundColor: 'rgba(204, 0, 0, 0.40)',
+                      backgroundColor: isMobile
+                        ? 'rgba(204, 0, 0, 0.60)'
+                        : 'rgba(204, 0, 0, 0.40)',
                     },
                     zIndex: 10,
                     position: 'absolute',
@@ -400,13 +384,28 @@ export default function PopularArea() {
                   }}
                 >
                   <ArrowForwardIosRounded
-                    sx={{ width: '18px', height: '18px', color: 'white' }}
+                    sx={{
+                      width: '18px',
+                      height: '18px',
+                      color: 'white',
+                    }}
                   />
                 </IconButton>
               )}
+              {/* Scroll left button */}
               {!isFocusScrolledLeft && (
                 <IconButton
-                  onClick={handleFocusScrollLeft}
+                  onClick={() => {
+                    if (focusRef.current) {
+                      const itemWidth = 260 + 16;
+                      const scrollDelta = itemWidth * (isMobile ? 1 : 3);
+                      focusRef.current.scrollBy({
+                        left: -scrollDelta,
+                        behavior: 'smooth',
+                      });
+                      setTimeout(handleFocusScroll, 300);
+                    }
+                  }}
                   sx={{
                     top: '90px',
                     left: '5px',
@@ -414,12 +413,14 @@ export default function PopularArea() {
                     height: '28px',
                     padding: '5px',
                     borderRadius: '50px',
-                    '&:hover': {
-                      backgroundColor: 'rgba(204, 0, 0, 0.40)',
-                    },
+                    backgroundColor: 'rgba(204, 0, 0, 0.60)',
                     zIndex: 10,
                     position: 'absolute',
-                    backgroundColor: 'rgba(204, 0, 0, 0.60)',
+                    '&:hover': {
+                      backgroundColor: isMobile
+                        ? 'rgba(204, 0, 0, 0.60)'
+                        : 'rgba(204, 0, 0, 0.40)',
+                    },
                   }}
                 >
                   <ArrowForwardIosRounded
@@ -546,6 +547,15 @@ export default function PopularArea() {
                   gap: '16px',
                   width: '100%',
                   display: 'flex',
+                  minHeight: '220px',
+                  overflowX: 'auto',
+                  touchAction: 'none', // disables touch-based scrolling
+                  scrollBehavior: 'smooth',
+                  scrollbarWidth: 'none',
+                  msOverflowStyle: 'none',
+                  '&::-webkit-scrollbar': {
+                    display: 'none',
+                  },
                 }}
               >
                 {recommendedItems.map((_, index) => (
@@ -677,7 +687,9 @@ export default function PopularArea() {
                     padding: '5px',
                     borderRadius: '50px',
                     '&:hover': {
-                      backgroundColor: 'rgba(204, 0, 0, 0.40)',
+                      backgroundColor: isMobile
+                        ? 'rgba(204, 0, 0, 0.60)'
+                        : 'rgba(204, 0, 0, 0.40)',
                     },
                     zIndex: 10,
                     position: 'absolute',
@@ -704,7 +716,9 @@ export default function PopularArea() {
                     padding: '5px',
                     borderRadius: '50px',
                     '&:hover': {
-                      backgroundColor: 'rgba(204, 0, 0, 0.40)',
+                      backgroundColor: isMobile
+                        ? 'rgba(204, 0, 0, 0.60)'
+                        : 'rgba(204, 0, 0, 0.40)',
                     },
                     zIndex: 10,
                     position: 'absolute',
