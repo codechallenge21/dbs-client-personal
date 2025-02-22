@@ -1,4 +1,4 @@
-import ChannelContextProvider from '@/components/context-provider/ChannelContextProvider';
+import ChannelContextProvider from '@/context/ChannelContextProvider';
 import ThemeProvider from '@/theme';
 import {
   Geist,
@@ -8,7 +8,7 @@ import {
   Public_Sans,
 } from 'next/font/google';
 import './globals.css';
-import { SnackbarProvider } from '@/components/context-provider/SnackbarContext';
+import { SnackbarProvider } from '@/context/SnackbarContext';
 // import { Box } from "@mui/material";
 // import { Header } from "@/components/header";
 

@@ -5,7 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { Container, CircularProgress } from '@mui/material';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import apis from '@/utils/hooks/apis/apis';
-import { SnackbarContext } from '@/components/context-provider/SnackbarContext';
+import { SnackbarContext } from '@/context/SnackbarContext';
 
 const VerifyAccountPage = () => {
   // Retrieve the emailTokenId query parameter

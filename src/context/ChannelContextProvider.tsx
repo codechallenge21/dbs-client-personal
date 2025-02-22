@@ -1,7 +1,7 @@
 'use client'; // Mark this file as a client component
 
 import React, { useState, useMemo } from 'react';
-import ChannelContentContext from '@/components/context-provider/ChannelContentContext';
+import ChannelContentContext from './ChannelContentContext';
 import {
   OrganizationChannel,
   OrganizationChannelMessage,

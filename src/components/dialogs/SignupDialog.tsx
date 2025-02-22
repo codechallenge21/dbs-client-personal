@@ -21,7 +21,7 @@ import EyeCloseIcon from '@/assets/Images/EyeClose Icon.svg';
 import EyeOpenIcon from '@/assets/Images/EyeOpen Icon.svg';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import apis from '@/utils/hooks/apis/apis';
-import { SnackbarContext } from '@/components/context-provider/SnackbarContext';
+import { SnackbarContext } from '@/context/SnackbarContext';
 
 interface SignupDialogProps {
   open: boolean;

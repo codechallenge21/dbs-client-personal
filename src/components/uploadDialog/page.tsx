@@ -18,7 +18,7 @@ import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import { useRef, useState, useContext } from 'react';
 import LoadingScreen from '../loading/page';
 import { CloseRounded, UploadRounded } from '@mui/icons-material';
-import { SnackbarContext } from '@/components/context-provider/SnackbarContext';
+import { SnackbarContext } from '@/context/SnackbarContext';
 
 // File Upload Configuration
 const FILE_CONFIG = {

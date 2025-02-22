@@ -33,7 +33,7 @@ import MuiDrawer from '@mui/material/Drawer';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
-import ChannelContentContext from '../context-provider/ChannelContentContext';
+import ChannelContentContext from '@/context/ChannelContentContext';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import apis from '@/utils/hooks/apis/apis';
 

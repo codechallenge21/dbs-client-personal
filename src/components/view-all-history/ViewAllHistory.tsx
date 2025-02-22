@@ -23,7 +23,7 @@ import {
   OrganizationChannelData,
 } from '@/interfaces/entities';
 import { useRouter } from 'next/navigation';
-import ChannelContentContext from '../context-provider/ChannelContentContext';
+import ChannelContentContext from '@/context/ChannelContentContext';
 
 export default function ChannelSearchCombined() {
   const router = useRouter();

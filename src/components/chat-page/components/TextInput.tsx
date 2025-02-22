@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import RotateRightRounded from '@mui/icons-material/RotateRightRounded';
-import ChannelContentContext from '../../context-provider/ChannelContentContext';
+import ChannelContentContext from '@/context/ChannelContentContext';
 import { SendRounded, CloseRounded } from '@mui/icons-material';
 import Image from 'next/image';
 import pdfPreview from '@/assets/Images/Pdf Icon.svg';
