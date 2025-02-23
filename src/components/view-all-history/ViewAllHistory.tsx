@@ -23,22 +23,7 @@ import {
   OrganizationChannelData,
 } from '@/interfaces/entities';
 import { useRouter } from 'next/navigation';
-import ChannelContentContext from '../channel-context-provider/ChannelContentContext';
-import { motion, AnimatePresence } from 'framer-motion';
-
-// Updated motion variants:
-// They start at x:0 (their original position) and when exiting, slide out.
-const selectButtonVariants = {
-  initial: { x: 500, opacity: 1 },
-  animate: { x: 0, opacity: 1 },
-  exit: { x: 100, opacity: 0 }, // Slide to right on exit
-};
-
-const selectAllVariants = {
-  initial: { x: -500, opacity: 0 },
-  animate: { x: 0, opacity: 1 },
-  exit: { x: -100, opacity: 0 },
-};
+import ChannelContentContext from '@/context/ChannelContentContext';
 
 export default function ChannelSearchCombined() {
   const router = useRouter();
@@ -72,12 +57,6 @@ export default function ChannelSearchCombined() {
   const handleDelete = () => setOpen(true);
 
   const selectedChannels = channels.filter((ch) => ch.selected);
-
-  // Toggle between the two views
-  const handleToggleV2 = () => setIsV2((prev) => !prev);
-
-  const handleSelectAll = () =>
-    setChannels((prev) => prev.map((ch) => ({ ...ch, selected: true })));
 
   // When Cancel is clicked, clear selections and toggle back to the first view.
   const handleCancelAll = () => {
@@ -213,37 +192,6 @@ export default function ChannelSearchCombined() {
                 >
                   您目前有 <span>{filteredChannels.length ?? 0}</span> 個頻道
                 </Typography>
-                {/* Animate the "選擇" button.
-                    It starts at its original position (x:0) and when exiting, slides right. */}
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key="select-button"
-                    variants={selectButtonVariants}
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
-                    transition={{ duration: 0.3 }}
-                  >
-                    <Button
-                      aria-label="Select"
-                      variant="text"
-                      onClick={handleToggleV2}
-                      sx={{
-                        color: 'primary.main',
-                        fontFamily: 'Open Sans',
-                        fontSize: '14px',
-                        fontStyle: 'normal',
-                        fontWeight: 700,
-                        lineHeight: 'normal',
-                        minWidth: 'auto',
-                        borderRadius: '8px',
-                      }}
-                      className="highlight"
-                    >
-                      選擇
-                    </Button>
-                  </motion.div>
-                </AnimatePresence>
               </Box>
             </Box>
             {/* Channel List */}
@@ -426,35 +374,6 @@ export default function ChannelSearchCombined() {
                 </Typography>
               </Box>
               <Stack direction="row" spacing={1} sx={{ width: 'auto' }}>
-                {/* Animate the "全選" box.
-                    It starts at its original position (x:0) and when exiting, slides left. */}
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key="select-all-box"
-                    variants={selectAllVariants}
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
-                    transition={{ duration: 0.3 }}
-                  >
-                    <Box
-                      onClick={handleSelectAll}
-                      sx={{
-                        color: '#CC0000',
-                        fontFamily: 'Open Sans',
-                        fontSize: '14px',
-                        fontStyle: 'normal',
-                        fontWeight: 700,
-                        borderRadius: '8px',
-                        padding: '4px 8px',
-                        cursor: 'pointer',
-                        '&:hover': { bgcolor: 'rgba(204, 0, 0, 0.1)' },
-                      }}
-                    >
-                      全選
-                    </Box>
-                  </motion.div>
-                </AnimatePresence>
                 <Button
                   aria-label="Cancel"
                   variant="outlined"

@@ -12,8 +12,8 @@ import MainContent from '@/components/chat-page/components/MainContent';
 import SwitchDialog from '@/components/dialogs/SwitchDialog';
 import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
 import { Box, CircularProgress, useMediaQuery, useTheme } from '@mui/material';
-import ChannelContentContext from '../../components/channel-context-provider/ChannelContentContext';
-import { useSearchParams } from 'next/navigation';
+import ChannelContentContext from '@/context/ChannelContentContext';
+import { useSearchParams, useRouter } from 'next/navigation';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import apis from '@/utils/hooks/apis/apis';
 import DataSourceDialog from '@/components/chat-page/components/chatDataStore';
@@ -31,6 +31,7 @@ export default function ChatHomePage() {
 
 function ClientContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -74,6 +75,11 @@ function ClientContent() {
     [getChannelDetail, setSelectedChannel, setSelectedChannelId]
   );
 
+  const handleLoginDialogClose = () => {
+    setIsLoginOpen(false);
+    router.replace('/');
+  };
+
   useEffect(() => {
     if (selectedChannel && organizationChannelId) {
       setSelectedChannelId(selectedChannel.organizationChannelId);
@@ -100,11 +106,18 @@ function ClientContent() {
     setIsOpenDrawer(!isMobile);
   }, [isMobile]);
 
+  useEffect(() => {
+    if (searchParams.get('login') === 'true') {
+      setIsLoginOpen(true);
+    }
+  }, [searchParams]);
+
   return (
     <ToolbarDrawer
       open={isOpenDrawer}
       setIsOpenDrawer={setIsOpenDrawer}
       openDataSource={openDataSource}
+      setIsLoginOpen={setIsLoginOpen}
     >
       <Box
         sx={{
@@ -138,7 +151,7 @@ function ClientContent() {
       <LoginDialog
         open={isLoginOpen}
         setIsSignupOpen={setIsSignupOpen}
-        onClose={() => setIsLoginOpen(false)}
+        onClose={handleLoginDialogClose}
       />
       <SignupDialog
         open={isSignupOpen}

@@ -7,16 +7,11 @@ import { CloseRounded, SendRounded } from '@mui/icons-material';
 import AttachFileRoundedIcon from '@mui/icons-material/AttachFileRounded';
 import MicRoundedIcon from '@mui/icons-material/MicRounded';
 import RotateRightRounded from '@mui/icons-material/RotateRightRounded';
-import {
-  Box,
-  IconButton,
-  TextareaAutosize,
-  Typography,
-} from '@mui/material';
+import { Box, IconButton, TextareaAutosize, Typography } from '@mui/material';
 import Cookies from 'js-cookie';
 import Image from 'next/image';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import ChannelContentContext from '../../channel-context-provider/ChannelContentContext';
+import ChannelContentContext from '@/context/ChannelContentContext';
 import DropdownMenu from './DropdownMenu';
 
 interface SpeechRecognition extends EventTarget {
@@ -205,7 +200,7 @@ const TextInput: React.FC<TextInputProps> = ({
 
   const handleOnChangeUserInput = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      const isLoggedin = Cookies.get('m_info');
+      const isLoggedin = Cookies.get('u_info');
       if (!isLoggedin) {
         if (setIsLoginOpen) setIsLoginOpen(true);
         return;
