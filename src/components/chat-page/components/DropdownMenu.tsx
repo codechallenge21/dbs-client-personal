@@ -276,6 +276,14 @@ export default function DropdownMenu({
                 handleDeleteChannelOpenConfirmDialog={
                   handleDeleteChannelOpenConfirmDialog
                 }
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'left',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'left',
+                }}
               />
             </>
           ) : (
