@@ -14,8 +14,10 @@ import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import apiExports from '@/utils/hooks/apis/apis';
 import LoadingScreen from '../../components/loading/page';
 import { Snackbar, Alert } from '@mui/material';
+import { useRequireAuth } from '@/utils/hooks/useRequireAuth';
+interface UploadScreenProps {}
 
-const UploadScreen: React.FC = () => {
+const UploadScreen: React.FC<UploadScreenProps> = ({}) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -25,6 +27,7 @@ const UploadScreen: React.FC = () => {
   const { excute: createChannelByAudio, isLoading: isCreating } = useAxiosApi(
     apiExports.createChannelByAudio
   );
+  const { requireAuth } = useRequireAuth();
 
   const FILE_CONFIG = {
     maxSize: 100 * 1024 * 1024,
@@ -81,6 +84,7 @@ const UploadScreen: React.FC = () => {
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
+    if (!requireAuth()) return;
     if (e.target.files && e.target.files.length > 0 && e.target.files[0]) {
       validateFile(e.target.files[0]);
       e.target.value = '';
@@ -89,6 +93,7 @@ const UploadScreen: React.FC = () => {
 
   const handleClick = (event: React.MouseEvent) => {
     event.stopPropagation();
+    if (!requireAuth()) return;
     if (
       fileInputRef?.current &&
       !fileInputRef.current.hasAttribute('data-clicked')

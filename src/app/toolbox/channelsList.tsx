@@ -42,11 +42,16 @@ import { useAudioChannels } from '@/utils/hooks/useAudioChannels';
 import EditableItem from '@/components/editable-item/EditableItem';
 import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
 import UploadScreen from './UploadScreen';
+import LoginDialog from '@/components/dialogs/LoginDialog';
+import SignupDialog from '@/components/dialogs/SignupDialog';
+import { useLoginContext } from '@/context/LoginContext';
 
 const ChannelsList = () => {
   const theme = useTheme();
   const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const { isLoginOpen, setIsLoginOpen, isSignupOpen, setIsSignupOpen } =
+    useLoginContext();
 
   const [tabValue, setTabValue] = useState(0);
   const [isClient, setIsClient] = useState(false);
@@ -73,6 +78,10 @@ const ChannelsList = () => {
 
   const { excute: deleteChannel } = useAxiosApi(apis.deleteChannel);
   const { excute: updateChannelDetail } = useAxiosApi(apis.updateChannelDetail);
+
+  const handleLoginDialogClose = () => {
+    setIsLoginOpen(false);
+  };
 
   const handleCloseToolsMenu = useCallback(() => {
     setToolsAnchor(null);
@@ -204,7 +213,11 @@ const ChannelsList = () => {
             background: 'var(--Primary-, #EBE3DD)',
           }}
         >
-          <ToolbarDrawer open={isOpenDrawer} setIsOpenDrawer={setIsOpenDrawer}>
+          <ToolbarDrawer
+            open={isOpenDrawer}
+            setIsOpenDrawer={setIsOpenDrawer}
+            setIsLoginOpen={setIsLoginOpen}
+          >
             <>
               <Tabs
                 value={tabValue}
@@ -794,6 +807,16 @@ const ChannelsList = () => {
                 )}
               </Box>
             </>
+            <LoginDialog
+              open={isLoginOpen}
+              setIsSignupOpen={setIsSignupOpen}
+              onClose={handleLoginDialogClose}
+            />
+            <SignupDialog
+              open={isSignupOpen}
+              setIsLoginOpen={setIsLoginOpen}
+              onClose={() => setIsSignupOpen(false)}
+            />
           </ToolbarDrawer>
         </Box>
       )}
@@ -818,7 +841,11 @@ const ChannelsList = () => {
               background: 'var(--Primary-White, #FFF)',
             }}
           >
-            <IconButton role="button" aria-label="menu">
+            <IconButton
+              role="button"
+              aria-label="menu"
+              onClick={() => setIsOpenDrawer(true)}
+            >
               <MenuRounded sx={{ color: 'black' }} />
             </IconButton>
             <Typography
@@ -1198,6 +1225,16 @@ const ChannelsList = () => {
         editableName={
           channelsData?.[activeIndex!]?.organizationChannelTitle || ''
         }
+      />
+      <LoginDialog
+        open={isLoginOpen}
+        setIsSignupOpen={setIsSignupOpen}
+        onClose={handleLoginDialogClose}
+      />
+      <SignupDialog
+        open={isSignupOpen}
+        setIsLoginOpen={setIsLoginOpen}
+        onClose={() => setIsSignupOpen(false)}
       />
     </>
   );

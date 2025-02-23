@@ -42,7 +42,7 @@ interface ToolbarDrawerProps {
   openDataSource?: boolean;
   children: React.ReactNode;
   setIsOpenDrawer: (open: boolean) => void;
-  setIsLoginOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsLoginOpen?: (open: boolean) => void;
 }
 
 const drawerItems = [
