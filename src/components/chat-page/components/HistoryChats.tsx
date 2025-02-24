@@ -1,5 +1,14 @@
-import React from 'react';
-import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
+import React, { useState } from 'react';
+import {
+  Box,
+  Paper,
+  Typography,
+  Checkbox,
+  IconButton,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
+import { StarRounded, Delete as DeleteIcon } from '@mui/icons-material';
 import {
   OrganizationChannel,
   OrganizationChannelData,
@@ -16,73 +25,175 @@ const HistoryChats: React.FC<HistoryChatsProps> = ({
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  // State to track hovered channel
+  const [hoveredChannelId, setHoveredChannelId] = useState<string | null>(null);
+  // State to track selected channels (by ID)
+  const [selectedChannels, setSelectedChannels] = useState<{
+    [channelId: string]: boolean;
+  }>({});
+
+  const handleMouseEnter = (channelId: string) => {
+    setHoveredChannelId(channelId);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredChannelId(null);
+  };
+
+  const toggleChannel = (channelId: string) => {
+    setSelectedChannels((prev) => ({
+      ...prev,
+      [channelId]: !prev[channelId],
+    }));
+  };
+
+  const handleDelete = (channelId: string) => {
+    console.log('Delete channel:', channelId);
+    // Add your delete logic here.
+  };
+
   return (
     <Box
       sx={{
-        display: 'flex',
-        flexDirection: isMobile ? 'column' : 'row',
-        flexWrap: 'wrap',
-        gap: '12px',
-        justifyContent: 'center',
-        alignItems: 'center',
-        alignSelf: 'stretch',
-        pb: '16px',
+        display: 'grid',
+        gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
+        gap: 2,
+        width: '100%',
       }}
     >
-      {chats.slice(0, 6).map((chat, index) => (
-        <Box
-          key={index}
-          sx={{
-            width: isMobile ? '100%' : 'calc(33.33% - 8px)', // Adjusting width to fit 3 items per row on desktop
-            padding: isMobile ? '8px 16px' : '16px',
-            border: '1px solid #ccc',
-            borderRadius: '8px',
-            textAlign: 'left',
-            boxSizing: 'border-box', // Ensuring padding and border are included in width
-            display: 'flex',
-            flexDirection: 'column',
-            gap: isMobile ? '4px' : '16px',
-            cursor: 'pointer',
-            '&:hover': {
-              backgroundColor: '#FFF5F5',
-            },
-          }}
-          onClick={() => moveToChannelDetail({ ...chat, selected: false })}
-        >
-          <Typography
+      {chats.slice(0, 6).map((channel) => {
+        const isHovered = hoveredChannelId === channel.organizationChannelId;
+        const isSelected = !!selectedChannels[channel.organizationChannelId];
+        const isHoveredOrSelected = isHovered || isSelected;
+
+        return (
+          <Paper
+            key={channel.organizationChannelId}
+            onMouseEnter={() => handleMouseEnter(channel.organizationChannelId)}
+            onMouseLeave={handleMouseLeave}
+            elevation={0}
             sx={{
-              fontFamily: 'var(--font-open-sans)',
-              fontSize: '14px',
-              fontStyle: 'normal',
-              fontWeight: 700,
-              lineHeight: 'normal',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              p: 2,
+              height: '84px', // Fixed height to prevent shift
+              border: '1px solid var(--Secondary-Dark-Gray, #4A4A4A)',
+              borderRadius: 2,
+              position: 'relative',
+              gap: 2,
+              cursor: 'pointer',
+              '&:hover': {
+                bgcolor: 'rgba(255, 0, 0, 0.05)',
+              },
             }}
+            onClick={() => moveToChannelDetail({ ...channel, selected: false })}
           >
-            {chat.organizationChannelTitle}
-          </Typography>
-          <Typography
-            sx={{
-              overflow: 'hidden',
-              color: 'var(--Secondary-Dark-Gray, #4A4A4A)',
-              textOverflow: 'ellipsis',
-              fontFamily: 'DFPHeiMedium-B5',
-              fontSize: '12px',
-              fontStyle: 'normal',
-              fontWeight: 400,
-              lineHeight: 'normal',
-              display: '-webkit-box',
-              WebkitBoxOrient: 'vertical',
-              WebkitLineClamp: 1,
-              alignSelf: 'stretch',
-            }}
-          >
-            {new Date(chat.organizationChannelCreateDate).toLocaleString()}
-          </Typography>
-        </Box>
-      ))}
+            {/* Checkbox on hover/selection */}
+            {isHoveredOrSelected && (
+              <Box
+                sx={{
+                  position: 'absolute',
+                  left: '-13px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  zIndex: 2,
+                  pointerEvents: 'auto',
+                  p: 0,
+                  bgcolor: '#fff',
+                  borderRadius: 1,
+                }}
+              >
+                <Checkbox
+                  checked={isSelected}
+                  onChange={(e) => {
+                    e.stopPropagation();
+                    toggleChannel(channel.organizationChannelId);
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                  sx={{
+                    color: 'var(--Primary-Black, #212B36)',
+                    p: 0,
+                    '&.Mui-checked': {
+                      color: 'var(--Primary-Black, #212B36)',
+                    },
+                  }}
+                />
+              </Box>
+            )}
+
+            {/* Left box with title and date */}
+            <Box sx={{ flexGrow: 1 }}>
+              <Typography
+                sx={{
+                  color: '#000',
+                  fontFamily: 'Open Sans',
+                  fontSize: '14px',
+                  fontWeight: 700,
+                  mb: 1,
+                  '.group:hover &': { color: '#990000' },
+                }}
+              >
+                {channel.organizationChannelTitle}
+              </Typography>
+              <Typography
+                sx={{
+                  display: '-webkit-box',
+                  WebkitBoxOrient: 'vertical',
+                  WebkitLineClamp: 1,
+                  overflow: 'hidden',
+                  color: 'text.secondary',
+                  textOverflow: 'ellipsis',
+                  fontFamily: 'Open Sans',
+                  fontSize: '12px',
+                  fontWeight: 400,
+                }}
+              >
+                {new Date(
+                  channel.organizationChannelCreateDate
+                ).toLocaleString()}
+              </Typography>
+            </Box>
+
+            {/* Right side: fixed width container for icons */}
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1,
+                width: '60px', // Reserve space so adding delete icon doesn't shift layout
+                justifyContent: 'flex-end',
+              }}
+            >
+              <IconButton size="small" onClick={(e) => e.stopPropagation()}>
+                <StarRounded sx={{ width: 25, height: 25, color: '#000' }} />
+              </IconButton>
+              {/* Reserve space even if delete icon is not visible */}
+              {isHoveredOrSelected ? (
+                <IconButton
+                  size="small"
+                  sx={{
+                    color: '#CC0000',
+                    transform: 'translateX(10px)',
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (!isSelected) {
+                      toggleChannel(channel.organizationChannelId);
+                    }
+                    handleDelete(channel.organizationChannelId);
+                  }}
+                >
+                  <DeleteIcon sx={{ width: 25, height: 25 }} />
+                </IconButton>
+              ) : (
+                <Box sx={{ width: 25, height: 25 }} />
+              )}
+            </Box>
+          </Paper>
+        );
+      })}
     </Box>
   );
 };
