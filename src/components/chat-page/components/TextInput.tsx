@@ -154,7 +154,7 @@ const TextInput: React.FC<TextInputProps> = ({
         },
       ]);
       const response = await submitUserInputs({
-        organizationId: '4aba77788ae94eca8d6ff330506af944',
+        organizationId: 'yMJHyi6R1CB9whpdNvtA',
         query: userInputValue,
         advisorType,
         organizationChannelId: selectedChannelId,

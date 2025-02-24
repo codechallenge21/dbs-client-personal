@@ -160,7 +160,7 @@ const ChannelSummary = () => {
     // isValidating: isloadingChannelData,
   } = useAudioChannel({
     organizationChannelId,
-    organizationId: '4aba77788ae94eca8d6ff330506af944',
+    organizationId: 'yMJHyi6R1CB9whpdNvtA',
   });
 
   const { excute: updateChannelDetail } = useAxiosApi(apis.updateChannelDetail);
@@ -203,7 +203,7 @@ const ChannelSummary = () => {
     async (event: React.MouseEvent) => {
       event.stopPropagation();
       deleteChannel({
-        organizationId: '4aba77788ae94eca8d6ff330506af944',
+        organizationId: 'yMJHyi6R1CB9whpdNvtA',
         organizationChannelId: organizationChannelId || '',
       })
         .then(() => {
@@ -219,7 +219,7 @@ const ChannelSummary = () => {
   const handleEditChannelConfirm = useCallback(
     async (newTitle: string) => {
       await updateChannelDetail({
-        organizationId: '4aba77788ae94eca8d6ff330506af944',
+        organizationId: 'yMJHyi6R1CB9whpdNvtA',
         organizationChannelId: selectedChannel?.organizationChannelId || '',
         organizationChannelTitle: newTitle,
       });

@@ -65,7 +65,7 @@ const apis = {
     }
 
     return uploadFetcher.post<OrganizationChannelResponse>(
-      `/organizations/4aba77788ae94eca8d6ff330506af944/channels/upload`,
+      `/organizations/yMJHyi6R1CB9whpdNvtA/channels/upload`,
       formData,
       config
     );
