@@ -86,8 +86,6 @@ const SignupDialog: React.FC<SignupDialogProps> = ({
       return;
     }
 
-    console.log('Registering user:', name, email, password);
-
     try {
       const response = await registerUser({
         organizationId: 'yMJHyi6R1CB9whpdNvtA',

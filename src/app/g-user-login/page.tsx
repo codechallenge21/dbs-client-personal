@@ -24,7 +24,6 @@ function GUserLoginPageContent() {
     const completeGoogleLogin = async () => {
       try {
         const response = await googleLogin({ code });
-        console.log('response', response);
         if (response.status === 200) {
           showSnackbar('Login successful.', 'success');
           setTimeout(() => {
