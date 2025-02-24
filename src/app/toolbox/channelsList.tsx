@@ -9,33 +9,33 @@ import apis from '@/utils/hooks/apis/apis';
 import { useAudioChannels } from '@/utils/hooks/useAudioChannels';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import {
-    CheckCircleRounded,
-    MenuRounded,
-    MicRounded,
-    PendingActionsRounded,
-    RotateRightRounded,
-    SearchRounded,
-    StarBorderRounded,
-    StarRounded,
-    UploadRounded,
+  CheckCircleRounded,
+  MenuRounded,
+  MicRounded,
+  PendingActionsRounded,
+  RotateRightRounded,
+  SearchRounded,
+  StarBorderRounded,
+  StarRounded,
+  UploadRounded,
 } from '@mui/icons-material';
 import {
-    Box,
-    Button,
-    Card,
-    CardContent,
-    IconButton,
-    Tab,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Tabs,
-    Typography,
-    useMediaQuery,
-    useTheme,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  IconButton,
+  Tab,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Tabs,
+  Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -822,7 +822,7 @@ const ChannelsList = () => {
                 textAlign: 'center',
               }}
             >
-              Title
+              工具箱
             </Typography>
           </Box>
           <Tabs
