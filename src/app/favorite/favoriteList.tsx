@@ -31,7 +31,7 @@ const FavouriteList = () => {
   const [tabValue, setTabValue] = useState(0);
   const [isClient, setIsClient] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const [toolsAnchor, setToolsAnchor] = useState<null | HTMLElement>(null);
+  const [, setToolsAnchor] = useState<null | HTMLElement>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState<boolean>(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
   const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(
