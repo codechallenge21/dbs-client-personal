@@ -1,19 +1,19 @@
 import {
-    OrganizationChannel,
-    OrganizationChannelChatInteractResponse,
-    OrganizationChannelResponse,
-} from "@/interfaces/entities";
+  OrganizationChannel,
+  OrganizationChannelChatInteractResponse,
+  OrganizationChannelResponse,
+} from '@/interfaces/entities';
 import {
-    DeleteChannelApiPayload,
-    GetChannelDetailApiPayload,
-    GetChannelsApiPayload,
-    LogApiPayload,
-    SubmitUserInputsApiPayload,
-    UpdateChannelApiPayload,
-    UploadFileApiPayload,
-} from "@/interfaces/payloads";
-import axios, { AxiosRequestConfig } from "axios";
-import { fetcher, fetcherConfig, uploadFetcher } from "./fetchers";
+  DeleteChannelApiPayload,
+  GetChannelDetailApiPayload,
+  GetChannelsApiPayload,
+  LogApiPayload,
+  SubmitUserInputsApiPayload,
+  UpdateChannelApiPayload,
+  UploadFileApiPayload,
+} from '@/interfaces/payloads';
+import axios, { AxiosRequestConfig } from 'axios';
+import { fetcher, fetcherConfig, uploadFetcher } from './fetchers';
 // import { fetcher, fetcherConfig, uploadFetcher } from "@eGroupAI/hooks/apis/fetchers";
 
 // import Cookies from "universal-cookie";
@@ -24,11 +24,11 @@ const tools = {
   /**
    * Log errors.
    */
-  createLog: (payload?: LogApiPayload) => fetcher.post("/logs", payload),
+  createLog: (payload?: LogApiPayload) => fetcher.post('/logs', payload),
 };
 
 const baseURL =
-  process.env.NODE_ENV === "production"
+  process.env.NODE_ENV === 'production'
     ? `${process.env.URL_FOR_NEXTJS_SERVER_SIDE_API}/api/v1/`
     : `${process.env.NEXT_PUBLIC_PROXY_URL}/api/v1/`;
 
@@ -53,6 +53,12 @@ const apis = {
       `/organizations/${organizationId}/channels/${organizationChannelId}`
     );
   },
+  ApiRegenerateSummary: (payload?: GetChannelDetailApiPayload) => {
+    const { organizationId, organizationChannelId } = payload || {};
+    return fetcher.post<OrganizationChannel>(
+      `/organizations/${organizationId}/channels/${organizationChannelId}/regenerate-summary`
+    );
+  },
   createChannelByAudio: (
     payload?: UploadFileApiPayload,
     config?: AxiosRequestConfig<FormData>
@@ -61,7 +67,7 @@ const apis = {
 
     const formData = new FormData();
     if (file) {
-      formData.append("file", file);
+      formData.append('file', file);
     }
 
     return uploadFetcher.post<OrganizationChannelResponse>(
@@ -71,7 +77,8 @@ const apis = {
     );
   },
   submitUserInputs: (payload?: SubmitUserInputsApiPayload) => {
-    const { organizationId, organizationChannelId, query, advisorType } = payload || {};
+    const { organizationId, organizationChannelId, query, advisorType } =
+      payload || {};
     if (!organizationChannelId) {
       return fetcher.post<OrganizationChannelChatInteractResponse>(
         `/organizations/${organizationId}/channels/chat`,
@@ -91,7 +98,8 @@ const apis = {
     );
   },
   updateChannelDetail: (payload?: UpdateChannelApiPayload) => {
-    const { organizationId, organizationChannelId, organizationChannelTitle } = payload || {};
+    const { organizationId, organizationChannelId, organizationChannelTitle } =
+      payload || {};
     return fetcher.patch<OrganizationChannel>(
       `/organizations/${organizationId}/channels/${organizationChannelId}`,
       {
