@@ -19,7 +19,6 @@ import {
     StarRounded,
     UploadRounded,
 } from '@mui/icons-material';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import {
     Box,
     Button,
@@ -248,7 +247,7 @@ const ChannelsList = () => {
                     fontWeight: 700,
                     fontStyle: 'normal',
                     lineHeight: 'normal',
-                    fontFamily: 'Open Sans',
+                    fontFamily: 'DFPHeiBold-B5',
                     color: 'var(--Text-Secondary, #637381)',
                     '&.Mui-selected': {
                       fontWeight: 400,
@@ -274,7 +273,7 @@ const ChannelsList = () => {
                     fontWeight: 700,
                     fontStyle: 'normal',
                     lineHeight: 'normal',
-                    fontFamily: 'Open Sans',
+                    fontFamily: 'DFPHeiBold-B5',
                     color: 'var(--Text-Secondary, #637381)',
                     '&.Mui-selected': {
                       fontWeight: 400,
@@ -300,7 +299,7 @@ const ChannelsList = () => {
                     fontWeight: 700,
                     fontStyle: 'normal',
                     lineHeight: 'normal',
-                    fontFamily: 'Open Sans',
+                    fontFamily: 'DFPHeiBold-B5',
                     color: 'var(--Text-Secondary, #637381)',
                     '&.Mui-selected': {
                       fontWeight: 400,
@@ -326,7 +325,7 @@ const ChannelsList = () => {
                     fontWeight: 700,
                     fontStyle: 'normal',
                     lineHeight: 'normal',
-                    fontFamily: 'Open Sans',
+                    fontFamily: 'DFPHeiBold-B5',
                     color: 'var(--Text-Secondary, #637381)',
                     '&.Mui-selected': {
                       fontWeight: 400,
@@ -656,11 +655,11 @@ const ChannelsList = () => {
                                   ?.organizationChannelTranscriptStatus ===
                                 'PENDING' ? (
                                 <PendingActionsRounded
-                                  sx={{ color: 'rgba(33, 43, 54, 1)' }}
+                                  sx={{ color: 'rgba(0, 102, 204, 1)' }}
                                 />
                               ) : (
                                 <PendingActionsRounded
-                                  sx={{ color: 'rgba(33, 43, 54, 1)' }}
+                                  sx={{ color: 'rgba(0, 102, 204, 1)' }}
                                 />
                               )}
                               <span
@@ -713,8 +712,8 @@ const ChannelsList = () => {
                               }}
                             >
                               {new Date(
-                        channel.organizationChannelCreateDate
-                      ).toLocaleString()}
+                                channel.organizationChannelCreateDate
+                              ).toLocaleString()}
                             </Typography>
                           </TableCell>
                           <TableCell
@@ -786,6 +785,7 @@ const ChannelsList = () => {
           sx={{
             padding: 2,
             height: '100vh',
+            width: '100vw',
             overflowY: 'auto',
             background: 'var(--Primary-White, #FFF)',
           }}
@@ -794,12 +794,13 @@ const ChannelsList = () => {
             sx={{
               flexShrink: 0,
               height: '64px',
-              width: '375px',
+              width: '100%',
               display: 'flex',
               padding: '8px 6px',
               alignItems: 'center',
               borderRadius: '8px 0px 0px 8px',
               background: 'var(--Primary-White, #FFF)',
+              boxSizing: 'border-box',
             }}
           >
             <IconButton role="button" aria-label="menu">
@@ -813,16 +814,15 @@ const ChannelsList = () => {
                 minHeight: '32px',
                 alignItems: 'center',
                 padding: '4px 0px 4px 8px',
+                fontFamily: 'DFPHeiBold-B5',
                 fontWeight: 400,
                 fontSize: '16px',
-                lineHeight: '16px',
+                lineHeight: '24px',
                 letterSpacing: '0%',
+                textAlign: 'center',
               }}
             >
-              工具箱
-              <ArrowDropDownIcon
-                sx={{ marginLeft: '5px', marginBottom: '3px' }}
-              />
+              Title
             </Typography>
           </Box>
           <Tabs
@@ -1106,11 +1106,11 @@ const ChannelsList = () => {
                     ) : channel.organizationChannelTranscriptList[0]
                         ?.organizationChannelTranscriptStatus === 'PENDING' ? (
                       <PendingActionsRounded
-                        sx={{ color: 'rgba(33, 43, 54, 1)' }}
+                        sx={{ color: 'rgba(0, 102, 204, 1)' }}
                       />
                     ) : (
                       <PendingActionsRounded
-                        sx={{ color: 'rgba(33, 43, 54, 1)' }}
+                        sx={{ color: 'rgba(0, 102, 204, 1)' }}
                       />
                     )}
                     <span
