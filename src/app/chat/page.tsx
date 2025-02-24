@@ -1,25 +1,25 @@
 'use client';
 
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-  Suspense,
-} from 'react';
+import DataSourceDialog from '@/components/chat-page/components/chatDataStore';
 import Header from '@/components/chat-page/components/Header';
 import MainContent from '@/components/chat-page/components/MainContent';
-import SwitchDialog from '@/components/dialogs/SwitchDialog';
-import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
-import { Box, CircularProgress, useMediaQuery, useTheme } from '@mui/material';
-import ChannelContentContext from '../../components/channel-context-provider/ChannelContentContext';
-import { useSearchParams } from 'next/navigation';
-import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
-import apis from '@/utils/hooks/apis/apis';
-import DataSourceDialog from '@/components/chat-page/components/chatDataStore';
-import { useChatChannels } from '@/utils/hooks/useChatChannels';
 import LoginDialog from '@/components/dialogs/LoginDialog';
 import SignupDialog from '@/components/dialogs/SignupDialog';
+import SwitchDialog from '@/components/dialogs/SwitchDialog';
+import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
+import apis from '@/utils/hooks/apis/apis';
+import { useChatChannels } from '@/utils/hooks/useChatChannels';
+import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
+import { Box, CircularProgress, useMediaQuery, useTheme } from '@mui/material';
+import { useSearchParams } from 'next/navigation';
+import {
+    Suspense,
+    useCallback,
+    useContext,
+    useEffect,
+    useState,
+} from 'react';
+import ChannelContentContext from '../../components/channel-context-provider/ChannelContentContext';
 
 export default function ChatHomePage() {
   return (
@@ -52,7 +52,7 @@ function ClientContent() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isSignupOpen, setIsSignupOpen] = useState(false);
   const { data: chatsData } = useChatChannels({
-    organizationId: '4aba77788ae94eca8d6ff330506af944',
+    organizationId: 'yMJHyi6R1CB9whpdNvtA',
   });
 
   const handleClose = useCallback(() => setIsOpen(false), []);
@@ -62,7 +62,7 @@ function ClientContent() {
     async (organizationChannelId: string) => {
       try {
         const res = await getChannelDetail({
-          organizationId: '4aba77788ae94eca8d6ff330506af944',
+          organizationId: 'yMJHyi6R1CB9whpdNvtA',
           organizationChannelId,
         });
         setSelectedChannel(res.data);
