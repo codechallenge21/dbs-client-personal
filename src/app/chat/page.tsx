@@ -35,7 +35,7 @@ function ClientContent() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const organizationChannelId = searchParams.get('organizationChannelId') || '';
+  const organizationChannelId = searchParams.get('organizationChannelId') ?? '';
   const {
     selectedChannel,
     setSelectedChannelId,
@@ -125,11 +125,7 @@ function ClientContent() {
           borderRadius: '8px',
           flexDirection: 'column',
           backgroundColor: '#FFF',
-          justifyContent: isMobile
-            ? chatsData?.length
-              ? 'flex-end'
-              : 'center'
-            : 'center',
+          justifyContent: isMobile && chatsData?.length ? 'flex-end' : 'center',
           height: isMobile ? '100vh' : 'calc(100vh - 32px)',
         }}
       >

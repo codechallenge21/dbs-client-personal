@@ -29,6 +29,7 @@
     "@types/mermaid": "^9.2.0",
     "axios": "^1.7.9",
     "dayjs": "^1.11.13",
+    "framer-motion": "^12.4.3",
     "js-cookie": "^3.0.5",
     "mermaid": "^11.4.1",
     "jwt-decode": "^4.0.0",

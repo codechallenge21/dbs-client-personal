@@ -1,5 +1,6 @@
 'use client';
 
+import React, { type FC, useState } from 'react';
 import type {
   OrganizationChannel,
   OrganizationChannelMessage,
@@ -22,7 +23,6 @@ import {
   ThumbDown,
 } from '@mui/icons-material';
 import Image from 'next/image';
-import React, { type FC, useState } from 'react';
 import imagePreview from '@/assets/Images/Image Icon.svg';
 import MermaidMarkdown from '../MermaidChart/Mermaidmarkdown';
 
@@ -81,27 +81,10 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
       maxWidth={false}
       sx={{
         display: 'flex',
-        marginTop: '0px',
-        mb: '74px',
-        overflow: 'hidden',
-        flex: 1,
-        transform: 'matrix(1, 0, 0, 1, 0, 74)',
+        marginTop: isMobile ? '16px' : '0px',
+        mb: '16px',
         alignItems: 'center',
         justifyContent: 'center',
-        '&::-webkit-scrollbar': {
-          width: '5px',
-        },
-        '&::-webkit-scrollbar-thumb': {
-          backgroundColor: '#c1c1c1',
-          borderRadius: '4px',
-        },
-        '&::-webkit-scrollbar-thumb:hover': {
-          backgroundColor: '#a8a8a8',
-        },
-        '&::-webkit-scrollbar-track': {
-          backgroundColor: '#f1f1f1',
-          borderRadius: '4px',
-        },
       }}
     >
       <Box
@@ -198,7 +181,6 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                     arrow
                   >
                     <IconButton
-                      role="button"
                       aria-label="copy"
                       sx={{
                         display: 'flex',
@@ -343,7 +325,6 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                   arrow
                 >
                   <IconButton
-                    role="button"
                     aria-label="copy"
                     sx={{
                       display: 'flex',

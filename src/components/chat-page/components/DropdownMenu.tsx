@@ -20,7 +20,6 @@ import {
   SupportAgentOutlined,
   BusinessCenterRounded,
   AccountBalanceWalletRounded,
-  PersonPinRounded,
 } from '@mui/icons-material';
 import apis from '@/utils/hooks/apis/apis';
 import { useRouter } from 'next/navigation';
@@ -76,13 +75,15 @@ const listItems = [
   },
 ];
 
+interface DropdownMenuProps {
+  readonly advisor: AdvisorType;
+  readonly isTextInput?: boolean;
+}
+
 export default function DropdownMenu({
   advisor,
   isTextInput = false,
-}: {
-  advisor: AdvisorType;
-  isTextInput?: boolean;
-}) {
+}: DropdownMenuProps) {
   const theme = useTheme();
   const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -157,7 +158,7 @@ export default function DropdownMenu({
       try {
         await deleteChannel({
           organizationId: '4aba77788ae94eca8d6ff330506af944',
-          organizationChannelId: selectedChannelId || '',
+          organizationChannelId: selectedChannelId ?? '',
         });
         window.location.href = '/chat';
         setIsDeleteDialogOpen(false);
@@ -174,7 +175,7 @@ export default function DropdownMenu({
       try {
         await updateChannelDetail({
           organizationId: '4aba77788ae94eca8d6ff330506af944',
-          organizationChannelId: selectedChannelId || '',
+          organizationChannelId: selectedChannelId ?? '',
           organizationChannelTitle: newTitle,
         });
         if (selectedChannelId) {
@@ -217,103 +218,91 @@ export default function DropdownMenu({
           onClick={(e) => setToolsAnchor(e.currentTarget)}
           sx={{
             cursor: 'pointer',
-            background: 'none',
           }}
         >
           {listItems
             .filter((item) => item.value === advisor)
-            .map((item, index) => (
-              <Button
-                sx={{
-                  gap: '2px',
-                  height: '40px',
-                  padding: '8px',
-                  borderRadius: '8px',
-                }}
-                startIcon={<PersonPinRounded sx={{ color: '#212B36' }} />}
-                key={index}
-              >
-                <Typography
+            .map((item) => (
+              <Box key={item.value} sx={{ display: 'flex', gap: '8px' }}>
+                <ListItemIcon
+                  key={item.value}
                   sx={{
-                    fontWeight: 700,
-                    fontSize: '14px',
-                    color: '#212B36',
-                    lineHeight: '24px',
-                    textAlign: 'center',
-                    letterSpacing: '0px',
-                    fontFamily: 'Public Sans',
+                    color: 'black',
+                    minWidth: 'auto',
                   }}
                 >
-                  {item.title}
-                </Typography>
-              </Button>
+                  {item.icon}
+                </ListItemIcon>
+                <Typography>{item.title}</Typography>
+              </Box>
             ))}
         </Box>
       ) : (
-        <>
-          <Typography
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '4px 8px',
-              color: toolsAnchor ? '#0066cc' : '#4A4A4A',
-              backgroundColor: toolsAnchor ? '#F5F5F5' : 'white',
-              borderRadius: toolsAnchor ? '10px' : '0px',
-              cursor:
-                chatResponses[1]?.organizationChannelTitle ||
-                selectedChannel?.organizationChannelTitle
-                  ? 'pointer'
-                  : 'default',
-              height: '40px',
-              fontSize: '16px',
-              fontFamily: 'DFPHeiBold-B5',
-            }}
-          >
-            {chatResponses[1]?.organizationChannelTitle ||
-            selectedChannel?.organizationChannelTitle ? (
-              <>
-                {chatResponses[1]?.organizationChannelTitle ||
-                  selectedChannel?.organizationChannelTitle}
-                <EditableItem
-                  index={0}
-                  isChannelSummary
-                  toolsAnchor={toolsAnchorDeleteEdit}
-                  activeIndex={activeIndex}
-                  key={selectedChannelId}
-                  handleMenuOpen={handleMenuOpen}
-                  setToolsAnchor={setToolsAnchorDeleteEdit}
-                  handleCloseToolsMenu={handleCloseToolsMenu}
-                  handleOpenEditChannelDialog={handleOpenEditChannelDialog}
-                  handleDeleteChannelOpenConfirmDialog={
-                    handleDeleteChannelOpenConfirmDialog
-                  }
-                />
-              </>
-            ) : (
-              listItems.find((item) => item.value === advisor)?.title
-            )}
-          </Typography>
-        </>
+        <Button
+          size="medium"
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '4px 8px',
+            color: toolsAnchor ? '#0066cc' : '#4A4A4A',
+            backgroundColor: toolsAnchor ? '#F5F5F5' : 'white',
+            borderRadius: toolsAnchor ? '10px' : '0px',
+            cursor:
+              chatResponses[1]?.organizationChannelTitle ||
+              selectedChannel?.organizationChannelTitle
+                ? 'pointer'
+                : 'default',
+            height: '40px',
+            fontSize: '16px',
+            fontFamily: 'DFPHeiBold-B5',
+          }}
+        >
+          {chatResponses[1]?.organizationChannelTitle ||
+          selectedChannel?.organizationChannelTitle ? (
+            <>
+              {chatResponses[1]?.organizationChannelTitle ??
+                selectedChannel?.organizationChannelTitle}
+              <EditableItem
+                index={0}
+                isChannelSummary
+                toolsAnchor={toolsAnchorDeleteEdit}
+                activeIndex={activeIndex}
+                key={selectedChannelId}
+                handleMenuOpen={handleMenuOpen}
+                setToolsAnchor={setToolsAnchorDeleteEdit}
+                handleCloseToolsMenu={handleCloseToolsMenu}
+                handleOpenEditChannelDialog={handleOpenEditChannelDialog}
+                handleDeleteChannelOpenConfirmDialog={
+                  handleDeleteChannelOpenConfirmDialog
+                }
+              />
+            </>
+          ) : (
+            listItems.find((item) => item.value === advisor)?.title
+          )}
+        </Button>
       )}
       <Menu
         anchorEl={toolsAnchor}
         open={Boolean(toolsAnchor)}
         onClose={() => setToolsAnchor(null)}
-        PaperProps={{
-          sx: {
-            padding: '4px',
-            borderRadius: '12px',
-            width: {
-              xs: '100%',
-              sm: '360px',
+        slotProps={{
+          paper: {
+            sx: {
+              padding: '4px',
+              borderRadius: '12px',
+              width: {
+                xs: '100%',
+                sm: '360px',
+              },
+              maxWidth: isMobile ? '89%' : '358px',
+              minHeight: isMobile ? 'auto' : '392px',
+              ml: chatResponses.length || selectedChannel ? 1 : -1,
+              mt: chatResponses.length || selectedChannel ? 0 : 1,
+              boxShadow:
+                '0px 0px 2px 0px rgba(145, 158, 171, 0.24), -20px 20px 40px -4px rgba(145, 158, 171, 0.24)',
             },
-            maxWidth: isMobile ? '89%' : '358px',
-            minHeight: isMobile ? 'auto' : '392px',
-            ml: chatResponses.length || selectedChannel ? 1 : -1,
-            mt: chatResponses.length || selectedChannel ? 0 : 1,
-            boxShadow:
-              '0px 0px 2px 0px rgba(145, 158, 171, 0.24), -20px 20px 40px -4px rgba(145, 158, 171, 0.24)',
           },
         }}
         MenuListProps={{
@@ -326,19 +315,18 @@ export default function DropdownMenu({
           },
         }}
         anchorOrigin={{
-          vertical:
-            chatResponses.length || selectedChannel ? 'bottom' : 'bottom', // Align vertically to the center
+          vertical: 'bottom', // Align vertically to the center
           horizontal:
             chatResponses.length || selectedChannel ? 'right' : 'left', // Align to the right side of the anchor element
         }}
         transformOrigin={{
           vertical: chatResponses.length || selectedChannel ? 'bottom' : 'top', // Transform origin to match the vertical alignment
-          horizontal: chatResponses.length || selectedChannel ? 'left' : 'left', // Ensure the menu starts from the left edge of its anchor
+          horizontal: 'left', // Ensure the menu starts from the left edge of its anchor
         }}
       >
-        {listItems.map((item, index) => (
+        {listItems.map((item) => (
           <MenuItem
-            key={index}
+            key={item.value}
             sx={{
               alignItems: 'center',
               padding: '8px',
@@ -413,8 +401,8 @@ export default function DropdownMenu({
         onClose={handleCloseDeleteDialog}
         onConfirm={handleDeleteChannelConfirm}
         deletableName={
-          selectedChannel?.organizationChannelTitle ||
-          chatResponses[1]?.organizationChannelTitle ||
+          selectedChannel?.organizationChannelTitle ??
+          chatResponses[1]?.organizationChannelTitle ??
           ''
         }
       />
@@ -423,8 +411,8 @@ export default function DropdownMenu({
         onClose={handleCloseEditDialog}
         onConfirm={handleEditChannelConfirm}
         editableName={
-          selectedChannel?.organizationChannelTitle ||
-          chatResponses[1]?.organizationChannelTitle ||
+          selectedChannel?.organizationChannelTitle ??
+          chatResponses[1]?.organizationChannelTitle ??
           ''
         }
       />
