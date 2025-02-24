@@ -376,10 +376,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
             )}
             <Box
               sx={{
-                width:
-                  message.organizationChannelMessageType === 'AI'
-                    ? '100%'
-                    : 'fit-content',
+                width: { xs: '100%', sm: 'fit-content' },
                 marginLeft:
                   message.organizationChannelMessageType === 'AI'
                     ? '0'
