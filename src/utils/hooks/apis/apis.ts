@@ -1,20 +1,19 @@
-import { fetcher, fetcherConfig, uploadFetcher } from "./fetchers";
-import axios from "axios";
 import {
-  OrganizationChannel,
-  OrganizationChannelResponse,
-  OrganizationChannelChatInteractResponse,
+    OrganizationChannel,
+    OrganizationChannelChatInteractResponse,
+    OrganizationChannelResponse,
 } from "@/interfaces/entities";
 import {
-  LogApiPayload,
-  GetChannelsApiPayload,
-  GetChannelDetailApiPayload,
-  UploadFileApiPayload,
-  SubmitUserInputsApiPayload,
-  DeleteChannelApiPayload,
-  UpdateChannelApiPayload,
+    DeleteChannelApiPayload,
+    GetChannelDetailApiPayload,
+    GetChannelsApiPayload,
+    LogApiPayload,
+    SubmitUserInputsApiPayload,
+    UpdateChannelApiPayload,
+    UploadFileApiPayload,
 } from "@/interfaces/payloads";
-import { AxiosRequestConfig } from "axios";
+import axios, { AxiosRequestConfig } from "axios";
+import { fetcher, fetcherConfig, uploadFetcher } from "./fetchers";
 // import { fetcher, fetcherConfig, uploadFetcher } from "@eGroupAI/hooks/apis/fetchers";
 
 // import Cookies from "universal-cookie";
@@ -66,7 +65,7 @@ const apis = {
     }
 
     return uploadFetcher.post<OrganizationChannelResponse>(
-      `/organizations/4aba77788ae94eca8d6ff330506af944/channels/upload`,
+      `/organizations/yMJHyi6R1CB9whpdNvtA/channels/upload`,
       formData,
       config
     );
