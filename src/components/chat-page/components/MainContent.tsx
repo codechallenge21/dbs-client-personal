@@ -103,27 +103,34 @@ const MainContent: React.FC<MainContentProps> = ({
           sx={{
             width: '100%',
             height: 'calc(100vh - 105px)',
-            overflow: 'auto !important',
-            '&::-webkit-scrollbar': {
-              width: '5px',
-            },
-            '&::-webkit-scrollbar-thumb': {
-              backgroundColor: '#c1c1c1',
-              borderRadius: '4px',
-            },
-            '&::-webkit-scrollbar-thumb:hover': {
-              backgroundColor: '#a8a8a8',
-            },
-            '&::-webkit-scrollbar-track': {
-              backgroundColor: '#f1f1f1',
-              borderRadius: '4px',
-            },
+            overflow: 'hidden',
+            display: 'flex',
+            flexDirection: 'column',
           }}
         >
-          <ChannelMessagePanel
-            channel={selectedChannel}
-            chatResponses={chatResponses}
-          />
+          <Box
+            sx={{
+              flex: 1,
+              overflowY: 'auto',
+              '&::-webkit-scrollbar': {
+                width: '22px',
+              },
+              '&::-webkit-scrollbar-thumb': {
+                backgroundColor: '#888',
+                borderRadius: '5px',
+                border: '3px solid transparent',
+                backgroundClip: 'content-box',
+              },
+              '&::-webkit-scrollbar-thumb:hover': {
+                backgroundColor: '#555',
+              },
+            }}
+          >
+            <ChannelMessagePanel
+              channel={selectedChannel}
+              chatResponses={chatResponses}
+            />
+          </Box>
           <TextInput
             from={'mainContent'}
             submitUserInputs={submitUserInputs}
