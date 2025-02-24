@@ -1,33 +1,33 @@
 'use client';
 
-import { useCallback, useContext, useState } from 'react';
-import {
-  Typography,
-  ListItemIcon,
-  ListItemText,
-  Menu,
-  MenuItem,
-  useTheme,
-  useMediaQuery,
-  Box,
-  Button,
-} from '@mui/material';
-import {
-  WorkRounded,
-  PhishingRounded,
-  MoneyOffRounded,
-  LocalHospitalRounded,
-  SupportAgentOutlined,
-  BusinessCenterRounded,
-  AccountBalanceWalletRounded,
-} from '@mui/icons-material';
-import apis from '@/utils/hooks/apis/apis';
-import { useRouter } from 'next/navigation';
-import { AdvisorType } from '../../../app/chat/types';
-import EditDialog from '@/components/dialogs/EditDialog';
-import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import DeleteDialog from '@/components/dialogs/DeleteDialog';
+import EditDialog from '@/components/dialogs/EditDialog';
 import EditableItem from '@/components/editable-item/EditableItem';
+import apis from '@/utils/hooks/apis/apis';
+import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
+import {
+    AccountBalanceWalletRounded,
+    BusinessCenterRounded,
+    LocalHospitalRounded,
+    MoneyOffRounded,
+    PhishingRounded,
+    SupportAgentOutlined,
+    WorkRounded,
+} from '@mui/icons-material';
+import {
+    Box,
+    Button,
+    ListItemIcon,
+    ListItemText,
+    Menu,
+    MenuItem,
+    Typography,
+    useMediaQuery,
+    useTheme,
+} from '@mui/material';
+import { useRouter } from 'next/navigation';
+import { useCallback, useContext, useState } from 'react';
+import { AdvisorType } from '../../../app/chat/types';
 import ChannelContentContext from '../../channel-context-provider/ChannelContentContext';
 
 const listItems = [
@@ -111,7 +111,7 @@ export default function DropdownMenu({
     async (organizationChannelId: string) => {
       try {
         const res = await getChannelDetail({
-          organizationId: '4aba77788ae94eca8d6ff330506af944',
+          organizationId: 'yMJHyi6R1CB9whpdNvtA',
           organizationChannelId,
         });
         setSelectedChannel(res.data);
@@ -157,7 +157,7 @@ export default function DropdownMenu({
       event.stopPropagation();
       try {
         await deleteChannel({
-          organizationId: '4aba77788ae94eca8d6ff330506af944',
+          organizationId: 'yMJHyi6R1CB9whpdNvtA',
           organizationChannelId: selectedChannelId ?? '',
         });
         window.location.href = '/chat';
@@ -174,7 +174,7 @@ export default function DropdownMenu({
     async (newTitle: string) => {
       try {
         await updateChannelDetail({
-          organizationId: '4aba77788ae94eca8d6ff330506af944',
+          organizationId: 'yMJHyi6R1CB9whpdNvtA',
           organizationChannelId: selectedChannelId ?? '',
           organizationChannelTitle: newTitle,
         });

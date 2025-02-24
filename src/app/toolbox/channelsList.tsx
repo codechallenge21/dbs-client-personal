@@ -1,46 +1,45 @@
 'use client';
-import React, { useState, useEffect, useCallback } from 'react';
-import {
-  Box,
-  Tab,
-  Tabs,
-  Table,
-  Button,
-  useTheme,
-  TableRow,
-  TableBody,
-  TableCell,
-  TableHead,
-  Typography,
-  IconButton,
-  useMediaQuery,
-  TableContainer,
-  Card,
-  CardContent,
-  // CircularProgress,
-} from '@mui/material';
-import {
-  MicRounded,
-  StarRounded,
-  SearchRounded,
-  UploadRounded,
-  MenuRounded,
-  CheckCircleRounded,
-  RotateRightRounded,
-  PendingActionsRounded,
-  StarBorderRounded,
-} from '@mui/icons-material';
-import { useRouter } from 'next/navigation';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { OrganizationChannel } from '@/interfaces/entities';
-import apis from '@/utils/hooks/apis/apis';
-import EditDialog from '@/components/dialogs/EditDialog';
-import UploadDialog from '@/components/uploadDialog/page';
-import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import DeleteDialog from '@/components/dialogs/DeleteDialog';
-import { useAudioChannels } from '@/utils/hooks/useAudioChannels';
+import EditDialog from '@/components/dialogs/EditDialog';
 import EditableItem from '@/components/editable-item/EditableItem';
 import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
+import UploadDialog from '@/components/uploadDialog/page';
+import { OrganizationChannel } from '@/interfaces/entities';
+import apis from '@/utils/hooks/apis/apis';
+import { useAudioChannels } from '@/utils/hooks/useAudioChannels';
+import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
+import {
+    CheckCircleRounded,
+    MenuRounded,
+    MicRounded,
+    PendingActionsRounded,
+    RotateRightRounded,
+    SearchRounded,
+    StarBorderRounded,
+    StarRounded,
+    UploadRounded,
+} from '@mui/icons-material';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import {
+    Box,
+    Button,
+    Card,
+    CardContent,
+    IconButton,
+    Tab,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Tabs,
+    Typography,
+    useMediaQuery,
+    useTheme,
+} from '@mui/material';
+import { useRouter } from 'next/navigation';
+import React, { useCallback, useEffect, useState } from 'react';
 
 const ChannelsList = () => {
   const theme = useTheme();
@@ -66,7 +65,7 @@ const ChannelsList = () => {
     mutate: mutateAudioChannels,
     // isValidating: isLoadingChannels,
   } = useAudioChannels({
-    organizationId: '4aba77788ae94eca8d6ff330506af944',
+    organizationId: 'yMJHyi6R1CB9whpdNvtA',
   });
 
   const { excute: deleteChannel } = useAxiosApi(apis.deleteChannel);
@@ -96,7 +95,7 @@ const ChannelsList = () => {
     async (event: React.MouseEvent) => {
       event.stopPropagation();
       deleteChannel({
-        organizationId: '4aba77788ae94eca8d6ff330506af944',
+        organizationId: 'yMJHyi6R1CB9whpdNvtA',
         organizationChannelId:
           channelsData?.[activeIndex!]?.organizationChannelId || '',
       })
@@ -121,7 +120,7 @@ const ChannelsList = () => {
   const handleEditChannelConfirm = useCallback(
     async (newTitle: string) => {
       await updateChannelDetail({
-        organizationId: '4aba77788ae94eca8d6ff330506af944',
+        organizationId: 'yMJHyi6R1CB9whpdNvtA',
         organizationChannelId:
           channelsData?.[activeIndex!]?.organizationChannelId || '',
         organizationChannelTitle: newTitle,
@@ -359,9 +358,11 @@ const ChannelsList = () => {
                 <Box
                   sx={{
                     display: 'flex',
-                    justifyContent: 'space-between',
+                    justifyContent: 'space-between', // Keep title on left & icons on right for big screens
                     alignItems: 'center',
                     alignSelf: 'stretch',
+                    flexWrap: 'wrap', // Allows wrapping when screen is small
+                    gap: '16px',
                   }}
                 >
                   <Typography
@@ -372,6 +373,8 @@ const ChannelsList = () => {
                       lineHeight: 'normal',
                       fontFamily: 'DFPHeiBold-B5',
                       color: 'var(--Primary-Black, #212B36)',
+                      textAlign: 'left', // Always left-aligned
+                      flex: '1 1 auto', // Makes sure title takes available space
                     }}
                     gutterBottom
                   >
@@ -381,10 +384,11 @@ const ChannelsList = () => {
                   <Box
                     sx={{
                       display: 'flex',
-                      width: '458px',
-                      justifyContent: 'flex-end',
+                      width: { xs: '100%', md: 'auto' }, // Full width on small screens, auto on big screens
+                      justifyContent: { xs: 'flex-start', md: 'flex-end' }, // Left-align when wrapped, right-align on big screens
                       alignItems: 'center',
                       gap: '16px',
+                      flexWrap: 'wrap',
                     }}
                   >
                     <IconButton
@@ -625,7 +629,7 @@ const ChannelsList = () => {
                           <TableCell
                             sx={{
                               width: '18%',
-                              padding: '0px',
+                              padding: '0px 8px 0px 0px ',
                               border: 'none',
                               height: '51px !important',
                             }}
@@ -692,7 +696,7 @@ const ChannelsList = () => {
                           <TableCell
                             sx={{
                               width: '18%',
-                              padding: '0px',
+                              padding: '0px 0px 0px 8px',
                               border: 'none',
                               height: '51px !important',
                             }}

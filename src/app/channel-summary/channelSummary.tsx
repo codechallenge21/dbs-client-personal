@@ -1,51 +1,50 @@
 'use client';
-import React, { useCallback, useEffect, useState } from 'react';
-import {
-  Tab,
-  Box,
-  Tabs,
-  Card,
-  Paper,
-  Grid2,
-  styled,
-  Button,
-  useTheme,
-  Typography,
-  IconButton,
-  CardContent,
-  useMediaQuery,
-  TextareaAutosize,
-  Tooltip
-  // CircularProgress,
-} from '@mui/material';
-import {
-  Done as DoneIcon,
-  MicRounded,
-  SyncRounded,
-  ReplayRounded,
-  PushPinRounded,
-  StarBorderRounded,
-  ContentCopyRounded,
-  PermIdentityRounded,
-  ArrowBackIosRounded,
-  ArrowForwardIosRounded,
-  ThumbDownOffAltRounded,
-  SettingsInputComponentRounded,
-  ArrowBackIosNewRounded,
-  HistoryRounded
-} from '@mui/icons-material';
-import { OrganizationChannel } from '@/interfaces/entities';
-import { useAudioChannel } from '@/utils/hooks/useAudioChannel';
-import { useRouter, useSearchParams } from 'next/navigation';
+import DataSourceDialog from '@/components/chat-page/components/chatDataStore';
+import DeleteDialog from '@/components/dialogs/DeleteDialog';
+import EditDialog from '@/components/dialogs/EditDialog';
+import EditableItem from '@/components/editable-item/EditableItem';
 import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
 import UploadDialog from '@/components/uploadDialog/page';
-import DataSourceDialog from '@/components/chat-page/components/chatDataStore';
-import ReactMarkdown from 'react-markdown';
-import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
+import { OrganizationChannel } from '@/interfaces/entities';
 import apis from '@/utils/hooks/apis/apis';
-import EditableItem from '@/components/editable-item/EditableItem';
-import EditDialog from '@/components/dialogs/EditDialog';
-import DeleteDialog from '@/components/dialogs/DeleteDialog';
+import { useAudioChannel } from '@/utils/hooks/useAudioChannel';
+import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
+import {
+  ArrowBackIosNewRounded,
+  ArrowBackIosRounded,
+  ArrowForwardIosRounded,
+  ContentCopyRounded,
+  Done as DoneIcon,
+  HistoryRounded,
+  MicRounded,
+  PermIdentityRounded,
+  PushPinRounded,
+  ReplayRounded,
+  SettingsInputComponentRounded,
+  StarBorderRounded,
+  SyncRounded,
+  ThumbDownOffAltRounded,
+} from '@mui/icons-material';
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Grid2,
+  IconButton,
+  Paper,
+  styled,
+  Tab,
+  Tabs,
+  TextareaAutosize,
+  Tooltip,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
+import { useRouter, useSearchParams } from 'next/navigation';
+import React, { useCallback, useEffect, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 
 function TabPanel(props: {
   value: number;
@@ -66,61 +65,61 @@ const Item = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(1),
   color: theme.palette.text.secondary,
   ...theme.applyStyles('dark', {
-    backgroundColor: '#1A2027'
-  })
+    backgroundColor: '#1A2027',
+  }),
 }));
 
 const dataRow1 = [
   {
     title: '延伸資料A',
     description:
-      '社工在財務類別的知識中，了解如何幫助客戶管理個人財務是至關重要的。這不僅包括制定預算和儲蓄計劃'
+      '社工在財務類別的知識中，了解如何幫助客戶管理個人財務是至關重要的。這不僅包括制定預算和儲蓄計劃',
   },
   {
     title: '延伸資料B',
     description:
-      '社工在財務類別的知識中，了解如何幫助客戶管理個人財務是至關重要的。這不僅包括制定預算和儲蓄計劃'
+      '社工在財務類別的知識中，了解如何幫助客戶管理個人財務是至關重要的。這不僅包括制定預算和儲蓄計劃',
   },
   {
     title: '延伸資料C',
     description:
-      '社工在財務類別的知識中，了解如何幫助客戶管理個人財務是至關重要的。這不僅包括制定預算和儲蓄計劃'
-  }
+      '社工在財務類別的知識中，了解如何幫助客戶管理個人財務是至關重要的。這不僅包括制定預算和儲蓄計劃',
+  },
 ];
 
 const dataRow2 = [
   {
     title: '延伸資料D',
     description:
-      '社工在財務類別的知識中，了解如何幫助客戶管理個人財務是至關重要的。這不僅包括制定預算和儲蓄計劃'
+      '社工在財務類別的知識中，了解如何幫助客戶管理個人財務是至關重要的。這不僅包括制定預算和儲蓄計劃',
   },
   {
     title: '延伸資料E',
     description:
-      '社工在財務類別的知識中，了解如何幫助客戶管理個人財務是至關重要的。這不僅包括制定預算和儲蓄計劃'
+      '社工在財務類別的知識中，了解如何幫助客戶管理個人財務是至關重要的。這不僅包括制定預算和儲蓄計劃',
   },
   {
     title: '延伸資料F',
     description:
-      '社工在財務類別的知識中，了解如何幫助客戶管理個人財務是至關重要的。這不僅包括制定預算和儲蓄計劃'
-  }
+      '社工在財務類別的知識中，了解如何幫助客戶管理個人財務是至關重要的。這不僅包括制定預算和儲蓄計劃',
+  },
 ];
 const dataRow3 = [
   {
     title: '延伸資料G',
     description:
-      '社工在財務類別的知識中，了解如何幫助客戶管理個人財務是至關重要的。這不僅包括制定預算和儲蓄計劃'
+      '社工在財務類別的知識中，了解如何幫助客戶管理個人財務是至關重要的。這不僅包括制定預算和儲蓄計劃',
   },
   {
     title: '延伸資料H',
     description:
-      '社工在財務類別的知識中，了解如何幫助客戶管理個人財務是至關重要的。這不僅包括制定預算和儲蓄計劃'
+      '社工在財務類別的知識中，了解如何幫助客戶管理個人財務是至關重要的。這不僅包括制定預算和儲蓄計劃',
   },
   {
     title: '延伸資料I',
     description:
-      '社工在財務類別的知識中，了解如何幫助客戶管理個人財務是至關重要的。這不僅包括制定預算和儲蓄計劃'
-  }
+      '社工在財務類別的知識中，了解如何幫助客戶管理個人財務是至關重要的。這不僅包括制定預算和儲蓄計劃',
+  },
 ];
 
 const ChannelSummary = () => {
@@ -156,11 +155,11 @@ const ChannelSummary = () => {
 
   const {
     data: channel,
-    mutate: mutateChannel
+    mutate: mutateChannel,
     // isValidating: isloadingChannelData,
   } = useAudioChannel({
     organizationChannelId,
-    organizationId: '4aba77788ae94eca8d6ff330506af944'
+    organizationId: 'yMJHyi6R1CB9whpdNvtA',
   });
 
   const { excute: updateChannelDetail } = useAxiosApi(apis.updateChannelDetail);
@@ -203,8 +202,8 @@ const ChannelSummary = () => {
     async (event: React.MouseEvent) => {
       event.stopPropagation();
       deleteChannel({
-        organizationId: '4aba77788ae94eca8d6ff330506af944',
-        organizationChannelId: organizationChannelId || ''
+        organizationId: 'yMJHyi6R1CB9whpdNvtA',
+        organizationChannelId: organizationChannelId || '',
       })
         .then(() => {
           router.push('/toolbox');
@@ -219,9 +218,9 @@ const ChannelSummary = () => {
   const handleEditChannelConfirm = useCallback(
     async (newTitle: string) => {
       await updateChannelDetail({
-        organizationId: '4aba77788ae94eca8d6ff330506af944',
+        organizationId: 'yMJHyi6R1CB9whpdNvtA',
         organizationChannelId: selectedChannel?.organizationChannelId || '',
-        organizationChannelTitle: newTitle
+        organizationChannelTitle: newTitle,
       });
       setIsEditDialogOpen(false);
       if (mutateChannel) mutateChannel();
@@ -295,7 +294,7 @@ const ChannelSummary = () => {
         <Box
           sx={{
             minHeight: '100vh',
-            background: 'var(--Primary-, #EBE3DD)'
+            background: 'var(--Primary-, #EBE3DD)',
           }}
         >
           <ToolbarDrawer open={isOpenDrawer} setIsOpenDrawer={setIsOpenDrawer}>
@@ -310,7 +309,7 @@ const ChannelSummary = () => {
                   ? isOpenDrawer
                     ? 'calc(100vw - 732px)'
                     : '76%'
-                  : '100%'
+                  : '100%',
               }}
             >
               {/* {isloadingChannelData ? (
@@ -333,8 +332,8 @@ const ChannelSummary = () => {
                   sx={{ mb: 2 }}
                   TabIndicatorProps={{
                     style: {
-                      backgroundColor: '#212B36'
-                    }
+                      backgroundColor: '#212B36',
+                    },
                   }}
                 >
                   <Tab
@@ -347,8 +346,8 @@ const ChannelSummary = () => {
                       fontFamily: 'DFPHeiBold-B5',
                       color: 'var(--Text-Secondary, #637381))',
                       '&.Mui-selected': {
-                        color: 'var(--Primary-Black, #212B36)'
-                      }
+                        color: 'var(--Primary-Black, #212B36)',
+                      },
                     }}
                   />
                   <Tab
@@ -361,8 +360,8 @@ const ChannelSummary = () => {
                       fontFamily: 'DFPHeiBold-B5',
                       color: 'var(--Text-Secondary, #637381)',
                       '&.Mui-selected': {
-                        color: 'var(--Primary-Black, #212B36)'
-                      }
+                        color: 'var(--Primary-Black, #212B36)',
+                      },
                     }}
                   />
                   <Tab
@@ -375,8 +374,8 @@ const ChannelSummary = () => {
                       fontFamily: 'DFPHeiBold-B5',
                       color: 'var(--Text-Secondary, #637381)',
                       '&.Mui-selected': {
-                        color: 'var(--Primary-Black, #212B36)'
-                      }
+                        color: 'var(--Primary-Black, #212B36)',
+                      },
                     }}
                   />
                   <Tab
@@ -389,8 +388,8 @@ const ChannelSummary = () => {
                       fontFamily: 'DFPHeiBold-B5',
                       color: 'var(--Text-Secondary, #637381)',
                       '&.Mui-selected': {
-                        color: 'var(--Primary-Black, #212B36)'
-                      }
+                        color: 'var(--Primary-Black, #212B36)',
+                      },
                     }}
                   />
                 </Tabs>
@@ -399,13 +398,13 @@ const ChannelSummary = () => {
                     display: 'flex',
                     padding: '8px 16px',
                     alignItems: 'center',
-                    justifyContent: 'space-between'
+                    justifyContent: 'space-between',
                   }}
                 >
                   <Box
                     sx={{
                       display: 'flex',
-                      alignItems: 'center'
+                      alignItems: 'center',
                     }}
                   >
                     <IconButton
@@ -424,7 +423,7 @@ const ChannelSummary = () => {
                         fontFamily: 'Inter',
                         lineHeight: 'normal',
                         textOverflow: 'ellipsis',
-                        color: 'var(--Text-Primary, #212B36)'
+                        color: 'var(--Text-Primary, #212B36)',
                       }}
                     >
                       {selectedChannel?.organizationChannelTitle}
@@ -464,26 +463,26 @@ const ChannelSummary = () => {
                       overflowY: 'auto',
                       height: 'calc(100vh - 200px)',
                       '&::-webkit-scrollbar': {
-                        width: '8px'
+                        width: '8px',
                       },
                       '&::-webkit-scrollbar-track': {
                         borderRadius: '10px',
-                        background: '#f1f1f1'
+                        background: '#f1f1f1',
                       },
                       '&::-webkit-scrollbar-thumb': {
                         borderRadius: '10px',
-                        background: '#888'
+                        background: '#888',
                       },
                       '&::-webkit-scrollbar-thumb:hover': {
-                        background: '#555'
-                      }
+                        background: '#555',
+                      },
                     }}
                   >
                     <Item>
                       <Paper
                         variant="outlined"
                         sx={{
-                          padding: '16px 16px 16px 32px'
+                          padding: '16px 16px 16px 32px',
                         }}
                       >
                         <Typography
@@ -494,7 +493,7 @@ const ChannelSummary = () => {
                             fontStyle: 'normal',
                             lineHeight: 'normal',
                             fontFamily: 'DFPHeiBold-B5',
-                            color: 'var(--Primary-Black, #212B36)'
+                            color: 'var(--Primary-Black, #212B36)',
                           }}
                           gutterBottom
                         >
@@ -504,7 +503,7 @@ const ChannelSummary = () => {
                           sx={{
                             display: 'flex',
                             alignItems: 'center',
-                            justifyContent: 'space-between'
+                            justifyContent: 'space-between',
                           }}
                         >
                           <Typography
@@ -514,14 +513,14 @@ const ChannelSummary = () => {
                               fontStyle: 'normal',
                               lineHeight: 'normal',
                               fontFamily: 'DFPHeiBold-B5',
-                              color: 'var(--Primary-Black, #212B36)'
+                              color: 'var(--Primary-Black, #212B36)',
                             }}
                           ></Typography>
                           <Box
                             sx={{
                               display: 'flex',
                               alignItems: 'center',
-                              justifyContent: 'space-between'
+                              justifyContent: 'space-between',
                             }}
                           >
                             <Tooltip
@@ -569,7 +568,7 @@ const ChannelSummary = () => {
                               <ThumbDownOffAltRounded
                                 sx={{
                                   color: 'black',
-                                  transform: 'scale(-1, -1)'
+                                  transform: 'scale(-1, -1)',
                                 }}
                               />
                             </IconButton>
@@ -595,26 +594,26 @@ const ChannelSummary = () => {
                       overflowY: 'auto',
                       height: 'calc(100vh - 200px)',
                       '&::-webkit-scrollbar': {
-                        width: '8px'
+                        width: '8px',
                       },
                       '&::-webkit-scrollbar-track': {
                         borderRadius: '10px',
-                        background: '#f1f1f1'
+                        background: '#f1f1f1',
                       },
                       '&::-webkit-scrollbar-thumb': {
                         borderRadius: '10px',
-                        background: '#888'
+                        background: '#888',
                       },
                       '&::-webkit-scrollbar-thumb:hover': {
-                        background: '#555'
-                      }
+                        background: '#555',
+                      },
                     }}
                   >
                     <Item>
                       <Paper
                         variant="outlined"
                         sx={{
-                          padding: '16px 16px 16px 32px'
+                          padding: '16px 16px 16px 32px',
                         }}
                       >
                         {' '}
@@ -623,7 +622,7 @@ const ChannelSummary = () => {
                             display: 'flex',
                             minHeight: '33px',
                             alignItems: 'center',
-                            justifyContent: 'space-between'
+                            justifyContent: 'space-between',
                           }}
                         >
                           <Typography
@@ -633,7 +632,7 @@ const ChannelSummary = () => {
                               fontStyle: 'normal',
                               lineHeight: 'normal',
                               fontFamily: 'DFPHeiBold-B5',
-                              color: 'var(--Primary-Black, #212B36)'
+                              color: 'var(--Primary-Black, #212B36)',
                             }}
                           >
                             {' '}
@@ -651,7 +650,7 @@ const ChannelSummary = () => {
                                 borderRadius: '8px',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                background: 'var(--Secondary-, #5C443A)'
+                                background: 'var(--Secondary-, #5C443A)',
                               }}
                               startIcon={<ReplayRounded />}
                             >
@@ -665,8 +664,8 @@ const ChannelSummary = () => {
                           onChange={handleAIAnalysisTabChange}
                           TabIndicatorProps={{
                             style: {
-                              backgroundColor: '#212B36'
-                            }
+                              backgroundColor: '#212B36',
+                            },
                           }}
                         >
                           <Tab
@@ -679,8 +678,8 @@ const ChannelSummary = () => {
                               // fontFamily: "Open Sans",
                               color: 'var(--Text-Secondary, #637381)',
                               '&.Mui-selected': {
-                                color: 'var(--Text-Primary, #212B36)'
-                              }
+                                color: 'var(--Text-Primary, #212B36)',
+                              },
                             }}
                           />
                           <Tab
@@ -693,8 +692,8 @@ const ChannelSummary = () => {
                               // fontFamily: "Open Sans",
                               color: 'var(--Text-Secondary, #637381)',
                               '&.Mui-selected': {
-                                color: 'var(--Text-Primary, #212B36)'
-                              }
+                                color: 'var(--Text-Primary, #212B36)',
+                              },
                             }}
                           />
                           <Tab
@@ -707,8 +706,8 @@ const ChannelSummary = () => {
                               // fontFamily: "Open Sans",
                               color: 'var(--Text-Secondary, #637381)',
                               '&.Mui-selected': {
-                                color: 'var(--Text-Primary, #212B36)'
-                              }
+                                color: 'var(--Text-Primary, #212B36)',
+                              },
                             }}
                           />
                         </Tabs>
@@ -719,14 +718,14 @@ const ChannelSummary = () => {
                               padding: '0',
                               display: 'flex',
                               alignItems: 'center',
-                              justifyContent: 'flex-end'
+                              justifyContent: 'flex-end',
                             }}
                           >
                             <Box
                               sx={{
                                 display: 'flex',
                                 // alignItems: 'center',
-                                justifyContent: 'space-between'
+                                justifyContent: 'space-between',
                               }}
                             >
                               <Tooltip
@@ -777,7 +776,7 @@ const ChannelSummary = () => {
                                 <ThumbDownOffAltRounded
                                   sx={{
                                     color: 'black',
-                                    transform: 'scale(-1, -1)'
+                                    transform: 'scale(-1, -1)',
                                   }}
                                 />
                               </IconButton>
@@ -802,7 +801,7 @@ const ChannelSummary = () => {
                           <Box
                             sx={{
                               padding: '0px 32px',
-                              alignItems: 'center'
+                              alignItems: 'center',
                             }}
                           >
                             <Box
@@ -812,7 +811,7 @@ const ChannelSummary = () => {
                                 display: 'flex',
                                 maxWidth: '760px',
                                 alignItems: 'center',
-                                justifyContent: 'flex-end'
+                                justifyContent: 'flex-end',
                               }}
                             >
                               <Box
@@ -824,14 +823,14 @@ const ChannelSummary = () => {
                                   borderRadius: '8px',
                                   alignItems: 'center',
                                   background:
-                                    'var(--Secondary-Lite-Gray, #F5F5F5)'
+                                    'var(--Secondary-Lite-Gray, #F5F5F5)',
                                 }}
                               >
                                 <Box
                                   sx={{
                                     display: 'flex',
                                     alignItems: 'center',
-                                    justifyContent: 'center'
+                                    justifyContent: 'center',
                                   }}
                                 >
                                   <PermIdentityRounded
@@ -840,7 +839,7 @@ const ChannelSummary = () => {
                                       height: '30px',
                                       color: 'white',
                                       borderRadius: '50px',
-                                      background: '#5C443A'
+                                      background: '#5C443A',
                                     }}
                                   />
                                 </Box>
@@ -851,7 +850,7 @@ const ChannelSummary = () => {
                             </Box>
                             <Typography
                               sx={{
-                                mt: '10px'
+                                mt: '10px',
                               }}
                             >
                               此專案的目標是透過提供一個線上平台來協助弱勢家庭改善財務狀況，並最終促進整體社會的福祉。
@@ -877,14 +876,14 @@ const ChannelSummary = () => {
                               sx={{
                                 display: 'flex',
                                 alignItems: 'center',
-                                justifyContent: 'flex-end'
+                                justifyContent: 'flex-end',
                               }}
                             >
                               <Box
                                 sx={{
                                   display: 'flex',
                                   alignItems: 'center',
-                                  justifyContent: 'space-between'
+                                  justifyContent: 'space-between',
                                 }}
                               >
                                 <IconButton role="button" aria-label="Copy">
@@ -894,7 +893,7 @@ const ChannelSummary = () => {
                                   <ThumbDownOffAltRounded
                                     sx={{
                                       color: 'black',
-                                      transform: 'scale(-1, -1)'
+                                      transform: 'scale(-1, -1)',
                                     }}
                                   />
                                 </IconButton>
@@ -916,7 +915,7 @@ const ChannelSummary = () => {
                                 alignSelf: 'stretch',
                                 flexDirection: 'column',
                                 alignItems: 'flex-start',
-                                background: 'var(--Primary-, #EBE3DD)'
+                                background: 'var(--Primary-, #EBE3DD)',
                               }}
                             >
                               <Box
@@ -926,7 +925,7 @@ const ChannelSummary = () => {
                                   alignItems: 'center',
                                   padding: '8px 16px 8px 20px',
                                   borderRadius: '0px 16px 0px 0px',
-                                  background: 'var(--Primary-, #EBE3DD)'
+                                  background: 'var(--Primary-, #EBE3DD)',
                                 }}
                               >
                                 <TextareaAutosize
@@ -952,14 +951,14 @@ const ChannelSummary = () => {
                                     lineHeight: 'normal',
                                     textOverflow: 'ellipsis',
                                     fontFamily: 'DFPHeiBold-B5',
-                                    background: 'var(--Primary-, #EBE3DD)'
+                                    background: 'var(--Primary-, #EBE3DD)',
                                   }}
                                   placeholder="問問AI"
                                 />
                                 <MicRounded
                                   sx={{
                                     color: 'black',
-                                    marginLeft: '8px'
+                                    marginLeft: '8px',
                                   }}
                                 />
                               </Box>
@@ -974,7 +973,7 @@ const ChannelSummary = () => {
                               spacing={2}
                               sx={{
                                 display: 'flex',
-                                overflowX: 'auto'
+                                overflowX: 'auto',
                               }}
                             >
                               <Typography
@@ -986,7 +985,7 @@ const ChannelSummary = () => {
                                   fontStyle: 'normal',
                                   lineHeight: 'normal',
                                   fontFamily: 'DFPHeiBold-B5',
-                                  color: 'var(--Primary-Black, #212B36)'
+                                  color: 'var(--Primary-Black, #212B36)',
                                 }}
                                 gutterBottom
                               >
@@ -998,11 +997,11 @@ const ChannelSummary = () => {
                                   flexDirection: 'row',
                                   overflowX: 'auto',
                                   '&::-webkit-scrollbar': {
-                                    height: '8px'
+                                    height: '8px',
                                   },
                                   '&::-webkit-scrollbar-thumb': {
-                                    backgroundColor: 'transparent'
-                                  }
+                                    backgroundColor: 'transparent',
+                                  },
                                 }}
                               >
                                 {dataRow1.map((item, index) => (
@@ -1021,7 +1020,7 @@ const ChannelSummary = () => {
                                       flexDirection: 'column',
                                       alignItems: 'flex-start',
                                       background: 'var(--Primary-, #EBE3DD)',
-                                      marginRight: '16px'
+                                      marginRight: '16px',
                                     }}
                                   >
                                     <CardContent sx={{ padding: '0px' }}>
@@ -1029,7 +1028,7 @@ const ChannelSummary = () => {
                                         sx={{
                                           display: 'flex',
                                           flexDirection: 'row',
-                                          alignItems: 'center'
+                                          alignItems: 'center',
                                         }}
                                       >
                                         <Typography
@@ -1041,7 +1040,7 @@ const ChannelSummary = () => {
                                             fontStyle: 'normal',
                                             lineHeight: 'normal',
                                             color:
-                                              'var(--Primary-Black, #212B36)'
+                                              'var(--Primary-Black, #212B36)',
                                           }}
                                         >
                                           {item.title}
@@ -1055,7 +1054,7 @@ const ChannelSummary = () => {
                                             sx={{
                                               width: '16px',
                                               height: '16px',
-                                              color: 'black'
+                                              color: 'black',
                                             }}
                                           />
                                         </IconButton>
@@ -1070,7 +1069,8 @@ const ChannelSummary = () => {
                                           lineHeight: 'normal',
                                           fontFamily: 'Open Sans',
                                           textOverflow: 'ellipsis',
-                                          color: 'var(--Primary-Black, #212B36)'
+                                          color:
+                                            'var(--Primary-Black, #212B36)',
                                         }}
                                       >
                                         {item.description}
@@ -1087,7 +1087,7 @@ const ChannelSummary = () => {
                               spacing={2}
                               sx={{
                                 display: 'flex',
-                                overflowX: 'auto'
+                                overflowX: 'auto',
                               }}
                             >
                               <Typography
@@ -1099,7 +1099,7 @@ const ChannelSummary = () => {
                                   fontStyle: 'normal',
                                   lineHeight: 'normal',
                                   fontFamily: 'DFPHeiBold-B5',
-                                  color: 'var(--Primary-Black, #212B36)'
+                                  color: 'var(--Primary-Black, #212B36)',
                                 }}
                                 gutterBottom
                               >
@@ -1111,11 +1111,11 @@ const ChannelSummary = () => {
                                   flexDirection: 'row',
                                   overflowX: 'auto',
                                   '&::-webkit-scrollbar': {
-                                    height: '8px'
+                                    height: '8px',
                                   },
                                   '&::-webkit-scrollbar-thumb': {
-                                    backgroundColor: 'transparent'
-                                  }
+                                    backgroundColor: 'transparent',
+                                  },
                                 }}
                               >
                                 {dataRow2.map((item, index) => (
@@ -1134,7 +1134,7 @@ const ChannelSummary = () => {
                                       flexDirection: 'column',
                                       alignItems: 'flex-start',
                                       background: 'var(--Primary-, #EBE3DD)',
-                                      marginRight: '16px'
+                                      marginRight: '16px',
                                     }}
                                   >
                                     <CardContent sx={{ padding: '0px' }}>
@@ -1142,7 +1142,7 @@ const ChannelSummary = () => {
                                         sx={{
                                           display: 'flex',
                                           flexDirection: 'row',
-                                          alignItems: 'center'
+                                          alignItems: 'center',
                                         }}
                                       >
                                         <Typography
@@ -1154,7 +1154,7 @@ const ChannelSummary = () => {
                                             fontStyle: 'normal',
                                             lineHeight: 'normal',
                                             color:
-                                              'var(--Primary-Black, #212B36)'
+                                              'var(--Primary-Black, #212B36)',
                                           }}
                                         >
                                           {item.title}
@@ -1168,7 +1168,7 @@ const ChannelSummary = () => {
                                             sx={{
                                               width: '16px',
                                               height: '16px',
-                                              color: 'black'
+                                              color: 'black',
                                             }}
                                           />
                                         </IconButton>
@@ -1183,7 +1183,8 @@ const ChannelSummary = () => {
                                           lineHeight: 'normal',
                                           fontFamily: 'Open Sans',
                                           textOverflow: 'ellipsis',
-                                          color: 'var(--Primary-Black, #212B36)'
+                                          color:
+                                            'var(--Primary-Black, #212B36)',
                                         }}
                                       >
                                         {item.description}
@@ -1200,7 +1201,7 @@ const ChannelSummary = () => {
                               spacing={2}
                               sx={{
                                 display: 'flex',
-                                overflowX: 'auto'
+                                overflowX: 'auto',
                               }}
                             >
                               <Typography
@@ -1212,7 +1213,7 @@ const ChannelSummary = () => {
                                   fontStyle: 'normal',
                                   lineHeight: 'normal',
                                   fontFamily: 'DFPHeiBold-B5',
-                                  color: 'var(--Primary-Black, #212B36)'
+                                  color: 'var(--Primary-Black, #212B36)',
                                 }}
                                 gutterBottom
                               >
@@ -1224,11 +1225,11 @@ const ChannelSummary = () => {
                                   flexDirection: 'row',
                                   overflowX: 'auto',
                                   '&::-webkit-scrollbar': {
-                                    height: '8px'
+                                    height: '8px',
                                   },
                                   '&::-webkit-scrollbar-thumb': {
-                                    backgroundColor: 'transparent'
-                                  }
+                                    backgroundColor: 'transparent',
+                                  },
                                 }}
                               >
                                 {dataRow3.map((item, index) => (
@@ -1247,7 +1248,7 @@ const ChannelSummary = () => {
                                       flexDirection: 'column',
                                       alignItems: 'flex-start',
                                       background: 'var(--Primary-, #EBE3DD)',
-                                      marginRight: '16px'
+                                      marginRight: '16px',
                                     }}
                                   >
                                     <CardContent sx={{ padding: '0px' }}>
@@ -1255,7 +1256,7 @@ const ChannelSummary = () => {
                                         sx={{
                                           display: 'flex',
                                           flexDirection: 'row',
-                                          alignItems: 'center'
+                                          alignItems: 'center',
                                         }}
                                       >
                                         <Typography
@@ -1267,7 +1268,7 @@ const ChannelSummary = () => {
                                             fontStyle: 'normal',
                                             lineHeight: 'normal',
                                             color:
-                                              'var(--Primary-Black, #212B36)'
+                                              'var(--Primary-Black, #212B36)',
                                           }}
                                         >
                                           {item.title}
@@ -1281,7 +1282,7 @@ const ChannelSummary = () => {
                                             sx={{
                                               width: '16px',
                                               height: '16px',
-                                              color: 'black'
+                                              color: 'black',
                                             }}
                                           />
                                         </IconButton>
@@ -1296,7 +1297,8 @@ const ChannelSummary = () => {
                                           lineHeight: 'normal',
                                           fontFamily: 'Open Sans',
                                           textOverflow: 'ellipsis',
-                                          color: 'var(--Primary-Black, #212B36)'
+                                          color:
+                                            'var(--Primary-Black, #212B36)',
                                         }}
                                       >
                                         {item.description}
@@ -1327,7 +1329,7 @@ const ChannelSummary = () => {
           sx={{
             height: '100vh',
             overflowY: 'auto',
-            background: 'var(--Primary-, #FFFFFF)'
+            background: 'var(--Primary-, #FFFFFF)',
           }}
         >
           <Box
@@ -1335,7 +1337,7 @@ const ChannelSummary = () => {
               display: 'flex',
               alignSelf: 'stretch',
               alignItems: 'center',
-              padding: '8px 16px 8px 0px'
+              padding: '8px 16px 8px 0px',
             }}
           >
             <IconButton
@@ -1345,7 +1347,7 @@ const ChannelSummary = () => {
                 padding: '8px',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center'
+                justifyContent: 'center',
               }}
               onClick={handleBackButtonClick}
             >
@@ -1358,7 +1360,7 @@ const ChannelSummary = () => {
                 display: 'flex',
                 minHeight: '32px',
                 alignItems: 'center',
-                padding: '4px 0px 4px 8px'
+                padding: '4px 0px 4px 8px',
               }}
             >
               <Typography
@@ -1370,7 +1372,7 @@ const ChannelSummary = () => {
                   fontStyle: 'normal',
                   lineHeight: 'normal',
                   textOverflow: 'ellipsis',
-                  color: 'var(--Text-Primary, #212B36)'
+                  color: 'var(--Text-Primary, #212B36)',
                 }}
               >
                 {selectedChannel?.organizationChannelTitle}
@@ -1411,7 +1413,7 @@ const ChannelSummary = () => {
                 fontStyle: 'normal',
                 lineHeight: 'normal',
                 fontFamily: 'DFPHeiBold-B5',
-                color: 'var(--Primary-Black, #212B36)'
+                color: 'var(--Primary-Black, #212B36)',
               }}
             >
               逐字稿
@@ -1420,7 +1422,7 @@ const ChannelSummary = () => {
               sx={{
                 display: 'flex',
                 // alignItems: 'center',
-                justifyContent: 'flex-end'
+                justifyContent: 'flex-end',
               }}
             >
               <Box>
@@ -1464,7 +1466,7 @@ const ChannelSummary = () => {
                   <ThumbDownOffAltRounded
                     sx={{
                       color: '#212B36',
-                      transform: 'scale(-1, -1)'
+                      transform: 'scale(-1, -1)',
                     }}
                   />
                 </IconButton>
@@ -1486,7 +1488,7 @@ const ChannelSummary = () => {
                 display: 'flex',
                 minHeight: '33px',
                 alignItems: 'center',
-                justifyContent: 'space-between'
+                justifyContent: 'space-between',
               }}
             >
               <Typography
@@ -1496,7 +1498,7 @@ const ChannelSummary = () => {
                   fontStyle: 'normal',
                   lineHeight: 'normal',
                   fontFamily: 'DFPHeiBold-B5',
-                  color: 'var(--Primary-Black, #212B36)'
+                  color: 'var(--Primary-Black, #212B36)',
                 }}
               >
                 AI分析
@@ -1513,7 +1515,7 @@ const ChannelSummary = () => {
                     borderRadius: '8px',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    background: 'var(--Secondary-, #5C443A)'
+                    background: 'var(--Secondary-, #5C443A)',
                   }}
                   startIcon={<ReplayRounded />}
                 >
@@ -1528,8 +1530,8 @@ const ChannelSummary = () => {
               onChange={handleAIAnalysisTabChange}
               TabIndicatorProps={{
                 style: {
-                  backgroundColor: '#212B36'
-                }
+                  backgroundColor: '#212B36',
+                },
               }}
             >
               <Tab
@@ -1542,8 +1544,8 @@ const ChannelSummary = () => {
                   fontFamily: 'Open Sans',
                   color: 'var(--Text-Secondary, #637381)',
                   '&.Mui-selected': {
-                    color: 'var(--Text-Primary, #212B36)'
-                  }
+                    color: 'var(--Text-Primary, #212B36)',
+                  },
                 }}
               />
               <Tab
@@ -1556,8 +1558,8 @@ const ChannelSummary = () => {
                   fontFamily: 'Open Sans',
                   color: 'var(--Text-Secondary, #637381)',
                   '&.Mui-selected': {
-                    color: 'var(--Text-Primary, #212B36)'
-                  }
+                    color: 'var(--Text-Primary, #212B36)',
+                  },
                 }}
               />
               <Tab
@@ -1570,8 +1572,8 @@ const ChannelSummary = () => {
                   fontFamily: 'Open Sans',
                   color: 'var(--Text-Secondary, #637381)',
                   '&.Mui-selected': {
-                    color: 'var(--Text-Primary, #212B36)'
-                  }
+                    color: 'var(--Text-Primary, #212B36)',
+                  },
                 }}
               />
             </Tabs>
@@ -1580,10 +1582,10 @@ const ChannelSummary = () => {
               <Box
                 sx={{
                   mt: '10px',
-                  padding: '0',
+
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'space-between'
+                  justifyContent: 'space-between',
                 }}
               >
                 <Typography
@@ -1593,7 +1595,7 @@ const ChannelSummary = () => {
                     fontStyle: 'normal',
                     lineHeight: 'normal',
                     fontFamily: 'DFPHeiBold-B5',
-                    color: 'var(--Primary-Black, #212B36)'
+                    color: 'var(--Primary-Black, #212B36)',
                   }}
                 >
                   總結
@@ -1602,7 +1604,7 @@ const ChannelSummary = () => {
                   sx={{
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'space-between'
+                    justifyContent: 'space-between',
                   }}
                 >
                   <Tooltip
@@ -1647,7 +1649,7 @@ const ChannelSummary = () => {
                     <ThumbDownOffAltRounded
                       sx={{
                         color: 'black',
-                        transform: 'scale(-1, -1)'
+                        transform: 'scale(-1, -1)',
                       }}
                     />
                   </IconButton>
@@ -1659,17 +1661,21 @@ const ChannelSummary = () => {
                   </IconButton>
                 </Box>
               </Box>
-              <ReactMarkdown>
-                {
-                  selectedChannel?.organizationChannelMessageList[0]
-                    ?.organizationChannelMessageContent
-                }
-              </ReactMarkdown>
+              {isMobile && (
+                <Box sx={{ padding: '16px' }}>
+                  <ReactMarkdown>
+                    {
+                      selectedChannel?.organizationChannelMessageList[0]
+                        ?.organizationChannelMessageContent
+                    }
+                  </ReactMarkdown>
+                </Box>
+              )}
             </TabPanel>
             <TabPanel value={aIAnalysisTabValue} index={1}>
               <Box
                 sx={{
-                  alignItems: 'center'
+                  alignItems: 'center',
                 }}
               >
                 <Box
@@ -1679,7 +1685,7 @@ const ChannelSummary = () => {
                     display: 'flex',
                     maxWidth: '760px',
                     alignItems: 'center',
-                    justifyContent: 'flex-end'
+                    justifyContent: 'flex-end',
                   }}
                 >
                   <Box
@@ -1690,14 +1696,14 @@ const ChannelSummary = () => {
                       padding: '16px',
                       borderRadius: '8px',
                       alignItems: 'center',
-                      background: 'var(--Secondary-Lite-Gray, #F5F5F5)'
+                      background: 'var(--Secondary-Lite-Gray, #F5F5F5)',
                     }}
                   >
                     <Box
                       sx={{
                         display: 'flex',
                         alignItems: 'center',
-                        justifyContent: 'center'
+                        justifyContent: 'center',
                       }}
                     >
                       <PermIdentityRounded
@@ -1706,7 +1712,7 @@ const ChannelSummary = () => {
                           height: '30px',
                           color: 'white',
                           borderRadius: '50px',
-                          background: '#5C443A'
+                          background: '#5C443A',
                         }}
                       />
                     </Box>
@@ -1717,7 +1723,7 @@ const ChannelSummary = () => {
                 </Box>
                 <Typography
                   sx={{
-                    mt: '10px'
+                    mt: '10px',
                   }}
                 >
                   此專案的目標是透過提供一個線上平台來協助弱勢家庭改善財務狀況，並最終促進整體社會的福祉。
@@ -1743,14 +1749,14 @@ const ChannelSummary = () => {
                     mt: '4px',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'flex-end'
+                    justifyContent: 'flex-end',
                   }}
                 >
                   <Box
                     sx={{
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'space-between'
+                      justifyContent: 'space-between',
                     }}
                   >
                     <IconButton role="button" aria-label="Copy">
@@ -1760,7 +1766,7 @@ const ChannelSummary = () => {
                       <ThumbDownOffAltRounded
                         sx={{
                           color: 'black',
-                          transform: 'scale(-1, -1)'
+                          transform: 'scale(-1, -1)',
                         }}
                       />
                     </IconButton>
@@ -1781,7 +1787,7 @@ const ChannelSummary = () => {
                     alignSelf: 'stretch',
                     flexDirection: 'column',
                     alignItems: 'flex-start',
-                    background: 'var(--Primary-, #EBE3DD)'
+                    background: 'var(--Primary-, #EBE3DD)',
                   }}
                 >
                   <Box
@@ -1791,7 +1797,7 @@ const ChannelSummary = () => {
                       alignItems: 'center',
                       padding: '8px 16px 8px 20px',
                       borderRadius: '0px 16px 0px 0px',
-                      background: 'var(--Primary-, #EBE3DD)'
+                      background: 'var(--Primary-, #EBE3DD)',
                     }}
                   >
                     <TextareaAutosize
@@ -1817,14 +1823,14 @@ const ChannelSummary = () => {
                         lineHeight: 'normal',
                         textOverflow: 'ellipsis',
                         fontFamily: 'DFPHeiBold-B5',
-                        background: 'var(--Primary-, #EBE3DD)'
+                        background: 'var(--Primary-, #EBE3DD)',
                       }}
                       placeholder="問問AI"
                     />
                     <MicRounded
                       sx={{
                         color: 'black',
-                        marginLeft: '8px'
+                        marginLeft: '8px',
                       }}
                     />
                   </Box>
@@ -1839,7 +1845,7 @@ const ChannelSummary = () => {
                   spacing={2}
                   sx={{
                     display: 'flex',
-                    overflowX: 'auto'
+                    overflowX: 'auto',
                   }}
                 >
                   <Typography
@@ -1852,7 +1858,7 @@ const ChannelSummary = () => {
                       fontStyle: 'normal',
                       lineHeight: 'normal',
                       fontFamily: 'DFPHeiBold-B5',
-                      color: 'var(--Primary-Black, #212B36)'
+                      color: 'var(--Primary-Black, #212B36)',
                     }}
                     gutterBottom
                   >
@@ -1864,11 +1870,11 @@ const ChannelSummary = () => {
                       flexDirection: 'row',
                       overflowX: 'auto',
                       '&::-webkit-scrollbar': {
-                        height: '8px'
+                        height: '8px',
                       },
                       '&::-webkit-scrollbar-thumb': {
-                        backgroundColor: 'transparent'
-                      }
+                        backgroundColor: 'transparent',
+                      },
                     }}
                   >
                     {dataRow1.map((item, index) => (
@@ -1887,7 +1893,7 @@ const ChannelSummary = () => {
                           flexDirection: 'column',
                           alignItems: 'flex-start',
                           background: 'var(--Primary-, #EBE3DD)',
-                          marginRight: '16px'
+                          marginRight: '16px',
                         }}
                       >
                         <CardContent sx={{ padding: '0px' }}>
@@ -1895,7 +1901,7 @@ const ChannelSummary = () => {
                             sx={{
                               display: 'flex',
                               flexDirection: 'row',
-                              alignItems: 'center'
+                              alignItems: 'center',
                             }}
                           >
                             <Typography
@@ -1906,7 +1912,7 @@ const ChannelSummary = () => {
                                 fontFamily: 'Inter',
                                 fontStyle: 'normal',
                                 lineHeight: 'normal',
-                                color: 'var(--Primary-Black, #212B36)'
+                                color: 'var(--Primary-Black, #212B36)',
                               }}
                             >
                               {item.title}
@@ -1920,7 +1926,7 @@ const ChannelSummary = () => {
                                 sx={{
                                   width: '16px',
                                   height: '16px',
-                                  color: 'black'
+                                  color: 'black',
                                 }}
                               />
                             </IconButton>
@@ -1935,7 +1941,7 @@ const ChannelSummary = () => {
                               lineHeight: 'normal',
                               fontFamily: 'Open Sans',
                               textOverflow: 'ellipsis',
-                              color: 'var(--Primary-Black, #212B36)'
+                              color: 'var(--Primary-Black, #212B36)',
                             }}
                           >
                             {item.description}
@@ -1952,7 +1958,7 @@ const ChannelSummary = () => {
                   spacing={2}
                   sx={{
                     display: 'flex',
-                    overflowX: 'auto'
+                    overflowX: 'auto',
                   }}
                 >
                   <Typography
@@ -1964,7 +1970,7 @@ const ChannelSummary = () => {
                       fontStyle: 'normal',
                       lineHeight: 'normal',
                       fontFamily: 'DFPHeiBold-B5',
-                      color: 'var(--Primary-Black, #212B36)'
+                      color: 'var(--Primary-Black, #212B36)',
                     }}
                     gutterBottom
                   >
@@ -1976,11 +1982,11 @@ const ChannelSummary = () => {
                       flexDirection: 'row',
                       overflowX: 'auto',
                       '&::-webkit-scrollbar': {
-                        height: '8px'
+                        height: '8px',
                       },
                       '&::-webkit-scrollbar-thumb': {
-                        backgroundColor: 'transparent'
-                      }
+                        backgroundColor: 'transparent',
+                      },
                     }}
                   >
                     {dataRow2.map((item, index) => (
@@ -1999,7 +2005,7 @@ const ChannelSummary = () => {
                           flexDirection: 'column',
                           alignItems: 'flex-start',
                           background: 'var(--Primary-, #EBE3DD)',
-                          marginRight: '16px'
+                          marginRight: '16px',
                         }}
                       >
                         <CardContent sx={{ padding: '0px' }}>
@@ -2007,7 +2013,7 @@ const ChannelSummary = () => {
                             sx={{
                               display: 'flex',
                               flexDirection: 'row',
-                              alignItems: 'center'
+                              alignItems: 'center',
                             }}
                           >
                             <Typography
@@ -2018,7 +2024,7 @@ const ChannelSummary = () => {
                                 fontFamily: 'Inter',
                                 fontStyle: 'normal',
                                 lineHeight: 'normal',
-                                color: 'var(--Primary-Black, #212B36)'
+                                color: 'var(--Primary-Black, #212B36)',
                               }}
                             >
                               {item.title}
@@ -2032,7 +2038,7 @@ const ChannelSummary = () => {
                                 sx={{
                                   width: '16px',
                                   height: '16px',
-                                  color: 'black'
+                                  color: 'black',
                                 }}
                               />
                             </IconButton>
@@ -2047,7 +2053,7 @@ const ChannelSummary = () => {
                               lineHeight: 'normal',
                               fontFamily: 'Open Sans',
                               textOverflow: 'ellipsis',
-                              color: 'var(--Primary-Black, #212B36)'
+                              color: 'var(--Primary-Black, #212B36)',
                             }}
                           >
                             {item.description}
@@ -2064,7 +2070,7 @@ const ChannelSummary = () => {
                   spacing={2}
                   sx={{
                     display: 'flex',
-                    overflowX: 'auto'
+                    overflowX: 'auto',
                   }}
                 >
                   <Typography
@@ -2076,7 +2082,7 @@ const ChannelSummary = () => {
                       fontStyle: 'normal',
                       lineHeight: 'normal',
                       fontFamily: 'DFPHeiBold-B5',
-                      color: 'var(--Primary-Black, #212B36)'
+                      color: 'var(--Primary-Black, #212B36)',
                     }}
                     gutterBottom
                   >
@@ -2088,11 +2094,11 @@ const ChannelSummary = () => {
                       flexDirection: 'row',
                       overflowX: 'auto',
                       '&::-webkit-scrollbar': {
-                        height: '8px'
+                        height: '8px',
                       },
                       '&::-webkit-scrollbar-thumb': {
-                        backgroundColor: 'transparent'
-                      }
+                        backgroundColor: 'transparent',
+                      },
                     }}
                   >
                     {dataRow3.map((item, index) => (
@@ -2111,7 +2117,7 @@ const ChannelSummary = () => {
                           flexDirection: 'column',
                           alignItems: 'flex-start',
                           background: 'var(--Primary-, #EBE3DD)',
-                          marginRight: '16px'
+                          marginRight: '16px',
                         }}
                       >
                         <CardContent sx={{ padding: '0px' }}>
@@ -2119,7 +2125,7 @@ const ChannelSummary = () => {
                             sx={{
                               display: 'flex',
                               flexDirection: 'row',
-                              alignItems: 'center'
+                              alignItems: 'center',
                             }}
                           >
                             <Typography
@@ -2130,7 +2136,7 @@ const ChannelSummary = () => {
                                 fontFamily: 'Inter',
                                 fontStyle: 'normal',
                                 lineHeight: 'normal',
-                                color: 'var(--Primary-Black, #212B36)'
+                                color: 'var(--Primary-Black, #212B36)',
                               }}
                             >
                               {item.title}
@@ -2144,7 +2150,7 @@ const ChannelSummary = () => {
                                 sx={{
                                   width: '16px',
                                   height: '16px',
-                                  color: 'black'
+                                  color: 'black',
                                 }}
                               />
                             </IconButton>
@@ -2159,7 +2165,7 @@ const ChannelSummary = () => {
                               lineHeight: 'normal',
                               fontFamily: 'Open Sans',
                               textOverflow: 'ellipsis',
-                              color: 'var(--Primary-Black, #212B36)'
+                              color: 'var(--Primary-Black, #212B36)',
                             }}
                           >
                             {item.description}
