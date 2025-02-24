@@ -9,7 +9,6 @@ import {
   StarBorderRounded,
   SettingsInputComponentRounded,
 } from '@mui/icons-material';
-import UploadDialog from '@/components/uploadDialog/page';
 import { AdvisorType } from '../../../app/chat/types';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import ChannelContentContext from '../../channel-context-provider/ChannelContentContext';
@@ -32,7 +31,6 @@ const Header: React.FC<HeaderProps> = ({
   setIsOpenDrawer = () => {},
   advisor,
   isChat = false,
-  openUpload = false,
   setOpenUpload = () => {},
   setOpenDataSource,
   openDataSource,
@@ -43,10 +41,6 @@ const Header: React.FC<HeaderProps> = ({
     ChannelContentContext
   );
   const router = useRouter();
-
-  const handleOpenUpload = useCallback(() => {
-    setOpenUpload(false);
-  }, [setOpenUpload]);
 
   const memoizedToggleDrawer = useCallback(
     (drawerOpen: boolean) => {
@@ -197,7 +191,6 @@ const Header: React.FC<HeaderProps> = ({
           )}
         </Box>
       )}
-      {!isChat && <UploadDialog open={openUpload} onClose={handleOpenUpload} />}
     </Box>
   );
 };

@@ -13,13 +13,16 @@ import {
   useTheme,
   useMediaQuery,
 } from '@mui/material';
-import { useRouter } from 'next/navigation';
 import { useDropzone } from 'react-dropzone';
-import apiExports from '@/utils/hooks/apis/apis';
-import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import { useRef, useState } from 'react';
-import LoadingScreen from '../loading/page';
 import { CloseRounded, UploadRounded } from '@mui/icons-material';
+import { UploadFileApiPayload } from '@/interfaces/payloads';
+import { AxiosPromise, AxiosRequestConfig, AxiosResponse } from 'axios';
+import {
+  OrganizationChannel,
+  OrganizationChannelResponse,
+} from '@/interfaces/entities';
+import { KeyedMutator } from 'swr';
 
 // File Upload Configuration
 const FILE_CONFIG = {
@@ -59,18 +62,34 @@ const FILE_CONFIG = {
 interface UploadDialogProps {
   open: boolean;
   onClose: () => void;
+  createChannelByAudio: (
+    payload?: UploadFileApiPayload | undefined,
+    config?: AxiosRequestConfig<any> | undefined
+  ) => AxiosPromise<OrganizationChannelResponse>;
+  setUploadingFile: React.Dispatch<
+    React.SetStateAction<
+      | {
+          organizationChannelTitle: string;
+          organizationChannelCreateDate: string;
+        }
+      | undefined
+    >
+  >;
+  mutateAudioChannels: KeyedMutator<AxiosResponse<OrganizationChannel[], any>>;
 }
 
-export default function UploadDialog({ open, onClose }: UploadDialogProps) {
-  const router = useRouter();
+export default function UploadDialog({
+  open,
+  onClose,
+  createChannelByAudio,
+  setUploadingFile,
+  mutateAudioChannels,
+}: UploadDialogProps) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [, setFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const { excute: createChannelByAudio, isLoading: isCreating } = useAxiosApi(
-    apiExports.createChannelByAudio
-  );
 
   const validateFile = async (file: File) => {
     try {
@@ -87,18 +106,34 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
         setError(FILE_CONFIG.errorMessages.sizeExceeded);
         return;
       }
+      // Generate current timestamp
+      const now = new Date();
+      const formattedDate = `${now.getDate().toString().padStart(2, '0')}/${(
+        now.getMonth() + 1
+      )
+        .toString()
+        .padStart(2, '0')}/${now.getFullYear()}, ${now
+        .getHours()
+        .toString()
+        .padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now
+        .getSeconds()
+        .toString()
+        .padStart(2, '0')} ${now.getHours() >= 12 ? 'pm' : 'am'}`;
 
+      // Create header info with filename as name and current timestamp
+      const fileInfo = {
+        organizationChannelTitle: file.name.split('.')[0] || 'Unknown', // Remove file extension
+        organizationChannelCreateDate: formattedDate,
+      };
+      setUploadingFile(fileInfo);
       setFile(file);
       onClose();
 
-      const res = await createChannelByAudio({
+      await createChannelByAudio({
         file,
       });
-
-      const { data } = res;
-      router.push(
-        `/channel-summary?organizationChannelId=${data.organizationChannelId}`
-      );
+      await mutateAudioChannels();
+      setUploadingFile(undefined);
     } catch (error) {
       setError(FILE_CONFIG.errorMessages.uploadFailed);
       console.error(error);
@@ -149,27 +184,6 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
   const handleCloseError = () => {
     setError(null);
   };
-
-  if (isCreating) {
-    return (
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          height: '100vh',
-          width: '100vw',
-          bgcolor: '#fff',
-          zIndex: 1300,
-        }}
-      >
-        <LoadingScreen />
-      </Box>
-    );
-  }
 
   return (
     <>
@@ -269,7 +283,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
               height: isMobile ? '46px' : '46px',
               width: isMobile ? '180px' : '294px',
               color: 'var(--Info-ContrastText, #FFF)',
-              background: 'var(--Secondary-Dark-Gray, #4A4A4A)',
+              background: 'var(--Secondary-Dark-Gray, #5C443A)',
             }}
             variant="contained"
             startIcon={<UploadRounded />}

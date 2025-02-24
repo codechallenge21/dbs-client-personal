@@ -4,7 +4,6 @@ import DeleteDialog from '@/components/dialogs/DeleteDialog';
 import EditDialog from '@/components/dialogs/EditDialog';
 import EditableItem from '@/components/editable-item/EditableItem';
 import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
-import UploadDialog from '@/components/uploadDialog/page';
 import { OrganizationChannel } from '@/interfaces/entities';
 import apis from '@/utils/hooks/apis/apis';
 import { useAudioChannel } from '@/utils/hooks/useAudioChannel';
@@ -133,7 +132,6 @@ const ChannelSummary = () => {
   const [openDataSource, setOpenDataSource] = useState(false);
   const [aIAnalysisTabValue, setAIAnalysisTabValue] = React.useState(0);
   const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(!isMobile);
-  const [openUpload, setOpenUpload] = React.useState(false);
   /**
    * @useSearchParams hook requires Suspense Boundary Component wrapping
    * Reference: https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout
@@ -282,10 +280,6 @@ const ChannelSummary = () => {
     newValue: number
   ) => {
     setAIAnalysisTabValue(newValue);
-  };
-
-  const handleCloseUploadDialog = () => {
-    setOpenUpload(false);
   };
 
   return (
@@ -1316,10 +1310,6 @@ const ChannelSummary = () => {
                 </Grid2>
               </>
               {/* )} */}
-              <UploadDialog
-                open={openUpload}
-                onClose={handleCloseUploadDialog}
-              />
             </Box>
           </ToolbarDrawer>
         </Box>

@@ -25,7 +25,7 @@ import {
 import Image from 'next/image';
 import imagePreview from '@/assets/Images/Image Icon.svg';
 import MermaidMarkdown from '../MermaidChart/Mermaidmarkdown';
-import CustomLoader from '../loader/page';
+import CustomLoader from '../loader/loader';
 
 export interface ChannelMessagePanelProps {
   channel?: OrganizationChannel;
@@ -42,6 +42,8 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
   const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
+
+  console.log('isInteractingInChat', isInteractingInChat);
 
   const copyPrompt = (text: string, messageId: string) => {
     navigator.clipboard.writeText(text).then(
@@ -88,6 +90,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
         mb: '16px',
         alignItems: 'center',
         justifyContent: 'center',
+        flexDirection: 'column',
       }}
     >
       <Box
@@ -465,8 +468,21 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
             </Box>
           </React.Fragment>
         ))}
-        {isInteractingInChat && <CustomLoader />}
       </Box>
+      {isInteractingInChat && (
+        <Box
+          sx={{
+            ml: '30px',
+            display: 'flex',
+            alignItems: 'center', // Adjust alignment as needed
+            justifyContent: 'flex-start',
+            width: '100%',
+            maxWidth: '760px',
+          }}
+        >
+          <CustomLoader />
+        </Box>
+      )}
     </Container>
   );
 };
