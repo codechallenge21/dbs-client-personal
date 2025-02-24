@@ -25,8 +25,6 @@ import {
   IconButton,
   Typography,
   useMediaQuery,
-  Menu,
-  MenuItem,
 } from '@mui/material';
 import { styled, Theme, CSSObject } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
@@ -36,6 +34,7 @@ import { jwtDecode } from 'jwt-decode';
 import ChannelContentContext from '@/context/ChannelContentContext';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import apis from '@/utils/hooks/apis/apis';
+import UserActionMenu from '../user-action-menu/UserActionMenu';
 
 interface ToolbarDrawerProps {
   open: boolean;
@@ -532,18 +531,16 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                   </Box>
                   <ArrowDropUpRounded sx={{ color: '#212B36' }} />
                 </Button>
-                <Menu
+
+                <UserActionMenu
+                  email={loginName}
+                  handleLogout={handleLogout}
                   anchorEl={anchorEl}
-                  open={Boolean(anchorEl)}
                   onClose={handleClose}
                   anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                   transformOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                  // PaperProps={{
-                  //   sx: { width: anchorEl ? anchorEl.clientWidth : '226px' },
-                  // }}
-                >
-                  <MenuItem onClick={handleLogout}>Logout</MenuItem>
-                </Menu>
+                  isExpanded={isExpanded}
+                />
               </>
             ) : (
               <Button
@@ -650,31 +647,42 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 <LoginRounded sx={{ color: '#212B36', fontSize: '20px' }} />
               </IconButton>
             ) : (
-              <IconButton
-                role="button"
-                aria-label="Logout"
-                onClick={handleLogout}
-                sx={{
-                  width: '36px',
-                  height: '36px',
-                  padding: '8px',
-                  display: 'flex',
-                  borderRadius: '50px',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  background: 'var(--Secondary-, #5C443A)',
-                  '&:hover': {
-                    background: 'rgba(92, 68, 58, 0.8)',
-                  },
-                  '&:active': {
-                    background: 'rgba(92, 68, 58, 0.6)',
-                  },
-                }}
-              >
-                <PermIdentityRounded
-                  sx={{ color: 'white', fontSize: '20px' }}
+              <>
+                <IconButton
+                  role="button"
+                  aria-label="Logout"
+                  onClick={handleMenuOpen}
+                  sx={{
+                    width: '36px',
+                    height: '36px',
+                    padding: '8px',
+                    display: 'flex',
+                    borderRadius: '50px',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: 'var(--Secondary-, #5C443A)',
+                    '&:hover': {
+                      background: 'rgba(92, 68, 58, 0.8)',
+                    },
+                    '&:active': {
+                      background: 'rgba(92, 68, 58, 0.6)',
+                    },
+                  }}
+                >
+                  <PermIdentityRounded
+                    sx={{ color: 'white', fontSize: '20px' }}
+                  />
+                </IconButton>
+                <UserActionMenu
+                  email={loginName}
+                  handleLogout={handleLogout}
+                  anchorEl={anchorEl}
+                  onClose={handleClose}
+                  anchorOrigin={{ vertical: 'center', horizontal: 'right' }}
+                  transformOrigin={{ vertical: 'center', horizontal: 'left' }}
+                  isExpanded={isExpanded}
                 />
-              </IconButton>
+              </>
             )}
             <IconButton
               role="button"
