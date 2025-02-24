@@ -1,18 +1,17 @@
 'use client';
 
-import { useEffect, useContext } from 'react';
+import { Suspense, useEffect, useContext } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Container, CircularProgress } from '@mui/material';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import apis from '@/utils/hooks/apis/apis';
 import { SnackbarContext } from '@/context/SnackbarContext';
 
-const VerifyAccountPage = () => {
+function VerifyAccountPageInner() {
   // Retrieve the emailTokenId query parameter
   const searchParams = useSearchParams();
   const emailTokenId = searchParams.get('emailTokenId');
   const router = useRouter();
-  // Setup the verifyAccount API hook
   const { excute: verifyAccount, isLoading } = useAxiosApi(apis.verifyAccount);
   const { showSnackbar } = useContext(SnackbarContext);
 
@@ -45,13 +44,19 @@ const VerifyAccountPage = () => {
         router.push('/');
       }, 2500);
     }
-  }, [emailTokenId, verifyAccount, router]);
+  }, [emailTokenId, verifyAccount, router, showSnackbar]);
 
   return (
     <Container sx={{ textAlign: 'center', marginTop: '2rem' }}>
-      {isLoading && <CircularProgress />}
+      {isLoading ? <CircularProgress /> : null}
     </Container>
   );
-};
+}
 
-export default VerifyAccountPage;
+export default function VerifyAccountPage() {
+  return (
+    <Suspense fallback={<CircularProgress />}>
+      <VerifyAccountPageInner />
+    </Suspense>
+  );
+}

@@ -65,7 +65,7 @@ const apis = {
     }
 
     return uploadFetcher.post<OrganizationChannelResponse>(
-      `/organizations/4aba77788ae94eca8d6ff330506af944/channels/upload`,
+      `/organizations/yMJHyi6R1CB9whpdNvtA/channels/upload`,
       formData,
       config
     );
@@ -124,25 +124,29 @@ const apis = {
   verifyAccount: (payload?: VerifyAccountApiPayload) => {
     const { emailTokenId } = payload || {};
     return fetcher.post(
-      `/organizations/4aba77788ae94eca8d6ff330506af944/users/verify-account`,
+      `/organizations/yMJHyi6R1CB9whpdNvtA/users/verify-account`,
       { emailTokenId }
     );
   },
   login: (payload?: LoginPayload) => {
     const { organizationUserAccount, organizationUserPassword } = payload || {};
-    return fetcher.post(
-      `/organizations/4aba77788ae94eca8d6ff330506af944/users/login`,
-      { organizationUserAccount, organizationUserPassword }
-    );
+    return fetcher.post(`/organizations/yMJHyi6R1CB9whpdNvtA/users/login`, {
+      organizationUserAccount,
+      organizationUserPassword,
+    });
   },
   logout: (payload?: LogoutPayload) => {
-    return fetcher.post(
-      `/organizations/4aba77788ae94eca8d6ff330506af944/users/logout`
-    );
+    return fetcher.post(`/organizations/yMJHyi6R1CB9whpdNvtA/users/logout`);
   },
   googleLoginUrl: () => {
     return fetcher.get(
-      `/organizations/4aba77788ae94eca8d6ff330506af944/users/google/login-url`
+      `/organizations/yMJHyi6R1CB9whpdNvtA/users/google/login-url`
+    );
+  },
+  googleLogin: (payload?: { code: string }) => {
+    return fetcher.post(
+      `/organizations/yMJHyi6R1CB9whpdNvtA/users/google/login`,
+      payload
     );
   },
 };

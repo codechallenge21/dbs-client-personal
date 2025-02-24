@@ -111,7 +111,7 @@ export default function DropdownMenu({
     async (organizationChannelId: string) => {
       try {
         const res = await getChannelDetail({
-          organizationId: '4aba77788ae94eca8d6ff330506af944',
+          organizationId: 'yMJHyi6R1CB9whpdNvtA',
           organizationChannelId,
         });
         setSelectedChannel(res.data);
@@ -157,7 +157,7 @@ export default function DropdownMenu({
       event.stopPropagation();
       try {
         await deleteChannel({
-          organizationId: '4aba77788ae94eca8d6ff330506af944',
+          organizationId: 'yMJHyi6R1CB9whpdNvtA',
           organizationChannelId: selectedChannelId ?? '',
         });
         window.location.href = '/chat';
@@ -174,7 +174,7 @@ export default function DropdownMenu({
     async (newTitle: string) => {
       try {
         await updateChannelDetail({
-          organizationId: '4aba77788ae94eca8d6ff330506af944',
+          organizationId: 'yMJHyi6R1CB9whpdNvtA',
           organizationChannelId: selectedChannelId ?? '',
           organizationChannelTitle: newTitle,
         });

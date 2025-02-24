@@ -99,32 +99,45 @@ const MainContent: React.FC<MainContentProps> = ({ chatsData }) => {
           sx={{
             width: '100%',
             height: 'calc(100vh - 105px)',
-            overflow: 'auto !important',
-            '&::-webkit-scrollbar': {
-              width: '5px',
-            },
-            '&::-webkit-scrollbar-thumb': {
-              backgroundColor: '#c1c1c1',
-              borderRadius: '4px',
-            },
-            '&::-webkit-scrollbar-thumb:hover': {
-              backgroundColor: '#a8a8a8',
-            },
-            '&::-webkit-scrollbar-track': {
-              backgroundColor: '#f1f1f1',
-              borderRadius: '4px',
-            },
+            overflow: 'hidden',
+            display: 'flex',
+            flexDirection: 'column',
           }}
         >
-          <ChannelMessagePanel
-            channel={selectedChannel}
-            chatResponses={chatResponses}
-          />
-          <TextInput
-            from={'mainContent'}
-            submitUserInputs={submitUserInputs}
-            isInteracting={isInteracting}
-          />
+          <Box
+            sx={{
+              flex: 1,
+              overflowY: 'auto',
+              '&::-webkit-scrollbar': {
+                width: '22px',
+              },
+              '&::-webkit-scrollbar-thumb': {
+                backgroundColor: '#888',
+                borderRadius: '5px',
+                border: '3px solid transparent',
+                backgroundClip: 'content-box',
+              },
+              '&::-webkit-scrollbar-thumb:hover': {
+                backgroundColor: '#555',
+              },
+            }}
+          >
+            <ChannelMessagePanel
+              channel={selectedChannel}
+              chatResponses={chatResponses}
+            />
+          </Box>
+          <Box
+            sx={{
+              px: '16px',
+            }}
+          >
+            <TextInput
+              from={'mainContent'}
+              submitUserInputs={submitUserInputs}
+              isInteracting={isInteracting}
+            />
+          </Box>
         </Box>
       </Box>
     );
@@ -132,13 +145,9 @@ const MainContent: React.FC<MainContentProps> = ({ chatsData }) => {
 
   const paddingTop = (() => {
     if (isMobile) {
-      if (chatsData && chatsData.length > 0) {
-        return '30vh';
-      } else {
-        return '10vh';
-      }
+      return chatsData && chatsData.length > 0 ? '50vh' : '10vh';
     }
-    return '0vh';
+    return chatsData && chatsData.length > 0 ? '20vh' : '0vh';
   })();
 
   return (
@@ -155,6 +164,7 @@ const MainContent: React.FC<MainContentProps> = ({ chatsData }) => {
         overflow: 'auto',
         justifyContent: 'center',
         pt: paddingTop,
+        mt: '10px',
       }}
     >
       <Typography
