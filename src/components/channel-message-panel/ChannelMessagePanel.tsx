@@ -43,8 +43,6 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
   const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
   const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
 
-  console.log('isInteractingInChat', isInteractingInChat);
-
   const copyPrompt = (text: string, messageId: string) => {
     navigator.clipboard.writeText(text).then(
       () => {

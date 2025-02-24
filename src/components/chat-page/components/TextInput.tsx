@@ -191,7 +191,6 @@ const TextInput: React.FC<TextInputProps> = ({
       }
     } catch (error: any) {
       if (axios.isCancel(error) || error.code === 'ERR_CANCELED') {
-        console.log('Request was canceled by the user.');
       } else {
         console.error('Request error:', error);
       }
@@ -211,7 +210,6 @@ const TextInput: React.FC<TextInputProps> = ({
   const handleCancel = () => {
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
-      console.log('Request canceled by user.');
     }
   };
 

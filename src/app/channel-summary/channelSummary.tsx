@@ -255,7 +255,6 @@ const ChannelSummary = () => {
         }
         // const isDataIncomplete =
         //   !channel.organizationChannelTranscriptList?.length;
-        // console.log('channel', channel);
 
         // if (isDataIncomplete) {
         //   try {
