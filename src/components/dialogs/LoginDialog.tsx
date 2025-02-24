@@ -70,7 +70,7 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
   const handleGoogleLogin = async () => {
     try {
       const response = await getGoogleLoginUrl();
-      window.open(response.data as string, '_self');
+      window.location.href = response.data;
     } catch (error) {
       showSnackbar(
         'Failed to obtain Google login URL. Please try again.',

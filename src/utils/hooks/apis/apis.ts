@@ -145,6 +145,12 @@ const apis = {
       `/organizations/4aba77788ae94eca8d6ff330506af944/users/google/login-url`
     );
   },
+  googleLogin: (payload?: { code: string }) => {
+    return fetcher.post(
+      `/organizations/4aba77788ae94eca8d6ff330506af944/users/google/login`,
+      payload
+    );
+  },
 };
 
 const apiExports = {
