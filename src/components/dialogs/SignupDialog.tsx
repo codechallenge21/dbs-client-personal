@@ -90,7 +90,7 @@ const SignupDialog: React.FC<SignupDialogProps> = ({
 
     try {
       const response = await registerUser({
-        organizationId: '4aba77788ae94eca8d6ff330506af944',
+        organizationId: 'yMJHyi6R1CB9whpdNvtA',
         organizationUserNameZh: name,
         organizationUserEmail: email,
         organizationUserPassword: password,
