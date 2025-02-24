@@ -143,13 +143,9 @@ const MainContent: React.FC<MainContentProps> = ({
 
   const paddingTop = (() => {
     if (isMobile) {
-      if (chatsData && chatsData.length > 0) {
-        return '30vh';
-      } else {
-        return '10vh';
-      }
+      return chatsData && chatsData.length > 0 ? '50vh' : '10vh';
     }
-    return '0vh';
+    return chatsData && chatsData.length > 0 ? '20vh' : '0vh';
   })();
 
   return (
@@ -166,6 +162,7 @@ const MainContent: React.FC<MainContentProps> = ({
         overflow: 'auto',
         justifyContent: 'center',
         pt: paddingTop,
+        mt: '10px',
       }}
     >
       <Typography
