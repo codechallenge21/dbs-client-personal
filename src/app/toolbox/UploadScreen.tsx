@@ -45,7 +45,7 @@ const UploadScreen: React.FC<UploadScreenProps> = ({}) => {
     errorMessages: {
       invalidFormat:
         '不支援的檔案格式，請選擇 mp3, mp4, mpeg, mpga, m4a, wav, aac 或 webm 格式',
-      sizeExceeded: '檔案大小超過 200MB 限制',
+      sizeExceeded: '檔案大小超過 100MB 限制',
       uploadFailed: '上傳失敗',
     },
     supportedFormats: {

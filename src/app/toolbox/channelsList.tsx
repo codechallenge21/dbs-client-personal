@@ -202,8 +202,6 @@ const ChannelsList = () => {
     return null;
   }
 
-  console.log('channelsData', channelsData);
-
   return (
     <>
       {!isMobile && (
