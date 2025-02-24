@@ -2,12 +2,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
   Box,
-  Grid2,
+  Button,
   useTheme,
   Typography,
   IconButton,
   useMediaQuery,
-  Button,
 } from '@mui/material';
 import Image from 'next/image';
 import {
@@ -91,7 +90,7 @@ const WishingWell = () => {
     }
   }, []);
 
-  const toolItems = Array.from({ length: 12 });
+  const toolItems = Array.from({ length: 9 });
   const focusItems = Array.from({ length: 10 });
 
   return (
@@ -135,7 +134,6 @@ const WishingWell = () => {
             <Button
               sx={{
                 gap: '8px',
-                width: '90px',
                 height: '32px',
                 paddingTop: '6px',
                 paddingLeft: '8px',
@@ -170,6 +168,7 @@ const WishingWell = () => {
             gap: '20px',
             display: 'flex',
             overflowY: 'auto',
+            overflowX: 'hidden',
             borderRadius: '8px',
             flexDirection: 'column',
             backgroundColor: 'white',
@@ -198,134 +197,143 @@ const WishingWell = () => {
             sx={{
               gap: '16px',
               display: 'flex',
-              minHeight: '260px',
+              height: '265px',
               overflow: 'visible',
-              position: 'relative',
+              alignSelf: 'stretch',
               flexDirection: 'column',
+              alignItems: 'flex-start',
             }}
           >
-            <Typography
-              sx={{
-                fontWeight: 400,
-                fontSize: '24px',
-                fontStyle: 'normal',
-                lineHeight: 'normal',
-                fontFamily: 'DFPHeiBold-B5',
-                color: 'var(--Primary-Black, #212B36)',
-              }}
-            >
-              你可能感興趣
-            </Typography>
             <Box
               sx={{
+                gap: '8px',
+                height: '29px',
                 display: 'flex',
-                minHeight: '220px',
-                position: 'relative',
+                alignItems: 'center',
+                alignSelf: 'stretch',
               }}
             >
-              <Box
-                ref={focusRef}
+              <Typography
                 sx={{
-                  gap: '16px',
-                  width: '100%',
-                  display: 'flex',
-                  minHeight: '220px',
+                  fontWeight: 600,
+                  fontSize: '24px',
+                  fontFamily: 'Inter',
+                  fontStyle: 'normal',
+                  lineHeight: 'normal',
+                  color: 'var(--Primary-Black, #212B36)',
                 }}
               >
-                {focusItems.map((_, index) => (
-                  <Box
-                    key={index}
-                    sx={{
-                      display: 'flex',
-                      minWidth: '260px',
-                      minHeight: '220px',
-                      alignItems: 'center',
-                      flexDirection: 'column',
-                      justifyContent: 'center',
-                      '&:hover': {
-                        '& .hover-text': {
-                          color: '#990000',
-                        },
-                        '& .hover-box': {
-                          backgroundColor: '#CC00000D',
-                        },
+                你可能感興趣
+              </Typography>
+            </Box>
+            <Box
+              ref={focusRef}
+              sx={{
+                gap: '16px',
+                display: 'flex',
+                height: '220px',
+                position: 'relative',
+                alignSelf: 'stretch',
+                alignItems: 'flex-start',
+              }}
+            >
+              {focusItems.map((_, index) => (
+                <Box
+                  key={index}
+                  sx={{
+                    // gap: '12px',
+                    display: 'flex',
+                    height: '220px',
+                    minWidth: '260px',
+                    alignItems: 'center',
+                    flexDirection: 'column',
+                    justifyContent: 'flex-end',
+                    '&:hover': {
+                      '& .hover-text': {
+                        color: '#990000',
                       },
+                      '& .hover-box': {
+                        backgroundColor: '#CC00000D',
+                      },
+                    },
+                  }}
+                >
+                  <Image
+                    src={boxImage}
+                    alt="Boxed Image"
+                    style={{
+                      width: '100%',
+                      height: '130px',
+                      objectFit: 'cover',
+                      borderTopLeftRadius: '8px',
+                      borderTopRightRadius: '8px',
+                    }}
+                  />
+                  <Box
+                    className="hover-box"
+                    sx={{
+                      gap: '4px',
+                      display: 'flex',
+                      alignSelf: 'stretch',
+                      flexDirection: 'column',
+                      alignItems: 'flex-start',
+                      borderBottomLeftRadius: '8px',
+                      padding: '24px 16px 16px 16px',
+                      borderBottomRightRadius: '8px',
+                      backgroundColor: 'var(--Primary-, #EBE3DD)',
                     }}
                   >
-                    <Image
-                      src={boxImage}
-                      alt="Boxed Image"
-                      style={{
-                        width: '100%',
-                        height: '130px',
-                        objectFit: 'cover',
-                        borderTopLeftRadius: '8px',
-                        borderTopRightRadius: '8px',
-                      }}
-                    />
-                    <Box
-                      className="hover-box"
+                    <Typography
+                      className="hover-text"
                       sx={{
-                        gap: '4px',
-                        display: 'flex',
-                        alignSelf: 'stretch',
-                        flexDirection: 'column',
-                        alignItems: 'flex-start',
-                        borderBottomLeftRadius: '8px',
-                        padding: '24px 16px 16px 16px',
-                        borderBottomRightRadius: '8px',
-                        backgroundColor: 'var(--Primary-, #EBE3DD)',
+                        fontWeight: 400,
+                        fontSize: '24px',
+                        overflow: 'hidden',
+                        fontStyle: 'normal',
+                        lineHeight: 'normal',
+                        textOverflow: 'ellipsis',
+                        fontFamily: 'DFPHeiBold-B5',
+                        color: 'var(--Primary-Black, #212B36)',
                       }}
                     >
-                      <Typography
-                        className="hover-text"
-                        sx={{
-                          fontWeight: 400,
-                          fontSize: '24px',
-                          overflow: 'hidden',
-                          fontStyle: 'normal',
-                          lineHeight: 'normal',
-                          textOverflow: 'ellipsis',
-                          fontFamily: 'DFPHeiBold-B5',
-                          color: 'var(--Primary-Black, #212B36)',
-                        }}
-                      >
-                        標題
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        color="textSecondary"
-                        sx={{
-                          fontWeight: 400,
-                          fontSize: '16px',
-                          lineHeight: '24px',
-                          fontStyle: 'normal',
-                          fontFamily: 'DFPHeiMedium-B5',
-                          color: 'var(--Text-, #454A4D)',
-                        }}
-                      >
-                        説明文字
-                      </Typography>
-                    </Box>
+                      標題
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      sx={{
+                        fontWeight: 400,
+                        fontSize: '16px',
+                        lineHeight: '24px',
+                        fontStyle: 'normal',
+                        fontFamily: 'DFPHeiMedium-B5',
+                        color: 'var(--Text-, #454A4D)',
+                      }}
+                    >
+                      説明文字
+                    </Typography>
                   </Box>
-                ))}
-              </Box>
+                </Box>
+              ))}
               {!isFocusScrolledRight && (
                 <IconButton
                   onClick={handleFocusScrollRight}
                   sx={{
-                    top: '90px',
-                    right: '5px',
+                    zIndex: 10,
+                    right: '8px',
                     width: '28px',
+                    bottom: '92px',
                     height: '28px',
                     padding: '5px',
+                    display: 'flex',
+                    alignItems: 'center',
                     borderRadius: '50px',
+                    position: 'absolute',
+                    justifyContent: 'center',
+                    backgroundColor: 'rgba(204, 0, 0, 0.60)',
                     '&:hover': {
                       backgroundColor: 'rgba(204, 0, 0, 0.40)',
                     },
-                    zIndex: 10,
-                    position: 'absolute',
-                    backgroundColor: 'rgba(204, 0, 0, 0.60)',
                   }}
                 >
                   <ArrowForwardIosRounded
@@ -337,18 +345,18 @@ const WishingWell = () => {
                 <IconButton
                   onClick={handleFocusScrollLeft}
                   sx={{
-                    top: '90px',
-                    left: '5px',
-                    width: '28px',
-                    height: '28px',
+                    left: '8px',
+                    bottom: '96px',
                     padding: '5px',
+                    display: 'flex',
+                    position: 'absolute',
+                    alignItems: 'center',
                     borderRadius: '50px',
+                    justifyContent: 'center',
+                    background: 'rgba(204, 0, 0, 0.60)',
                     '&:hover': {
                       backgroundColor: 'rgba(204, 0, 0, 0.40)',
                     },
-                    zIndex: 10,
-                    position: 'absolute',
-                    backgroundColor: 'rgba(204, 0, 0, 0.60)',
                   }}
                 >
                   <ArrowForwardIosRounded
@@ -363,89 +371,139 @@ const WishingWell = () => {
               )}
             </Box>
           </Box>
-          <Box sx={{ overflow: 'visible' }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Box
+            sx={{
+              gap: '16px',
+              display: 'flex',
+              alignSelf: 'stretch',
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+            }}
+          >
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                alignSelf: 'stretch',
+                justifyContent: 'space-between',
+              }}
+            >
               <Typography
-                gutterBottom
                 sx={{
-                  fontWeight: 400,
+                  fontWeight: 600,
                   fontSize: '24px',
                   fontStyle: 'normal',
+                  fontFamily: 'Inter',
                   lineHeight: 'normal',
-                  marginBottom: '16px',
-                  fontFamily: 'DFPHeiBold-B5',
                   color: 'var(--Primary-Black, #212B36)',
                 }}
               >
                 所有活動
               </Typography>
-              <IconButton>
-                <SearchRounded sx={{ color: '#212B36' }} />
+              <IconButton
+                sx={{
+                  padding: '8px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <SearchRounded
+                  sx={{ width: '24px', height: '24px', color: '#212B36' }}
+                />
               </IconButton>
             </Box>
-            <Grid2 container spacing={2}>
+            <Box
+              sx={{
+                gap: '16px',
+                rowGap: '16px',
+                display: 'flex',
+                flexWrap: 'wrap',
+                alignSelf: 'stretch',
+                alignItems: 'flex-start',
+                alignContent: 'flex-start',
+                justifyContent: 'space-between',
+              }}
+            >
               {toolItems.map((_, index) => (
-                <Grid2
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
+                <Box
                   key={index}
-                  size={{ xs: 12, sm: 6, md: 4, lg: 3 }}
+                  sx={{
+                    // gap: '12px',
+                    display: 'flex',
+                    height: '220px',
+                    minWidth: '260px',
+                    alignItems: 'center',
+                    flexDirection: 'column',
+                    justifyContent: 'flex-end',
+                    '&:hover': {
+                      '& .hover-text': {
+                        color: '#990000',
+                      },
+                      '& .hover-box': {
+                        backgroundColor: '#CC00000D',
+                      },
+                    },
+                  }}
                 >
+                  <Image
+                    src={boxImage}
+                    alt="Boxed Image"
+                    style={{
+                      width: '100%',
+                      height: '130px',
+                      objectFit: 'cover',
+                      borderTopLeftRadius: '8px',
+                      borderTopRightRadius: '8px',
+                    }}
+                  />
                   <Box
-                    key={index}
+                    className="hover-box"
                     sx={{
+                      gap: '4px',
                       display: 'flex',
-                      minWidth: '260px',
-                      minHeight: '220px',
-                      overflow: 'visible',
-                      alignItems: 'center',
+                      alignSelf: 'stretch',
                       flexDirection: 'column',
-                      justifyContent: 'center',
+                      alignItems: 'flex-start',
+                      borderBottomLeftRadius: '8px',
+                      padding: '24px 16px 16px 16px',
+                      borderBottomRightRadius: '8px',
+                      backgroundColor: 'var(--Primary-, #EBE3DD)',
                     }}
                   >
-                    <Image
-                      src={boxImage}
-                      alt="Boxed Image"
-                      style={{
-                        width: '100%',
-                        height: '130px',
-                        borderTopLeftRadius: '8px',
-                        borderTopRightRadius: '8px',
-                      }}
-                    />
-                    <Box
+                    <Typography
+                      className="hover-text"
                       sx={{
-                        width: '100%',
-                        borderBottomLeftRadius: '8px',
-                        borderBottomRightRadius: '8px',
-                        backgroundColor: 'var(--Primary-, #EBE3DD)',
+                        fontWeight: 400,
+                        fontSize: '24px',
+                        overflow: 'hidden',
+                        fontStyle: 'normal',
+                        lineHeight: 'normal',
+                        textOverflow: 'ellipsis',
+                        fontFamily: 'DFPHeiBold-B5',
+                        color: 'var(--Primary-Black, #212B36)',
                       }}
                     >
-                      <Typography
-                        sx={{
-                          marginLeft: '20px',
-                          marginTop: '10px',
-                          fontFamily: 'DFPHeiBold-B5',
-                          color: 'var(--Primary-Black, #212B36)',
-                        }}
-                      >
-                        標題
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        color="textSecondary"
-                        sx={{ marginLeft: '20px', marginBottom: '20px' }}
-                      >
-                        説明文字
-                      </Typography>
-                    </Box>
+                      標題
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      sx={{
+                        fontWeight: 400,
+                        fontSize: '16px',
+                        lineHeight: '24px',
+                        fontStyle: 'normal',
+                        fontFamily: 'DFPHeiMedium-B5',
+                        color: 'var(--Text-, #454A4D)',
+                      }}
+                    >
+                      説明文字
+                    </Typography>
                   </Box>
-                </Grid2>
+                </Box>
               ))}
-            </Grid2>
+            </Box>
           </Box>
         </Box>
       </ToolbarDrawer>
