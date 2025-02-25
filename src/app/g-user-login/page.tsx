@@ -1,11 +1,11 @@
 'use client';
 
-import { Suspense, useEffect, useContext } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
-import { Container, CircularProgress, Typography } from '@mui/material';
-import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
-import apis from '@/utils/hooks/apis/apis';
 import { SnackbarContext } from '@/context/SnackbarContext';
+import apis from '@/utils/hooks/apis/apis';
+import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
+import { CircularProgress, Container, Typography } from '@mui/material';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useContext, useEffect } from 'react';
 
 function GUserLoginPageContent() {
   const searchParams = useSearchParams();
@@ -16,7 +16,7 @@ function GUserLoginPageContent() {
 
   useEffect(() => {
     if (!code) {
-      showSnackbar('Missing Google login code.', 'error');
+      showSnackbar('缺少 Google 登入驗證碼。', 'error');
       router.push('/login');
       return;
     }
@@ -25,16 +25,16 @@ function GUserLoginPageContent() {
       try {
         const response = await googleLogin({ code });
         if (response.status === 200) {
-          showSnackbar('Login successful.', 'success');
+          showSnackbar('登入成功。', 'success');
           setTimeout(() => {
             window.location.reload();
           }, 2000);
         } else {
-          showSnackbar('Google login failed. Please try again.', 'error');
+          showSnackbar('Google 登入失敗。請再試一次。', 'error');
           router.push('/');
         }
       } catch (error) {
-        showSnackbar('Google login failed. Please try again.', 'error');
+        showSnackbar('正在處理 Google 登入...', 'error');
         router.push('/');
       }
     };
