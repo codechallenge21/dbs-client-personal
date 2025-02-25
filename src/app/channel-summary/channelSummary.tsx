@@ -1,50 +1,51 @@
 'use client';
-import DataSourceDialog from '@/components/chat-page/components/chatDataStore';
-import DeleteDialog from '@/components/dialogs/DeleteDialog';
-import EditDialog from '@/components/dialogs/EditDialog';
-import EditableItem from '@/components/editable-item/EditableItem';
-import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
-import UploadDialog from '@/components/uploadDialog/page';
-import { OrganizationChannel } from '@/interfaces/entities';
-import apis from '@/utils/hooks/apis/apis';
-import { useAudioChannel } from '@/utils/hooks/useAudioChannel';
-import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
-  ArrowBackIosNewRounded,
-  ArrowBackIosRounded,
-  ArrowForwardIosRounded,
-  ContentCopyRounded,
-  Done as DoneIcon,
-  HistoryRounded,
-  MicRounded,
-  PermIdentityRounded,
-  PushPinRounded,
-  ReplayRounded,
-  SettingsInputComponentRounded,
-  StarBorderRounded,
-  SyncRounded,
-  ThumbDownOffAltRounded,
-} from '@mui/icons-material';
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Grid2,
-  IconButton,
-  Paper,
-  styled,
   Tab,
+  Box,
   Tabs,
+  Card,
+  Paper,
+  Grid2,
+  styled,
+  Button,
+  useTheme,
+  Typography,
+  IconButton,
+  CardContent,
+  useMediaQuery,
   TextareaAutosize,
   Tooltip,
-  Typography,
-  useMediaQuery,
-  useTheme,
+  // CircularProgress,
 } from '@mui/material';
+import {
+  Done as DoneIcon,
+  MicRounded,
+  SyncRounded,
+  ReplayRounded,
+  PushPinRounded,
+  StarBorderRounded,
+  ContentCopyRounded,
+  PermIdentityRounded,
+  ArrowBackIosRounded,
+  ArrowForwardIosRounded,
+  ThumbDownOffAltRounded,
+  SettingsInputComponentRounded,
+  ArrowBackIosNewRounded,
+  HistoryRounded,
+} from '@mui/icons-material';
+import { OrganizationChannel } from '@/interfaces/entities';
+import { useAudioChannel } from '@/utils/hooks/useAudioChannel';
 import { useRouter, useSearchParams } from 'next/navigation';
-import React, { useCallback, useEffect, useState } from 'react';
+import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
+import UploadDialog from '@/components/uploadDialog/page';
+import DataSourceDialog from '@/components/chat-page/components/chatDataStore';
 import ReactMarkdown from 'react-markdown';
+import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
+import apis from '@/utils/hooks/apis/apis';
+import EditableItem from '@/components/editable-item/EditableItem';
+import EditDialog from '@/components/dialogs/EditDialog';
+import DeleteDialog from '@/components/dialogs/DeleteDialog';
 
 function TabPanel(props: {
   value: number;
@@ -257,7 +258,6 @@ const ChannelSummary = () => {
         }
         // const isDataIncomplete =
         //   !channel.organizationChannelTranscriptList?.length;
-        // console.log('channel', channel);
 
         // if (isDataIncomplete) {
         //   try {
