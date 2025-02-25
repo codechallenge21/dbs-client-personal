@@ -1,30 +1,30 @@
 'use client';
 
-import {
-  OrganizationChannel,
-  OrganizationChannelData,
-} from '@/interfaces/entities';
-import { useChatChannels } from '@/utils/hooks/useChatChannels';
-import DeleteIcon from '@mui/icons-material/Delete';
-import SearchIcon from '@mui/icons-material/Search';
+import { useState, useEffect, useContext } from 'react';
 import {
   Box,
+  TextField,
+  Typography,
+  Paper,
+  Stack,
   Button,
   Checkbox,
   IconButton,
   InputAdornment,
-  Paper,
-  Stack,
-  TextField,
-  Typography,
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import { AnimatePresence, motion } from 'framer-motion';
-import { useRouter } from 'next/navigation';
-import { useContext, useEffect, useState } from 'react';
-import ChannelContentContext from '../channel-context-provider/ChannelContentContext';
+import SearchIcon from '@mui/icons-material/Search';
+import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteConfirmationModal from '../dialogs/DeleteConfirmationModal';
+import { useChatChannels } from '@/utils/hooks/useChatChannels';
+import {
+  OrganizationChannel,
+  OrganizationChannelData,
+} from '@/interfaces/entities';
+import { useRouter } from 'next/navigation';
+import ChannelContentContext from '@/context/ChannelContentContext';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // Updated motion variants:
 // They start at x:0 (their original position) and when exiting, slide out.
