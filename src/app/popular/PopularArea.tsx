@@ -37,44 +37,6 @@ export default function PopularArea() {
     useState(false);
   const tolerance = 5; // Adjust if necessary
 
-  const handleRecommendedScrollRight = () => {
-    if (recommendationsRef.current) {
-      const itemWidth = 260 + 16;
-      const scrollDelta = itemWidth * (isMobile ? 1 : 3);
-      const newScrollLeft = recommendationsRef.current.scrollLeft + scrollDelta;
-
-      recommendationsRef.current.scrollBy({
-        behavior: 'smooth',
-        left: scrollDelta,
-      });
-
-      const { clientWidth, scrollWidth } = recommendationsRef.current;
-      setIsRecommendedScrolledLeft(newScrollLeft <= tolerance);
-      setIsRecommendedScrolledRight(
-        newScrollLeft >= scrollWidth - clientWidth - tolerance
-      );
-    }
-  };
-
-  const handleRecommendedScrollLeft = () => {
-    if (recommendationsRef.current) {
-      const itemWidth = 260 + 16;
-      const scrollDelta = itemWidth * (isMobile ? 1 : 3);
-      const newScrollLeft = recommendationsRef.current.scrollLeft - scrollDelta;
-
-      recommendationsRef.current.scrollBy({
-        behavior: 'smooth',
-        left: -scrollDelta,
-      });
-
-      const { clientWidth, scrollWidth } = recommendationsRef.current;
-      setIsRecommendedScrolledLeft(newScrollLeft <= tolerance);
-      setIsRecommendedScrolledRight(
-        newScrollLeft >= scrollWidth - clientWidth - tolerance
-      );
-    }
-  };
-
   const handleFocusScroll = () => {
     if (focusRef.current) {
       const { scrollLeft, scrollWidth, clientWidth } = focusRef.current;
@@ -356,12 +318,17 @@ export default function PopularArea() {
                 <IconButton
                   onClick={() => {
                     if (focusRef.current) {
-                      const itemWidth = 260 + 16;
+                      const itemWidth = 260 + 16; // width of each item plus gap
                       const scrollDelta = itemWidth * (isMobile ? 1 : 3);
-                      focusRef.current.scrollBy({
-                        left: scrollDelta,
+
+                      // Store current scroll position before scrolling
+                      const currentScroll = focusRef.current.scrollLeft;
+
+                      focusRef.current.scrollTo({
+                        left: currentScroll + scrollDelta,
                         behavior: 'smooth',
                       });
+
                       // Wait for the animation and then update the state
                       setTimeout(handleFocusScroll, 300);
                     }
@@ -392,17 +359,24 @@ export default function PopularArea() {
                   />
                 </IconButton>
               )}
+
               {/* Scroll left button */}
               {!isFocusScrolledLeft && (
                 <IconButton
                   onClick={() => {
                     if (focusRef.current) {
-                      const itemWidth = 260 + 16;
+                      const itemWidth = 260 + 16; // width of each item plus gap
                       const scrollDelta = itemWidth * (isMobile ? 1 : 3);
-                      focusRef.current.scrollBy({
-                        left: -scrollDelta,
+
+                      // Store current scroll position before scrolling
+                      const currentScroll = focusRef.current.scrollLeft;
+
+                      focusRef.current.scrollTo({
+                        left: currentScroll - scrollDelta,
                         behavior: 'smooth',
                       });
+
+                      // Wait for the animation and then update the state
                       setTimeout(handleFocusScroll, 300);
                     }
                   }}
@@ -547,7 +521,7 @@ export default function PopularArea() {
                   gap: '16px',
                   width: '100%',
                   display: 'flex',
-                  minHeight: '220px',
+                  minHeight: '146px',
                   overflowX: 'auto',
                   touchAction: 'none', // disables touch-based scrolling
                   scrollBehavior: 'smooth',
@@ -676,9 +650,27 @@ export default function PopularArea() {
                 ))}
               </Box>
 
+              {/* Scroll right button */}
               {!isRecommendedScrolledRight && (
                 <IconButton
-                  onClick={handleRecommendedScrollRight}
+                  onClick={() => {
+                    if (recommendationsRef.current) {
+                      const itemWidth = 300 + 16; // minWidth of each card plus gap
+                      const scrollDelta = itemWidth * (isMobile ? 1 : 3);
+
+                      // Store current scroll position before scrolling
+                      const currentScroll =
+                        recommendationsRef.current.scrollLeft;
+
+                      recommendationsRef.current.scrollTo({
+                        left: currentScroll + scrollDelta,
+                        behavior: 'smooth',
+                      });
+
+                      // Wait for the animation and then update the state
+                      setTimeout(handleRecommendedScroll, 300);
+                    }
+                  }}
                   sx={{
                     top: '60px',
                     right: '8px',
@@ -705,9 +697,28 @@ export default function PopularArea() {
                   />
                 </IconButton>
               )}
+
+              {/* Scroll left button */}
               {!isRecommendedScrolledLeft && (
                 <IconButton
-                  onClick={handleRecommendedScrollLeft}
+                  onClick={() => {
+                    if (recommendationsRef.current) {
+                      const itemWidth = 300 + 16; // minWidth of each card plus gap
+                      const scrollDelta = itemWidth * (isMobile ? 1 : 3);
+
+                      // Store current scroll position before scrolling
+                      const currentScroll =
+                        recommendationsRef.current.scrollLeft;
+
+                      recommendationsRef.current.scrollTo({
+                        left: currentScroll - scrollDelta,
+                        behavior: 'smooth',
+                      });
+
+                      // Wait for the animation and then update the state
+                      setTimeout(handleRecommendedScroll, 300);
+                    }
+                  }}
                   sx={{
                     top: '60px',
                     left: '8px',
@@ -715,14 +726,14 @@ export default function PopularArea() {
                     height: '28px',
                     padding: '5px',
                     borderRadius: '50px',
+                    backgroundColor: 'rgba(204, 0, 0, 0.60)',
+                    zIndex: 10,
+                    position: 'absolute',
                     '&:hover': {
                       backgroundColor: isMobile
                         ? 'rgba(204, 0, 0, 0.60)'
                         : 'rgba(204, 0, 0, 0.40)',
                     },
-                    zIndex: 10,
-                    position: 'absolute',
-                    backgroundColor: 'rgba(204, 0, 0, 0.60)',
                   }}
                 >
                   <ArrowForwardIosRounded
