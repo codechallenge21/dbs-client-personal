@@ -43,7 +43,6 @@ export default function PopularArea() {
     useState(true);
   const [isMobileToolsScrolledRight, setIsMobileToolsScrolledRight] =
     useState(false);
-  const [, setCurrentMobilePage] = useState(0);
 
   const handleMobileToolsScroll = () => {
     if (toolsMobileRef.current) {
@@ -53,10 +52,6 @@ export default function PopularArea() {
       setIsMobileToolsScrolledRight(
         scrollLeft + clientWidth >= scrollWidth - 10
       );
-
-      const windowWidth = window.innerWidth;
-      const currentPage = Math.round(scrollLeft / windowWidth);
-      setCurrentMobilePage(currentPage);
     }
   };
 
@@ -552,6 +547,7 @@ export default function PopularArea() {
                 position: 'relative',
               }}
             >
+              {/* Scrollable container */}
               <Box
                 ref={toolsMobileRef}
                 sx={{
@@ -564,6 +560,14 @@ export default function PopularArea() {
                   '&::-webkit-scrollbar': {
                     display: 'none',
                   },
+
+                  // Remove any horizontal padding/margin that might affect centering
+                  margin: 0,
+                  padding: 0,
+                  // Set a specific width to ensure consistency
+                  width: '100%',
+                  // Ensure snapping to page boundaries
+                  scrollSnapType: 'x mandatory',
                 }}
               >
                 {Array.from({ length: Math.ceil(toolItems.length / 4) }).map(
@@ -577,7 +581,16 @@ export default function PopularArea() {
                         gridTemplateColumns: 'repeat(2, 1fr)',
                         gridTemplateRows: 'repeat(2, auto)',
                         gap: '16px',
-                        padding: '0 4px',
+                        // Center the grid in the viewport
+                        margin: '0 auto',
+                        padding: '0 16px', // Add horizontal padding to center content
+                        // Set min-width to 100% of viewport to ensure full page coverage
+                        minWidth: '100%',
+                        // Add scroll snap to ensure pages align properly
+                        scrollSnapAlign: 'start',
+                        // Ensure content is centered within each box
+                        justifyContent: 'center',
+                        justifyItems: 'center',
                       }}
                     >
                       {Array.from({ length: 4 }).map((_, itemIndex) => {
@@ -598,8 +611,11 @@ export default function PopularArea() {
                                 position: 'relative',
                                 flexDirection: 'column',
                                 backgroundColor: 'white',
+                                // Make box take up full space in grid cell
+                                maxWidth: '160px', // Limit max width for consistent appearance
+                                margin: '0 auto', // Center the box in its grid cell
                                 '&:hover': {
-                                  backgroundColor: '#CC00000D',
+                                  backgroundColor: 'var(--Primary-, #fff2f2)',
                                   '& .download-icon': {
                                     display: 'block',
                                   },
@@ -613,7 +629,9 @@ export default function PopularArea() {
                                   color: 'black',
                                 }}
                               />
-                              <Typography variant="body2">工具名称</Typography>
+                              <Typography variant="body2" align="center">
+                                工具名称
+                              </Typography>
                               <DownloadRounded
                                 className="download-icon"
                                 sx={{
@@ -627,21 +645,38 @@ export default function PopularArea() {
                             </Box>
                           );
                         }
-                        return null;
+                        // Instead of null, return an empty box to maintain grid structure
+                        return (
+                          <Box
+                            key={itemIndex}
+                            sx={{
+                              width: '100%',
+                              height: '140px',
+                              maxWidth: '160px',
+                              margin: '0 auto',
+                            }}
+                          />
+                        );
                       })}
                     </Box>
                   )
                 )}
               </Box>
+
+              {/* Navigation buttons - update the scroll logic to ensure proper centering */}
               {!isMobileToolsScrolledRight && (
                 <IconButton
                   onClick={() => {
                     if (toolsMobileRef.current) {
-                      const currentScroll = toolsMobileRef.current.scrollLeft;
-                      const windowWidth = window.innerWidth;
+                      // Instead of adding to current scroll, move to next full page
+                      const pageWidth = window.innerWidth;
+                      const currentPage = Math.round(
+                        toolsMobileRef.current.scrollLeft / pageWidth
+                      );
+                      const nextPage = currentPage + 1;
 
                       toolsMobileRef.current.scrollTo({
-                        left: currentScroll + windowWidth,
+                        left: nextPage * pageWidth,
                         behavior: 'smooth',
                       });
 
@@ -659,6 +694,11 @@ export default function PopularArea() {
                     zIndex: 10,
                     position: 'absolute',
                     backgroundColor: 'rgba(204, 0, 0, 0.60)',
+                    '&:hover': {
+                      backgroundColor: isMobile
+                        ? 'rgba(204, 0, 0, 0.60)'
+                        : 'rgba(204, 0, 0, 0.40)',
+                    },
                   }}
                 >
                   <ArrowForwardIosRounded
@@ -675,11 +715,15 @@ export default function PopularArea() {
                 <IconButton
                   onClick={() => {
                     if (toolsMobileRef.current) {
-                      const currentScroll = toolsMobileRef.current.scrollLeft;
-                      const windowWidth = window.innerWidth;
+                      // Instead of subtracting from current scroll, move to previous full page
+                      const pageWidth = window.innerWidth;
+                      const currentPage = Math.round(
+                        toolsMobileRef.current.scrollLeft / pageWidth
+                      );
+                      const prevPage = currentPage - 1;
 
                       toolsMobileRef.current.scrollTo({
-                        left: currentScroll - windowWidth,
+                        left: prevPage * pageWidth,
                         behavior: 'smooth',
                       });
 
@@ -697,6 +741,11 @@ export default function PopularArea() {
                     transform: 'translateY(-50%)',
                     zIndex: 10,
                     position: 'absolute',
+                    '&:hover': {
+                      backgroundColor: isMobile
+                        ? 'rgba(204, 0, 0, 0.60)'
+                        : 'rgba(204, 0, 0, 0.40)',
+                    },
                   }}
                 >
                   <ArrowForwardIosRounded
