@@ -35,7 +35,39 @@ export default function PopularArea() {
     useState(true);
   const [isRecommendedScrolledRight, setIsRecommendedScrolledRight] =
     useState(false);
-  const tolerance = 5; // Adjust if necessary
+  const tolerance = 5;
+
+  const toolsMobileRef = useRef<HTMLDivElement>(null);
+
+  const [isMobileToolsScrolledLeft, setIsMobileToolsScrolledLeft] =
+    useState(true);
+  const [isMobileToolsScrolledRight, setIsMobileToolsScrolledRight] =
+    useState(false);
+  const [, setCurrentMobilePage] = useState(0);
+
+  const handleMobileToolsScroll = () => {
+    if (toolsMobileRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = toolsMobileRef.current;
+
+      setIsMobileToolsScrolledLeft(scrollLeft === 0);
+      setIsMobileToolsScrolledRight(
+        scrollLeft + clientWidth >= scrollWidth - 10
+      );
+
+      const windowWidth = window.innerWidth;
+      const currentPage = Math.round(scrollLeft / windowWidth);
+      setCurrentMobilePage(currentPage);
+    }
+  };
+
+  useEffect(() => {
+    const ref = toolsMobileRef.current;
+    if (ref) {
+      ref.addEventListener('scroll', handleMobileToolsScroll);
+      handleMobileToolsScroll();
+      return () => ref.removeEventListener('scroll', handleMobileToolsScroll);
+    }
+  }, []);
 
   const handleFocusScrollRight = () => {
     if (focusRef.current) {
@@ -456,62 +488,229 @@ export default function PopularArea() {
             >
               工具下載
             </Typography>
-            <Grid2 container>
-              {toolItems.map((_, index) => (
-                <Grid2
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                  key={index}
-                  size={{ xs: 6, sm: 4, md: 3, lg: 2 }}
-                >
-                  <Box
+
+            <Box sx={{ display: { xs: 'none', sm: 'block' }, width: '100%' }}>
+              <Grid2 container>
+                {toolItems.map((_, index) => (
+                  <Grid2
                     sx={{
-                      gap: '20px',
-                      width: '173px',
-                      height: '140px',
                       display: 'flex',
-                      padding: '16px',
-                      borderRadius: '8px',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      position: 'relative',
-                      flexDirection: 'column',
-                      backgroundColor: 'white',
-                      '&:hover': {
-                        backgroundColor: '#CC00000D',
-                        '& .download-icon': {
-                          display: 'block',
-                        },
-                      },
                     }}
+                    key={index}
+                    size={{ sm: 4, md: 3, lg: 2 }}
                   >
-                    <WorkRounded
+                    <Box
                       sx={{
-                        width: '71px',
-                        height: '72px',
-                        color: 'black',
+                        gap: '20px',
+                        width: '173px',
+                        height: '140px',
+                        display: 'flex',
+                        padding: '16px',
+                        borderRadius: '8px',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        position: 'relative',
+                        flexDirection: 'column',
+                        backgroundColor: 'white',
+                        '&:hover': {
+                          backgroundColor: '#CC00000D',
+                          '& .download-icon': {
+                            display: 'block',
+                          },
+                        },
                       }}
-                    />
-                    <Typography variant="body2">工具名称</Typography>
-                    <DownloadRounded
-                      className="download-icon"
-                      sx={{
-                        display: 'none',
-                        position: 'absolute',
-                        top: '8px',
-                        right: '8px',
-                        color: 'black',
-                      }}
-                    />
-                  </Box>
-                </Grid2>
-              ))}
-            </Grid2>
-          </Box>
+                    >
+                      <WorkRounded
+                        sx={{
+                          width: '71px',
+                          height: '72px',
+                          color: 'black',
+                        }}
+                      />
+                      <Typography variant="body2">工具名称</Typography>
+                      <DownloadRounded
+                        className="download-icon"
+                        sx={{
+                          display: 'none',
+                          position: 'absolute',
+                          top: '8px',
+                          right: '8px',
+                          color: 'black',
+                        }}
+                      />
+                    </Box>
+                  </Grid2>
+                ))}
+              </Grid2>
+            </Box>
 
+            <Box
+              sx={{
+                display: { xs: 'block', sm: 'none' },
+                position: 'relative',
+              }}
+            >
+              <Box
+                ref={toolsMobileRef}
+                sx={{
+                  display: 'flex',
+                  overflowX: 'auto',
+                  scrollBehavior: 'smooth',
+                  touchAction: 'none',
+                  scrollbarWidth: 'none',
+                  msOverflowStyle: 'none',
+                  '&::-webkit-scrollbar': {
+                    display: 'none',
+                  },
+                }}
+              >
+                {Array.from({ length: Math.ceil(toolItems.length / 4) }).map(
+                  (_, pageIndex) => (
+                    <Box
+                      key={pageIndex}
+                      sx={{
+                        flexShrink: 0,
+                        width: '100%',
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(2, 1fr)',
+                        gridTemplateRows: 'repeat(2, auto)',
+                        gap: '16px',
+                        padding: '0 4px',
+                      }}
+                    >
+                      {Array.from({ length: 4 }).map((_, itemIndex) => {
+                        const index = pageIndex * 4 + itemIndex;
+                        if (index < toolItems.length) {
+                          return (
+                            <Box
+                              key={itemIndex}
+                              sx={{
+                                gap: '10px',
+                                width: '100%',
+                                height: '140px',
+                                display: 'flex',
+                                padding: '8px',
+                                borderRadius: '8px',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                position: 'relative',
+                                flexDirection: 'column',
+                                backgroundColor: 'white',
+                                '&:hover': {
+                                  backgroundColor: '#CC00000D',
+                                  '& .download-icon': {
+                                    display: 'block',
+                                  },
+                                },
+                              }}
+                            >
+                              <WorkRounded
+                                sx={{
+                                  width: '60px',
+                                  height: '60px',
+                                  color: 'black',
+                                }}
+                              />
+                              <Typography variant="body2">工具名称</Typography>
+                              <DownloadRounded
+                                className="download-icon"
+                                sx={{
+                                  display: 'none',
+                                  position: 'absolute',
+                                  top: '8px',
+                                  right: '8px',
+                                  color: 'black',
+                                }}
+                              />
+                            </Box>
+                          );
+                        }
+                        return null;
+                      })}
+                    </Box>
+                  )
+                )}
+              </Box>
+              {!isMobileToolsScrolledRight && (
+                <IconButton
+                  onClick={() => {
+                    if (toolsMobileRef.current) {
+                      const currentScroll = toolsMobileRef.current.scrollLeft;
+                      const windowWidth = window.innerWidth;
+
+                      toolsMobileRef.current.scrollTo({
+                        left: currentScroll + windowWidth,
+                        behavior: 'smooth',
+                      });
+
+                      setTimeout(handleMobileToolsScroll, 300);
+                    }
+                  }}
+                  sx={{
+                    top: '50%',
+                    right: '5px',
+                    width: '28px',
+                    height: '28px',
+                    padding: '5px',
+                    borderRadius: '50px',
+                    transform: 'translateY(-50%)',
+                    zIndex: 10,
+                    position: 'absolute',
+                    backgroundColor: 'rgba(204, 0, 0, 0.60)',
+                  }}
+                >
+                  <ArrowForwardIosRounded
+                    sx={{
+                      width: '18px',
+                      height: '18px',
+                      color: 'white',
+                    }}
+                  />
+                </IconButton>
+              )}
+
+              {!isMobileToolsScrolledLeft && (
+                <IconButton
+                  onClick={() => {
+                    if (toolsMobileRef.current) {
+                      const currentScroll = toolsMobileRef.current.scrollLeft;
+                      const windowWidth = window.innerWidth;
+
+                      toolsMobileRef.current.scrollTo({
+                        left: currentScroll - windowWidth,
+                        behavior: 'smooth',
+                      });
+
+                      setTimeout(handleMobileToolsScroll, 300);
+                    }
+                  }}
+                  sx={{
+                    top: '50%',
+                    left: '5px',
+                    width: '28px',
+                    height: '28px',
+                    padding: '5px',
+                    borderRadius: '50px',
+                    backgroundColor: 'rgba(204, 0, 0, 0.60)',
+                    transform: 'translateY(-50%)',
+                    zIndex: 10,
+                    position: 'absolute',
+                  }}
+                >
+                  <ArrowForwardIosRounded
+                    sx={{
+                      width: '18px',
+                      height: '18px',
+                      color: 'white',
+                      transform: 'scaleX(-1)',
+                    }}
+                  />
+                </IconButton>
+              )}
+            </Box>
+          </Box>
           <Box
             sx={{
               gap: '16px',
