@@ -48,13 +48,19 @@ const serverSide = {
 
 const apis = {
   getChannelDetail: (payload?: GetChannelDetailApiPayload) => {
-    const { organizationId, organizationChannelId } = payload || {};
+    if (!payload) {
+      throw new Error('Payload is undefined');
+    }
+    const { organizationId, organizationChannelId } = payload;
     return fetcher.get<OrganizationChannel>(
       `/organizations/${organizationId}/channels/${organizationChannelId}`
     );
   },
   ApiRegenerateSummary: (payload?: GetChannelDetailApiPayload) => {
-    const { organizationId, organizationChannelId } = payload || {};
+    if (!payload) {
+      throw new Error('Payload is undefined');
+    }
+    const { organizationId, organizationChannelId } = payload;
     return fetcher.post<OrganizationChannel>(
       `/organizations/${organizationId}/channels/${organizationChannelId}/regenerate-summary`
     );
