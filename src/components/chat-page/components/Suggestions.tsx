@@ -8,7 +8,7 @@ interface SuggestionsProps {
 
 const Suggestions: React.FC<SuggestionsProps> = ({ title }) => {
   return (
-    <Box onClick={() => console.log('clicked')} sx={{ cursor: 'pointer' }}>
+    <Box onClick={() => {}} sx={{ cursor: 'pointer' }}>
       <Typography
         variant="h6"
         sx={{

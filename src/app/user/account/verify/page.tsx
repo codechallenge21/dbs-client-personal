@@ -1,11 +1,11 @@
 'use client';
 
-import { Suspense, useEffect, useContext } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
-import { Container, CircularProgress } from '@mui/material';
-import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
-import apis from '@/utils/hooks/apis/apis';
 import { SnackbarContext } from '@/context/SnackbarContext';
+import apis from '@/utils/hooks/apis/apis';
+import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
+import { CircularProgress, Container } from '@mui/material';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useContext, useEffect } from 'react';
 
 function VerifyAccountPageInner() {
   // Retrieve the emailTokenId query parameter
@@ -20,26 +20,26 @@ function VerifyAccountPageInner() {
       verifyAccount({ emailTokenId })
         .then((response) => {
           if (response.status === 200) {
-            showSnackbar('Email is verified', 'success');
+            showSnackbar('電子郵件已驗證', 'success');
             // Redirect to home with login dialog open after a short delay
             setTimeout(() => {
               router.push('/?login=true');
             }, 2500);
           } else {
-            showSnackbar('Verification failed. Please try again.', 'error');
+            showSnackbar('驗證失敗。請再試一次。', 'error');
             setTimeout(() => {
               router.push('/');
             }, 2500);
           }
         })
         .catch(() => {
-          showSnackbar('Verification failed. Please try again.', 'error');
+          showSnackbar('驗證失敗。請再試一次。', 'error');
           setTimeout(() => {
             router.push('/');
           }, 2500);
         });
     } else {
-      showSnackbar('Invalid verification link.', 'error');
+      showSnackbar('無效的驗證連結。', 'error');
       setTimeout(() => {
         router.push('/');
       }, 2500);
