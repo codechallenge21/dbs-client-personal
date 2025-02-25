@@ -1,7 +1,6 @@
 import SettingsIcon from '@mui/icons-material/Settings';
-import { Divider } from '@mui/material';
+import { Box, Divider, Menu, MenuItem, Typography } from '@mui/material';
 import React from 'react';
-import { Menu, MenuItem, Box, Typography } from '@mui/material';
 
 interface UserActionMenuProps {
   email: string;
@@ -87,7 +86,7 @@ export const UserActionMenu: React.FC<UserActionMenuProps> = ({
               lineHeight: '24px',
             }}
           >
-            设置
+            設置
           </Typography>
         </Box>
       </MenuItem>

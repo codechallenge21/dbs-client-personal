@@ -1,25 +1,25 @@
 'use client';
 
-import React, { useState, useContext } from 'react';
+import EyeCloseIcon from '@/assets/Images/EyeClose Icon.svg';
+import EyeOpenIcon from '@/assets/Images/EyeOpen Icon.svg';
+import { SnackbarContext } from '@/context/SnackbarContext';
+import apis from '@/utils/hooks/apis/apis';
+import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
+import { CloseRounded } from '@mui/icons-material';
 import {
   Box,
   Button,
   Dialog,
-  useTheme,
+  IconButton,
+  InputAdornment,
   TextField,
   Typography,
-  IconButton,
   useMediaQuery,
-  InputAdornment,
+  useTheme,
 } from '@mui/material';
-import { CloseRounded } from '@mui/icons-material';
-import GoogleIcon from '../../assets/google.png';
 import Image from 'next/image';
-import EyeCloseIcon from '@/assets/Images/EyeClose Icon.svg';
-import EyeOpenIcon from '@/assets/Images/EyeOpen Icon.svg';
-import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
-import apis from '@/utils/hooks/apis/apis';
-import { SnackbarContext } from '@/context/SnackbarContext';
+import { useContext, useState } from 'react';
+import GoogleIcon from '../../assets/google.png';
 
 const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
   const theme = useTheme();
@@ -46,7 +46,7 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
 
   const handleLogin = async () => {
     if (!email || !password) {
-      showSnackbar('Please fill in both email and password.', 'error');
+      showSnackbar('請填寫電子郵件及密碼。', 'error');
       return;
     }
     try {
@@ -55,15 +55,15 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
         organizationUserPassword: password,
       });
       if (response.status === 200) {
-        showSnackbar('Login successful.', 'success');
+        showSnackbar('登入成功。', 'success');
         setTimeout(() => {
           window.location.reload();
         }, 2000);
       } else {
-        showSnackbar('Login failed. Please check your credentials.', 'error');
+        showSnackbar('登入失敗。請檢查您的帳號密碼。', 'error');
       }
     } catch (error) {
-      showSnackbar('Login failed. Please try again.', 'error');
+      showSnackbar('登入失敗。請再試一次。', 'error');
     }
   };
 
@@ -72,11 +72,7 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
       const response = await getGoogleLoginUrl();
       window.location.href = response.data;
     } catch (error) {
-      showSnackbar(
-        'Failed to obtain Google login URL. Please try again.',
-        'error'
-      );
-      console.error('Error obtaining Google login URL:', error);
+      showSnackbar('無法取得 Google 登入網址。請再試一次。', 'error');
     }
   };
 

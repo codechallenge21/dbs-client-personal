@@ -1,27 +1,27 @@
 'use client';
 
-import React, { useState, useContext } from 'react';
+import EyeCloseIcon from '@/assets/Images/EyeClose Icon.svg';
+import EyeOpenIcon from '@/assets/Images/EyeOpen Icon.svg';
+import { SnackbarContext } from '@/context/SnackbarContext';
+import apis from '@/utils/hooks/apis/apis';
+import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
+import { CloseRounded } from '@mui/icons-material';
 import {
   Box,
   Button,
-  Dialog,
-  useTheme,
   Checkbox,
+  Dialog,
+  FormControlLabel,
+  IconButton,
+  InputAdornment,
   TextField,
   Typography,
-  IconButton,
   useMediaQuery,
-  FormControlLabel,
-  InputAdornment,
+  useTheme,
 } from '@mui/material';
-import { CloseRounded } from '@mui/icons-material';
 import Image from 'next/image';
+import React, { useContext, useState } from 'react';
 import GoogleIcon from '../../assets/google.png';
-import EyeCloseIcon from '@/assets/Images/EyeClose Icon.svg';
-import EyeOpenIcon from '@/assets/Images/EyeOpen Icon.svg';
-import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
-import apis from '@/utils/hooks/apis/apis';
-import { SnackbarContext } from '@/context/SnackbarContext';
 
 interface SignupDialogProps {
   open: boolean;
@@ -63,26 +63,23 @@ const SignupDialog: React.FC<SignupDialogProps> = ({
 
   const handleRegister = async () => {
     if (!name || !email || !password || !confirmPassword) {
-      showSnackbar('Please fill in all required fields.', 'error');
+      showSnackbar('請填寫所有必填欄位。', 'error');
       return;
     }
 
     if (!agree) {
-      showSnackbar(
-        'You must agree to the terms, privacy policy, and cookie policy.',
-        'error'
-      );
+      showSnackbar('您必須同意服務條款、隱私政策和 Cookie 政策。', 'error');
       return;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      showSnackbar('Please enter a valid email address.', 'error');
+      showSnackbar('請輸入有效的電子郵件地址。', 'error');
       return;
     }
 
     if (password !== confirmPassword) {
-      showSnackbar('Passwords do not match.', 'error');
+      showSnackbar('密碼不一致。', 'error');
       return;
     }
 
@@ -95,21 +92,18 @@ const SignupDialog: React.FC<SignupDialogProps> = ({
       });
 
       if (response.status === 200) {
-        showSnackbar(
-          'Please verify your account through your email.',
-          'success'
-        );
+        showSnackbar('請透過您的電子郵件驗證帳戶。', 'success');
       } else if (response.status === 409) {
-        showSnackbar('This account has already been registered.', 'error');
+        showSnackbar('此帳號已經註冊。', 'error');
       } else {
-        showSnackbar('An error occurred. Please try again.', 'error');
+        showSnackbar('發生錯誤。請再試一次。', 'error');
       }
       handleClose();
     } catch (error: any) {
       if (error.response && error.response.status === 409) {
-        showSnackbar('This account has already been registered.', 'error');
+        showSnackbar('此帳號已經註冊。', 'error');
       } else {
-        showSnackbar('An error occurred. Please try again.', 'error');
+        showSnackbar('發生錯誤。請再試一次。', 'error');
       }
     }
   };
