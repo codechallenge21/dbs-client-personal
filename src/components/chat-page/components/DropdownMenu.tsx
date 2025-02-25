@@ -1,34 +1,34 @@
 'use client';
 
-import DeleteDialog from '@/components/dialogs/DeleteDialog';
-import EditDialog from '@/components/dialogs/EditDialog';
-import EditableItem from '@/components/editable-item/EditableItem';
-import apis from '@/utils/hooks/apis/apis';
-import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
-import {
-    AccountBalanceWalletRounded,
-    BusinessCenterRounded,
-    LocalHospitalRounded,
-    MoneyOffRounded,
-    PhishingRounded,
-    SupportAgentOutlined,
-    WorkRounded,
-} from '@mui/icons-material';
-import {
-    Box,
-    Button,
-    ListItemIcon,
-    ListItemText,
-    Menu,
-    MenuItem,
-    Typography,
-    useMediaQuery,
-    useTheme,
-} from '@mui/material';
-import { useRouter } from 'next/navigation';
 import { useCallback, useContext, useState } from 'react';
+import {
+  Typography,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+  useTheme,
+  useMediaQuery,
+  Box,
+  Button,
+} from '@mui/material';
+import {
+  WorkRounded,
+  PhishingRounded,
+  MoneyOffRounded,
+  LocalHospitalRounded,
+  SupportAgentOutlined,
+  BusinessCenterRounded,
+  AccountBalanceWalletRounded,
+} from '@mui/icons-material';
+import apis from '@/utils/hooks/apis/apis';
+import { useRouter } from 'next/navigation';
 import { AdvisorType } from '../../../app/chat/types';
-import ChannelContentContext from '../../channel-context-provider/ChannelContentContext';
+import EditDialog from '@/components/dialogs/EditDialog';
+import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
+import DeleteDialog from '@/components/dialogs/DeleteDialog';
+import EditableItem from '@/components/editable-item/EditableItem';
+import ChannelContentContext from '@/context/ChannelContentContext';
 
 const listItems = [
   {

@@ -1,45 +1,46 @@
 'use client';
-import DeleteDialog from '@/components/dialogs/DeleteDialog';
-import EditDialog from '@/components/dialogs/EditDialog';
-import EditableItem from '@/components/editable-item/EditableItem';
-import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
-import UploadDialog from '@/components/uploadDialog/page';
+import React, { useState, useEffect, useCallback } from 'react';
+import {
+  Box,
+  Tab,
+  Tabs,
+  Table,
+  Button,
+  useTheme,
+  TableRow,
+  TableBody,
+  TableCell,
+  TableHead,
+  Typography,
+  IconButton,
+  useMediaQuery,
+  TableContainer,
+  Card,
+  CardContent,
+  // CircularProgress,
+} from '@mui/material';
+import {
+  MicRounded,
+  StarRounded,
+  SearchRounded,
+  UploadRounded,
+  MenuRounded,
+  CheckCircleRounded,
+  RotateRightRounded,
+  PendingActionsRounded,
+  StarBorderRounded,
+} from '@mui/icons-material';
+import { useRouter } from 'next/navigation';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { OrganizationChannel } from '@/interfaces/entities';
 import apis from '@/utils/hooks/apis/apis';
-import { useAudioChannels } from '@/utils/hooks/useAudioChannels';
+import EditDialog from '@/components/dialogs/EditDialog';
+import UploadDialog from '@/components/uploadDialog/page';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
-import {
-    CheckCircleRounded,
-    MenuRounded,
-    MicRounded,
-    PendingActionsRounded,
-    RotateRightRounded,
-    SearchRounded,
-    StarBorderRounded,
-    StarRounded,
-    UploadRounded,
-} from '@mui/icons-material';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import {
-    Box,
-    Button,
-    Card,
-    CardContent,
-    IconButton,
-    Tab,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Tabs,
-    Typography,
-    useMediaQuery,
-    useTheme,
-} from '@mui/material';
-import { useRouter } from 'next/navigation';
-import React, { useCallback, useEffect, useState } from 'react';
+import DeleteDialog from '@/components/dialogs/DeleteDialog';
+import { useAudioChannels } from '@/utils/hooks/useAudioChannels';
+import EditableItem from '@/components/editable-item/EditableItem';
+import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
 
 const ChannelsList = () => {
   const theme = useTheme();
@@ -713,8 +714,8 @@ const ChannelsList = () => {
                               }}
                             >
                               {new Date(
-                        channel.organizationChannelCreateDate
-                      ).toLocaleString()}
+                                channel.organizationChannelCreateDate
+                              ).toLocaleString()}
                             </Typography>
                           </TableCell>
                           <TableCell
