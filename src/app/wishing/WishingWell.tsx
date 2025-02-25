@@ -420,8 +420,8 @@ const WishingWell = () => {
                 display: 'flex',
                 flexWrap: 'wrap',
                 alignSelf: 'stretch',
-                alignItems: 'flex-start',
-                alignContent: 'flex-start',
+                alignItems: isMobile ? 'center' : 'flex-start',
+                alignContent: isMobile ? 'center' : 'flex-start',
                 justifyContent: 'space-between',
               }}
             >
@@ -432,6 +432,7 @@ const WishingWell = () => {
                     // gap: '12px',
                     display: 'flex',
                     height: '220px',
+                    width: isMobile ? '100%' : 'auto',
                     minWidth: '260px',
                     alignItems: 'center',
                     flexDirection: 'column',

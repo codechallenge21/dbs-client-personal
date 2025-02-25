@@ -533,13 +533,20 @@ const WishPoolDialog: React.FC<WishPoolDialogProps> = ({ open, onClose }) => {
                 width: '324px',
                 height: '570px',
                 display: 'flex',
-                overflow: 'hidden',
+                // overflow: 'hidden',
                 borderRadius: '8px',
                 alignItems: 'center',
                 paddingBottom: '16px',
                 flexDirection: 'column',
                 background: 'var(--Primary-White, #FFF)',
                 boxShadow: '-40px 40px 80px -8px rgba(0, 0, 0, 0.24)',
+                overflow: 'auto',
+                msOverflowStyle: 'none', // IE and Edge
+                scrollbarWidth: 'none', // Firefox
+                '&::-webkit-scrollbar': {
+                  // Chrome, Safari, Opera
+                  display: 'none',
+                },
               },
             },
           }}
@@ -559,7 +566,7 @@ const WishPoolDialog: React.FC<WishPoolDialogProps> = ({ open, onClose }) => {
                 width: '100px',
                 height: '32px',
                 fontWeight: 400,
-                fontSize: '32px',
+                fontSize: '24px',
                 color: '#212B36',
                 lineHeight: '32px',
                 letterSpacing: '0%',
@@ -589,6 +596,7 @@ const WishPoolDialog: React.FC<WishPoolDialogProps> = ({ open, onClose }) => {
               gap: '16px',
               flex: '1 0 0',
               display: 'flex',
+              minHeight: '590px',
               padding: '0px 16px',
               alignItems: 'center',
               alignSelf: 'stretch',
@@ -597,293 +605,321 @@ const WishPoolDialog: React.FC<WishPoolDialogProps> = ({ open, onClose }) => {
             }}
           >
             {/* {Response Box} */}
+
+            {/* {User Text} */}
             <Box
               sx={{
-                gap: '24px',
-                flex: '1 0 0',
+                gap: '16px',
                 display: 'flex',
-                paddingTop: '16px',
+                padding: '16px',
                 alignSelf: 'stretch',
-                flexDirection: 'column',
                 alignItems: 'flex-start',
-                justifyContent: 'flex-end',
+                minHeight: '80px',
+                backgroundColor: '#F5F5F5',
+                borderRadius: '8px',
               }}
             >
-              {/* {User Text} */}
+              <PermIdentityRounded
+                sx={{
+                  padding: '8px',
+                  color: 'white',
+                  display: 'flex',
+                  alignItems: 'center',
+                  borderRadius: '50px',
+                  justifyContent: 'center',
+                  backgroundColor: 'var(--Secondary-, #5C443A)',
+                  width: '36px',
+                  height: '36px',
+                }}
+              />
               <Box
                 sx={{
-                  gap: '16px',
                   display: 'flex',
-                  padding: '16px',
-                  alignSelf: 'stretch',
-                  alignItems: 'flex-start',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  height: '100%',
+                  justifyContent: 'center',
                 }}
               >
-                <PermIdentityRounded
-                  sx={{
-                    padding: '8px',
-                    color: 'white',
-                    display: 'flex',
-                    alignItems: 'center',
-                    borderRadius: '50px',
-                    justifyContent: 'center',
-                    backgroundColor: 'var(--Secondary-, #5C443A)',
-                  }}
-                />
                 <Typography
                   sx={{
                     fontWeight: 400,
                     color: '#212B36',
                     fontSize: '16px',
-                    lineHeight: '16px',
-                    letterSpacing: '0%',
+                    lineHeight: '24px',
                     fontFamily: 'DFPHeiBold-B5',
                   }}
                 >
                   我想要幫我的個案進行財務狀況的分析
                 </Typography>
               </Box>
-              {/* {Response Main Container} */}
+            </Box>
+            {/* {Response Main Container} */}
+            <Box
+              sx={{
+                gap: '20px',
+                width: '100%',
+                display: 'flex',
+                // height: '330px',
+                flexDirection: 'column',
+              }}
+            >
+              {/* {Main Top Box} */}
               <Box
                 sx={{
-                  gap: '20px',
-                  width: '760px',
+                  gap: '12px',
+                  width: '100%',
+                  // height: '148px',
                   display: 'flex',
-                  height: '330px',
                   flexDirection: 'column',
                 }}
               >
-                {/* {Main Top Box} */}
+                {/* {Text Search Box} */}
                 <Box
                   sx={{
                     gap: '12px',
-                    width: '760px',
-                    height: '148px',
+                    width: '100%',
+                    height: '36px',
                     display: 'flex',
-                    flexDirection: 'column',
+                    alignItems: 'center',
                   }}
                 >
-                  {/* {Text Search Box} */}
-                  <Box
+                  <IconButton
                     sx={{
-                      gap: '16px',
-                      width: '760px',
-                      height: '36px',
-                      display: 'flex',
+                      width: '24px',
+                      height: '24px',
+                      padding: '0px',
                     }}
                   >
-                    <Box
-                      sx={{
-                        gap: '12px',
-                        width: '156',
-                        height: '36px',
-                        display: 'flex',
-                        alignItems: 'center',
-                      }}
-                    >
-                      <IconButton
-                        sx={{ width: '24px', height: '24px', padding: '0px' }}
-                      >
-                        <SearchRounded sx={{ color: '#212B36' }} />
-                      </IconButton>
-                      <Typography
+                    <SearchRounded sx={{ color: '#212B36' }} />
+                  </IconButton>
+                  <Typography
+                    sx={{
+                      fontWeight: 400,
+                      color: '#212B36',
+                      fontSize: '24px',
+                      lineHeight: '24px',
+                      letterSpacing: '0%',
+                      fontFamily: 'DFPHeiBold-B5',
+                    }}
+                  >
+                    你可能在找
+                  </Typography>
+                </Box>
+
+                {/* {Card Container Box} */}
+                <Box
+                  sx={{
+                    gap: '12px',
+                    height: '100px',
+                    display: 'flex',
+                    overflowX: 'auto',
+                    overflowY: 'hidden',
+                    msOverflowStyle: 'none',
+                    scrollbarWidth: 'none',
+                    '&::-webkit-scrollbar': {
+                      display: 'none',
+                    },
+                  }}
+                >
+                  {['財務快篩', '活動1', '活動2', '查看更多 +4'].map(
+                    (item, index) => (
+                      <Card
+                        key={index}
                         sx={{
-                          width: '120px',
-                          height: '24px',
-                          fontWeight: 400,
-                          color: '#212B36',
-                          fontSize: '24px',
-                          lineHeight: '24px',
-                          letterSpacing: '0%',
-                          fontFamily: 'DFPHeiBold-B5',
+                          gap: '10px',
+                          width: '184px',
+                          height: '100px',
+                          borderRadius: '8px',
+                          flexShrink: 0,
                         }}
                       >
-                        你可能在找
-                      </Typography>
-                    </Box>
-                  </Box>
-
-                  {/* {Card Container Box} */}
-                  <Box
-                    sx={{
-                      gap: '12px',
-                      width: '760px',
-                      height: '100px',
-                      display: 'flex',
-                    }}
-                  >
-                    {['財務快篩', '活動1', '活動2', '查看更多 +4'].map(
-                      (item, index) => (
-                        <Card
-                          key={index}
+                        <CardContent
                           sx={{
-                            gap: '10px',
-                            width: '181px',
+                            gap: '8px',
+                            width: '184px',
+                            display: 'flex',
                             height: '100px',
+                            padding: '16px !important',
                             borderRadius: '8px',
+                            flexDirection: 'column',
+                            backgroundColor: '#EBE3DD',
                           }}
                         >
-                          <CardContent
+                          <Typography
                             sx={{
-                              gap: '8px',
-                              width: '181px',
-                              display: 'flex',
-                              height: '100px',
-                              padding: '16px',
-                              borderRadius: '8px',
-                              flexDirection: 'column',
-                              backgroundColor: '#EBE3DD',
+                              width: '149px',
+                              height: '36px',
+                              fontWeight: 400,
+                              fontSize: '14px',
+                              color: '#212B36',
+                              lineHeight: '24px',
+                              letterSpacing: '0%',
+                              fontFamily: 'DFPHeiBold-B5',
                             }}
                           >
+                            {item}
+                          </Typography>
+                          <Button
+                            sx={{
+                              gap: '8px',
+                              height: '24px',
+                              padding: '0px',
+                              justifyContent: 'flex-start',
+                              alignItems: 'center',
+                            }}
+                          >
+                            <PublicRounded
+                              sx={{
+                                color: '#CC0000',
+                                width: '18px',
+                                height: '18px',
+                              }}
+                            />
                             <Typography
                               sx={{
-                                width: '149px',
-                                height: '36px',
                                 fontWeight: 400,
                                 fontSize: '14px',
-                                color: '#212B36',
+                                color: '#CC0000',
                                 lineHeight: '24px',
-                                letterSpacing: '0%',
                                 fontFamily: 'DFPHeiBold-B5',
                               }}
                             >
-                              {item}
+                              URL
                             </Typography>
-                            <Button
-                              sx={{
-                                gap: '8px',
-                                width: '149px',
-                                height: '24px',
-                                padding: '0px',
-                                justifyContent: 'flex-start',
-                              }}
-                            >
-                              <PublicRounded sx={{ color: '#CC0000' }} />
-                              <Typography
-                                sx={{
-                                  fontWeight: 400,
-                                  fontSize: '14px',
-                                  color: '#CC0000',
-                                  lineHeight: '24px',
-                                  letterSpacing: '0%',
-                                  fontFamily: 'DFPHeiBold-B5',
-                                }}
-                              >
-                                URL
-                              </Typography>
-                            </Button>
-                          </CardContent>
-                        </Card>
-                      )
-                    )}
-                  </Box>
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    )
+                  )}
                 </Box>
-                {/* {Main Second Box} */}
+              </Box>
+              {/* {Main Second Box} */}
+              <Box
+                sx={{
+                  gap: '12px',
+                  width: '100%',
+                  height: '162px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                }}
+              >
+                {/* {Title Box} */}
                 <Box
                   sx={{
-                    gap: '12px',
-                    width: '760px',
-                    height: '162px',
+                    width: '100%',
+                    height: '36px',
                     display: 'flex',
-                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
                   }}
                 >
-                  {/* {Title Box} */}
                   <Box
                     sx={{
-                      width: '760px',
-                      height: '36px',
+                      gap: '12px',
+                      width: '90px',
+                      height: '24px',
                       display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
                     }}
                   >
-                    <Box
+                    <IconButton
                       sx={{
-                        gap: '12px',
-                        width: '90px',
+                        width: '24px',
                         height: '24px',
-                        display: 'flex',
+                        padding: '0px',
                       }}
                     >
-                      <IconButton
+                      <LibraryBooksRounded
                         sx={{
                           width: '24px',
                           height: '24px',
-                          padding: '0px',
-                        }}
-                      >
-                        <LibraryBooksRounded
-                          sx={{
-                            width: '20px',
-                            height: '20px',
-                            color: '#212B36',
-                          }}
-                        />
-                      </IconButton>
-                      <Typography
-                        sx={{
-                          width: '60px',
-                          height: '24px',
-                          fontWeight: 400,
-                          fontSize: '24px',
                           color: '#212B36',
-                          lineHeight: '24px',
-                          letterSpacing: '0%',
-                          fontFamily: 'DFPHeiBold-B5',
                         }}
-                      >
-                        回覆
-                      </Typography>
-                    </Box>
-                    <Box
+                      />
+                    </IconButton>
+                    <Typography
                       sx={{
-                        gap: '8px',
-                        width: '82px',
-                        height: '36px',
-                        display: 'flex',
-                        paddingTop: '6px',
-                        paddingLeft: '8px',
-                        borderRadius: '8px',
-                        paddingRight: '8px',
-                        paddingBottom: '6px',
+                        fontWeight: 400,
+                        fontSize: '24px',
+                        color: '#212B36',
+                        lineHeight: '24px',
+                        letterSpacing: '0%',
+                        fontFamily: 'DFPHeiBold-B5',
                       }}
                     >
-                      <IconButton
-                        sx={{
-                          width: '24px',
-                          height: '24px',
-                          padding: '0px',
-                        }}
-                      >
-                        <ContentCopyRounded
-                          sx={{
-                            width: '20px',
-                            height: '20px',
-                            color: '#212B36',
-                          }}
-                        />
-                      </IconButton>
-                      <Typography
-                        sx={{
-                          width: '28px',
-                          fontWeight: 700,
-                          fontSize: '14px',
-                          color: '#212B36',
-                          lineHeight: '24px',
-                          textAlign: 'center',
-                          letterSpacing: '0px',
-                          fontFamily: 'Public Sans',
-                        }}
-                      >
-                        複製
-                      </Typography>
-                    </Box>
+                      回覆
+                    </Typography>
                   </Box>
-                  {/* {Description} */}
+                  <Box
+                    sx={{
+                      gap: '8px',
+                      width: '82px',
+                      height: '36px',
+                      display: 'flex',
+                      paddingTop: '6px',
+                      paddingLeft: '8px',
+                      borderRadius: '8px',
+                      paddingRight: '8px',
+                      paddingBottom: '6px',
+                    }}
+                  >
+                    <IconButton
+                      sx={{
+                        width: '24px',
+                        height: '24px',
+                        padding: '0px',
+                      }}
+                    >
+                      <ContentCopyRounded
+                        sx={{
+                          width: '20px',
+                          height: '20px',
+                          color: '#212B36',
+                        }}
+                      />
+                    </IconButton>
+                    <Typography
+                      sx={{
+                        width: '28px',
+                        fontWeight: 700,
+                        fontSize: '14px',
+                        color: '#212B36',
+                        lineHeight: '24px',
+                        textAlign: 'center',
+                        letterSpacing: '0px',
+                        fontFamily: 'Public Sans',
+                      }}
+                    >
+                      複製
+                    </Typography>
+                  </Box>
+                </Box>
+                {/* {Description} */}
+                <Typography
+                  sx={{
+                    width: '100%',
+                    fontWeight: 400,
+                    fontSize: '16px',
+                    color: '#212B36',
+                    lineHeight: '27px',
+                    letterSpacing: '0%',
+                    fontFamily: 'DFPHeiBold-B5',
+                  }}
+                >
+                  上面的內容是關於＂協助個案進行財務狀況分析＂你可能在找的內容，希望有幫到你。
+                </Typography>
+                {/* {Footer Box} */}
+                <Box
+                  sx={{
+                    gap: '8px',
+                    width: '100%',
+                    height: '27px',
+                    display: 'flex',
+                  }}
+                >
                   <Typography
                     sx={{
-                      width: '760px',
+                      width: '145px',
                       height: '27px',
                       fontWeight: 400,
                       fontSize: '16px',
@@ -893,83 +929,59 @@ const WishPoolDialog: React.FC<WishPoolDialogProps> = ({ open, onClose }) => {
                       fontFamily: 'DFPHeiBold-B5',
                     }}
                   >
-                    上面的內容是關於＂協助個案進行財務狀況分析＂你可能在找的內容，希望有幫到你。
+                    沒有你想要的內容?
                   </Typography>
-                  {/* {Footer Box} */}
-                  <Box
+                  <Button
                     sx={{
                       gap: '8px',
-                      width: '760px',
-                      height: '27px',
-                      display: 'flex',
+                      width: '90px',
+                      minHeight: '27px',
+                      color: '#FFFFFF',
+                      paddingTop: '4px',
+                      paddingLeft: '8px',
+                      borderRadius: '8px',
+                      paddingRight: '8px',
+                      paddingBottom: '4px',
+                      background: '#5C443A',
+                      fontSize: '16px',
+                      fontWeight: 600,
                     }}
                   >
-                    <Typography
-                      sx={{
-                        width: '145px',
-                        height: '27px',
-                        fontWeight: 400,
-                        fontSize: '16px',
-                        color: '#212B36',
-                        lineHeight: '27px',
-                        letterSpacing: '0%',
-                        fontFamily: 'DFPHeiBold-B5',
-                      }}
-                    >
-                      沒有你想要的內容?
-                    </Typography>
-                    <Button
-                      sx={{
-                        gap: '8px',
-                        width: '96px',
-                        height: '27px',
-                        color: '#FFFFFF',
-                        paddingTop: '4px',
-                        paddingLeft: '8px',
-                        borderRadius: '8px',
-                        paddingRight: '8px',
-                        paddingBottom: '4px',
-                        background: '#5C443A',
-                      }}
-                    >
-                      立即許願！
-                    </Button>
-                  </Box>
-                  {/* {Response Action Buttons Box} */}
-                  <Box
-                    sx={{
-                      width: '760px',
-                      height: '36px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'flex-end',
-                    }}
-                  >
-                    <IconButton>
-                      <ThumbDownOffAltRounded
-                        sx={{ width: '20px', height: '20px', color: '#212B36' }}
-                      />
-                    </IconButton>
-                    <IconButton>
-                      <ThumbDownOffAltRounded
-                        sx={{ width: '20px', height: '20px', color: '#212B36' }}
-                      />
-                    </IconButton>
-                  </Box>
+                    送出願望
+                  </Button>
                 </Box>
+                {/* {Response Action Buttons Box} */}
+              </Box>
+              <Box
+                sx={{
+                  width: '100%',
+                  height: '36px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'flex-end',
+                }}
+              >
+                <IconButton>
+                  <ThumbDownOffAltRounded
+                    sx={{ width: '20px', height: '20px', color: '#212B36' }}
+                  />
+                </IconButton>
+                <IconButton>
+                  <ThumbDownOffAltRounded
+                    sx={{ width: '20px', height: '20px', color: '#212B36' }}
+                  />
+                </IconButton>
               </Box>
             </Box>
-
-            {/* {AI Text Input Box} */}
             <Box
               sx={{
                 gap: '8px',
-                width: '760px',
+                width: '100%',
                 height: '56px',
                 display: 'flex',
                 maxWidth: '760px',
                 paddingTop: '8px',
-                maxHeight: '250px',
+                // maxHeight: '250px',
                 borderRadius: '8px',
                 paddingLeft: '16px',
                 paddingRight: '16px',
@@ -1001,6 +1013,8 @@ const WishPoolDialog: React.FC<WishPoolDialogProps> = ({ open, onClose }) => {
                 }}
               />
             </Box>
+
+            {/* {AI Text Input Box} */}
           </Box>
         </Dialog>
       )}
