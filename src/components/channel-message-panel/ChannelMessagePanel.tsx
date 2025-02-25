@@ -90,22 +90,40 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
       <Box
         sx={{
           display: 'flex',
+          width: '100%',
           maxWidth: '760px',
           flexDirection: 'column',
           minWidth: isMobile ? '100%' : isTablet ? '350px' : '760px',
-          overflow: 'auto',
+          overflowY: 'auto',
+          overflowX: 'hidden', // prevent horizontal scroll
           height: '100%',
+          // ChatGPT-like scrollbar styling for Webkit browsers
+          '&::-webkit-scrollbar': {
+            width: '30px', // Increased scrollbar width
+          },
+          '&::-webkit-scrollbar-track': {
+            background: '#f1f1f1',
+            borderRadius: '3px',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: '#888',
+            borderRadius: '3px',
+          },
+          '&::-webkit-scrollbar-thumb:hover': {
+            backgroundColor: '#555',
+          },
+          // Firefox scrollbar styling
+          scrollbarWidth: 'thick', // Increased scrollbar width
+          scrollbarColor: '#888 #f1f1f1',
         }}
       >
         {sortedData?.map((message, messageIndex) => (
           <Box
             key={`channelMessage-${messageIndex}`}
             sx={{
-              width:
-                message.organizationChannelMessageType !== 'AI'
-                  ? 'fit-content'
-                  : '100%',
-              marginLeft: 'auto',
+              width: { xs: '100%', sm: 'fit-content' },
+              marginLeft:
+                message.organizationChannelMessageType === 'AI' ? '0' : 'auto',
               marginBottom: '20px',
               display: 'flex',
               alignItems: 'flex-start',
@@ -141,7 +159,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                 flex: 1,
                 py: 2,
                 pr: 2,
-                width: '100%',
+                width: { xs: '100%', sm: '100%' },
                 maxWidth: '710px',
                 color: '#212B36',
                 wordBreak: 'break-word',
@@ -158,6 +176,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                     justifyContent: 'space-between',
                     width: '100%',
                     mb: 1,
+                    ml: { xs: '-25px', sm: '0px' }, // Shift to left by 10px on small screens
                   }}
                 >
                   <Box
@@ -218,6 +237,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                     justifyContent: 'flex-end',
                     gap: 1,
                     mt: 2,
+                    ml: { xs: '-30px', sm: '-20px' },
                   }}
                 >
                   <ThumbUp
@@ -354,10 +374,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
             )}
             <Box
               sx={{
-                width:
-                  message.organizationChannelMessageType === 'AI'
-                    ? '100%'
-                    : 'fit-content',
+                width: { xs: '100%', sm: 'fit-content' },
                 marginLeft:
                   message.organizationChannelMessageType === 'AI'
                     ? '0'
@@ -392,7 +409,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                   <PermIdentityRounded sx={{ color: 'white' }} />
                 </Avatar>
               ) : (
-                <Box sx={{ width: 36, height: 36, ml: '20px', mt: '20px' }} /> // Placeholder for spacing
+                <Box sx={{ width: 36, height: 36, ml: '20px', mt: '20px' }} />
               )}
               <Box
                 sx={{
