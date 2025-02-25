@@ -1,24 +1,23 @@
-import { fetcher, fetcherConfig, uploadFetcher } from './fetchers';
-import axios from 'axios';
 import {
   OrganizationChannel,
-  OrganizationChannelResponse,
   OrganizationChannelChatInteractResponse,
+  OrganizationChannelResponse,
 } from '@/interfaces/entities';
 import {
-  LogApiPayload,
-  GetChannelsApiPayload,
-  GetChannelDetailApiPayload,
-  UploadFileApiPayload,
-  SubmitUserInputsApiPayload,
   DeleteChannelApiPayload,
-  UpdateChannelApiPayload,
-  RegisterUserApiPayload,
-  VerifyAccountApiPayload,
+  GetChannelDetailApiPayload,
+  GetChannelsApiPayload,
+  LogApiPayload,
   LoginPayload,
   LogoutPayload,
+  RegisterUserApiPayload,
+  SubmitUserInputsApiPayload,
+  UpdateChannelApiPayload,
+  UploadFileApiPayload,
+  VerifyAccountApiPayload,
 } from '@/interfaces/payloads';
-import { AxiosRequestConfig } from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
+import { fetcher, fetcherConfig, uploadFetcher } from './fetchers';
 
 const tools = {
   /**
@@ -48,9 +47,21 @@ const serverSide = {
 
 const apis = {
   getChannelDetail: (payload?: GetChannelDetailApiPayload) => {
-    const { organizationId, organizationChannelId } = payload || {};
+    if (!payload) {
+      throw new Error('Payload is undefined');
+    }
+    const { organizationId, organizationChannelId } = payload;
     return fetcher.get<OrganizationChannel>(
       `/organizations/${organizationId}/channels/${organizationChannelId}`
+    );
+  },
+  ApiRegenerateSummary: (payload?: GetChannelDetailApiPayload) => {
+    if (!payload) {
+      throw new Error('Payload is undefined');
+    }
+    const { organizationId, organizationChannelId } = payload;
+    return fetcher.post<OrganizationChannel>(
+      `/organizations/${organizationId}/channels/${organizationChannelId}/regenerate-summary`
     );
   },
   createChannelByAudio: (
