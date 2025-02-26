@@ -154,7 +154,7 @@ const UploadScreen: React.FC<UploadDialogProps> = () => {
         flexDirection: 'column',
         justifyContent: isMobile ? 'start' : 'center',
         alignItems: 'center',
-        height: isMobile ? 'auto' : '100vh',
+        height: 'calc(100vh - 230px)',
         width: '100%',
       }}
     >
