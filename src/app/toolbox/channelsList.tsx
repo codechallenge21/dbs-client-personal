@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   Box,
   Tab,
@@ -66,15 +66,29 @@ const ChannelsList = () => {
   const [favoriteChannels, setFavoriteChannels] = useState<{
     [key: number]: boolean;
   }>({});
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const [isFetching, setIsFetching] = useState(false);
+  const [channelList, setChannelList] = useState<OrganizationChannel[]>([]);
+  const itemsPerPage = 10;
 
   const {
     data: channelsData = [],
-    // mutate: mutateAudioChannels,
+    mutate: mutateAudioChannels,
     isValidating: isLoadingChannels,
-  } = useAudioChannels({
-    organizationId: 'yMJHyi6R1CB9whpdNvtA',
-  });
-  // const channelsData: OrganizationChannel[] = [];
+  } = useAudioChannels(
+    {
+      organizationId: 'yMJHyi6R1CB9whpdNvtA',
+    },
+    {
+      startIndex: page,
+      size: itemsPerPage,
+    }
+  );
+
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+  const observer = useRef<IntersectionObserver | null>(null);
+  const loadingRef = useRef(null);
 
   const { excute: deleteChannel } = useAxiosApi(apis.deleteChannel);
   const { excute: updateChannelDetail } = useAxiosApi(apis.updateChannelDetail);
@@ -193,6 +207,68 @@ const ChannelsList = () => {
       [index]: !prev[index],
     }));
   };
+
+  // Initialize channelList with channelsData
+  useEffect(() => {
+    if (channelsData && channelsData.length > 0 && page === 0) {
+      setChannelList(channelsData);
+    }
+  }, [channelsData, page]);
+
+  // Fetch more data when scrolled to the bottom
+  const fetchMoreData = useCallback(async () => {
+    if (isFetching || !hasMore) return;
+
+    setIsFetching(true);
+
+    try {
+      const nextPage = page + itemsPerPage;
+      setPage(nextPage);
+
+      // Use the updated page value in the API call
+      const response = await mutateAudioChannels();
+
+      const newChannels = response?.data || [];
+
+      if (newChannels.length > 0) {
+        setChannelList((prevChannels) => [...prevChannels, ...newChannels]);
+        setHasMore(newChannels.length >= itemsPerPage);
+      } else {
+        setHasMore(false);
+      }
+    } catch (error) {
+      console.error('Error loading channels:', error);
+      setHasMore(false);
+    } finally {
+      setIsFetching(false);
+    }
+  }, [isFetching, hasMore, page, mutateAudioChannels]);
+
+  // Setup Intersection Observer for infinite scrolling
+  useEffect(() => {
+    if (!loadingRef.current) return;
+
+    observer.current = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting && hasMore && !isFetching) {
+          console.log('222', channelList.length);
+
+          fetchMoreData();
+        }
+      },
+      { threshold: 0.2, root: scrollContainerRef.current }
+    );
+
+    if (loadingRef.current) {
+      observer.current.observe(loadingRef.current);
+    }
+
+    return () => {
+      if (observer.current && loadingRef.current) {
+        observer.current.unobserve(loadingRef.current);
+      }
+    };
+  }, [fetchMoreData, hasMore, isFetching, channelList.length]);
 
   useEffect(() => {
     setIsClient(true);
@@ -352,8 +428,8 @@ const ChannelsList = () => {
                   gap: '40px',
                   flex: '1 0 0',
                   display: 'flex',
-                  minHeight: '91vh',
-                  maxHeight: '91vh',
+                  minHeight: 'calc(100dvh - 81px)',
+                  maxHeight: 'calc(100dvh - 81px)',
                   padding: '16px 32px',
                   alignItems: 'center',
                   alignSelf: 'stretch',
@@ -455,7 +531,9 @@ const ChannelsList = () => {
                     </IconButton>
                   </Box>
                 </Box>
-                {isLoadingChannels && channelsData?.length === 0 ? (
+                {isLoadingChannels &&
+                channelsData?.length === 0 &&
+                page === 0 ? (
                   <Box
                     sx={{
                       top: '50%',
@@ -467,27 +545,29 @@ const ChannelsList = () => {
                   >
                     <CircularProgress color="primary" />
                   </Box>
-                ) : channelsData?.length > 0 ? (
-                  <TableContainer>
-                    <Table
-                      sx={{
-                        overflowY: 'auto',
-                        '&::-webkit-scrollbar': {
-                          width: '8px',
-                        },
-                        '&::-webkit-scrollbar-track': {
-                          borderRadius: '10px',
-                          background: '#f1f1f1',
-                        },
-                        '&::-webkit-scrollbar-thumb': {
-                          borderRadius: '10px',
-                          background: '#888',
-                        },
-                        '&::-webkit-scrollbar-thumb:hover': {
-                          background: '#555',
-                        },
-                      }}
-                    >
+                ) : channelList?.length > 0 ? (
+                  <TableContainer
+                    ref={scrollContainerRef}
+                    sx={{
+                      maxHeight: 'calc(100vh - 180px)',
+                      overflow: 'auto',
+                      '&::-webkit-scrollbar': {
+                        width: '8px',
+                      },
+                      '&::-webkit-scrollbar-track': {
+                        borderRadius: '10px',
+                        background: '#f1f1f1',
+                      },
+                      '&::-webkit-scrollbar-thumb': {
+                        borderRadius: '10px',
+                        background: '#888',
+                      },
+                      '&::-webkit-scrollbar-thumb:hover': {
+                        background: '#555',
+                      },
+                    }}
+                  >
+                    <Table stickyHeader>
                       <TableHead>
                         <TableRow>
                           <TableCell
@@ -605,7 +685,7 @@ const ChannelsList = () => {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {channelsData?.map((channel, index) => (
+                        {channelList?.map((channel, index) => (
                           <TableRow
                             key={index}
                             onClick={() => handleRowClick(channel)}
@@ -802,6 +882,35 @@ const ChannelsList = () => {
                             </TableCell>
                           </TableRow>
                         ))}
+                        {hasMore && (
+                          <TableRow ref={loadingRef}>
+                            <TableCell
+                              colSpan={5}
+                              align="center"
+                              sx={{ border: 'none', p: 2 }}
+                            >
+                              <CircularProgress size={24} color="primary" />
+                            </TableCell>
+                          </TableRow>
+                        )}
+
+                        {/* End message when no more data */}
+                        {!hasMore && channelList.length > 0 && (
+                          <TableRow>
+                            <TableCell
+                              colSpan={5}
+                              align="center"
+                              sx={{ border: 'none' }}
+                            >
+                              <Typography
+                                variant="body2"
+                                sx={{ p: 2, color: 'gray' }}
+                              >
+                                No more data available.
+                              </Typography>
+                            </TableCell>
+                          </TableRow>
+                        )}
                       </TableBody>
                     </Table>
                   </TableContainer>
