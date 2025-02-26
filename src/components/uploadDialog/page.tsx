@@ -19,6 +19,7 @@ import { useRef, useState, useContext } from 'react';
 import LoadingScreen from '../loading/page';
 import { CloseRounded, UploadRounded } from '@mui/icons-material';
 import { SnackbarContext } from '@/context/SnackbarContext';
+import { useRequireAuth } from '@/utils/hooks/useRequireAuth';
 
 // File Upload Configuration
 const FILE_CONFIG = {
@@ -64,6 +65,8 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
   const router = useRouter();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const { requireAuth } = useRequireAuth();
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [, setFile] = useState<File | null>(null);
   const { excute: createChannelByAudio, isLoading: isCreating } = useAxiosApi(
@@ -121,6 +124,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
 
   const handleClick = (event: React.MouseEvent) => {
     event.stopPropagation();
+    if (!requireAuth()) return;
     if (
       fileInputRef?.current &&
       !fileInputRef.current.hasAttribute('data-clicked')
@@ -261,7 +265,7 @@ export default function UploadDialog({ open, onClose }: UploadDialogProps) {
               height: isMobile ? '46px' : '46px',
               width: isMobile ? '180px' : '294px',
               color: 'var(--Info-ContrastText, #FFF)',
-              background: 'var(--Secondary-Dark-Gray, #4A4A4A)',
+              background: 'var(--Secondary-Dark-Gray, #5C443A)',
             }}
             variant="contained"
             startIcon={<UploadRounded />}
