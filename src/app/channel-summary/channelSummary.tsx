@@ -437,6 +437,14 @@ const ChannelSummary = () => {
                       handleDeleteChannelOpenConfirmDialog={
                         handleDeleteChannelOpenConfirmDialog
                       }
+                      anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'right',
+                      }}
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'left',
+                      }}
                     />
                   </Box>
                   <Box>
@@ -1429,6 +1437,14 @@ const ChannelSummary = () => {
                 handleDeleteChannelOpenConfirmDialog={
                   handleDeleteChannelOpenConfirmDialog
                 }
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'right',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
               />
             </Box>
             <Box>

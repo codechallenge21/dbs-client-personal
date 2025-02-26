@@ -22,6 +22,7 @@ import {
 } from '@/interfaces/entities';
 import { KeyedMutator } from 'swr';
 import { SnackbarContext } from '@/context/SnackbarContext';
+import { useRequireAuth } from '@/utils/hooks/useRequireAuth';
 
 // File Upload Configuration
 const FILE_CONFIG = {
@@ -86,6 +87,8 @@ export default function UploadDialog({
 }: UploadDialogProps) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const { requireAuth } = useRequireAuth();
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [, setFile] = useState<File | null>(null);
   const { showSnackbar } = useContext(SnackbarContext);
@@ -159,6 +162,7 @@ export default function UploadDialog({
 
   const handleClick = (event: React.MouseEvent) => {
     event.stopPropagation();
+    if (!requireAuth()) return;
     if (
       fileInputRef?.current &&
       !fileInputRef.current.hasAttribute('data-clicked')
