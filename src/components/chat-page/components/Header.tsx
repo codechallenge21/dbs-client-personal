@@ -12,7 +12,7 @@ import {
 import UploadDialog from '@/components/uploadDialog/page';
 import { AdvisorType } from '../../../app/chat/types';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
-import ChannelContentContext from '../../channel-context-provider/ChannelContentContext';
+import ChannelContentContext from '@/context/ChannelContentContext';
 import { useRouter } from 'next/navigation';
 
 interface HeaderProps {
