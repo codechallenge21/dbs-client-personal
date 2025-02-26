@@ -29,7 +29,7 @@ export default function CustomLoader() {
       xmlns="http://www.w3.org/2000/svg"
     >
       <g
-        clip-path="url(#paint0_angular_351_18898_clip_path)"
+        clipPath="url(#paint0_angular_351_18898_clip_path)"
         data-figma-skip-parse="true"
       >
         <g transform="matrix(0 0.012 -0.012 0 12 12)">
