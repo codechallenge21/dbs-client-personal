@@ -89,7 +89,10 @@ const EditableItem: React.FC<{
     <>
       <IconButton
         aria-label="Menu"
-        onClick={(event) => handleMenuOpen(event, index)}
+        onClick={(event) => {
+          event.stopPropagation();
+          handleMenuOpen(event, index);
+        }}
       >
         {isChannelSummary ? (
           <ArrowDropDownRounded sx={{ color: 'black' }} />

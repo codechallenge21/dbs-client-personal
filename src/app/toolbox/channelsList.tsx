@@ -128,9 +128,9 @@ const ChannelsList = () => {
         .then(() => {
           setIsDeleteDialogOpen(false);
           handleCloseToolsMenu();
-          // if (mutateAudioChannels) {
-          //   mutateAudioChannels();
-          // }
+          if (mutateAudioChannels) {
+            mutateAudioChannels();
+          }
         })
         .catch(() => {});
     },
@@ -138,7 +138,7 @@ const ChannelsList = () => {
       activeIndex,
       channelsData,
       deleteChannel,
-      // mutateAudioChannels,
+      mutateAudioChannels,
       handleCloseToolsMenu,
     ]
   );
@@ -152,14 +152,9 @@ const ChannelsList = () => {
         organizationChannelTitle: newTitle,
       });
       setIsEditDialogOpen(false);
-      // if (mutateAudioChannels) mutateAudioChannels();
+      if (mutateAudioChannels) mutateAudioChannels();
     },
-    [
-      updateChannelDetail,
-      channelsData,
-      activeIndex,
-      // mutateAudioChannels
-    ]
+    [updateChannelDetail, channelsData, activeIndex, mutateAudioChannels]
   );
 
   const handleOpenEditChannelDialog = useCallback((event: React.MouseEvent) => {
@@ -251,8 +246,6 @@ const ChannelsList = () => {
     observer.current = new IntersectionObserver(
       (entries) => {
         if (entries[0]?.isIntersecting && hasMore && !isFetching) {
-          console.log('222', channelList.length);
-
           fetchMoreData();
         }
       },
@@ -915,412 +908,522 @@ const ChannelsList = () => {
                     </Table>
                   </TableContainer>
                 ) : (
-                  <UploadScreen />
+                  channelsData?.length === 0 && <UploadScreen />
                 )}
               </Box>
             </>
-            <LoginDialog
-              open={isLoginOpen}
-              setIsSignupOpen={setIsSignupOpen}
-              onClose={handleLoginDialogClose}
-            />
-            <SignupDialog
-              open={isSignupOpen}
-              setIsLoginOpen={setIsLoginOpen}
-              onClose={() => setIsSignupOpen(false)}
-            />
           </ToolbarDrawer>
         </Box>
       )}
       {isMobile && (
-        <Box
-          sx={{
-            padding: 2,
-            height: '100vh',
-            overflowY: 'auto',
-            background: 'var(--Primary-White, #FFF)',
-          }}
-        >
+        <>
           <Box
             sx={{
-              flexShrink: 0,
-              height: '64px',
-              width: '375px',
-              display: 'flex',
-              padding: '8px 6px',
-              alignItems: 'center',
-              borderRadius: '8px 0px 0px 8px',
+              padding: '8px 16px',
+              overflowY: 'auto',
               background: 'var(--Primary-White, #FFF)',
             }}
           >
-            <IconButton
-              role="button"
-              aria-label="menu"
-              onClick={() => setIsOpenDrawer(true)}
-            >
-              <MenuRounded sx={{ color: 'black' }} />
-            </IconButton>
-            <Typography
+            <Box
               sx={{
-                flex: '1 0 0',
-                height: '40px',
+                flexShrink: 0,
+                width: '100%',
                 display: 'flex',
-                minHeight: '32px',
+                padding: '0px',
                 alignItems: 'center',
-                padding: '4px 0px 4px 8px',
-                fontWeight: 400,
-                fontSize: '16px',
-                lineHeight: '16px',
-                letterSpacing: '0%',
+                borderRadius: '8px 0px 0px 8px',
+                background: 'var(--Primary-White, #FFF)',
               }}
             >
-              工具箱
-              <ArrowDropDownIcon
-                sx={{ marginLeft: '5px', marginBottom: '3px' }}
-              />
-            </Typography>
-          </Box>
-          <Tabs
-            value={tabValue}
-            onChange={handleTabChange}
-            sx={{ mb: 2 }}
-            TabIndicatorProps={{
-              style: {
-                backgroundColor: '#212B36',
-              },
-            }}
-          >
-            <Tab
-              label="智能語音轉文字"
-              sx={{
-                fontWeight: 400,
-                fontSize: '14px',
-                lineHeight: '22px',
-                fontStyle: 'normal',
-                fontFamily: 'DFPHeiBold-B5',
-                color: 'var(--Text-Secondary, #637381))',
-                '&.Mui-selected': {
-                  color: 'var(--Primary-Black, #212B36)',
-                },
-              }}
-            />
-            <Tab
-              label="家系圖"
-              disabled
-              sx={{
-                fontWeight: 400,
-                fontSize: '14px',
-                lineHeight: '22px',
-                fontStyle: 'normal',
-                fontFamily: 'DFPHeiBold-B5',
-                color: 'var(--Text-Secondary, #637381)',
-                '&.Mui-selected': {
-                  color: 'var(--Primary-Black, #212B36)',
-                },
-              }}
-            />
-            <Tab
-              label="問答語音錄音"
-              disabled
-              sx={{
-                fontWeight: 400,
-                fontSize: '14px',
-                lineHeight: '22px',
-                fontStyle: 'normal',
-                fontFamily: 'DFPHeiBold-B5',
-                color: 'var(--Text-Secondary, #637381)',
-                '&.Mui-selected': {
-                  color: 'var(--Primary-Black, #212B36)',
-                },
-              }}
-            />
-            <Tab
-              label="個別與實時錄音"
-              disabled
-              sx={{
-                fontWeight: 400,
-                fontSize: '14px',
-                lineHeight: '22px',
-                fontStyle: 'normal',
-                fontFamily: 'DFPHeiBold-B5',
-                color: 'var(--Text-Secondary, #637381)',
-                '&.Mui-selected': {
-                  color: 'var(--Primary-Black, #212B36)',
-                },
-              }}
-            />
-          </Tabs>
-          <Typography
-            sx={{
-              fontWeight: 900,
-              fontSize: '32px',
-              fontStyle: 'normal',
-              lineHeight: 'normal',
-              fontFamily:
-                'DFPHeiUBold-B5, Heiti TC, PingFang TC, Noto Sans TC, sans-serif',
-              color: '#212B36',
-              letterSpacing: '0.3px',
-              WebkitTextStroke: '0.5px #212B36',
-              textShadow: '0.5px 0.5px 0px #212B36',
-            }}
-          >
-            智能語音轉文字
-          </Typography>
-          <Box
-            sx={{
-              gap: '16px',
-              width: '100%',
-              display: 'flex',
-              margin: '16px 0',
-              justifyContent: 'flex-end',
-            }}
-          >
-            <IconButton role="button" aria-label="search">
-              <SearchRounded sx={{ color: '#212B36' }} />
-            </IconButton>
-            <Button
-              role="button"
-              aria-label="Start Recording"
-              sx={{
-                gap: '8px',
-                display: 'flex',
-                boxShadow: 'none',
-                borderRadius: '8px',
-                padding: '6px 12px',
-                alignItems: 'center',
-                justifyContent: 'center',
-                border: '1px solid var(--Secondary-, #5C443A)',
-              }}
-              startIcon={<MicRounded sx={{ color: '#5C443A' }} />}
-            >
+              <IconButton
+                role="button"
+                aria-label="menu"
+                onClick={() => setIsOpenDrawer(true)}
+              >
+                <MenuRounded sx={{ color: 'black' }} />
+              </IconButton>
               <Typography
                 sx={{
+                  flex: '1 0 0',
+                  height: '40px',
+                  display: 'flex',
+                  minHeight: '32px',
+                  alignItems: 'center',
+                  padding: '8px',
                   fontWeight: 400,
                   fontSize: '16px',
-                  lineHeight: '24px',
-                  textAlign: 'center',
-                  fontStyle: 'normal',
-                  fontFamily: 'DFPHeiBold-B5',
-                  color: 'var(--Secondary-, #5C443A)',
+                  lineHeight: '16px',
+                  letterSpacing: '0%',
                 }}
               >
-                開始錄音
+                工具箱
+                <ArrowDropDownIcon
+                  sx={{ marginLeft: '5px', marginBottom: '3px' }}
+                />
               </Typography>
-            </Button>
-            <Button
-              role="button"
-              aria-label="Upload File"
-              sx={{
-                gap: '8px',
-                color: '#FFF',
-                display: 'flex',
-                boxShadow: 'none',
-                padding: '6px 12px',
-                borderRadius: '8px',
-                alignItems: 'center',
-                justifyContent: 'center',
-                background: 'var(--Secondary-, #5C443A)',
-              }}
-              startIcon={<UploadRounded sx={{ color: '#FFF' }} />}
-              onClick={() => setOpenUpload(true)}
-            >
-              上傳檔案
-            </Button>
+            </Box>
           </Box>
-          {channelsData?.length > 0 ? (
-            <>
-              {channelsData?.map((channel, index) => (
-                <Card
-                  key={index}
+          <Box
+            sx={{
+              padding: '0 20px',
+              background: 'var(--Primary-White, #FFF)',
+            }}
+          >
+            <Tabs
+              value={tabValue}
+              onChange={handleTabChange}
+              sx={{
+                '& .MuiTabs-flexContainer': {
+                  gap: '20px',
+                  overflowX: 'hidden',
+                },
+              }}
+              TabIndicatorProps={{
+                style: {
+                  backgroundColor: '#212B36',
+                },
+              }}
+            >
+              <Tab
+                label="智能語音轉文字"
+                sx={{
+                  fontWeight: 400,
+                  fontSize: '14px',
+                  lineHeight: '22px',
+                  fontStyle: 'normal',
+                  fontFamily: 'DFPHeiBold-B5',
+                  color: 'var(--Text-Secondary, #637381))',
+                  '&.Mui-selected': {
+                    color: 'var(--Primary-Black, #212B36)',
+                  },
+                  padding: '12px 0px',
+                }}
+              />
+              <Tab
+                label="家系圖"
+                disabled
+                sx={{
+                  fontWeight: 400,
+                  fontSize: '14px',
+                  lineHeight: '22px',
+                  fontStyle: 'normal',
+                  fontFamily: 'DFPHeiBold-B5',
+                  color: 'var(--Text-Secondary, #637381)',
+                  '&.Mui-selected': {
+                    color: 'var(--Primary-Black, #212B36)',
+                  },
+                  padding: '12px 0px',
+                  minWidth: 'auto',
+                }}
+              />
+              <Tab
+                label="問答語音錄音"
+                disabled
+                sx={{
+                  fontWeight: 400,
+                  fontSize: '14px',
+                  lineHeight: '22px',
+                  fontStyle: 'normal',
+                  fontFamily: 'DFPHeiBold-B5',
+                  color: 'var(--Text-Secondary, #637381)',
+                  '&.Mui-selected': {
+                    color: 'var(--Primary-Black, #212B36)',
+                  },
+                  padding: '12px 0px',
+                  minWidth: 'auto',
+                }}
+              />
+              <Tab
+                label="個別與實時錄音"
+                disabled
+                sx={{
+                  fontWeight: 400,
+                  fontSize: '14px',
+                  lineHeight: '22px',
+                  fontStyle: 'normal',
+                  fontFamily: 'DFPHeiBold-B5',
+                  color: 'var(--Text-Secondary, #637381)',
+                  '&.Mui-selected': {
+                    color: 'var(--Primary-Black, #212B36)',
+                  },
+                  padding: '12px 0px',
+                  minWidth: 'auto',
+                }}
+              />
+            </Tabs>
+          </Box>
+          <Box
+            sx={{
+              display: 'flex',
+              padding: '16px',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'flex-start',
+              gap: '16px',
+              flex: '1 0 0',
+              alignSelf: 'stretch',
+              background: 'var(--Primary-White, #FFF)',
+            }}
+          >
+            <Typography
+              sx={{
+                fontWeight: 400,
+                fontSize: '32px',
+                fontStyle: 'normal',
+                lineHeight: 'normal',
+                fontFamily: 'DFPHeiBold-B5',
+                color: '#212B36',
+              }}
+            >
+              歡迎使用 語音轉文字
+            </Typography>
+            <Box
+              sx={{
+                gap: '16px',
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'flex-end',
+              }}
+            >
+              <IconButton role="button" aria-label="search">
+                <SearchRounded sx={{ color: '#212B36' }} />
+              </IconButton>
+              <Button
+                role="button"
+                aria-label="Start Recording"
+                sx={{
+                  gap: '8px',
+                  display: 'flex',
+                  boxShadow: 'none',
+                  borderRadius: '8px',
+                  padding: '6px 12px',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: '1px solid var(--Secondary-, #5C443A)',
+                  '& .MuiButton-startIcon': {
+                    margin: 0,
+                  },
+                }}
+                startIcon={<MicRounded sx={{ color: '#5C443A' }} />}
+              >
+                <Typography
                   sx={{
-                    mb: '16px',
-                    height: '146px',
-                    padding: '16px',
-                    display: 'flex',
-                    maxWidth: '384px',
-                    minWidth: '300px',
-                    alignSelf: 'stretch',
-                    flexDirection: 'column',
-                    alignItems: 'flex-start',
-                    borderRadius: '16px',
-                    background: 'var(--Primary-White, #FFF)',
-                    boxShadow:
-                      '0px 12px 24px -4px rgba(17, 68, 85, 0.12), 0px 0px 2px 0px rgba(17, 68, 85, 0.12)',
+                    fontWeight: 400,
+                    fontSize: '16px',
+                    lineHeight: '24px',
+                    textAlign: 'center',
+                    fontStyle: 'normal',
+                    fontFamily: 'DFPHeiBold-B5',
+                    color: 'var(--Secondary-, #5C443A)',
                   }}
-                  onClick={() => handleRowClick(channel)}
                 >
-                  <CardContent
-                    sx={{
-                      padding: 0,
-                      width: '100%',
-                      height: '100%',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      paddingBottom: '0 !important',
-                      justifyContent: 'space-between',
-                    }}
-                  >
-                    <Box
+                  開始錄音
+                </Typography>
+              </Button>
+              <Button
+                role="button"
+                aria-label="Upload File"
+                sx={{
+                  gap: '8px',
+                  color: '#FFF',
+                  display: 'flex',
+                  boxShadow: 'none',
+                  padding: '6px 12px',
+                  borderRadius: '8px',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: 'var(--Secondary-, #5C443A)',
+                  '& .MuiButton-startIcon': {
+                    margin: 0,
+                  },
+                }}
+                startIcon={<UploadRounded sx={{ color: '#FFF' }} />}
+                onClick={() => setOpenUpload(true)}
+              >
+                <Typography
+                  sx={{
+                    fontWeight: 400,
+                    fontSize: '16px',
+                    lineHeight: '24px',
+                    textAlign: 'center',
+                    fontStyle: 'normal',
+                    fontFamily: 'DFPHeiBold-B5',
+                    color: '#FFF',
+                  }}
+                >
+                  上傳檔案
+                </Typography>
+              </Button>
+            </Box>
+            {isLoadingChannels && channelsData?.length === 0 && page === 0 ? (
+              <Box
+                sx={{
+                  top: '50%',
+                  left: '50%',
+                  display: 'flex',
+                  position: 'absolute',
+                  transform: 'translate(-50%, -50%)',
+                }}
+              >
+                <CircularProgress color="primary" />
+              </Box>
+            ) : channelList?.length > 0 ? (
+              <Box
+                ref={scrollContainerRef}
+                sx={{
+                  width: '100%',
+                  maxHeight: 'calc(100vh - 230px)',
+                  overflow: 'auto',
+                  '&::-webkit-scrollbar': {
+                    width: '8px',
+                  },
+                  '&::-webkit-scrollbar-track': {
+                    borderRadius: '10px',
+                    background: '#f1f1f1',
+                  },
+                  '&::-webkit-scrollbar-thumb': {
+                    borderRadius: '10px',
+                    background: '#888',
+                  },
+                  '&::-webkit-scrollbar-thumb:hover': {
+                    background: '#555',
+                  },
+                }}
+              >
+                <Box
+                  // ref={scrollContainerRef}
+                  sx={{
+                    gap: '16px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                  }}
+                >
+                  {channelList?.map((channel, index) => (
+                    <Card
+                      key={index}
                       sx={{
-                        mb: '8px',
-                        width: '100%',
+                        padding: '16px',
                         display: 'flex',
-                        alignItems: 'start',
-                        justifyContent: 'space-between',
+                        alignSelf: 'stretch',
+                        flexDirection: 'column',
+                        alignItems: 'flex-start',
+                        borderRadius: '16px',
+                        background: 'var(--Primary-White, #FFF)',
+                        boxShadow:
+                          '0px 12px 24px -4px rgba(17, 68, 85, 0.12), 0px 0px 2px 0px rgba(17, 68, 85, 0.12)',
                       }}
+                      onClick={() => handleRowClick(channel)}
                     >
-                      <Typography
+                      <CardContent
                         sx={{
-                          fontWeight: 400,
-                          fontSize: '24px',
-                          fontStyle: 'normal',
-                          lineHeight: 'normal',
-                          whiteSpace: 'normal',
-                          wordBreak: 'break-word',
-                          fontFamily: 'DFPHeiBold-B5',
-                          color: 'var(--Primary-Black, #212B36)',
-                        }}
-                      >
-                        {channel?.organizationChannelTitle}
-                      </Typography>
-                      <EditableItem
-                        key={channel.organizationChannelId}
-                        index={index}
-                        toolsAnchor={toolsAnchor}
-                        activeIndex={activeIndex}
-                        handleMenuOpen={handleMenuOpen}
-                        setToolsAnchor={setToolsAnchor}
-                        handleCloseToolsMenu={handleCloseToolsMenu}
-                        handleOpenEditChannelDialog={
-                          handleOpenEditChannelDialog
-                        }
-                        handleDeleteChannelOpenConfirmDialog={
-                          handleDeleteChannelOpenConfirmDialog
-                        }
-                        anchorOrigin={{
-                          vertical: 'bottom',
-                          horizontal: 'right',
-                        }}
-                        transformOrigin={{
-                          vertical: 'top',
-                          horizontal: 'right',
-                        }}
-                      />
-                    </Box>
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                      }}
-                    >
-                      <Box
-                        sx={{
+                          padding: 0,
+                          width: '100%',
+                          height: '100%',
                           display: 'flex',
-                          alignItems: 'center',
+                          flexDirection: 'column',
+                          paddingBottom: '0 !important',
+                          justifyContent: 'space-between',
                         }}
                       >
-                        <IconButton
-                          role="button"
-                          aria-label="favorite"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleToggle(index);
-                          }}
-                          sx={{ padding: '0px', marginRight: '8px' }}
-                        >
-                          {favoriteChannels[index] ? (
-                            <StarRounded sx={{ color: 'black' }} />
-                          ) : (
-                            <StarBorderRounded sx={{ color: 'black' }} />
-                          )}
-                        </IconButton>
-                        <Typography
+                        <Box
                           sx={{
-                            fontWeight: 400,
-                            fontSize: '16px',
-                            overflow: 'hidden',
-                            lineHeight: '24px',
-                            fontStyle: 'normal',
-                            textAlign: 'center',
-                            textOverflow: 'ellipsis',
-                            fontFamily: 'DFPHeiMedium-B5',
-                            color: 'var(--Primary-Black, #212B36)',
+                            mb: '8px',
+                            width: '100%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
                           }}
                         >
-                          {new Date(
-                            channel.organizationChannelCreateDate
-                          ).toLocaleString()}
-                        </Typography>
-                      </Box>
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          alignItems: 'center',
-                        }}
-                      >
-                        {channel.organizationChannelTranscriptList[0]
-                          ?.organizationChannelTranscriptStatus ===
-                        'COMPLETE' ? (
-                          <CheckCircleRounded
-                            sx={{ color: ' rgba(52, 199, 89, 1)' }}
+                          <Typography
+                            sx={{
+                              fontWeight: 400,
+                              fontSize: '24px',
+                              fontStyle: 'normal',
+                              lineHeight: '36px',
+                              whiteSpace: 'normal',
+                              wordBreak: 'break-word',
+                              fontFamily: 'DFPHeiBold-B5',
+                              color: 'var(--Primary-Black, #212B36)',
+                            }}
+                          >
+                            {channel?.organizationChannelTitle}
+                          </Typography>
+                          <EditableItem
+                            key={channel.organizationChannelId}
+                            index={index}
+                            toolsAnchor={toolsAnchor}
+                            activeIndex={activeIndex}
+                            handleMenuOpen={handleMenuOpen}
+                            setToolsAnchor={setToolsAnchor}
+                            handleCloseToolsMenu={handleCloseToolsMenu}
+                            handleOpenEditChannelDialog={
+                              handleOpenEditChannelDialog
+                            }
+                            handleDeleteChannelOpenConfirmDialog={
+                              handleDeleteChannelOpenConfirmDialog
+                            }
+                            anchorOrigin={{
+                              vertical: 'bottom',
+                              horizontal: 'right',
+                            }}
+                            transformOrigin={{
+                              vertical: 'top',
+                              horizontal: 'right',
+                            }}
                           />
-                        ) : channel.organizationChannelTranscriptList[0]
-                            ?.organizationChannelTranscriptStatus ===
-                          'PROCESSING' ? (
-                          <RotateRightRounded
-                            sx={{ color: 'rgba(0, 102, 204, 1)' }}
-                          />
-                        ) : channel.organizationChannelTranscriptList[0]
-                            ?.organizationChannelTranscriptStatus ===
-                          'PENDING' ? (
-                          <PendingActionsRounded
-                            sx={{ color: 'rgba(33, 43, 54, 1)' }}
-                          />
-                        ) : (
-                          <PendingActionsRounded
-                            sx={{ color: 'rgba(33, 43, 54, 1)' }}
-                          />
-                        )}
-                        <span
-                          style={{
-                            fontFamily: 'DFPHeiMedium-B5',
-                            fontWeight: 400,
-                            fontSize: '16px',
-                            lineHeight: '24px',
-                            letterSpacing: '0%',
-                            overflow: 'hidden',
-                            fontStyle: 'normal',
-                            textOverflow: 'ellipsis',
-                            marginLeft: '12px',
-                            color: 'var(--Primary-Black, #212B36)',
+                        </Box>
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
                           }}
                         >
-                          {channel.organizationChannelTranscriptList[0]
-                            ?.organizationChannelTranscriptStatus === 'COMPLETE'
-                            ? '完成'
-                            : channel.organizationChannelTranscriptList[0]
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              alignItems: 'center',
+                            }}
+                          >
+                            <IconButton
+                              role="button"
+                              aria-label="favorite"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleToggle(index);
+                              }}
+                              sx={{ padding: '0px', marginRight: '8px' }}
+                            >
+                              {favoriteChannels[index] ? (
+                                <StarRounded sx={{ color: 'black' }} />
+                              ) : (
+                                <StarBorderRounded sx={{ color: 'black' }} />
+                              )}
+                            </IconButton>
+                            <Typography
+                              sx={{
+                                fontWeight: 400,
+                                fontSize: '16px',
+                                overflow: 'hidden',
+                                lineHeight: '24px',
+                                fontStyle: 'normal',
+                                textAlign: 'center',
+                                textOverflow: 'ellipsis',
+                                fontFamily: 'DFPHeiMedium-B5',
+                                color: 'var(--Primary-Black, #212B36)',
+                              }}
+                            >
+                              {new Date(
+                                channel.organizationChannelCreateDate
+                              ).toLocaleString()}
+                            </Typography>
+                          </Box>
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              alignItems: 'center',
+                            }}
+                          >
+                            {channel.organizationChannelTranscriptList[0]
+                              ?.organizationChannelTranscriptStatus ===
+                            'COMPLETE' ? (
+                              <CheckCircleRounded
+                                sx={{ color: ' rgba(52, 199, 89, 1)' }}
+                              />
+                            ) : channel.organizationChannelTranscriptList[0]
                                 ?.organizationChannelTranscriptStatus ===
-                              'PROCESSING'
-                            ? ' 上傳中...'
-                            : channel.organizationChannelTranscriptList[0]
+                              'PROCESSING' ? (
+                              <RotateRightRounded
+                                sx={{ color: 'rgba(0, 102, 204, 1)' }}
+                              />
+                            ) : channel.organizationChannelTranscriptList[0]
                                 ?.organizationChannelTranscriptStatus ===
-                              'PENDING'
-                            ? '正在摘要...'
-                            : ''}
-                        </span>
-                      </Box>
+                              'PENDING' ? (
+                              <PendingActionsRounded
+                                sx={{ color: 'rgba(33, 43, 54, 1)' }}
+                              />
+                            ) : (
+                              <PendingActionsRounded
+                                sx={{ color: 'rgba(33, 43, 54, 1)' }}
+                              />
+                            )}
+                            <span
+                              style={{
+                                fontFamily: 'DFPHeiMedium-B5',
+                                fontWeight: 400,
+                                fontSize: '16px',
+                                lineHeight: '24px',
+                                letterSpacing: '0%',
+                                overflow: 'hidden',
+                                fontStyle: 'normal',
+                                textOverflow: 'ellipsis',
+                                marginLeft: '12px',
+                                color: 'var(--Primary-Black, #212B36)',
+                              }}
+                            >
+                              {channel.organizationChannelTranscriptList[0]
+                                ?.organizationChannelTranscriptStatus ===
+                              'COMPLETE'
+                                ? '完成'
+                                : channel.organizationChannelTranscriptList[0]
+                                    ?.organizationChannelTranscriptStatus ===
+                                  'PROCESSING'
+                                ? ' 上傳中...'
+                                : channel.organizationChannelTranscriptList[0]
+                                    ?.organizationChannelTranscriptStatus ===
+                                  'PENDING'
+                                ? '正在摘要...'
+                                : ''}
+                            </span>
+                          </Box>
+                        </Box>
+                      </CardContent>
+                    </Card>
+                  ))}
+                  {hasMore && (
+                    <Box
+                      ref={loadingRef}
+                      sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        p: 2,
+                      }}
+                    >
+                      <CircularProgress size={24} color="primary" />
                     </Box>
-                  </CardContent>
-                </Card>
-              ))}
-            </>
-          ) : (
-            <UploadScreen />
-          )}
-        </Box>
-      )}
+                  )}
 
+                  {/* End message */}
+                  {!hasMore && channelList.length > 0 && (
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        p: 2,
+                        color: 'gray',
+                        textAlign: 'center',
+                      }}
+                    >
+                      No more data available.
+                    </Typography>
+                  )}
+                </Box>
+              </Box>
+            ) : (
+              channelsData?.length === 0 && <UploadScreen />
+            )}
+          </Box>
+        </>
+      )}
+      <LoginDialog
+        open={isLoginOpen}
+        setIsSignupOpen={setIsSignupOpen}
+        onClose={handleLoginDialogClose}
+      />
+      <SignupDialog
+        open={isSignupOpen}
+        setIsLoginOpen={setIsLoginOpen}
+        onClose={() => setIsSignupOpen(false)}
+      />
       <UploadDialog open={openUpload} onClose={handleCloseUploadDialog} />
       <DeleteDialog
         open={isDeleteDialogOpen}
