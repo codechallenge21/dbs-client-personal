@@ -1,5 +1,11 @@
 'use client';
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  useContext,
+} from 'react';
 import {
   Box,
   Tab,
@@ -45,6 +51,7 @@ import UploadScreen from './UploadScreen';
 import LoginDialog from '@/components/dialogs/LoginDialog';
 import SignupDialog from '@/components/dialogs/SignupDialog';
 import { useLoginContext } from '@/context/LoginContext';
+import { SnackbarContext } from '@/context/SnackbarContext';
 
 const ChannelsList = () => {
   const theme = useTheme();
@@ -71,6 +78,7 @@ const ChannelsList = () => {
   const [isFetching, setIsFetching] = useState(false);
   const [channelList, setChannelList] = useState<OrganizationChannel[]>([]);
   const itemsPerPage = 10;
+  const { showSnackbar } = useContext(SnackbarContext);
 
   const {
     data: channelsData = [],
@@ -83,6 +91,18 @@ const ChannelsList = () => {
     {
       startIndex: page,
       size: itemsPerPage,
+    },
+    {
+      // Custom SWR configuration to handle errors
+      onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
+        if (error?.status === 401) {
+          showSnackbar('認證已失效，請重新登入', 'error');
+          setHasMore(false); // Stop infinite scroll attempts
+        }
+
+        // For other errors, use the default retry behavior but limit attempts
+        if (retryCount >= 3) return;
+      },
     }
   );
 
