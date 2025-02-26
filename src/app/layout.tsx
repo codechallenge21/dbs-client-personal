@@ -10,6 +10,7 @@ import {
 import Script from 'next/script';
 import './globals.css';
 import { SnackbarProvider } from '@/context/SnackbarContext';
+import { LoginProvider } from '@/context/LoginContext';
 // import { Box } from "@mui/material";
 // import { Header } from "@/components/header";
 
@@ -105,9 +106,10 @@ export default function RootLayout({ children }: Props) {
           <Header />
         </Box> */}
         <ThemeProvider>
-          {' '}
           <SnackbarProvider>
-            <ChannelContextProvider>{children}</ChannelContextProvider>
+            <LoginProvider>
+              <ChannelContextProvider>{children}</ChannelContextProvider>
+            </LoginProvider>
           </SnackbarProvider>
         </ThemeProvider>
       </body>

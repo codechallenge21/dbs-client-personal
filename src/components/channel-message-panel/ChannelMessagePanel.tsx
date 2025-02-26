@@ -121,9 +121,11 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
           <Box
             key={`channelMessage-${messageIndex}`}
             sx={{
-              width: { xs: '100%', sm: 'fit-content' },
-              marginLeft:
-                message.organizationChannelMessageType === 'AI' ? '0' : 'auto',
+              width:
+                message.organizationChannelMessageType !== 'AI'
+                  ? 'fit-content'
+                  : '100%',
+              marginLeft: 'auto',
               marginBottom: '20px',
               display: 'flex',
               alignItems: 'flex-start',
