@@ -539,7 +539,7 @@ const FavoriteFinancialScreening = () => {
       {isMobile && (
         <Box
           sx={{
-            padding: 2,
+            padding: 1,
             height: '100vh',
             overflowY: 'auto',
             background: 'var(--Primary-White, #FFF)',
@@ -588,15 +588,15 @@ const FavoriteFinancialScreening = () => {
               key={index}
               sx={{
                 mb: '16px',
-                height: '146px',
+                height: 'auto', // Changed from fixed height to auto
                 padding: '16px',
                 display: 'flex',
-                maxWidth: '384px',
-                minWidth: '300px',
+                width: '100%', // Changed from fixed width to 100%
                 alignSelf: 'stretch',
                 flexDirection: 'column',
                 alignItems: 'flex-start',
                 borderRadius: '16px',
+                minHeight: '146px', // Added minHeight instead of fixed height
                 background: 'var(--Primary-White, #FFF)',
                 boxShadow:
                   '0px 12px 24px -4px rgba(17, 68, 85, 0.12), 0px 0px 2px 0px rgba(17, 68, 85, 0.12)',
@@ -626,13 +626,15 @@ const FavoriteFinancialScreening = () => {
                   <Typography
                     sx={{
                       fontWeight: 400,
-                      fontSize: '24px',
+                      fontSize: { xs: '20px', sm: '24px' }, // Responsive font size
                       fontStyle: 'normal',
                       lineHeight: 'normal',
                       whiteSpace: 'normal',
                       wordBreak: 'break-word',
                       fontFamily: 'DFPHeiBold-B5',
                       color: 'var(--Primary-Black, #212B36)',
+                      flexGrow: 1, // Allow text to take available space
+                      mr: '8px', // Add margin to prevent overlap with icon
                     }}
                   >
                     {channel?.organizationChannelTitle}
@@ -656,12 +658,15 @@ const FavoriteFinancialScreening = () => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
+                    flexWrap: { xs: 'wrap', sm: 'nowrap' }, // Allow wrapping on extra small screens
+                    mt: '8px', // Add margin top for spacing when wrapped
                   }}
                 >
                   <Box
                     sx={{
                       display: 'flex',
                       alignItems: 'center',
+                      mb: { xs: '8px', sm: 0 }, // Add bottom margin when wrapped
                     }}
                   >
                     <IconButton
@@ -682,7 +687,7 @@ const FavoriteFinancialScreening = () => {
                     <Typography
                       sx={{
                         fontWeight: 400,
-                        fontSize: '16px',
+                        fontSize: { xs: '14px', sm: '16px' }, // Responsive font size
                         overflow: 'hidden',
                         lineHeight: '24px',
                         fontStyle: 'normal',
@@ -701,6 +706,7 @@ const FavoriteFinancialScreening = () => {
                     sx={{
                       display: 'flex',
                       alignItems: 'center',
+                      ml: { xs: 0, sm: 'auto' }, // Auto margin on left for larger screens
                     }}
                   >
                     {channel.organizationChannelTranscriptList[0]

@@ -23,9 +23,9 @@ import {
   OrganizationChannelData,
 } from '@/interfaces/entities';
 import { useRouter } from 'next/navigation';
-import ChannelContentContext from '../channel-context-provider/ChannelContentContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { StarRounded } from '@mui/icons-material';
+import ChannelContentContext from '@/context/ChannelContentContext';
 
 // Updated motion variants:
 // They start at x:0 (their original position) and when exiting, slide out.
@@ -140,7 +140,7 @@ export default function FavoriteSolution() {
           width: '100%',
           maxWidth: 800,
           maxHeight: '90vh',
-          overflow: 'auto', // Local scrolling behavior for this component
+          // overflow: 'auto', // Local scrolling behavior for this component
           bgcolor: 'background.paper',
           borderRadius: 2,
           p: isMobile ? '16px' : 3,
@@ -251,9 +251,9 @@ export default function FavoriteSolution() {
             <Box
               sx={{
                 width: '100%',
-                overflowY: 'auto',
+                // overflowY: 'auto',
                 paddingRight: '8px',
-                paddingLeft: isMobile ? '0px' : '10px',
+                paddingLeft: isMobile ? '0px' : '0px',
                 '&::-webkit-scrollbar': { width: '4px' },
                 '&::-webkit-scrollbar-thumb': {
                   backgroundColor: '#c1c1c1',
@@ -412,6 +412,7 @@ export default function FavoriteSolution() {
           </>
         ) : (
           <>
+            {/* mobile screen  */}
             {/* Action Bar with "全選", "取消", and "刪除" buttons */}
             <Box
               sx={{

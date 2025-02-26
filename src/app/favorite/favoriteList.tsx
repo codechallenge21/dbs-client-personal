@@ -265,19 +265,20 @@ const FavouriteList = () => {
       {isMobile && (
         <Box
           sx={{
-            padding: 2,
+            padding: 1,
             height: '100vh',
-            overflowY: 'auto',
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'hidden',
             background: 'var(--Primary-White, #FFF)',
           }}
         >
+          {/* Header section */}
           <Box
             sx={{
-              flexShrink: 0,
+              flexShrink: 0, 
               height: '64px',
-              width: '375px',
               display: 'flex',
-              padding: '8px 6px',
               alignItems: 'center',
               borderRadius: '8px 0px 0px 8px',
               background: 'var(--Primary-White, #FFF)',
@@ -289,9 +290,7 @@ const FavouriteList = () => {
             <Typography
               sx={{
                 flex: '1 0 0',
-                height: '40px',
                 display: 'flex',
-                minHeight: '32px',
                 alignItems: 'center',
                 padding: '4px 0px 4px 8px',
                 fontWeight: 400,
@@ -306,15 +305,22 @@ const FavouriteList = () => {
               />
             </Typography>
           </Box>
+
+          {/* Tabs section */}
           <Tabs
             value={tabValue}
             onChange={handleTabChange}
-            sx={{ mb: 2 }}
+            sx={{
+              mb: 2,
+              flexShrink: 0, 
+            }}
             TabIndicatorProps={{
               style: {
                 backgroundColor: '#212B36',
               },
             }}
+            variant="scrollable" 
+            scrollButtons="auto"
           >
             <Tab
               label="解決麻煩事"
@@ -359,23 +365,24 @@ const FavouriteList = () => {
               }}
             />
           </Tabs>
+          {/* Content section */}
           <Box
             sx={{
-              gap: '40px',
-              flex: '1 0 0',
+              flex: 1, 
               display: 'flex',
-              minHeight: '91vh',
-              maxHeight: '91vh',
-              padding: '16px 32px',
-              alignItems: 'center',
-              alignSelf: 'stretch',
               flexDirection: 'column',
               backgroundColor: 'white',
               borderBottomLeftRadius: '8px',
               borderBottomRightRadius: '8px',
+              overflow: 'hidden', 
             }}
           >
-            <TableContainer>
+            <TableContainer
+              sx={{
+                height: '100%',
+                overflow: 'auto', 
+              }}
+            >
               {tabValue === 0 && <FavoriteSolution />}
               {tabValue === 1 && <FavoriteFinancialScreening />}
               {tabValue === 2 && <FavoriteFinancialQuickScreening />}
