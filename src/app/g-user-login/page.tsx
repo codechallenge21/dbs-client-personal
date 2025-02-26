@@ -26,9 +26,7 @@ function GUserLoginPageContent() {
         const response = await googleLogin({ code });
         if (response.status === 200) {
           showSnackbar('登入成功。', 'success');
-          setTimeout(() => {
-            window.location.reload();
-          }, 2000);
+          router.push('/');
         } else {
           showSnackbar('Google 登入失敗。請再試一次。', 'error');
           router.push('/');
