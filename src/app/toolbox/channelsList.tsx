@@ -1,4 +1,5 @@
 'use client';
+import React, { useState, useEffect, useCallback } from 'react';
 import DeleteDialog from '@/components/dialogs/DeleteDialog';
 import EditDialog from '@/components/dialogs/EditDialog';
 import EditableItem from '@/components/editable-item/EditableItem';
@@ -10,38 +11,37 @@ import apiExports from '@/utils/hooks/apis/apis';
 import apis from '@/utils/hooks/apis/apis';
 import { useAudioChannels } from '@/utils/hooks/useAudioChannels';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
-import {
-  CheckCircleRounded,
-  MenuRounded,
-  MicRounded,
-  PendingActionsRounded,
-  RotateRightRounded,
-  SearchRounded,
-  StarBorderRounded,
-  StarRounded,
-  UploadRounded,
-} from '@mui/icons-material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import {
   Box,
-  Button,
-  Card,
-  CardContent,
-  IconButton,
   Tab,
+  Tabs,
   Table,
+  Button,
+  useTheme,
+  TableRow,
   TableBody,
   TableCell,
-  TableContainer,
   TableHead,
-  TableRow,
-  Tabs,
   Typography,
+  IconButton,
   useMediaQuery,
-  useTheme,
+  TableContainer,
+  Card,
+  CardContent,
 } from '@mui/material';
+import {
+  MicRounded,
+  StarRounded,
+  SearchRounded,
+  UploadRounded,
+  MenuRounded,
+  CheckCircleRounded,
+  RotateRightRounded,
+  PendingActionsRounded,
+  StarBorderRounded,
+} from '@mui/icons-material';
 import { useRouter } from 'next/navigation';
-import React, { useCallback, useEffect, useState } from 'react';
 
 const ChannelsList = () => {
   const theme = useTheme();

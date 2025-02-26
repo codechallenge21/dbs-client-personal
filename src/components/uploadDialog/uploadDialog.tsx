@@ -8,13 +8,11 @@ import {
   IconButton,
   Box,
   Typography,
-  Alert,
-  Snackbar,
   useTheme,
   useMediaQuery,
 } from '@mui/material';
 import { useDropzone } from 'react-dropzone';
-import { useRef, useState } from 'react';
+import { useRef, useState, useContext } from 'react';
 import { CloseRounded, UploadRounded } from '@mui/icons-material';
 import { UploadFileApiPayload } from '@/interfaces/payloads';
 import { AxiosPromise, AxiosRequestConfig, AxiosResponse } from 'axios';
@@ -23,6 +21,7 @@ import {
   OrganizationChannelResponse,
 } from '@/interfaces/entities';
 import { KeyedMutator } from 'swr';
+import { SnackbarContext } from '@/context/SnackbarContext';
 
 // File Upload Configuration
 const FILE_CONFIG = {
@@ -89,7 +88,7 @@ export default function UploadDialog({
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [, setFile] = useState<File | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const { showSnackbar } = useContext(SnackbarContext);
 
   const validateFile = async (file: File) => {
     try {
@@ -98,12 +97,12 @@ export default function UploadDialog({
           file.type as (typeof FILE_CONFIG.allowedFormats)[number]
         )
       ) {
-        setError(FILE_CONFIG.errorMessages.invalidFormat);
+        showSnackbar(FILE_CONFIG.errorMessages.invalidFormat, 'error');
         return;
       }
 
       if (file.size > FILE_CONFIG.maxSize) {
-        setError(FILE_CONFIG.errorMessages.sizeExceeded);
+        showSnackbar(FILE_CONFIG.errorMessages.sizeExceeded, 'error');
         return;
       }
       // Generate current timestamp
@@ -135,7 +134,7 @@ export default function UploadDialog({
       await mutateAudioChannels();
       setUploadingFile(undefined);
     } catch (error) {
-      setError(FILE_CONFIG.errorMessages.uploadFailed);
+      showSnackbar(FILE_CONFIG.errorMessages.uploadFailed, 'error');
       console.error(error);
     }
   };
@@ -147,7 +146,7 @@ export default function UploadDialog({
   };
 
   const handleDropRejected = (fileRejections: any[]) => {
-    setError('檔案格式錯誤或檔案大小超過 200MB 限制');
+    showSnackbar('檔案格式錯誤或檔案大小超過 200MB 限制', 'error');
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -180,10 +179,6 @@ export default function UploadDialog({
     },
     maxSize: FILE_CONFIG.maxSize,
   });
-
-  const handleCloseError = () => {
-    setError(null);
-  };
 
   return (
     <>
@@ -323,20 +318,6 @@ export default function UploadDialog({
           </Box>
         </DialogContent>
       </Dialog>
-      <Snackbar
-        open={!!error}
-        autoHideDuration={6000}
-        onClose={handleCloseError}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert
-          onClose={handleCloseError}
-          severity="error"
-          sx={{ width: '100%' }}
-        >
-          {error}
-        </Alert>
-      </Snackbar>
     </>
   );
 }

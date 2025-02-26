@@ -8,9 +8,13 @@ import {
   GetChannelDetailApiPayload,
   GetChannelsApiPayload,
   LogApiPayload,
+  LoginPayload,
+  LogoutPayload,
+  RegisterUserApiPayload,
   SubmitUserInputsApiPayload,
   UpdateChannelApiPayload,
   UploadFileApiPayload,
+  VerifyAccountApiPayload,
 } from '@/interfaces/payloads';
 import axios, { AxiosRequestConfig } from 'axios';
 import { fetcher, fetcherConfig, uploadFetcher } from './fetchers';
@@ -43,9 +47,21 @@ const serverSide = {
 
 const apis = {
   getChannelDetail: (payload?: GetChannelDetailApiPayload) => {
-    const { organizationId, organizationChannelId } = payload || {};
+    if (!payload) {
+      throw new Error('Payload is undefined');
+    }
+    const { organizationId, organizationChannelId } = payload;
     return fetcher.get<OrganizationChannel>(
       `/organizations/${organizationId}/channels/${organizationChannelId}`
+    );
+  },
+  ApiRegenerateSummary: (payload?: GetChannelDetailApiPayload) => {
+    if (!payload) {
+      throw new Error('Payload is undefined');
+    }
+    const { organizationId, organizationChannelId } = payload;
+    return fetcher.post<OrganizationChannel>(
+      `/organizations/${organizationId}/channels/${organizationChannelId}/regenerate-summary`
     );
   },
   createChannelByAudio: (
@@ -103,6 +119,48 @@ const apis = {
     const { organizationId, organizationChannelId } = payload || {};
     return fetcher.delete(
       `/organizations/${organizationId}/channels/${organizationChannelId}`
+    );
+  },
+  registerUser: (payload?: RegisterUserApiPayload) => {
+    const {
+      organizationId,
+      organizationUserNameZh,
+      organizationUserEmail,
+      organizationUserPassword,
+    } = payload || {};
+
+    return fetcher.post(`/organizations/${organizationId}/users/register`, {
+      organizationUserNameZh,
+      organizationUserEmail,
+      organizationUserPassword,
+    });
+  },
+  verifyAccount: (payload?: VerifyAccountApiPayload) => {
+    const { emailTokenId } = payload || {};
+    return fetcher.post(
+      `/organizations/yMJHyi6R1CB9whpdNvtA/users/verify-account`,
+      { emailTokenId }
+    );
+  },
+  login: (payload?: LoginPayload) => {
+    const { organizationUserAccount, organizationUserPassword } = payload || {};
+    return fetcher.post(`/organizations/yMJHyi6R1CB9whpdNvtA/users/login`, {
+      organizationUserAccount,
+      organizationUserPassword,
+    });
+  },
+  logout: (payload?: LogoutPayload) => {
+    return fetcher.post(`/organizations/yMJHyi6R1CB9whpdNvtA/users/logout`);
+  },
+  googleLoginUrl: () => {
+    return fetcher.get(
+      `/organizations/yMJHyi6R1CB9whpdNvtA/users/google/login-url`
+    );
+  },
+  googleLogin: (payload?: { code: string }) => {
+    return fetcher.post(
+      `/organizations/yMJHyi6R1CB9whpdNvtA/users/google/login`,
+      payload
     );
   },
 };
