@@ -459,9 +459,9 @@ const ChannelsList = () => {
                 <Box
                   sx={{
                     display: 'flex',
-                    justifyContent: 'space-between', // Keep title on left & icons on right for big screens
+                    justifyContent: 'space-between',
+                    width: '100%',
                     alignItems: 'center',
-                    alignSelf: 'stretch',
                     flexWrap: 'wrap', // Allows wrapping when screen is small
                     gap: '16px',
                   }}
@@ -475,7 +475,6 @@ const ChannelsList = () => {
                       fontFamily: 'DFPHeiBold-B5',
                       color: 'var(--Primary-Black, #212B36)',
                       textAlign: 'left', // Always left-aligned
-                      flex: '1 1 auto', // Makes sure title takes available space
                     }}
                     gutterBottom
                   >
