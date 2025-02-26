@@ -66,7 +66,7 @@ const ChannelsList = () => {
     mutate: mutateAudioChannels,
     // isValidating: isLoadingChannels,
   } = useAudioChannels({
-    organizationId: '4aba77788ae94eca8d6ff330506af944',
+    organizationId: 'yMJHyi6R1CB9whpdNvtA',
   });
 
   const { excute: deleteChannel } = useAxiosApi(apis.deleteChannel);
@@ -96,7 +96,7 @@ const ChannelsList = () => {
     async (event: React.MouseEvent) => {
       event.stopPropagation();
       deleteChannel({
-        organizationId: '4aba77788ae94eca8d6ff330506af944',
+        organizationId: 'yMJHyi6R1CB9whpdNvtA',
         organizationChannelId:
           channelsData?.[activeIndex!]?.organizationChannelId || '',
       })
@@ -121,7 +121,7 @@ const ChannelsList = () => {
   const handleEditChannelConfirm = useCallback(
     async (newTitle: string) => {
       await updateChannelDetail({
-        organizationId: '4aba77788ae94eca8d6ff330506af944',
+        organizationId: 'yMJHyi6R1CB9whpdNvtA',
         organizationChannelId:
           channelsData?.[activeIndex!]?.organizationChannelId || '',
         organizationChannelTitle: newTitle,
@@ -359,9 +359,11 @@ const ChannelsList = () => {
                 <Box
                   sx={{
                     display: 'flex',
-                    justifyContent: 'space-between',
+                    justifyContent: 'space-between', // Keep title on left & icons on right for big screens
                     alignItems: 'center',
                     alignSelf: 'stretch',
+                    flexWrap: 'wrap', // Allows wrapping when screen is small
+                    gap: '16px',
                   }}
                 >
                   <Typography
@@ -372,6 +374,8 @@ const ChannelsList = () => {
                       lineHeight: 'normal',
                       fontFamily: 'DFPHeiBold-B5',
                       color: 'var(--Primary-Black, #212B36)',
+                      textAlign: 'left', // Always left-aligned
+                      flex: '1 1 auto', // Makes sure title takes available space
                     }}
                     gutterBottom
                   >
@@ -381,10 +385,11 @@ const ChannelsList = () => {
                   <Box
                     sx={{
                       display: 'flex',
-                      width: '458px',
-                      justifyContent: 'flex-end',
+                      width: { xs: '100%', md: 'auto' }, // Full width on small screens, auto on big screens
+                      justifyContent: { xs: 'flex-start', md: 'flex-end' }, // Left-align when wrapped, right-align on big screens
                       alignItems: 'center',
                       gap: '16px',
+                      flexWrap: 'wrap',
                     }}
                   >
                     <IconButton
@@ -625,7 +630,7 @@ const ChannelsList = () => {
                           <TableCell
                             sx={{
                               width: '18%',
-                              padding: '0px',
+                              padding: '0px 8px 0px 0px ',
                               border: 'none',
                               height: '51px !important',
                             }}
@@ -692,7 +697,7 @@ const ChannelsList = () => {
                           <TableCell
                             sx={{
                               width: '18%',
-                              padding: '0px',
+                              padding: '0px 0px 0px 8px',
                               border: 'none',
                               height: '51px !important',
                             }}
@@ -709,8 +714,8 @@ const ChannelsList = () => {
                               }}
                             >
                               {new Date(
-                        channel.organizationChannelCreateDate
-                      ).toLocaleString()}
+                                channel.organizationChannelCreateDate
+                              ).toLocaleString()}
                             </Typography>
                           </TableCell>
                           <TableCell

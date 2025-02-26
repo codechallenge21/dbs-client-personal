@@ -15,6 +15,7 @@ import {
   LocalFireDepartmentRounded,
   AddRounded,
   LoginRounded,
+  ArrowDropUpRounded,
 } from '@mui/icons-material';
 import {
   Box,
@@ -30,13 +31,17 @@ import MuiDrawer from '@mui/material/Drawer';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
-import ChannelContentContext from '../channel-context-provider/ChannelContentContext';
+import ChannelContentContext from '@/context/ChannelContentContext';
+import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
+import apis from '@/utils/hooks/apis/apis';
+import UserActionMenu from '../user-action-menu/UserActionMenu';
 
 interface ToolbarDrawerProps {
   open: boolean;
   openDataSource?: boolean;
   children: React.ReactNode;
   setIsOpenDrawer: (open: boolean) => void;
+  setIsLoginOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const drawerItems = [
@@ -116,8 +121,8 @@ const MainBox = styled('div', {
 
 const drawerWidth = 240;
 
-const isLogin = Cookies.get('tid') || null;
-const token = Cookies.get('m_info') || null;
+const isLogin = Cookies.get('u_tid') || null;
+const token = Cookies.get('u_info') || null;
 const decodedHeader = token ? jwtDecode(token, { header: true }) : null;
 const loginName = decodedHeader ? (decodedHeader as any).loginName : null;
 
@@ -172,14 +177,18 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
   children,
   setIsOpenDrawer,
   openDataSource = false,
+  setIsLoginOpen,
 }) => {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const { excute: logout } = useAxiosApi(apis.logout);
+
   const [isClient, setIsClient] = useState(false);
   const [isExpanded, setIsExpanded] = useState(true); // Track expanded/collapsed state
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const { selectedChannel, selectedChannelId, isInteractingInChat } =
     useContext(ChannelContentContext);
@@ -196,6 +205,44 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
     const params = new URLSearchParams(searchParams);
     params.delete('organizationChannelId');
     router.push('/chat');
+  };
+
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  // Helper function to delete a cookie by name
+  const deleteCookie = (name: string) => {
+    document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+  };
+
+  const handleLogout = async () => {
+    // Optionally, close any open menus/dialogs
+    handleClose();
+
+    try {
+      const response = await logout();
+
+      if (response.status === 200) {
+        // Clear authentication-related cookies
+        deleteCookie('u_lid');
+        deleteCookie('u_tid');
+        deleteCookie('u_info');
+        // Optionally, clear CSRF token cookie if applicable
+        deleteCookie('XSRF-TOKEN');
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      }
+    } catch (error) {
+      console.error('Failed to logout:', error);
+      // Optionally handle errors (e.g., log or display an error message)
+    }
   };
 
   useEffect(() => {
@@ -348,9 +395,11 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             sx={{
               gap: '8px',
               width: '100%',
-              padding: '8px',
               display: 'flex',
               flexDirection: 'column',
+              alignItems: 'flex-start',
+              justifyContent: 'flex-end',
+              marginTop: '8px',
             }}
           >
             {drawerItems.map((item, index) => (
@@ -436,38 +485,70 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
         {(isExpanded || isMobile) && (
           <>
             {isLogin ? (
-              <Button
-                role="button"
-                aria-label="Logout"
-                sx={{
-                  display: 'flex',
-                  // padding: '16px',
-                  alignItems: 'center',
-                }}
-              >
-                <PermIdentityRounded
-                  sx={{ color: '#212B36', marginRight: '8px' }}
-                />
-                <Typography
+              <>
+                <Button
+                  role="button"
+                  aria-label="Logout"
+                  onClick={handleMenuOpen}
                   sx={{
-                    fontWeight: 400,
-                    fontSize: '16px',
-                    overflow: 'hidden',
-                    fontStyle: 'normal',
-                    lineHeight: 'normal',
-                    whiteSpace: 'nowrap',
-                    textOverflow: 'ellipsis',
-                    fontFamily: 'DFPHeiBold-B5',
-                    color: 'var(--Primary-Black, #212B36)',
+                    display: 'flex',
+                    width: '100%',
+                    minHeight: '44px',
+                    padding: '6px 8px',
+                    alignItems: 'center',
+                    gap: '8px',
+                    alignSelf: 'stretch',
                   }}
                 >
-                  {loginName}
-                </Typography>
-              </Button>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      flex: 1, // makes the left group take available space
+                    }}
+                  >
+                    <PermIdentityRounded sx={{ color: '#212B36' }} />
+                    <Typography
+                      sx={{
+                        display: '-webkit-box',
+                        WebkitBoxOrient: 'vertical',
+                        WebkitLineClamp: 1,
+                        flex: '1 0 0',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        color: 'var(--Primary-Black, #212B36)',
+                        fontFamily: 'DFPHeiBold-B5',
+                        fontSize: '16px',
+                        fontStyle: 'normal',
+                        fontWeight: 400,
+                        lineHeight: '24px',
+                        textAlign: 'left',
+                      }}
+                    >
+                      {loginName}
+                    </Typography>
+                  </Box>
+                  <ArrowDropUpRounded sx={{ color: '#212B36' }} />
+                </Button>
+
+                <UserActionMenu
+                  email={loginName}
+                  handleLogout={handleLogout}
+                  anchorEl={anchorEl}
+                  onClose={handleClose}
+                  anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                  transformOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                  isExpanded={isExpanded}
+                />
+              </>
             ) : (
               <Button
                 role="button"
                 aria-label="Logout"
+                onClick={() => {
+                  if (setIsLoginOpen) setIsLoginOpen(true);
+                }}
                 sx={{
                   gap: '8px',
                   color: '#212B36',
@@ -542,6 +623,9 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               <IconButton
                 role="button"
                 aria-label="Login"
+                onClick={() => {
+                  if (setIsLoginOpen) setIsLoginOpen(true);
+                }}
                 sx={{
                   width: '36px',
                   height: '36px',
@@ -563,30 +647,42 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 <LoginRounded sx={{ color: '#212B36', fontSize: '20px' }} />
               </IconButton>
             ) : (
-              <IconButton
-                role="button"
-                aria-label="Logout"
-                sx={{
-                  width: '36px',
-                  height: '36px',
-                  padding: '8px',
-                  display: 'flex',
-                  borderRadius: '50px',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  background: 'var(--Secondary-, #5C443A)',
-                  '&:hover': {
-                    background: 'rgba(92, 68, 58, 0.8)',
-                  },
-                  '&:active': {
-                    background: 'rgba(92, 68, 58, 0.6)',
-                  },
-                }}
-              >
-                <PermIdentityRounded
-                  sx={{ color: 'white', fontSize: '20px' }}
+              <>
+                <IconButton
+                  role="button"
+                  aria-label="Logout"
+                  onClick={handleMenuOpen}
+                  sx={{
+                    width: '36px',
+                    height: '36px',
+                    padding: '8px',
+                    display: 'flex',
+                    borderRadius: '50px',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: 'var(--Secondary-, #5C443A)',
+                    '&:hover': {
+                      background: 'rgba(92, 68, 58, 0.8)',
+                    },
+                    '&:active': {
+                      background: 'rgba(92, 68, 58, 0.6)',
+                    },
+                  }}
+                >
+                  <PermIdentityRounded
+                    sx={{ color: 'white', fontSize: '20px' }}
+                  />
+                </IconButton>
+                <UserActionMenu
+                  email={loginName}
+                  handleLogout={handleLogout}
+                  anchorEl={anchorEl}
+                  onClose={handleClose}
+                  anchorOrigin={{ vertical: 'center', horizontal: 'right' }}
+                  transformOrigin={{ vertical: 'center', horizontal: 'left' }}
+                  isExpanded={isExpanded}
                 />
-              </IconButton>
+              </>
             )}
             <IconButton
               role="button"
@@ -693,7 +789,6 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
       <MainBox
         open={openDataSource}
         sx={{
-          height: '100vh',
           marginRight: isMobile ? 0 : openDataSource ? '446px' : 0,
           overflow: 'auto',
           marginBottom: '16px',

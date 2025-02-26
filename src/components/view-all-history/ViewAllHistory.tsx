@@ -23,7 +23,7 @@ import {
   OrganizationChannelData,
 } from '@/interfaces/entities';
 import { useRouter } from 'next/navigation';
-import ChannelContentContext from '../channel-context-provider/ChannelContentContext';
+import ChannelContentContext from '@/context/ChannelContentContext';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // Updated motion variants:
@@ -54,7 +54,7 @@ export default function ChannelSearchCombined() {
   const [open, setOpen] = useState(false);
 
   const { data: chatsData } = useChatChannels({
-    organizationId: '4aba77788ae94eca8d6ff330506af944',
+    organizationId: 'yMJHyi6R1CB9whpdNvtA',
   });
 
   const handleMouseEnter = (id: string) => {
