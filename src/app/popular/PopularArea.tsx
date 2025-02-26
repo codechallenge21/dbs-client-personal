@@ -1,27 +1,27 @@
-import React, { useEffect, useRef, useState } from 'react';
-import {
-  Box,
-  Card,
-  List,
-  Grid2,
-  Button,
-  useTheme,
-  ListItem,
-  IconButton,
-  Typography,
-  CardContent,
-  ListItemText,
-  useMediaQuery,
-} from '@mui/material';
+import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
 import {
   ArrowForwardIosRounded,
   DownloadRounded,
   MenuRounded,
   WorkRounded,
 } from '@mui/icons-material';
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Grid2,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 import Image from 'next/image';
+import { useEffect, useRef, useState } from 'react';
 import boxImage from '../../../public/assets/images/box.png';
-import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
 
 export default function PopularArea() {
   const theme = useTheme();
@@ -470,7 +470,7 @@ export default function PopularArea() {
                         color: 'black',
                       }}
                     />
-                    <Typography variant="body2">工具名称</Typography>
+                    <Typography variant="body2">工具名稱</Typography>
                     <DownloadRounded
                       className="download-icon"
                       sx={{
