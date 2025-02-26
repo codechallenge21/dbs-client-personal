@@ -123,9 +123,9 @@ export default function PopularArea() {
       sx={{
         height: '100vh',
         display: 'flex',
-        overflow: 'hidden',
+        overflowY: 'auto',
         flexDirection: 'column',
-        background: 'var(--Primary-, #EBE3DD)',
+        background: isMobile ? 'white' : 'var(--Primary-, #EBE3DD)',
       }}
     >
       <ToolbarDrawer open={isOpenDrawer} setIsOpenDrawer={setIsOpenDrawer}>
@@ -134,11 +134,10 @@ export default function PopularArea() {
             sx={{
               flexShrink: 0,
               width: '100%',
-              height: '64px',
+              height: '100%',
               display: 'flex',
               padding: '8px 16px',
               alignItems: 'center',
-              borderRadius: '8px 0px 0px 8px',
               background: 'var(--Primary-White, #FFF)',
             }}
           >
@@ -187,11 +186,12 @@ export default function PopularArea() {
             gap: '20px',
             display: 'flex',
             overflowY: 'auto',
-            borderRadius: '8px',
             flexDirection: 'column',
             backgroundColor: 'white',
-            height: isMobile ? '100%' : '96vh',
-            padding: isMobile ? '16px' : '16px 32px',
+            height: '100%',
+            marginBottom: '0px',
+            padding: isMobile ? '16px' : '16px 32px 0px 32px',
+            // paddingBottom: isMobile ? '0' : '16px', // Ensure no extra padding at the bottom for mobile
             '@media (min-width: 600px)': {
               flex: '1 0 0',
             },
@@ -219,6 +219,7 @@ export default function PopularArea() {
               overflow: 'visible',
               position: 'relative',
               flexDirection: 'column',
+              marginBottom: '0px', 
             }}
           >
             <Typography
@@ -1001,6 +1002,7 @@ export default function PopularArea() {
             sx={{
               gap: '16px',
               padding: '0px',
+              marginBottom: '0px',
               display: 'flex',
               overflow: 'visible',
               alignSelf: 'stretch',
