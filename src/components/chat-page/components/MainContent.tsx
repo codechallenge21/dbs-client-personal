@@ -158,7 +158,7 @@ const MainContent: React.FC<MainContentProps> = ({
         alignItems: 'center',
         flexDirection: 'column',
         height: '100vh',
-        minHeight: 0, // critical so that overflow can happen
+        minHeight: 0,
         overflow: 'auto',
         justifyContent: 'center',
         pt: paddingTop,

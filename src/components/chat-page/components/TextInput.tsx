@@ -13,6 +13,8 @@ import Image from 'next/image';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import ChannelContentContext from '@/context/ChannelContentContext';
 import DropdownMenu from './DropdownMenu';
+import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
+import apis from '@/utils/hooks/apis/apis';
 
 interface SpeechRecognition extends EventTarget {
   continuous: boolean;
@@ -68,6 +70,23 @@ type TextInputProps = {
   from?: string;
 };
 
+interface ChatWithFilesPayload {
+  chatRequest: {
+    query: string;
+    advisorType: string;
+  };
+  files: File[];
+  organizationId: string;
+}
+
+interface ChatWithFilesResponse {
+  data: {
+    response: string;
+    organizationChannelTitle: string;
+    organizationChannelId: string;
+  };
+}
+
 const TextInput: React.FC<TextInputProps> = ({
   submitUserInputs,
   isInteracting,
@@ -82,11 +101,33 @@ const TextInput: React.FC<TextInputProps> = ({
     []
   );
 
+  const MAX_FILES = 3;
+  const MAX_FILE_SIZE = 5 * 1024 * 1024;
+
+  const { excute: chatWithFiles } = useAxiosApi<
+    ChatWithFilesResponse,
+    ChatWithFilesPayload
+  >(apis.chatWithFiles);
+
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     const droppedFiles = Array.from(event.dataTransfer.files);
+    if (files.length + droppedFiles.length > MAX_FILES) {
+      setError(`You can only upload up to ${MAX_FILES} files.`);
+      return;
+    }
+
+    for (const file of droppedFiles) {
+      if (file.size > MAX_FILE_SIZE) {
+        setError(`File "${file.name}" exceeds the 5MB limit.`);
+        return;
+      }
+      setError('');
+    }
+
     const mappedFiles = droppedFiles.map((file) => ({ file, preview: null }));
     setFiles((prev) => [...prev, ...mappedFiles]);
+    setError('');
   };
 
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
@@ -96,11 +137,24 @@ const TextInput: React.FC<TextInputProps> = ({
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
       const selectedFiles = Array.from(event.target.files);
+      if (files.length + selectedFiles.length > MAX_FILES) {
+        setError(`You can only upload up to ${MAX_FILES} files.`);
+        return;
+      }
+      // Validate each file's size
+      for (const file of selectedFiles) {
+        if (file.size > MAX_FILE_SIZE) {
+          setError(`File "${file.name}" exceeds the 5MB limit.`);
+          return;
+        }
+        setError('');
+      }
       const newFiles = selectedFiles.map((file) => {
         const icon = getFileIcon(file);
         return { file, preview: icon };
       });
       setFiles((prev) => [...prev, ...newFiles]);
+      setError('');
     }
   };
 
@@ -141,42 +195,74 @@ const TextInput: React.FC<TextInputProps> = ({
   } = useContext(ChannelContentContext);
 
   const handleSendMessage = useCallback(async () => {
-    try {
-      if (isInteracting) {
-        return;
-      }
-      setChatResponses((prev) => [
-        ...prev,
-        {
-          organizationChannelMessageType: 'USER',
-          organizationChannelMessageContent: userInputValue,
-          organizationChannelFiles: files,
-        },
-      ]);
-      const response = await submitUserInputs({
-        organizationId: 'yMJHyi6R1CB9whpdNvtA',
-        query: userInputValue,
-        advisorType,
-        organizationChannelId: selectedChannelId,
-      });
-      if (response.data.response) {
-        setChatResponses((prev) => [
-          ...prev,
-          {
-            organizationChannelMessageType: 'AI',
-            organizationChannelMessageContent: response?.data?.response,
-            organizationChannelTitle: response?.data?.organizationChannelTitle,
+    if (isInteracting) {
+      return;
+    }
+    setChatResponses((prev) => [
+      ...prev,
+      {
+        organizationChannelMessageType: 'USER',
+        organizationChannelMessageContent: userInputValue,
+        organizationChannelFiles: files,
+      },
+    ]);
+    if (files.length > 0) {
+      try {
+        const response = await chatWithFiles({
+          chatRequest: {
+            query: userInputValue,
+            advisorType: 'DEBT',
           },
-        ]);
-        setSelectedChannelId(response?.data?.organizationChannelId);
-        if (channelsMutate) {
-          channelsMutate();
+          files: files.map((item) => item.file),
+          organizationId: 'yMJHyi6R1CB9whpdNvtA',
+        });
+        if (response.data.response) {
+          setChatResponses((prev) => [
+            ...prev,
+            {
+              organizationChannelMessageType: 'AI',
+              organizationChannelMessageContent: response.data.response,
+              organizationChannelTitle: response.data.organizationChannelTitle,
+            },
+          ]);
+          setSelectedChannelId(response.data.organizationChannelId);
+          if (channelsMutate) {
+            channelsMutate();
+          }
+          setUserInputValue('');
+          setFiles([]);
         }
-        setUserInputValue('');
-        setFiles([]);
+      } catch (error) {
+        console.error('Error sending message with files:', error);
       }
-    } catch (error) {
-      console.error('Error sending message:', error);
+    } else {
+      try {
+        const response = await submitUserInputs({
+          organizationId: 'yMJHyi6R1CB9whpdNvtA',
+          query: userInputValue,
+          advisorType,
+          organizationChannelId: selectedChannelId,
+        });
+        if (response.data.response) {
+          setChatResponses((prev) => [
+            ...prev,
+            {
+              organizationChannelMessageType: 'AI',
+              organizationChannelMessageContent: response?.data?.response,
+              organizationChannelTitle:
+                response?.data?.organizationChannelTitle,
+            },
+          ]);
+          setSelectedChannelId(response?.data?.organizationChannelId);
+          if (channelsMutate) {
+            channelsMutate();
+          }
+          setUserInputValue('');
+          setFiles([]);
+        }
+      } catch (error) {
+        console.error('Error sending message:', error);
+      }
     }
   }, [
     channelsMutate,

@@ -4,6 +4,7 @@ import {
   OrganizationChannelResponse,
 } from '@/interfaces/entities';
 import {
+  ChatWithFilesPayload,
   DeleteChannelApiPayload,
   GetChannelDetailApiPayload,
   GetChannelsApiPayload,
@@ -100,6 +101,24 @@ const apis = {
         query,
         advisorType,
       }
+    );
+  },
+  chatWithFiles: (payload?: ChatWithFilesPayload) => {
+    const organizationId = payload?.organizationId;
+
+    const formData = new FormData();
+    // Append the chat request as a JSON string
+    formData.append('chatRequest', JSON.stringify(payload?.chatRequest));
+    // Append each file. If multiple files are allowed, this will add them all.
+    payload?.files.forEach((file) => {
+      const blob = new Blob([file], { type: 'text/plain' });
+      console.log('file', file);
+
+      formData.append('files', blob, file.name);
+    });
+    return fetcher.post(
+      `/organizations/${organizationId}/channels/chat-with-files`,
+      formData
     );
   },
   updateChannelDetail: (payload?: UpdateChannelApiPayload) => {

@@ -40,6 +40,15 @@ export interface SubmitUserInputsApiPayload {
   advisorType: AdvisorType;
 }
 
+export interface ChatWithFilesPayload {
+  chatRequest: {
+    query: string;
+    advisorType: string;
+    organizationId: string;
+  };
+  files: File[];
+}
+
 export interface DeleteChannelApiPayload {
   organizationId: string;
   organizationChannelId: string;
