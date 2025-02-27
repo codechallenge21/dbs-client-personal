@@ -7,7 +7,6 @@ import {
   Open_Sans,
   Public_Sans,
 } from 'next/font/google';
-import Script from 'next/script';
 import './globals.css';
 import { SnackbarProvider } from '@/context/SnackbarContext';
 import { LoginProvider } from '@/context/LoginContext';
@@ -86,18 +85,18 @@ export default function RootLayout({ children }: Props) {
   return (
     <html lang="en">
       <head>
-        <Script id="dynafont-config" strategy="beforeInteractive">
-          {`
-            FontJSON={
-              User:"16697",
-              DomainID:"D0005795KZB", 
-              Font:["DFT_B5","DFT_B7","DFT_B3","DFT_BC"]
-            }
-          `}
-        </Script>
-        <Script
-          src="https://dfo.dynacw.com.tw/DynaJSFont/DynaFont_FOUT.js"
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+            window.FontJSON = {
+              User: "16697",
+              DomainID: "D0005795KZB",
+              Font: ["DFT_B5", "DFT_B7", "DFT_B3", "DFT_BC"]
+            };
+          `,
+          }}
         />
+        <script src="https://dfo.dynacw.com.tw/DynaJSFont/DynaFont_FOUT.js" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${publicSansFont.variable} ${openSansFont.variable} ${interFont.variable}`}
