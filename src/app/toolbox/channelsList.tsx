@@ -172,7 +172,6 @@ const ChannelsList = () => {
           );
           setIsDeleteDialogOpen(false);
           handleCloseToolsMenu();
-          setHasMore(true);
           setTimeout(() => {
             mutateAudioChannels();
           }, 0);
@@ -204,7 +203,6 @@ const ChannelsList = () => {
             : channel
         )
       );
-      setHasMore(true);
       setTimeout(() => {
         mutateAudioChannels();
       }, 0);
@@ -316,7 +314,6 @@ const ChannelsList = () => {
       setTimeout(async () => {
         const response = await mutateAudioChannels();
         const newChannels = response?.data || [];
-        console.log('newChannels', newChannels);
 
         if (newChannels.length > 0) {
           setChannelList((prevChannels) => [...prevChannels, ...newChannels]);
@@ -615,10 +612,10 @@ const ChannelsList = () => {
                   </Box>
                 </Box>
                 {isLoadingChannels &&
-                channelsData?.length === 0 &&
+                channelList?.length === 0 &&
                 currentPageRef.current === 0 &&
                 !uploadingFile &&
-                !(isCreating || isLoadingChannels || isSingleChannelLoading) ? (
+                !(isCreating || isSingleChannelLoading) ? (
                   <Box
                     sx={{
                       top: '50%',
@@ -1392,10 +1389,10 @@ const ChannelsList = () => {
                 </Button>
               </Box>
               {isLoadingChannels &&
-              channelsData?.length === 0 &&
+              channelList?.length === 0 &&
               currentPageRef.current === 0 &&
               !uploadingFile &&
-              !(isCreating || isLoadingChannels || isSingleChannelLoading) ? (
+              !(isCreating || isSingleChannelLoading) ? (
                 <Box
                   sx={{
                     top: '50%',
