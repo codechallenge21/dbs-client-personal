@@ -72,6 +72,9 @@ const ChannelsList = () => {
   const { isLoginOpen, setIsLoginOpen, isSignupOpen, setIsSignupOpen } =
     useLoginContext();
 
+  const { excute: getChannelDetail, isLoading: isSingleChannelLoading } =
+    useAxiosApi(apis.getChannelDetail);
+
   const [tabValue, setTabValue] = useState(0);
   const [loadingElementVisible, setLoadingElementVisible] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -169,9 +172,10 @@ const ChannelsList = () => {
           );
           setIsDeleteDialogOpen(false);
           handleCloseToolsMenu();
-          if (mutateAudioChannels) {
+          setHasMore(true);
+          setTimeout(() => {
             mutateAudioChannels();
-          }
+          }, 0);
         })
         .catch(() => {});
     },
@@ -200,7 +204,10 @@ const ChannelsList = () => {
             : channel
         )
       );
-      if (mutateAudioChannels) mutateAudioChannels();
+      setHasMore(true);
+      setTimeout(() => {
+        mutateAudioChannels();
+      }, 0);
     },
     [updateChannelDetail, channelList, activeIndex, mutateAudioChannels]
   );
@@ -259,10 +266,18 @@ const ChannelsList = () => {
   const handleUploadFile = async (file: File, fileInfo: fileProps) => {
     try {
       setUploadingFile(fileInfo);
-      await createChannelByAudio({
+      const createdChannelRes = await createChannelByAudio({
         file,
       });
-      await mutateAudioChannels();
+      const channelResponse = await getChannelDetail({
+        organizationId: 'yMJHyi6R1CB9whpdNvtA',
+        organizationChannelId: createdChannelRes.data.organizationChannelId,
+      });
+
+      setChannelList((prevChannelList) => [
+        channelResponse.data,
+        ...prevChannelList,
+      ]);
       setUploadingFile(undefined);
     } catch (err) {
       showSnackbar(FILE_CONFIG.errorMessages.uploadFailed, 'error');
@@ -298,16 +313,18 @@ const ChannelsList = () => {
       currentPageRef.current = nextPage;
 
       // Use the updated page value in the API call
-      const response = await mutateAudioChannels();
+      setTimeout(async () => {
+        const response = await mutateAudioChannels();
+        const newChannels = response?.data || [];
+        console.log('newChannels', newChannels);
 
-      const newChannels = response?.data || [];
-
-      if (newChannels.length > 0) {
-        setChannelList((prevChannels) => [...prevChannels, ...newChannels]);
-        setHasMore(newChannels.length >= itemsPerPage);
-      } else {
-        setHasMore(true);
-      }
+        if (newChannels.length > 0) {
+          setChannelList((prevChannels) => [...prevChannels, ...newChannels]);
+          setHasMore(newChannels.length >= itemsPerPage);
+        } else {
+          setHasMore(false);
+        }
+      }, 100);
     } catch (error) {
       console.error('Error loading channels:', error);
       setHasMore(false);
@@ -601,7 +618,7 @@ const ChannelsList = () => {
                 channelsData?.length === 0 &&
                 currentPageRef.current === 0 &&
                 !uploadingFile &&
-                !(isCreating || isLoadingChannels) ? (
+                !(isCreating || isLoadingChannels || isSingleChannelLoading) ? (
                   <Box
                     sx={{
                       top: '50%',
@@ -617,7 +634,7 @@ const ChannelsList = () => {
                   <TableContainer
                     ref={scrollContainerRef}
                     sx={{
-                      maxHeight: 'calc(100vh - 380px)',
+                      maxHeight: 'calc(100vh - 180px)',
                       overflow: 'auto',
                       '&::-webkit-scrollbar': {
                         width: '8px',
@@ -753,135 +770,141 @@ const ChannelsList = () => {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {uploadingFile && (isCreating || isLoadingChannels) && (
-                          <TableRow
-                            key={0}
-                            sx={{
-                              cursor: 'default',
-                              height: '56px !important',
-                              borderBottom:
-                                '1px dashed var(--Components-Divider, rgba(145, 158, 171, 0.20))',
-                              background: 'var(--Background-Paper, #FFF)',
-                            }}
-                          >
-                            <TableCell
+                        {uploadingFile &&
+                          (isCreating ||
+                            isLoadingChannels ||
+                            isSingleChannelLoading) && (
+                            <TableRow
+                              key={0}
                               sx={{
-                                width: '50%',
-                                padding: '0px',
-                                border: 'none',
-                                height: '51px !important',
+                                cursor: 'default',
+                                height: '56px !important',
+                                borderBottom:
+                                  '1px dashed var(--Components-Divider, rgba(145, 158, 171, 0.20))',
+                                background: 'var(--Background-Paper, #FFF)',
                               }}
                             >
-                              <Typography
+                              <TableCell
                                 sx={{
-                                  fontFamily: 'DFPHeiBold-B5',
-                                  fontWeight: 400,
-                                  fontSize: '16px',
-                                  lineHeight: '16px',
-                                  letterSpacing: '0%',
-                                  textAlign: 'left',
-                                  WebkitLineClamp: 1,
-                                  overflow: 'hidden',
-                                  padding: '16px 0px',
-                                  fontStyle: 'normal',
-                                  display: '-webkit-box',
-                                  textOverflow: 'ellipsis',
-                                  WebkitBoxOrient: 'vertical',
-                                  color: 'var(--Text-Primary, #212B36)',
+                                  width: '50%',
+                                  padding: '0px',
+                                  border: 'none',
+                                  height: '51px !important',
                                 }}
                               >
-                                {uploadingFile?.organizationChannelTitle}
-                                {'222'}
-                              </Typography>
-                            </TableCell>
-                            <TableCell
-                              sx={{
-                                width: '18%',
-                                padding: '0px 8px 0px 0px ',
-                                border: 'none',
-                                height: '51px !important',
-                              }}
-                            >
-                              <Box
-                                sx={{
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                }}
-                              >
-                                {(isCreating || isLoadingChannels) && (
-                                  <CustomLoader />
-                                )}
-                                <span
-                                  style={{
+                                <Typography
+                                  sx={{
                                     fontFamily: 'DFPHeiBold-B5',
                                     fontWeight: 400,
                                     fontSize: '16px',
                                     lineHeight: '16px',
                                     letterSpacing: '0%',
+                                    textAlign: 'left',
+                                    WebkitLineClamp: 1,
                                     overflow: 'hidden',
+                                    padding: '16px 0px',
                                     fontStyle: 'normal',
+                                    display: '-webkit-box',
                                     textOverflow: 'ellipsis',
-                                    marginLeft: '12px',
-                                    color: 'var(--Primary-Black, #212B36)',
+                                    WebkitBoxOrient: 'vertical',
+                                    color: 'var(--Text-Primary, #212B36)',
                                   }}
                                 >
-                                  {'上傳中...'}
-                                </span>
-                              </Box>
-                            </TableCell>
-                            <TableCell
-                              sx={{
-                                width: '18%',
-                                padding: '0px 0px 0px 8px',
-                                border: 'none',
-                                height: '51px !important',
-                              }}
-                            >
-                              <Typography
+                                  {uploadingFile?.organizationChannelTitle}
+                                </Typography>
+                              </TableCell>
+                              <TableCell
                                 sx={{
-                                  fontWeight: 400,
-                                  fontSize: '16px',
-                                  fontStyle: 'normal',
-                                  padding: '16px 0px',
-                                  lineHeight: 'normal',
-                                  fontFamily: 'DFPHeiBold-B5',
-                                  color: 'var(--Text-Primary, #212B36)',
+                                  width: '18%',
+                                  padding: '0px 8px 0px 0px ',
+                                  border: 'none',
+                                  height: '51px !important',
                                 }}
                               >
-                                {uploadingFile.organizationChannelCreateDate}
-                              </Typography>
-                            </TableCell>
-                            <TableCell
-                              sx={{
-                                width: '7%',
-                                border: 'none',
-                                padding: '0px 0px 0px 40px',
-                                textAlign: 'center',
-                                height: '51px !important',
-                              }}
-                            >
-                              <IconButton
-                                role="button"
-                                aria-label="favorite"
-                                sx={{ padding: '0px' }}
+                                <Box
+                                  sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                  }}
+                                >
+                                  {(isCreating || isLoadingChannels) && (
+                                    <CustomLoader />
+                                  )}
+                                  <span
+                                    style={{
+                                      fontFamily: 'DFPHeiBold-B5',
+                                      fontWeight: 400,
+                                      fontSize: '16px',
+                                      lineHeight: '16px',
+                                      letterSpacing: '0%',
+                                      overflow: 'hidden',
+                                      fontStyle: 'normal',
+                                      textOverflow: 'ellipsis',
+                                      marginLeft: '12px',
+                                      color: 'var(--Primary-Black, #212B36)',
+                                    }}
+                                  >
+                                    {'上傳中...'}
+                                  </span>
+                                </Box>
+                              </TableCell>
+                              <TableCell
+                                sx={{
+                                  width: '18%',
+                                  padding: '0px 0px 0px 8px',
+                                  border: 'none',
+                                  height: '51px !important',
+                                }}
                               >
-                                {<StarBorderRounded sx={{ color: 'black' }} />}
-                              </IconButton>
-                            </TableCell>
-                            <TableCell
-                              sx={{
-                                width: '7%',
-                                border: 'none',
-                                padding: '0px 18px 0px 0px',
-                                textAlign: 'center',
-                                height: '51px !important',
-                              }}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                              }}
-                            ></TableCell>
-                          </TableRow>
-                        )}
+                                <Typography
+                                  sx={{
+                                    fontWeight: 400,
+                                    fontSize: '16px',
+                                    fontStyle: 'normal',
+                                    padding: '16px 0px',
+                                    lineHeight: 'normal',
+                                    fontFamily: 'DFPHeiBold-B5',
+                                    color: 'var(--Text-Primary, #212B36)',
+                                  }}
+                                >
+                                  {uploadingFile.organizationChannelCreateDate}
+                                </Typography>
+                              </TableCell>
+                              <TableCell
+                                sx={{
+                                  width: '7%',
+                                  border: 'none',
+                                  padding: '0px 0px 0px 40px',
+                                  textAlign: 'center',
+                                  height: '51px !important',
+                                }}
+                              >
+                                <IconButton
+                                  role="button"
+                                  aria-label="favorite"
+                                  sx={{ padding: '0px' }}
+                                >
+                                  {
+                                    <StarBorderRounded
+                                      sx={{ color: 'black' }}
+                                    />
+                                  }
+                                </IconButton>
+                              </TableCell>
+                              <TableCell
+                                sx={{
+                                  width: '7%',
+                                  border: 'none',
+                                  padding: '0px 18px 0px 0px',
+                                  textAlign: 'center',
+                                  height: '51px !important',
+                                }}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                }}
+                              ></TableCell>
+                            </TableRow>
+                          )}
                         {channelList?.map((channel, index) => (
                           <TableRow
                             key={index}
@@ -1110,14 +1133,11 @@ const ChannelsList = () => {
                   channelsData?.length === 0 &&
                   channelList?.length === 0 &&
                   !uploadingFile &&
-                  !(isCreating || isLoadingChannels) && (
-                    <UploadScreen
-                      handleUploadFile={(file, fileInfo) => {
-                        currentPageRef.current = 0;
-                        handleUploadFile(file, fileInfo);
-                      }}
-                    />
-                  )
+                  !(
+                    isCreating ||
+                    isLoadingChannels ||
+                    isSingleChannelLoading
+                  ) && <UploadScreen handleUploadFile={handleUploadFile} />
                 )}
               </Box>
             </>
@@ -1375,7 +1395,7 @@ const ChannelsList = () => {
               channelsData?.length === 0 &&
               currentPageRef.current === 0 &&
               !uploadingFile &&
-              !(isCreating || isLoadingChannels) ? (
+              !(isCreating || isLoadingChannels || isSingleChannelLoading) ? (
                 <Box
                   sx={{
                     top: '50%',
@@ -1418,126 +1438,133 @@ const ChannelsList = () => {
                       flexDirection: 'column',
                     }}
                   >
-                    {uploadingFile && (isCreating || isLoadingChannels) && (
-                      <Card
-                        key={0}
-                        sx={{
-                          mb: '16px',
-                          height: '146px',
-                          padding: '16px',
-                          display: 'flex',
-                          maxWidth: '384px',
-                          minWidth: '300px',
-                          alignSelf: 'stretch',
-                          flexDirection: 'column',
-                          alignItems: 'flex-start',
-                          borderRadius: '16px',
-                          background: 'var(--Primary-White, #FFF)',
-                          boxShadow:
-                            '0px 12px 24px -4px rgba(17, 68, 85, 0.12), 0px 0px 2px 0px rgba(17, 68, 85, 0.12)',
-                        }}
-                      >
-                        <CardContent
+                    {uploadingFile &&
+                      (isCreating ||
+                        isLoadingChannels ||
+                        isSingleChannelLoading) && (
+                        <Card
+                          key={0}
                           sx={{
-                            padding: 0,
-                            width: '100%',
-                            height: '100%',
+                            mb: '16px',
+                            height: '146px',
+                            padding: '16px',
                             display: 'flex',
+                            maxWidth: '384px',
+                            minWidth: '300px',
+                            alignSelf: 'stretch',
                             flexDirection: 'column',
-                            paddingBottom: '0 !important',
-                            justifyContent: 'space-between',
+                            alignItems: 'flex-start',
+                            borderRadius: '16px',
+                            background: 'var(--Primary-White, #FFF)',
+                            boxShadow:
+                              '0px 12px 24px -4px rgba(17, 68, 85, 0.12), 0px 0px 2px 0px rgba(17, 68, 85, 0.12)',
                           }}
                         >
-                          <Box
+                          <CardContent
                             sx={{
-                              mb: '8px',
+                              padding: 0,
                               width: '100%',
+                              height: '100%',
                               display: 'flex',
-                              alignItems: 'start',
-                              justifyContent: 'space-between',
-                            }}
-                          >
-                            <Typography
-                              sx={{
-                                fontWeight: 400,
-                                fontSize: '24px',
-                                fontStyle: 'normal',
-                                lineHeight: 'normal',
-                                whiteSpace: 'normal',
-                                wordBreak: 'break-word',
-                                fontFamily: 'DFPHeiBold-B5',
-                                color: 'var(--Primary-Black, #212B36)',
-                              }}
-                            >
-                              {uploadingFile?.organizationChannelTitle}
-                            </Typography>
-                          </Box>
-                          <Box
-                            sx={{
-                              display: 'flex',
-                              alignItems: 'center',
+                              flexDirection: 'column',
+                              paddingBottom: '0 !important',
                               justifyContent: 'space-between',
                             }}
                           >
                             <Box
                               sx={{
+                                mb: '8px',
+                                width: '100%',
                                 display: 'flex',
-                                alignItems: 'center',
+                                alignItems: 'start',
+                                justifyContent: 'space-between',
                               }}
                             >
-                              <IconButton
-                                role="button"
-                                aria-label="favorite"
-                                sx={{ padding: '0px', marginRight: '8px' }}
-                              >
-                                {<StarBorderRounded sx={{ color: 'black' }} />}
-                              </IconButton>
                               <Typography
                                 sx={{
                                   fontWeight: 400,
-                                  fontSize: '16px',
-                                  overflow: 'hidden',
-                                  lineHeight: '24px',
+                                  fontSize: '24px',
                                   fontStyle: 'normal',
-                                  textAlign: 'center',
-                                  textOverflow: 'ellipsis',
-                                  fontFamily: 'DFPHeiMedium-B5',
+                                  lineHeight: 'normal',
+                                  whiteSpace: 'normal',
+                                  wordBreak: 'break-word',
+                                  fontFamily: 'DFPHeiBold-B5',
                                   color: 'var(--Primary-Black, #212B36)',
                                 }}
                               >
-                                {uploadingFile?.organizationChannelCreateDate}
+                                {uploadingFile?.organizationChannelTitle}
                               </Typography>
                             </Box>
                             <Box
                               sx={{
                                 display: 'flex',
                                 alignItems: 'center',
+                                justifyContent: 'space-between',
                               }}
                             >
-                              {(isCreating || isLoadingChannels) && (
-                                <CustomLoader />
-                              )}
-                              <span
-                                style={{
-                                  fontFamily: 'DFPHeiBold-B5',
-                                  fontWeight: 400,
-                                  fontSize: '16px',
-                                  lineHeight: '24px',
-                                  letterSpacing: '0%',
-                                  overflow: 'hidden',
-                                  fontStyle: 'normal',
-                                  textOverflow: 'ellipsis',
-                                  marginLeft: '12px',
-                                  color: 'var(--Primary-Black, #212B36)',
+                              <Box
+                                sx={{
+                                  display: 'flex',
+                                  alignItems: 'center',
                                 }}
                               >
-                                {'上傳中...'}
-                              </span>
+                                <IconButton
+                                  role="button"
+                                  aria-label="favorite"
+                                  sx={{ padding: '0px', marginRight: '8px' }}
+                                >
+                                  {
+                                    <StarBorderRounded
+                                      sx={{ color: 'black' }}
+                                    />
+                                  }
+                                </IconButton>
+                                <Typography
+                                  sx={{
+                                    fontWeight: 400,
+                                    fontSize: '16px',
+                                    overflow: 'hidden',
+                                    lineHeight: '24px',
+                                    fontStyle: 'normal',
+                                    textAlign: 'center',
+                                    textOverflow: 'ellipsis',
+                                    fontFamily: 'DFPHeiMedium-B5',
+                                    color: 'var(--Primary-Black, #212B36)',
+                                  }}
+                                >
+                                  {uploadingFile?.organizationChannelCreateDate}
+                                </Typography>
+                              </Box>
+                              <Box
+                                sx={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                }}
+                              >
+                                {(isCreating || isLoadingChannels) && (
+                                  <CustomLoader />
+                                )}
+                                <span
+                                  style={{
+                                    fontFamily: 'DFPHeiBold-B5',
+                                    fontWeight: 400,
+                                    fontSize: '16px',
+                                    lineHeight: '24px',
+                                    letterSpacing: '0%',
+                                    overflow: 'hidden',
+                                    fontStyle: 'normal',
+                                    textOverflow: 'ellipsis',
+                                    marginLeft: '12px',
+                                    color: 'var(--Primary-Black, #212B36)',
+                                  }}
+                                >
+                                  {'上傳中...'}
+                                </span>
+                              </Box>
                             </Box>
-                          </Box>
-                        </CardContent>
-                      </Card>
-                    )}
+                          </CardContent>
+                        </Card>
+                      )}
                     {channelList?.map((channel, index) => (
                       <Card
                         key={index}
@@ -1743,14 +1770,11 @@ const ChannelsList = () => {
                 channelsData?.length === 0 &&
                 channelList?.length === 0 &&
                 !uploadingFile &&
-                !(isCreating || isLoadingChannels) && (
-                  <UploadScreen
-                    handleUploadFile={(file, fileInfo) => {
-                      currentPageRef.current = 0;
-                      handleUploadFile(file, fileInfo);
-                    }}
-                  />
-                )
+                !(
+                  isCreating ||
+                  isLoadingChannels ||
+                  isSingleChannelLoading
+                ) && <UploadScreen handleUploadFile={handleUploadFile} />
               )}
             </Box>
           </ToolbarDrawer>
