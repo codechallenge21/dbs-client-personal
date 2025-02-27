@@ -1,51 +1,50 @@
 'use client';
-import React, { useCallback, useEffect, useState } from 'react';
-import {
-  Tab,
-  Box,
-  Tabs,
-  Card,
-  Paper,
-  Grid2,
-  styled,
-  Button,
-  useTheme,
-  Typography,
-  IconButton,
-  CardContent,
-  useMediaQuery,
-  TextareaAutosize,
-  Tooltip,
-  // CircularProgress,
-} from '@mui/material';
-import {
-  Done as DoneIcon,
-  MicRounded,
-  SyncRounded,
-  ReplayRounded,
-  PushPinRounded,
-  StarBorderRounded,
-  ContentCopyRounded,
-  PermIdentityRounded,
-  ArrowBackIosRounded,
-  ArrowForwardIosRounded,
-  ThumbDownOffAltRounded,
-  SettingsInputComponentRounded,
-  ArrowBackIosNewRounded,
-  HistoryRounded,
-} from '@mui/icons-material';
-import { OrganizationChannel } from '@/interfaces/entities';
-import { useAudioChannel } from '@/utils/hooks/useAudioChannel';
-import { useRouter, useSearchParams } from 'next/navigation';
+import DataSourceDialog from '@/components/chat-page/components/chatDataStore';
+import DeleteDialog from '@/components/dialogs/DeleteDialog';
+import EditDialog from '@/components/dialogs/EditDialog';
+import EditableItem from '@/components/editable-item/EditableItem';
 import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
 import UploadDialog from '@/components/uploadDialog/page';
-import DataSourceDialog from '@/components/chat-page/components/chatDataStore';
-import ReactMarkdown from 'react-markdown';
-import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
+import { OrganizationChannel } from '@/interfaces/entities';
 import apis from '@/utils/hooks/apis/apis';
-import EditableItem from '@/components/editable-item/EditableItem';
-import EditDialog from '@/components/dialogs/EditDialog';
-import DeleteDialog from '@/components/dialogs/DeleteDialog';
+import { useAudioChannel } from '@/utils/hooks/useAudioChannel';
+import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
+import {
+  ArrowBackIosNewRounded,
+  ArrowBackIosRounded,
+  ArrowForwardIosRounded,
+  ContentCopyRounded,
+  Done as DoneIcon,
+  HistoryRounded,
+  MicRounded,
+  PermIdentityRounded,
+  PushPinRounded,
+  ReplayRounded,
+  SettingsInputComponentRounded,
+  StarBorderRounded,
+  SyncRounded,
+  ThumbDownOffAltRounded,
+} from '@mui/icons-material';
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Grid2,
+  IconButton,
+  Paper,
+  styled,
+  Tab,
+  Tabs,
+  TextareaAutosize,
+  Tooltip,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
+import { useRouter, useSearchParams } from 'next/navigation';
+import React, { useCallback, useEffect, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 
 function TabPanel(props: {
   readonly value: number;
@@ -822,7 +821,6 @@ const ChannelSummary = () => {
                                   }
                                 }}
                                 sx={{
-                                  backgroundColor: '#F0F0F0',
                                   borderRadius: '50%',
                                   padding: 1,
                                   transition: 'all 0.3s ease',
