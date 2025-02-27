@@ -15,6 +15,7 @@ import ChannelContentContext from '@/context/ChannelContentContext';
 import DropdownMenu from './DropdownMenu';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import apis from '@/utils/hooks/apis/apis';
+import { SnackbarContext } from '@/context/SnackbarContext';
 
 interface SpeechRecognition extends EventTarget {
   continuous: boolean;
@@ -80,11 +81,9 @@ interface ChatWithFilesPayload {
 }
 
 interface ChatWithFilesResponse {
-  data: {
-    response: string;
-    organizationChannelTitle: string;
-    organizationChannelId: string;
-  };
+  response: string;
+  organizationChannelTitle: string;
+  organizationChannelId: string;
 }
 
 const TextInput: React.FC<TextInputProps> = ({
@@ -100,9 +99,20 @@ const TextInput: React.FC<TextInputProps> = ({
   const [files, setFiles] = useState<{ file: File; preview: string | null }[]>(
     []
   );
+  const { showSnackbar } = useContext(SnackbarContext);
 
   const MAX_FILES = 3;
   const MAX_FILE_SIZE = 5 * 1024 * 1024;
+  const allowedExtensions = [
+    'mp3',
+    'mp4',
+    'mpeg',
+    'mpga',
+    'm4a',
+    'wav',
+    'aac',
+    'webm',
+  ];
 
   const { excute: chatWithFiles } = useAxiosApi<
     ChatWithFilesResponse,
@@ -113,21 +123,24 @@ const TextInput: React.FC<TextInputProps> = ({
     event.preventDefault();
     const droppedFiles = Array.from(event.dataTransfer.files);
     if (files.length + droppedFiles.length > MAX_FILES) {
-      setError(`You can only upload up to ${MAX_FILES} files.`);
+      showSnackbar(`You can only upload up to ${MAX_FILES} files.`, 'error');
       return;
     }
 
     for (const file of droppedFiles) {
-      if (file.size > MAX_FILE_SIZE) {
-        setError(`File "${file.name}" exceeds the 5MB limit.`);
+      const extension = file.name.split('.').pop()?.toLowerCase();
+      if (!allowedExtensions.includes(extension || '')) {
+        showSnackbar(`Invalid file format: ${file.name}`, 'error');
         return;
       }
-      setError('');
+      if (file.size > MAX_FILE_SIZE) {
+        showSnackbar(`File "${file.name}" exceeds the 5MB limit.`, 'error');
+        return;
+      }
     }
 
     const mappedFiles = droppedFiles.map((file) => ({ file, preview: null }));
     setFiles((prev) => [...prev, ...mappedFiles]);
-    setError('');
   };
 
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
@@ -138,23 +151,26 @@ const TextInput: React.FC<TextInputProps> = ({
     if (event.target.files) {
       const selectedFiles = Array.from(event.target.files);
       if (files.length + selectedFiles.length > MAX_FILES) {
-        setError(`You can only upload up to ${MAX_FILES} files.`);
+        showSnackbar(`You can only upload up to ${MAX_FILES} files.`, 'error');
         return;
       }
       // Validate each file's size
       for (const file of selectedFiles) {
-        if (file.size > MAX_FILE_SIZE) {
-          setError(`File "${file.name}" exceeds the 5MB limit.`);
+        const extension = file.name.split('.').pop()?.toLowerCase();
+        if (!allowedExtensions.includes(extension || '')) {
+          showSnackbar(`Invalid file format: ${file.name}`, 'error');
           return;
         }
-        setError('');
+        if (file.size > MAX_FILE_SIZE) {
+          showSnackbar(`File "${file.name}" exceeds the 5MB limit.`, 'error');
+          return;
+        }
       }
       const newFiles = selectedFiles.map((file) => {
         const icon = getFileIcon(file);
         return { file, preview: icon };
       });
       setFiles((prev) => [...prev, ...newFiles]);
-      setError('');
     }
   };
 

@@ -104,18 +104,19 @@ const apis = {
     );
   },
   chatWithFiles: (payload?: ChatWithFilesPayload) => {
-    const organizationId = payload?.organizationId;
+    if (!payload) {
+      return Promise.reject(new Error('Payload is required'));
+    }
+    const organizationId = payload.organizationId;
 
     const formData = new FormData();
-    // Append the chat request as a JSON string
-    formData.append('chatRequest', JSON.stringify(payload?.chatRequest));
-    // Append each file. If multiple files are allowed, this will add them all.
-    payload?.files.forEach((file) => {
-      const blob = new Blob([file], { type: 'text/plain' });
-      console.log('file', file);
+    formData.append('chatRequest', JSON.stringify(payload.chatRequest));
+    if (payload.files.length) {
+      for (const file of payload.files) {
+        formData.append('files', file);
+      }
+    }
 
-      formData.append('files', blob, file.name);
-    });
     return fetcher.post(
       `/organizations/${organizationId}/channels/chat-with-files`,
       formData

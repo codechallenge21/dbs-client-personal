@@ -44,9 +44,9 @@ export interface ChatWithFilesPayload {
   chatRequest: {
     query: string;
     advisorType: string;
-    organizationId: string;
   };
   files: File[];
+  organizationId: string;
 }
 
 export interface DeleteChannelApiPayload {
