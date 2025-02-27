@@ -20,6 +20,7 @@ import DataSourceDialog from '@/components/chat-page/components/chatDataStore';
 import { useChatChannels } from '@/utils/hooks/useChatChannels';
 import LoginDialog from '@/components/dialogs/LoginDialog';
 import SignupDialog from '@/components/dialogs/SignupDialog';
+import { useLoginContext } from '@/context/LoginContext';
 
 export default function ChatHomePage() {
   return (
@@ -34,6 +35,8 @@ function ClientContent() {
   const router = useRouter();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const { isLoginOpen, setIsLoginOpen, isSignupOpen, setIsSignupOpen } =
+    useLoginContext();
 
   const organizationChannelId = searchParams.get('organizationChannelId') ?? '';
   const {
@@ -50,8 +53,6 @@ function ClientContent() {
   const [openDataSource, setOpenDataSource] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenDrawer, setIsOpenDrawer] = useState(!isMobile);
-  const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const [isSignupOpen, setIsSignupOpen] = useState(false);
   const { data: chatsData } = useChatChannels({
     organizationId: 'yMJHyi6R1CB9whpdNvtA',
   });
@@ -137,7 +138,7 @@ function ClientContent() {
           setIsOpenDrawer={setIsOpenDrawer}
           setOpenDataSource={setOpenDataSource}
         />
-        <MainContent chatsData={chatsData} setIsLoginOpen={setIsLoginOpen} />
+        <MainContent chatsData={chatsData} />
         <SwitchDialog
           open={isOpen}
           onClose={handleClose}
