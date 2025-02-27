@@ -218,9 +218,11 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                     >
                       {copiedMessageId ===
                       message.organizationChannelMessageId ? (
-                        <DoneIcon />
+                        <DoneIcon sx={{ color: "#212B36" }} />
                       ) : (
-                        <ContentCopyRounded sx={{ color: "#212B36" }} />
+                        <ContentCopyRounded
+                          sx={{ color: "#212B36", fontSize: 20 }}
+                        />
                       )}
                     </IconButton>
                   </Tooltip>
@@ -245,13 +247,16 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                         sx={{
                           color: "black",
                           transform: "scale(-1, -1)",
+                          fontSize: 20,
                         }}
                       />
                     </IconButton>
                   </Tooltip>
                   <Tooltip title="回應不佳" placement="top" arrow>
                     <IconButton aria-label="Dislike">
-                      <ThumbDownOffAltRounded sx={{ color: "black" }} />
+                      <ThumbDownOffAltRounded
+                        sx={{ color: "black", fontSize: 20 }}
+                      />
                     </IconButton>
                   </Tooltip>
                 </Box>
@@ -358,7 +363,9 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                     message.organizationChannelMessageContent ? (
                       <DoneIcon sx={{ color: "#212B36" }} />
                     ) : (
-                      <ContentCopyRounded sx={{ color: "#212B36" }} />
+                      <ContentCopyRounded
+                        sx={{ color: "#212B36", fontSize: 20 }}
+                      />
                     )}
                   </IconButton>
                 </Tooltip>
@@ -432,15 +439,18 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                       <IconButton aria-label="Like">
                         <ThumbDownOffAltRounded
                           sx={{
-                            color: "#212B36",
+                            color: "black",
                             transform: "scale(-1, -1)",
+                            fontSize: 20,
                           }}
                         />
                       </IconButton>
                     </Tooltip>
                     <Tooltip title="回應不佳" placement="top" arrow>
                       <IconButton aria-label="Dislike">
-                        <ThumbDownOffAltRounded sx={{ color: "#212B36" }} />
+                        <ThumbDownOffAltRounded
+                          sx={{ color: "black", fontSize: 20 }}
+                        />
                       </IconButton>
                     </Tooltip>
                   </Box>
