@@ -1,57 +1,51 @@
 'use client';
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  useRef,
-  useContext,
-} from 'react';
+import DeleteDialog from '@/components/dialogs/DeleteDialog';
+import EditDialog from '@/components/dialogs/EditDialog';
+import EditableItem from '@/components/editable-item/EditableItem';
+import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
+import UploadDialog from '@/components/uploadDialog/page';
+import { useLoginContext } from '@/context/LoginContext';
+import { SnackbarContext } from '@/context/SnackbarContext';
+import { OrganizationChannel } from '@/interfaces/entities';
+import apis from '@/utils/hooks/apis/apis';
+import { useAudioChannels } from '@/utils/hooks/useAudioChannels';
+import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
+import {
+  ArrowDropDown,
+  CheckCircleRounded,
+  MenuRounded,
+  MicRounded,
+  PendingActionsRounded,
+  RotateRightRounded,
+  SearchRounded,
+  StarBorderRounded,
+  StarRounded,
+  UploadRounded,
+} from '@mui/icons-material';
 import {
   Box,
-  Tab,
-  Tabs,
-  Table,
   Button,
-  useTheme,
-  TableRow,
-  TableBody,
-  TableCell,
-  TableHead,
-  Typography,
-  IconButton,
-  useMediaQuery,
-  TableContainer,
   Card,
   CardContent,
   CircularProgress,
+  IconButton,
+  Tab,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Tabs,
+  Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
-import {
-  MicRounded,
-  StarRounded,
-  SearchRounded,
-  UploadRounded,
-  MenuRounded,
-  CheckCircleRounded,
-  RotateRightRounded,
-  PendingActionsRounded,
-  StarBorderRounded,
-} from '@mui/icons-material';
 import { useRouter } from 'next/navigation';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { OrganizationChannel } from '@/interfaces/entities';
-import apis from '@/utils/hooks/apis/apis';
-import EditDialog from '@/components/dialogs/EditDialog';
-import UploadDialog from '@/components/uploadDialog/page';
-import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
-import DeleteDialog from '@/components/dialogs/DeleteDialog';
-import { useAudioChannels } from '@/utils/hooks/useAudioChannels';
-import EditableItem from '@/components/editable-item/EditableItem';
-import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import UploadScreen from './UploadScreen';
 import LoginDialog from '@/components/dialogs/LoginDialog';
 import SignupDialog from '@/components/dialogs/SignupDialog';
-import { useLoginContext } from '@/context/LoginContext';
-import { SnackbarContext } from '@/context/SnackbarContext';
 
 const ChannelsList = () => {
   const theme = useTheme();
@@ -349,7 +343,7 @@ const ChannelsList = () => {
                     fontWeight: 700,
                     fontStyle: 'normal',
                     lineHeight: 'normal',
-                    fontFamily: 'Open Sans',
+                    fontFamily: 'DFPHeiBold-B5',
                     color: 'var(--Text-Secondary, #637381)',
                     '&.Mui-selected': {
                       fontWeight: 400,
@@ -375,7 +369,7 @@ const ChannelsList = () => {
                     fontWeight: 700,
                     fontStyle: 'normal',
                     lineHeight: 'normal',
-                    fontFamily: 'Open Sans',
+                    fontFamily: 'DFPHeiBold-B5',
                     color: 'var(--Text-Secondary, #637381)',
                     '&.Mui-selected': {
                       fontWeight: 400,
@@ -401,7 +395,7 @@ const ChannelsList = () => {
                     fontWeight: 700,
                     fontStyle: 'normal',
                     lineHeight: 'normal',
-                    fontFamily: 'Open Sans',
+                    fontFamily: 'DFPHeiBold-B5',
                     color: 'var(--Text-Secondary, #637381)',
                     '&.Mui-selected': {
                       fontWeight: 400,
@@ -427,7 +421,7 @@ const ChannelsList = () => {
                     fontWeight: 700,
                     fontStyle: 'normal',
                     lineHeight: 'normal',
-                    fontFamily: 'Open Sans',
+                    fontFamily: 'DFPHeiBold-B5',
                     color: 'var(--Text-Secondary, #637381)',
                     '&.Mui-selected': {
                       fontWeight: 400,
@@ -985,7 +979,7 @@ const ChannelsList = () => {
                   }}
                 >
                   工具箱
-                  <ArrowDropDownIcon
+                  <ArrowDropDown
                     sx={{ marginLeft: '5px', marginBottom: '3px' }}
                   />
                 </Typography>
@@ -1370,11 +1364,11 @@ const ChannelsList = () => {
                                   ?.organizationChannelTranscriptStatus ===
                                 'PENDING' ? (
                                 <PendingActionsRounded
-                                  sx={{ color: 'rgba(33, 43, 54, 1)' }}
+                                  sx={{ color: 'rgba(0, 102, 204, 1)' }}
                                 />
                               ) : (
                                 <PendingActionsRounded
-                                  sx={{ color: 'rgba(33, 43, 54, 1)' }}
+                                  sx={{ color: 'rgba(0, 102, 204, 1)' }}
                                 />
                               )}
                               <span
