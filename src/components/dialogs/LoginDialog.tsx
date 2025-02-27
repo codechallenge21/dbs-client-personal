@@ -21,7 +21,12 @@ import Image from 'next/image';
 import { useContext, useState } from 'react';
 import GoogleIcon from '../../assets/google.png';
 
-const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
+const LoginDialog = ({
+  open,
+  onClose,
+  setIsSignupOpen,
+  onOpenForgetPassword,
+}) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -74,6 +79,10 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
     } catch (error) {
       showSnackbar('無法取得 Google 登入網址。請再試一次。', 'error');
     }
+  };
+
+  const handleForgetPasswordClick = () => {
+    onOpenForgetPassword();
   };
 
   return (
@@ -336,6 +345,7 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
             }}
           />
           <Typography
+            onClick={handleForgetPasswordClick}
             sx={{
               color: 'var(--Primary-DBS-Red, #C00)',
               fontSize: '14px',

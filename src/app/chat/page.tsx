@@ -21,6 +21,7 @@ import { useChatChannels } from '@/utils/hooks/useChatChannels';
 import LoginDialog from '@/components/dialogs/LoginDialog';
 import SignupDialog from '@/components/dialogs/SignupDialog';
 import { useLoginContext } from '@/context/LoginContext';
+import ForgetPasswordDialog from '@/components/dialogs/ForgetPasswordDialog';
 
 export default function ChatHomePage() {
   return (
@@ -37,6 +38,7 @@ function ClientContent() {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const { isLoginOpen, setIsLoginOpen, isSignupOpen, setIsSignupOpen } =
     useLoginContext();
+  const [isForgetPasswordOpen, setIsForgetPasswordOpen] = useState(false);
 
   const organizationChannelId = searchParams.get('organizationChannelId') ?? '';
   const {
@@ -80,6 +82,11 @@ function ClientContent() {
     setIsLoginOpen(false);
     router.replace('/');
   };
+
+  const handleForgetPasswordOpen = useCallback(() => {
+    setIsLoginOpen(false);
+    setIsForgetPasswordOpen(true);
+  }, [setIsLoginOpen]);
 
   useEffect(() => {
     if (selectedChannel && organizationChannelId) {
@@ -153,11 +160,16 @@ function ClientContent() {
         open={isLoginOpen}
         setIsSignupOpen={setIsSignupOpen}
         onClose={handleLoginDialogClose}
+        onOpenForgetPassword={handleForgetPasswordOpen}
       />
       <SignupDialog
         open={isSignupOpen}
         setIsLoginOpen={setIsLoginOpen}
         onClose={() => setIsSignupOpen(false)}
+      />
+      <ForgetPasswordDialog
+        open={isForgetPasswordOpen}
+        onClose={() => setIsForgetPasswordOpen(false)}
       />
     </ToolbarDrawer>
   );
