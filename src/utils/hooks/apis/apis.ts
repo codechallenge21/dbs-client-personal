@@ -5,6 +5,7 @@ import {
 } from '@/interfaces/entities';
 import {
   DeleteChannelApiPayload,
+  ForgotPasswordApiPayload,
   GetChannelDetailApiPayload,
   GetChannelsApiPayload,
   LogApiPayload,
@@ -158,6 +159,25 @@ const apis = {
     return fetcher.post(
       `/organizations/yMJHyi6R1CB9whpdNvtA/users/google/login`,
       payload
+    );
+  },
+  forgotPassword: (payload?: ForgotPasswordApiPayload) => {
+    const { organizationUserEmail } = payload || {};
+
+    return fetcher.post(
+      `/organizations/4aba77788ae94eca8d6ff330506af944/users/forgot-password`,
+      { organizationUserEmail }
+    );
+  },
+  resetPassword: (payload?: {
+    emailTokenId: string;
+    organizationUserPassword: string;
+  }) => {
+    const { emailTokenId, organizationUserPassword } = payload || {};
+
+    return fetcher.post(
+      `/organizations/4aba77788ae94eca8d6ff330506af944/users/reset-password`,
+      { emailTokenId, organizationUserPassword }
     );
   },
 };

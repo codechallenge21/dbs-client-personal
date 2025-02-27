@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import { CloseRounded, ArrowBackIos } from '@mui/icons-material';
 import { SnackbarContext } from '@/context/SnackbarContext';
+import apis from '@/utils/hooks/apis/apis';
 
 interface ForgetPasswordDialogProps {
   open: boolean;
@@ -39,12 +40,16 @@ const ForgetPasswordDialog: React.FC<ForgetPasswordDialogProps> = ({
     }
     try {
       setIsSubmitting(true);
-      // Call your forget password API here
-      // Example: await forgetPasswordAPI({ email });
+
+      await apis.forgotPassword({ organizationUserEmail: email });
       showSnackbar('重設密碼郵件已發送，請檢查您的信箱。', 'success');
       onClose();
-    } catch (error) {
-      showSnackbar('發送失敗，請稍後再試。', 'error');
+    } catch (error: any) {
+      if (error?.response?.status === 404) {
+        showSnackbar('查無此電子郵件，請重新輸入。', 'error');
+      } else {
+        showSnackbar('發送失敗，請稍後再試。', 'error');
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -115,13 +120,13 @@ const ForgetPasswordDialog: React.FC<ForgetPasswordDialogProps> = ({
       <Typography
         sx={{
           fontWeight: 400,
-          fontSize: '14px',
+          fontSize: isMobile ? '12px' : '14px',
           color: '#212B36',
           fontFamily: 'DFPHeiMedium-B5',
           fontStyle: 'normal',
           lineHeight: '22px',
           textAlign: 'center',
-          padding: '32px 0',
+          padding: isMobile ? '16px 0' : '32px 0',
           width: '100%',
           display: 'block',
           '& span': {
@@ -138,7 +143,7 @@ const ForgetPasswordDialog: React.FC<ForgetPasswordDialogProps> = ({
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          gap: '16px',
+          gap: isMobile ? '8px' : '16px',
         }}
       >
         <TextField
@@ -147,8 +152,8 @@ const ForgetPasswordDialog: React.FC<ForgetPasswordDialogProps> = ({
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           sx={{
-            width: '341px',
-            minHeight: '54px',
+            width: isMobile ? '250px' : '341px',
+            minHeight: isMobile ? '24px' : '54px',
             borderRadius: '8px',
             border: '1px solid rgba(145, 158, 171, 0.20)',
             justifyContent: 'center',
@@ -157,6 +162,19 @@ const ForgetPasswordDialog: React.FC<ForgetPasswordDialogProps> = ({
             },
             '& .MuiInputBase-input::placeholder': {
               fontSize: '14px',
+              color: '#919EAB',
+              fontFamily: 'DFPHeiBold-B5',
+              fontStyle: 'normal',
+              fontWeight: 400,
+              lineHeight: '22px',
+            },
+
+            '&.Mui-focused fieldset': {
+              borderColor: '#d32f2f !important',
+              borderWidth: '1px',
+            },
+            '& .MuiOutlinedInput-root:hover fieldset': {
+              borderColor: 'rgba(145, 158, 171, 0.32)',
             },
           }}
         />
@@ -166,8 +184,8 @@ const ForgetPasswordDialog: React.FC<ForgetPasswordDialogProps> = ({
           disabled={isSubmitting}
           fullWidth
           sx={{
-            width: '341px',
-            minHeight: '46px',
+            width: isMobile ? ' 250px' : '341px',
+            minHeight: isMobile ? '35px' : '46px',
             borderRadius: '8px',
             background: '#5C443A',
             '&:hover': {
