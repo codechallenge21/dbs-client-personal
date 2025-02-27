@@ -41,7 +41,9 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { OrganizationChannel } from '@/interfaces/entities';
 import apis from '@/utils/hooks/apis/apis';
 import EditDialog from '@/components/dialogs/EditDialog';
-import UploadDialog from '@/components/uploadDialog/uploadDialog';
+import UploadDialog, {
+  FILE_CONFIG,
+} from '@/components/uploadDialog/uploadDialog';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import DeleteDialog from '@/components/dialogs/DeleteDialog';
 import { useAudioChannels } from '@/utils/hooks/useAudioChannels';
@@ -55,6 +57,11 @@ import { SnackbarContext } from '@/context/SnackbarContext';
 import CustomLoader from '@/components/loader/loader';
 import apiExports from '@/utils/hooks/apis/apis';
 
+interface fileProps {
+  organizationChannelTitle: string;
+  organizationChannelCreateDate: string;
+}
+
 const ChannelsList = () => {
   const theme = useTheme();
   const router = useRouter();
@@ -66,7 +73,7 @@ const ChannelsList = () => {
     useLoginContext();
 
   const [tabValue, setTabValue] = useState(0);
-  const [isClient, setIsClient] = useState(false);
+  const [loadingElementVisible, setLoadingElementVisible] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [toolsAnchor, setToolsAnchor] = useState<null | HTMLElement>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState<boolean>(false);
@@ -78,17 +85,13 @@ const ChannelsList = () => {
   const [favoriteChannels, setFavoriteChannels] = useState<{
     [key: number]: boolean;
   }>({});
-  const [uploadingFile, setUploadingFile] = useState<{
-    organizationChannelTitle: string;
-    organizationChannelCreateDate: string;
-  }>();
-  const [page, setPage] = useState(0);
+  const [uploadingFile, setUploadingFile] = useState<fileProps>();
   const [hasMore, setHasMore] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
   const [channelList, setChannelList] = useState<OrganizationChannel[]>([]);
   const itemsPerPage = 10;
   const { showSnackbar } = useContext(SnackbarContext);
-
+  const currentPageRef = useRef(0);
   const {
     data: channelsData = [],
     mutate: mutateAudioChannels,
@@ -98,10 +101,12 @@ const ChannelsList = () => {
       organizationId: 'yMJHyi6R1CB9whpdNvtA',
     },
     {
-      startIndex: page,
+      startIndex: currentPageRef.current,
       size: itemsPerPage,
     },
     {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
       // Custom SWR configuration to handle errors
       onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
         if (error?.status === 401) {
@@ -117,7 +122,7 @@ const ChannelsList = () => {
 
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const observer = useRef<IntersectionObserver | null>(null);
-  const loadingRef = useRef(null);
+  const loadingRef = useRef<HTMLElement | null>(null);
 
   const { excute: deleteChannel } = useAxiosApi(apis.deleteChannel);
   const { excute: updateChannelDetail } = useAxiosApi(apis.updateChannelDetail);
@@ -149,12 +154,19 @@ const ChannelsList = () => {
   const handleDeleteChannelConfirm = useCallback(
     async (event: React.MouseEvent) => {
       event.stopPropagation();
+      const channelToDeleteId =
+        channelList?.[activeIndex!]?.organizationChannelId || '';
+
       deleteChannel({
         organizationId: 'yMJHyi6R1CB9whpdNvtA',
-        organizationChannelId:
-          channelsData?.[activeIndex!]?.organizationChannelId || '',
+        organizationChannelId: channelToDeleteId,
       })
         .then(() => {
+          setChannelList((prevChannelList) =>
+            prevChannelList.filter(
+              (channel) => channel.organizationChannelId !== channelToDeleteId
+            )
+          );
           setIsDeleteDialogOpen(false);
           handleCloseToolsMenu();
           if (mutateAudioChannels) {
@@ -165,7 +177,7 @@ const ChannelsList = () => {
     },
     [
       activeIndex,
-      channelsData,
+      channelList,
       deleteChannel,
       mutateAudioChannels,
       handleCloseToolsMenu,
@@ -177,13 +189,20 @@ const ChannelsList = () => {
       await updateChannelDetail({
         organizationId: 'yMJHyi6R1CB9whpdNvtA',
         organizationChannelId:
-          channelsData?.[activeIndex!]?.organizationChannelId || '',
+          channelList?.[activeIndex!]?.organizationChannelId || '',
         organizationChannelTitle: newTitle,
       });
       setIsEditDialogOpen(false);
+      setChannelList((prevChannelList) =>
+        prevChannelList.map((channel, index) =>
+          index === activeIndex
+            ? { ...channel, organizationChannelTitle: newTitle }
+            : channel
+        )
+      );
       if (mutateAudioChannels) mutateAudioChannels();
     },
-    [updateChannelDetail, channelsData, activeIndex, mutateAudioChannels]
+    [updateChannelDetail, channelList, activeIndex, mutateAudioChannels]
   );
 
   const handleOpenEditChannelDialog = useCallback((event: React.MouseEvent) => {
@@ -237,26 +256,46 @@ const ChannelsList = () => {
     }));
   };
 
+  const handleUploadFile = async (file: File, fileInfo: fileProps) => {
+    try {
+      setUploadingFile(fileInfo);
+      await createChannelByAudio({
+        file,
+      });
+      await mutateAudioChannels();
+      setUploadingFile(undefined);
+    } catch (err) {
+      showSnackbar(FILE_CONFIG.errorMessages.uploadFailed, 'error');
+      console.error(err);
+    }
+  };
+
   useEffect(() => {
     setIsOpenDrawer(!isMobile);
   }, [isMobile]);
 
   // Initialize channelList with channelsData
   useEffect(() => {
-    if (channelsData && channelsData.length > 0 && page === 0) {
+    if (
+      channelsData &&
+      channelsData.length > 0 &&
+      currentPageRef.current === 0
+    ) {
       setChannelList(channelsData);
+      if (channelsData.length < itemsPerPage) {
+        setHasMore(false);
+      }
     }
-  }, [channelsData, page]);
+  }, [channelsData, currentPageRef.current]);
 
   // Fetch more data when scrolled to the bottom
   const fetchMoreData = useCallback(async () => {
     if (isFetching || !hasMore) return;
-
     setIsFetching(true);
 
     try {
-      const nextPage = page + itemsPerPage;
-      setPage(nextPage);
+      const nextPage = currentPageRef.current + itemsPerPage;
+      currentPageRef.current = nextPage;
 
       // Use the updated page value in the API call
       const response = await mutateAudioChannels();
@@ -267,7 +306,7 @@ const ChannelsList = () => {
         setChannelList((prevChannels) => [...prevChannels, ...newChannels]);
         setHasMore(newChannels.length >= itemsPerPage);
       } else {
-        setHasMore(false);
+        setHasMore(true);
       }
     } catch (error) {
       console.error('Error loading channels:', error);
@@ -275,19 +314,24 @@ const ChannelsList = () => {
     } finally {
       setIsFetching(false);
     }
-  }, [isFetching, hasMore, page, mutateAudioChannels]);
+  }, [isFetching, hasMore, currentPageRef.current, mutateAudioChannels]);
 
   // Setup Intersection Observer for infinite scrolling
   useEffect(() => {
-    if (!loadingRef.current) return;
+    if (!loadingElementVisible || !hasMore) return;
 
     observer.current = new IntersectionObserver(
       (entries) => {
-        if (entries[0]?.isIntersecting && hasMore && !isFetching) {
+        if (
+          entries[0]?.isIntersecting &&
+          hasMore &&
+          !isFetching &&
+          !isLoadingChannels
+        ) {
           fetchMoreData();
         }
       },
-      { threshold: 0.2, root: scrollContainerRef.current }
+      { threshold: 0.2 }
     );
 
     if (loadingRef.current) {
@@ -299,15 +343,7 @@ const ChannelsList = () => {
         observer.current.unobserve(loadingRef.current);
       }
     };
-  }, [fetchMoreData, hasMore, isFetching, channelList.length]);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  if (!isClient) {
-    return null;
-  }
+  }, [loadingElementVisible]);
 
   return (
     <>
@@ -563,7 +599,9 @@ const ChannelsList = () => {
                 </Box>
                 {isLoadingChannels &&
                 channelsData?.length === 0 &&
-                page === 0 ? (
+                currentPageRef.current === 0 &&
+                !uploadingFile &&
+                !(isCreating || isLoadingChannels) ? (
                   <Box
                     sx={{
                       top: '50%',
@@ -575,11 +613,11 @@ const ChannelsList = () => {
                   >
                     <CircularProgress color="primary" />
                   </Box>
-                ) : channelList?.length > 0 ? (
+                ) : channelList?.length > 0 || uploadingFile ? (
                   <TableContainer
                     ref={scrollContainerRef}
                     sx={{
-                      maxHeight: 'calc(100vh - 180px)',
+                      maxHeight: 'calc(100vh - 380px)',
                       overflow: 'auto',
                       '&::-webkit-scrollbar': {
                         width: '8px',
@@ -1047,31 +1085,21 @@ const ChannelsList = () => {
                           </TableRow>
                         ))}
                         {hasMore && (
-                          <TableRow ref={loadingRef}>
+                          <TableRow
+                            ref={(el) => {
+                              loadingRef.current = el;
+                              // Update state when the ref is attached to a DOM element
+                              setLoadingElementVisible(!!el);
+                            }}
+                          >
                             <TableCell
                               colSpan={5}
                               align="center"
                               sx={{ border: 'none', p: 2 }}
                             >
-                              <CircularProgress size={24} color="primary" />
-                            </TableCell>
-                          </TableRow>
-                        )}
-
-                        {/* End message when no more data */}
-                        {!hasMore && channelList.length > 0 && (
-                          <TableRow>
-                            <TableCell
-                              colSpan={5}
-                              align="center"
-                              sx={{ border: 'none' }}
-                            >
-                              <Typography
-                                variant="body2"
-                                sx={{ p: 2, color: 'gray' }}
-                              >
-                                No more data available.
-                              </Typography>
+                              {!isCreating && (
+                                <CircularProgress size={24} color="primary" />
+                              )}
                             </TableCell>
                           </TableRow>
                         )}
@@ -1079,7 +1107,17 @@ const ChannelsList = () => {
                     </Table>
                   </TableContainer>
                 ) : (
-                  channelsData?.length === 0 && <UploadScreen />
+                  channelsData?.length === 0 &&
+                  channelList?.length === 0 &&
+                  !uploadingFile &&
+                  !(isCreating || isLoadingChannels) && (
+                    <UploadScreen
+                      handleUploadFile={(file, fileInfo) => {
+                        currentPageRef.current = 0;
+                        handleUploadFile(file, fileInfo);
+                      }}
+                    />
+                  )
                 )}
               </Box>
             </>
@@ -1333,7 +1371,11 @@ const ChannelsList = () => {
                   </Typography>
                 </Button>
               </Box>
-              {isLoadingChannels && channelsData?.length === 0 && page === 0 ? (
+              {isLoadingChannels &&
+              channelsData?.length === 0 &&
+              currentPageRef.current === 0 &&
+              !uploadingFile &&
+              !(isCreating || isLoadingChannels) ? (
                 <Box
                   sx={{
                     top: '50%',
@@ -1345,7 +1387,7 @@ const ChannelsList = () => {
                 >
                   <CircularProgress color="primary" />
                 </Box>
-              ) : channelList?.length > 0 ? (
+              ) : channelList?.length > 0 || uploadingFile ? (
                 <Box
                   ref={scrollContainerRef}
                   sx={{
@@ -1680,34 +1722,35 @@ const ChannelsList = () => {
                     ))}
                     {hasMore && (
                       <Box
-                        ref={loadingRef}
+                        ref={(el: HTMLElement) => {
+                          loadingRef.current = el;
+                          setLoadingElementVisible(!!el);
+                        }}
                         sx={{
                           display: 'flex',
                           justifyContent: 'center',
                           p: 2,
                         }}
                       >
-                        <CircularProgress size={24} color="primary" />
+                        {!isCreating && (
+                          <CircularProgress size={24} color="primary" />
+                        )}
                       </Box>
-                    )}
-
-                    {/* End message */}
-                    {!hasMore && channelList.length > 0 && (
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          p: 2,
-                          color: 'gray',
-                          textAlign: 'center',
-                        }}
-                      >
-                        No more data available.
-                      </Typography>
                     )}
                   </Box>
                 </Box>
               ) : (
-                channelsData?.length === 0 && <UploadScreen />
+                channelsData?.length === 0 &&
+                channelList?.length === 0 &&
+                !uploadingFile &&
+                !(isCreating || isLoadingChannels) && (
+                  <UploadScreen
+                    handleUploadFile={(file, fileInfo) => {
+                      currentPageRef.current = 0;
+                      handleUploadFile(file, fileInfo);
+                    }}
+                  />
+                )
               )}
             </Box>
           </ToolbarDrawer>
@@ -1726,16 +1769,14 @@ const ChannelsList = () => {
       <UploadDialog
         open={openUpload}
         onClose={handleCloseUploadDialog}
-        createChannelByAudio={createChannelByAudio}
-        setUploadingFile={setUploadingFile}
-        mutateAudioChannels={mutateAudioChannels}
+        handleUploadFile={handleUploadFile}
       />
       <DeleteDialog
         open={isDeleteDialogOpen}
         onClose={handleCloseDeleteDialog}
         onConfirm={handleDeleteChannelConfirm}
         deletableName={
-          channelsData?.[activeIndex!]?.organizationChannelTitle || ''
+          channelList?.[activeIndex!]?.organizationChannelTitle || ''
         }
       />
       <EditDialog
@@ -1743,7 +1784,7 @@ const ChannelsList = () => {
         onClose={handleCloseEditDialog}
         onConfirm={handleEditChannelConfirm}
         editableName={
-          channelsData?.[activeIndex!]?.organizationChannelTitle || ''
+          channelList?.[activeIndex!]?.organizationChannelTitle || ''
         }
       />
       <LoginDialog

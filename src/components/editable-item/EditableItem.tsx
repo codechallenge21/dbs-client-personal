@@ -120,9 +120,9 @@ const EditableItem: React.FC<{
           },
         }}
       >
-        {menuActions.map((item, index) => (
+        {menuActions.map((item, i) => (
           <MenuItem
-            key={index}
+            key={i}
             sx={{
               width: '175px',
               display: 'flex',
@@ -135,7 +135,7 @@ const EditableItem: React.FC<{
               },
             }}
             onClick={
-              index === 1
+              i === 1
                 ? handleDeleteChannelOpenConfirmDialog
                 : handleOpenEditChannelDialog
             }

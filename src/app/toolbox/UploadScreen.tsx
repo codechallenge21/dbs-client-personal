@@ -8,26 +8,25 @@ import {
   useTheme,
   Container,
 } from '@mui/material';
-import React, { useRef, useState, useContext } from 'react';
+import React, { useRef, useContext } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { useRouter } from 'next/navigation';
-import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
-import apiExports from '@/utils/hooks/apis/apis';
-import LoadingScreen from '../../components/loading/page';
 import { SnackbarContext } from '@/context/SnackbarContext';
 import { useRequireAuth } from '@/utils/hooks/useRequireAuth';
 
-interface UploadDialogProps {}
+interface UploadScreenProps {
+  handleUploadFile: (
+    file: File,
+    fileInfo: {
+      organizationChannelTitle: string;
+      organizationChannelCreateDate: string;
+    }
+  ) => void;
+}
 
-const UploadScreen: React.FC<UploadDialogProps> = () => {
+const UploadScreen: React.FC<UploadScreenProps> = ({ handleUploadFile }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [, setFile] = useState<File | null>(null);
-  const router = useRouter();
-  const { excute: createChannelByAudio, isLoading: isCreating } = useAxiosApi(
-    apiExports.createChannelByAudio
-  );
   const { requireAuth } = useRequireAuth();
   const { showSnackbar } = useContext(SnackbarContext);
 
@@ -72,12 +71,26 @@ const UploadScreen: React.FC<UploadDialogProps> = () => {
         return;
       }
 
-      setFile(file);
-      const res = await createChannelByAudio({ file });
-      const { data } = res;
-      router.push(
-        `/channel-summary?organizationChannelId=${data.organizationChannelId}`
-      );
+      // Generate current timestamp
+      const now = new Date();
+      const formattedDate = `${now.getDate().toString().padStart(2, '0')}/${(
+        now.getMonth() + 1
+      )
+        .toString()
+        .padStart(2, '0')}/${now.getFullYear()}, ${now
+        .getHours()
+        .toString()
+        .padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now
+        .getSeconds()
+        .toString()
+        .padStart(2, '0')} ${now.getHours() >= 12 ? 'pm' : 'am'}`;
+
+      // Create header info with filename as name and current timestamp
+      const fileInfo = {
+        organizationChannelTitle: file.name.split('.')[0] || 'Unknown', // Remove file extension
+        organizationChannelCreateDate: formattedDate,
+      };
+      handleUploadFile(file, fileInfo);
     } catch (err) {
       showSnackbar(FILE_CONFIG.errorMessages.uploadFailed, 'error');
       console.error(err);
@@ -124,27 +137,6 @@ const UploadScreen: React.FC<UploadDialogProps> = () => {
     accept: { 'audio/*': FILE_CONFIG.allowedExtensions },
     maxSize: FILE_CONFIG.maxSize,
   });
-
-  if (isCreating) {
-    return (
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          height: '100vh',
-          width: '100vw',
-          bgcolor: '#fff',
-          zIndex: 1300,
-        }}
-      >
-        <LoadingScreen />
-      </Box>
-    );
-  }
 
   return (
     <Container

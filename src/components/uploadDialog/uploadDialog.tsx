@@ -12,20 +12,13 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import { useDropzone } from 'react-dropzone';
-import { useRef, useState, useContext } from 'react';
+import { useRef, useContext } from 'react';
 import { CloseRounded, UploadRounded } from '@mui/icons-material';
-import { UploadFileApiPayload } from '@/interfaces/payloads';
-import { AxiosPromise, AxiosRequestConfig, AxiosResponse } from 'axios';
-import {
-  OrganizationChannel,
-  OrganizationChannelResponse,
-} from '@/interfaces/entities';
-import { KeyedMutator } from 'swr';
 import { SnackbarContext } from '@/context/SnackbarContext';
 import { useRequireAuth } from '@/utils/hooks/useRequireAuth';
 
 // File Upload Configuration
-const FILE_CONFIG = {
+export const FILE_CONFIG = {
   maxSize: 200 * 1024 * 1024, // 200MB
   allowedFormats: [
     'audio/mpeg',
@@ -62,35 +55,25 @@ const FILE_CONFIG = {
 interface UploadDialogProps {
   open: boolean;
   onClose: () => void;
-  createChannelByAudio: (
-    payload?: UploadFileApiPayload | undefined,
-    config?: AxiosRequestConfig<any> | undefined
-  ) => AxiosPromise<OrganizationChannelResponse>;
-  setUploadingFile: React.Dispatch<
-    React.SetStateAction<
-      | {
-          organizationChannelTitle: string;
-          organizationChannelCreateDate: string;
-        }
-      | undefined
-    >
-  >;
-  mutateAudioChannels: KeyedMutator<AxiosResponse<OrganizationChannel[], any>>;
+  handleUploadFile: (
+    file: File,
+    fileInfo: {
+      organizationChannelTitle: string;
+      organizationChannelCreateDate: string;
+    }
+  ) => void;
 }
 
 export default function UploadDialog({
   open,
   onClose,
-  createChannelByAudio,
-  setUploadingFile,
-  mutateAudioChannels,
+  handleUploadFile,
 }: UploadDialogProps) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const { requireAuth } = useRequireAuth();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [, setFile] = useState<File | null>(null);
   const { showSnackbar } = useContext(SnackbarContext);
 
   const validateFile = async (file: File) => {
@@ -127,15 +110,8 @@ export default function UploadDialog({
         organizationChannelTitle: file.name.split('.')[0] || 'Unknown', // Remove file extension
         organizationChannelCreateDate: formattedDate,
       };
-      setUploadingFile(fileInfo);
-      setFile(file);
       onClose();
-
-      await createChannelByAudio({
-        file,
-      });
-      await mutateAudioChannels();
-      setUploadingFile(undefined);
+      handleUploadFile(file, fileInfo);
     } catch (error) {
       showSnackbar(FILE_CONFIG.errorMessages.uploadFailed, 'error');
       console.error(error);
