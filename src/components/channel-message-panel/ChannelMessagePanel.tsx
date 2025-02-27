@@ -1,29 +1,28 @@
 'use client';
 
-import React, { type FC, useState } from 'react';
+import imagePreview from '@/assets/Images/Image Icon.svg';
 import type {
   OrganizationChannel,
   OrganizationChannelMessage,
 } from '@/interfaces/entities';
 import {
+  ContentCopyRounded,
+  Done as DoneIcon,
+  LibraryBooksRounded,
+  PermIdentityRounded,
+  ThumbDownOffAltRounded,
+} from '@mui/icons-material';
+import {
+  Avatar,
   Box,
   Container,
-  useTheme,
-  useMediaQuery,
-  Avatar,
   IconButton,
   Tooltip,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
-import {
-  PermIdentityRounded,
-  LibraryBooksRounded,
-  ContentCopyRounded,
-  ThumbUp,
-  Done as DoneIcon,
-  ThumbDown,
-} from '@mui/icons-material';
 import Image from 'next/image';
-import imagePreview from '@/assets/Images/Image Icon.svg';
+import React, { type FC, useState } from 'react';
 import MermaidMarkdown from '../MermaidChart/Mermaidmarkdown';
 
 export interface ChannelMessagePanelProps {
@@ -195,8 +194,8 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                   <Tooltip
                     title={
                       copiedMessageId === message.organizationChannelMessageId
-                        ? 'Copied'
-                        : 'Copy'
+                        ? '已複製'
+                        : '複製'
                     }
                     placement="top"
                     arrow
@@ -222,7 +221,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                         <DoneIcon />
                       ) : (
                         <ContentCopyRounded
-                          sx={{ color: '#212B36', fontSize: 20 }}
+                          sx={{ color: '#212B36'}}
                         />
                       )}
                     </IconButton>
@@ -237,31 +236,26 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                   sx={{
                     display: 'flex',
                     justifyContent: 'flex-end',
-                    gap: 1,
+                    gap: 0.5,
                     mt: 2,
                     ml: { xs: '-30px', sm: '-20px' },
                   }}
                 >
-                  <ThumbUp
-                    sx={{
-                      fontSize: 20,
-                      cursor: 'pointer',
-                      color: 'text.secondary',
-                      '&:hover': {
-                        color: 'primary.main',
-                      },
-                    }}
-                  />
-                  <ThumbDown
-                    sx={{
-                      fontSize: 20,
-                      cursor: 'pointer',
-                      color: 'text.secondary',
-                      '&:hover': {
-                        color: 'primary.main',
-                      },
-                    }}
-                  />
+                  <Tooltip title="回應良好" placement="top" arrow>
+                    <IconButton aria-label="Like">
+                      <ThumbDownOffAltRounded
+                        sx={{
+                          color: 'black',
+                          transform: 'scale(-1, -1)',
+                        }}
+                      />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="回應不佳" placement="top" arrow>
+                    <IconButton aria-label="Dislike">
+                      <ThumbDownOffAltRounded sx={{ color: 'black' }} />
+                    </IconButton>
+                  </Tooltip>
                 </Box>
               )}
             </Box>
@@ -340,8 +334,8 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                   title={
                     copiedMessageId ===
                     message.organizationChannelMessageContent
-                      ? 'Copied'
-                      : 'Copy'
+                      ? '已複製'
+                      : '複製'
                   }
                   placement="top"
                   arrow
@@ -364,10 +358,10 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                   >
                     {copiedMessageId ===
                     message.organizationChannelMessageContent ? (
-                      <DoneIcon sx={{ color: '#212B36', fontSize: 20 }} />
+                      <DoneIcon sx={{ color: '#212B36'}} />
                     ) : (
                       <ContentCopyRounded
-                        sx={{ color: '#212B36', fontSize: 20 }}
+                        sx={{ color: '#212B36'}}
                       />
                     )}
                   </IconButton>
@@ -438,26 +432,21 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                       mt: 2,
                     }}
                   >
-                    <ThumbUp
-                      sx={{
-                        fontSize: 20,
-                        cursor: 'pointer',
-                        color: 'text.secondary',
-                        '&:hover': {
-                          color: 'primary.main',
-                        },
-                      }}
-                    />
-                    <ThumbDown
-                      sx={{
-                        fontSize: 20,
-                        cursor: 'pointer',
-                        color: 'text.secondary',
-                        '&:hover': {
-                          color: 'primary.main',
-                        },
-                      }}
-                    />
+                    <Tooltip title="回應良好" placement="top" arrow>
+                      <IconButton aria-label="Like">
+                        <ThumbDownOffAltRounded
+                          sx={{
+                            color: '#212B36',
+                            transform: 'scale(-1, -1)',
+                          }}
+                        />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="回應不佳" placement="top" arrow>
+                      <IconButton aria-label="Dislike">
+                        <ThumbDownOffAltRounded sx={{ color: '#212B36' }} />
+                      </IconButton>
+                    </Tooltip>
                   </Box>
                 )}
               </Box>

@@ -176,7 +176,7 @@ const ChannelSummary = () => {
         }, 1000);
       },
       (err) => {
-        console.error('Failed to copy to clipboard', err);
+        console.error('複製失敗', err);
       }
     );
   };
@@ -222,7 +222,7 @@ const ChannelSummary = () => {
     async (newTitle: string) => {
       await updateChannelDetail({
         organizationId: 'yMJHyi6R1CB9whpdNvtA',
-        organizationChannelId: selectedChannel?.organizationChannelId || '',
+        organizationChannelId: selectedChannel?.organizationChannelId ?? '',
         organizationChannelTitle: newTitle,
       });
       setIsEditDialogOpen(false);
@@ -408,13 +408,14 @@ const ChannelSummary = () => {
                       display: 'flex',
                       alignItems: 'center',
                     }}
-                  >
-                    <IconButton
-                      aria-label="back"
-                      onClick={handleBackButtonClick}
-                    >
-                      <ArrowBackIosRounded sx={{ color: 'black' }} />
-                    </IconButton>
+                  ><Tooltip title="返回" placement="top" arrow>
+                      <IconButton
+                        aria-label="back"
+                        onClick={handleBackButtonClick}
+                      >
+                        <ArrowBackIosRounded sx={{ color: 'black' }} />
+                      </IconButton>
+                    </Tooltip>
                     <Typography
                       sx={{
                         fontWeight: 600,
@@ -453,9 +454,11 @@ const ChannelSummary = () => {
                     />
                   </Box>
                   <Box>
-                    <IconButton aria-label="Add Favorite">
-                      <StarBorderRounded sx={{ color: 'black' }} />
-                    </IconButton>
+                    <Tooltip title="收藏" placement="top" arrow>
+                      <IconButton aria-label="Add Favorite">
+                        <StarBorderRounded sx={{ color: 'black' }} />
+                      </IconButton>
+                    </Tooltip>
                     <IconButton
                       aria-label="Open Data Source"
                       onClick={() => setOpenDataSource(!openDataSource)}
@@ -537,8 +540,8 @@ const ChannelSummary = () => {
                                 selectedChannel
                                   ?.organizationChannelTranscriptList[0]
                                   ?.organizationChannelTranscriptId
-                                  ? 'Copied'
-                                  : 'Copy'
+                                  ? '已複製'
+                                  : '複製'
                               }
                               placement="top"
                               arrow
@@ -565,24 +568,25 @@ const ChannelSummary = () => {
                                   ?.organizationChannelTranscriptId ? (
                                   <DoneIcon />
                                 ) : (
-                                  <ContentCopyRounded
-                                    sx={{ color: '#212B36', fontSize: 20 }}
-                                  />
+                                  <ContentCopyRounded sx={{ color: 'black' }} />
                                 )}
                               </IconButton>
                             </Tooltip>
-                            <IconButton aria-label="Like">
-                              <ThumbDownOffAltRounded
-                                sx={{
-                                  color: 'black',
-                                  transform: 'scale(-1, -1)',
-                                }}
-                              />
-                            </IconButton>
-
-                            <IconButton aria-label="Dislike">
-                              <ThumbDownOffAltRounded sx={{ color: 'black' }} />
-                            </IconButton>
+                            <Tooltip title="回應良好" placement="top" arrow>
+                              <IconButton aria-label="Like">
+                                <ThumbDownOffAltRounded
+                                  sx={{
+                                    color: 'black',
+                                    transform: 'scale(-1, -1)',
+                                  }}
+                                />
+                              </IconButton>
+                            </Tooltip>
+                            <Tooltip title="回應不佳" placement="top" arrow>
+                              <IconButton aria-label="Dislike">
+                                <ThumbDownOffAltRounded sx={{ color: 'black' }} />
+                              </IconButton>
+                            </Tooltip>
                           </Box>
                         </Box>
                         <ReactMarkdown>
@@ -743,8 +747,8 @@ const ChannelSummary = () => {
                                       ?.organizationChannelMessageList.length -
                                       1
                                   ]?.organizationChannelMessageId
-                                    ? 'Copied'
-                                    : 'Copy'
+                                    ? '已複製'
+                                    : '複製'
                                 }
                                 placement="top"
                                 arrow
@@ -790,61 +794,65 @@ const ChannelSummary = () => {
                                   ]?.organizationChannelMessageId ? (
                                     <DoneIcon />
                                   ) : (
-                                    <ContentCopyRounded
-                                      sx={{ color: '#212B36', fontSize: 20 }}
-                                    />
+                                    <ContentCopyRounded sx={{ color: 'black' }} />
                                   )}
                                 </IconButton>
                               </Tooltip>
-                              <IconButton aria-label="Like">
-                                <ThumbDownOffAltRounded
-                                  sx={{
-                                    color: 'black',
-                                    transform: 'scale(-1, -1)',
-                                  }}
-                                />
-                              </IconButton>
-                              <IconButton aria-label="Dislike">
-                                <ThumbDownOffAltRounded
-                                  sx={{ color: 'black' }}
-                                />
-                              </IconButton>
-                              <IconButton
-                                aria-label="Regenerate"
-                                onClick={async () => {
-                                  if (!isLoading) {
-                                    await ApiRegenerateSummary({
-                                      organizationId: 'yMJHyi6R1CB9whpdNvtA',
-                                      organizationChannelId,
-                                    });
-                                    mutateChannel();
-                                  }
-                                }}
-                                sx={{
-                                  borderRadius: '50%',
-                                  padding: 1,
-                                  transition: 'all 0.3s ease',
-                                  '&:hover': {
-                                    backgroundColor: '#e0e0e0',
-                                    transform: 'scale(1.1)',
-                                  },
-                                }}
-                              >
-                                {isLoading ? (
-                                  <SyncRounded
+                              <Tooltip title="回應良好" placement="top" arrow>
+                                <IconButton aria-label="Like">
+                                  <ThumbDownOffAltRounded
                                     sx={{
                                       color: 'black',
-                                      '@keyframes spin': {
-                                        '0%': { transform: 'rotate(0deg)' },
-                                        '100%': { transform: 'rotate(360deg)' },
-                                      },
-                                      animation: 'spin 1s linear infinite',
+                                      transform: 'scale(-1, -1)',
                                     }}
                                   />
-                                ) : (
-                                  <SyncRounded sx={{ color: 'black' }} />
-                                )}
-                              </IconButton>
+                                </IconButton>
+                              </Tooltip>
+                              <Tooltip title="回應不佳" placement="top" arrow>
+                                <IconButton aria-label="Dislike">
+                                  <ThumbDownOffAltRounded
+                                    sx={{ color: 'black' }}
+                                  />
+                                </IconButton>
+                              </Tooltip>
+                              <Tooltip title="重新產生" placement="top" arrow>
+                                <IconButton
+                                  aria-label="Regenerate"
+                                  onClick={async () => {
+                                    if (!isLoading) {
+                                      await ApiRegenerateSummary({
+                                        organizationId: 'yMJHyi6R1CB9whpdNvtA',
+                                        organizationChannelId,
+                                      });
+                                      mutateChannel();
+                                    }
+                                  }}
+                                  sx={{
+                                    borderRadius: '50%',
+                                    padding: 1,
+                                    transition: 'all 0.3s ease',
+                                    '&:hover': {
+                                      backgroundColor: '#e0e0e0',
+                                      transform: 'scale(1.1)',
+                                    },
+                                  }}
+                                >
+                                  {isLoading ? (
+                                    <SyncRounded
+                                      sx={{
+                                        color: 'black',
+                                        '@keyframes spin': {
+                                          '0%': { transform: 'rotate(0deg)' },
+                                          '100%': { transform: 'rotate(360deg)' },
+                                        },
+                                        animation: 'spin 1s linear infinite',
+                                      }}
+                                    />
+                                  ) : (
+                                    <SyncRounded sx={{ color: 'black' }} />
+                                  )}
+                                </IconButton>
+                              </Tooltip>
                             </Box>
                           </Box>
                           <ReactMarkdown>
@@ -945,25 +953,31 @@ const ChannelSummary = () => {
                                   justifyContent: 'space-between',
                                 }}
                               >
-                                <IconButton aria-label="Copy">
-                                  <ContentCopyRounded sx={{ color: 'black' }} />
-                                </IconButton>
-                                <IconButton aria-label="Like">
-                                  <ThumbDownOffAltRounded
-                                    sx={{
-                                      color: 'black',
-                                      transform: 'scale(-1, -1)',
-                                    }}
-                                  />
-                                </IconButton>
-                                <IconButton aria-label="Dislike">
-                                  <ThumbDownOffAltRounded
-                                    sx={{ color: 'black' }}
-                                  />
-                                </IconButton>
-                                <IconButton aria-label="Pin">
+                                <Tooltip title="複製" placement="top" arrow>
+                                  <IconButton aria-label="Copy">
+                                    <ContentCopyRounded sx={{ color: 'black' }} />
+                                  </IconButton>
+                                </Tooltip>
+                                <Tooltip title="回應良好" placement="top" arrow>
+                                  <IconButton aria-label="Like">
+                                    <ThumbDownOffAltRounded
+                                      sx={{
+                                        color: 'black',
+                                        transform: 'scale(-1, -1)',
+                                      }}
+                                    />
+                                  </IconButton>
+                                </Tooltip>
+                                <Tooltip title="回應不佳" placement="top" arrow>
+                                  <IconButton aria-label="Dislike">
+                                    <ThumbDownOffAltRounded
+                                      sx={{ color: 'black' }}
+                                    />
+                                  </IconButton>
+                                </Tooltip>
+                                {/* <IconButton aria-label="Pin">
                                   <PushPinRounded sx={{ color: 'black' }} />
-                                </IconButton>
+                                </IconButton> */}
                               </Box>
                             </Box>
                             <Box
@@ -1494,8 +1508,8 @@ const ChannelSummary = () => {
                     copiedMessageId ===
                     selectedChannel?.organizationChannelTranscriptList[0]
                       ?.organizationChannelTranscriptId
-                      ? 'Copied'
-                      : 'Copy'
+                      ? '已複製'
+                      : '複製'
                   }
                   placement="top"
                   arrow
@@ -1524,17 +1538,21 @@ const ChannelSummary = () => {
                     )}
                   </IconButton>
                 </Tooltip>
-                <IconButton aria-label="Like">
-                  <ThumbDownOffAltRounded
-                    sx={{
-                      color: '#212B36',
-                      transform: 'scale(-1, -1)',
-                    }}
-                  />
-                </IconButton>
-                <IconButton aria-label="Dislike">
-                  <ThumbDownOffAltRounded sx={{ color: '#212B36' }} />
-                </IconButton>
+                <Tooltip title="回應良好" placement="top" arrow>
+                  <IconButton aria-label="Like">
+                    <ThumbDownOffAltRounded
+                      sx={{
+                        color: '#212B36',
+                        transform: 'scale(-1, -1)',
+                      }}
+                    />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="回應不佳" placement="top" arrow>
+                  <IconButton aria-label="Dislike">
+                    <ThumbDownOffAltRounded sx={{ color: '#212B36' }} />
+                  </IconButton>
+                </Tooltip>
               </Box>
             </Box>
             <ReactMarkdown>
