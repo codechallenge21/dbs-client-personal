@@ -4,6 +4,7 @@ import {
   OrganizationChannelResponse,
 } from '@/interfaces/entities';
 import {
+  ChatWithFilesPayload,
   DeleteChannelApiPayload,
   GetChannelDetailApiPayload,
   GetChannelsApiPayload,
@@ -103,6 +104,25 @@ const apis = {
       url,
       dataWithChannel,
       config
+    );
+  },
+  chatWithFiles: (payload?: ChatWithFilesPayload) => {
+    if (!payload) {
+      return Promise.reject(new Error('Payload is required'));
+    }
+    const organizationId = payload.organizationId;
+
+    const formData = new FormData();
+    formData.append('chatRequest', JSON.stringify(payload.chatRequest));
+    if (payload.files.length) {
+      for (const file of payload.files) {
+        formData.append('files', file);
+      }
+    }
+
+    return fetcher.post(
+      `/organizations/${organizationId}/channels/chat-with-files`,
+      formData
     );
   },
   updateChannelDetail: (payload?: UpdateChannelApiPayload) => {

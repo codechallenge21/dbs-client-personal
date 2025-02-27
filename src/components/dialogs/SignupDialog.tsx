@@ -130,6 +130,9 @@ const SignupDialog: React.FC<SignupDialogProps> = ({
               '&::-webkit-scrollbar': {
                 width: '8px',
               },
+              '@media (orientation: landscape)': {
+                overflow: 'auto',
+              },
               '&::-webkit-scrollbar-track': {
                 borderRadius: '10px',
                 background: '#f1f1f1',

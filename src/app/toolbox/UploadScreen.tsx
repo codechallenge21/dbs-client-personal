@@ -31,7 +31,7 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ handleUploadFile }) => {
   const { showSnackbar } = useContext(SnackbarContext);
 
   const FILE_CONFIG = {
-    maxSize: 100 * 1024 * 1024, // 100MB
+    maxSize: 200 * 1024 * 1024, // 200MB
     allowedFormats: [
       'audio/mpeg',
       'audio/mp4',
@@ -42,16 +42,25 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ handleUploadFile }) => {
       'audio/vnd.dlna.adts',
       'video/mp4',
     ],
-    allowedExtensions: ['.mp3', '.m4a', '.wav', '.aac'],
+    allowedExtensions: [
+      '.mp3',
+      '.m4a',
+      '.wav',
+      '.aac',
+      '.mp4',
+      '.mpeg',
+      '.mpga',
+      '.webm',
+    ],
     errorMessages: {
       invalidFormat:
         '不支援的檔案格式，請選擇 mp3, mp4, mpeg, mpga, m4a, wav, aac 或 webm 格式',
-      sizeExceeded: '檔案大小超過 100MB 限制',
+      sizeExceeded: '檔案大小超過 200MB 限制',
       uploadFailed: '上傳失敗',
     },
     supportedFormats: {
-      mobile: '支援檔案格式：.mp3, .m4a, .wav, .aac',
-      desktop: '支援檔案格式：.mp3, .m4a, .wav, .aac',
+      mobile: '支援檔案格式： mp3, mp4, mpeg, mpga, m4a, wav, aac, webm',
+      desktop: '支援檔案格式： mp3, mp4, mpeg, mpga, m4a, wav, aac, webm',
     },
   };
 
@@ -128,7 +137,7 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ handleUploadFile }) => {
   };
 
   const handleDropRejected = () => {
-    showSnackbar('檔案格式錯誤或檔案大小超過 100MB 限制', 'error');
+    showSnackbar('檔案格式錯誤或檔案大小超過 200MB 限制', 'error');
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
