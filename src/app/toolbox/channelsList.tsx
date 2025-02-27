@@ -42,10 +42,17 @@ import {
   useTheme,
 } from '@mui/material';
 import { useRouter } from 'next/navigation';
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import UploadScreen from './UploadScreen';
 import LoginDialog from '@/components/dialogs/LoginDialog';
 import SignupDialog from '@/components/dialogs/SignupDialog';
+import ForgetPasswordDialog from '@/components/dialogs/ForgetPasswordDialog';
 
 const ChannelsList = () => {
   const theme = useTheme();
@@ -71,6 +78,7 @@ const ChannelsList = () => {
   const [hasMore, setHasMore] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
   const [channelList, setChannelList] = useState<OrganizationChannel[]>([]);
+  const [isForgetPasswordOpen, setIsForgetPasswordOpen] = useState(false);
   const itemsPerPage = 10;
   const { showSnackbar } = useContext(SnackbarContext);
 
@@ -216,6 +224,11 @@ const ChannelsList = () => {
       [index]: !prev[index],
     }));
   };
+
+  const handleForgetPasswordOpen = useCallback(() => {
+    setIsLoginOpen(false);
+    setIsForgetPasswordOpen(true);
+  }, [setIsLoginOpen]);
 
   useEffect(() => {
     setIsOpenDrawer(!isMobile);
@@ -1443,11 +1456,16 @@ const ChannelsList = () => {
         open={isLoginOpen}
         setIsSignupOpen={setIsSignupOpen}
         onClose={handleLoginDialogClose}
+        onOpenForgetPassword={handleForgetPasswordOpen}
       />
       <SignupDialog
         open={isSignupOpen}
         setIsLoginOpen={setIsLoginOpen}
         onClose={() => setIsSignupOpen(false)}
+      />
+      <ForgetPasswordDialog
+        open={isForgetPasswordOpen}
+        onClose={() => setIsForgetPasswordOpen(false)}
       />
       <UploadDialog open={openUpload} onClose={handleCloseUploadDialog} />
       <DeleteDialog
@@ -1470,11 +1488,16 @@ const ChannelsList = () => {
         open={isLoginOpen}
         setIsSignupOpen={setIsSignupOpen}
         onClose={handleLoginDialogClose}
+        onOpenForgetPassword={handleForgetPasswordOpen}
       />
       <SignupDialog
         open={isSignupOpen}
         setIsLoginOpen={setIsLoginOpen}
         onClose={() => setIsSignupOpen(false)}
+      />
+      <ForgetPasswordDialog
+        open={isForgetPasswordOpen}
+        onClose={() => setIsForgetPasswordOpen(false)}
       />
     </>
   );
