@@ -1,18 +1,18 @@
 'use client';
 
 import {
+  ArrowBack,
+  ContentCopy,
+  ThumbDownOffAltRounded,
+} from '@mui/icons-material';
+import {
   Box,
-  Typography,
   IconButton,
   Stack,
+  Typography,
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import {
-  ContentCopy,
-  ArrowBack,
-  ThumbDownOffAltRounded,
-} from '@mui/icons-material';
 import SourceCards from './sourceCard';
 
 export interface SourceData {
