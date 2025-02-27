@@ -65,6 +65,14 @@ const EditableItem: React.FC<{
   handleDeleteChannelOpenConfirmDialog: (event: React.MouseEvent) => void;
   setToolsAnchor: React.Dispatch<React.SetStateAction<HTMLElement | null>>;
   handleMenuOpen: (event: React.MouseEvent<HTMLElement>, index: number) => void;
+  anchorOrigin: {
+    vertical: 'top' | 'center' | 'bottom';
+    horizontal: 'left' | 'center' | 'right';
+  };
+  transformOrigin: {
+    vertical: 'top' | 'center' | 'bottom';
+    horizontal: 'left' | 'center' | 'right';
+  };
 }> = ({
   index,
   activeIndex,
@@ -74,13 +82,17 @@ const EditableItem: React.FC<{
   handleCloseToolsMenu,
   handleOpenEditChannelDialog,
   handleDeleteChannelOpenConfirmDialog,
+  anchorOrigin,
+  transformOrigin,
 }) => {
   return (
     <>
       <IconButton
         aria-label="Menu"
-        sx={{ padding: 0 }}
-        onClick={(event) => handleMenuOpen(event, index)}
+        onClick={(event) => {
+          event.stopPropagation();
+          handleMenuOpen(event, index);
+        }}
       >
         {isChannelSummary ? (
           <ArrowDropDownRounded sx={{ color: 'black' }} />
@@ -92,14 +104,8 @@ const EditableItem: React.FC<{
         anchorEl={toolsAnchor}
         open={Boolean(toolsAnchor) && activeIndex === index}
         onClose={handleCloseToolsMenu}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
+        anchorOrigin={anchorOrigin}
+        transformOrigin={transformOrigin}
         slotProps={{
           paper: {
             sx: {

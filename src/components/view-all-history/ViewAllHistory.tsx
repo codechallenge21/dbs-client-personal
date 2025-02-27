@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useRef, useCallback } from 'react';
 import {
   Box,
   TextField,
@@ -13,6 +13,7 @@ import {
   InputAdornment,
   useMediaQuery,
   useTheme,
+  CircularProgress,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -53,9 +54,24 @@ export default function ChannelSearchCombined() {
   const [searchQuery, setSearchQuery] = useState('');
   const [open, setOpen] = useState(false);
 
-  const { data: chatsData } = useChatChannels({
-    organizationId: 'yMJHyi6R1CB9whpdNvtA',
-  });
+  // Infinite scroll states
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const [isFetching, setIsFetching] = useState(false);
+  const itemsPerPage = 10;
+  const loadingRef = useRef(null);
+  const scrollContainerRef = useRef(null);
+  const observer = useRef<IntersectionObserver | null>(null);
+
+  const { data: chatsData, mutate: mutateChatChannels } = useChatChannels(
+    {
+      organizationId: 'yMJHyi6R1CB9whpdNvtA',
+    },
+    {
+      startIndex: page,
+      size: itemsPerPage,
+    }
+  );
 
   const handleMouseEnter = (id: string) => {
     setHoveredChannelId(id);
@@ -92,15 +108,13 @@ export default function ChannelSearchCombined() {
       )
     );
 
-  const filteredChannels = channels
-    .filter(
-      (ch) =>
-        ch.organizationChannelTitle
-          .toLowerCase()
-          .includes(searchQuery.toLowerCase()) ||
-        ch.organizationChannelCreateDate.includes(searchQuery)
-    )
-    .slice(0, 5); // Limit to 5 channels
+  const filteredChannels = channels.filter(
+    (ch) =>
+      ch.organizationChannelTitle
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
+      ch.organizationChannelCreateDate.includes(searchQuery)
+  );
 
   const moveToChannelDetail = (channel: OrganizationChannelData) => {
     setSelectedChannel(channel);
@@ -112,7 +126,7 @@ export default function ChannelSearchCombined() {
   };
 
   useEffect(() => {
-    if (chatsData) {
+    if (chatsData && page === 0) {
       const formattedChannels = chatsData.map((chat: OrganizationChannel) => ({
         ...chat,
         id: chat.organizationChannelId,
@@ -121,7 +135,85 @@ export default function ChannelSearchCombined() {
       }));
       setChannels(formattedChannels);
     }
-  }, [chatsData]);
+  }, [chatsData, page]);
+
+  // Fetch more channels when scrolling
+  const fetchMoreData = useCallback(async () => {
+    if (isFetching || !hasMore) return;
+
+    setIsFetching(true);
+
+    try {
+      const nextPage = page + itemsPerPage;
+      setPage(nextPage);
+
+      // Use the updated page value in the API call
+      const response = await mutateChatChannels();
+
+      const newChannelsData = response?.data || [];
+
+      if (newChannelsData.length > 0) {
+        const newFormattedChannels = newChannelsData.map(
+          (chat: OrganizationChannel) => ({
+            ...chat,
+            id: chat.organizationChannelId,
+            date: new Date(chat.organizationChannelCreateDate).toLocaleString(),
+            selected: false,
+          })
+        );
+
+        setChannels((prev) => [...prev, ...newFormattedChannels]);
+        setHasMore(newChannelsData.length >= itemsPerPage);
+      } else {
+        setHasMore(false);
+      }
+    } catch (error) {
+      console.error('Error loading channels:', error);
+      setHasMore(false);
+    } finally {
+      setIsFetching(false);
+    }
+  }, [isFetching, hasMore, page, mutateChatChannels]);
+
+  // Setup Intersection Observer for infinite scrolling
+  useEffect(() => {
+    if (!loadingRef.current) return;
+
+    observer.current = new IntersectionObserver(
+      (entries) => {
+        console.log(
+          'isTrue',
+          entries[0]?.isIntersecting,
+          hasMore,
+          !isFetching,
+          `hello ${searchQuery}`,
+          !searchQuery.trim()
+        );
+        if (
+          entries[0]?.isIntersecting &&
+          hasMore &&
+          !isFetching &&
+          !searchQuery.trim()
+        ) {
+          fetchMoreData();
+        }
+      },
+      {
+        threshold: 0.3,
+        root: scrollContainerRef.current,
+      }
+    );
+
+    if (loadingRef.current) {
+      observer.current.observe(loadingRef.current);
+    }
+
+    return () => {
+      if (observer.current && loadingRef.current) {
+        observer.current.unobserve(loadingRef.current);
+      }
+    };
+  }, [fetchMoreData, hasMore, isFetching, channels.length, searchQuery]);
 
   return (
     <Box
@@ -139,7 +231,7 @@ export default function ChannelSearchCombined() {
           width: '100%',
           maxWidth: 800,
           maxHeight: '90vh',
-          overflow: 'auto', // Local scrolling behavior for this component
+          overflow: 'hidden',
           bgcolor: 'background.paper',
           borderRadius: 2,
           p: isMobile ? '16px' : 3,
@@ -213,8 +305,7 @@ export default function ChannelSearchCombined() {
                 >
                   您目前有 <span>{filteredChannels.length ?? 0}</span> 個頻道
                 </Typography>
-                {/* Animate the "選擇" button.
-                    It starts at its original position (x:0) and when exiting, slides right. */}
+                {/* Animate the "選擇" button */}
                 <AnimatePresence mode="wait">
                   <motion.div
                     key="select-button"
@@ -246,10 +337,12 @@ export default function ChannelSearchCombined() {
                 </AnimatePresence>
               </Box>
             </Box>
-            {/* Channel List */}
+            {/* Channel List with infinite scroll */}
             <Box
+              ref={scrollContainerRef}
               sx={{
                 width: '100%',
+                maxheight: 'calc(100vh - 140px)', // Adjust based on your layout
                 overflowY: 'auto',
                 paddingRight: '8px',
                 paddingLeft: isMobile ? '0px' : '10px',
@@ -384,6 +477,33 @@ export default function ChannelSearchCombined() {
                     </Paper>
                   );
                 })}
+                {/* Loading indicator */}
+                {hasMore && !searchQuery.trim() && (
+                  <Box
+                    ref={loadingRef}
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      p: 2,
+                    }}
+                  >
+                    <CircularProgress size={24} color="primary" />
+                  </Box>
+                )}
+
+                {/* End message */}
+                {!hasMore && channels.length > 0 && !searchQuery.trim() && (
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      textAlign: 'center',
+                      p: 2,
+                      color: 'gray',
+                    }}
+                  >
+                    沒有更多頻道了
+                  </Typography>
+                )}
               </Stack>
             </Box>
           </>
@@ -426,8 +546,7 @@ export default function ChannelSearchCombined() {
                 </Typography>
               </Box>
               <Stack direction="row" spacing={1} sx={{ width: 'auto' }}>
-                {/* Animate the "全選" box.
-                    It starts at its original position (x:0) and when exiting, slides left. */}
+                {/* Animate the "全選" box */}
                 <AnimatePresence mode="wait">
                   <motion.div
                     key="select-all-box"
@@ -495,10 +614,12 @@ export default function ChannelSearchCombined() {
                 </Button>
               </Stack>
             </Box>
-            {/* Channel List */}
+            {/* Channel List with infinite scroll */}
             <Box
+              ref={scrollContainerRef}
               sx={{
                 width: '100%',
+                maxheight: 'calc(100vh - 140px)', // Adjust based on your layout
                 overflowY: 'auto',
                 paddingRight: '8px',
                 paddingLeft: isMobile ? '0px' : '10px',
@@ -612,6 +733,34 @@ export default function ChannelSearchCombined() {
                     </IconButton>
                   </Paper>
                 ))}
+
+                {/* Loading indicator */}
+                {hasMore && !searchQuery.trim() && (
+                  <Box
+                    ref={loadingRef}
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      p: 2,
+                    }}
+                  >
+                    <CircularProgress size={24} color="primary" />
+                  </Box>
+                )}
+
+                {/* End message */}
+                {!hasMore && channels.length > 0 && !searchQuery.trim() && (
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      textAlign: 'center',
+                      p: 2,
+                      color: 'gray',
+                    }}
+                  >
+                    沒有更多頻道了
+                  </Typography>
+                )}
               </Stack>
             </Box>
           </>
