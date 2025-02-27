@@ -11,14 +11,14 @@ import {
   Typography,
   IconButton,
   useMediaQuery,
-  useTheme
+  useTheme,
 } from '@mui/material';
 import {
   Close as CloseIcon,
   FilePresentRounded,
   ImageRounded,
   PictureAsPdfRounded,
-  ArticleRounded
+  ArticleRounded,
 } from '@mui/icons-material';
 
 interface DataSourceDialogFile {
@@ -40,7 +40,7 @@ export default function DataSourceDialog({
   open,
   onClose,
   title = '詳細內容',
-  files = []
+  files = [],
 }: DataSourceDialogProps) {
   // If no files are provided, use these default files
   const defaultFiles: DataSourceDialogFile[] = [
@@ -48,86 +48,86 @@ export default function DataSourceDialog({
       name: 'LocalsIFile_name_00.text',
       type: 'text',
       isLocal: true,
-      onClick: () => console.log('clicked'),
-      icon: <FilePresentRounded sx={{ color: '#212B36' }} />
+      onClick: () => {},
+      icon: <FilePresentRounded sx={{ color: '#212B36' }} />,
     },
     {
       name: 'LocalsIFile_name_01.aff',
       type: 'file',
       isLocal: true,
-      onClick: () => console.log('clicked'),
-      icon: <ImageRounded sx={{ color: '#212B36' }} />
+      onClick: () => {},
+      icon: <ImageRounded sx={{ color: '#212B36' }} />,
     },
     {
       name: 'LocalsIFile_name_02.img',
       type: 'image',
       isLocal: true,
-      onClick: () => console.log('clicked'),
-      icon: <ImageRounded sx={{ color: '#212B36' }} />
+      onClick: () => {},
+      icon: <ImageRounded sx={{ color: '#212B36' }} />,
     },
     {
       name: 'LocalsIFile_name_03.pdf',
       type: 'pdf',
       isLocal: true,
-      onClick: () => console.log('clicked'),
-      icon: <PictureAsPdfRounded sx={{ color: '#212B36' }} />
+      onClick: () => {},
+      icon: <PictureAsPdfRounded sx={{ color: '#212B36' }} />,
     },
     {
       name: 'LocalsIFile_name_04.tsx',
       type: 'code',
       isLocal: true,
-      onClick: () => console.log('clicked'),
-      icon: <FilePresentRounded sx={{ color: '#212B36' }} />
+      onClick: () => {},
+      icon: <FilePresentRounded sx={{ color: '#212B36' }} />,
     },
     {
       name: 'LocalsIFile_name_05.docx',
       type: 'code',
       isLocal: true,
-      onClick: () => console.log('clicked'),
-      icon: <FilePresentRounded sx={{ color: '#212B36' }} />
+      onClick: () => {},
+      icon: <FilePresentRounded sx={{ color: '#212B36' }} />,
     },
     {
       name: '技術資料01',
       type: 'doc',
       isLocal: false,
-      onClick: () => console.log('clicked'),
-      icon: <ArticleRounded sx={{ color: '#212B36' }} />
+      onClick: () => {},
+      icon: <ArticleRounded sx={{ color: '#212B36' }} />,
     },
     {
       name: '技術資料02',
       type: 'doc',
       isLocal: false,
-      onClick: () => console.log('clicked'),
-      icon: <ArticleRounded sx={{ color: '#212B36' }} />
+      onClick: () => {},
+      icon: <ArticleRounded sx={{ color: '#212B36' }} />,
     },
     {
       name: '技術資料03',
       type: 'doc',
       isLocal: false,
-      onClick: () => console.log('clicked'),
-      icon: <ArticleRounded sx={{ color: '#212B36' }} />
+      onClick: () => {},
+      icon: <ArticleRounded sx={{ color: '#212B36' }} />,
     },
     {
       name: '技術資料04',
       type: 'doc',
       isLocal: false,
-      onClick: () => console.log('clicked'),
-      icon: <ArticleRounded sx={{ color: '#212B36' }} />
+      onClick: () => {},
+      icon: <ArticleRounded sx={{ color: '#212B36' }} />,
     },
     {
       name: '技術資料05',
       type: 'doc',
       isLocal: false,
-      onClick: () => console.log('clicked'),
-      icon: <ArticleRounded sx={{ color: '#212B36' }} />
+      onClick: () => {},
+      icon: <ArticleRounded sx={{ color: '#212B36' }} />,
     },
     {
       name: '技術資料06',
       type: 'doc',
       isLocal: false,
-      onClick: () => console.log('clicked'),
-      icon: <ArticleRounded sx={{ color: '#212B36' }} />
-    }
+      onClick: () => {},
+      icon: <ArticleRounded sx={{ color: '#212B36' }} />,
+    },
   ];
 
   const displayFiles = files.length > 0 ? files : defaultFiles;
@@ -156,8 +156,8 @@ export default function DataSourceDialog({
           marginTop: isMobile ? '0' : '16px',
           marginRight: isMobile ? '0' : '16px',
           height: isMobile ? 'auto' : 'calc(100vh - 30px)',
-          top: isMobile ? '112px' : ''
-        }
+          top: isMobile ? '112px' : '',
+        },
       }}
       variant={isMobile ? 'temporary' : 'persistent'}
     >
@@ -171,7 +171,7 @@ export default function DataSourceDialog({
           justifyContent: 'space-between',
           height: isMobile ? '48px' : '62px',
           pl: '8px',
-          gap: '8px'
+          gap: '8px',
         }}
       >
         <Typography
@@ -179,7 +179,7 @@ export default function DataSourceDialog({
           sx={{
             color: 'var(--Primary-Black, #212B36)',
             fontFamily: 'DFPHeiBold-B5',
-            fontSize: '24px'
+            fontSize: '24px',
           }}
         >
           {title}
@@ -200,12 +200,12 @@ export default function DataSourceDialog({
           height: '100%',
           overflowY: 'auto',
           '&::-webkit-scrollbar': {
-            width: '4px'
+            width: '4px',
           },
           '&::-webkit-scrollbar-thumb': {
             backgroundColor: 'rgba(0,0,0,0.2)',
-            borderRadius: '8px'
-          }
+            borderRadius: '8px',
+          },
         }}
       >
         <Typography
@@ -217,7 +217,7 @@ export default function DataSourceDialog({
             lineHeight: 'normal',
             fontStyle: 'normal',
             fontWeight: 400,
-            pb: '8px'
+            pb: '8px',
           }}
         >
           本地上傳
@@ -232,11 +232,11 @@ export default function DataSourceDialog({
               backgroundColor: '#EBE3DD',
               borderRadius: '8px',
               '&:hover': {
-                backgroundColor: 'rgba(0, 0, 0, 0.04)'
+                backgroundColor: 'rgba(0, 0, 0, 0.04)',
               },
               cursor: 'pointer',
               py: '16px',
-              px: '8px'
+              px: '8px',
             }}
           >
             <ListItemIcon sx={{ minWidth: '0px', pr: '16px' }}>
@@ -253,8 +253,8 @@ export default function DataSourceDialog({
                   fontFamily: 'DFPHeiBold-B5',
                   fontStyle: 'normal',
                   fontWeight: 400,
-                  lineHeight: 'normal'
-                }
+                  lineHeight: 'normal',
+                },
               }}
             />
           </ListItem>
@@ -269,7 +269,7 @@ export default function DataSourceDialog({
             fontWeight: 400,
             lineHeight: 'normal',
             pb: '8px',
-            pt: '16px'
+            pt: '16px',
           }}
         >
           資料來源
@@ -284,11 +284,11 @@ export default function DataSourceDialog({
               backgroundColor: '#EBE3DD',
               borderRadius: '8px',
               '&:hover': {
-                backgroundColor: 'rgba(0, 0, 0, 0.04)'
+                backgroundColor: 'rgba(0, 0, 0, 0.04)',
               },
               cursor: 'pointer',
               py: '16px',
-              px: '8px'
+              px: '8px',
             }}
           >
             <ListItemIcon sx={{ minWidth: '0px', pr: '16px' }}>
@@ -303,8 +303,8 @@ export default function DataSourceDialog({
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   fontFamily: 'DFPHeiBold-B5',
-                  color: 'var(--Primary-Black, #212B36)'
-                }
+                  color: 'var(--Primary-Black, #212B36)',
+                },
               }}
             />
           </ListItem>

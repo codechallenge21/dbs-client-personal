@@ -16,13 +16,9 @@ import {
 
 interface MainContentProps {
   chatsData?: OrganizationChannel[];
-  setIsLoginOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const MainContent: React.FC<MainContentProps> = ({
-  chatsData,
-  setIsLoginOpen,
-}) => {
+const MainContent: React.FC<MainContentProps> = ({ chatsData }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const router = useRouter();
@@ -131,11 +127,17 @@ const MainContent: React.FC<MainContentProps> = ({
               chatResponses={chatResponses}
             />
           </Box>
-          <TextInput
-            from={'mainContent'}
-            submitUserInputs={submitUserInputs}
-            isInteracting={isInteracting}
-          />
+          <Box
+            sx={{
+              px: '16px',
+            }}
+          >
+            <TextInput
+              from={'mainContent'}
+              submitUserInputs={submitUserInputs}
+              isInteracting={isInteracting}
+            />
+          </Box>
         </Box>
       </Box>
     );
@@ -181,7 +183,6 @@ const MainContent: React.FC<MainContentProps> = ({
       <TextInput
         submitUserInputs={submitUserInputs}
         isInteracting={isInteracting}
-        setIsLoginOpen={setIsLoginOpen}
       />
       <Box
         sx={{

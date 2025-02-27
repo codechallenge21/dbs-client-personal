@@ -8,7 +8,6 @@ import AttachFileRoundedIcon from '@mui/icons-material/AttachFileRounded';
 import MicRoundedIcon from '@mui/icons-material/MicRounded';
 import RotateRightRounded from '@mui/icons-material/RotateRightRounded';
 import { Box, IconButton, TextareaAutosize, Typography } from '@mui/material';
-import Cookies from 'js-cookie';
 import Image from 'next/image';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import ChannelContentContext from '@/context/ChannelContentContext';
@@ -16,6 +15,7 @@ import DropdownMenu from './DropdownMenu';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import apis from '@/utils/hooks/apis/apis';
 import { SnackbarContext } from '@/context/SnackbarContext';
+import { useRequireAuth } from '@/utils/hooks/useRequireAuth';
 
 interface SpeechRecognition extends EventTarget {
   continuous: boolean;
@@ -92,6 +92,8 @@ const TextInput: React.FC<TextInputProps> = ({
   setIsLoginOpen,
   from,
 }) => {
+  const { requireAuth } = useRequireAuth();
+
   const [userInputValue, setUserInputValue] = useState('');
   const [isListening, setIsListening] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -302,11 +304,8 @@ const TextInput: React.FC<TextInputProps> = ({
 
   const handleOnChangeUserInput = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      const isLoggedin = Cookies.get('u_info');
-      if (!isLoggedin) {
-        if (setIsLoginOpen) setIsLoginOpen(true);
-        return;
-      }
+      if (!requireAuth()) return;
+
       const { value } = e.target;
       setUserInputValue(value);
     },
