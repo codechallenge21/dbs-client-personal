@@ -18,11 +18,13 @@ import { SnackbarContext } from '@/context/SnackbarContext';
 interface ForgetPasswordDialogProps {
   open: boolean;
   onClose: () => void;
+  onBack?: () => void;
 }
 
 const ForgetPasswordDialog: React.FC<ForgetPasswordDialogProps> = ({
   open,
   onClose,
+  onBack,
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -51,6 +53,14 @@ const ForgetPasswordDialog: React.FC<ForgetPasswordDialogProps> = ({
   const handleClose = () => {
     setEmail('');
     onClose();
+  };
+  const handleBack = () => {
+    setEmail('');
+    if (onBack) {
+      onBack();
+    } else {
+      handleClose();
+    }
   };
 
   return (
@@ -179,7 +189,7 @@ const ForgetPasswordDialog: React.FC<ForgetPasswordDialogProps> = ({
         }}
       >
         <Box
-          onClick={handleClose}
+          onClick={handleBack}
           sx={{
             display: 'flex',
             alignItems: 'center',

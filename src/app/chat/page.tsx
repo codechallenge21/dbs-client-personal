@@ -170,6 +170,10 @@ function ClientContent() {
       <ForgetPasswordDialog
         open={isForgetPasswordOpen}
         onClose={() => setIsForgetPasswordOpen(false)}
+        onBack={() => {
+          setIsForgetPasswordOpen(false);
+          setIsLoginOpen(true);
+        }}
       />
     </ToolbarDrawer>
   );
