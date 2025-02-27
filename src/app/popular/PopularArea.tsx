@@ -188,10 +188,10 @@ export default function PopularArea() {
             overflowY: 'auto',
             flexDirection: 'column',
             backgroundColor: 'white',
-            height: '100%',
+            height: '96.5vh',
             marginBottom: '0px',
-            padding: isMobile ? '16px' : '16px 32px 0px 32px',
-            // paddingBottom: isMobile ? '0' : '16px', // Ensure no extra padding at the bottom for mobile
+            borderRadius: '8px',
+            padding: isMobile ? '16px' : '16px 32px 16px 32px',
             '@media (min-width: 600px)': {
               flex: '1 0 0',
             },
@@ -219,7 +219,6 @@ export default function PopularArea() {
               overflow: 'visible',
               position: 'relative',
               flexDirection: 'column',
-              marginBottom: '0px', 
             }}
           >
             <Typography
