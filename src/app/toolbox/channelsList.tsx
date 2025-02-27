@@ -929,7 +929,7 @@ const ChannelsList = () => {
                                 variant="body2"
                                 sx={{ p: 2, color: 'gray' }}
                               >
-                                No more data available.
+                                所有資料均已載入
                               </Typography>
                             </TableCell>
                           </TableRow>
@@ -1440,7 +1440,7 @@ const ChannelsList = () => {
                           textAlign: 'center',
                         }}
                       >
-                        No more data available.
+                        所有資料均已載入
                       </Typography>
                     )}
                   </Box>

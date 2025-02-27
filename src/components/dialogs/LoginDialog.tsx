@@ -104,6 +104,9 @@ const LoginDialog = ({
               paddingBottom: '24px',
               transform: 'translate(-50%, -50%)',
               overflow: 'hidden',
+              '@media (orientation: landscape)': {
+                overflow: 'auto',
+              },
             },
           },
         }}
