@@ -1,12 +1,12 @@
 'use client';
 import React, { Suspense } from 'react';
 import { CircularProgress } from '@mui/material';
-import WishingWell from './WishingWell';
+import Events from './Events';
 
-export default function WishingWellWrapper() {
+export default function EventsWrapper() {
   return (
     <Suspense fallback={<CircularProgress />}>
-      <WishingWell />
+      <Events />
     </Suspense>
   );
 }

@@ -18,7 +18,7 @@ import {
 import boxImage from '../../../public/assets/images/box.png';
 import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
 
-const WishingWell = () => {
+const Events = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -512,4 +512,4 @@ const WishingWell = () => {
   );
 };
 
-export default WishingWell;
+export default Events;
