@@ -1,7 +1,7 @@
 import { Box, Typography, useTheme, useMediaQuery } from '@mui/material';
 import TextInput from './TextInput';
 import { useContext, useEffect, useRef } from 'react';
-import ChannelContentContext from '../../channel-context-provider/ChannelContentContext';
+import ChannelContentContext from '@/context/ChannelContentContext';
 import ChannelMessagePanel from '../../channel-message-panel/ChannelMessagePanel';
 import Suggestions from './Suggestions';
 import ViewChats from './viewChats';
@@ -16,13 +16,9 @@ import {
 
 interface MainContentProps {
   chatsData?: OrganizationChannel[];
-  setIsLoginOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const MainContent: React.FC<MainContentProps> = ({
-  chatsData,
-  setIsLoginOpen,
-}) => {
+const MainContent: React.FC<MainContentProps> = ({ chatsData }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const router = useRouter();
@@ -31,6 +27,7 @@ const MainContent: React.FC<MainContentProps> = ({
     selectedChannel,
     chatResponses,
     setSelectedChannel,
+    isInteractingInChat,
   } = useContext(ChannelContentContext);
   const { excute: submitUserInputs, isLoading: isInteracting } = useAxiosApi(
     apis.submitUserInputs
@@ -129,13 +126,20 @@ const MainContent: React.FC<MainContentProps> = ({
             <ChannelMessagePanel
               channel={selectedChannel}
               chatResponses={chatResponses}
+              isInteractingInChat={isInteractingInChat}
             />
           </Box>
-          <TextInput
-            from={'mainContent'}
-            submitUserInputs={submitUserInputs}
-            isInteracting={isInteracting}
-          />
+          <Box
+            sx={{
+              px: '16px',
+            }}
+          >
+            <TextInput
+              from={'mainContent'}
+              submitUserInputs={submitUserInputs}
+              isInteracting={isInteracting}
+            />
+          </Box>
         </Box>
       </Box>
     );
@@ -143,13 +147,9 @@ const MainContent: React.FC<MainContentProps> = ({
 
   const paddingTop = (() => {
     if (isMobile) {
-      if (chatsData && chatsData.length > 0) {
-        return '30vh';
-      } else {
-        return '10vh';
-      }
+      return chatsData && chatsData.length > 0 ? '50vh' : '10vh';
     }
-    return '0vh';
+    return chatsData && chatsData.length > 0 ? '20vh' : '0vh';
   })();
 
   return (
@@ -162,10 +162,11 @@ const MainContent: React.FC<MainContentProps> = ({
         alignItems: 'center',
         flexDirection: 'column',
         height: '100vh',
-        minHeight: 0, // critical so that overflow can happen
+        minHeight: 0,
         overflow: 'auto',
         justifyContent: 'center',
         pt: paddingTop,
+        mt: '10px',
       }}
     >
       <Typography
@@ -184,7 +185,6 @@ const MainContent: React.FC<MainContentProps> = ({
       <TextInput
         submitUserInputs={submitUserInputs}
         isInteracting={isInteracting}
-        setIsLoginOpen={setIsLoginOpen}
       />
       <Box
         sx={{

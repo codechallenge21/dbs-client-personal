@@ -40,6 +40,15 @@ export interface SubmitUserInputsApiPayload {
   advisorType: AdvisorType;
 }
 
+export interface ChatWithFilesPayload {
+  chatRequest: {
+    query: string;
+    advisorType: string;
+  };
+  files: File[];
+  organizationId: string;
+}
+
 export interface DeleteChannelApiPayload {
   organizationId: string;
   organizationChannelId: string;
@@ -49,4 +58,25 @@ export interface UpdateChannelApiPayload {
   organizationId: string;
   organizationChannelId: string;
   organizationChannelTitle: string;
+}
+
+export interface RegisterUserApiPayload {
+  organizationId: string;
+  organizationUserNameZh: string;
+  organizationUserEmail: string;
+  organizationUserPassword: string;
+}
+
+export interface VerifyAccountApiPayload {
+  emailTokenId: string;
+}
+
+export interface LoginPayload {
+  organizationUserAccount: string;
+  organizationUserPassword: string;
+}
+
+export interface LogoutPayload {
+  organizationUserAccount: string;
+  organizationUserPassword: string;
 }
