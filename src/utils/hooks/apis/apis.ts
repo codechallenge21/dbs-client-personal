@@ -82,25 +82,28 @@ const apis = {
       config
     );
   },
-  submitUserInputs: (payload?: SubmitUserInputsApiPayload) => {
+  submitUserInputs: (
+    payload?: SubmitUserInputsApiPayload,
+    config?: AxiosRequestConfig
+  ) => {
     const { organizationId, organizationChannelId, query, advisorType } =
       payload || {};
+    const url = `/organizations/${organizationId}/channels/chat`;
+
+    const dataWithoutChannel = { query, advisorType };
+    const dataWithChannel = { organizationChannelId, query, advisorType };
+
     if (!organizationChannelId) {
       return fetcher.post<OrganizationChannelChatInteractResponse>(
-        `/organizations/${organizationId}/channels/chat`,
-        {
-          query,
-          advisorType,
-        }
+        url,
+        dataWithoutChannel,
+        config
       );
     }
     return fetcher.post<OrganizationChannelChatInteractResponse>(
-      `/organizations/${organizationId}/channels/chat`,
-      {
-        organizationChannelId,
-        query,
-        advisorType,
-      }
+      url,
+      dataWithChannel,
+      config
     );
   },
   chatWithFiles: (payload?: ChatWithFilesPayload) => {
