@@ -152,7 +152,7 @@ const Header: React.FC<HeaderProps> = ({
               )}
             </Box>
           )}
-          {isChat && (
+          {isChat && selectedChannel && (
             <Box
               sx={{
                 display: 'flex',
@@ -170,9 +170,7 @@ const Header: React.FC<HeaderProps> = ({
                 >
                   <StarBorderRounded sx={{ color: '#212B36', margin: '8px' }} />
                 </IconButton>
-                {selectedChannel ||
-                selectedChannelId ||
-                chatResponses.length ? (
+                {selectedChannelId || chatResponses.length ? (
                   <IconButton
                     role="button"
                     aria-label="All Chats"
