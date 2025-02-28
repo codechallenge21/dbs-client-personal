@@ -2,17 +2,21 @@ import docPreview from '@/assets/Images/Doc Icon.svg';
 import imagePreview from '@/assets/Images/Image Icon.svg';
 import pdfPreview from '@/assets/Images/Pdf Icon.svg';
 import txtPreview from '@/assets/Images/Txt Icon.svg';
+import ChannelContentContext from '@/context/ChannelContentContext';
+import { SnackbarContext } from '@/context/SnackbarContext';
 import { SubmitUserInputsApiPayload } from '@/interfaces/payloads';
+import apis from '@/utils/hooks/apis/apis';
+import { useRequireAuth } from '@/utils/hooks/useRequireAuth';
+import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import { CloseRounded, SendRounded } from '@mui/icons-material';
 import AttachFileRoundedIcon from '@mui/icons-material/AttachFileRounded';
 import MicRoundedIcon from '@mui/icons-material/MicRounded';
-import RotateRightRounded from '@mui/icons-material/RotateRightRounded';
 import { Box, IconButton, TextareaAutosize, Typography } from '@mui/material';
 import Image from 'next/image';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import ChannelContentContext from '@/context/ChannelContentContext';
 import DropdownMenu from './DropdownMenu';
-import { useRequireAuth } from '@/utils/hooks/useRequireAuth';
+import StopCircleRounded from '@mui/icons-material/StopCircleRounded';
+import axios, { AxiosRequestConfig } from 'axios';
 
 interface SpeechRecognition extends EventTarget {
   continuous: boolean;
@@ -56,7 +60,10 @@ interface SpeechRecognitionErrorEvent extends Event {
 }
 
 type TextInputProps = {
-  submitUserInputs: (input: SubmitUserInputsApiPayload) => Promise<{
+  submitUserInputs: (
+    input: SubmitUserInputsApiPayload,
+    config?: AxiosRequestConfig
+  ) => Promise<{
     data: {
       response: string;
       organizationChannelTitle: string;
@@ -67,6 +74,21 @@ type TextInputProps = {
   setIsLoginOpen?: (value: boolean) => void;
   from?: string;
 };
+
+interface ChatWithFilesPayload {
+  chatRequest: {
+    query: string;
+    advisorType: string;
+  };
+  files: File[];
+  organizationId: string;
+}
+
+interface ChatWithFilesResponse {
+  response: string;
+  organizationChannelTitle: string;
+  organizationChannelId: string;
+}
 
 const TextInput: React.FC<TextInputProps> = ({
   submitUserInputs,
@@ -83,10 +105,51 @@ const TextInput: React.FC<TextInputProps> = ({
   const [files, setFiles] = useState<{ file: File; preview: string | null }[]>(
     []
   );
+  const { showSnackbar } = useContext(SnackbarContext);
+
+  const MAX_FILES = 3;
+  const MAX_FILE_SIZE = 5 * 1024 * 1024;
+  const allowedExtensions = [
+    'pdf', // PDF
+    'ppt', // PowerPoint
+    'pptx', // PowerPoint (新格式)
+    'doc', // Word
+    'docx', // Word (新格式)
+    'xls', // Excel
+    'xlsx', // Excel (新格式)
+    'html', // HTML
+    'csv', // CSV
+    'json', // JSON
+    'xml', // XML
+    'zip', // ZIP
+    'txt', // Text
+  ];
+
+  const { excute: chatWithFiles } = useAxiosApi<
+    ChatWithFilesResponse,
+    ChatWithFilesPayload
+  >(apis.chatWithFiles);
 
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     const droppedFiles = Array.from(event.dataTransfer.files);
+    if (files.length + droppedFiles.length > MAX_FILES) {
+      showSnackbar(`您一次最多只能上傳 ${MAX_FILES} 個檔案。`, 'error');
+      return;
+    }
+
+    for (const file of droppedFiles) {
+      const extension = file.name.split('.').pop()?.toLowerCase();
+      if (!allowedExtensions.includes(extension ?? '')) {
+        showSnackbar(`檔案格式不支援: ${file.name}`, 'error');
+        return;
+      }
+      if (file.size > MAX_FILE_SIZE) {
+        showSnackbar(`檔案 "${file.name}" 超過 5MB 的限制。`, 'error');
+        return;
+      }
+    }
+
     const mappedFiles = droppedFiles.map((file) => ({ file, preview: null }));
     setFiles((prev) => [...prev, ...mappedFiles]);
   };
@@ -98,6 +161,22 @@ const TextInput: React.FC<TextInputProps> = ({
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
       const selectedFiles = Array.from(event.target.files);
+      if (files.length + selectedFiles.length > MAX_FILES) {
+        showSnackbar(`您一次最多只能上傳 ${MAX_FILES} 個檔案。`, 'error');
+        return;
+      }
+      // Validate each file's size
+      for (const file of selectedFiles) {
+        const extension = file.name.split('.').pop()?.toLowerCase();
+        if (!allowedExtensions.includes(extension ?? '')) {
+          showSnackbar(`檔案格式不支援: ${file.name}`, 'error');
+          return;
+        }
+        if (file.size > MAX_FILE_SIZE) {
+          showSnackbar(`檔案 "${file.name}" 超過 5MB 的限制。`, 'error');
+          return;
+        }
+      }
       const newFiles = selectedFiles.map((file) => {
         const icon = getFileIcon(file);
         return { file, preview: icon };
@@ -142,43 +221,96 @@ const TextInput: React.FC<TextInputProps> = ({
     advisorType,
   } = useContext(ChannelContentContext);
 
+  const abortControllerRef = useRef<AbortController | null>(null);
   const handleSendMessage = useCallback(async () => {
-    try {
-      if (isInteracting) {
-        return;
-      }
-      setChatResponses((prev) => [
-        ...prev,
-        {
-          organizationChannelMessageType: 'USER',
-          organizationChannelMessageContent: userInputValue,
-          organizationChannelFiles: files,
-        },
-      ]);
-      const response = await submitUserInputs({
-        organizationId: 'yMJHyi6R1CB9whpdNvtA',
-        query: userInputValue,
-        advisorType,
-        organizationChannelId: selectedChannelId,
-      });
-      if (response.data.response) {
-        setChatResponses((prev) => [
-          ...prev,
+    if (isInteracting) return;
+
+    // Create a new AbortController for each request
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
+    // Update your UI immediately if needed
+    setChatResponses((prev) => [
+      ...prev,
+      {
+        organizationChannelMessageType: 'USER',
+        organizationChannelMessageContent: userInputValue,
+        organizationChannelFiles: files,
+      },
+    ]);
+
+    const payload = {
+      organizationId: '4aba77788ae94eca8d6ff330506af944',
+      query: userInputValue,
+      advisorType,
+      organizationChannelId: selectedChannelId,
+    };
+    if (files.length > 0) {
+      try {
+        const response = await chatWithFiles(
           {
-            organizationChannelMessageType: 'AI',
-            organizationChannelMessageContent: response?.data?.response,
-            organizationChannelTitle: response?.data?.organizationChannelTitle,
+            chatRequest: {
+              query: userInputValue,
+              advisorType: 'DEBT',
+            },
+            files: files.map((item) => item.file),
+            organizationId: 'yMJHyi6R1CB9whpdNvtA',
           },
-        ]);
-        setSelectedChannelId(response?.data?.organizationChannelId);
-        if (channelsMutate) {
-          channelsMutate();
+          {
+            signal: controller.signal,
+          }
+        );
+        if (response.data.response) {
+          setChatResponses((prev) => [
+            ...prev,
+            {
+              organizationChannelMessageType: 'AI',
+              organizationChannelMessageContent: response.data.response,
+              organizationChannelTitle: response.data.organizationChannelTitle,
+            },
+          ]);
+          setSelectedChannelId(response.data.organizationChannelId);
+          if (channelsMutate) {
+            channelsMutate();
+          }
+          setUserInputValue('');
+          setFiles([]);
         }
-        setUserInputValue('');
-        setFiles([]);
+      } catch (error: any) {
+        if (axios.isCancel(error) || error.code === 'ERR_CANCELED') {
+        } else {
+          console.error('Error sending message with files:', error);
+        }
       }
-    } catch (error) {
-      console.error('Error sending message:', error);
+    } else {
+      try {
+        // Now you can pass two arguments:
+        const response = await submitUserInputs(payload, {
+          signal: controller.signal, // Pass the abort signal here
+        });
+
+        if (response.data.response) {
+          setChatResponses((prev) => [
+            ...prev,
+            {
+              organizationChannelMessageType: 'AI',
+              organizationChannelMessageContent: response.data.response,
+              organizationChannelTitle: response.data.organizationChannelTitle,
+            },
+          ]);
+          setSelectedChannelId(response.data.organizationChannelId);
+          if (channelsMutate) {
+            channelsMutate();
+          }
+          setUserInputValue('');
+          setFiles([]);
+        }
+      } catch (error: any) {
+        if (axios.isCancel(error) || error.code === 'ERR_CANCELED') {
+        } else {
+          console.error('Request error:', error);
+        }
+      }
     }
   }, [
     channelsMutate,
@@ -191,6 +323,12 @@ const TextInput: React.FC<TextInputProps> = ({
     advisorType,
     files,
   ]);
+
+  const handleCancel = () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+  };
 
   const handleClickSubmitOrAudioFileUpload = useCallback(() => {
     if (userInputValue !== '') {
@@ -466,9 +604,20 @@ const TextInput: React.FC<TextInputProps> = ({
           </Box>
 
           {isInteracting ? (
-            <Box>
-              <RotateRightRounded sx={{ color: '#1877F2', fontSize: 24 }} />
-            </Box>
+            <IconButton
+              onClick={handleCancel}
+              className={isInteracting ? 'interacting' : ''}
+              sx={{
+                position: 'absolute',
+                bottom: '10px',
+                right: '10px',
+              }}
+            >
+              <StopCircleRounded
+                className={'interactingIcon'}
+                sx={{ color: '#0066CC' }}
+              />
+            </IconButton>
           ) : userInputValue !== '' && !isListening ? (
             <IconButton
               aria-label="send message"
