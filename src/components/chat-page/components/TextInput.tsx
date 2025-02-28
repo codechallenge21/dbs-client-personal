@@ -1,21 +1,22 @@
-import docPreview from "@/assets/Images/Doc Icon.svg";
-import imagePreview from "@/assets/Images/Image Icon.svg";
-import pdfPreview from "@/assets/Images/Pdf Icon.svg";
-import txtPreview from "@/assets/Images/Txt Icon.svg";
-import ChannelContentContext from "@/context/ChannelContentContext";
-import { SnackbarContext } from "@/context/SnackbarContext";
-import { SubmitUserInputsApiPayload } from "@/interfaces/payloads";
-import apis from "@/utils/hooks/apis/apis";
-import { useRequireAuth } from "@/utils/hooks/useRequireAuth";
-import useAxiosApi from "@eGroupAI/hooks/apis/useAxiosApi";
-import { CloseRounded, SendRounded } from "@mui/icons-material";
-import AttachFileRoundedIcon from "@mui/icons-material/AttachFileRounded";
-import MicRoundedIcon from "@mui/icons-material/MicRounded";
-import RotateRightRounded from "@mui/icons-material/RotateRightRounded";
-import { Box, IconButton, TextareaAutosize, Typography } from "@mui/material";
-import Image from "next/image";
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
-import DropdownMenu from "./DropdownMenu";
+import docPreview from '@/assets/Images/Doc Icon.svg';
+import imagePreview from '@/assets/Images/Image Icon.svg';
+import pdfPreview from '@/assets/Images/Pdf Icon.svg';
+import txtPreview from '@/assets/Images/Txt Icon.svg';
+import ChannelContentContext from '@/context/ChannelContentContext';
+import { SnackbarContext } from '@/context/SnackbarContext';
+import { SubmitUserInputsApiPayload } from '@/interfaces/payloads';
+import apis from '@/utils/hooks/apis/apis';
+import { useRequireAuth } from '@/utils/hooks/useRequireAuth';
+import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
+import { CloseRounded, SendRounded } from '@mui/icons-material';
+import AttachFileRoundedIcon from '@mui/icons-material/AttachFileRounded';
+import MicRoundedIcon from '@mui/icons-material/MicRounded';
+import { Box, IconButton, TextareaAutosize, Typography } from '@mui/material';
+import Image from 'next/image';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import DropdownMenu from './DropdownMenu';
+import StopCircleRounded from '@mui/icons-material/StopCircleRounded';
+import axios, { AxiosRequestConfig } from 'axios';
 
 interface SpeechRecognition extends EventTarget {
   continuous: boolean;
@@ -59,7 +60,10 @@ interface SpeechRecognitionErrorEvent extends Event {
 }
 
 type TextInputProps = {
-  submitUserInputs: (input: SubmitUserInputsApiPayload) => Promise<{
+  submitUserInputs: (
+    input: SubmitUserInputsApiPayload,
+    config?: AxiosRequestConfig
+  ) => Promise<{
     data: {
       response: string;
       organizationChannelTitle: string;
@@ -94,7 +98,7 @@ const TextInput: React.FC<TextInputProps> = ({
 }) => {
   const { requireAuth } = useRequireAuth();
 
-  const [userInputValue, setUserInputValue] = useState("");
+  const [userInputValue, setUserInputValue] = useState('');
   const [isListening, setIsListening] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const recognitionRef = useRef<null | SpeechRecognition>(null);
@@ -106,19 +110,19 @@ const TextInput: React.FC<TextInputProps> = ({
   const MAX_FILES = 3;
   const MAX_FILE_SIZE = 5 * 1024 * 1024;
   const allowedExtensions = [
-    "pdf", // PDF
-    "ppt", // PowerPoint
-    "pptx", // PowerPoint (新格式)
-    "doc", // Word
-    "docx", // Word (新格式)
-    "xls", // Excel
-    "xlsx", // Excel (新格式)
-    "html", // HTML
-    "csv", // CSV
-    "json", // JSON
-    "xml", // XML
-    "zip", // ZIP
-    "txt", // Text
+    'pdf', // PDF
+    'ppt', // PowerPoint
+    'pptx', // PowerPoint (新格式)
+    'doc', // Word
+    'docx', // Word (新格式)
+    'xls', // Excel
+    'xlsx', // Excel (新格式)
+    'html', // HTML
+    'csv', // CSV
+    'json', // JSON
+    'xml', // XML
+    'zip', // ZIP
+    'txt', // Text
   ];
 
   const { excute: chatWithFiles } = useAxiosApi<
@@ -130,18 +134,18 @@ const TextInput: React.FC<TextInputProps> = ({
     event.preventDefault();
     const droppedFiles = Array.from(event.dataTransfer.files);
     if (files.length + droppedFiles.length > MAX_FILES) {
-      showSnackbar(`您一次最多只能上傳 ${MAX_FILES} 個檔案。`, "error");
+      showSnackbar(`您一次最多只能上傳 ${MAX_FILES} 個檔案。`, 'error');
       return;
     }
 
     for (const file of droppedFiles) {
-      const extension = file.name.split(".").pop()?.toLowerCase();
-      if (!allowedExtensions.includes(extension ?? "")) {
-        showSnackbar(`檔案格式不支援: ${file.name}`, "error");
+      const extension = file.name.split('.').pop()?.toLowerCase();
+      if (!allowedExtensions.includes(extension ?? '')) {
+        showSnackbar(`檔案格式不支援: ${file.name}`, 'error');
         return;
       }
       if (file.size > MAX_FILE_SIZE) {
-        showSnackbar(`檔案 "${file.name}" 超過 5MB 的限制。`, "error");
+        showSnackbar(`檔案 "${file.name}" 超過 5MB 的限制。`, 'error');
         return;
       }
     }
@@ -158,18 +162,18 @@ const TextInput: React.FC<TextInputProps> = ({
     if (event.target.files) {
       const selectedFiles = Array.from(event.target.files);
       if (files.length + selectedFiles.length > MAX_FILES) {
-        showSnackbar(`您一次最多只能上傳 ${MAX_FILES} 個檔案。`, "error");
+        showSnackbar(`您一次最多只能上傳 ${MAX_FILES} 個檔案。`, 'error');
         return;
       }
       // Validate each file's size
       for (const file of selectedFiles) {
-        const extension = file.name.split(".").pop()?.toLowerCase();
-        if (!allowedExtensions.includes(extension ?? "")) {
-          showSnackbar(`檔案格式不支援: ${file.name}`, "error");
+        const extension = file.name.split('.').pop()?.toLowerCase();
+        if (!allowedExtensions.includes(extension ?? '')) {
+          showSnackbar(`檔案格式不支援: ${file.name}`, 'error');
           return;
         }
         if (file.size > MAX_FILE_SIZE) {
-          showSnackbar(`檔案 "${file.name}" 超過 5MB 的限制。`, "error");
+          showSnackbar(`檔案 "${file.name}" 超過 5MB 的限制。`, 'error');
           return;
         }
       }
@@ -186,22 +190,22 @@ const TextInput: React.FC<TextInputProps> = ({
   };
 
   const getFileIcon = (file: File): string => {
-    const extension = file.name.split(".").pop()?.toLowerCase();
+    const extension = file.name.split('.').pop()?.toLowerCase();
 
     switch (extension) {
-      case "pdf":
+      case 'pdf':
         return pdfPreview;
-      case "txt":
+      case 'txt':
         return txtPreview;
-      case "png":
-      case "jpg":
-      case "jpeg":
-      case "gif":
+      case 'png':
+      case 'jpg':
+      case 'jpeg':
+      case 'gif':
         return imagePreview;
-      case "doc":
-      case "docx":
-      case "xlsx":
-      case "xls":
+      case 'doc':
+      case 'docx':
+      case 'xlsx':
+      case 'xls':
         return docPreview;
       default:
         return imagePreview;
@@ -217,33 +221,50 @@ const TextInput: React.FC<TextInputProps> = ({
     advisorType,
   } = useContext(ChannelContentContext);
 
+  const abortControllerRef = useRef<AbortController | null>(null);
   const handleSendMessage = useCallback(async () => {
-    if (isInteracting) {
-      return;
-    }
+    if (isInteracting) return;
+
+    // Create a new AbortController for each request
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
+    // Update your UI immediately if needed
     setChatResponses((prev) => [
       ...prev,
       {
-        organizationChannelMessageType: "USER",
+        organizationChannelMessageType: 'USER',
         organizationChannelMessageContent: userInputValue,
         organizationChannelFiles: files,
       },
     ]);
+
+    const payload = {
+      organizationId: '4aba77788ae94eca8d6ff330506af944',
+      query: userInputValue,
+      advisorType,
+      organizationChannelId: selectedChannelId,
+    };
     if (files.length > 0) {
       try {
-        const response = await chatWithFiles({
-          chatRequest: {
-            query: userInputValue,
-            advisorType: "DEBT",
+        const response = await chatWithFiles(
+          {
+            chatRequest: {
+              query: userInputValue,
+              advisorType: 'DEBT',
+            },
+            files: files.map((item) => item.file),
+            organizationId: 'yMJHyi6R1CB9whpdNvtA',
           },
-          files: files.map((item) => item.file),
-          organizationId: "yMJHyi6R1CB9whpdNvtA",
-        });
+          {
+            signal: controller.signal,
+          }
+        );
         if (response.data.response) {
           setChatResponses((prev) => [
             ...prev,
             {
-              organizationChannelMessageType: "AI",
+              organizationChannelMessageType: 'AI',
               organizationChannelMessageContent: response.data.response,
               organizationChannelTitle: response.data.organizationChannelTitle,
             },
@@ -252,39 +273,43 @@ const TextInput: React.FC<TextInputProps> = ({
           if (channelsMutate) {
             channelsMutate();
           }
-          setUserInputValue("");
+          setUserInputValue('');
           setFiles([]);
         }
-      } catch (error) {
-        console.error("Error sending message with files:", error);
+      } catch (error: any) {
+        if (axios.isCancel(error) || error.code === 'ERR_CANCELED') {
+        } else {
+          console.error('Error sending message with files:', error);
+        }
       }
     } else {
       try {
-        const response = await submitUserInputs({
-          organizationId: "yMJHyi6R1CB9whpdNvtA",
-          query: userInputValue,
-          advisorType,
-          organizationChannelId: selectedChannelId,
+        // Now you can pass two arguments:
+        const response = await submitUserInputs(payload, {
+          signal: controller.signal, // Pass the abort signal here
         });
+
         if (response.data.response) {
           setChatResponses((prev) => [
             ...prev,
             {
-              organizationChannelMessageType: "AI",
-              organizationChannelMessageContent: response?.data?.response,
-              organizationChannelTitle:
-                response?.data?.organizationChannelTitle,
+              organizationChannelMessageType: 'AI',
+              organizationChannelMessageContent: response.data.response,
+              organizationChannelTitle: response.data.organizationChannelTitle,
             },
           ]);
-          setSelectedChannelId(response?.data?.organizationChannelId);
+          setSelectedChannelId(response.data.organizationChannelId);
           if (channelsMutate) {
             channelsMutate();
           }
-          setUserInputValue("");
+          setUserInputValue('');
           setFiles([]);
         }
-      } catch (error) {
-        console.error("Error sending message:", error);
+      } catch (error: any) {
+        if (axios.isCancel(error) || error.code === 'ERR_CANCELED') {
+        } else {
+          console.error('Request error:', error);
+        }
       }
     }
   }, [
@@ -299,11 +324,17 @@ const TextInput: React.FC<TextInputProps> = ({
     files,
   ]);
 
+  const handleCancel = () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+  };
+
   const handleClickSubmitOrAudioFileUpload = useCallback(() => {
-    if (userInputValue !== "") {
+    if (userInputValue !== '') {
       handleSendMessage();
       setFiles([]);
-      setUserInputValue("");
+      setUserInputValue('');
     }
   }, [handleSendMessage, userInputValue]);
 
@@ -319,12 +350,12 @@ const TextInput: React.FC<TextInputProps> = ({
 
   const handleOnKeyDownUserInput = useCallback(
     (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-      if (e.key === "Enter" && !e.shiftKey) {
-        if (userInputValue.trim() !== "") {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        if (userInputValue.trim() !== '') {
           e.preventDefault();
           handleSendMessage();
           setFiles([]);
-          setUserInputValue("");
+          setUserInputValue('');
         }
       }
     },
@@ -336,19 +367,19 @@ const TextInput: React.FC<TextInputProps> = ({
   }, [isInteracting, setIsInteractingInChat]);
 
   useEffect(() => {
-    if ("webkitSpeechRecognition" in window) {
+    if ('webkitSpeechRecognition' in window) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const SpeechRecognition = (window as any).webkitSpeechRecognition;
       recognitionRef.current = new SpeechRecognition();
       if (recognitionRef.current) {
         recognitionRef.current.continuous = true;
         recognitionRef.current.interimResults = true;
-        recognitionRef.current.lang = "zh-TW";
+        recognitionRef.current.lang = 'zh-TW';
 
         recognitionRef.current.onresult = (event: SpeechRecognitionEvent) => {
           const finalTranscript = Array.from(event.results)
             .map((result) => result[0]?.transcript)
-            .join("");
+            .join('');
           setUserInputValue(finalTranscript);
         };
 
@@ -364,7 +395,7 @@ const TextInput: React.FC<TextInputProps> = ({
         };
       }
     } else {
-      setError("Your browser does not support Speech Recognition.");
+      setError('Your browser does not support Speech Recognition.');
     }
   }, []);
 
@@ -373,7 +404,7 @@ const TextInput: React.FC<TextInputProps> = ({
       if (isListening) {
         recognitionRef.current.stop();
         setIsListening(false);
-        if (userInputValue !== "") {
+        if (userInputValue !== '') {
           handleSendMessage();
         }
       } else {
@@ -385,44 +416,44 @@ const TextInput: React.FC<TextInputProps> = ({
   }, [handleSendMessage, isListening, userInputValue]);
   return (
     <>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
       <Box
         sx={{
-          width: "100%",
-          maxWidth: "760px",
-          minHeight: "116px",
-          position: from === "mainContent" ? "sticky" : "relative",
+          width: '100%',
+          maxWidth: '760px',
+          minHeight: '116px',
+          position: from === 'mainContent' ? 'sticky' : 'relative',
           bottom: 0,
-          backgroundColor: "#F5F5F5",
-          borderRadius: "16px",
+          backgroundColor: '#F5F5F5',
+          borderRadius: '16px',
           zIndex: 10,
-          overflow: "hidden",
-          margin: from === "mainContent" ? "auto" : "0",
+          overflow: 'hidden',
+          margin: from === 'mainContent' ? 'auto' : '0',
         }}
         className="chat-text-input"
       >
         {files.length > 0 && (
           <Box
             sx={{
-              display: "flex",
-              gap: "12px",
-              flexWrap: "wrap",
-              padding: "12px",
-              maxHeight: "180px",
-              overflowY: "auto",
-              "&::-webkit-scrollbar": {
-                width: "8px",
+              display: 'flex',
+              gap: '12px',
+              flexWrap: 'wrap',
+              padding: '12px',
+              maxHeight: '180px',
+              overflowY: 'auto',
+              '&::-webkit-scrollbar': {
+                width: '8px',
               },
-              "&::-webkit-scrollbar-thumb": {
-                backgroundColor: "#c1c1c1",
-                borderRadius: "4px",
+              '&::-webkit-scrollbar-thumb': {
+                backgroundColor: '#c1c1c1',
+                borderRadius: '4px',
               },
-              "&::-webkit-scrollbar-thumb:hover": {
-                backgroundColor: "#a8a8a8",
+              '&::-webkit-scrollbar-thumb:hover': {
+                backgroundColor: '#a8a8a8',
               },
-              "&::-webkit-scrollbar-track": {
-                backgroundColor: "#f1f1f1",
-                borderRadius: "4px",
+              '&::-webkit-scrollbar-track': {
+                backgroundColor: '#f1f1f1',
+                borderRadius: '4px',
               },
             }}
           >
@@ -430,13 +461,13 @@ const TextInput: React.FC<TextInputProps> = ({
               <Box
                 key={index}
                 sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  textAlign: "center",
-                  position: "relative",
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  textAlign: 'center',
+                  position: 'relative',
                   width: 80,
-                  paddingTop: "10px",
+                  paddingTop: '10px',
                 }}
               >
                 <Image
@@ -445,17 +476,17 @@ const TextInput: React.FC<TextInputProps> = ({
                   width={64}
                   height={64}
                   style={{
-                    objectFit: "cover",
-                    borderRadius: "4px",
+                    objectFit: 'cover',
+                    borderRadius: '4px',
                   }}
                 />
                 <Typography
                   sx={{
                     mt: 1,
-                    fontSize: "14px",
-                    fontFamily: "DFPHeiBold-B5",
-                    wordBreak: "break-word",
-                    textAlign: "center",
+                    fontSize: '14px',
+                    fontFamily: 'DFPHeiBold-B5',
+                    wordBreak: 'break-word',
+                    textAlign: 'center',
                   }}
                 >
                   {file.file.name}
@@ -463,20 +494,20 @@ const TextInput: React.FC<TextInputProps> = ({
                 <IconButton
                   aria-label="remove file"
                   sx={{
-                    position: "absolute",
-                    top: "0px",
-                    left: "6px",
-                    backgroundColor: "red",
-                    width: "16px",
-                    height: "16px",
-                    color: "white",
-                    "&:hover": {
-                      backgroundColor: "darkred",
+                    position: 'absolute',
+                    top: '0px',
+                    left: '6px',
+                    backgroundColor: 'red',
+                    width: '16px',
+                    height: '16px',
+                    color: 'white',
+                    '&:hover': {
+                      backgroundColor: 'darkred',
                     },
                   }}
                   onClick={() => handleRemoveFile(index)}
                 >
-                  <CloseRounded sx={{ fontSize: "14px" }} />
+                  <CloseRounded sx={{ fontSize: '14px' }} />
                 </IconButton>
               </Box>
             ))}
@@ -484,23 +515,23 @@ const TextInput: React.FC<TextInputProps> = ({
         )}
         <Box
           sx={{
-            margin: "8px 0px 8px 16px",
-            overflowY: "auto",
-            minHeight: "40px",
-            maxHeight: "200px",
-            "&::-webkit-scrollbar": {
-              width: "8px",
+            margin: '8px 0px 8px 16px',
+            overflowY: 'auto',
+            minHeight: '40px',
+            maxHeight: '200px',
+            '&::-webkit-scrollbar': {
+              width: '8px',
             },
-            "&::-webkit-scrollbar-thumb": {
-              backgroundColor: "#c1c1c1",
-              borderRadius: "4px",
+            '&::-webkit-scrollbar-thumb': {
+              backgroundColor: '#c1c1c1',
+              borderRadius: '4px',
             },
-            "&::-webkit-scrollbar-thumb:hover": {
-              backgroundColor: "#a8a8a8",
+            '&::-webkit-scrollbar-thumb:hover': {
+              backgroundColor: '#a8a8a8',
             },
-            "&::-webkit-scrollbar-track": {
-              backgroundColor: "#f1f1f1",
-              borderRadius: "4px",
+            '&::-webkit-scrollbar-track': {
+              backgroundColor: '#f1f1f1',
+              borderRadius: '4px',
             },
           }}
         >
@@ -509,17 +540,17 @@ const TextInput: React.FC<TextInputProps> = ({
             minRows={1}
             placeholder="傳訊息給智能顧問"
             style={{
-              width: "100%",
-              border: "none",
-              resize: "none",
-              outline: "none",
-              fontSize: "16px",
-              color: "#212B36",
-              overflow: "auto",
-              borderRadius: "8px",
-              backgroundColor: "#F5F5F5",
-              paddingTop: "2px",
-              paddingBottom: "",
+              width: '100%',
+              border: 'none',
+              resize: 'none',
+              outline: 'none',
+              fontSize: '16px',
+              color: '#212B36',
+              overflow: 'auto',
+              borderRadius: '8px',
+              backgroundColor: '#F5F5F5',
+              paddingTop: '2px',
+              paddingBottom: '',
             }}
             className="textarea-autosize"
             value={userInputValue}
@@ -529,16 +560,16 @@ const TextInput: React.FC<TextInputProps> = ({
         </Box>
         <Box
           sx={{
-            width: "100%",
-            justifyContent: "space-between",
-            display: "flex",
-            padding: "10px 16px 10px 6px",
+            width: '100%',
+            justifyContent: 'space-between',
+            display: 'flex',
+            padding: '10px 16px 10px 6px',
           }}
         >
           <Box
             sx={{
-              width: "100%",
-              display: "flex",
+              width: '100%',
+              display: 'flex',
             }}
           >
             <input
@@ -546,26 +577,26 @@ const TextInput: React.FC<TextInputProps> = ({
               id="file-upload"
               multiple
               onChange={handleFileSelect}
-              style={{ display: "none" }}
+              style={{ display: 'none' }}
             />
-            <Box sx={{ display: "flex" }}>
+            <Box sx={{ display: 'flex' }}>
               <IconButton
                 aria-label="attach file"
                 component="span"
                 onDrop={handleDrop}
                 onDragOver={handleDragOver}
-                sx={{ padding: "8px" }}
+                sx={{ padding: '8px' }}
               >
                 <AttachFileRoundedIcon
-                  sx={{ transform: "rotate(180deg)", color: "black" }}
+                  sx={{ transform: 'rotate(180deg)', color: 'black' }}
                   onClick={() =>
-                    document.getElementById("file-upload")?.click()
+                    document.getElementById('file-upload')?.click()
                   }
                 />
               </IconButton>
               <IconButton
                 aria-label="attach file"
-                sx={{ padding: "8px", borderRadius: "7px 10px" }}
+                sx={{ padding: '8px', borderRadius: '7px 10px' }}
               >
                 <DropdownMenu isTextInput advisor={advisorType} />
               </IconButton>
@@ -573,26 +604,37 @@ const TextInput: React.FC<TextInputProps> = ({
           </Box>
 
           {isInteracting ? (
-            <Box>
-              <RotateRightRounded sx={{ color: "#1877F2", fontSize: 24 }} />
-            </Box>
-          ) : userInputValue !== "" && !isListening ? (
+            <IconButton
+              onClick={handleCancel}
+              className={isInteracting ? 'interacting' : ''}
+              sx={{
+                position: 'absolute',
+                bottom: '10px',
+                right: '10px',
+              }}
+            >
+              <StopCircleRounded
+                className={'interactingIcon'}
+                sx={{ color: '#0066CC' }}
+              />
+            </IconButton>
+          ) : userInputValue !== '' && !isListening ? (
             <IconButton
               aria-label="send message"
               onClick={handleClickSubmitOrAudioFileUpload}
             >
-              <SendRounded sx={{ color: "black" }} />
+              <SendRounded sx={{ color: 'black' }} />
             </IconButton>
           ) : (
             <IconButton
               aria-label="Audio Message"
               onClick={handleListening}
-              className={isListening ? "mic-listening" : ""}
-              sx={{ padding: "8px" }}
+              className={isListening ? 'mic-listening' : ''}
+              sx={{ padding: '8px' }}
             >
               <MicRoundedIcon
-                className={isListening ? "mic-icon" : ""}
-                sx={{ color: isListening ? "white" : "black" }}
+                className={isListening ? 'mic-icon' : ''}
+                sx={{ color: isListening ? 'white' : 'black' }}
               />
             </IconButton>
           )}

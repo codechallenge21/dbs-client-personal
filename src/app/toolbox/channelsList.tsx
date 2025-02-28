@@ -1,9 +1,13 @@
 'use client';
 import DeleteDialog from '@/components/dialogs/DeleteDialog';
 import EditDialog from '@/components/dialogs/EditDialog';
+import LoginDialog from '@/components/dialogs/LoginDialog';
+import SignupDialog from '@/components/dialogs/SignupDialog';
 import EditableItem from '@/components/editable-item/EditableItem';
 import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
-import UploadDialog from '@/components/uploadDialog/page';
+import UploadDialog, {
+  FILE_CONFIG,
+} from '@/components/uploadDialog/uploadDialog';
 import { useLoginContext } from '@/context/LoginContext';
 import { SnackbarContext } from '@/context/SnackbarContext';
 import { OrganizationChannel } from '@/interfaces/entities';
@@ -50,19 +54,30 @@ import React, {
   useState,
 } from 'react';
 import UploadScreen from './UploadScreen';
-import LoginDialog from '@/components/dialogs/LoginDialog';
-import SignupDialog from '@/components/dialogs/SignupDialog';
+import CustomLoader from '@/components/loader/loader';
+import apiExports from '@/utils/hooks/apis/apis';
 import ForgetPasswordDialog from '@/components/dialogs/ForgetPasswordDialog';
+
+interface fileProps {
+  organizationChannelTitle: string;
+  organizationChannelCreateDate: string;
+}
 
 const ChannelsList = () => {
   const theme = useTheme();
   const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const { excute: createChannelByAudio, isLoading: isCreating } = useAxiosApi(
+    apiExports.createChannelByAudio
+  );
   const { isLoginOpen, setIsLoginOpen, isSignupOpen, setIsSignupOpen } =
     useLoginContext();
 
+  const { excute: getChannelDetail, isLoading: isSingleChannelLoading } =
+    useAxiosApi(apis.getChannelDetail);
+
   const [tabValue, setTabValue] = useState(0);
-  const [isClient, setIsClient] = useState(false);
+  const [loadingElementVisible, setLoadingElementVisible] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [toolsAnchor, setToolsAnchor] = useState<null | HTMLElement>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState<boolean>(false);
@@ -74,14 +89,14 @@ const ChannelsList = () => {
   const [favoriteChannels, setFavoriteChannels] = useState<{
     [key: number]: boolean;
   }>({});
-  const [page, setPage] = useState(0);
+  const [uploadingFile, setUploadingFile] = useState<fileProps>();
   const [hasMore, setHasMore] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
   const [channelList, setChannelList] = useState<OrganizationChannel[]>([]);
   const [isForgetPasswordOpen, setIsForgetPasswordOpen] = useState(false);
   const itemsPerPage = 10;
   const { showSnackbar } = useContext(SnackbarContext);
-
+  const currentPageRef = useRef(0);
   const {
     data: channelsData = [],
     mutate: mutateAudioChannels,
@@ -91,10 +106,12 @@ const ChannelsList = () => {
       organizationId: 'yMJHyi6R1CB9whpdNvtA',
     },
     {
-      startIndex: page,
+      startIndex: currentPageRef.current,
       size: itemsPerPage,
     },
     {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
       // Custom SWR configuration to handle errors
       onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
         if (error?.status === 401) {
@@ -110,7 +127,7 @@ const ChannelsList = () => {
 
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const observer = useRef<IntersectionObserver | null>(null);
-  const loadingRef = useRef(null);
+  const loadingRef = useRef<HTMLElement | null>(null);
 
   const { excute: deleteChannel } = useAxiosApi(apis.deleteChannel);
   const { excute: updateChannelDetail } = useAxiosApi(apis.updateChannelDetail);
@@ -142,23 +159,30 @@ const ChannelsList = () => {
   const handleDeleteChannelConfirm = useCallback(
     async (event: React.MouseEvent) => {
       event.stopPropagation();
+      const channelToDeleteId =
+        channelList?.[activeIndex!]?.organizationChannelId || '';
+
       deleteChannel({
         organizationId: 'yMJHyi6R1CB9whpdNvtA',
-        organizationChannelId:
-          channelsData?.[activeIndex!]?.organizationChannelId || '',
+        organizationChannelId: channelToDeleteId,
       })
         .then(() => {
+          setChannelList((prevChannelList) =>
+            prevChannelList.filter(
+              (channel) => channel.organizationChannelId !== channelToDeleteId
+            )
+          );
           setIsDeleteDialogOpen(false);
           handleCloseToolsMenu();
-          if (mutateAudioChannels) {
+          setTimeout(() => {
             mutateAudioChannels();
-          }
+          }, 0);
         })
         .catch(() => {});
     },
     [
       activeIndex,
-      channelsData,
+      channelList,
       deleteChannel,
       mutateAudioChannels,
       handleCloseToolsMenu,
@@ -170,13 +194,22 @@ const ChannelsList = () => {
       await updateChannelDetail({
         organizationId: 'yMJHyi6R1CB9whpdNvtA',
         organizationChannelId:
-          channelsData?.[activeIndex!]?.organizationChannelId || '',
+          channelList?.[activeIndex!]?.organizationChannelId || '',
         organizationChannelTitle: newTitle,
       });
       setIsEditDialogOpen(false);
-      if (mutateAudioChannels) mutateAudioChannels();
+      setChannelList((prevChannelList) =>
+        prevChannelList.map((channel, index) =>
+          index === activeIndex
+            ? { ...channel, organizationChannelTitle: newTitle }
+            : channel
+        )
+      );
+      setTimeout(() => {
+        mutateAudioChannels();
+      }, 0);
     },
-    [updateChannelDetail, channelsData, activeIndex, mutateAudioChannels]
+    [updateChannelDetail, channelList, activeIndex, mutateAudioChannels]
   );
 
   const handleOpenEditChannelDialog = useCallback((event: React.MouseEvent) => {
@@ -209,7 +242,12 @@ const ChannelsList = () => {
   };
 
   const handleRowClick = (channel: OrganizationChannel) => {
-    if (handleShowDetail) handleShowDetail(channel);
+    if (
+      channel.organizationChannelTranscriptList[0]
+        ?.organizationChannelTranscriptStatus === 'COMPLETE'
+    ) {
+      if (handleShowDetail) handleShowDetail(channel);
+    }
   };
 
   const handleShowDetail = (channel: OrganizationChannel) => {
@@ -225,6 +263,28 @@ const ChannelsList = () => {
     }));
   };
 
+  const handleUploadFile = async (file: File, fileInfo: fileProps) => {
+    try {
+      setUploadingFile(fileInfo);
+      const createdChannelRes = await createChannelByAudio({
+        file,
+      });
+      const channelResponse = await getChannelDetail({
+        organizationId: 'yMJHyi6R1CB9whpdNvtA',
+        organizationChannelId: createdChannelRes.data.organizationChannelId,
+      });
+
+      setChannelList((prevChannelList) => [
+        channelResponse.data,
+        ...prevChannelList,
+      ]);
+      setUploadingFile(undefined);
+    } catch (err) {
+      showSnackbar(FILE_CONFIG.errorMessages.uploadFailed, 'error');
+      console.error(err);
+    }
+  };
+
   const handleForgetPasswordOpen = useCallback(() => {
     setIsLoginOpen(false);
     setIsForgetPasswordOpen(true);
@@ -236,51 +296,63 @@ const ChannelsList = () => {
 
   // Initialize channelList with channelsData
   useEffect(() => {
-    if (channelsData && channelsData.length > 0 && page === 0) {
+    if (
+      channelsData &&
+      channelsData.length > 0 &&
+      currentPageRef.current === 0
+    ) {
       setChannelList(channelsData);
+      if (channelsData.length < itemsPerPage) {
+        setHasMore(false);
+      }
     }
-  }, [channelsData, page]);
+  }, [channelsData, currentPageRef.current]);
 
   // Fetch more data when scrolled to the bottom
   const fetchMoreData = useCallback(async () => {
     if (isFetching || !hasMore) return;
-
     setIsFetching(true);
 
     try {
-      const nextPage = page + itemsPerPage;
-      setPage(nextPage);
+      const nextPage = currentPageRef.current + itemsPerPage;
+      currentPageRef.current = nextPage;
 
       // Use the updated page value in the API call
-      const response = await mutateAudioChannels();
+      setTimeout(async () => {
+        const response = await mutateAudioChannels();
+        const newChannels = response?.data || [];
 
-      const newChannels = response?.data || [];
-
-      if (newChannels.length > 0) {
-        setChannelList((prevChannels) => [...prevChannels, ...newChannels]);
-        setHasMore(newChannels.length >= itemsPerPage);
-      } else {
-        setHasMore(false);
-      }
+        if (newChannels.length > 0) {
+          setChannelList((prevChannels) => [...prevChannels, ...newChannels]);
+          setHasMore(newChannels.length >= itemsPerPage);
+        } else {
+          setHasMore(false);
+        }
+      }, 100);
     } catch (error) {
       console.error('Error loading channels:', error);
       setHasMore(false);
     } finally {
       setIsFetching(false);
     }
-  }, [isFetching, hasMore, page, mutateAudioChannels]);
+  }, [isFetching, hasMore, currentPageRef.current, mutateAudioChannels]);
 
   // Setup Intersection Observer for infinite scrolling
   useEffect(() => {
-    if (!loadingRef.current) return;
+    if (!loadingElementVisible || !hasMore) return;
 
     observer.current = new IntersectionObserver(
       (entries) => {
-        if (entries[0]?.isIntersecting && hasMore && !isFetching) {
+        if (
+          entries[0]?.isIntersecting &&
+          hasMore &&
+          !isFetching &&
+          !isLoadingChannels
+        ) {
           fetchMoreData();
         }
       },
-      { threshold: 0.2, root: scrollContainerRef.current }
+      { threshold: 0.2 }
     );
 
     if (loadingRef.current) {
@@ -292,15 +364,7 @@ const ChannelsList = () => {
         observer.current.unobserve(loadingRef.current);
       }
     };
-  }, [fetchMoreData, hasMore, isFetching, channelList.length]);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  if (!isClient) {
-    return null;
-  }
+  }, [loadingElementVisible]);
 
   return (
     <>
@@ -555,8 +619,10 @@ const ChannelsList = () => {
                   </Box>
                 </Box>
                 {isLoadingChannels &&
-                channelsData?.length === 0 &&
-                page === 0 ? (
+                channelList?.length === 0 &&
+                currentPageRef.current === 0 &&
+                !uploadingFile &&
+                !(isCreating || isSingleChannelLoading) ? (
                   <Box
                     sx={{
                       top: '50%',
@@ -568,7 +634,7 @@ const ChannelsList = () => {
                   >
                     <CircularProgress color="primary" />
                   </Box>
-                ) : channelList?.length > 0 ? (
+                ) : channelList?.length > 0 || uploadingFile ? (
                   <TableContainer
                     ref={scrollContainerRef}
                     sx={{
@@ -708,12 +774,152 @@ const ChannelsList = () => {
                         </TableRow>
                       </TableHead>
                       <TableBody>
+                        {uploadingFile &&
+                          (isCreating ||
+                            isLoadingChannels ||
+                            isSingleChannelLoading) && (
+                            <TableRow
+                              key={0}
+                              sx={{
+                                cursor: 'default',
+                                height: '56px !important',
+                                borderBottom:
+                                  '1px dashed var(--Components-Divider, rgba(145, 158, 171, 0.20))',
+                                background: 'var(--Background-Paper, #FFF)',
+                              }}
+                            >
+                              <TableCell
+                                sx={{
+                                  width: '50%',
+                                  padding: '0px',
+                                  border: 'none',
+                                  height: '51px !important',
+                                }}
+                              >
+                                <Typography
+                                  sx={{
+                                    fontFamily: 'DFPHeiBold-B5',
+                                    fontWeight: 400,
+                                    fontSize: '16px',
+                                    lineHeight: '16px',
+                                    letterSpacing: '0%',
+                                    textAlign: 'left',
+                                    WebkitLineClamp: 1,
+                                    overflow: 'hidden',
+                                    padding: '16px 0px',
+                                    fontStyle: 'normal',
+                                    display: '-webkit-box',
+                                    textOverflow: 'ellipsis',
+                                    WebkitBoxOrient: 'vertical',
+                                    color: 'var(--Text-Primary, #212B36)',
+                                  }}
+                                >
+                                  {uploadingFile?.organizationChannelTitle}
+                                </Typography>
+                              </TableCell>
+                              <TableCell
+                                sx={{
+                                  width: '18%',
+                                  padding: '0px 8px 0px 0px ',
+                                  border: 'none',
+                                  height: '51px !important',
+                                }}
+                              >
+                                <Box
+                                  sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                  }}
+                                >
+                                  {(isCreating || isLoadingChannels) && (
+                                    <CustomLoader />
+                                  )}
+                                  <span
+                                    style={{
+                                      fontFamily: 'DFPHeiBold-B5',
+                                      fontWeight: 400,
+                                      fontSize: '16px',
+                                      lineHeight: '16px',
+                                      letterSpacing: '0%',
+                                      overflow: 'hidden',
+                                      fontStyle: 'normal',
+                                      textOverflow: 'ellipsis',
+                                      marginLeft: '12px',
+                                      color: 'var(--Primary-Black, #212B36)',
+                                    }}
+                                  >
+                                    {'上傳中...'}
+                                  </span>
+                                </Box>
+                              </TableCell>
+                              <TableCell
+                                sx={{
+                                  width: '18%',
+                                  padding: '0px 0px 0px 8px',
+                                  border: 'none',
+                                  height: '51px !important',
+                                }}
+                              >
+                                <Typography
+                                  sx={{
+                                    fontWeight: 400,
+                                    fontSize: '16px',
+                                    fontStyle: 'normal',
+                                    padding: '16px 0px',
+                                    lineHeight: 'normal',
+                                    fontFamily: 'DFPHeiBold-B5',
+                                    color: 'var(--Text-Primary, #212B36)',
+                                  }}
+                                >
+                                  {uploadingFile.organizationChannelCreateDate}
+                                </Typography>
+                              </TableCell>
+                              <TableCell
+                                sx={{
+                                  width: '7%',
+                                  border: 'none',
+                                  padding: '0px 0px 0px 40px',
+                                  textAlign: 'center',
+                                  height: '51px !important',
+                                }}
+                              >
+                                <IconButton
+                                  role="button"
+                                  aria-label="favorite"
+                                  sx={{ padding: '0px' }}
+                                >
+                                  {
+                                    <StarBorderRounded
+                                      sx={{ color: 'black' }}
+                                    />
+                                  }
+                                </IconButton>
+                              </TableCell>
+                              <TableCell
+                                sx={{
+                                  width: '7%',
+                                  border: 'none',
+                                  padding: '0px 18px 0px 0px',
+                                  textAlign: 'center',
+                                  height: '51px !important',
+                                }}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                }}
+                              ></TableCell>
+                            </TableRow>
+                          )}
                         {channelList?.map((channel, index) => (
                           <TableRow
                             key={index}
                             onClick={() => handleRowClick(channel)}
                             sx={{
-                              cursor: 'pointer',
+                              cursor:
+                                channel.organizationChannelTranscriptList[0]
+                                  ?.organizationChannelTranscriptStatus ===
+                                'COMPLETE'
+                                  ? 'pointer'
+                                  : 'default',
                               height: '56px !important',
                               borderBottom:
                                 '1px dashed var(--Components-Divider, rgba(145, 158, 171, 0.20))',
@@ -779,11 +985,11 @@ const ChannelsList = () => {
                                     ?.organizationChannelTranscriptStatus ===
                                   'PENDING' ? (
                                   <PendingActionsRounded
-                                    sx={{ color: 'rgba(33, 43, 54, 1)' }}
+                                    sx={{ color: '#0066CC' }}
                                   />
                                 ) : (
                                   <PendingActionsRounded
-                                    sx={{ color: 'rgba(33, 43, 54, 1)' }}
+                                    sx={{ color: '#0066CC' }}
                                   />
                                 )}
                                 <span
@@ -813,8 +1019,8 @@ const ChannelsList = () => {
                                         .organizationChannelTranscriptList[0]
                                         ?.organizationChannelTranscriptStatus ===
                                       'PENDING'
-                                    ? '正在摘要...'
-                                    : ''}
+                                    ? '摘要中...'
+                                    : '摘要中...'}
                                 </span>
                               </Box>
                             </TableCell>
@@ -906,31 +1112,21 @@ const ChannelsList = () => {
                           </TableRow>
                         ))}
                         {hasMore && (
-                          <TableRow ref={loadingRef}>
+                          <TableRow
+                            ref={(el) => {
+                              loadingRef.current = el;
+                              // Update state when the ref is attached to a DOM element
+                              setLoadingElementVisible(!!el);
+                            }}
+                          >
                             <TableCell
                               colSpan={5}
                               align="center"
                               sx={{ border: 'none', p: 2 }}
                             >
-                              <CircularProgress size={24} color="primary" />
-                            </TableCell>
-                          </TableRow>
-                        )}
-
-                        {/* End message when no more data */}
-                        {!hasMore && channelList.length > 0 && (
-                          <TableRow>
-                            <TableCell
-                              colSpan={5}
-                              align="center"
-                              sx={{ border: 'none' }}
-                            >
-                              <Typography
-                                variant="body2"
-                                sx={{ p: 2, color: 'gray' }}
-                              >
-                                所有資料均已載入
-                              </Typography>
+                              {!isCreating && (
+                                <CircularProgress size={24} color="primary" />
+                              )}
                             </TableCell>
                           </TableRow>
                         )}
@@ -938,7 +1134,14 @@ const ChannelsList = () => {
                     </Table>
                   </TableContainer>
                 ) : (
-                  channelsData?.length === 0 && <UploadScreen />
+                  channelsData?.length === 0 &&
+                  channelList?.length === 0 &&
+                  !uploadingFile &&
+                  !(
+                    isCreating ||
+                    isLoadingChannels ||
+                    isSingleChannelLoading
+                  ) && <UploadScreen handleUploadFile={handleUploadFile} />
                 )}
               </Box>
             </>
@@ -1192,7 +1395,11 @@ const ChannelsList = () => {
                   </Typography>
                 </Button>
               </Box>
-              {isLoadingChannels && channelsData?.length === 0 && page === 0 ? (
+              {isLoadingChannels &&
+              channelList?.length === 0 &&
+              currentPageRef.current === 0 &&
+              !uploadingFile &&
+              !(isCreating || isSingleChannelLoading) ? (
                 <Box
                   sx={{
                     top: '50%',
@@ -1204,7 +1411,7 @@ const ChannelsList = () => {
                 >
                   <CircularProgress color="primary" />
                 </Box>
-              ) : channelList?.length > 0 ? (
+              ) : channelList?.length > 0 || uploadingFile ? (
                 <Box
                   ref={scrollContainerRef}
                   sx={{
@@ -1235,6 +1442,133 @@ const ChannelsList = () => {
                       flexDirection: 'column',
                     }}
                   >
+                    {uploadingFile &&
+                      (isCreating ||
+                        isLoadingChannels ||
+                        isSingleChannelLoading) && (
+                        <Card
+                          key={0}
+                          sx={{
+                            mb: '16px',
+                            height: '146px',
+                            padding: '16px',
+                            display: 'flex',
+                            maxWidth: '384px',
+                            minWidth: '300px',
+                            alignSelf: 'stretch',
+                            flexDirection: 'column',
+                            alignItems: 'flex-start',
+                            borderRadius: '16px',
+                            background: 'var(--Primary-White, #FFF)',
+                            boxShadow:
+                              '0px 12px 24px -4px rgba(17, 68, 85, 0.12), 0px 0px 2px 0px rgba(17, 68, 85, 0.12)',
+                          }}
+                        >
+                          <CardContent
+                            sx={{
+                              padding: 0,
+                              width: '100%',
+                              height: '100%',
+                              display: 'flex',
+                              flexDirection: 'column',
+                              paddingBottom: '0 !important',
+                              justifyContent: 'space-between',
+                            }}
+                          >
+                            <Box
+                              sx={{
+                                mb: '8px',
+                                width: '100%',
+                                display: 'flex',
+                                alignItems: 'start',
+                                justifyContent: 'space-between',
+                              }}
+                            >
+                              <Typography
+                                sx={{
+                                  fontWeight: 400,
+                                  fontSize: '24px',
+                                  fontStyle: 'normal',
+                                  lineHeight: 'normal',
+                                  whiteSpace: 'normal',
+                                  wordBreak: 'break-word',
+                                  fontFamily: 'DFPHeiBold-B5',
+                                  color: 'var(--Primary-Black, #212B36)',
+                                }}
+                              >
+                                {uploadingFile?.organizationChannelTitle}
+                              </Typography>
+                            </Box>
+                            <Box
+                              sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                              }}
+                            >
+                              <Box
+                                sx={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                }}
+                              >
+                                <IconButton
+                                  role="button"
+                                  aria-label="favorite"
+                                  sx={{ padding: '0px', marginRight: '8px' }}
+                                >
+                                  {
+                                    <StarBorderRounded
+                                      sx={{ color: 'black' }}
+                                    />
+                                  }
+                                </IconButton>
+                                <Typography
+                                  sx={{
+                                    fontWeight: 400,
+                                    fontSize: '16px',
+                                    overflow: 'hidden',
+                                    lineHeight: '24px',
+                                    fontStyle: 'normal',
+                                    textAlign: 'center',
+                                    textOverflow: 'ellipsis',
+                                    fontFamily: 'DFPHeiMedium-B5',
+                                    color: 'var(--Primary-Black, #212B36)',
+                                  }}
+                                >
+                                  {uploadingFile?.organizationChannelCreateDate}
+                                </Typography>
+                              </Box>
+                              <Box
+                                sx={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                }}
+                              >
+                                {(isCreating || isLoadingChannels) && (
+                                  <CustomLoader />
+                                )}
+                                <span
+                                  style={{
+                                    fontFamily: 'DFPHeiBold-B5',
+                                    fontWeight: 400,
+                                    fontSize: '16px',
+                                    lineHeight: '24px',
+                                    letterSpacing: '0%',
+                                    overflow: 'hidden',
+                                    fontStyle: 'normal',
+                                    textOverflow: 'ellipsis',
+                                    marginLeft: '12px',
+                                    color: 'var(--Primary-Black, #212B36)',
+                                  }}
+                                >
+                                  {'上傳中...'}
+                                </span>
+                              </Box>
+                            </Box>
+                          </CardContent>
+                        </Card>
+                      )}
                     {channelList?.map((channel, index) => (
                       <Card
                         key={index}
@@ -1365,7 +1699,7 @@ const ChannelsList = () => {
                                 ?.organizationChannelTranscriptStatus ===
                               'COMPLETE' ? (
                                 <CheckCircleRounded
-                                  sx={{ color: ' rgba(52, 199, 89, 1)' }}
+                                  sx={{ color: ' #118D57' }}
                                 />
                               ) : channel.organizationChannelTranscriptList[0]
                                   ?.organizationChannelTranscriptStatus ===
@@ -1377,11 +1711,11 @@ const ChannelsList = () => {
                                   ?.organizationChannelTranscriptStatus ===
                                 'PENDING' ? (
                                 <PendingActionsRounded
-                                  sx={{ color: 'rgba(0, 102, 204, 1)' }}
+                                  sx={{ color: '#0066CC' }}
                                 />
                               ) : (
                                 <PendingActionsRounded
-                                  sx={{ color: 'rgba(0, 102, 204, 1)' }}
+                                  sx={{ color: '#0066CC' }}
                                 />
                               )}
                               <span
@@ -1409,8 +1743,8 @@ const ChannelsList = () => {
                                   : channel.organizationChannelTranscriptList[0]
                                       ?.organizationChannelTranscriptStatus ===
                                     'PENDING'
-                                  ? '正在摘要...'
-                                  : ''}
+                                  ? '摘要中...'
+                                  : '摘要中...'}
                               </span>
                             </Box>
                           </Box>
@@ -1419,34 +1753,32 @@ const ChannelsList = () => {
                     ))}
                     {hasMore && (
                       <Box
-                        ref={loadingRef}
+                        ref={(el: HTMLElement) => {
+                          loadingRef.current = el;
+                          setLoadingElementVisible(!!el);
+                        }}
                         sx={{
                           display: 'flex',
                           justifyContent: 'center',
                           p: 2,
                         }}
                       >
-                        <CircularProgress size={24} color="primary" />
+                        {!isCreating && (
+                          <CircularProgress size={24} color="primary" />
+                        )}
                       </Box>
-                    )}
-
-                    {/* End message */}
-                    {!hasMore && channelList.length > 0 && (
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          p: 2,
-                          color: 'gray',
-                          textAlign: 'center',
-                        }}
-                      >
-                        所有資料均已載入
-                      </Typography>
                     )}
                   </Box>
                 </Box>
               ) : (
-                channelsData?.length === 0 && <UploadScreen />
+                channelsData?.length === 0 &&
+                channelList?.length === 0 &&
+                !uploadingFile &&
+                !(
+                  isCreating ||
+                  isLoadingChannels ||
+                  isSingleChannelLoading
+                ) && <UploadScreen handleUploadFile={handleUploadFile} />
               )}
             </Box>
           </ToolbarDrawer>
@@ -1463,17 +1795,17 @@ const ChannelsList = () => {
         setIsLoginOpen={setIsLoginOpen}
         onClose={() => setIsSignupOpen(false)}
       />
-      <ForgetPasswordDialog
-        open={isForgetPasswordOpen}
-        onClose={() => setIsForgetPasswordOpen(false)}
+      <UploadDialog
+        open={openUpload}
+        onClose={handleCloseUploadDialog}
+        handleUploadFile={handleUploadFile}
       />
-      <UploadDialog open={openUpload} onClose={handleCloseUploadDialog} />
       <DeleteDialog
         open={isDeleteDialogOpen}
         onClose={handleCloseDeleteDialog}
         onConfirm={handleDeleteChannelConfirm}
         deletableName={
-          channelsData?.[activeIndex!]?.organizationChannelTitle || ''
+          channelList?.[activeIndex!]?.organizationChannelTitle || ''
         }
       />
       <EditDialog
@@ -1481,7 +1813,7 @@ const ChannelsList = () => {
         onClose={handleCloseEditDialog}
         onConfirm={handleEditChannelConfirm}
         editableName={
-          channelsData?.[activeIndex!]?.organizationChannelTitle || ''
+          channelList?.[activeIndex!]?.organizationChannelTitle || ''
         }
       />
       <LoginDialog
