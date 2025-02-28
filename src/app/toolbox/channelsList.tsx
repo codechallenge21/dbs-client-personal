@@ -159,7 +159,8 @@ const ChannelsList = () => {
       event.stopPropagation();
       const channelToDeleteId =
         channelList?.[activeIndex!]?.organizationChannelId || '';
-
+      setIsDeleteDialogOpen(false);
+      handleCloseToolsMenu();
       deleteChannel({
         organizationId: 'yMJHyi6R1CB9whpdNvtA',
         organizationChannelId: channelToDeleteId,
@@ -170,8 +171,6 @@ const ChannelsList = () => {
               (channel) => channel.organizationChannelId !== channelToDeleteId
             )
           );
-          setIsDeleteDialogOpen(false);
-          handleCloseToolsMenu();
           setTimeout(() => {
             mutateAudioChannels();
           }, 0);
@@ -334,14 +333,16 @@ const ChannelsList = () => {
   useEffect(() => {
     if (!loadingElementVisible || !hasMore) return;
 
+    // Clear any existing observer
+    if (observer.current && loadingRef.current && scrollContainerRef.current) {
+      observer.current.unobserve(loadingRef.current);
+      observer.current.unobserve(scrollContainerRef.current);
+      observer.current = null;
+    }
+
     observer.current = new IntersectionObserver(
       (entries) => {
-        if (
-          entries[0]?.isIntersecting &&
-          hasMore &&
-          !isFetching &&
-          !isLoadingChannels
-        ) {
+        if (entries[0]?.isIntersecting && hasMore && !isFetching) {
           fetchMoreData();
         }
       },
@@ -355,6 +356,7 @@ const ChannelsList = () => {
     return () => {
       if (observer.current && loadingRef.current) {
         observer.current.unobserve(loadingRef.current);
+        observer.current = null;
       }
     };
   }, [loadingElementVisible]);
