@@ -1,4 +1,5 @@
 'use client';
+import AddFinanceRecordDialog from '@/components/dialogs/AddFinanceRecordDialog';
 import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
 import {
   AddRounded,
@@ -139,6 +140,7 @@ const FinanceScreen = () => {
   const [loanAmount, setLoanAmount] = useState('');
   const [annualInterest, setAnnualInterest] = useState('');
   const [repaymentMethod, setRepaymentMethod] = useState('');
+  const [openFinanceDialog, setOpenFinanceDialog] = useState<boolean>(false);
   const [favoriteChannels, setFavoriteChannels] = useState<{
     [key: number]: boolean;
   }>({});
@@ -186,6 +188,10 @@ const FinanceScreen = () => {
   const handleMenuClose = () => {
     setAnchorEl(null);
     // setCurrentMenuId(null);
+  };
+
+  const handleCloseFinanceDialog = () => {
+    setOpenFinanceDialog(false);
   };
 
   useEffect(() => {
@@ -315,7 +321,7 @@ const FinanceScreen = () => {
                         background: 'rgba(92, 68, 58, 0.6)',
                       },
                     }}
-                    // onClick={() => setOpenUpload(true)}
+                    onClick={() => setOpenFinanceDialog(true)}
                   >
                     <AddRounded sx={{ color: '#fff' }} />
                     <Typography
@@ -1431,7 +1437,7 @@ const FinanceScreen = () => {
                       background: 'rgba(92, 68, 58, 0.6)',
                     },
                   }}
-                  // onClick={() => setOpenUpload(true)}
+                  onClick={() => setOpenFinanceDialog(true)}
                 >
                   <AddRounded sx={{ color: '#fff' }} />
                   <Typography
@@ -2052,6 +2058,11 @@ const FinanceScreen = () => {
           </Menu>
         </Box>
       )}
+
+      <AddFinanceRecordDialog
+        open={openFinanceDialog}
+        onClose={handleCloseFinanceDialog}
+      />
     </>
   );
 };
