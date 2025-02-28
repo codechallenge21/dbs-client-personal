@@ -2,20 +2,21 @@ import docPreview from '@/assets/Images/Doc Icon.svg';
 import imagePreview from '@/assets/Images/Image Icon.svg';
 import pdfPreview from '@/assets/Images/Pdf Icon.svg';
 import txtPreview from '@/assets/Images/Txt Icon.svg';
-import ChannelContentContext from '@/context/ChannelContentContext';
 import { SnackbarContext } from '@/context/SnackbarContext';
 import { SubmitUserInputsApiPayload } from '@/interfaces/payloads';
-import apis from '@/utils/hooks/apis/apis';
 import { useRequireAuth } from '@/utils/hooks/useRequireAuth';
-import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
-import { CloseRounded, SendRounded } from '@mui/icons-material';
+import {
+  CloseRounded,
+  SendRounded,
+  StopCircleRounded,
+} from '@mui/icons-material';
 import AttachFileRoundedIcon from '@mui/icons-material/AttachFileRounded';
 import MicRoundedIcon from '@mui/icons-material/MicRounded';
 import { Box, IconButton, TextareaAutosize, Typography } from '@mui/material';
 import Image from 'next/image';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import ChannelContentContext from '@/context/ChannelContentContext';
 import DropdownMenu from './DropdownMenu';
-import StopCircleRounded from '@mui/icons-material/StopCircleRounded';
 import axios, { AxiosRequestConfig } from 'axios';
 
 interface SpeechRecognition extends EventTarget {
@@ -62,7 +63,7 @@ interface SpeechRecognitionErrorEvent extends Event {
 type TextInputProps = {
   submitUserInputs: (
     input: SubmitUserInputsApiPayload,
-    config?: AxiosRequestConfig
+    config?: { signal?: AbortSignal }
   ) => Promise<{
     data: {
       response: string;
@@ -70,6 +71,10 @@ type TextInputProps = {
       organizationChannelId: string;
     };
   }>;
+  chatWithFiles: (
+    payload: ChatWithFilesPayload,
+    config?: AxiosRequestConfig // Change from { signal?: AbortSignal }
+  ) => Promise<{ data: ChatWithFilesResponse }>;
   isInteracting: boolean;
   setIsLoginOpen?: (value: boolean) => void;
   from?: string;
@@ -92,8 +97,8 @@ interface ChatWithFilesResponse {
 
 const TextInput: React.FC<TextInputProps> = ({
   submitUserInputs,
+  chatWithFiles,
   isInteracting,
-  setIsLoginOpen,
   from,
 }) => {
   const { requireAuth } = useRequireAuth();
@@ -105,6 +110,7 @@ const TextInput: React.FC<TextInputProps> = ({
   const [files, setFiles] = useState<{ file: File; preview: string | null }[]>(
     []
   );
+  const abortControllerRef = useRef<AbortController | null>(null);
   const { showSnackbar } = useContext(SnackbarContext);
 
   const MAX_FILES = 3;
@@ -124,11 +130,6 @@ const TextInput: React.FC<TextInputProps> = ({
     'zip', // ZIP
     'txt', // Text
   ];
-
-  const { excute: chatWithFiles } = useAxiosApi<
-    ChatWithFilesResponse,
-    ChatWithFilesPayload
-  >(apis.chatWithFiles);
 
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -221,15 +222,11 @@ const TextInput: React.FC<TextInputProps> = ({
     advisorType,
   } = useContext(ChannelContentContext);
 
-  const abortControllerRef = useRef<AbortController | null>(null);
   const handleSendMessage = useCallback(async () => {
-    if (isInteracting) return;
-
-    // Create a new AbortController for each request
-    const controller = new AbortController();
-    abortControllerRef.current = controller;
-
-    // Update your UI immediately if needed
+    if (isInteracting) {
+      return;
+    }
+    abortControllerRef.current = new AbortController();
     setChatResponses((prev) => [
       ...prev,
       {
@@ -239,14 +236,11 @@ const TextInput: React.FC<TextInputProps> = ({
       },
     ]);
 
-    const payload = {
-      organizationId: '4aba77788ae94eca8d6ff330506af944',
-      query: userInputValue,
-      advisorType,
-      organizationChannelId: selectedChannelId,
-    };
+
     if (files.length > 0) {
       try {
+        const controller = abortControllerRef.current;
+
         const response = await chatWithFiles(
           {
             chatRequest: {
@@ -256,9 +250,7 @@ const TextInput: React.FC<TextInputProps> = ({
             files: files.map((item) => item.file),
             organizationId: 'yMJHyi6R1CB9whpdNvtA',
           },
-          {
-            signal: controller.signal,
-          }
+          { signal: controller.signal } // Pass the abort signal
         );
         if (response.data.response) {
           setChatResponses((prev) => [
@@ -276,26 +268,38 @@ const TextInput: React.FC<TextInputProps> = ({
           setUserInputValue('');
           setFiles([]);
         }
-      } catch (error: any) {
-        if (axios.isCancel(error) || error.code === 'ERR_CANCELED') {
+      } catch (error: unknown) {
+        if (
+          (error instanceof Error && error.name === 'AbortError') ||
+          axios?.isCancel?.(error)
+        ) {
+          showSnackbar(`File upload was aborted`, 'error');
         } else {
-          console.error('Error sending message with files:', error);
+          showSnackbar(`Error sending message with files:${error}`, 'error');
         }
+      } finally {
+        abortControllerRef.current = null; // Clear the abort controller ref
       }
     } else {
       try {
-        // Now you can pass two arguments:
-        const response = await submitUserInputs(payload, {
-          signal: controller.signal, // Pass the abort signal here
-        });
-
+        const controller = abortControllerRef.current;
+        const response = await submitUserInputs(
+          {
+            organizationId: 'yMJHyi6R1CB9whpdNvtA',
+            query: userInputValue,
+            advisorType,
+            organizationChannelId: selectedChannelId,
+          },
+          { signal: controller.signal } // Pass as part of AxiosRequestConfig
+        );
         if (response.data.response) {
           setChatResponses((prev) => [
             ...prev,
             {
               organizationChannelMessageType: 'AI',
-              organizationChannelMessageContent: response.data.response,
-              organizationChannelTitle: response.data.organizationChannelTitle,
+              organizationChannelMessageContent: response?.data?.response,
+              organizationChannelTitle:
+                response?.data?.organizationChannelTitle,
             },
           ]);
           setSelectedChannelId(response.data.organizationChannelId);
@@ -305,11 +309,17 @@ const TextInput: React.FC<TextInputProps> = ({
           setUserInputValue('');
           setFiles([]);
         }
-      } catch (error: any) {
-        if (axios.isCancel(error) || error.code === 'ERR_CANCELED') {
+      } catch (error: unknown) {
+        if (
+          (error instanceof Error && error.name === 'AbortError') ||
+          axios?.isCancel?.(error)
+        ) {
+          showSnackbar(`Request was aborted`, 'error');
         } else {
-          console.error('Request error:', error);
+          showSnackbar(`Error sending message:${error}`, 'error');
         }
+      } finally {
+        abortControllerRef.current = null;
       }
     }
   }, [
@@ -331,7 +341,7 @@ const TextInput: React.FC<TextInputProps> = ({
   };
 
   const handleClickSubmitOrAudioFileUpload = useCallback(() => {
-    if (userInputValue !== '') {
+    if (userInputValue !== '' || files.length > 0) {
       handleSendMessage();
       setFiles([]);
       setUserInputValue('');
@@ -414,6 +424,7 @@ const TextInput: React.FC<TextInputProps> = ({
       }
     }
   }, [handleSendMessage, isListening, userInputValue]);
+
   return (
     <>
       {error && <p style={{ color: 'red' }}>{error}</p>}
@@ -618,7 +629,7 @@ const TextInput: React.FC<TextInputProps> = ({
                 sx={{ color: '#0066CC' }}
               />
             </IconButton>
-          ) : userInputValue !== '' && !isListening ? (
+          ) : (userInputValue !== '' || files.length > 0) && !isListening ? (
             <IconButton
               aria-label="send message"
               onClick={handleClickSubmitOrAudioFileUpload}

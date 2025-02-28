@@ -144,25 +144,24 @@ export default function CommentSection() {
           <SingleComment comment={comment} />
 
           {/* Replies */}
-          {comment.replies &&
-            comment.replies.map((reply) => (
-              <Box
-                key={reply.id}
-                sx={{
-                  display: 'flex',
-                  padding: '10px 0px 10px 40px',
-                  alignItems: 'flex-start',
-                  gap: '20px',
-                }}
-              >
-                <Divider
-                  orientation="vertical"
-                  flexItem
-                  sx={{ backgroundColor: 'rgba(182, 151, 145, 0.20)' }}
-                />
-                <SingleComment comment={reply} />
-              </Box>
-            ))}
+          {comment.replies?.map((reply) => (
+            <Box
+              key={reply.id}
+              sx={{
+                display: 'flex',
+                padding: '10px 0px 10px 40px',
+                alignItems: 'flex-start',
+                gap: '20px',
+              }}
+            >
+              <Divider
+                orientation="vertical"
+                flexItem
+                sx={{ backgroundColor: 'rgba(182, 151, 145, 0.20)' }}
+              />
+              <SingleComment comment={reply} />
+            </Box>
+          ))}
         </Box>
       ))}
     </Box>

@@ -27,11 +27,12 @@ const MainContent: React.FC<MainContentProps> = ({ chatsData }) => {
     selectedChannel,
     chatResponses,
     setSelectedChannel,
-    isInteractingInChat,
   } = useContext(ChannelContentContext);
   const { excute: submitUserInputs, isLoading: isInteracting } = useAxiosApi(
     apis.submitUserInputs
   );
+  const { excute: chatWithFiles, isLoading: isInteractingwithfile } =
+    useAxiosApi(apis.chatWithFiles);
 
   const moveToChannelDetail = (channel: OrganizationChannelData) => {
     setSelectedChannel(channel);
@@ -126,7 +127,7 @@ const MainContent: React.FC<MainContentProps> = ({ chatsData }) => {
             <ChannelMessagePanel
               channel={selectedChannel}
               chatResponses={chatResponses}
-              isInteractingInChat={isInteractingInChat}
+              isInteracting={isInteracting || isInteractingwithfile}
             />
           </Box>
           <Box
@@ -136,8 +137,9 @@ const MainContent: React.FC<MainContentProps> = ({ chatsData }) => {
           >
             <TextInput
               from={'mainContent'}
+              chatWithFiles={chatWithFiles}
               submitUserInputs={submitUserInputs}
-              isInteracting={isInteracting}
+              isInteracting={isInteracting || isInteractingwithfile}
             />
           </Box>
         </Box>
@@ -183,8 +185,9 @@ const MainContent: React.FC<MainContentProps> = ({ chatsData }) => {
         嗨！我能為您做些什麼？
       </Typography>
       <TextInput
+        chatWithFiles={chatWithFiles}
         submitUserInputs={submitUserInputs}
-        isInteracting={isInteracting}
+        isInteracting={isInteracting || isInteractingwithfile}
       />
       <Box
         sx={{

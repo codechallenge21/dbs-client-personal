@@ -1,8 +1,8 @@
 @font-face {
-  font-family: 'DFPHeiBold-B5';
+  font-family: "DFPHeiBold-B5";
   font-weight: 400;
   font-style: normal;
-  src: local('DFPHeiBold-B5'), url('DFPHeiBold-B5.ttf') format('opentype');
+  src: local("DFPHeiBold-B5"), url("DFPHeiBold-B5.ttf") format("opentype");
 }
 
 :root {
@@ -22,7 +22,7 @@ body {
   margin: 0;
   color: var(--foreground);
   background: var(--background);
-  font-family: 'Roboto', Arial, Helvetica, sans-serif;
+  font-family: "Roboto", Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   width: 100%;
@@ -118,7 +118,6 @@ a {
     opacity: 1;
   }
 }
-
 @keyframes interactingButton {
   0% {
     background-color: rgba(0, 102, 204, 0.1);
@@ -133,7 +132,6 @@ a {
     box-shadow: 0 0 10px rgba(0, 102, 204, 0.2);
   }
 }
-
 .interacting {
   animation: interactingButton 1s infinite;
   border-radius: 50%;
@@ -142,7 +140,6 @@ a {
   align-items: center;
   justify-content: center;
 }
-
 .interactingIcon {
   animation: interactingAnimation 1s infinite;
 }

@@ -305,7 +305,6 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             </Typography>
           )}
           <IconButton
-            role="button"
             aria-label="Expand/Collapse"
             onClick={() => {
               if (isMobile) {
@@ -334,7 +333,6 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             }}
           >
             <Button
-              role="button"
               aria-label="New Chat"
               sx={{
                 height: '40px',
@@ -371,7 +369,6 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
 
         {!isExpanded && !isMobile && (
           <IconButton
-            role="button"
             aria-label="New Chat"
             sx={{
               padding: '8px',
@@ -487,7 +484,6 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             {isLogin ? (
               <>
                 <Button
-                  role="button"
                   aria-label="Logout"
                   onClick={handleMenuOpen}
                   sx={{
@@ -544,7 +540,6 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               </>
             ) : (
               <Button
-                role="button"
                 aria-label="Logout"
                 onClick={() => {
                   if (setIsLoginOpen) setIsLoginOpen(true);
@@ -571,7 +566,6 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               </Button>
             )}
             <Button
-              role="button"
               aria-label="Wishing Pool"
               sx={{
                 gap: '8px',
@@ -594,7 +588,6 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               許願池
             </Button>
             <Button
-              role="button"
               aria-label="Consultant Area"
               sx={{
                 gap: '8px',
@@ -621,7 +614,6 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
           <>
             {!isLogin ? (
               <IconButton
-                role="button"
                 aria-label="Login"
                 onClick={() => {
                   if (setIsLoginOpen) setIsLoginOpen(true);
@@ -649,7 +641,6 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             ) : (
               <>
                 <IconButton
-                  role="button"
                   aria-label="Logout"
                   onClick={handleMenuOpen}
                   sx={{
@@ -685,7 +676,6 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               </>
             )}
             <IconButton
-              role="button"
               aria-label="Wsihing Pool"
               sx={{
                 width: '36px',
@@ -707,7 +697,6 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               <EmojiObjectsRounded sx={{ color: 'white', fontSize: '20px' }} />
             </IconButton>
             <IconButton
-              role="button"
               aria-label="Consultant Area"
               sx={{
                 width: '36px',
