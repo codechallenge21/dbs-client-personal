@@ -27,6 +27,7 @@ const MainContent: React.FC<MainContentProps> = ({ chatsData }) => {
     selectedChannel,
     chatResponses,
     setSelectedChannel,
+    isInteractingInChat,
   } = useContext(ChannelContentContext);
   const { excute: submitUserInputs, isLoading: isInteracting } = useAxiosApi(
     apis.submitUserInputs
@@ -125,6 +126,7 @@ const MainContent: React.FC<MainContentProps> = ({ chatsData }) => {
             <ChannelMessagePanel
               channel={selectedChannel}
               chatResponses={chatResponses}
+              isInteractingInChat={isInteractingInChat}
             />
           </Box>
           <Box
