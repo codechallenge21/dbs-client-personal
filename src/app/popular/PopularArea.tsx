@@ -123,7 +123,7 @@ export default function PopularArea() {
       sx={{
         height: '100vh',
         display: 'flex',
-        overflowY: 'auto',
+
         flexDirection: 'column',
         background: isMobile ? 'white' : 'var(--Primary-, #EBE3DD)',
       }}
@@ -185,11 +185,11 @@ export default function PopularArea() {
           sx={{
             gap: '20px',
             display: 'flex',
-            overflowY: 'auto',
             flexDirection: 'column',
             backgroundColor: 'white',
             height: '96.5vh',
             marginBottom: '0px',
+            overflowY: 'auto',
             borderRadius: '8px',
             padding: isMobile ? '16px' : '16px 32px 16px 32px',
             '@media (min-width: 600px)': {
