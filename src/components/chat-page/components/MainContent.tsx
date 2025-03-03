@@ -27,6 +27,7 @@ const MainContent: React.FC<MainContentProps> = ({ chatsData }) => {
     selectedChannel,
     chatResponses,
     setSelectedChannel,
+    isInteractingInChat,
   } = useContext(ChannelContentContext);
   const { excute: submitUserInputs, isLoading: isInteracting } = useAxiosApi(
     apis.submitUserInputs
@@ -125,6 +126,7 @@ const MainContent: React.FC<MainContentProps> = ({ chatsData }) => {
             <ChannelMessagePanel
               channel={selectedChannel}
               chatResponses={chatResponses}
+              isInteractingInChat={isInteractingInChat}
             />
           </Box>
           <Box
@@ -160,7 +162,7 @@ const MainContent: React.FC<MainContentProps> = ({ chatsData }) => {
         alignItems: 'center',
         flexDirection: 'column',
         height: '100vh',
-        minHeight: 0, // critical so that overflow can happen
+        minHeight: 0,
         overflow: 'auto',
         justifyContent: 'center',
         pt: paddingTop,
