@@ -7,7 +7,9 @@ import {
   Typography,
   IconButton,
   useMediaQuery,
+  Container,
 } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import Image from 'next/image';
 import {
   MenuRounded,
@@ -21,6 +23,7 @@ import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
 const Events = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isBelow400px = useMediaQuery('(max-width:400px)');
 
   const focusRef = useRef<HTMLDivElement>(null);
   const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(true);
@@ -113,7 +116,6 @@ const Events = () => {
               display: 'flex',
               padding: '8px 16px',
               alignItems: 'center',
-              borderRadius: '8px 0px 0px 8px',
               background: 'var(--Primary-White, #FFF)',
             }}
           >
@@ -169,7 +171,7 @@ const Events = () => {
             display: 'flex',
             overflowY: 'auto',
             overflowX: 'hidden',
-            borderRadius: '8px',
+            borderRadius: isMobile ? '0' : '8px',
             flexDirection: 'column',
             backgroundColor: 'white',
             height: isMobile ? '100%' : '96vh',
@@ -371,13 +373,19 @@ const Events = () => {
               )}
             </Box>
           </Box>
-          <Box
+          <Container
+            maxWidth="xl"
             sx={{
               gap: '16px',
               display: 'flex',
               alignSelf: 'stretch',
               flexDirection: 'column',
               alignItems: 'flex-start',
+              p: 0,
+              '&.MuiContainer-root': {
+                paddingLeft: '0',
+                paddingRight: '0',
+              },
             }}
           >
             <Box
@@ -413,99 +421,105 @@ const Events = () => {
                 />
               </IconButton>
             </Box>
-            <Box
+            <Grid
+              container
+              spacing={2}
               sx={{
                 gap: '16px',
                 rowGap: '16px',
-                display: 'flex',
-                flexWrap: 'wrap',
-                alignSelf: 'stretch',
                 alignItems: isMobile ? 'center' : 'flex-start',
                 alignContent: isMobile ? 'center' : 'flex-start',
-                justifyContent: 'space-between',
+                justifyContent: 'center',
               }}
             >
               {toolItems.map((_, index) => (
-                <Box
-                  key={index}
-                  sx={{
-                    // gap: '12px',
-                    display: 'flex',
-                    height: '220px',
-                    width: isMobile ? '100%' : 'auto',
-                    minWidth: '260px',
-                    alignItems: 'center',
-                    flexDirection: 'column',
-                    justifyContent: 'flex-end',
-                    '&:hover': {
-                      '& .hover-text': {
-                        color: '#990000',
-                      },
-                      '& .hover-box': {
-                        backgroundColor: '#CC00000D',
-                      },
-                    },
+                <Grid
+                  size={{
+                    xs: isBelow400px ? 12 : 6,
+                    sm: 6,
+                    md: 4,
+                    lg: 3,
+                    xl: 2.4,
                   }}
+                  key={index}
                 >
-                  <Image
-                    src={boxImage}
-                    alt="Boxed Image"
-                    style={{
-                      width: '100%',
-                      height: '130px',
-                      objectFit: 'cover',
-                      borderTopLeftRadius: '8px',
-                      borderTopRightRadius: '8px',
-                    }}
-                  />
                   <Box
-                    className="hover-box"
                     sx={{
-                      gap: '4px',
                       display: 'flex',
-                      alignSelf: 'stretch',
+                      height: '220px',
+                      width: isMobile ? '100%' : 'auto',
+                      alignItems: 'center',
                       flexDirection: 'column',
-                      alignItems: 'flex-start',
-                      borderBottomLeftRadius: '8px',
-                      padding: '24px 16px 16px 16px',
-                      borderBottomRightRadius: '8px',
-                      backgroundColor: 'var(--Primary-, #EBE3DD)',
+                      '&:hover': {
+                        '& .hover-text': {
+                          color: '#990000',
+                        },
+                        '& .hover-box': {
+                          backgroundColor: '#CC00000D',
+                        },
+                      },
                     }}
                   >
-                    <Typography
-                      className="hover-text"
+                    <Image
+                      src={boxImage}
+                      alt="Boxed Image"
+                      style={{
+                        width: '100%',
+                        height: '130px',
+                        objectFit: 'cover',
+                        borderTopLeftRadius: '8px',
+                        borderTopRightRadius: '8px',
+                      }}
+                    />
+                    <Box
+                      className="hover-box"
                       sx={{
-                        fontWeight: 400,
-                        fontSize: '24px',
-                        overflow: 'hidden',
-                        fontStyle: 'normal',
-                        lineHeight: 'normal',
-                        textOverflow: 'ellipsis',
-                        fontFamily: 'DFPHeiBold-B5',
-                        color: 'var(--Primary-Black, #212B36)',
+                        gap: '4px',
+                        display: 'flex',
+                        alignSelf: 'stretch',
+                        flexDirection: 'column',
+                        alignItems: 'flex-start',
+                        borderBottomLeftRadius: '8px',
+                        padding: '24px 16px 16px 16px',
+                        borderBottomRightRadius: '8px',
+                        backgroundColor: 'var(--Primary-, #EBE3DD)',
                       }}
                     >
-                      標題
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="textSecondary"
-                      sx={{
-                        fontWeight: 400,
-                        fontSize: '16px',
-                        lineHeight: '24px',
-                        fontStyle: 'normal',
-                        fontFamily: 'DFPHeiMedium-B5',
-                        color: 'var(--Text-, #454A4D)',
-                      }}
-                    >
-                      説明文字
-                    </Typography>
+                      <Typography
+                        className="hover-text"
+                        sx={{
+                          fontWeight: 400,
+                          fontSize: '24px',
+                          overflow: 'hidden',
+                          fontStyle: 'normal',
+                          lineHeight: 'normal',
+                          textOverflow: 'ellipsis',
+                          fontFamily: 'DFPHeiBold-B5',
+                          color: 'var(--Primary-Black, #212B36)',
+                        }}
+                      >
+                        標題
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="textSecondary"
+                        sx={{
+                          fontWeight: 400,
+                          fontSize: '16px',
+                          lineHeight: '24px',
+                          fontStyle: 'normal',
+                          fontFamily: 'DFPHeiMedium-B5',
+                          color: 'var(--Text-, #454A4D)',
+                        }}
+                      >
+                        説明文字
+                      </Typography>
+                    </Box>
                   </Box>
-                </Box>
+                </Grid>
               ))}
-            </Box>
-          </Box>
+            </Grid>
+          </Container>
         </Box>
       </ToolbarDrawer>
     </Box>
