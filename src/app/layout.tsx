@@ -10,8 +10,7 @@ import {
 import './globals.css';
 import { SnackbarProvider } from '@/context/SnackbarContext';
 import { LoginProvider } from '@/context/LoginContext';
-// import { Box } from "@mui/material";
-// import { Header } from "@/components/header";
+import DynaFontScript from '../assets/font/DynaFontScript';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -85,25 +84,11 @@ export default function RootLayout({ children }: Props) {
   return (
     <html lang="en">
       <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-            window.FontJSON = {
-              User: "16697",
-              DomainID: "D0005795KZB",
-              Font: ["DFT_B5", "DFT_B7", "DFT_B3", "DFT_BC"]
-            };
-          `,
-          }}
-        />
-        <script src="https://dfo.dynacw.com.tw/DynaJSFont/DynaFont_FOUT.js" />
+        <DynaFontScript />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${publicSansFont.variable} ${openSansFont.variable} ${interFont.variable}`}
       >
-        {/* <Box>
-          <Header />
-        </Box> */}
         <ThemeProvider>
           <SnackbarProvider>
             <LoginProvider>
