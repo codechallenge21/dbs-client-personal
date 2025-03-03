@@ -22,11 +22,8 @@ export default function ThemeProvider({ children }: Props) {
   const [theme, setTheme] = useState(createTheme());
 
   useEffect(() => {
-    const pathname = window.location.pathname;
-    const isHomePage = pathname === '/';
-
     const baseOption = {
-      palette: isHomePage ? palette('light') : palette('light'),
+      palette: palette('light'),
     };
 
     setTheme(createTheme(baseOption as ThemeOptions));

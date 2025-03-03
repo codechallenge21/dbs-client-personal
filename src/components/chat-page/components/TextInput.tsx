@@ -106,7 +106,7 @@ const TextInput: React.FC<TextInputProps> = ({
   const [userInputValue, setUserInputValue] = useState('');
   const [isListening, setIsListening] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const recognitionRef = useRef<null | SpeechRecognition>(null);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
   const [files, setFiles] = useState<{ file: File; preview: string | null }[]>(
     []
   );
@@ -430,106 +430,25 @@ const TextInput: React.FC<TextInputProps> = ({
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <Box
         sx={{
+          display: 'flex',
+          flexDirection: 'column',
           width: '100%',
-          maxWidth: '760px',
-          minHeight: '116px',
+          maxWidth: { xs: '100%', md: '760px' },
           position: from === 'mainContent' ? 'sticky' : 'relative',
           bottom: 0,
           backgroundColor: '#F5F5F5',
-          borderRadius: '16px',
+          borderRadius: { xs: 0, md: '16px' },
           zIndex: 10,
-          overflow: 'hidden',
-          margin: from === 'mainContent' ? 'auto' : '0',
+          margin: from === 'mainContent' ? 'auto' : 0,
         }}
         className="chat-text-input"
       >
-        {files.length > 0 && (
-          <Box
-            sx={{
-              display: 'flex',
-              gap: '12px',
-              flexWrap: 'wrap',
-              padding: '12px',
-              maxHeight: '180px',
-              overflowY: 'auto',
-              '&::-webkit-scrollbar': {
-                width: '8px',
-              },
-              '&::-webkit-scrollbar-thumb': {
-                backgroundColor: '#c1c1c1',
-                borderRadius: '4px',
-              },
-              '&::-webkit-scrollbar-thumb:hover': {
-                backgroundColor: '#a8a8a8',
-              },
-              '&::-webkit-scrollbar-track': {
-                backgroundColor: '#f1f1f1',
-                borderRadius: '4px',
-              },
-            }}
-          >
-            {files.map((file, index) => (
-              <Box
-                key={index}
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  textAlign: 'center',
-                  position: 'relative',
-                  width: 80,
-                  paddingTop: '10px',
-                }}
-              >
-                <Image
-                  src={file.preview ?? imagePreview}
-                  alt={file.file.name}
-                  width={64}
-                  height={64}
-                  style={{
-                    objectFit: 'cover',
-                    borderRadius: '4px',
-                  }}
-                />
-                <Typography
-                  sx={{
-                    mt: 1,
-                    fontSize: '14px',
-                    fontFamily: 'DFPHeiBold-B5',
-                    wordBreak: 'break-word',
-                    textAlign: 'center',
-                  }}
-                >
-                  {file.file.name}
-                </Typography>
-                <IconButton
-                  aria-label="remove file"
-                  sx={{
-                    position: 'absolute',
-                    top: '0px',
-                    left: '6px',
-                    backgroundColor: 'red',
-                    width: '16px',
-                    height: '16px',
-                    color: 'white',
-                    '&:hover': {
-                      backgroundColor: 'darkred',
-                    },
-                  }}
-                  onClick={() => handleRemoveFile(index)}
-                >
-                  <CloseRounded sx={{ fontSize: '14px' }} />
-                </IconButton>
-              </Box>
-            ))}
-          </Box>
-        )}
         <Box
           sx={{
-            margin: '8px 0px 8px 16px',
+            maxHeight: { xs: '220px', md: '300px' },
             overflowY: 'auto',
-            minHeight: '40px',
-            maxHeight: '200px',
+            px: { xs: 2, md: 3 },
+            pt: { xs: 2, md: 3 },
             '&::-webkit-scrollbar': {
               width: '8px',
             },
@@ -537,52 +456,126 @@ const TextInput: React.FC<TextInputProps> = ({
               backgroundColor: '#c1c1c1',
               borderRadius: '4px',
             },
-            '&::-webkit-scrollbar-thumb:hover': {
-              backgroundColor: '#a8a8a8',
-            },
             '&::-webkit-scrollbar-track': {
               backgroundColor: '#f1f1f1',
               borderRadius: '4px',
             },
           }}
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
         >
-          <TextareaAutosize
-            aria-label="Ask the AI"
-            minRows={1}
-            placeholder="傳訊息給智能顧問"
-            style={{
-              width: '100%',
-              border: 'none',
-              resize: 'none',
-              outline: 'none',
-              fontSize: '16px',
-              color: '#212B36',
-              overflow: 'auto',
-              borderRadius: '8px',
-              backgroundColor: '#F5F5F5',
-              paddingTop: '2px',
-              paddingBottom: '',
+          {files.length > 0 && (
+            <Box
+              sx={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: '12px',
+                pb: 2,
+                '@media (max-width: 600px)': {
+                  flexWrap: 'nowrap',
+                  overflowX: 'auto',
+                },
+              }}
+            >
+              {files.map((file, index) => (
+                <Box
+                  key={index}
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    textAlign: 'center',
+                    position: 'relative',
+                    width: 80,
+                    '@media (max-width: 600px)': {
+                      width: 60,
+                    },
+                  }}
+                >
+                  <Image
+                    src={file.preview ?? imagePreview}
+                    alt={file.file.name}
+                    width={64}
+                    height={64}
+                    style={{
+                      objectFit: 'cover',
+                      borderRadius: '4px',
+                    }}
+                  />
+                  <Typography
+                    sx={{
+                      mt: 1,
+                      fontSize: '14px',
+                      fontFamily: 'DFPHeiBold-B5',
+                      wordBreak: 'break-word',
+                      textAlign: 'center',
+                      '@media (max-width: 600px)': {
+                        fontSize: '12px',
+                      },
+                    }}
+                  >
+                    {file.file.name}
+                  </Typography>
+                  <IconButton
+                    aria-label="remove file"
+                    sx={{
+                      position: 'absolute',
+                      top: 0,
+                      left: '6px',
+                      backgroundColor: 'red',
+                      width: '16px',
+                      height: '16px',
+                      color: 'white',
+                      p: 0.5,
+                      '&:hover': {
+                        backgroundColor: 'darkred',
+                      },
+                    }}
+                    onClick={() => handleRemoveFile(index)}
+                  >
+                    <CloseRounded sx={{ fontSize: '14px' }} />
+                  </IconButton>
+                </Box>
+              ))}
+            </Box>
+          )}
+          <Box
+            sx={{
+              mb: 2,
             }}
-            className="textarea-autosize"
-            value={userInputValue}
-            onChange={handleOnChangeUserInput}
-            onKeyDown={handleOnKeyDownUserInput}
-          />
+          >
+            <TextareaAutosize
+              aria-label="Ask the AI"
+              minRows={1}
+              placeholder="傳訊息給智能顧問"
+              style={{
+                width: '100%',
+                border: 'none',
+                resize: 'none',
+                outline: 'none',
+                fontSize: '16px',
+                color: '#212B36',
+                overflow: 'hidden',
+                borderRadius: '8px',
+                backgroundColor: '#F5F5F5',
+              }}
+              className="textarea-autosize"
+              value={userInputValue}
+              onChange={handleOnChangeUserInput}
+              onKeyDown={handleOnKeyDownUserInput}
+            />
+          </Box>
         </Box>
         <Box
           sx={{
-            width: '100%',
-            justifyContent: 'space-between',
+            flexShrink: 0,
             display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
             padding: '10px 16px 10px 6px',
           }}
         >
-          <Box
-            sx={{
-              width: '100%',
-              display: 'flex',
-            }}
-          >
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <input
               type="file"
               id="file-upload"
@@ -590,28 +583,22 @@ const TextInput: React.FC<TextInputProps> = ({
               onChange={handleFileSelect}
               style={{ display: 'none' }}
             />
-            <Box sx={{ display: 'flex' }}>
-              <IconButton
-                aria-label="attach file"
-                component="span"
-                onDrop={handleDrop}
-                onDragOver={handleDragOver}
-                sx={{ padding: '8px' }}
-              >
-                <AttachFileRoundedIcon
-                  sx={{ transform: 'rotate(180deg)', color: 'black' }}
-                  onClick={() =>
-                    document.getElementById('file-upload')?.click()
-                  }
-                />
-              </IconButton>
-              <IconButton
-                aria-label="attach file"
-                sx={{ padding: '8px', borderRadius: '7px 10px' }}
-              >
-                <DropdownMenu isTextInput advisor={advisorType} />
-              </IconButton>
-            </Box>
+            <IconButton
+              aria-label="attach file"
+              component="span"
+              onClick={() => document.getElementById('file-upload')?.click()}
+              sx={{ padding: '8px' }}
+            >
+              <AttachFileRoundedIcon
+                sx={{ transform: 'rotate(180deg)', color: 'black' }}
+              />
+            </IconButton>
+            <IconButton
+              aria-label="Advisor Options"
+              sx={{ padding: '8px', borderRadius: '7px 10px' }}
+            >
+              <DropdownMenu isTextInput advisor={advisorType} />
+            </IconButton>
           </Box>
 
           {isInteracting ? (
