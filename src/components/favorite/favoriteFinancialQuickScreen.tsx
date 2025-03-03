@@ -31,7 +31,7 @@ import { useRouter } from 'next/navigation';
 import { OrganizationChannel } from '@/interfaces/entities';
 import apis from '@/utils/hooks/apis/apis';
 import EditDialog from '@/components/dialogs/EditDialog';
-import UploadDialog from '@/components/uploadDialog/page';
+import UploadDialog from '@/components/uploadDialog/uploadDialog';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import DeleteDialog from '@/components/dialogs/DeleteDialog';
 import SearchIcon from '@mui/icons-material/Search';
@@ -475,6 +475,14 @@ const FavoriteFinancialQuickScreening = () => {
                       handleDeleteChannelOpenConfirmDialog={
                         handleDeleteChannelOpenConfirmDialog
                       }
+                      anchorOrigin={{
+                        vertical: 'center',
+                        horizontal: 'center',
+                      }}
+                      transformOrigin={{
+                        vertical: 'center',
+                        horizontal: 'center',
+                      }}
                     />
                   </TableCell>
                 </TableRow>
@@ -598,6 +606,14 @@ const FavoriteFinancialQuickScreening = () => {
                     handleDeleteChannelOpenConfirmDialog={
                       handleDeleteChannelOpenConfirmDialog
                     }
+                    anchorOrigin={{
+                      vertical: 'center',
+                      horizontal: 'center',
+                    }}
+                    transformOrigin={{
+                      vertical: 'center',
+                      horizontal: 'center',
+                    }}
                   />
                 </Box>
 
@@ -705,7 +721,19 @@ const FavoriteFinancialQuickScreening = () => {
       )}
 
       {/* Dialogs */}
-      <UploadDialog open={openUpload} onClose={handleCloseUploadDialog} />
+      <UploadDialog
+        open={openUpload}
+        onClose={handleCloseUploadDialog}
+        handleUploadFile={function (
+          file: File,
+          fileInfo: {
+            organizationChannelTitle: string;
+            organizationChannelCreateDate: string;
+          }
+        ): void {
+          throw new Error('Function not implemented.');
+        }}
+      />
       <DeleteDialog
         open={isDeleteDialogOpen}
         onClose={handleCloseDeleteDialog}

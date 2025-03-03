@@ -132,10 +132,13 @@ const HistoryChats: React.FC<HistoryChatsProps> = ({
                   fontSize: '14px',
                   fontWeight: 700,
                   mb: 1,
+                  textAlign: 'left',
                   '.group:hover &': { color: '#990000' },
                 }}
               >
-                {channel.organizationChannelTitle}
+                {channel.organizationChannelTitle.length > 5
+                  ? `${channel.organizationChannelTitle.substring(0, 5)}...`
+                  : channel.organizationChannelTitle}
               </Typography>
               <Typography
                 sx={{
@@ -147,12 +150,13 @@ const HistoryChats: React.FC<HistoryChatsProps> = ({
                   textOverflow: 'ellipsis',
                   fontFamily: 'Open Sans',
                   fontSize: '12px',
+                  textAlign: 'left',
                   fontWeight: 400,
                 }}
               >
                 {new Date(
                   channel.organizationChannelCreateDate
-                ).toLocaleString()}
+                ).toLocaleDateString()}
               </Typography>
             </Box>
 
@@ -161,21 +165,24 @@ const HistoryChats: React.FC<HistoryChatsProps> = ({
               sx={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: 1,
-                width: '60px', // Reserve space so adding delete icon doesn't shift layout
-                justifyContent: 'flex-end',
               }}
             >
-              <IconButton size="small" onClick={(e) => e.stopPropagation()}>
-                <StarRounded sx={{ width: 25, height: 25, color: '#000' }} />
+              <IconButton size="small" sx={{ padding: '8px' }}>
+                <StarRounded
+                  sx={{
+                    width: '25px',
+                    height: '25px',
+                    color: '#000',
+                  }}
+                />
               </IconButton>
-              {/* Reserve space even if delete icon is not visible */}
-              {isHoveredOrSelected ? (
+              {isHoveredOrSelected && (
                 <IconButton
                   size="small"
                   sx={{
                     color: '#CC0000',
                     transform: 'translateX(10px)',
+                    padding: '8px',
                   }}
                   onClick={(e) => {
                     e.stopPropagation();
@@ -185,10 +192,13 @@ const HistoryChats: React.FC<HistoryChatsProps> = ({
                     handleDelete(channel.organizationChannelId);
                   }}
                 >
-                  <DeleteIcon sx={{ width: 25, height: 25 }} />
+                  <DeleteIcon
+                    sx={{
+                      width: '25px',
+                      height: '25px',
+                    }}
+                  />
                 </IconButton>
-              ) : (
-                <Box sx={{ width: 25, height: 25 }} />
               )}
             </Box>
           </Paper>

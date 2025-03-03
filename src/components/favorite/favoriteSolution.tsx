@@ -132,6 +132,7 @@ export default function FavoriteSolution() {
         justifyContent: 'center',
         alignItems: 'center',
         bgcolor: '#ffffff',
+        padding: '0px',
         overflow: 'hidden',
       }}
     >
@@ -143,7 +144,7 @@ export default function FavoriteSolution() {
           // overflow: 'auto', // Local scrolling behavior for this component
           bgcolor: 'background.paper',
           borderRadius: 2,
-          p: isMobile ? '16px' : 3,
+          // p: isMobile ? '16px' : 3,
           mx: isMobile ? '' : 2,
           display: 'flex',
           alignItems: 'flex-start',
@@ -169,14 +170,12 @@ export default function FavoriteSolution() {
               },
             },
           }}
-          slotProps={{
-            input: {
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon sx={{ color: 'text.secondary' }} />
-                </InputAdornment>
-              ),
-            },
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon sx={{ color: 'text.secondary' }} />
+              </InputAdornment>
+            ),
           }}
         />
         {isV2 ? (
@@ -205,7 +204,8 @@ export default function FavoriteSolution() {
                     fontSize: '14px',
                     fontStyle: 'normal',
                     fontWeight: 700,
-                    lineHeight: 'normal',
+                    lineHeight: '24px',
+                    letterSpacing: '0%',
                     '& .highlight': {
                       color: 'error.main',
                       px: 0.5,
@@ -253,7 +253,7 @@ export default function FavoriteSolution() {
                 width: '100%',
                 // overflowY: 'auto',
                 paddingRight: '8px',
-                paddingLeft: isMobile ? '0px' : '0px',
+                // paddingLeft: isMobile ? '0px' : '0px',
                 '&::-webkit-scrollbar': { width: '4px' },
                 '&::-webkit-scrollbar-thumb': {
                   backgroundColor: '#c1c1c1',
@@ -289,12 +289,14 @@ export default function FavoriteSolution() {
                         p: 2,
                         border: '1px solid var(--Secondary-Dark-Gray, #4A4A4A)',
                         borderRadius: 2,
+                        marginLeft: '10px !important',
                         position: 'relative',
                         gap: '16px',
                         alignSelf: 'stretch',
                         cursor: 'pointer',
                         '&:hover': {
                           bgcolor: 'rgba(255, 0, 0, 0.05)',
+                          marginLeft: isMobile ? '10px' : '10px',
                         },
                       }}
                       onClick={() => {
@@ -371,10 +373,9 @@ export default function FavoriteSolution() {
                         sx={{
                           display: 'flex',
                           alignItems: 'center',
-                          gap: '8px',
                         }}
                       >
-                        <IconButton size="small">
+                        <IconButton size="small" sx={{ padding: '8px' }}>
                           <StarRounded
                             sx={{
                               width: '25px',
@@ -389,6 +390,7 @@ export default function FavoriteSolution() {
                             sx={{
                               color: '#CC0000',
                               transform: 'translateX(10px)',
+                              padding: '8px',
                             }}
                             onClick={(e) => {
                               e.stopPropagation();
@@ -399,7 +401,10 @@ export default function FavoriteSolution() {
                             }}
                           >
                             <DeleteIcon
-                              sx={{ width: '25px', height: '25px' }}
+                              sx={{
+                                width: '25px',
+                                height: '25px',
+                              }}
                             />
                           </IconButton>
                         )}
@@ -524,8 +529,8 @@ export default function FavoriteSolution() {
               sx={{
                 width: '100%',
                 overflowY: 'auto',
-                paddingRight: '8px',
-                paddingLeft: isMobile ? '0px' : '10px',
+                paddingRight: '4px',
+                paddingLeft: isMobile ? '10px' : '10px',
                 '&::-webkit-scrollbar': { width: '4px' },
                 '&::-webkit-scrollbar-thumb': {
                   backgroundColor: '#c1c1c1',

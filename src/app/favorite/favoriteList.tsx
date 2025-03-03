@@ -12,10 +12,10 @@ import {
   // CircularProgress,
 } from '@mui/material';
 import { MenuRounded } from '@mui/icons-material';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import apis from '@/utils/hooks/apis/apis';
 import EditDialog from '@/components/dialogs/EditDialog';
-import UploadDialog from '@/components/uploadDialog/page';
+import UploadDialog from '@/components/uploadDialog/uploadDialog';
+// import UploadDialog from '@/components/uploadDialog/page';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import DeleteDialog from '@/components/dialogs/DeleteDialog';
 import { useAudioChannels } from '@/utils/hooks/useAudioChannels';
@@ -125,14 +125,14 @@ const FavouriteList = () => {
 
   return (
     <>
-      {!isMobile && (
-        <Box
-          sx={{
-            minHeight: '100vh',
-            background: 'var(--Primary-, #EBE3DD)',
-          }}
-        >
-          <ToolbarDrawer open={isOpenDrawer} setIsOpenDrawer={setIsOpenDrawer}>
+      <ToolbarDrawer open={isOpenDrawer} setIsOpenDrawer={setIsOpenDrawer}>
+        {!isMobile && (
+          <Box
+            sx={{
+              minHeight: '100vh',
+              background: 'var(--Primary-, #EBE3DD)',
+            }}
+          >
             <>
               <Tabs
                 value={tabValue}
@@ -259,155 +259,168 @@ const FavouriteList = () => {
                 </TableContainer>
               </Box>
             </>
-          </ToolbarDrawer>
-        </Box>
-      )}
-      {isMobile && (
-        <Box
-          sx={{
-            padding: 1,
-            height: '100vh',
-            display: 'flex',
-            flexDirection: 'column',
-            overflow: 'hidden',
-            background: 'var(--Primary-White, #FFF)',
-          }}
-        >
-          {/* Header section */}
+          </Box>
+        )}
+        {isMobile && (
           <Box
             sx={{
-              flexShrink: 0, 
-              height: '64px',
+              padding: 1,
+              height: '100vh',
               display: 'flex',
-              alignItems: 'center',
-              borderRadius: '8px 0px 0px 8px',
+              flexDirection: 'column',
+              overflow: 'hidden',
               background: 'var(--Primary-White, #FFF)',
             }}
           >
-            <IconButton role="button" aria-label="menu">
-              <MenuRounded sx={{ color: 'black' }} />
-            </IconButton>
-            <Typography
+            {/* Header section */}
+            <Box
               sx={{
-                flex: '1 0 0',
+                flexShrink: 0,
+                height: '64px',
                 display: 'flex',
                 alignItems: 'center',
-                padding: '4px 0px 4px 8px',
-                fontWeight: 400,
-                fontSize: '16px',
-                lineHeight: '16px',
-                letterSpacing: '0%',
+                borderRadius: '8px 0px 0px 8px',
+                background: 'var(--Primary-White, #FFF)',
               }}
             >
-              工具箱
-              <ArrowDropDownIcon
-                sx={{ marginLeft: '5px', marginBottom: '3px' }}
+              <IconButton
+                role="button"
+                aria-label="menu"
+                onClick={() => setIsOpenDrawer(true)}
+              >
+                <MenuRounded sx={{ color: 'black' }} />
+              </IconButton>
+              <Typography
+                sx={{
+                  flex: '1 0 0',
+                  display: 'flex',
+                  alignItems: 'center',
+                  padding: '4px 0px 4px 8px',
+                  fontWeight: 400,
+                  fontSize: '16px',
+                  lineHeight: '16px',
+                  letterSpacing: '0%',
+                }}
+              >
+                我的收藏
+              </Typography>
+            </Box>
+
+            {/* Tabs section */}
+            <Tabs
+              value={tabValue}
+              onChange={handleTabChange}
+              sx={{
+                mb: 2,
+                flexShrink: 0,
+              }}
+              TabIndicatorProps={{
+                style: {
+                  backgroundColor: '#212B36',
+                },
+              }}
+              variant="scrollable"
+              scrollButtons="auto"
+            >
+              <Tab
+                label="解決麻煩事"
+                sx={{
+                  fontWeight: 400,
+                  fontSize: '14px',
+                  lineHeight: '22px',
+                  fontStyle: 'normal',
+                  fontFamily: 'DFPHeiBold-B5',
+                  color: 'var(--Text-Secondary, #637381))',
+                  '&.Mui-selected': {
+                    color: 'var(--Primary-Black, #212B36)',
+                  },
+                }}
               />
-            </Typography>
-          </Box>
-
-          {/* Tabs section */}
-          <Tabs
-            value={tabValue}
-            onChange={handleTabChange}
-            sx={{
-              mb: 2,
-              flexShrink: 0, 
-            }}
-            TabIndicatorProps={{
-              style: {
-                backgroundColor: '#212B36',
-              },
-            }}
-            variant="scrollable" 
-            scrollButtons="auto"
-          >
-            <Tab
-              label="解決麻煩事"
+              <Tab
+                label="語音轉文字"
+                sx={{
+                  fontWeight: 400,
+                  fontSize: '14px',
+                  lineHeight: '22px',
+                  fontStyle: 'normal',
+                  fontFamily: 'DFPHeiBold-B5',
+                  color: 'var(--Text-Secondary, #637381)',
+                  '&.Mui-selected': {
+                    color: 'var(--Primary-Black, #212B36)',
+                  },
+                }}
+              />
+              <Tab
+                label="財務快篩"
+                sx={{
+                  fontWeight: 400,
+                  fontSize: '14px',
+                  lineHeight: '22px',
+                  fontStyle: 'normal',
+                  fontFamily: 'DFPHeiBold-B5',
+                  color: 'var(--Text-Secondary, #637381)',
+                  '&.Mui-selected': {
+                    color: 'var(--Primary-Black, #212B36)',
+                  },
+                }}
+              />
+            </Tabs>
+            {/* Content section */}
+            <Box
               sx={{
-                fontWeight: 400,
-                fontSize: '14px',
-                lineHeight: '22px',
-                fontStyle: 'normal',
-                fontFamily: 'DFPHeiBold-B5',
-                color: 'var(--Text-Secondary, #637381))',
-                '&.Mui-selected': {
-                  color: 'var(--Primary-Black, #212B36)',
-                },
-              }}
-            />
-            <Tab
-              label="語音轉文字"
-              sx={{
-                fontWeight: 400,
-                fontSize: '14px',
-                lineHeight: '22px',
-                fontStyle: 'normal',
-                fontFamily: 'DFPHeiBold-B5',
-                color: 'var(--Text-Secondary, #637381)',
-                '&.Mui-selected': {
-                  color: 'var(--Primary-Black, #212B36)',
-                },
-              }}
-            />
-            <Tab
-              label="財務快篩"
-              sx={{
-                fontWeight: 400,
-                fontSize: '14px',
-                lineHeight: '22px',
-                fontStyle: 'normal',
-                fontFamily: 'DFPHeiBold-B5',
-                color: 'var(--Text-Secondary, #637381)',
-                '&.Mui-selected': {
-                  color: 'var(--Primary-Black, #212B36)',
-                },
-              }}
-            />
-          </Tabs>
-          {/* Content section */}
-          <Box
-            sx={{
-              flex: 1, 
-              display: 'flex',
-              flexDirection: 'column',
-              backgroundColor: 'white',
-              borderBottomLeftRadius: '8px',
-              borderBottomRightRadius: '8px',
-              overflow: 'hidden', 
-            }}
-          >
-            <TableContainer
-              sx={{
-                height: '100%',
-                overflow: 'auto', 
+                flex: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                backgroundColor: 'white',
+                borderBottomLeftRadius: '8px',
+                borderBottomRightRadius: '8px',
+                overflow: 'hidden',
               }}
             >
-              {tabValue === 0 && <FavoriteSolution />}
-              {tabValue === 1 && <FavoriteFinancialScreening />}
-              {tabValue === 2 && <FavoriteFinancialQuickScreening />}
-            </TableContainer>
+              <TableContainer
+                sx={{
+                  height: '100%',
+                  overflow: 'auto',
+                }}
+              >
+                {tabValue === 0 && <FavoriteSolution />}
+                {tabValue === 1 && <FavoriteFinancialScreening />}
+                {tabValue === 2 && <FavoriteFinancialQuickScreening />}
+              </TableContainer>
+            </Box>
           </Box>
-        </Box>
-      )}
+        )}
 
-      <UploadDialog open={openUpload} onClose={handleCloseUploadDialog} />
-      <DeleteDialog
-        open={isDeleteDialogOpen}
-        onClose={handleCloseDeleteDialog}
-        onConfirm={handleDeleteChannelConfirm}
-        deletableName={
-          channelsData?.[activeIndex!]?.organizationChannelTitle || ''
-        }
-      />
-      <EditDialog
-        open={isEditDialogOpen}
-        onClose={handleCloseEditDialog}
-        onConfirm={handleEditChannelConfirm}
-        editableName={
-          channelsData?.[activeIndex!]?.organizationChannelTitle || ''
-        }
-      />
+        <UploadDialog
+          open={openUpload}
+          onClose={handleCloseUploadDialog}
+          handleUploadFile={function (
+            file: File,
+            fileInfo: {
+              organizationChannelTitle: string;
+              organizationChannelCreateDate: string;
+            }
+          ): void {
+            throw new Error('Function not implemented.');
+          }}
+        />
+        <DeleteDialog
+          open={isDeleteDialogOpen}
+          onClose={handleCloseDeleteDialog}
+          onConfirm={handleDeleteChannelConfirm}
+          deletableName={
+            channelsData?.[activeIndex!]?.organizationChannelTitle || ''
+          }
+        />
+        <EditDialog
+          open={isEditDialogOpen}
+          onClose={handleCloseEditDialog}
+          onConfirm={handleEditChannelConfirm}
+          editableName={
+            channelsData?.[activeIndex!]?.organizationChannelTitle || ''
+          }
+        />
+      </ToolbarDrawer>
     </>
   );
 };
