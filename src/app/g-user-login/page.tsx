@@ -16,7 +16,7 @@ function GUserLoginPageContent() {
 
   useEffect(() => {
     if (!code) {
-      showSnackbar('缺少 Google 登入驗證碼。', 'error');
+      showSnackbar('無法取得Google授權碼。', 'error');
       router.push('/login');
       return;
     }
@@ -26,15 +26,13 @@ function GUserLoginPageContent() {
         const response = await googleLogin({ code });
         if (response.status === 200) {
           showSnackbar('登入成功。', 'success');
-          setTimeout(() => {
-            window.location.reload();
-          }, 2000);
+          router.push('/');
         } else {
-          showSnackbar('Google 登入失敗。請再試一次。', 'error');
+          showSnackbar('Google驗證失敗。請重新嘗試。', 'error');
           router.push('/');
         }
       } catch (error) {
-        showSnackbar('正在處理 Google 登入...', 'error');
+        showSnackbar('Google驗證失敗。請重新嘗試。', 'error');
         router.push('/');
       }
     };
@@ -47,7 +45,7 @@ function GUserLoginPageContent() {
       {isLoading ? (
         <CircularProgress />
       ) : (
-        <Typography variant="h5">Processing Google login...</Typography>
+        <Typography variant="h5">正在進行Google身份驗證...</Typography>
       )}
     </Container>
   );

@@ -9,7 +9,6 @@ import {
   StarBorderRounded,
   SettingsInputComponentRounded,
 } from '@mui/icons-material';
-import UploadDialog from '@/components/uploadDialog/page';
 import { AdvisorType } from '../../../app/chat/types';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import ChannelContentContext from '@/context/ChannelContentContext';
@@ -32,7 +31,6 @@ const Header: React.FC<HeaderProps> = ({
   setIsOpenDrawer = () => {},
   advisor,
   isChat = false,
-  openUpload = false,
   setOpenUpload = () => {},
   setOpenDataSource,
   openDataSource,
@@ -43,10 +41,6 @@ const Header: React.FC<HeaderProps> = ({
     ChannelContentContext
   );
   const router = useRouter();
-
-  const handleOpenUpload = useCallback(() => {
-    setOpenUpload(false);
-  }, [setOpenUpload]);
 
   const memoizedToggleDrawer = useCallback(
     (drawerOpen: boolean) => {
@@ -104,25 +98,27 @@ const Header: React.FC<HeaderProps> = ({
               <FileUploadIcon sx={{ color: '#212B36' }} />
             </IconButton>
           )}
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <IconButton
-              role="button"
-              aria-label="Add Favorite"
-              sx={{ padding: '0px' }}
-            >
-              <StarBorderRounded sx={{ color: '#212B36', margin: '8px' }} />
-            </IconButton>
-            <IconButton
-              role="button"
-              aria-label="Data Source"
-              sx={{ padding: '0px' }}
-              onClick={() => setOpenDataSource(true)}
-            >
-              <SettingsInputComponentRounded
-                sx={{ color: '#212B36', margin: '8px' }}
-              />
-            </IconButton>
-          </Box>
+          {isChat && selectedChannel && (
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <IconButton
+                role="button"
+                aria-label="Add Favorite"
+                sx={{ padding: '0px' }}
+              >
+                <StarBorderRounded sx={{ color: '#212B36', margin: '8px' }} />
+              </IconButton>
+              <IconButton
+                role="button"
+                aria-label="Data Source"
+                sx={{ padding: '0px' }}
+                onClick={() => setOpenDataSource(true)}
+              >
+                <SettingsInputComponentRounded
+                  sx={{ color: '#212B36', margin: '8px' }}
+                />
+              </IconButton>
+            </Box>
+          )}
         </Box>
       ) : (
         <Box
@@ -152,7 +148,7 @@ const Header: React.FC<HeaderProps> = ({
               )}
             </Box>
           )}
-          {isChat && (
+          {isChat && selectedChannel && (
             <Box
               sx={{
                 display: 'flex',
@@ -170,9 +166,7 @@ const Header: React.FC<HeaderProps> = ({
                 >
                   <StarBorderRounded sx={{ color: '#212B36', margin: '8px' }} />
                 </IconButton>
-                {selectedChannel ||
-                selectedChannelId ||
-                chatResponses.length ? (
+                {selectedChannelId || chatResponses.length ? (
                   <IconButton
                     role="button"
                     aria-label="All Chats"
@@ -197,7 +191,6 @@ const Header: React.FC<HeaderProps> = ({
           )}
         </Box>
       )}
-      {!isChat && <UploadDialog open={openUpload} onClose={handleOpenUpload} />}
     </Box>
   );
 };

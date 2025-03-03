@@ -1,51 +1,48 @@
 'use client';
-import React, { useCallback, useEffect, useState } from 'react';
+import DataSourceDialog from '@/components/chat-page/components/chatDataStore';
+import DeleteDialog from '@/components/dialogs/DeleteDialog';
+import EditDialog from '@/components/dialogs/EditDialog';
+import EditableItem from '@/components/editable-item/EditableItem';
+import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
+import { OrganizationChannel } from '@/interfaces/entities';
+import apis from '@/utils/hooks/apis/apis';
+import { useAudioChannel } from '@/utils/hooks/useAudioChannel';
+import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import {
-  Tab,
-  Box,
-  Tabs,
-  Card,
-  Paper,
-  Grid2,
-  styled,
-  Button,
-  useTheme,
-  Typography,
-  IconButton,
-  CardContent,
-  useMediaQuery,
-  TextareaAutosize,
-  Tooltip,
-  // CircularProgress,
-} from '@mui/material';
-import {
-  Done as DoneIcon,
-  MicRounded,
-  SyncRounded,
-  ReplayRounded,
-  PushPinRounded,
-  StarBorderRounded,
-  ContentCopyRounded,
-  PermIdentityRounded,
+  ArrowBackIosNewRounded,
   ArrowBackIosRounded,
   ArrowForwardIosRounded,
-  ThumbDownOffAltRounded,
-  SettingsInputComponentRounded,
-  ArrowBackIosNewRounded,
+  ContentCopyRounded,
+  Done as DoneIcon,
   HistoryRounded,
+  MicRounded,
+  PermIdentityRounded,
+  ReplayRounded,
+  SettingsInputComponentRounded,
+  StarBorderRounded,
+  SyncRounded,
+  ThumbDownOffAltRounded,
 } from '@mui/icons-material';
-import { OrganizationChannel } from '@/interfaces/entities';
-import { useAudioChannel } from '@/utils/hooks/useAudioChannel';
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Grid2,
+  IconButton,
+  Paper,
+  styled,
+  Tab,
+  Tabs,
+  TextareaAutosize,
+  Tooltip,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 import { useRouter, useSearchParams } from 'next/navigation';
-import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
-import UploadDialog from '@/components/uploadDialog/page';
-import DataSourceDialog from '@/components/chat-page/components/chatDataStore';
+import React, { useCallback, useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
-import apis from '@/utils/hooks/apis/apis';
-import EditableItem from '@/components/editable-item/EditableItem';
-import EditDialog from '@/components/dialogs/EditDialog';
-import DeleteDialog from '@/components/dialogs/DeleteDialog';
 
 function TabPanel(props: {
   readonly value: number;
@@ -134,7 +131,6 @@ const ChannelSummary = () => {
   const [openDataSource, setOpenDataSource] = useState(false);
   const [aIAnalysisTabValue, setAIAnalysisTabValue] = React.useState(0);
   const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(!isMobile);
-  const [openUpload, setOpenUpload] = React.useState(false);
   /**
    * @useSearchParams hook requires Suspense Boundary Component wrapping
    * Reference: https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout
@@ -177,7 +173,7 @@ const ChannelSummary = () => {
         }, 1000);
       },
       (err) => {
-        console.error('Failed to copy to clipboard', err);
+        console.error('複製失敗', err);
       }
     );
   };
@@ -223,7 +219,7 @@ const ChannelSummary = () => {
     async (newTitle: string) => {
       await updateChannelDetail({
         organizationId: 'yMJHyi6R1CB9whpdNvtA',
-        organizationChannelId: selectedChannel?.organizationChannelId || '',
+        organizationChannelId: selectedChannel?.organizationChannelId ?? '',
         organizationChannelTitle: newTitle,
       });
       setIsEditDialogOpen(false);
@@ -285,10 +281,6 @@ const ChannelSummary = () => {
     newValue: number
   ) => {
     setAIAnalysisTabValue(newValue);
-  };
-
-  const handleCloseUploadDialog = () => {
-    setOpenUpload(false);
   };
 
   return (
@@ -410,12 +402,14 @@ const ChannelSummary = () => {
                       alignItems: 'center',
                     }}
                   >
-                    <IconButton
-                      aria-label="back"
-                      onClick={handleBackButtonClick}
-                    >
-                      <ArrowBackIosRounded sx={{ color: 'black' }} />
-                    </IconButton>
+                    <Tooltip title="返回" placement="top" arrow>
+                      <IconButton
+                        aria-label="back"
+                        onClick={handleBackButtonClick}
+                      >
+                        <ArrowBackIosRounded sx={{ color: 'black' }} />
+                      </IconButton>
+                    </Tooltip>
                     <Typography
                       sx={{
                         fontWeight: 600,
@@ -443,12 +437,22 @@ const ChannelSummary = () => {
                       handleDeleteChannelOpenConfirmDialog={
                         handleDeleteChannelOpenConfirmDialog
                       }
+                      anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'right',
+                      }}
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'left',
+                      }}
                     />
                   </Box>
                   <Box>
-                    <IconButton aria-label="Add Favorite">
-                      <StarBorderRounded sx={{ color: 'black' }} />
-                    </IconButton>
+                    <Tooltip title="收藏" placement="top" arrow>
+                      <IconButton aria-label="Add Favorite">
+                        <StarBorderRounded sx={{ color: 'black' }} />
+                      </IconButton>
+                    </Tooltip>
                     <IconButton
                       aria-label="Open Data Source"
                       onClick={() => setOpenDataSource(!openDataSource)}
@@ -530,8 +534,8 @@ const ChannelSummary = () => {
                                 selectedChannel
                                   ?.organizationChannelTranscriptList[0]
                                   ?.organizationChannelTranscriptId
-                                  ? 'Copied'
-                                  : 'Copy'
+                                  ? '已複製'
+                                  : '複製'
                               }
                               placement="top"
                               arrow
@@ -556,7 +560,7 @@ const ChannelSummary = () => {
                                 selectedChannel
                                   ?.organizationChannelTranscriptList[0]
                                   ?.organizationChannelTranscriptId ? (
-                                  <DoneIcon />
+                                  <DoneIcon sx={{ color: '#212B36' }} />
                                 ) : (
                                   <ContentCopyRounded
                                     sx={{ color: '#212B36', fontSize: 20 }}
@@ -564,18 +568,24 @@ const ChannelSummary = () => {
                                 )}
                               </IconButton>
                             </Tooltip>
-                            <IconButton aria-label="Like">
-                              <ThumbDownOffAltRounded
-                                sx={{
-                                  color: 'black',
-                                  transform: 'scale(-1, -1)',
-                                }}
-                              />
-                            </IconButton>
-
-                            <IconButton aria-label="Dislike">
-                              <ThumbDownOffAltRounded sx={{ color: 'black' }} />
-                            </IconButton>
+                            <Tooltip title="回應良好" placement="top" arrow>
+                              <IconButton aria-label="Like">
+                                <ThumbDownOffAltRounded
+                                  sx={{
+                                    color: 'black',
+                                    transform: 'scale(-1, -1)',
+                                    fontSize: 20,
+                                  }}
+                                />
+                              </IconButton>
+                            </Tooltip>
+                            <Tooltip title="回應不佳" placement="top" arrow>
+                              <IconButton aria-label="Dislike">
+                                <ThumbDownOffAltRounded
+                                  sx={{ color: 'black', fontSize: 20 }}
+                                />
+                              </IconButton>
+                            </Tooltip>
                           </Box>
                         </Box>
                         <ReactMarkdown>
@@ -736,8 +746,8 @@ const ChannelSummary = () => {
                                       ?.organizationChannelMessageList.length -
                                       1
                                   ]?.organizationChannelMessageId
-                                    ? 'Copied'
-                                    : 'Copy'
+                                    ? '已複製'
+                                    : '複製'
                                 }
                                 placement="top"
                                 arrow
@@ -781,7 +791,7 @@ const ChannelSummary = () => {
                                       ?.organizationChannelMessageList.length -
                                       1
                                   ]?.organizationChannelMessageId ? (
-                                    <DoneIcon />
+                                    <DoneIcon sx={{ color: '#212B36' }} />
                                   ) : (
                                     <ContentCopyRounded
                                       sx={{ color: '#212B36', fontSize: 20 }}
@@ -789,56 +799,64 @@ const ChannelSummary = () => {
                                   )}
                                 </IconButton>
                               </Tooltip>
-                              <IconButton aria-label="Like">
-                                <ThumbDownOffAltRounded
-                                  sx={{
-                                    color: 'black',
-                                    transform: 'scale(-1, -1)',
-                                  }}
-                                />
-                              </IconButton>
-                              <IconButton aria-label="Dislike">
-                                <ThumbDownOffAltRounded
-                                  sx={{ color: 'black' }}
-                                />
-                              </IconButton>
-                              <IconButton
-                                aria-label="Regenerate"
-                                onClick={async () => {
-                                  if (!isLoading) {
-                                    await ApiRegenerateSummary({
-                                      organizationId: 'yMJHyi6R1CB9whpdNvtA',
-                                      organizationChannelId,
-                                    });
-                                    mutateChannel();
-                                  }
-                                }}
-                                sx={{
-                                  backgroundColor: '#F0F0F0',
-                                  borderRadius: '50%',
-                                  padding: 1,
-                                  transition: 'all 0.3s ease',
-                                  '&:hover': {
-                                    backgroundColor: '#e0e0e0',
-                                    transform: 'scale(1.1)',
-                                  },
-                                }}
-                              >
-                                {isLoading ? (
-                                  <SyncRounded
+                              <Tooltip title="回應良好" placement="top" arrow>
+                                <IconButton aria-label="Like">
+                                  <ThumbDownOffAltRounded
                                     sx={{
                                       color: 'black',
-                                      '@keyframes spin': {
-                                        '0%': { transform: 'rotate(0deg)' },
-                                        '100%': { transform: 'rotate(360deg)' },
-                                      },
-                                      animation: 'spin 1s linear infinite',
+                                      transform: 'scale(-1, -1)',
+                                      fontSize: 20,
                                     }}
                                   />
-                                ) : (
-                                  <SyncRounded sx={{ color: 'black' }} />
-                                )}
-                              </IconButton>
+                                </IconButton>
+                              </Tooltip>
+                              <Tooltip title="回應不佳" placement="top" arrow>
+                                <IconButton aria-label="Dislike">
+                                  <ThumbDownOffAltRounded
+                                    sx={{ color: 'black', fontSize: 20 }}
+                                  />
+                                </IconButton>
+                              </Tooltip>
+                              <Tooltip title="重新產生" placement="top" arrow>
+                                <IconButton
+                                  aria-label="Regenerate"
+                                  onClick={async () => {
+                                    if (!isLoading) {
+                                      await ApiRegenerateSummary({
+                                        organizationId: 'yMJHyi6R1CB9whpdNvtA',
+                                        organizationChannelId,
+                                      });
+                                      mutateChannel();
+                                    }
+                                  }}
+                                  sx={{
+                                    borderRadius: '50%',
+                                    padding: 1,
+                                    transition: 'all 0.3s ease',
+                                    '&:hover': {
+                                      backgroundColor: '#e0e0e0',
+                                      transform: 'scale(1.1)',
+                                    },
+                                  }}
+                                >
+                                  {isLoading ? (
+                                    <SyncRounded
+                                      sx={{
+                                        color: 'black',
+                                        '@keyframes spin': {
+                                          '0%': { transform: 'rotate(0deg)' },
+                                          '100%': {
+                                            transform: 'rotate(360deg)',
+                                          },
+                                        },
+                                        animation: 'spin 1s linear infinite',
+                                      }}
+                                    />
+                                  ) : (
+                                    <SyncRounded sx={{ color: 'black' }} />
+                                  )}
+                                </IconButton>
+                              </Tooltip>
                             </Box>
                           </Box>
                           <ReactMarkdown>
@@ -939,25 +957,34 @@ const ChannelSummary = () => {
                                   justifyContent: 'space-between',
                                 }}
                               >
-                                <IconButton aria-label="Copy">
-                                  <ContentCopyRounded sx={{ color: 'black' }} />
-                                </IconButton>
-                                <IconButton aria-label="Like">
-                                  <ThumbDownOffAltRounded
-                                    sx={{
-                                      color: 'black',
-                                      transform: 'scale(-1, -1)',
-                                    }}
-                                  />
-                                </IconButton>
-                                <IconButton aria-label="Dislike">
-                                  <ThumbDownOffAltRounded
-                                    sx={{ color: 'black' }}
-                                  />
-                                </IconButton>
-                                <IconButton aria-label="Pin">
+                                <Tooltip title="複製" placement="top" arrow>
+                                  <IconButton aria-label="Copy">
+                                    <ContentCopyRounded
+                                      sx={{ color: '#212B36', fontSize: 20 }}
+                                    />
+                                  </IconButton>
+                                </Tooltip>
+                                <Tooltip title="回應良好" placement="top" arrow>
+                                  <IconButton aria-label="Like">
+                                    <ThumbDownOffAltRounded
+                                      sx={{
+                                        color: 'black',
+                                        transform: 'scale(-1, -1)',
+                                        fontSize: 20,
+                                      }}
+                                    />
+                                  </IconButton>
+                                </Tooltip>
+                                <Tooltip title="回應不佳" placement="top" arrow>
+                                  <IconButton aria-label="Dislike">
+                                    <ThumbDownOffAltRounded
+                                      sx={{ color: 'black', fontSize: 20 }}
+                                    />
+                                  </IconButton>
+                                </Tooltip>
+                                {/* <IconButton aria-label="Pin">
                                   <PushPinRounded sx={{ color: 'black' }} />
-                                </IconButton>
+                                </IconButton> */}
                               </Box>
                             </Box>
                             <Box
@@ -1366,10 +1393,6 @@ const ChannelSummary = () => {
                 </Grid2>
               </>
               {/* )} */}
-              <UploadDialog
-                open={openUpload}
-                onClose={handleCloseUploadDialog}
-              />
             </Box>
           </ToolbarDrawer>
         </Box>
@@ -1439,6 +1462,14 @@ const ChannelSummary = () => {
                 handleDeleteChannelOpenConfirmDialog={
                   handleDeleteChannelOpenConfirmDialog
                 }
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'right',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
               />
             </Box>
             <Box>
@@ -1480,8 +1511,8 @@ const ChannelSummary = () => {
                     copiedMessageId ===
                     selectedChannel?.organizationChannelTranscriptList[0]
                       ?.organizationChannelTranscriptId
-                      ? 'Copied'
-                      : 'Copy'
+                      ? '已複製'
+                      : '複製'
                   }
                   placement="top"
                   arrow
@@ -1502,7 +1533,7 @@ const ChannelSummary = () => {
                     {copiedMessageId ===
                     selectedChannel?.organizationChannelTranscriptList[0]
                       ?.organizationChannelTranscriptId ? (
-                      <DoneIcon />
+                      <DoneIcon sx={{ color: '#212B36' }} />
                     ) : (
                       <ContentCopyRounded
                         sx={{ color: '#212B36', fontSize: 20 }}
@@ -1510,17 +1541,24 @@ const ChannelSummary = () => {
                     )}
                   </IconButton>
                 </Tooltip>
-                <IconButton aria-label="Like">
-                  <ThumbDownOffAltRounded
-                    sx={{
-                      color: '#212B36',
-                      transform: 'scale(-1, -1)',
-                    }}
-                  />
-                </IconButton>
-                <IconButton aria-label="Dislike">
-                  <ThumbDownOffAltRounded sx={{ color: '#212B36' }} />
-                </IconButton>
+                <Tooltip title="回應良好" placement="top" arrow>
+                  <IconButton aria-label="Like">
+                    <ThumbDownOffAltRounded
+                      sx={{
+                        color: 'black',
+                        transform: 'scale(-1, -1)',
+                        fontSize: 20,
+                      }}
+                    />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="回應不佳" placement="top" arrow>
+                  <IconButton aria-label="Dislike">
+                    <ThumbDownOffAltRounded
+                      sx={{ color: 'black', fontSize: 20 }}
+                    />
+                  </IconButton>
+                </Tooltip>
               </Box>
             </Box>
             <ReactMarkdown>
@@ -1695,7 +1733,7 @@ const ChannelSummary = () => {
                         selectedChannel?.organizationChannelMessageList.length -
                           1
                       ]?.organizationChannelMessageId ? (
-                        <DoneIcon />
+                        <DoneIcon sx={{ color: '#212B36' }} />
                       ) : (
                         <ContentCopyRounded
                           sx={{ color: '#212B36', fontSize: 20 }}
@@ -1708,14 +1746,17 @@ const ChannelSummary = () => {
                       sx={{
                         color: 'black',
                         transform: 'scale(-1, -1)',
+                        fontSize: 20,
                       }}
                     />
                   </IconButton>
                   <IconButton aria-label="Dislike">
-                    <ThumbDownOffAltRounded sx={{ color: 'black' }} />
+                    <ThumbDownOffAltRounded
+                      sx={{ color: 'black', fontSize: 20 }}
+                    />
                   </IconButton>
                   <IconButton aria-label="Regenerate">
-                    <SyncRounded sx={{ color: 'black' }} />
+                    <SyncRounded sx={{ color: 'black', fontSize: 20 }} />
                   </IconButton>
                 </Box>
               </Box>
@@ -1820,22 +1861,27 @@ const ChannelSummary = () => {
                     }}
                   >
                     <IconButton aria-label="Copy">
-                      <ContentCopyRounded sx={{ color: 'black' }} />
+                      <ContentCopyRounded
+                        sx={{ color: '#212B36', fontSize: 20 }}
+                      />
                     </IconButton>
                     <IconButton aria-label="Like">
                       <ThumbDownOffAltRounded
                         sx={{
                           color: 'black',
                           transform: 'scale(-1, -1)',
+                          fontSize: 20,
                         }}
                       />
                     </IconButton>
                     <IconButton aria-label="Dislike">
-                      <ThumbDownOffAltRounded sx={{ color: 'black' }} />
+                      <ThumbDownOffAltRounded
+                        sx={{ color: 'black', fontSize: 20 }}
+                      />
                     </IconButton>
-                    <IconButton aria-label="Pin">
-                      <PushPinRounded sx={{ color: 'black' }} />
-                    </IconButton>
+                    {/* <IconButton aria-label="Pin">
+                      <PushPinRounded sx={{ color: "black" }} />
+                    </IconButton> */}
                   </Box>
                 </Box>
                 <Box
