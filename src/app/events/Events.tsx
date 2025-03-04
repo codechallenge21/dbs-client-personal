@@ -19,6 +19,7 @@ import {
 } from '@mui/icons-material';
 import boxImage from '../../../public/assets/images/box.png';
 import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
+import SearchDialog from '@/components/dialogs/SearchDialog';
 
 const Events = () => {
   const theme = useTheme();
@@ -33,6 +34,7 @@ const Events = () => {
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [startScrollLeft, setStartScrollLeft] = useState(0);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   // Check scroll position on mount and scroll events
   const checkScrollPosition = () => {
@@ -151,6 +153,14 @@ const Events = () => {
     if (isDragging) {
       handleMouseUp();
     }
+  };
+
+  const handleOpenSearch = () => {
+    setIsSearchOpen(true);
+  };
+
+  const handleCloseSearch = () => {
+    setIsSearchOpen(false);
   };
 
   // Add useEffect to add/remove global mouse event listeners
@@ -525,11 +535,15 @@ const Events = () => {
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}
+                onClick={handleOpenSearch}
               >
                 <SearchRounded
                   sx={{ width: '24px', height: '24px', color: '#212B36' }}
                 />
               </IconButton>
+            </Box>
+            <Box>
+              <SearchDialog open={isSearchOpen} onClose={handleCloseSearch} />
             </Box>
             <Grid
               container
