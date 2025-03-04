@@ -11,6 +11,7 @@ import {
   StarBorderRounded,
   MenuRounded,
   ArrowDropDownRounded,
+  DeleteRounded,
 } from '@mui/icons-material';
 import {
   Box,
@@ -38,7 +39,7 @@ import {
   CardContent,
   Menu,
 } from '@mui/material';
-// import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
 const tableRows = [
@@ -128,7 +129,7 @@ function TabPanel(props: {
 
 const FinanceScreen = () => {
   const theme = useTheme();
-  // const router = useRouter();
+  const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const [tabValue, setTabValue] = useState(0);
@@ -181,6 +182,7 @@ const FinanceScreen = () => {
     });
   };
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, id: number) => {
+    event.stopPropagation();
     setAnchorEl(event.currentTarget);
     // setCurrentMenuId(id);
   };
@@ -192,6 +194,11 @@ const FinanceScreen = () => {
 
   const handleCloseFinanceDialog = () => {
     setOpenFinanceDialog(false);
+  };
+
+  const handleRowClick = () => {
+    if (anchorEl) setAnchorEl(null);
+    else router.push('/finance-detail');
   };
 
   useEffect(() => {
@@ -216,7 +223,7 @@ const FinanceScreen = () => {
               sx={{
                 gap: '16px',
                 flex: '1 0 0',
-                height: '96.5%',
+                height: '96.5vh',
                 display: 'flex',
                 borderRadius: '8px',
                 padding: '16px 32px',
@@ -597,8 +604,10 @@ const FinanceScreen = () => {
                               display: 'flex',
                               maxHeight: '68px',
                               minHeight: '68px',
+                              cursor: 'pointer',
                             }}
                             key={row.id}
+                            onClick={() => handleRowClick()}
                             hover
                           >
                             <TableCell
@@ -738,15 +747,16 @@ const FinanceScreen = () => {
                                 role="button"
                                 aria-label="favorite"
                                 sx={{
-                                  padding: '0px',
-                                  maxHeight: '68px',
-                                  minHeight: '68px',
+                                  padding: '8px',
+                                  borderRadius: '50px',
                                 }}
                               >
                                 {favoriteChannels[index] ? (
-                                  <StarRounded sx={{ color: 'black' }} />
+                                  <StarRounded sx={{ color: '#212B36' }} />
                                 ) : (
-                                  <StarBorderRounded sx={{ color: 'black' }} />
+                                  <StarBorderRounded
+                                    sx={{ color: '#212B36' }}
+                                  />
                                 )}
                               </IconButton>
                             </TableCell>
@@ -764,8 +774,17 @@ const FinanceScreen = () => {
                                 justifyContent: 'flex-start',
                               }}
                             >
-                              <IconButton>
-                                <MoreVertRounded />
+                              <IconButton
+                                sx={{
+                                  padding: '8px',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  borderRadius: '50px',
+                                  justifyContent: 'center',
+                                }}
+                                onClick={(e) => handleMenuOpen(e, row.id)}
+                              >
+                                <MoreVertRounded sx={{ color: '#212B36' }} />
                               </IconButton>
                             </TableCell>
                           </TableRow>
@@ -773,6 +792,75 @@ const FinanceScreen = () => {
                       })}
                     </TableBody>
                   </Table>
+                  <Menu
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={handleMenuClose}
+                    sx={{
+                      padding: '8px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      borderRadius: '50px',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <MenuItem
+                      sx={{
+                        gap: '8px',
+                        display: 'flex',
+                        minHeight: '34px',
+                        padding: '6px 8px',
+                        alignItems: 'center',
+                        alignSelf: 'stretch',
+                        borderRadius: 'var(--Corner-Small, 8px)',
+                      }}
+                      onClick={handleMenuClose}
+                    >
+                      <StarRounded sx={{ color: '#212B36' }} />
+                      <Typography
+                        sx={{
+                          fontSize: '16px',
+                          fontWeight: '400',
+                          lineHeight: '24px',
+                          overflow: 'hidden',
+                          fontStyle: 'normal',
+                          textOverflow: 'ellipsis',
+                          fontFamily: 'DFPHeiBold-B5',
+                          color: ' var(--Primary-Black, #212B36)',
+                        }}
+                      >
+                        加入最愛
+                      </Typography>
+                    </MenuItem>
+                    <MenuItem
+                      sx={{
+                        gap: '8px',
+                        display: 'flex',
+                        minHeight: '34px',
+                        padding: '6px 8px',
+                        alignItems: 'center',
+                        alignSelf: 'stretch',
+                        borderRadius: 'var(--Corner-Small, 8px)',
+                      }}
+                      onClick={handleMenuClose}
+                    >
+                      <DeleteRounded sx={{ color: '#CC0000' }} />
+                      <Typography
+                        sx={{
+                          fontSize: '16px',
+                          fontWeight: '400',
+                          lineHeight: '24px',
+                          overflow: 'hidden',
+                          fontStyle: 'normal',
+                          textOverflow: 'ellipsis',
+                          fontFamily: 'DFPHeiBold-B5',
+                          color: 'var(--Primary-DBS-Red, #C00)',
+                        }}
+                      >
+                        刪除
+                      </Typography>
+                    </MenuItem>
+                  </Menu>
                 </TableContainer>
               </TabPanel>
               <TabPanel value={tabValue} index={1}>
@@ -1286,498 +1374,493 @@ const FinanceScreen = () => {
         </Box>
       )}
       {isMobile && (
-        <Box
-          sx={{
-            width: '100%',
-            height: '100vh',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-start',
-            background: 'var(--Primary-White, #FFF)',
-          }}
-        >
-          {/* {Header} */}
+        <ToolbarDrawer open={isOpenDrawer} setIsOpenDrawer={setIsOpenDrawer}>
           <Box
             sx={{
-              flexShrink: 0,
-              height: '64px',
+              width: '100%',
+              height: '100vh',
               display: 'flex',
-              padding: '8px 16px',
-              alignItems: 'center',
-              justifyContent: 'flex-start',
-              width: '-webkit-fill-available',
-              borderRadius: '8px 0px 0px 8px',
+              flexDirection: 'column',
+              alignItems: 'flex-start',
               background: 'var(--Primary-White, #FFF)',
             }}
           >
-            <IconButton
-              aria-label="menu"
+            {/* {Header} */}
+            <Box
               sx={{
-                padding: '8px',
+                flexShrink: 0,
+                height: '64px',
                 display: 'flex',
+                padding: '8px 16px',
                 alignItems: 'center',
-                borderRadius: '50px',
-                justifyContent: 'center',
+                justifyContent: 'flex-start',
+                width: '-webkit-fill-available',
+                borderRadius: '8px 0px 0px 8px',
+                background: 'var(--Primary-White, #FFF)',
               }}
             >
-              <MenuRounded
-                sx={{ width: '24px', height: '24px', color: '#212B36' }}
-              />
-            </IconButton>
-            <Button
-              sx={{
-                gap: '8px',
-                display: 'flex',
-                padding: '6px 8px',
-                borderRadius: '8px',
-                alignItems: 'center',
-              }}
-              endIcon={
-                <ArrowDropDownRounded
-                  sx={{
-                    margin: '0',
-                    width: '20px',
-                    height: '20px',
-                    color: '#212B36',
-                  }}
-                />
-              }
-            >
-              <Typography
+              <IconButton
+                aria-label="menu"
                 sx={{
-                  fontWeight: 400,
-                  fontSize: '16px',
-                  lineHeight: '24px',
-                  textAlign: 'center',
-                  fontStyle: 'normal',
-                  fontFamily: 'DFPHeiBold-B5',
-                  color: 'var(--Text-Primary, #212B36)',
-                }}
-              >
-                財務快篩
-              </Typography>
-            </Button>
-          </Box>
-
-          <Box
-            sx={{
-              gap: '16px',
-              width: '100%',
-              display: 'flex',
-              padding: '16px',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'flex-start',
-              flex: tabValue === 0 ? '1 0 0' : 'default',
-            }}
-          >
-            {tabValue === 0 && (
-              <Box
-                sx={{
-                  gap: '40px',
+                  padding: '8px',
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'flex-end',
+                  borderRadius: '50px',
+                  justifyContent: 'center',
                 }}
+                onClick={() => setIsOpenDrawer(true)}
               >
-                <TextField
-                  fullWidth
-                  placeholder="搜尋頻道"
+                <MenuRounded
+                  sx={{ width: '24px', height: '24px', color: '#212B36' }}
+                />
+              </IconButton>
+              <Button
+                sx={{
+                  gap: '8px',
+                  display: 'flex',
+                  padding: '6px 8px',
+                  borderRadius: '8px',
+                  alignItems: 'center',
+                }}
+                endIcon={
+                  <ArrowDropDownRounded
+                    sx={{
+                      margin: '0',
+                      width: '20px',
+                      height: '20px',
+                      color: '#212B36',
+                    }}
+                  />
+                }
+              >
+                <Typography
                   sx={{
-                    '& .MuiOutlinedInput-root': {
-                      height: '36px',
+                    fontWeight: 400,
+                    fontSize: '16px',
+                    lineHeight: '24px',
+                    textAlign: 'center',
+                    fontStyle: 'normal',
+                    fontFamily: 'DFPHeiBold-B5',
+                    color: 'var(--Text-Primary, #212B36)',
+                  }}
+                >
+                  財務快篩
+                </Typography>
+              </Button>
+            </Box>
+
+            <Box
+              sx={{
+                gap: '16px',
+                width: '100%',
+                display: 'flex',
+                padding: '16px',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'flex-start',
+                flex: tabValue === 0 ? '1 0 0' : 'default',
+              }}
+            >
+              {tabValue === 0 && (
+                <Box
+                  sx={{
+                    gap: '40px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'flex-end',
+                  }}
+                >
+                  <TextField
+                    fullWidth
+                    placeholder="搜尋頻道"
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        height: '36px',
+                        display: 'flex',
+                        '& fieldset': {
+                          borderRadius: '8px',
+                          border:
+                            '1px solid var(--input-Outline-Stoke-Default, rgba(145, 158, 171, 0.20))',
+                        },
+                        '&:hover fieldset': {
+                          borderColor: 'black',
+                        },
+                        '&.Mui-focused fieldset': {
+                          borderColor: 'black',
+                        },
+                        '& input': {
+                          fontWeight: 400,
+                          padding: '0 8px',
+                          fontSize: '14px',
+                          lineHeight: '24px',
+                          fontStyle: 'normal',
+                          fontFamily: 'DFPHeiBold-B5',
+                          color: 'var(--Secondary-Mid-Gray, #9B9B9B)',
+                        },
+                      },
+                    }}
+                    slotProps={{
+                      input: {
+                        startAdornment: (
+                          <InputAdornment
+                            sx={{ margin: '0px' }}
+                            position="start"
+                          >
+                            <SearchRounded sx={{ color: '#9B9B9B' }} />
+                          </InputAdornment>
+                        ),
+                      },
+                    }}
+                  />
+                  <IconButton
+                    role="button"
+                    aria-label="Add Record"
+                    sx={{
+                      gap: '8px',
                       display: 'flex',
-                      '& fieldset': {
-                        borderRadius: '8px',
-                        border:
-                          '1px solid var(--input-Outline-Stoke-Default, rgba(145, 158, 171, 0.20))',
+                      padding: '6px 12px',
+                      borderRadius: '8px',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      background: 'var(--Secondary-, #5C443A)',
+                      '&:hover': {
+                        background: 'rgba(92, 68, 58, 0.8)',
                       },
-                      '&:hover fieldset': {
-                        borderColor: 'black',
+                      '&:active': {
+                        background: 'rgba(92, 68, 58, 0.6)',
                       },
-                      '&.Mui-focused fieldset': {
-                        borderColor: 'black',
-                      },
-                      '& input': {
+                    }}
+                    onClick={() => setOpenFinanceDialog(true)}
+                  >
+                    <AddRounded sx={{ color: '#fff' }} />
+                    <Typography
+                      sx={{
                         fontWeight: 400,
-                        padding: '0 8px',
-                        fontSize: '14px',
+                        fontSize: '16px',
                         lineHeight: '24px',
+                        textAlign: 'center',
                         fontStyle: 'normal',
                         fontFamily: 'DFPHeiBold-B5',
-                        color: 'var(--Secondary-Mid-Gray, #9B9B9B)',
-                      },
-                    },
-                  }}
-                  slotProps={{
-                    input: {
-                      startAdornment: (
-                        <InputAdornment sx={{ margin: '0px' }} position="start">
-                          <SearchRounded sx={{ color: '#9B9B9B' }} />
-                        </InputAdornment>
-                      ),
+                        color: 'var(--Primary-ContrastText, #FFF)',
+                      }}
+                    >
+                      新增
+                    </Typography>
+                  </IconButton>
+                </Box>
+              )}
+
+              <Tabs
+                value={tabValue}
+                onChange={handleTabChange}
+                sx={{
+                  gap: '40px',
+                  height: '48px',
+                  display: 'flex',
+                  padding: '0px 20px',
+                  alignItems: 'center',
+                  alignSelf: 'stretch',
+                  borderBottom:
+                    '2px solid var(--transparent-grey-8, rgba(145, 158, 171, 0.08))',
+                  background: 'var(--Primary-White, #FFF)',
+                  '& .MuiTabs-flexContainer': {
+                    gap: '40px',
+                  },
+                }}
+                TabIndicatorProps={{
+                  style: {
+                    height: '3px',
+                    backgroundColor: '#212B36',
+                  },
+                }}
+              >
+                <Tab
+                  disableRipple
+                  label="資料管理"
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    padding: '13px 0px 12px 0px',
+                    fontSize: '14px',
+                    fontWeight: 700,
+                    fontStyle: 'normal',
+                    lineHeight: 'normal',
+                    fontFamily: 'Open Sans',
+                    color: 'var(--Text-Secondary, #637381)',
+                    '&.Mui-selected': {
+                      fontWeight: 400,
+                      fontSize: '14px',
+                      lineHeight: '22px',
+                      fontStyle: 'normal',
+                      fontFamily: 'DFPHeiBold-B5',
+                      color: 'var(--Text-Secondary, #212B36)',
                     },
                   }}
                 />
-                <IconButton
-                  role="button"
-                  aria-label="Add Record"
+                <Tab
+                  disableRipple
+                  label="貸款計算機"
                   sx={{
-                    gap: '8px',
                     display: 'flex',
-                    padding: '6px 12px',
-                    borderRadius: '8px',
                     alignItems: 'center',
+                    flexDirection: 'column',
                     justifyContent: 'center',
-                    background: 'var(--Secondary-, #5C443A)',
-                    '&:hover': {
-                      background: 'rgba(92, 68, 58, 0.8)',
-                    },
-                    '&:active': {
-                      background: 'rgba(92, 68, 58, 0.6)',
-                    },
-                  }}
-                  onClick={() => setOpenFinanceDialog(true)}
-                >
-                  <AddRounded sx={{ color: '#fff' }} />
-                  <Typography
-                    sx={{
+                    padding: '13px 0px 12px 0px',
+                    fontSize: '14px',
+                    fontWeight: 700,
+                    fontStyle: 'normal',
+                    lineHeight: 'normal',
+                    fontFamily: 'Open Sans',
+                    color: 'var(--Text-Secondary, #637381)',
+                    '&.Mui-selected': {
                       fontWeight: 400,
-                      fontSize: '16px',
-                      lineHeight: '24px',
-                      textAlign: 'center',
+                      fontSize: '14px',
+                      lineHeight: '22px',
                       fontStyle: 'normal',
                       fontFamily: 'DFPHeiBold-B5',
-                      color: 'var(--Primary-ContrastText, #FFF)',
-                    }}
-                  >
-                    新增
-                  </Typography>
-                </IconButton>
-              </Box>
-            )}
+                      color: 'var(--Text-Secondary, #212B36)',
+                    },
+                  }}
+                />
+              </Tabs>
 
-            <Tabs
-              value={tabValue}
-              onChange={handleTabChange}
-              sx={{
-                gap: '40px',
-                height: '48px',
-                display: 'flex',
-                padding: '0px 20px',
-                alignItems: 'center',
-                alignSelf: 'stretch',
-                borderBottom:
-                  '2px solid var(--transparent-grey-8, rgba(145, 158, 171, 0.08))',
-                background: 'var(--Primary-White, #FFF)',
-                '& .MuiTabs-flexContainer': {
-                  gap: '40px',
-                },
-              }}
-              TabIndicatorProps={{
-                style: {
-                  height: '3px',
-                  backgroundColor: '#212B36',
-                },
-              }}
-            >
-              <Tab
-                disableRipple
-                label="資料管理"
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  padding: '13px 0px 12px 0px',
-                  fontSize: '14px',
-                  fontWeight: 700,
-                  fontStyle: 'normal',
-                  lineHeight: 'normal',
-                  fontFamily: 'Open Sans',
-                  color: 'var(--Text-Secondary, #637381)',
-                  '&.Mui-selected': {
-                    fontWeight: 400,
-                    fontSize: '14px',
-                    lineHeight: '22px',
-                    fontStyle: 'normal',
-                    fontFamily: 'DFPHeiBold-B5',
-                    color: 'var(--Text-Secondary, #212B36)',
-                  },
-                }}
-              />
-              <Tab
-                disableRipple
-                label="貸款計算機"
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  padding: '13px 0px 12px 0px',
-                  fontSize: '14px',
-                  fontWeight: 700,
-                  fontStyle: 'normal',
-                  lineHeight: 'normal',
-                  fontFamily: 'Open Sans',
-                  color: 'var(--Text-Secondary, #637381)',
-                  '&.Mui-selected': {
-                    fontWeight: 400,
-                    fontSize: '14px',
-                    lineHeight: '22px',
-                    fontStyle: 'normal',
-                    fontFamily: 'DFPHeiBold-B5',
-                    color: 'var(--Text-Secondary, #212B36)',
-                  },
-                }}
-              />
-            </Tabs>
-
-            {tabValue === 0 && (
-              <Box
-                sx={{
-                  gap: '16px',
-                  flex: '1 0 0',
-                  display: 'flex',
-                  alignItems: 'center',
-                  alignSelf: 'stretch',
-                  flexDirection: 'column',
-                  maxHeight: '1570px',
-                  overflowY: 'auto',
-                  '&::-webkit-scrollbar': {
-                    width: '8px',
-                  },
-                  '&::-webkit-scrollbar-track': {
-                    borderRadius: '10px',
-                    background: '#f1f1f1',
-                  },
-                  '&::-webkit-scrollbar-thumb': {
-                    borderRadius: '10px',
-                    background: '#888',
-                  },
-                  '&::-webkit-scrollbar-thumb:hover': {
-                    background: '#555',
-                  },
-                }}
-              >
-                {tableRows.map((rowData, index) => (
-                  <Card
-                    key={rowData.id}
-                    sx={{
-                      width: '100%',
-                      minHeight: '228px',
-                      ' & .MuiCardContent-root': {
-                        paddingBottom: '16px',
-                      },
-                    }}
-                  >
-                    <CardContent
+              {tabValue === 0 && (
+                <Box
+                  sx={{
+                    gap: '16px',
+                    flex: '1 0 0',
+                    display: 'flex',
+                    alignItems: 'center',
+                    alignSelf: 'stretch',
+                    flexDirection: 'column',
+                    maxHeight: '1570px',
+                    overflowY: 'auto',
+                    '&::-webkit-scrollbar': {
+                      width: '8px',
+                    },
+                    '&::-webkit-scrollbar-track': {
+                      borderRadius: '10px',
+                      background: '#f1f1f1',
+                    },
+                    '&::-webkit-scrollbar-thumb': {
+                      borderRadius: '10px',
+                      background: '#888',
+                    },
+                    '&::-webkit-scrollbar-thumb:hover': {
+                      background: '#555',
+                    },
+                  }}
+                >
+                  {tableRows.map((rowData, index) => (
+                    <Card
+                      key={rowData.id}
                       sx={{
-                        gap: '8px',
-                        display: 'flex',
-                        minWidth: '100%',
+                        width: '100%',
                         minHeight: '228px',
-                        flexDirection: 'column',
-                        alignItems: 'flex-start',
+                        ' & .MuiCardContent-root': {
+                          paddingBottom: '16px',
+                        },
                       }}
                     >
-                      <Box
+                      <CardContent
                         sx={{
-                          width: '100%',
+                          gap: '8px',
                           display: 'flex',
-                          justifyContent: 'space-between',
+                          minWidth: '100%',
+                          minHeight: '228px',
+                          flexDirection: 'column',
+                          alignItems: 'flex-start',
                         }}
                       >
-                        <Typography
+                        <Box
                           sx={{
-                            fontWeight: 400,
-                            color: '#212B36',
-                            fontSize: '24px',
-                            lineHeight: '36px',
-                            fontStyle: 'normal',
-                            fontFamily: 'DFPHeiBold-B5',
+                            width: '100%',
+                            display: 'flex',
+                            justifyContent: 'space-between',
                           }}
                         >
-                          {rowData.name}
-                        </Typography>
-                        <IconButton
-                          onClick={(e) => handleMenuOpen(e, rowData.id)}
+                          <Typography
+                            sx={{
+                              fontWeight: 400,
+                              color: '#212B36',
+                              fontSize: '24px',
+                              lineHeight: '36px',
+                              fontStyle: 'normal',
+                              fontFamily: 'DFPHeiBold-B5',
+                            }}
+                          >
+                            {rowData.name}
+                          </Typography>
+                          <IconButton
+                            onClick={(e) => handleMenuOpen(e, rowData.id)}
+                            sx={{
+                              padding: '0px',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                            }}
+                          >
+                            <MoreVertRounded
+                              sx={{
+                                width: '20px',
+                                height: '20px',
+                                color: '#212B36',
+                              }}
+                            />
+                          </IconButton>
+                        </Box>
+
+                        <Box
                           sx={{
-                            padding: '0px',
+                            width: '100%',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                          }}
+                        >
+                          <Typography
+                            sx={{
+                              fontWeight: 400,
+                              minWidth: '80px',
+                              fontSize: '16px',
+                              lineHeight: '24px',
+                              fontStyle: 'normal',
+                              fontFamily: 'DFPHeiMedium-B5',
+                              color: 'var(--Primary-Blue, #06C)',
+                            }}
+                          >
+                            性別
+                          </Typography>
+                          <Typography
+                            sx={{
+                              fontWeight: 400,
+                              fontSize: '14px',
+                              overflow: 'hidden',
+                              lineHeight: '24px',
+                              fontStyle: 'normal',
+                              whiteSpace: 'nowrap',
+                              textOverflow: 'ellipsis',
+                              fontFamily: 'DFPHeiBold-B5',
+                              color: 'var(--Primary-Black, #212B36)',
+                            }}
+                          >
+                            {rowData.gender}
+                          </Typography>
+                        </Box>
+
+                        <Box
+                          sx={{
+                            width: '100%',
+                            height: '48px',
                             display: 'flex',
                             alignItems: 'center',
-                            justifyContent: 'center',
+                            justifyContent: 'space-between',
                           }}
                         >
-                          <MoreVertRounded
+                          <Typography
                             sx={{
-                              width: '20px',
-                              height: '20px',
-                              color: '#212B36',
+                              fontWeight: 400,
+                              minWidth: '80px',
+                              fontSize: '16px',
+                              lineHeight: '24px',
+                              fontStyle: 'normal',
+                              fontFamily: 'DFPHeiMedium-B5',
+                              color: 'var(--Primary-Blue, #06C)',
                             }}
-                          />
-                        </IconButton>
-                      </Box>
-
-                      <Box
-                        sx={{
-                          width: '100%',
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                        }}
-                      >
-                        <Typography
-                          sx={{
-                            fontWeight: 400,
-                            minWidth: '80px',
-                            fontSize: '16px',
-                            lineHeight: '24px',
-                            fontStyle: 'normal',
-                            fontFamily: 'DFPHeiMedium-B5',
-                            color: 'var(--Primary-Blue, #06C)',
-                          }}
-                        >
-                          性別
-                        </Typography>
-                        <Typography
-                          sx={{
-                            fontWeight: 400,
-                            fontSize: '14px',
-                            overflow: 'hidden',
-                            lineHeight: '24px',
-                            fontStyle: 'normal',
-                            whiteSpace: 'nowrap',
-                            textOverflow: 'ellipsis',
-                            fontFamily: 'DFPHeiBold-B5',
-                            color: 'var(--Primary-Black, #212B36)',
-                          }}
-                        >
-                          {rowData.gender}
-                        </Typography>
-                      </Box>
-
-                      <Box
-                        sx={{
-                          width: '100%',
-                          height: '48px',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                        }}
-                      >
-                        <Typography
-                          sx={{
-                            fontWeight: 400,
-                            minWidth: '80px',
-                            fontSize: '16px',
-                            lineHeight: '24px',
-                            fontStyle: 'normal',
-                            fontFamily: 'DFPHeiMedium-B5',
-                            color: 'var(--Primary-Blue, #06C)',
-                          }}
-                        >
-                          個案描述
-                        </Typography>
-                        <Typography
-                          sx={{
-                            fontWeight: 400,
-                            fontSize: '14px',
-                            overflow: 'hidden',
-                            lineHeight: '24px',
-                            fontStyle: 'normal',
-                            whiteSpace: 'nowrap',
-                            textOverflow: 'ellipsis',
-                            fontFamily: 'DFPHeiBold-B5',
-                            color: 'var(--Primary-Black, #212B36)',
-                          }}
-                        >
-                          {rowData.description}
-                        </Typography>
-                      </Box>
-
-                      <Box
-                        sx={{
-                          width: '100%',
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                        }}
-                      >
-                        <Typography
-                          sx={{
-                            fontWeight: 400,
-                            minWidth: '80px',
-                            fontSize: '16px',
-                            lineHeight: '24px',
-                            fontStyle: 'normal',
-                            fontFamily: 'DFPHeiMedium-B5',
-                            color: 'var(--Primary-Blue, #06C)',
-                          }}
-                        >
-                          風險評分
-                        </Typography>
-                        <Box
-                          component="span"
-                          sx={{
-                            fontWeight: 600,
-                            fontSize: '14px',
-                            overflow: 'hidden',
-                            lineHeight: '22px',
-                            fontStyle: 'normal',
-                            whiteSpace: 'nowrap',
-                            alignSelf: 'stretch',
-                            textOverflow: 'ellipsis',
-                            fontFamily: 'Public Sans',
-                            color:
-                              rowData.risk.includes('非常高') ||
-                              rowData.risk.includes('高')
-                                ? 'var(--Primary-DBS-Red, #C00)'
-                                : rowData.risk.includes('安全')
-                                ? 'var(--Status-Success, #118D57)'
-                                : 'var(--Status-Warning, #FFAB00)',
-                          }}
-                        >
-                          {rowData.risk}
+                          >
+                            個案描述
+                          </Typography>
+                          <Typography
+                            sx={{
+                              fontWeight: 400,
+                              fontSize: '14px',
+                              overflow: 'hidden',
+                              lineHeight: '24px',
+                              fontStyle: 'normal',
+                              whiteSpace: 'nowrap',
+                              textOverflow: 'ellipsis',
+                              fontFamily: 'DFPHeiBold-B5',
+                              color: 'var(--Primary-Black, #212B36)',
+                            }}
+                          >
+                            {rowData.description}
+                          </Typography>
                         </Box>
-                      </Box>
 
-                      <Box
-                        sx={{
-                          width: '100%',
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                        }}
-                      >
-                        <IconButton
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleToggle(index);
+                        <Box
+                          sx={{
+                            width: '100%',
+                            display: 'flex',
+                            justifyContent: 'space-between',
                           }}
-                          sx={{ p: 0 }}
                         >
-                          {favoriteChannels[index] ? (
-                            <StarRounded sx={{ color: '#000' }} />
-                          ) : (
-                            <StarBorderRounded sx={{ color: '#000' }} />
-                          )}
-                        </IconButton>
-                      </Box>
-                    </CardContent>
-                  </Card>
-                ))}
-              </Box>
-            )}
+                          <Typography
+                            sx={{
+                              fontWeight: 400,
+                              minWidth: '80px',
+                              fontSize: '16px',
+                              lineHeight: '24px',
+                              fontStyle: 'normal',
+                              fontFamily: 'DFPHeiMedium-B5',
+                              color: 'var(--Primary-Blue, #06C)',
+                            }}
+                          >
+                            風險評分
+                          </Typography>
+                          <Box
+                            component="span"
+                            sx={{
+                              fontWeight: 600,
+                              fontSize: '14px',
+                              overflow: 'hidden',
+                              lineHeight: '22px',
+                              fontStyle: 'normal',
+                              whiteSpace: 'nowrap',
+                              alignSelf: 'stretch',
+                              textOverflow: 'ellipsis',
+                              fontFamily: 'Public Sans',
+                              color:
+                                rowData.risk.includes('非常高') ||
+                                rowData.risk.includes('高')
+                                  ? 'var(--Primary-DBS-Red, #C00)'
+                                  : rowData.risk.includes('安全')
+                                  ? 'var(--Status-Success, #118D57)'
+                                  : 'var(--Status-Warning, #FFAB00)',
+                            }}
+                          >
+                            {rowData.risk}
+                          </Box>
+                        </Box>
 
-            {tabValue === 1 && (
-              <Box
-                sx={{
-                  gap: '16px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  alignSelf: 'stretch',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                }}
-              >
+                        <Box
+                          sx={{
+                            width: '100%',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                          }}
+                        >
+                          <IconButton
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleToggle(index);
+                            }}
+                            sx={{ p: 0 }}
+                          >
+                            {favoriteChannels[index] ? (
+                              <StarRounded sx={{ color: '#000' }} />
+                            ) : (
+                              <StarBorderRounded sx={{ color: '#000' }} />
+                            )}
+                          </IconButton>
+                        </Box>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </Box>
+              )}
+
+              {tabValue === 1 && (
                 <Box
                   sx={{
                     gap: '16px',
@@ -1788,275 +1871,276 @@ const FinanceScreen = () => {
                     justifyContent: 'center',
                   }}
                 >
-                  {/* Repayment Method */}
-                  <FormControl
+                  <Box
                     sx={{
-                      width: '100%',
-                      height: '56px',
+                      gap: '16px',
                       display: 'flex',
+                      alignItems: 'center',
+                      alignSelf: 'stretch',
                       flexDirection: 'column',
-                      alignItems: 'flex-start',
+                      justifyContent: 'center',
                     }}
                   >
-                    <InputLabel id="repayment-method-label">
-                      請選擇攤還方式
-                    </InputLabel>
-                    <Select
+                    {/* Repayment Method */}
+                    <FormControl
                       sx={{
-                        gap: '8px',
-                        flex: '1 0 0',
+                        width: '100%',
+                        height: '56px',
                         display: 'flex',
-                        alignItems: 'center',
-                        alignSelf: 'stretch',
-                        borderRadius: '8px',
-                        border:
-                          '1px solid var(--Components-Input-Outlined, rgba(145, 158, 171, 0.20))',
-                        '& .MuiOutlinedInput-input': {
+                        flexDirection: 'column',
+                        alignItems: 'flex-start',
+                      }}
+                    >
+                      <InputLabel id="repayment-method-label">
+                        請選擇攤還方式
+                      </InputLabel>
+                      <Select
+                        sx={{
+                          gap: '8px',
+                          flex: '1 0 0',
+                          display: 'flex',
+                          alignItems: 'center',
+                          alignSelf: 'stretch',
+                          borderRadius: '8px',
+                          border:
+                            '1px solid var(--Components-Input-Outlined, rgba(145, 158, 171, 0.20))',
+                          '& .MuiOutlinedInput-input': {
+                            padding: '16px 14px',
+                          },
+                        }}
+                        labelId="repayment-method-label"
+                        id="repayment-method"
+                        value={repaymentMethod}
+                        label="請選擇試算方式"
+                        onChange={handleRepaymentMethodChange}
+                      >
+                        <MenuItem value="equalPrincipal">等額本金</MenuItem>
+                        <MenuItem value="equalPrincipalInterest">
+                          等額本息
+                        </MenuItem>
+                        <MenuItem value="interestOnly">只還利息</MenuItem>
+                      </Select>
+                    </FormControl>
+
+                    {/* Loan Amount */}
+                    <TextField
+                      fullWidth
+                      label="貸款金額"
+                      type="number"
+                      value={loanAmount}
+                      onChange={(e) => setLoanAmount(e.target.value)}
+                      sx={{
+                        '& .MuiOutlinedInput-root': {
+                          height: '56px',
+                          display: 'flex',
                           padding: '16px 14px',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          '& fieldset': {
+                            borderRadius: '8px',
+                            border:
+                              '1px solid var(--Components-Input-Outlined, rgba(145, 158, 171, 0.20))',
+                          },
+                          '&:hover fieldset': {
+                            borderColor: 'black',
+                          },
+                          '&.Mui-focused fieldset': {
+                            borderColor: 'black',
+                          },
+                          '& input': {
+                            padding: '0px',
+                            fontWeight: 400,
+                            fontSize: '14px',
+                            lineHeight: '22px',
+                            fontStyle: 'normal',
+                            fontFamily: 'DFPHeiBold-B5',
+                            color: 'var(--Text-Disabled, #919EAB)',
+                            '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button':
+                              {
+                                WebkitAppearance: 'none',
+                                margin: 0,
+                              },
+                            '&[type=number]': {
+                              MozAppearance: 'textfield',
+                            },
+                          },
                         },
                       }}
-                      labelId="repayment-method-label"
-                      id="repayment-method"
-                      value={repaymentMethod}
-                      label="請選擇試算方式"
-                      onChange={handleRepaymentMethodChange}
-                    >
-                      <MenuItem value="equalPrincipal">等額本金</MenuItem>
-                      <MenuItem value="equalPrincipalInterest">
-                        等額本息
-                      </MenuItem>
-                      <MenuItem value="interestOnly">只還利息</MenuItem>
-                    </Select>
-                  </FormControl>
-
-                  {/* Loan Amount */}
-                  <TextField
-                    fullWidth
-                    label="貸款金額"
-                    type="number"
-                    value={loanAmount}
-                    onChange={(e) => setLoanAmount(e.target.value)}
-                    sx={{
-                      '& .MuiOutlinedInput-root': {
-                        height: '56px',
-                        display: 'flex',
-                        padding: '16px 14px',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        '& fieldset': {
-                          borderRadius: '8px',
-                          border:
-                            '1px solid var(--Components-Input-Outlined, rgba(145, 158, 171, 0.20))',
-                        },
-                        '&:hover fieldset': {
-                          borderColor: 'black',
-                        },
-                        '&.Mui-focused fieldset': {
-                          borderColor: 'black',
-                        },
-                        '& input': {
-                          padding: '0px',
-                          fontWeight: 400,
-                          fontSize: '14px',
-                          lineHeight: '22px',
-                          fontStyle: 'normal',
-                          fontFamily: 'DFPHeiBold-B5',
-                          color: 'var(--Text-Disabled, #919EAB)',
-                          '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button':
-                            {
-                              WebkitAppearance: 'none',
-                              margin: 0,
-                            },
-                          '&[type=number]': {
-                            MozAppearance: 'textfield',
-                          },
-                        },
-                      },
-                    }}
-                    slotProps={{
-                      input: {
-                        endAdornment: (
-                          <InputAdornment
-                            sx={{
-                              margin: '0px',
-                              width: '40px',
-                              height: '40px',
-                              padding: '8px',
-                            }}
-                            position="start"
-                          >
-                            <AttachMoneyRounded
+                      slotProps={{
+                        input: {
+                          endAdornment: (
+                            <InputAdornment
                               sx={{
-                                minWidth: '24px',
-                                minHeight: '24px',
-                                color: '#9B9B9B',
-                                borderRadius: '50px',
+                                margin: '0px',
+                                width: '40px',
+                                height: '40px',
+                                padding: '8px',
                               }}
-                            />
-                          </InputAdornment>
-                        ),
-                      },
-                    }}
-                  />
-
-                  {/* Annual Interest */}
-                  <TextField
-                    fullWidth
-                    label="年利率"
-                    type="number"
-                    value={annualInterest}
-                    onChange={(e) => setAnnualInterest(e.target.value)}
-                    sx={{
-                      '& .MuiOutlinedInput-root': {
-                        height: '56px',
-                        display: 'flex',
-                        padding: '16px 14px',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        '& fieldset': {
-                          borderRadius: '8px',
-                          border:
-                            '1px solid var(--Components-Input-Outlined, rgba(145, 158, 171, 0.20))',
-                        },
-                        '&:hover fieldset': {
-                          borderColor: 'black',
-                        },
-                        '&.Mui-focused fieldset': {
-                          borderColor: 'black',
-                        },
-                        '& input': {
-                          padding: '0px',
-                          fontWeight: 400,
-                          fontSize: '14px',
-                          lineHeight: '22px',
-                          fontStyle: 'normal',
-                          fontFamily: 'DFPHeiBold-B5',
-                          color: 'var(--Text-Disabled, #919EAB)',
-                          '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button':
-                            {
-                              WebkitAppearance: 'none',
-                              margin: 0,
-                            },
-                          '&[type=number]': {
-                            MozAppearance: 'textfield',
-                          },
-                        },
-                      },
-                    }}
-                    slotProps={{
-                      input: {
-                        endAdornment: (
-                          <InputAdornment
-                            sx={{
-                              margin: '0px',
-                              width: '40px',
-                              height: '40px',
-                              padding: '8px',
-                            }}
-                            position="start"
-                          >
-                            <PercentRounded
-                              sx={{
-                                minWidth: '24px',
-                                minHeight: '24px',
-                                color: '#9B9B9B',
-                                borderRadius: '50px',
-                              }}
-                            />
-                          </InputAdornment>
-                        ),
-                      },
-                    }}
-                  />
-
-                  {/* Loan Term */}
-                  <TextField
-                    fullWidth
-                    label="貸款總期數"
-                    type="number"
-                    value={loanTerm}
-                    onChange={(e) => setLoanTerm(e.target.value)}
-                    sx={{
-                      '& .MuiOutlinedInput-root': {
-                        height: '56px',
-                        display: 'flex',
-                        padding: '16px 14px',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        '& fieldset': {
-                          borderRadius: '8px',
-                          border:
-                            '1px solid var(--Components-Input-Outlined, rgba(145, 158, 171, 0.20))',
-                        },
-                        '&:hover fieldset': {
-                          borderColor: 'black',
-                        },
-                        '&.Mui-focused fieldset': {
-                          borderColor: 'black',
-                        },
-                        '& input': {
-                          padding: '0px',
-                          fontWeight: 400,
-                          fontSize: '14px',
-                          lineHeight: '22px',
-                          fontStyle: 'normal',
-                          fontFamily: 'DFPHeiBold-B5',
-                          color: 'var(--Text-Disabled, #919EAB)',
-                          '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button':
-                            {
-                              WebkitAppearance: 'none',
-                              margin: 0,
-                            },
-                          '&[type=number]': {
-                            MozAppearance: 'textfield',
-                          },
-                        },
-                      },
-                    }}
-                    slotProps={{
-                      input: {
-                        endAdornment: (
-                          <InputAdornment
-                            sx={{
-                              margin: '0px',
-                              width: '40px',
-                              height: '40px',
-                              padding: '8px',
-                            }}
-                            position="start"
-                          >
-                            <Typography
-                              sx={{
-                                fontWeight: 400,
-                                fontSize: '14px',
-                                lineHeight: '22px',
-                                fontStyle: 'normal',
-                                fontFamily: 'DFPHeiMedium-B5',
-                                color: 'var(--Text-Secondary, #637381)',
-                              }}
+                              position="start"
                             >
-                              年
-                            </Typography>
-                          </InputAdornment>
-                        ),
-                      },
-                    }}
-                  />
-                </Box>
-              </Box>
-            )}
-          </Box>
+                              <AttachMoneyRounded
+                                sx={{
+                                  minWidth: '24px',
+                                  minHeight: '24px',
+                                  color: '#9B9B9B',
+                                  borderRadius: '50px',
+                                }}
+                              />
+                            </InputAdornment>
+                          ),
+                        },
+                      }}
+                    />
 
-          <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleMenuClose}
-          >
-            <MenuItem onClick={handleMenuClose}>編輯</MenuItem>
-            <MenuItem onClick={handleMenuClose}>刪除</MenuItem>
-            <MenuItem onClick={handleMenuClose}>查看詳情</MenuItem>
-          </Menu>
-        </Box>
+                    {/* Annual Interest */}
+                    <TextField
+                      fullWidth
+                      label="年利率"
+                      type="number"
+                      value={annualInterest}
+                      onChange={(e) => setAnnualInterest(e.target.value)}
+                      sx={{
+                        '& .MuiOutlinedInput-root': {
+                          height: '56px',
+                          display: 'flex',
+                          padding: '16px 14px',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          '& fieldset': {
+                            borderRadius: '8px',
+                            border:
+                              '1px solid var(--Components-Input-Outlined, rgba(145, 158, 171, 0.20))',
+                          },
+                          '&:hover fieldset': {
+                            borderColor: 'black',
+                          },
+                          '&.Mui-focused fieldset': {
+                            borderColor: 'black',
+                          },
+                          '& input': {
+                            padding: '0px',
+                            fontWeight: 400,
+                            fontSize: '14px',
+                            lineHeight: '22px',
+                            fontStyle: 'normal',
+                            fontFamily: 'DFPHeiBold-B5',
+                            color: 'var(--Text-Disabled, #919EAB)',
+                            '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button':
+                              {
+                                WebkitAppearance: 'none',
+                                margin: 0,
+                              },
+                            '&[type=number]': {
+                              MozAppearance: 'textfield',
+                            },
+                          },
+                        },
+                      }}
+                      slotProps={{
+                        input: {
+                          endAdornment: (
+                            <InputAdornment
+                              sx={{
+                                margin: '0px',
+                                width: '40px',
+                                height: '40px',
+                                padding: '8px',
+                              }}
+                              position="start"
+                            >
+                              <PercentRounded
+                                sx={{
+                                  minWidth: '24px',
+                                  minHeight: '24px',
+                                  color: '#9B9B9B',
+                                  borderRadius: '50px',
+                                }}
+                              />
+                            </InputAdornment>
+                          ),
+                        },
+                      }}
+                    />
+
+                    {/* Loan Term */}
+                    <TextField
+                      fullWidth
+                      label="貸款總期數"
+                      type="number"
+                      value={loanTerm}
+                      onChange={(e) => setLoanTerm(e.target.value)}
+                      sx={{
+                        '& .MuiOutlinedInput-root': {
+                          height: '56px',
+                          display: 'flex',
+                          padding: '16px 14px',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          '& fieldset': {
+                            borderRadius: '8px',
+                            border:
+                              '1px solid var(--Components-Input-Outlined, rgba(145, 158, 171, 0.20))',
+                          },
+                          '&:hover fieldset': {
+                            borderColor: 'black',
+                          },
+                          '&.Mui-focused fieldset': {
+                            borderColor: 'black',
+                          },
+                          '& input': {
+                            padding: '0px',
+                            fontWeight: 400,
+                            fontSize: '14px',
+                            lineHeight: '22px',
+                            fontStyle: 'normal',
+                            fontFamily: 'DFPHeiBold-B5',
+                            color: 'var(--Text-Disabled, #919EAB)',
+                            '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button':
+                              {
+                                WebkitAppearance: 'none',
+                                margin: 0,
+                              },
+                            '&[type=number]': {
+                              MozAppearance: 'textfield',
+                            },
+                          },
+                        },
+                      }}
+                      slotProps={{
+                        input: {
+                          endAdornment: (
+                            <InputAdornment
+                              sx={{
+                                margin: '0px',
+                                width: '40px',
+                                height: '40px',
+                                padding: '8px',
+                              }}
+                              position="start"
+                            >
+                              <Typography
+                                sx={{
+                                  fontWeight: 400,
+                                  fontSize: '14px',
+                                  lineHeight: '22px',
+                                  fontStyle: 'normal',
+                                  fontFamily: 'DFPHeiMedium-B5',
+                                  color: 'var(--Text-Secondary, #637381)',
+                                }}
+                              >
+                                年
+                              </Typography>
+                            </InputAdornment>
+                          ),
+                        },
+                      }}
+                    />
+                  </Box>
+                </Box>
+              )}
+            </Box>
+          </Box>
+        </ToolbarDrawer>
       )}
 
       <AddFinanceRecordDialog
