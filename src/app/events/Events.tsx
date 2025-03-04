@@ -20,6 +20,7 @@ import {
 import boxImage from '../../../public/assets/images/box.png';
 import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
 import SearchDialog from '@/components/dialogs/SearchDialog';
+import DataSourceDialog from '@/components/chat-page/components/chatDataStore';
 
 const Events = () => {
   const theme = useTheme();
@@ -35,6 +36,7 @@ const Events = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [startScrollLeft, setStartScrollLeft] = useState(0);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [openDataSource, setOpenDataSource] = useState(false);
 
   // Check scroll position on mount and scroll events
   const checkScrollPosition = () => {
@@ -202,13 +204,14 @@ const Events = () => {
     <Box
       sx={{
         height: '100vh',
-        display: 'flex',
-        overflow: 'hidden',
-        flexDirection: 'column',
         background: 'var(--Primary-, #EBE3DD)',
       }}
     >
-      <ToolbarDrawer open={isOpenDrawer} setIsOpenDrawer={setIsOpenDrawer}>
+      <ToolbarDrawer
+        open={isOpenDrawer}
+        setIsOpenDrawer={setIsOpenDrawer}
+        openDataSource={openDataSource}
+      >
         {isMobile && (
           <Box
             sx={{
@@ -276,7 +279,7 @@ const Events = () => {
             borderRadius: isMobile ? '0' : '8px',
             flexDirection: 'column',
             backgroundColor: 'white',
-            height: isMobile ? '100%' : '96vh',
+            height: isMobile ? '100%' : 'calc(100vh - 32px)',
             padding: isMobile ? '16px' : '16px 32px',
             '@media (min-width: 600px)': {
               flex: '1 0 0',
@@ -301,7 +304,6 @@ const Events = () => {
             sx={{
               gap: '16px',
               display: 'flex',
-              height: '265px',
               overflow: 'visible',
               alignSelf: 'stretch',
               flexDirection: 'column',
@@ -312,7 +314,6 @@ const Events = () => {
             <Box
               sx={{
                 gap: '8px',
-                height: '29px',
                 display: 'flex',
                 alignItems: 'center',
                 alignSelf: 'stretch',
@@ -336,7 +337,6 @@ const Events = () => {
               sx={{
                 gap: '16px',
                 display: 'flex',
-                height: '220px',
                 position: 'relative',
                 alignSelf: 'stretch',
                 alignItems: 'flex-start',
@@ -366,7 +366,9 @@ const Events = () => {
                     minWidth: '260px',
                     alignItems: 'center',
                     flexDirection: 'column',
-                    justifyContent: 'flex-end',
+                    justifyContent: 'center',
+                    borderRadius: '8px',
+                    overflow: 'hidden',
                     '&:hover': {
                       '& .hover-text': {
                         color: '#990000',
@@ -376,18 +378,14 @@ const Events = () => {
                       },
                     },
                   }}
+                  onClick={() => setOpenDataSource(true)}
                 >
                   <Image
                     src={boxImage || '/placeholder.svg'}
                     alt="Boxed Image"
-                    width={260}
-                    height={130}
                     style={{
                       width: '100%',
-                      height: '130px',
                       objectFit: 'cover',
-                      borderTopLeftRadius: '8px',
-                      borderTopRightRadius: '8px',
                       pointerEvents: 'none',
                     }}
                   />
@@ -399,9 +397,7 @@ const Events = () => {
                       alignSelf: 'stretch',
                       flexDirection: 'column',
                       alignItems: 'flex-start',
-                      borderBottomLeftRadius: '8px',
                       padding: '24px 16px 16px 16px',
-                      borderBottomRightRadius: '8px',
                       backgroundColor: 'var(--Primary-, #EBE3DD)',
                     }}
                   >
@@ -560,10 +556,10 @@ const Events = () => {
                 <Grid
                   size={{
                     xs: isBelow400px ? 12 : 6,
-                    sm: 6,
-                    md: 4,
-                    lg: 3,
-                    xl: 2.4,
+                    sm: openDataSource ? 12 : 6,
+                    md: openDataSource ? 12 : 4,
+                    lg: openDataSource ? 4 : 3,
+                    xl: openDataSource ? 3 : 2.4,
                   }}
                   key={index}
                 >
@@ -574,6 +570,8 @@ const Events = () => {
                       width: isMobile ? '100%' : 'auto',
                       alignItems: 'center',
                       flexDirection: 'column',
+                      borderRadius: '8px',
+                      overflow: 'hidden',
                       '&:hover': {
                         '& .hover-text': {
                           color: '#990000',
@@ -591,8 +589,6 @@ const Events = () => {
                         width: '100%',
                         height: '130px',
                         objectFit: 'cover',
-                        borderTopLeftRadius: '8px',
-                        borderTopRightRadius: '8px',
                       }}
                     />
                     <Box
@@ -603,9 +599,7 @@ const Events = () => {
                         alignSelf: 'stretch',
                         flexDirection: 'column',
                         alignItems: 'flex-start',
-                        borderBottomLeftRadius: '8px',
                         padding: '24px 16px 16px 16px',
-                        borderBottomRightRadius: '8px',
                         backgroundColor: 'var(--Primary-, #EBE3DD)',
                       }}
                     >
@@ -646,6 +640,10 @@ const Events = () => {
           </Container>
         </Box>
       </ToolbarDrawer>
+      <DataSourceDialog
+        open={openDataSource}
+        onClose={() => setOpenDataSource(false)}
+      />
     </Box>
   );
 };

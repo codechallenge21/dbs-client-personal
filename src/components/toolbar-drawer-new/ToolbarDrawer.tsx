@@ -185,6 +185,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
   const searchParams = useSearchParams();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
   const { excute: logout } = useAxiosApi(apis.logout);
 
   const [isClient, setIsClient] = useState(false);
@@ -794,7 +795,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
       <MainBox
         open={openDataSource}
         sx={{
-          marginRight: isMobile ? 0 : openDataSource ? '446px' : 0,
+          marginRight: isMobile ? 0 : openDataSource && !isTablet ? '446px' : 0,
           overflow: 'auto',
           marginBottom: '16px',
           transition: 'margin-left 0.3s',
