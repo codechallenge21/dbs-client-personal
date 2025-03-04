@@ -285,9 +285,15 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 fontFamily: 'DFPHeiBold-B5',
                 fontSize: '20px',
                 fontWeight: 800,
+                cursor: 'pointer',
               }}
+              onClick={() => router.push('/chat')}
             >
-              好理家在
+              <img
+                src="/assets/images/logo.png"
+                alt="logo"
+                style={{ width: '110px' }}
+              />
             </Typography>
           )}
           {!isExpanded && !isMobile && (
@@ -299,9 +305,11 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 fontFamily: 'DFPHeiBold-B5',
                 color: 'var(--Primary-Black, #212B36)',
                 lineHeight: 'normal',
+                cursor: 'pointer',
               }}
+              onClick={() => router.push('/chat')}
             >
-              好
+              <img src="/assets/images/logocollapse.png" alt="logo" />
             </Typography>
           )}
           <IconButton
