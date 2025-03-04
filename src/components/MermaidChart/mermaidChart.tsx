@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import { IconButton } from '@mui/material';
+import { useEffect, useRef, useState } from 'react';
+import { Dialog, DialogContent, IconButton } from '@mui/material';
 import ZoomInSharpIcon from '@mui/icons-material/ZoomInSharp';
 import ZoomOutIcon from '@mui/icons-material/ZoomOut';
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -9,12 +9,21 @@ import ChevronRightSharpIcon from '@mui/icons-material/ChevronRightSharp';
 import ChevronLeftSharpIcon from '@mui/icons-material/ChevronLeftSharp';
 import ExpandLessSharpIcon from '@mui/icons-material/ExpandLessSharp';
 import ExpandMoreSharpIcon from '@mui/icons-material/ExpandMoreSharp';
+import {
+  ContentCopyRounded,
+  DoneRounded,
+  OpenInFullRounded,
+} from '@mui/icons-material';
+import CloseIcon from '@mui/icons-material/Close';
 
 interface MermaidChartProps {
   chart: string;
 }
 
 export default function MermaidChart({ chart }: MermaidChartProps) {
+  const [mermaidCopied, setMermaidCopied] = useState(false);
+  const [svgContent, setSvgContent] = useState('');
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const panZoomRef = useRef<any>(null);
   const uniqueIdRef = useRef(
@@ -32,6 +41,10 @@ export default function MermaidChart({ chart }: MermaidChartProps) {
         mermaid.initialize({ startOnLoad: false });
 
         const { svg } = await mermaid.render(uniqueIdRef.current, chart);
+        // Store the svg string in state so we can render it in the dialog too.
+        if (isMounted) {
+          setSvgContent(svg);
+        }
 
         if (isMounted && containerRef.current) {
           containerRef.current.innerHTML = svg;
@@ -88,19 +101,9 @@ export default function MermaidChart({ chart }: MermaidChartProps) {
   }, [chart]);
 
   return (
-    <div
-      style={{
-        position: 'relative',
-        height: 'auto',
-      }}
-    >
-      <div
-        style={{
-          width: 'auto',
-          height: 'auto',
-        }}
-        ref={containerRef}
-      />
+    <div style={{ position: 'relative', height: 'auto' }}>
+      <div style={{ width: 'auto', height: 'auto' }} ref={containerRef} />
+
       <div
         style={{
           position: 'absolute',
@@ -113,7 +116,44 @@ export default function MermaidChart({ chart }: MermaidChartProps) {
           zIndex: 1000,
         }}
       >
-        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+        <div
+          style={{
+            gap: '0.5rem',
+            display: 'flex',
+            alignSelf: 'stretch',
+            alignItems: 'center',
+            flexDirection: 'column',
+            justifyContent: 'center',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              alignSelf: 'stretch',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <IconButton
+              onClick={() => {
+                navigator.clipboard
+                  .writeText(`\`\`\`mermaid\n${chart}\n\`\`\``)
+                  .then(() => {
+                    setMermaidCopied(true);
+                    setTimeout(() => setMermaidCopied(false), 1000);
+                  });
+              }}
+            >
+              {mermaidCopied ? (
+                <DoneRounded sx={{ color: '#4CAF50' }} />
+              ) : (
+                <ContentCopyRounded sx={{ color: '#212B36' }} />
+              )}
+            </IconButton>
+            <IconButton onClick={() => setIsDialogOpen(true)}>
+              <OpenInFullRounded sx={{ color: '#212B36' }} />
+            </IconButton>
+          </div>
           <div
             style={{
               display: 'grid',
@@ -129,6 +169,7 @@ export default function MermaidChart({ chart }: MermaidChartProps) {
           >
             <div style={{ gridArea: 'up' }}>
               <IconButton
+                sx={{ color: '#212B36' }}
                 onClick={() => panZoomRef.current?.panBy({ x: 0, y: -20 })}
               >
                 <ExpandLessSharpIcon />
@@ -136,18 +177,23 @@ export default function MermaidChart({ chart }: MermaidChartProps) {
             </div>
             <div style={{ gridArea: 'left' }}>
               <IconButton
+                sx={{ color: '#212B36' }}
                 onClick={() => panZoomRef.current?.panBy({ x: -20, y: 0 })}
               >
                 <ChevronLeftSharpIcon />
               </IconButton>
             </div>
             <div style={{ gridArea: 'center' }}>
-              <IconButton onClick={() => panZoomRef.current?.reset()}>
+              <IconButton
+                sx={{ color: '#212B36' }}
+                onClick={() => panZoomRef.current?.reset()}
+              >
                 <RefreshIcon />
               </IconButton>
             </div>
             <div style={{ gridArea: 'right' }}>
               <IconButton
+                sx={{ color: '#212B36' }}
                 onClick={() => panZoomRef.current?.panBy({ x: 20, y: 0 })}
               >
                 <ChevronRightSharpIcon />
@@ -155,24 +201,68 @@ export default function MermaidChart({ chart }: MermaidChartProps) {
             </div>
             <div style={{ gridArea: 'down' }}>
               <IconButton
+                sx={{ color: '#212B36' }}
                 onClick={() => panZoomRef.current?.panBy({ x: 0, y: 20 })}
               >
                 <ExpandMoreSharpIcon />
               </IconButton>
             </div>
             <div style={{ gridArea: 'zoomIn' }}>
-              <IconButton onClick={() => panZoomRef.current?.zoomIn()}>
+              <IconButton
+                sx={{ color: '#212B36' }}
+                onClick={() => panZoomRef.current?.zoomIn()}
+              >
                 <ZoomInSharpIcon />
               </IconButton>
             </div>
             <div style={{ gridArea: 'zoomOut' }}>
-              <IconButton onClick={() => panZoomRef.current?.zoomOut()}>
+              <IconButton
+                sx={{ color: '#212B36' }}
+                onClick={() => panZoomRef.current?.zoomOut()}
+              >
                 <ZoomOutIcon />
               </IconButton>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Expanded view Dialog */}
+      <Dialog
+        open={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+        maxWidth="lg"
+        fullWidth={true}
+        slotProps={{
+          paper: {
+            style: {
+              padding: 0,
+              width: '80%',
+              height: '50%',
+              margin: 'auto',
+              backgroundColor: '#fff',
+            },
+          },
+          backdrop: {
+            style: { backgroundColor: 'rgba(0,0,0,0.5)' },
+          },
+        }}
+      >
+        <IconButton
+          onClick={() => setIsDialogOpen(false)}
+          style={{
+            position: 'absolute',
+            top: 10,
+            right: 10,
+            zIndex: 2000,
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+        <DialogContent style={{ padding: 0 }}>
+          <div dangerouslySetInnerHTML={{ __html: svgContent }} />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
