@@ -34,7 +34,7 @@ const ViewChats: React.FC<ViewChatsProps> = ({ onClick }) => {
           sx={{
             color: 'var(--Primary-Black, #212B36)',
             textAlign: 'center',
-            fontFamily: 'DFPHeiBold-B5',
+            fontFamily: 'var(--font-bold)',
             fontSize: '24px',
             fontStyle: 'normal',
             fontWeight: 400,

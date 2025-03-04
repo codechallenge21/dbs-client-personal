@@ -282,7 +282,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             <Typography
               sx={{
                 color: 'var(--Primary-Black, #212B36)',
-                fontFamily: 'DFPHeiBold-B5',
+                fontFamily: 'var(--font-bold)',
                 fontSize: '20px',
                 fontWeight: 800,
               }}
@@ -296,7 +296,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 fontWeight: 800,
                 fontSize: '20px',
                 textAlign: 'center',
-                fontFamily: 'DFPHeiBold-B5',
+                fontFamily: 'var(--font-bold)',
                 color: 'var(--Primary-Black, #212B36)',
                 lineHeight: 'normal',
               }}
@@ -449,7 +449,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                     fontSize: '16px',
                     alignItems: 'center',
                     color: index === 0 ? '#CC0000' : '#212B36',
-                    fontFamily: 'DFPHeiBold-B5',
+                    fontFamily: 'var(--font-bold)',
                   }}
                 >
                   <span
@@ -518,7 +518,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         color: 'var(--Primary-Black, #212B36)',
-                        fontFamily: 'DFPHeiBold-B5',
+                        fontFamily: 'var(--font-bold)',
                         fontSize: '16px',
                         fontStyle: 'normal',
                         fontWeight: 400,

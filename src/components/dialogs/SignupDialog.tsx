@@ -109,7 +109,6 @@ const SignupDialog: React.FC<SignupDialogProps> = ({
   };
 
   return (
-    <>
       <Dialog
         open={open}
         onClose={onClose}
@@ -167,7 +166,7 @@ const SignupDialog: React.FC<SignupDialogProps> = ({
               fontSize: '32px',
               lineHeight: '32px',
               letterSpacing: '0%',
-              fontFamily: 'DFPHeiBold-B5',
+              fontFamily: 'var(--font-bold)',
             }}
           >
             註冊
@@ -211,7 +210,7 @@ const SignupDialog: React.FC<SignupDialogProps> = ({
               color: '#212B36',
               lineHeight: '32px',
               letterSpacing: '0%',
-              fontFamily: 'DFPHeiBold-B5',
+              fontFamily: 'var(--font-bold)',
             }}
           >
             建立帳戶
@@ -224,7 +223,7 @@ const SignupDialog: React.FC<SignupDialogProps> = ({
               color: '#212B36',
               lineHeight: '22px',
               letterSpacing: '0%',
-              fontFamily: 'DFPHeiMedium-B5',
+              fontFamily: 'var(--font-medium)',
             }}
           >
             已經擁有帳戶?{' '}
@@ -233,7 +232,7 @@ const SignupDialog: React.FC<SignupDialogProps> = ({
               style={{
                 color: '#C00',
                 cursor: 'pointer',
-                fontFamily: 'DFPHeiBold-B5',
+                fontFamily: 'var(--font-bold)',
               }}
             >
               登入
@@ -576,7 +575,7 @@ const SignupDialog: React.FC<SignupDialogProps> = ({
                 lineHeight: '24px',
                 letterSpacing: '0%',
                 textTransform: 'none',
-                fontFamily: 'DFPHeiMedium-B5',
+                fontFamily: 'var(--font-medium)',
               }}
             >
               使用 Google 帳號繼續
@@ -612,7 +611,7 @@ const SignupDialog: React.FC<SignupDialogProps> = ({
             <Typography
               variant="body2"
               sx={{
-                fontFamily: 'DFPHeiMedium-B5',
+                fontFamily: 'var(--font-medium)',
                 fontSize: '14px',
                 justifyContent: 'center',
                 textAlign: 'center',
@@ -622,7 +621,7 @@ const SignupDialog: React.FC<SignupDialogProps> = ({
               <Typography
                 component="span"
                 color="#06C"
-                sx={{ fontFamily: 'DFPHeiMedium-B5', fontSize: '14px' }}
+                sx={{ fontFamily: 'var(--font-medium)', fontSize: '14px' }}
               >
                 《服務條款》
               </Typography>
@@ -630,7 +629,7 @@ const SignupDialog: React.FC<SignupDialogProps> = ({
               <Typography
                 component="span"
                 color="#06C"
-                sx={{ fontFamily: 'DFPHeiMedium-B5', fontSize: '14px' }}
+                sx={{ fontFamily: 'var(--font-medium)', fontSize: '14px' }}
               >
                 《隱私政策》
               </Typography>{' '}
@@ -639,7 +638,7 @@ const SignupDialog: React.FC<SignupDialogProps> = ({
                 component="span"
                 color="#06C"
                 sx={{
-                  fontFamily: 'DFPHeiMedium-B5',
+                  fontFamily: 'var(--font-medium)',
                   fontSize: '14px',
                 }}
               >
@@ -649,7 +648,6 @@ const SignupDialog: React.FC<SignupDialogProps> = ({
           }
         />
       </Dialog>
-    </>
   );
 };
 

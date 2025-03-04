@@ -69,7 +69,7 @@ export default function DeleteConfirmationModal({
           sx={{
             mb: 3,
             color: 'var(--Primary-Black, #212B36)',
-            fontFamily: 'DFPHeiBold-B5',
+            fontFamily: 'var(--font-bold)',
             fontSize: '24px',
             fontStyle: 'normal',
             fontWeight: 400,
@@ -86,7 +86,7 @@ export default function DeleteConfirmationModal({
             sx={{
               mb: 1,
               color: 'var(--Primary-Black, #212B36)',
-              fontFamily: 'DFPHeiBold-B5',
+              fontFamily: 'var(--font-bold)',
               fontSize: '16px',
               fontStyle: 'normal',
               fontWeight: 400,

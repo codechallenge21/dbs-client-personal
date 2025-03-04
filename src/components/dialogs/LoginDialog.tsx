@@ -122,7 +122,7 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
               fontSize: '32px',
               lineHeight: '32px',
               letterSpacing: '0%',
-              fontFamily: 'DFPHeiBold-B5',
+              fontFamily: 'var(--font-bold)',
               alignItems: 'center',
             }}
           >
@@ -167,7 +167,7 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
               color: '#212B36',
               lineHeight: '32px',
               letterSpacing: '0%',
-              fontFamily: 'DFPHeiBold-B5',
+              fontFamily: 'var(--font-bold)',
             }}
           >
             歡迎回來
@@ -180,7 +180,7 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
               color: '#212B36',
               lineHeight: '22px',
               letterSpacing: '0%',
-              fontFamily: 'DFPHeiMedium-B5',
+              fontFamily: 'var(--font-medium)',
             }}
           >
             還沒有帳戶嗎?{' '}
@@ -189,7 +189,7 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
               style={{
                 color: '#C00',
                 cursor: 'pointer',
-                fontFamily: 'DFPHeiBold-B5',
+                fontFamily: 'var(--font-bold)',
               }}
             >
               註冊
@@ -344,7 +344,7 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
               fontSize: '14px',
               lineHeight: '24px',
               letterSpacing: 0,
-              fontFamily: 'DFPHeiBold-B5',
+              fontFamily: 'var(--font-bold)',
               fontStyle: 'normal',
               fontWeight: 400,
               cursor: 'pointer',
@@ -413,7 +413,7 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
                 lineHeight: '24px',
                 letterSpacing: '0%',
                 textTransform: 'none',
-                fontFamily: 'DFPHeiMedium-B5',
+                fontFamily: 'var(--font-medium)',
               }}
             >
               使用 Google 帳號繼續

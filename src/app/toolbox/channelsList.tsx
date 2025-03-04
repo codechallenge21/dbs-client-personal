@@ -415,14 +415,14 @@ const ChannelsList = () => {
                     fontWeight: 700,
                     fontStyle: 'normal',
                     lineHeight: 'normal',
-                    fontFamily: 'DFPHeiBold-B5',
+                    fontFamily: 'var(--font-bold)',
                     color: 'var(--Text-Secondary, #637381)',
                     '&.Mui-selected': {
                       fontWeight: 400,
                       fontSize: '14px',
                       lineHeight: '22px',
                       fontStyle: 'normal',
-                      fontFamily: 'DFPHeiBold-B5',
+                      fontFamily: 'var(--font-bold)',
                       color: 'var(--Text-Secondary, #212B36)',
                     },
                   }}
@@ -441,14 +441,14 @@ const ChannelsList = () => {
                     fontWeight: 700,
                     fontStyle: 'normal',
                     lineHeight: 'normal',
-                    fontFamily: 'DFPHeiBold-B5',
+                    fontFamily: 'var(--font-bold)',
                     color: 'var(--Text-Secondary, #637381)',
                     '&.Mui-selected': {
                       fontWeight: 400,
                       fontSize: '14px',
                       lineHeight: '22px',
                       fontStyle: 'normal',
-                      fontFamily: 'DFPHeiBold-B5',
+                      fontFamily: 'var(--font-bold)',
                       color: 'var(--Text-Secondary, #212B36)',
                     },
                   }}
@@ -467,14 +467,14 @@ const ChannelsList = () => {
                     fontWeight: 700,
                     fontStyle: 'normal',
                     lineHeight: 'normal',
-                    fontFamily: 'DFPHeiBold-B5',
+                    fontFamily: 'var(--font-bold)',
                     color: 'var(--Text-Secondary, #637381)',
                     '&.Mui-selected': {
                       fontWeight: 400,
                       fontSize: '14px',
                       lineHeight: '22px',
                       fontStyle: 'normal',
-                      fontFamily: 'DFPHeiBold-B5',
+                      fontFamily: 'var(--font-bold)',
                       color: 'var(--Text-Secondary, #212B36)',
                     },
                   }}
@@ -493,14 +493,14 @@ const ChannelsList = () => {
                     fontWeight: 700,
                     fontStyle: 'normal',
                     lineHeight: 'normal',
-                    fontFamily: 'DFPHeiBold-B5',
+                    fontFamily: 'var(--font-bold)',
                     color: 'var(--Text-Secondary, #637381)',
                     '&.Mui-selected': {
                       fontWeight: 400,
                       fontSize: '14px',
                       lineHeight: '22px',
                       fontStyle: 'normal',
-                      fontFamily: 'DFPHeiBold-B5',
+                      fontFamily: 'var(--font-bold)',
                       color: 'var(--Text-Secondary, #212B36)',
                     },
                   }}
@@ -538,7 +538,7 @@ const ChannelsList = () => {
                       fontSize: '32px',
                       fontStyle: 'normal',
                       lineHeight: 'normal',
-                      fontFamily: 'DFPHeiBold-B5',
+                      fontFamily: 'var(--font-bold)',
                       color: 'var(--Primary-Black, #212B36)',
                       textAlign: 'left', // Always left-aligned
                     }}
@@ -558,7 +558,6 @@ const ChannelsList = () => {
                     }}
                   >
                     <IconButton
-                      role="button"
                       aria-label="search"
                       sx={{
                         padding: '8px',
@@ -571,7 +570,6 @@ const ChannelsList = () => {
                       <SearchRounded />
                     </IconButton>
                     <IconButton
-                      role="button"
                       aria-label="Start Recording"
                       sx={{
                         gap: '8px',
@@ -589,7 +587,6 @@ const ChannelsList = () => {
                       <Typography>開始錄音</Typography>
                     </IconButton>
                     <IconButton
-                      role="button"
                       aria-label="Upload File"
                       sx={{
                         gap: '8px',
@@ -663,7 +660,7 @@ const ChannelsList = () => {
                               fontStyle: 'normal',
                               lineHeight: 'normal',
                               textOverflow: 'ellipsis',
-                              fontFamily: 'DFPHeiBold-B5',
+                              fontFamily: 'var(--font-bold)',
                               color: 'var(--Text-Primary, #212B36)',
                               borderBottom:
                                 '1px dashed var(--Components-Divider, rgba(145, 158, 171, 0.20))',
@@ -679,7 +676,7 @@ const ChannelsList = () => {
                                 fontStyle: 'normal',
                                 lineHeight: 'normal',
                                 textOverflow: 'ellipsis',
-                                fontFamily: 'DFPHeiBold-B5',
+                                fontFamily: 'var(--font-bold)',
                                 color: 'var(--Text-Primary, #212B36)',
                               }}
                             >
@@ -695,7 +692,7 @@ const ChannelsList = () => {
                               fontStyle: 'normal',
                               lineHeight: 'normal',
                               textOverflow: 'ellipsis',
-                              fontFamily: 'DFPHeiBold-B5',
+                              fontFamily: 'var(--font-bold)',
                               color: 'var(--Text-Primary, #212B36)',
                               borderBottom:
                                 '1px dashed var(--Components-Divider, rgba(145, 158, 171, 0.20))',
@@ -711,7 +708,7 @@ const ChannelsList = () => {
                                 fontStyle: 'normal',
                                 lineHeight: 'normal',
                                 textOverflow: 'ellipsis',
-                                fontFamily: 'DFPHeiBold-B5',
+                                fontFamily: 'var(--font-bold)',
                                 color: 'var(--Text-Primary, #212B36)',
                               }}
                             >
@@ -727,7 +724,7 @@ const ChannelsList = () => {
                               fontStyle: 'normal',
                               lineHeight: 'normal',
                               textOverflow: 'ellipsis',
-                              fontFamily: 'DFPHeiBold-B5',
+                              fontFamily: 'var(--font-bold)',
                               color: 'var(--Text-Primary, #212B36)',
                               borderBottom:
                                 '1px dashed var(--Components-Divider, rgba(145, 158, 171, 0.20))',
@@ -743,7 +740,7 @@ const ChannelsList = () => {
                                 fontStyle: 'normal',
                                 lineHeight: 'normal',
                                 textOverflow: 'ellipsis',
-                                fontFamily: 'DFPHeiBold-B5',
+                                fontFamily: 'var(--font-bold)',
                                 color: 'var(--Text-Primary, #212B36)',
                               }}
                             >
@@ -793,7 +790,7 @@ const ChannelsList = () => {
                               >
                                 <Typography
                                   sx={{
-                                    fontFamily: 'DFPHeiBold-B5',
+                                    fontFamily: 'var(--font-bold)',
                                     fontWeight: 400,
                                     fontSize: '16px',
                                     lineHeight: '16px',
@@ -831,7 +828,7 @@ const ChannelsList = () => {
                                   )}
                                   <span
                                     style={{
-                                      fontFamily: 'DFPHeiBold-B5',
+                                      fontFamily: 'var(--font-bold)',
                                       fontWeight: 400,
                                       fontSize: '16px',
                                       lineHeight: '16px',
@@ -862,7 +859,7 @@ const ChannelsList = () => {
                                     fontStyle: 'normal',
                                     padding: '16px 0px',
                                     lineHeight: 'normal',
-                                    fontFamily: 'DFPHeiBold-B5',
+                                    fontFamily: 'var(--font-bold)',
                                     color: 'var(--Text-Primary, #212B36)',
                                   }}
                                 >
@@ -931,7 +928,7 @@ const ChannelsList = () => {
                             >
                               <Typography
                                 sx={{
-                                  fontFamily: 'DFPHeiBold-B5',
+                                  fontFamily: 'var(--font-bold)',
                                   fontWeight: 400,
                                   fontSize: '16px',
                                   lineHeight: '16px',
@@ -989,7 +986,7 @@ const ChannelsList = () => {
                                 )}
                                 <span
                                   style={{
-                                    fontFamily: 'DFPHeiBold-B5',
+                                    fontFamily: 'var(--font-bold)',
                                     fontWeight: 400,
                                     fontSize: '16px',
                                     lineHeight: '16px',
@@ -1034,7 +1031,7 @@ const ChannelsList = () => {
                                   fontStyle: 'normal',
                                   padding: '16px 0px',
                                   lineHeight: 'normal',
-                                  fontFamily: 'DFPHeiBold-B5',
+                                  fontFamily: 'var(--font-bold)',
                                   color: 'var(--Text-Primary, #212B36)',
                                 }}
                               >
@@ -1224,7 +1221,7 @@ const ChannelsList = () => {
                     fontSize: '14px',
                     lineHeight: '22px',
                     fontStyle: 'normal',
-                    fontFamily: 'DFPHeiBold-B5',
+                    fontFamily: 'var(--font-bold)',
                     color: 'var(--Text-Secondary, #637381))',
                     '&.Mui-selected': {
                       color: 'var(--Primary-Black, #212B36)',
@@ -1240,7 +1237,7 @@ const ChannelsList = () => {
                     fontSize: '14px',
                     lineHeight: '22px',
                     fontStyle: 'normal',
-                    fontFamily: 'DFPHeiBold-B5',
+                    fontFamily: 'var(--font-bold)',
                     color: 'var(--Text-Secondary, #637381)',
                     '&.Mui-selected': {
                       color: 'var(--Primary-Black, #212B36)',
@@ -1257,7 +1254,7 @@ const ChannelsList = () => {
                     fontSize: '14px',
                     lineHeight: '22px',
                     fontStyle: 'normal',
-                    fontFamily: 'DFPHeiBold-B5',
+                    fontFamily: 'var(--font-bold)',
                     color: 'var(--Text-Secondary, #637381)',
                     '&.Mui-selected': {
                       color: 'var(--Primary-Black, #212B36)',
@@ -1274,7 +1271,7 @@ const ChannelsList = () => {
                     fontSize: '14px',
                     lineHeight: '22px',
                     fontStyle: 'normal',
-                    fontFamily: 'DFPHeiBold-B5',
+                    fontFamily: 'var(--font-bold)',
                     color: 'var(--Text-Secondary, #637381)',
                     '&.Mui-selected': {
                       color: 'var(--Primary-Black, #212B36)',
@@ -1305,7 +1302,7 @@ const ChannelsList = () => {
                   fontSize: '32px',
                   fontStyle: 'normal',
                   lineHeight: 'normal',
-                  fontFamily: 'DFPHeiBold-B5',
+                  fontFamily: 'var(--font-bold)',
                   color: '#212B36',
                 }}
               >
@@ -1348,7 +1345,7 @@ const ChannelsList = () => {
                       lineHeight: '24px',
                       textAlign: 'center',
                       fontStyle: 'normal',
-                      fontFamily: 'DFPHeiBold-B5',
+                      fontFamily: 'var(--font-bold)',
                       color: 'var(--Secondary-, #5C443A)',
                     }}
                   >
@@ -1382,7 +1379,7 @@ const ChannelsList = () => {
                       lineHeight: '24px',
                       textAlign: 'center',
                       fontStyle: 'normal',
-                      fontFamily: 'DFPHeiBold-B5',
+                      fontFamily: 'var(--font-bold)',
                       color: '#FFF',
                     }}
                   >
@@ -1487,7 +1484,7 @@ const ChannelsList = () => {
                                   lineHeight: 'normal',
                                   whiteSpace: 'normal',
                                   wordBreak: 'break-word',
-                                  fontFamily: 'DFPHeiBold-B5',
+                                  fontFamily: 'var(--font-bold)',
                                   color: 'var(--Primary-Black, #212B36)',
                                 }}
                               >
@@ -1527,7 +1524,7 @@ const ChannelsList = () => {
                                     fontStyle: 'normal',
                                     textAlign: 'center',
                                     textOverflow: 'ellipsis',
-                                    fontFamily: 'DFPHeiMedium-B5',
+                                    fontFamily: 'var(--font-medium)',
                                     color: 'var(--Primary-Black, #212B36)',
                                   }}
                                 >
@@ -1545,7 +1542,7 @@ const ChannelsList = () => {
                                 )}
                                 <span
                                   style={{
-                                    fontFamily: 'DFPHeiBold-B5',
+                                    fontFamily: 'var(--font-bold)',
                                     fontWeight: 400,
                                     fontSize: '16px',
                                     lineHeight: '24px',
@@ -1608,7 +1605,7 @@ const ChannelsList = () => {
                                 lineHeight: '36px',
                                 whiteSpace: 'normal',
                                 wordBreak: 'break-word',
-                                fontFamily: 'DFPHeiBold-B5',
+                                fontFamily: 'var(--font-bold)',
                                 color: 'var(--Primary-Black, #212B36)',
                               }}
                             >
@@ -1675,7 +1672,7 @@ const ChannelsList = () => {
                                   fontStyle: 'normal',
                                   textAlign: 'center',
                                   textOverflow: 'ellipsis',
-                                  fontFamily: 'DFPHeiMedium-B5',
+                                  fontFamily: 'var(--font-medium)',
                                   color: 'var(--Primary-Black, #212B36)',
                                 }}
                               >
@@ -1715,7 +1712,7 @@ const ChannelsList = () => {
                               )}
                               <span
                                 style={{
-                                  fontFamily: 'DFPHeiMedium-B5',
+                                  fontFamily: 'var(--font-medium)',
                                   fontWeight: 400,
                                   fontSize: '16px',
                                   lineHeight: '24px',
