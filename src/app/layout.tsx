@@ -10,8 +10,7 @@ import {
 import './globals.css';
 import { SnackbarProvider } from '@/context/SnackbarContext';
 import { LoginProvider } from '@/context/LoginContext';
-// import { Box } from "@mui/material";
-// import { Header } from "@/components/header";
+import DynaFontScript from '../assets/font/DynaFontScript';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -84,12 +83,12 @@ type Props = {
 export default function RootLayout({ children }: Props) {
   return (
     <html lang="en">
+      <head>
+        <DynaFontScript />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${publicSansFont.variable} ${openSansFont.variable} ${interFont.variable}`}
       >
-        {/* <Box>
-          <Header />
-        </Box> */}
         <ThemeProvider>
           <SnackbarProvider>
             <LoginProvider>
