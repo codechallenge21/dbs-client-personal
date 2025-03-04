@@ -25,75 +25,167 @@ const Events = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isBelow400px = useMediaQuery('(max-width:400px)');
 
-  const focusRef = useRef<HTMLDivElement>(null);
   const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(true);
   const [isFocusScrolledLeft, setIsFocusScrolledLeft] = useState(true);
   const [isFocusScrolledRight, setIsFocusScrolledRight] = useState(false);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startScrollLeft, setStartScrollLeft] = useState(0);
 
-  const tolerance = 5;
+  // Check scroll position on mount and scroll events
+  const checkScrollPosition = () => {
+    if (!scrollContainerRef.current) return;
 
+    const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+    // Check if scrolled to the left edge
+    setIsFocusScrolledLeft(scrollLeft <= 0);
+
+    // Check if scrolled to the right edge (with a small buffer for rounding errors)
+    setIsFocusScrolledRight(scrollLeft + clientWidth >= scrollWidth - 5);
+  };
+
+  // Handle scroll right button click
   const handleFocusScrollRight = () => {
-    if (focusRef.current) {
-      const itemWidth = 260 + 16;
-      const scrollDelta = itemWidth * (isMobile ? 1 : 3);
-      const newScrollLeft = focusRef.current.scrollLeft + scrollDelta;
+    if (!scrollContainerRef.current) return;
 
-      // Trigger smooth scrolling
-      focusRef.current.scrollBy({
-        behavior: 'smooth',
-        left: scrollDelta,
-      });
-
-      const { clientWidth, scrollWidth } = focusRef.current;
-      // Optimistically update state
-      setIsFocusScrolledLeft(newScrollLeft <= tolerance);
-      setIsFocusScrolledRight(
-        newScrollLeft >= scrollWidth - clientWidth - tolerance
-      );
-    }
+    scrollContainerRef.current.scrollBy({
+      left: 275,
+      behavior: 'smooth',
+    });
   };
 
+  // Handle scroll left button click
   const handleFocusScrollLeft = () => {
-    if (focusRef.current) {
-      const itemWidth = 260 + 16;
-      const scrollDelta = itemWidth * (isMobile ? 1 : 3);
-      const newScrollLeft = focusRef.current.scrollLeft - scrollDelta;
+    if (!scrollContainerRef.current) return;
 
-      focusRef.current.scrollBy({
-        behavior: 'smooth',
-        left: -scrollDelta,
-      });
+    scrollContainerRef.current.scrollBy({
+      left: -275,
+      behavior: 'smooth',
+    });
+  };
 
-      const { clientWidth, scrollWidth } = focusRef.current;
-      setIsFocusScrolledLeft(newScrollLeft <= tolerance);
-      setIsFocusScrolledRight(
-        newScrollLeft >= scrollWidth - clientWidth - tolerance
-      );
+  // Handle touch start event
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const touchX = e.targetTouches[0]?.clientX;
+    if (touchX !== undefined) {
+      setTouchStart(touchX);
+      if (scrollContainerRef.current) {
+        setStartScrollLeft(scrollContainerRef.current.scrollLeft);
+      }
     }
   };
 
-  const handleFocusScroll = () => {
-    if (focusRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = focusRef.current;
-      setIsFocusScrolledLeft(scrollLeft <= tolerance);
-      setIsFocusScrolledRight(
-        scrollLeft >= scrollWidth - clientWidth - tolerance
-      );
+  // Handle touch move event for smooth scrolling during the swipe
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!touchStart || !scrollContainerRef.current) return;
+
+    const currentTouch = e.targetTouches[0]?.clientX;
+    if (currentTouch === undefined) return;
+
+    const diff = touchStart - currentTouch;
+
+    // Apply the scroll directly during the move for a more responsive feel
+    scrollContainerRef.current.scrollLeft = startScrollLeft + diff;
+    setTouchEnd(currentTouch);
+  };
+
+  // Handle touch end event
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe) {
+      handleFocusScrollRight();
+    } else if (isRightSwipe) {
+      handleFocusScrollLeft();
+    }
+
+    // Reset touch states
+    setTouchStart(null);
+    setTouchEnd(null);
+  };
+
+  // Handle mouse events for desktop drag scrolling
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (!scrollContainerRef.current) return;
+
+    setIsDragging(true);
+    setTouchStart(e.clientX);
+    setStartScrollLeft(scrollContainerRef.current.scrollLeft);
+
+    // Change cursor to indicate grabbing
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.style.cursor = 'grabbing';
+      scrollContainerRef.current.style.userSelect = 'none';
     }
   };
 
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || !touchStart || !scrollContainerRef.current) return;
+
+    const currentX = e.clientX;
+    const diff = touchStart - currentX;
+
+    // Apply the scroll directly during the move
+    scrollContainerRef.current.scrollLeft = startScrollLeft + diff;
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+    setTouchStart(null);
+
+    // Reset cursor
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.style.cursor = 'grab';
+      scrollContainerRef.current.style.userSelect = 'auto';
+    }
+  };
+
+  // Add mouseLeave handler to handle cases where mouse up happens outside the container
+  const handleMouseLeave = () => {
+    if (isDragging) {
+      handleMouseUp();
+    }
+  };
+
+  // Add useEffect to add/remove global mouse event listeners
   useEffect(() => {
-    if (focusRef.current) {
-      focusRef.current.addEventListener('scroll', handleFocusScroll);
-      handleFocusScroll();
+    const handleGlobalMouseUp = () => {
+      if (isDragging) {
+        handleMouseUp();
+      }
+    };
 
-      return () => {
-        focusRef?.current?.removeEventListener('scroll', handleFocusScroll);
-      };
+    // Add global event listener to catch mouse up events outside the component
+    document.addEventListener('mouseup', handleGlobalMouseUp);
+
+    return () => {
+      document.removeEventListener('mouseup', handleGlobalMouseUp);
+    };
+  }, [isDragging]); // Added isDragging to dependencies
+
+  // Add scroll event listener
+  useEffect(() => {
+    const scrollContainer = scrollContainerRef.current;
+    if (scrollContainer) {
+      scrollContainer.addEventListener('scroll', checkScrollPosition);
+      // Initial check
+      checkScrollPosition();
     }
-  }, []);
 
-  const toolItems = Array.from({ length: 9 });
+    return () => {
+      if (scrollContainer) {
+        scrollContainer.removeEventListener('scroll', checkScrollPosition);
+      }
+    };
+  }, [scrollContainerRef.current, checkScrollPosition]); // Use .current as dependency
+
+  const toolItems = Array.from({ length: 13 });
   const focusItems = Array.from({ length: 10 });
 
   return (
@@ -204,6 +296,7 @@ const Events = () => {
               alignSelf: 'stretch',
               flexDirection: 'column',
               alignItems: 'flex-start',
+              position: 'relative',
             }}
           >
             <Box
@@ -229,7 +322,7 @@ const Events = () => {
               </Typography>
             </Box>
             <Box
-              ref={focusRef}
+              ref={scrollContainerRef}
               sx={{
                 gap: '16px',
                 display: 'flex',
@@ -237,13 +330,27 @@ const Events = () => {
                 position: 'relative',
                 alignSelf: 'stretch',
                 alignItems: 'flex-start',
+                overflowX: 'auto',
+                scrollbarWidth: 'none', // Hide scrollbar for Firefox
+                '&::-webkit-scrollbar': {
+                  // Hide scrollbar for Chrome/Safari
+                  display: 'none',
+                },
+                msOverflowStyle: 'none', // Hide scrollbar for IE/Edge
+                cursor: 'grab',
               }}
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
+              onMouseUp={handleMouseUp}
+              onMouseLeave={handleMouseLeave}
             >
               {focusItems.map((_, index) => (
                 <Box
                   key={index}
                   sx={{
-                    // gap: '12px',
                     display: 'flex',
                     height: '220px',
                     minWidth: '260px',
@@ -261,14 +368,17 @@ const Events = () => {
                   }}
                 >
                   <Image
-                    src={boxImage}
+                    src={boxImage || '/placeholder.svg'}
                     alt="Boxed Image"
+                    width={260}
+                    height={130}
                     style={{
                       width: '100%',
                       height: '130px',
                       objectFit: 'cover',
                       borderTopLeftRadius: '8px',
                       borderTopRightRadius: '8px',
+                      pointerEvents: 'none',
                     }}
                   />
                   <Box
@@ -317,61 +427,61 @@ const Events = () => {
                   </Box>
                 </Box>
               ))}
-              {!isFocusScrolledRight && (
-                <IconButton
-                  onClick={handleFocusScrollRight}
-                  sx={{
-                    zIndex: 10,
-                    right: '8px',
-                    width: '28px',
-                    bottom: '92px',
-                    height: '28px',
-                    padding: '5px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    borderRadius: '50px',
-                    position: 'absolute',
-                    justifyContent: 'center',
-                    backgroundColor: 'rgba(204, 0, 0, 0.60)',
-                    '&:hover': {
-                      backgroundColor: 'rgba(204, 0, 0, 0.40)',
-                    },
-                  }}
-                >
-                  <ArrowForwardIosRounded
-                    sx={{ width: '18px', height: '18px', color: 'white' }}
-                  />
-                </IconButton>
-              )}
-              {!isFocusScrolledLeft && (
-                <IconButton
-                  onClick={handleFocusScrollLeft}
-                  sx={{
-                    left: '8px',
-                    bottom: '96px',
-                    padding: '5px',
-                    display: 'flex',
-                    position: 'absolute',
-                    alignItems: 'center',
-                    borderRadius: '50px',
-                    justifyContent: 'center',
-                    background: 'rgba(204, 0, 0, 0.60)',
-                    '&:hover': {
-                      backgroundColor: 'rgba(204, 0, 0, 0.40)',
-                    },
-                  }}
-                >
-                  <ArrowForwardIosRounded
-                    sx={{
-                      width: '18px',
-                      height: '18px',
-                      color: 'white',
-                      transform: 'scaleX(-1)',
-                    }}
-                  />
-                </IconButton>
-              )}
             </Box>
+            {!isFocusScrolledRight && (
+              <IconButton
+                onClick={handleFocusScrollRight}
+                sx={{
+                  zIndex: 10,
+                  right: '8px',
+                  width: '28px',
+                  bottom: '92px',
+                  height: '28px',
+                  padding: '5px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  borderRadius: '50px',
+                  position: 'absolute',
+                  justifyContent: 'center',
+                  backgroundColor: 'rgba(204, 0, 0, 0.60)',
+                  '&:hover': {
+                    backgroundColor: 'rgba(204, 0, 0, 0.40)',
+                  },
+                }}
+              >
+                <ArrowForwardIosRounded
+                  sx={{ width: '18px', height: '18px', color: 'white' }}
+                />
+              </IconButton>
+            )}
+            {!isFocusScrolledLeft && (
+              <IconButton
+                onClick={handleFocusScrollLeft}
+                sx={{
+                  left: '8px',
+                  bottom: '96px',
+                  padding: '5px',
+                  display: 'flex',
+                  position: 'absolute',
+                  alignItems: 'center',
+                  borderRadius: '50px',
+                  justifyContent: 'center',
+                  background: 'rgba(204, 0, 0, 0.60)',
+                  '&:hover': {
+                    backgroundColor: 'rgba(204, 0, 0, 0.40)',
+                  },
+                }}
+              >
+                <ArrowForwardIosRounded
+                  sx={{
+                    width: '18px',
+                    height: '18px',
+                    color: 'white',
+                    transform: 'scaleX(-1)',
+                  }}
+                />
+              </IconButton>
+            )}
           </Box>
           <Container
             maxWidth="xl"
@@ -429,7 +539,7 @@ const Events = () => {
                 rowGap: '16px',
                 alignItems: isMobile ? 'center' : 'flex-start',
                 alignContent: isMobile ? 'center' : 'flex-start',
-                justifyContent: 'center',
+                justifyContent: 'flex-start',
               }}
             >
               {toolItems.map((_, index) => (
