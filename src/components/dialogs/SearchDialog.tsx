@@ -31,15 +31,20 @@ interface SearchModalProps {
   onClose: () => void;
 }
 
+interface EventItem {
+  id: number;
+  title: string;
+}
+
 export default function SearchDialog({ open, onClose }: SearchModalProps) {
   const [searchTerm, setSearchTerm] = useState('');
-  const [suggestions, setSuggestions] = useState(POPULAR_EVENTS);
+  const [suggestions, setSuggestions] = useState<EventItem[]>([]);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
     if (searchTerm.trim() === '') {
-      setSuggestions(POPULAR_EVENTS);
+      setSuggestions([]);
     } else {
       const filtered = POPULAR_EVENTS.filter((event) =>
         event.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -108,8 +113,10 @@ export default function SearchDialog({ open, onClose }: SearchModalProps) {
             fontStyle: 'normal',
             fontWeight: 400,
             lineHeight: '24px',
-            '&::placeholder': {
+
+            '& .MuiInputBase-input::placeholder': {
               color: '#212B36',
+              opacity: 1,
             },
           }}
         />
@@ -135,26 +142,20 @@ export default function SearchDialog({ open, onClose }: SearchModalProps) {
           width: '100%',
           overflowY: 'auto',
           '&::-webkit-scrollbar': {
-            width: '12px',
+            width: '6px',
+          },
+          '&::-webkit-scrollbar-track': {
+            background: 'transparent',
+            borderRadius: '12px',
           },
           '&::-webkit-scrollbar-thumb': {
-            borderRadius: '12px',
             backgroundColor: '#637381',
+            opacity: '0.48',
+            borderRadius: '12px',
             '&:hover': {
               backgroundColor: '#4a5a68',
             },
           },
-          '&::-webkit-scrollbar-track': {
-            borderRadius: '12px',
-            background: 'transparent ',
-          },
-          '&::-webkit-scrollbar-button': {
-            display: 'none !important',
-          },
-          scrollbarWidth: 'thin',
-          scrollbarColor: '#637381 ',
-          overscrollBehavior: 'contain',
-          msOverflowStyle: 'auto',
         }}
       >
         {suggestions.map((event) => (
