@@ -150,7 +150,11 @@ const FinanceScreen = () => {
 
   const [selected, setSelected] = useState<number[]>([]);
 
-  const handleSelectRow = (rowId: number) => {
+  const handleSelectRow = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    rowId: number
+  ) => {
+    e.stopPropagation();
     setSelected((prevSelected: number[]) =>
       prevSelected.includes(rowId)
         ? prevSelected.filter((id) => id !== rowId)
@@ -460,17 +464,24 @@ const FinanceScreen = () => {
                           sx={{
                             width: '5%',
                             display: 'flex',
-                            minHeight: '56px',
-                            maxHeight: '56px',
+                            maxHeight: '68px',
+                            minHeight: '68px',
                             alignItems: 'center',
                             background: '#F4F6F8',
-                            justifyContent: 'flex-start',
+                            justifyContent: 'center',
                           }}
                         >
                           <Checkbox
                             sx={{
-                              padding: 0,
-                              maxHeight: '56px',
+                              maxHeight: '68px',
+                              minHeight: '68px',
+                              color: 'default',
+                              '&.Mui-checked': {
+                                color: '#0000FF',
+                              },
+                              '&:hover': {
+                                backgroundColor: 'transparent',
+                              },
                             }}
                             // checked={isSelected}
                             // onChange={() => handleSelectRow(row.id)}
@@ -633,7 +644,8 @@ const FinanceScreen = () => {
                                   },
                                 }}
                                 checked={isSelected}
-                                onChange={() => handleSelectRow(row.id)}
+                                onClick={(e) => e.stopPropagation()}
+                                onChange={(e) => handleSelectRow(e, row.id)}
                               />
                             </TableCell>
 
@@ -787,80 +799,85 @@ const FinanceScreen = () => {
                                 <MoreVertRounded sx={{ color: '#212B36' }} />
                               </IconButton>
                             </TableCell>
+
+                            {/* <Menu
+                              anchorEl={anchorEl}
+                              open={Boolean(anchorEl)}
+                              onClose={handleMenuClose}
+                              anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'left',
+                              }}
+                              transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                              }}
+                              sx={{
+                                borderRadius: '12px',
+                              }}
+                            >
+                              <MenuItem
+                                sx={{
+                                  gap: '8px',
+                                  display: 'flex',
+                                  minHeight: '34px',
+                                  padding: '6px 8px',
+                                  alignItems: 'center',
+                                  alignSelf: 'stretch',
+                                  borderRadius: 'var(--Corner-Small, 8px)',
+                                }}
+                                onClick={handleMenuClose}
+                              >
+                                <StarRounded sx={{ color: '#212B36' }} />
+                                <Typography
+                                  sx={{
+                                    fontSize: '16px',
+                                    fontWeight: '400',
+                                    lineHeight: '24px',
+                                    overflow: 'hidden',
+                                    fontStyle: 'normal',
+                                    textOverflow: 'ellipsis',
+                                    fontFamily: 'DFPHeiBold-B5',
+                                    color: ' var(--Primary-Black, #212B36)',
+                                  }}
+                                >
+                                  加入最愛
+                                </Typography>
+                              </MenuItem>
+                              <MenuItem
+                                sx={{
+                                  gap: '8px',
+                                  display: 'flex',
+                                  minHeight: '34px',
+                                  padding: '6px 8px',
+                                  alignItems: 'center',
+                                  alignSelf: 'stretch',
+                                  borderRadius: 'var(--Corner-Small, 8px)',
+                                }}
+                                onClick={handleMenuClose}
+                              >
+                                <DeleteRounded sx={{ color: '#CC0000' }} />
+                                <Typography
+                                  sx={{
+                                    fontSize: '16px',
+                                    fontWeight: '400',
+                                    lineHeight: '24px',
+                                    overflow: 'hidden',
+                                    fontStyle: 'normal',
+                                    textOverflow: 'ellipsis',
+                                    fontFamily: 'DFPHeiBold-B5',
+                                    color: 'var(--Primary-DBS-Red, #C00)',
+                                  }}
+                                >
+                                  刪除
+                                </Typography>
+                              </MenuItem>
+                            </Menu> */}
                           </TableRow>
                         );
                       })}
                     </TableBody>
                   </Table>
-                  <Menu
-                    anchorEl={anchorEl}
-                    open={Boolean(anchorEl)}
-                    onClose={handleMenuClose}
-                    sx={{
-                      padding: '8px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      borderRadius: '50px',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <MenuItem
-                      sx={{
-                        gap: '8px',
-                        display: 'flex',
-                        minHeight: '34px',
-                        padding: '6px 8px',
-                        alignItems: 'center',
-                        alignSelf: 'stretch',
-                        borderRadius: 'var(--Corner-Small, 8px)',
-                      }}
-                      onClick={handleMenuClose}
-                    >
-                      <StarRounded sx={{ color: '#212B36' }} />
-                      <Typography
-                        sx={{
-                          fontSize: '16px',
-                          fontWeight: '400',
-                          lineHeight: '24px',
-                          overflow: 'hidden',
-                          fontStyle: 'normal',
-                          textOverflow: 'ellipsis',
-                          fontFamily: 'DFPHeiBold-B5',
-                          color: ' var(--Primary-Black, #212B36)',
-                        }}
-                      >
-                        加入最愛
-                      </Typography>
-                    </MenuItem>
-                    <MenuItem
-                      sx={{
-                        gap: '8px',
-                        display: 'flex',
-                        minHeight: '34px',
-                        padding: '6px 8px',
-                        alignItems: 'center',
-                        alignSelf: 'stretch',
-                        borderRadius: 'var(--Corner-Small, 8px)',
-                      }}
-                      onClick={handleMenuClose}
-                    >
-                      <DeleteRounded sx={{ color: '#CC0000' }} />
-                      <Typography
-                        sx={{
-                          fontSize: '16px',
-                          fontWeight: '400',
-                          lineHeight: '24px',
-                          overflow: 'hidden',
-                          fontStyle: 'normal',
-                          textOverflow: 'ellipsis',
-                          fontFamily: 'DFPHeiBold-B5',
-                          color: 'var(--Primary-DBS-Red, #C00)',
-                        }}
-                      >
-                        刪除
-                      </Typography>
-                    </MenuItem>
-                  </Menu>
                 </TableContainer>
               </TabPanel>
               <TabPanel value={tabValue} index={1}>
@@ -1455,6 +1472,7 @@ const FinanceScreen = () => {
                 width: '100%',
                 display: 'flex',
                 padding: '16px',
+                background: '#FFF',
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'flex-start',
@@ -1638,18 +1656,23 @@ const FinanceScreen = () => {
                     maxHeight: '1570px',
                     overflowY: 'auto',
                     '&::-webkit-scrollbar': {
-                      width: '8px',
+                      width: '6px',
+                      height: '64px',
+                      opacity: '0.48',
                     },
                     '&::-webkit-scrollbar-track': {
                       borderRadius: '10px',
                       background: '#f1f1f1',
+                      opacity: '0.48',
                     },
                     '&::-webkit-scrollbar-thumb': {
-                      borderRadius: '10px',
-                      background: '#888',
+                      borderRadius: '12px',
+                      background: 'var(--Grey-600, #637381)',
+                      opacity: '0.48',
                     },
                     '&::-webkit-scrollbar-thumb:hover': {
                       background: '#555',
+                      opacity: '0.48',
                     },
                   }}
                 >
@@ -1659,6 +1682,10 @@ const FinanceScreen = () => {
                       sx={{
                         width: '100%',
                         minHeight: '228px',
+                        borderRadius: '16px',
+                        background: 'var(--Primary-White, #FFF)',
+                        boxShadow:
+                          '0px 12px 24px -4px rgba(17, 68, 85, 0.12), 0px 0px 2px 0px rgba(17, 68, 85, 0.12)',
                         ' & .MuiCardContent-root': {
                           paddingBottom: '16px',
                         },
@@ -2136,12 +2163,302 @@ const FinanceScreen = () => {
                       }}
                     />
                   </Box>
+                  <Box
+                    sx={{
+                      gap: '16px',
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Button
+                      variant="contained"
+                      // onClick={handleCalculate}
+                      sx={{
+                        gap: '8px',
+                        display: 'flex',
+                        borderRadius: '8px',
+                        padding: '6px 12px',
+                        alignItems: 'center',
+                        backgroundColor: '#FFF',
+                        justifyContent: 'center',
+                        border: '1px solid var(--Primary-Black, #212B36)',
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontWeight: 700,
+                          fontSize: '14px',
+                          lineHeight: '24px',
+                          fontStyle: 'normal',
+                          textAlign: 'center',
+                          fontFamily: 'Public Sans',
+                          color: 'var(--Primary-Black, #212B36)',
+                        }}
+                      >
+                        清除
+                      </Typography>
+                    </Button>
+                    <Button
+                      variant="contained"
+                      onClick={handleCalculate}
+                      sx={{
+                        gap: '8px',
+                        display: 'flex',
+                        padding: '6px 12px',
+                        borderRadius: '8px',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        background: 'var(--Secondary-, #5C443A)',
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontWeight: 700,
+                          fontSize: '14px',
+                          lineHeight: '24px',
+                          fontStyle: 'normal',
+                          textAlign: 'center',
+                          fontFamily: 'Public Sans',
+                          color: 'var(--Primary-ContrastText, #FFF)',
+                        }}
+                      >
+                        開始試算
+                      </Typography>
+                    </Button>
+                  </Box>
+                  {/* Table */}
+                  <TableContainer>
+                    <Table>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell
+                            sx={{
+                              fontWeight: 600,
+                              fontSize: '14px',
+                              lineHeight: '22px',
+                              fontStyle: 'normal',
+                              background: '#919EAB33',
+                              fontFamily: 'Public Sans',
+                              color: 'var(--Text-Primary, #212B36)',
+                            }}
+                          >
+                            期別
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              fontWeight: 600,
+                              fontSize: '14px',
+                              lineHeight: '22px',
+                              fontStyle: 'normal',
+                              background: '#919EAB33',
+                              fontFamily: 'Public Sans',
+                              color: 'var(--Text-Primary, #212B36)',
+                            }}
+                          >
+                            償還本金
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              fontWeight: 600,
+                              fontSize: '14px',
+                              lineHeight: '22px',
+                              fontStyle: 'normal',
+                              background: '#919EAB33',
+                              fontFamily: 'Public Sans',
+                              color: 'var(--Text-Primary, #212B36)',
+                            }}
+                          >
+                            償還利息
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              fontWeight: 600,
+                              fontSize: '14px',
+                              lineHeight: '22px',
+                              fontStyle: 'normal',
+                              background: '#919EAB33',
+                              fontFamily: 'Public Sans',
+                              color: 'var(--Text-Primary, #212B36)',
+                            }}
+                          >
+                            償還本利和
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              fontWeight: 600,
+                              fontSize: '14px',
+                              lineHeight: '22px',
+                              fontStyle: 'normal',
+                              background: '#919EAB33',
+                              fontFamily: 'Public Sans',
+                              color: 'var(--Text-Primary, #212B36)',
+                            }}
+                          >
+                            貸款餘額
+                          </TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {tableData.map((row) => (
+                          <TableRow key={row.period}>
+                            <TableCell
+                              sx={{
+                                fontWeight: 600,
+                                fontSize: '14px',
+                                lineHeight: '22px',
+                                fontStyle: 'normal',
+                                fontFamily: 'Public Sans',
+                                color: 'var(--Text-Primary, #212B36)',
+                              }}
+                            >
+                              {row.period}
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                fontWeight: 600,
+                                fontSize: '14px',
+                                lineHeight: '22px',
+                                fontStyle: 'normal',
+                                fontFamily: 'Public Sans',
+                                color: 'var(--Text-Primary, #212B36)',
+                              }}
+                            >
+                              {row.principal}
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                fontWeight: 600,
+                                fontSize: '14px',
+                                lineHeight: '22px',
+                                fontStyle: 'normal',
+                                fontFamily: 'Public Sans',
+                                color: 'var(--Text-Primary, #212B36)',
+                              }}
+                            >
+                              {row.interest}
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                fontWeight: 600,
+                                fontSize: '14px',
+                                lineHeight: '22px',
+                                fontStyle: 'normal',
+                                fontFamily: 'Public Sans',
+                                color: 'var(--Text-Primary, #212B36)',
+                              }}
+                            >
+                              {row.total}
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                fontWeight: 600,
+                                fontSize: '14px',
+                                lineHeight: '22px',
+                                fontStyle: 'normal',
+                                fontFamily: 'Public Sans',
+                                color: 'var(--Text-Primary, #212B36)',
+                              }}
+                            >
+                              {row.balance}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
                 </Box>
               )}
             </Box>
           </Box>
         </ToolbarDrawer>
       )}
+
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleMenuClose}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        sx={{
+          '& .MuiMenu-list': {
+            width: '200px',
+          },
+          '& .MuiPaper-root': {
+            gap: '4px',
+            width: '200px',
+            padding: '4px',
+            display: 'flex',
+            borderRadius: '12px',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'flex-start',
+          },
+        }}
+      >
+        <MenuItem
+          sx={{
+            gap: '8px',
+            width: '100%',
+            display: 'flex',
+            minHeight: '34px',
+            padding: '6px 8px',
+            alignItems: 'center',
+            alignSelf: 'stretch',
+            borderRadius: 'var(--Corner-Small, 8px)',
+          }}
+          // onClick={handleEdit}
+        >
+          <StarRounded sx={{ color: '#212B36' }} />
+          <Typography
+            sx={{
+              fontSize: '16px',
+              fontWeight: '400',
+              lineHeight: '24px',
+              overflow: 'hidden',
+              fontStyle: 'normal',
+              textOverflow: 'ellipsis',
+              fontFamily: 'DFPHeiBold-B5',
+              color: ' var(--Primary-Black, #212B36)',
+            }}
+          >
+            加入最愛
+          </Typography>
+        </MenuItem>
+        <MenuItem
+          sx={{
+            gap: '8px',
+            display: 'flex',
+            minHeight: '34px',
+            padding: '6px 8px',
+            alignItems: 'center',
+            alignSelf: 'stretch',
+            borderRadius: 'var(--Corner-Small, 8px)',
+          }}
+          // onClick={handleDelete}
+        >
+          <DeleteRounded sx={{ color: '#CC0000' }} />
+          <Typography
+            sx={{
+              fontSize: '16px',
+              fontWeight: '400',
+              lineHeight: '24px',
+              overflow: 'hidden',
+              fontStyle: 'normal',
+              textOverflow: 'ellipsis',
+              fontFamily: 'DFPHeiBold-B5',
+              color: 'var(--Primary-DBS-Red, #C00)',
+            }}
+          >
+            刪除
+          </Typography>
+        </MenuItem>
+      </Menu>
 
       <AddFinanceRecordDialog
         open={openFinanceDialog}
