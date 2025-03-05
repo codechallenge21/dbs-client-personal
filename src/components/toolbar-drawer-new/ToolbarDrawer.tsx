@@ -55,17 +55,17 @@ const drawerItems = [
         }}
       />
     ),
-    route: '/popular',
+    route: '', //popular
   },
   {
     text: '我的收藏',
     icon: <StarRounded sx={{ color: '#212B36' }} />,
-    route: '/favorite',
+    route: '', //favorite
   },
   {
     text: '活動公告',
     icon: <CampaignRounded sx={{ color: '#212B36' }} />,
-    route: '/events',
+    route: '', //events,
   },
   {
     text: '解決麻煩事',
@@ -80,12 +80,12 @@ const drawerItems = [
   {
     text: '財務快篩',
     icon: <PaidRounded sx={{ color: '#212B36' }} />,
-    route: '/financial-screening',
+    route: '', //financial-screening
   },
   {
     text: '知識庫',
     icon: <AutoStoriesRounded sx={{ color: '#212B36' }} />,
-    route: '/knowledge-base',
+    route: '', //knowledge-base
   },
 ];
 
@@ -282,12 +282,18 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             <Typography
               sx={{
                 color: 'var(--Primary-Black, #212B36)',
-                fontFamily: 'DFPHeiBold-B5',
+                fontFamily: 'var(--font-bold)',
                 fontSize: '20px',
                 fontWeight: 800,
+                cursor: 'pointer',
               }}
+              onClick={() => router.push('/chat')}
             >
-              好理家在
+              <img
+                src="/assets/images/logo.png"
+                alt="logo"
+                style={{ width: '110px' }}
+              />
             </Typography>
           )}
           {!isExpanded && !isMobile && (
@@ -296,12 +302,14 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 fontWeight: 800,
                 fontSize: '20px',
                 textAlign: 'center',
-                fontFamily: 'DFPHeiBold-B5',
+                fontFamily: 'var(--font-bold)',
                 color: 'var(--Primary-Black, #212B36)',
                 lineHeight: 'normal',
+                cursor: 'pointer',
               }}
+              onClick={() => router.push('/chat')}
             >
-              好
+              <img src="/assets/images/logocollapse.png" alt="logo" />
             </Typography>
           )}
           <IconButton
@@ -420,8 +428,14 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                   },
                   cursor: 'pointer',
                   height: isExpanded || isMobile ? '48px' : 'auto',
+                  ...(item.route === '' && {
+                    pointerEvents: 'none',
+                    opacity: 0.5,
+                    cursor: 'not-allowed',
+                  }),
                 }}
                 onClick={() => {
+                  // if (!item.route) return;
                   if (index === 3) {
                     if (
                       selectedChannel ||
@@ -449,7 +463,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                     fontSize: '16px',
                     alignItems: 'center',
                     color: index === 0 ? '#CC0000' : '#212B36',
-                    fontFamily: 'DFPHeiBold-B5',
+                    fontFamily: 'var(--font-bold)',
                   }}
                 >
                   <span
@@ -518,7 +532,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         color: 'var(--Primary-Black, #212B36)',
-                        fontFamily: 'DFPHeiBold-B5',
+                        fontFamily: 'var(--font-bold)',
                         fontSize: '16px',
                         fontStyle: 'normal',
                         fontWeight: 400,
@@ -589,8 +603,10 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 lineHeight: 'normal',
                 height: '30px',
               }}
+              disabled={true}
+              title="Coming Soon"
             >
-              <EmojiObjectsRounded sx={{ color: 'white', fontSize: '18px' }} />
+              <EmojiObjectsRounded sx={{ color: '', fontSize: '18px' }} />
               許願池
             </Button>
             <Button
@@ -612,6 +628,8 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 lineHeight: 'normal',
                 height: '30px',
               }}
+              disabled={true}
+              title="Coming Soon"
             >
               諮詢師專區
             </Button>

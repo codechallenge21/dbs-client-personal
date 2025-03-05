@@ -178,7 +178,7 @@ export default function DataSourceDialog({
           variant={isMobile ? 'subtitle1' : 'h6'}
           sx={{
             color: 'var(--Primary-Black, #212B36)',
-            fontFamily: 'DFPHeiBold-B5',
+            fontFamily: 'var(--font-bold)',
             fontSize: '24px',
           }}
         >
@@ -212,7 +212,7 @@ export default function DataSourceDialog({
           variant={isMobile ? 'body2' : 'subtitle1'}
           sx={{
             color: 'var(--Primary-Black, #212B36)',
-            fontFamily: 'DFPHeiBold-B5',
+            fontFamily: 'var(--font-bold)',
             fontSize: '14px',
             lineHeight: 'normal',
             fontStyle: 'normal',
@@ -250,7 +250,7 @@ export default function DataSourceDialog({
                   whiteSpace: 'nowrap',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
-                  fontFamily: 'DFPHeiBold-B5',
+                  fontFamily: 'var(--font-bold)',
                   fontStyle: 'normal',
                   fontWeight: 400,
                   lineHeight: 'normal',
@@ -263,7 +263,7 @@ export default function DataSourceDialog({
           variant={isMobile ? 'body2' : 'subtitle1'}
           sx={{
             color: 'var(--Primary-Black, #212B36)',
-            fontFamily: 'DFPHeiBold-B5',
+            fontFamily: 'var(--font-bold)',
             fontSize: '14px',
             fontStyle: 'normal',
             fontWeight: 400,
@@ -302,7 +302,7 @@ export default function DataSourceDialog({
                   whiteSpace: 'nowrap',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
-                  fontFamily: 'DFPHeiBold-B5',
+                  fontFamily: 'var(--font-bold)',
                   color: 'var(--Primary-Black, #212B36)',
                 },
               }}

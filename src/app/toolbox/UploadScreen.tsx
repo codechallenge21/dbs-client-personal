@@ -191,7 +191,7 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ handleUploadFile }) => {
           <Typography
             sx={{
               color: 'var(--Primary-Black, #212B36)',
-              fontFamily: 'DFPHeiBold-B5',
+              fontFamily: 'var(--font-bold)',
               fontSize: '24px',
               fontStyle: 'normal',
               fontWeight: 400,
@@ -218,7 +218,7 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ handleUploadFile }) => {
               padding: '11px 16px',
               alignItems: 'center',
               justifyContent: 'center',
-              fontFamily: 'DFPHeiBold-B5',
+              fontFamily: 'var(--font-bold)',
               mb: '65px',
               minHeight: '46px',
               width: '294px',
@@ -248,7 +248,7 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ handleUploadFile }) => {
               sx={{
                 color: '#9B9B9B',
                 fontSize: isMobile ? 14 : 16,
-                fontFamily: 'DFPHeiBold-B5',
+                fontFamily: 'var(--font-bold)',
                 fontStyle: 'normal',
                 fontWeight: 400,
                 mb: 0.5,
@@ -264,7 +264,7 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ handleUploadFile }) => {
               sx={{
                 color: '#9B9B9B',
                 fontSize: isMobile ? 14 : 16,
-                fontFamily: 'DFPHeiBold-B5',
+                fontFamily: 'var(--font-bold)',
                 fontStyle: 'normal',
                 fontWeight: 400,
                 width: '100%',

@@ -71,7 +71,7 @@ const EditDialog: React.FC<EditDialogProps> = ({
             fontWeight: '400',
             fontStyle: 'normal',
             lineHeight: 'normal',
-            fontFamily: 'DFPHeiBold-B5',
+            fontFamily: 'var(--font-bold)',
           }}
         >
           重新命名

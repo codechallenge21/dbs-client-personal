@@ -56,7 +56,7 @@ export default function NotFound() {
           lineHeight: subtitleLineHeight,
           textAlign: "center",
           color: "#000000",
-          fontFamily: "DFPHeiMedium-B5",
+          fontFamily: "var(--font-medium)",
         }}
       >
         請檢查網址或返回首頁
@@ -88,7 +88,7 @@ export default function NotFound() {
           backgroundColor: "#5C443A",
           color: "#FFFFFF",
           fontWeight: 400,
-          fontFamily: "DFPHeiBold-B5",
+          fontFamily: "var(--font-bold)",
           padding: "6px 12px",
           borderRadius: "8px",
           fontSize: "14px",

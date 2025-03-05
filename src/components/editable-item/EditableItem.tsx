@@ -25,7 +25,7 @@ const menuActions = [
           fontStyle: 'normal',
           lineHeight: 'normal',
           textOverflow: 'ellipsis',
-          fontFamily: 'DFPHeiBold-B5',
+          fontFamily: 'var(--font-bold)',
           color: 'var(--Primary-Black, #000)',
         }}
       >
@@ -45,7 +45,7 @@ const menuActions = [
           fontStyle: 'normal',
           lineHeight: 'normal',
           textOverflow: 'ellipsis',
-          fontFamily: 'DFPHeiBold-B5',
+          fontFamily: 'var(--font-bold)',
         }}
       >
         刪除
