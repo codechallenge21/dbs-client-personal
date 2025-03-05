@@ -2,7 +2,13 @@
 
 import React, { useContext, useCallback, memo, useMemo } from "react";
 import DropdownMenu from "./DropdownMenu";
-import { Box, IconButton, useMediaQuery, useTheme } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  useMediaQuery,
+  useTheme,
+  Tooltip,
+} from "@mui/material";
 import {
   MenuRounded,
   HistoryRounded,
@@ -167,14 +173,18 @@ const Header: React.FC<HeaderProps> = ({
                   <StarBorderRounded sx={{ color: "#212B36", margin: "8px" }} />
                 </IconButton> */}
                 {selectedChannelId || chatResponses.length ? (
-                  <IconButton
-                    role="button"
-                    aria-label="All Chats"
-                    sx={{ padding: "0px" }}
-                    onClick={() => router.push("/allchat")}
-                  >
-                    <HistoryRounded sx={{ color: "#212B36", margin: "8px" }} />
-                  </IconButton>
+                  <Tooltip title="歷史紀錄" arrow placement="top">
+                    <IconButton
+                      role="button"
+                      aria-label="歷史紀錄"
+                      sx={{ padding: "0px" }}
+                      onClick={() => router.push("/allchat")}
+                    >
+                      <HistoryRounded
+                        sx={{ color: "#212B36", margin: "8px" }}
+                      />
+                    </IconButton>
+                  </Tooltip>
                 ) : null}
                 {/* <IconButton
                   role="button"
