@@ -176,7 +176,7 @@ const MainContent: React.FC<MainContentProps> = ({ chatsData }) => {
           fontSize: '32px',
           fontWeight: '400',
           overflow: 'visible',
-          fontFamily: 'DFPHeiBold-B5',
+          fontFamily: 'var(--font-bold)',
           textAlign: 'center',
         }}
       >

@@ -25,7 +25,6 @@ const SwitchDialog: React.FC<SwitchDialogProps> = ({
 }) => {
   return (
     <Dialog
-      role="dialog"
       open={open}
       onClose={onClose}
       maxWidth="sm"
@@ -48,7 +47,7 @@ const SwitchDialog: React.FC<SwitchDialogProps> = ({
         <Typography
           sx={{
             color: '#000',
-            fontFamily: 'DFPHeiBold-B5',
+            fontFamily: 'var(--font-bold)',
             fontSize: '32px',
             fontStyle: 'normal',
             fontWeight: '400',
@@ -58,7 +57,6 @@ const SwitchDialog: React.FC<SwitchDialogProps> = ({
           切換顧問
         </Typography>
         <IconButton
-          role="button"
           aria-label="close"
           onClick={onClose}
           sx={{
@@ -86,7 +84,7 @@ const SwitchDialog: React.FC<SwitchDialogProps> = ({
             fontStyle: 'normal',
             fontWeight: '400',
             lineHeight: '20px',
-            fontFamily: 'DFPHeiMedium-B5',
+            fontFamily: 'var(--font-medium)',
           }}
         >
           您即將切換到 <strong>意外事件顧問</strong>。
@@ -94,7 +92,6 @@ const SwitchDialog: React.FC<SwitchDialogProps> = ({
       </DialogContent>
       <DialogActions>
         <Button
-          role="button"
           aria-label="confirm"
           variant="contained"
           color="primary"

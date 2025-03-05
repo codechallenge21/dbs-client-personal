@@ -1,13 +1,70 @@
+/**
+ * Font Loading Strategy:
+ * 1. Primary fonts: DFT_B5 (bold) and DFT_B7 (medium)
+ * 2. Fallback fonts: DFPHeiBold-B5 and DFPHeiMedium-B5
+ * 3. Final fallback: system sans-serif
+ * 
+ * CSS variables (--font-bold and --font-medium) are used throughout the app
+ * to ensure consistent font application.
+ */
+
 @font-face {
-  font-family: 'DFPHeiBold-B5';
-  font-weight: 400;
+  font-family: "DFT_B5";
+  src: local("DFT_B5");
+  font-weight: bold;
   font-style: normal;
-  src: local('DFPHeiBold-B5'), url('DFPHeiBold-B5.ttf') format('opentype');
+  font-display: swap;
 }
 
+@font-face {
+  font-family: "DFT_B7";
+  src: local("DFT_B7");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Fallback font declarations */
+@font-face {
+  font-family: "DFPHeiBold-B5";
+  font-weight: bold;
+  font-style: normal;
+  src: local("DFPHeiBold-B5"), url("DFPHeiBold-B5.ttf") format("opentype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DFPHeiMedium-B5";
+  font-weight: 500;
+  font-style: normal;
+  src: local("DFPHeiMedium-B5");
+  font-display: swap;
+}
+
+/* Root variables for centralized font management */
 :root {
-  --background: #ebe3dd;
-  --foreground: #171717;
+  --font-bold: "DFT_B5", "DFPHeiBold-B5", sans-serif;
+  --font-medium: "DFT_B7", "DFPHeiMedium-B5", sans-serif;
+}
+
+/* Font utility classes */
+.font-bold {
+  font-family: var(--font-bold);
+}
+
+.font-medium {
+  font-family: var(--font-medium);
+}
+
+/* Font states for loading scenarios */
+.primary-fonts-loaded {
+  --font-bold: "DFT_B5", "DFPHeiBold-B5", sans-serif;
+  --font-medium: "DFT_B7", "DFPHeiMedium-B5", sans-serif;
+}
+
+.fallback-fonts-loaded {
+  --font-bold: "DFPHeiBold-B5", sans-serif;
+  --font-medium: "DFPHeiMedium-B5", sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -18,11 +75,11 @@
 }
 
 body {
-  overflow: hidden; /* Keep it here only if absolutely necessary */
+  overflow: hidden;
   margin: 0;
   color: var(--foreground);
   background: var(--background);
-  font-family: 'Roboto', Arial, Helvetica, sans-serif;
+  font-family: "Roboto", Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   width: 100%;
@@ -40,20 +97,12 @@ body {
   overflow: visible;
 }
 
-.font-bold {
-  font-family: 'DFT_B5', sans-serif;
-}
-
-.font-medium {
-  font-family: 'DFT_B7', sans-serif;
-}
-
 .font-light {
-  font-family: 'DFT_B3', sans-serif;
+  font-family: "DFT_B3", sans-serif;
 }
 
 .font-regular {
-  font-family: 'DFT_BC', sans-serif;
+  font-family: "DFT_BC", sans-serif;
 }
 
 a {

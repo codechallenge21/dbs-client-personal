@@ -253,7 +253,7 @@ export default function DropdownMenu({
                 : "default",
             height: "40px",
             fontSize: "16px",
-            fontFamily: "DFPHeiBold-B5",
+            fontFamily: "var(--font-bold)",
           }}
         >
           {chatResponses[1]?.organizationChannelTitle ||
@@ -372,7 +372,7 @@ export default function DropdownMenu({
                     overflow: "hidden",
                     color: "var(--Primary-Black, #212B36)",
                     textOverflow: "ellipsis",
-                    fontFamily: "DFPHeiBold-B5",
+                    fontFamily: "var(--font-bold)",
                     fontSize: "16px",
                     fontStyle: "normal",
                     fontWeight: "400",
@@ -387,7 +387,7 @@ export default function DropdownMenu({
                 <Typography
                   sx={{
                     color: "var(--Text-Secondary, #637381)",
-                    fontFamily: "DFPHeiBold-B5",
+                    fontFamily: "var(--font-bold)",
                     fontSize: isMobile ? "13px" : "14px",
                     fontStyle: "normal",
                     fontWeight: "400",
