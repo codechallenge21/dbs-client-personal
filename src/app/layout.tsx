@@ -1,17 +1,17 @@
+import FontLoader from '@/components/font-loader';
 import ChannelContextProvider from '@/context/ChannelContextProvider';
+import { LoginProvider } from '@/context/LoginContext';
+import { SnackbarProvider } from '@/context/SnackbarContext';
 import ThemeProvider from '@/theme';
 import {
-  Geist,
-  Geist_Mono,
-  Inter,
-  Open_Sans,
-  Public_Sans,
+    Geist,
+    Geist_Mono,
+    Inter,
+    Open_Sans,
+    Public_Sans,
 } from 'next/font/google';
-import './globals.css';
-import { SnackbarProvider } from '@/context/SnackbarContext';
-import { LoginProvider } from '@/context/LoginContext';
 import DynaFontScript from '../assets/font/DynaFontScript';
-import FontLoader from '@/components/font-loader';
+import './globals.css';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -83,9 +83,12 @@ type Props = {
 
 export default function RootLayout({ children }: Props) {
   return (
-    <html lang="en">
+    <html lang="zh-TW">
       <head>
         <DynaFontScript />
+        <meta httpEquiv="Content-Language" content="zh-TW" />
+        <meta name="google" content="notranslate" />
+        <meta property="og:locale" content="zh_TW" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${publicSansFont.variable} ${openSansFont.variable} ${interFont.variable}`}
