@@ -1,39 +1,38 @@
 'use client';
-import React, { useState, useEffect, useContext } from 'react';
-import Drawer from '@mui/material/Drawer';
-import ListItem from '@mui/material/ListItem';
+import ChannelContentContext from '@/context/ChannelContentContext';
+import apis from '@/utils/hooks/apis/apis';
+import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import {
-  StarRounded,
-  PaidRounded,
+  AddRounded,
+  ArrowDropUpRounded,
+  AutoStoriesRounded,
   BuildRounded,
   CampaignRounded,
-  MenuOpenRounded,
-  PsychologyRounded,
-  AutoStoriesRounded,
   EmojiObjectsRounded,
-  PermIdentityRounded,
   LocalFireDepartmentRounded,
-  AddRounded,
   LoginRounded,
-  ArrowDropUpRounded,
+  MenuOpenRounded,
+  PaidRounded,
+  PermIdentityRounded,
+  PsychologyRounded,
+  StarRounded,
 } from '@mui/icons-material';
 import {
   Box,
-  List,
   Button,
-  useTheme,
   IconButton,
+  List,
   Typography,
   useMediaQuery,
+  useTheme,
 } from '@mui/material';
-import { styled, Theme, CSSObject } from '@mui/material/styles';
-import MuiDrawer from '@mui/material/Drawer';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { default as Drawer, default as MuiDrawer } from '@mui/material/Drawer';
+import ListItem from '@mui/material/ListItem';
+import { CSSObject, styled, Theme } from '@mui/material/styles';
 import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
-import ChannelContentContext from '@/context/ChannelContentContext';
-import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
-import apis from '@/utils/hooks/apis/apis';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import React, { useContext, useEffect, useState } from 'react';
 import UserActionMenu from '../user-action-menu/UserActionMenu';
 
 interface ToolbarDrawerProps {
@@ -286,6 +285,8 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 fontSize: '20px',
                 fontWeight: 800,
                 cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'flex-end',
               }}
               onClick={() => router.push('/chat')}
             >
@@ -294,6 +295,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 alt="logo"
                 style={{ width: '110px' }}
               />
+              <span style={{ fontSize: '14px', marginLeft: '1px', paddingBottom: '12px' }}>財務健檢網</span>
             </Typography>
           )}
           {!isExpanded && !isMobile && (
@@ -306,11 +308,14 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 color: 'var(--Primary-Black, #212B36)',
                 lineHeight: 'normal',
                 cursor: 'pointer',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
               }}
               onClick={() => router.push('/chat')}
             >
               <img src="/assets/images/logocollapse.png" alt="logo" />
-            </Typography>
+              </Typography>
           )}
           <IconButton
             role="button"
