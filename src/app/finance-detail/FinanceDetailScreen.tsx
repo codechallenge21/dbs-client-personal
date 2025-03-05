@@ -25,6 +25,7 @@ import FinanceDetailInfo from '@/components/finance-detail-info/FinanceDetailInf
 import FinanceDetailFamilyTree from '@/components/finance-detail-family-tree/FinanceDetailFamilyTree';
 import FinanceDetailInventorySheet from '@/components/finance-detail-inventory-sheet/FinanceDetailInventorySheet';
 import { useRouter } from 'next/navigation';
+import FinanceDetailSolutionHistory from '@/components/finance-detail-solution-history/FinanceDetailSolutionHistory';
 
 function TabPanel(props: {
   value: number;
@@ -393,7 +394,7 @@ export default function FinanceDetailScreen() {
             <FinanceDetailInventorySheet />
           </TabPanel>
           <TabPanel value={tabValue} index={3}>
-            <FinanceDetailInfo />
+            <FinanceDetailSolutionHistory />
           </TabPanel>
         </Box>
       </ToolbarDrawer>
