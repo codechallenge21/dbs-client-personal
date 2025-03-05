@@ -56,8 +56,11 @@ import React, {
   useEffect,
   useRef,
   useState,
-} from "react";
-import UploadScreen from "./UploadScreen";
+} from 'react';
+import UploadScreen from './UploadScreen';
+import CustomLoader from '@/components/loader/loader';
+import apiExports from '@/utils/hooks/apis/apis';
+import ForgetPasswordDialog from '@/components/dialogs/ForgetPasswordDialog';
 
 interface fileProps {
   organizationChannelTitle: string;
@@ -94,6 +97,7 @@ const ChannelsList = () => {
   const [hasMore, setHasMore] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
   const [channelList, setChannelList] = useState<OrganizationChannel[]>([]);
+  const [isForgetPasswordOpen, setIsForgetPasswordOpen] = useState(false);
   const itemsPerPage = 10;
   const { showSnackbar } = useContext(SnackbarContext);
   const currentPageRef = useRef(0);
@@ -283,6 +287,11 @@ const ChannelsList = () => {
       console.error(err);
     }
   };
+
+  const handleForgetPasswordOpen = useCallback(() => {
+    setIsLoginOpen(false);
+    setIsForgetPasswordOpen(true);
+  }, [setIsLoginOpen]);
 
   useEffect(() => {
     setIsOpenDrawer(!isMobile);
@@ -1782,6 +1791,7 @@ const ChannelsList = () => {
         open={isLoginOpen}
         setIsSignupOpen={setIsSignupOpen}
         onClose={handleLoginDialogClose}
+        onOpenForgetPassword={handleForgetPasswordOpen}
       />
       <SignupDialog
         open={isSignupOpen}
@@ -1813,11 +1823,16 @@ const ChannelsList = () => {
         open={isLoginOpen}
         setIsSignupOpen={setIsSignupOpen}
         onClose={handleLoginDialogClose}
+        onOpenForgetPassword={handleForgetPasswordOpen}
       />
       <SignupDialog
         open={isSignupOpen}
         setIsLoginOpen={setIsLoginOpen}
         onClose={() => setIsSignupOpen(false)}
+      />
+      <ForgetPasswordDialog
+        open={isForgetPasswordOpen}
+        onClose={() => setIsForgetPasswordOpen(false)}
       />
     </>
   );

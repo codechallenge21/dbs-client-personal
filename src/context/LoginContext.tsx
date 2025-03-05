@@ -7,6 +7,7 @@ interface LoginContextProps {
   setIsLoginOpen: (open: boolean) => void;
   isSignupOpen: boolean;
   setIsSignupOpen: (open: boolean) => void;
+  onOpenForgetPassword?: () => void;
 }
 
 const LoginContext = createContext<LoginContextProps | undefined>(undefined);
