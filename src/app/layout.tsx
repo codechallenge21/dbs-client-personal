@@ -89,6 +89,7 @@ export default function RootLayout({ children }: Props) {
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${publicSansFont.variable} ${openSansFont.variable} ${interFont.variable}`}
+        style={{ visibility: 'visible' }}
       >
         <ThemeProvider>
           <SnackbarProvider>
