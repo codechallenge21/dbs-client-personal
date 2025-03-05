@@ -21,7 +21,12 @@ import Image from 'next/image';
 import { useContext, useState } from 'react';
 import GoogleIcon from '../../assets/google.png';
 
-const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
+const LoginDialog = ({
+  open,
+  onClose,
+  setIsSignupOpen,
+  onOpenForgetPassword,
+}) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -76,6 +81,10 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
     }
   };
 
+  const handleForgetPasswordClick = () => {
+    onOpenForgetPassword();
+  };
+
   return (
     <>
       <Dialog
@@ -122,7 +131,7 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
               fontSize: '32px',
               lineHeight: '32px',
               letterSpacing: '0%',
-              fontFamily: 'DFPHeiBold-B5',
+              fontFamily: 'var(--font-bold)',
               alignItems: 'center',
             }}
           >
@@ -167,7 +176,7 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
               color: '#212B36',
               lineHeight: '32px',
               letterSpacing: '0%',
-              fontFamily: 'DFPHeiBold-B5',
+              fontFamily: 'var(--font-bold)',
             }}
           >
             歡迎回來
@@ -180,7 +189,7 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
               color: '#212B36',
               lineHeight: '22px',
               letterSpacing: '0%',
-              fontFamily: 'DFPHeiMedium-B5',
+              fontFamily: 'var(--font-medium)',
             }}
           >
             還沒有帳戶嗎?{' '}
@@ -189,7 +198,7 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
               style={{
                 color: '#C00',
                 cursor: 'pointer',
-                fontFamily: 'DFPHeiBold-B5',
+                fontFamily: 'var(--font-bold)',
               }}
             >
               註冊
@@ -339,12 +348,13 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
             }}
           />
           <Typography
+            onClick={handleForgetPasswordClick}
             sx={{
               color: 'var(--Primary-DBS-Red, #C00)',
               fontSize: '14px',
               lineHeight: '24px',
               letterSpacing: 0,
-              fontFamily: 'DFPHeiBold-B5',
+              fontFamily: 'var(--font-bold)',
               fontStyle: 'normal',
               fontWeight: 400,
               cursor: 'pointer',
@@ -413,7 +423,7 @@ const LoginDialog = ({ open, onClose, setIsSignupOpen }) => {
                 lineHeight: '24px',
                 letterSpacing: '0%',
                 textTransform: 'none',
-                fontFamily: 'DFPHeiMedium-B5',
+                fontFamily: 'var(--font-medium)',
               }}
             >
               使用 Google 帳號繼續
