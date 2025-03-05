@@ -338,7 +338,7 @@ const ChannelSummary = () => {
                       fontSize: '14px',
                       lineHeight: '22px',
                       fontStyle: 'normal',
-                      fontFamily: 'DFPHeiBold-B5',
+                      fontFamily: 'var(--font-bold)',
                       color: 'var(--Text-Secondary, #637381))',
                       '&.Mui-selected': {
                         color: 'var(--Primary-Black, #212B36)',
@@ -352,7 +352,7 @@ const ChannelSummary = () => {
                       fontSize: '14px',
                       lineHeight: '22px',
                       fontStyle: 'normal',
-                      fontFamily: 'DFPHeiBold-B5',
+                      fontFamily: 'var(--font-bold)',
                       color: 'var(--Text-Secondary, #637381)',
                       '&.Mui-selected': {
                         color: 'var(--Primary-Black, #212B36)',
@@ -366,7 +366,7 @@ const ChannelSummary = () => {
                       fontSize: '14px',
                       lineHeight: '22px',
                       fontStyle: 'normal',
-                      fontFamily: 'DFPHeiBold-B5',
+                      fontFamily: 'var(--font-bold)',
                       color: 'var(--Text-Secondary, #637381)',
                       '&.Mui-selected': {
                         color: 'var(--Primary-Black, #212B36)',
@@ -380,7 +380,7 @@ const ChannelSummary = () => {
                       fontSize: '14px',
                       lineHeight: '22px',
                       fontStyle: 'normal',
-                      fontFamily: 'DFPHeiBold-B5',
+                      fontFamily: 'var(--font-bold)',
                       color: 'var(--Text-Secondary, #637381)',
                       '&.Mui-selected': {
                         color: 'var(--Primary-Black, #212B36)',
@@ -497,7 +497,7 @@ const ChannelSummary = () => {
                             textAlign: 'start',
                             fontStyle: 'normal',
                             lineHeight: 'normal',
-                            fontFamily: 'DFPHeiBold-B5',
+                            fontFamily: 'var(--font-bold)',
                             color: 'var(--Primary-Black, #212B36)',
                           }}
                           gutterBottom
@@ -517,7 +517,7 @@ const ChannelSummary = () => {
                               fontSize: '16px',
                               fontStyle: 'normal',
                               lineHeight: 'normal',
-                              fontFamily: 'DFPHeiBold-B5',
+                              fontFamily: 'var(--font-bold)',
                               color: 'var(--Primary-Black, #212B36)',
                             }}
                           ></Typography>
@@ -641,7 +641,7 @@ const ChannelSummary = () => {
                               fontSize: '24px',
                               fontStyle: 'normal',
                               lineHeight: 'normal',
-                              fontFamily: 'DFPHeiBold-B5',
+                              fontFamily: 'var(--font-bold)',
                               color: 'var(--Primary-Black, #212B36)',
                             }}
                           >
@@ -1030,7 +1030,7 @@ const ChannelSummary = () => {
                                     whiteSpace: 'nowrap',
                                     lineHeight: 'normal',
                                     textOverflow: 'ellipsis',
-                                    fontFamily: 'DFPHeiBold-B5',
+                                    fontFamily: 'var(--font-bold)',
                                     background: 'var(--Primary-, #EBE3DD)',
                                   }}
                                   placeholder="問問AI"
@@ -1064,7 +1064,7 @@ const ChannelSummary = () => {
                                   textAlign: 'start',
                                   fontStyle: 'normal',
                                   lineHeight: 'normal',
-                                  fontFamily: 'DFPHeiBold-B5',
+                                  fontFamily: 'var(--font-bold)',
                                   color: 'var(--Primary-Black, #212B36)',
                                 }}
                                 gutterBottom
@@ -1177,7 +1177,7 @@ const ChannelSummary = () => {
                                   textAlign: 'start',
                                   fontStyle: 'normal',
                                   lineHeight: 'normal',
-                                  fontFamily: 'DFPHeiBold-B5',
+                                  fontFamily: 'var(--font-bold)',
                                   color: 'var(--Primary-Black, #212B36)',
                                 }}
                                 gutterBottom
@@ -1290,7 +1290,7 @@ const ChannelSummary = () => {
                                   textAlign: 'start',
                                   fontStyle: 'normal',
                                   lineHeight: 'normal',
-                                  fontFamily: 'DFPHeiBold-B5',
+                                  fontFamily: 'var(--font-bold)',
                                   color: 'var(--Primary-Black, #212B36)',
                                 }}
                                 gutterBottom
@@ -1492,7 +1492,7 @@ const ChannelSummary = () => {
                 fontSize: '24px',
                 fontStyle: 'normal',
                 lineHeight: 'normal',
-                fontFamily: 'DFPHeiBold-B5',
+                fontFamily: 'var(--font-bold)',
                 color: 'var(--Primary-Black, #212B36)',
               }}
             >
@@ -1583,7 +1583,7 @@ const ChannelSummary = () => {
                   fontSize: '24px',
                   fontStyle: 'normal',
                   lineHeight: 'normal',
-                  fontFamily: 'DFPHeiBold-B5',
+                  fontFamily: 'var(--font-bold)',
                   color: 'var(--Primary-Black, #212B36)',
                 }}
               >
@@ -1679,7 +1679,7 @@ const ChannelSummary = () => {
                     fontSize: '16px',
                     fontStyle: 'normal',
                     lineHeight: 'normal',
-                    fontFamily: 'DFPHeiBold-B5',
+                    fontFamily: 'var(--font-bold)',
                     color: 'var(--Primary-Black, #212B36)',
                   }}
                 >
@@ -1928,7 +1928,7 @@ const ChannelSummary = () => {
                         whiteSpace: 'nowrap',
                         lineHeight: 'normal',
                         textOverflow: 'ellipsis',
-                        fontFamily: 'DFPHeiBold-B5',
+                        fontFamily: 'var(--font-bold)',
                         background: 'var(--Primary-, #EBE3DD)',
                       }}
                       placeholder="問問AI"
@@ -1963,7 +1963,7 @@ const ChannelSummary = () => {
                       textAlign: 'start',
                       fontStyle: 'normal',
                       lineHeight: 'normal',
-                      fontFamily: 'DFPHeiBold-B5',
+                      fontFamily: 'var(--font-bold)',
                       color: 'var(--Primary-Black, #212B36)',
                     }}
                     gutterBottom
@@ -2074,7 +2074,7 @@ const ChannelSummary = () => {
                       textAlign: 'start',
                       fontStyle: 'normal',
                       lineHeight: 'normal',
-                      fontFamily: 'DFPHeiBold-B5',
+                      fontFamily: 'var(--font-bold)',
                       color: 'var(--Primary-Black, #212B36)',
                     }}
                     gutterBottom
@@ -2185,7 +2185,7 @@ const ChannelSummary = () => {
                       textAlign: 'start',
                       fontStyle: 'normal',
                       lineHeight: 'normal',
-                      fontFamily: 'DFPHeiBold-B5',
+                      fontFamily: 'var(--font-bold)',
                       color: 'var(--Primary-Black, #212B36)',
                     }}
                     gutterBottom

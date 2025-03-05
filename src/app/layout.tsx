@@ -11,6 +11,7 @@ import './globals.css';
 import { SnackbarProvider } from '@/context/SnackbarContext';
 import { LoginProvider } from '@/context/LoginContext';
 import DynaFontScript from '../assets/font/DynaFontScript';
+import FontLoader from '@/components/font-loader';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -77,7 +78,7 @@ export const metadata = {
 };
 
 type Props = {
-  children: React.ReactNode;
+  readonly children: React.ReactNode;
 };
 
 export default function RootLayout({ children }: Props) {
@@ -88,11 +89,15 @@ export default function RootLayout({ children }: Props) {
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${publicSansFont.variable} ${openSansFont.variable} ${interFont.variable}`}
+        style={{ visibility: 'visible' }}
       >
         <ThemeProvider>
           <SnackbarProvider>
             <LoginProvider>
-              <ChannelContextProvider>{children}</ChannelContextProvider>
+              <ChannelContextProvider>
+                <FontLoader />
+                {children}
+              </ChannelContextProvider>
             </LoginProvider>
           </SnackbarProvider>
         </ThemeProvider>

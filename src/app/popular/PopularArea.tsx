@@ -146,7 +146,7 @@ export default function PopularArea() {
                   fontStyle: 'normal',
                   lineHeight: 'normal',
                   textOverflow: 'ellipsis',
-                  fontFamily: 'DFPHeiBold-B5',
+                  fontFamily: 'var(--font-bold)',
                   color: 'var(--Secondary-Dark-Gray, #4A4A4A)',
                 }}
               >
@@ -200,7 +200,7 @@ export default function PopularArea() {
                 fontSize: '24px',
                 fontStyle: 'normal',
                 lineHeight: 'normal',
-                fontFamily: 'DFPHeiBold-B5',
+                fontFamily: 'var(--font-bold)',
                 color: 'var(--Primary-Black, #212B36)',
               }}
             >
@@ -289,7 +289,7 @@ export default function PopularArea() {
                           fontStyle: 'normal',
                           lineHeight: 'normal',
                           textOverflow: 'ellipsis',
-                          fontFamily: 'DFPHeiBold-B5',
+                          fontFamily: 'var(--font-bold)',
                           color: 'var(--Primary-Black, #212B36)',
                         }}
                       >
@@ -303,7 +303,7 @@ export default function PopularArea() {
                           fontSize: '16px',
                           lineHeight: '24px',
                           fontStyle: 'normal',
-                          fontFamily: 'DFPHeiMedium-B5',
+                          fontFamily: 'var(--font-medium)',
                           color: 'var(--Text-, #454A4D)',
                         }}
                       >
@@ -425,7 +425,7 @@ export default function PopularArea() {
                 fontSize: '24px',
                 fontStyle: 'normal',
                 lineHeight: 'normal',
-                fontFamily: 'DFPHeiBold-B5',
+                fontFamily: 'var(--font-bold)',
                 color: 'var(--Primary-Black, #212B36)',
               }}
             >
@@ -501,7 +501,7 @@ export default function PopularArea() {
                 fontSize: '24px',
                 fontStyle: 'normal',
                 lineHeight: 'normal',
-                fontFamily: 'DFPHeiBold-B5',
+                fontFamily: 'var(--font-bold)',
                 color: 'var(--Primary-Black, #212B36)',
               }}
             >
@@ -589,7 +589,7 @@ export default function PopularArea() {
                             fontSize: '14px',
                             lineHeight: '22px',
                             fontStyle: 'normal',
-                            fontFamily: 'DFPHeiMedium-B5',
+                            fontFamily: 'var(--font-medium)',
                             color: 'var(--Primary-Black, #212B36)',
                           }}
                         >
@@ -766,7 +766,7 @@ export default function PopularArea() {
                 fontSize: '24px',
                 fontStyle: 'normal',
                 lineHeight: 'normal',
-                fontFamily: 'DFPHeiBold-B5',
+                fontFamily: 'var(--font-bold)',
                 color: 'var(--Primary-Black, #212B36)',
               }}
             >
@@ -815,7 +815,7 @@ export default function PopularArea() {
                         alignSelf: 'stretch',
                         flexDirection: 'column',
                         justifyContent: 'center',
-                        fontFamily: 'DFPHeiBold-B5',
+                        fontFamily: 'var(--font-bold)',
                         color: 'var(--Secondary-Dark-Gray, #4A4A4A)',
                       }}
                     >
@@ -844,7 +844,7 @@ export default function PopularArea() {
                                 fontStyle: 'normal',
                                 alignSelf: 'stretch',
                                 lineHeight: 'normal',
-                                fontFamily: 'DFPHeiBold-B5',
+                                fontFamily: 'var(--font-bold)',
                                 color: 'var(--Primary-Black, #212B36)',
                               },
                             },
@@ -855,7 +855,7 @@ export default function PopularArea() {
                                 lineHeight: '24px',
                                 fontStyle: 'normal',
                                 alignSelf: 'stretch',
-                                fontFamily: 'DFPHeiMedium-B5',
+                                fontFamily: 'var(--font-medium)',
                                 color: 'var(--Secondary-Dark-Gray, #4A4A4A)',
                               },
                             },

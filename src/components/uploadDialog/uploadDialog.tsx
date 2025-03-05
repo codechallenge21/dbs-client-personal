@@ -184,7 +184,7 @@ export default function UploadDialog({
             fontWeight: 400,
             fontStyle: 'normal',
             lineHeight: 'normal',
-            fontFamily: 'DFPHeiBold-B5',
+            fontFamily: 'var(--font-bold)',
             color: 'var(--Primary-Black, #212B36)',
           }}
         >
@@ -224,7 +224,7 @@ export default function UploadDialog({
             <Typography
               sx={{
                 color: 'var(--Primary-Black, #212B36)',
-                fontFamily: 'DFPHeiBold-B5',
+                fontFamily: 'var(--font-bold)',
                 fontSize: '24px',
                 fontStyle: 'normal',
                 fontWeight: 400,
@@ -253,7 +253,7 @@ export default function UploadDialog({
               padding: '11px 16px',
               alignItems: 'center',
               justifyContent: 'center',
-              fontFamily: 'DFPHeiBold-B5',
+              fontFamily: 'var(--font-bold)',
               mb: isMobile ? '32px' : '65px',
               height: isMobile ? '46px' : '46px',
               width: isMobile ? '180px' : '294px',
