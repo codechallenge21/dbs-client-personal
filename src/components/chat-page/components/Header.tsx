@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import React, { useContext, useCallback, memo, useMemo } from 'react';
-import DropdownMenu from './DropdownMenu';
-import { Box, IconButton, useMediaQuery, useTheme } from '@mui/material';
+import React, { useContext, useCallback, memo, useMemo } from "react";
+import DropdownMenu from "./DropdownMenu";
+import { Box, IconButton, useMediaQuery, useTheme } from "@mui/material";
 import {
   MenuRounded,
   HistoryRounded,
-  StarBorderRounded,
-  SettingsInputComponentRounded,
-} from '@mui/icons-material';
-import { AdvisorType } from '../../../app/chat/types';
-import FileUploadIcon from '@mui/icons-material/FileUpload';
-import ChannelContentContext from '@/context/ChannelContentContext';
-import { useRouter } from 'next/navigation';
+  // StarBorderRounded,
+  // SettingsInputComponentRounded,
+} from "@mui/icons-material";
+import { AdvisorType } from "../../../app/chat/types";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
+import ChannelContentContext from "@/context/ChannelContentContext";
+import { useRouter } from "next/navigation";
 
 interface HeaderProps {
   open: boolean;
@@ -36,7 +36,7 @@ const Header: React.FC<HeaderProps> = ({
   openDataSource,
 }) => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const { selectedChannelId, selectedChannel, chatResponses } = useContext(
     ChannelContentContext
   );
@@ -50,7 +50,7 @@ const Header: React.FC<HeaderProps> = ({
   );
 
   const headerWidth = useMemo(() => {
-    if (isMobile) return '100%';
+    if (isMobile) return "100%";
     return open
       ? `calc(100% - 287px - ${openDataSource ? 446 : 0}px)`
       : `calc(100% - 107px - ${openDataSource ? 446 : 0}px)`;
@@ -59,33 +59,33 @@ const Header: React.FC<HeaderProps> = ({
   return (
     <Box
       sx={{
-        position: 'fixed',
+        position: "fixed",
         top: 0,
         width: headerWidth,
-        mt: isMobile ? 0 : '16px',
-        py: isMobile ? '8px' : 0,
-        px: isMobile ? '16px' : 0,
+        mt: isMobile ? 0 : "16px",
+        py: isMobile ? "8px" : 0,
+        px: isMobile ? "16px" : 0,
         zIndex: 11,
-        marginRight: 'auto',
-        backgroundColor: 'white',
-        borderRadius: isMobile ? 0 : '8px',
+        marginRight: "auto",
+        backgroundColor: "white",
+        borderRadius: isMobile ? 0 : "8px",
       }}
     >
       {isMobile ? (
         <Box
           sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
           }}
         >
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
             <IconButton
               role="button"
               aria-label="Menu"
               onClick={() => memoizedToggleDrawer(true)}
             >
-              <MenuRounded sx={{ color: '#212B36' }} />
+              <MenuRounded sx={{ color: "#212B36" }} />
             </IconButton>
             {isChat && <DropdownMenu advisor={advisor} />}
           </Box>
@@ -95,46 +95,46 @@ const Header: React.FC<HeaderProps> = ({
               aria-label="File Upload"
               onClick={() => setOpenUpload(true)}
             >
-              <FileUploadIcon sx={{ color: '#212B36' }} />
+              <FileUploadIcon sx={{ color: "#212B36" }} />
             </IconButton>
           )}
           {isChat && selectedChannel && (
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <IconButton
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              {/* <IconButton
                 role="button"
                 aria-label="Add Favorite"
                 sx={{ padding: '0px' }}
               >
                 <StarBorderRounded sx={{ color: '#212B36', margin: '8px' }} />
-              </IconButton>
-              <IconButton
+              </IconButton> */}
+              {/* <IconButton
                 role="button"
                 aria-label="Data Source"
-                sx={{ padding: '0px' }}
+                sx={{ padding: "0px" }}
                 onClick={() => setOpenDataSource(true)}
               >
                 <SettingsInputComponentRounded
-                  sx={{ color: '#212B36', margin: '8px' }}
+                  sx={{ color: "#212B36", margin: "8px" }}
                 />
-              </IconButton>
+              </IconButton> */}
             </Box>
           )}
         </Box>
       ) : (
         <Box
           sx={{
-            display: 'flex',
-            padding: '8px 16px',
-            alignItems: 'flex-start',
-            justifyContent: open ? 'space-between' : 'flex-start',
+            display: "flex",
+            padding: "8px 16px",
+            alignItems: "flex-start",
+            justifyContent: open ? "space-between" : "flex-start",
           }}
         >
           {!open && (
             <Box
               sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "flex-start",
               }}
             >
               {!isChat && (
@@ -143,7 +143,7 @@ const Header: React.FC<HeaderProps> = ({
                   aria-label="File Upload"
                   onClick={() => setOpenUpload(true)}
                 >
-                  <FileUploadIcon sx={{ color: '#212B36' }} />
+                  <FileUploadIcon sx={{ color: "#212B36" }} />
                 </IconButton>
               )}
             </Box>
@@ -151,41 +151,41 @@ const Header: React.FC<HeaderProps> = ({
           {isChat && selectedChannel && (
             <Box
               sx={{
-                display: 'flex',
-                width: '100%',
-                justifyContent: 'space-between',
-                alignItems: 'center',
+                display: "flex",
+                width: "100%",
+                justifyContent: "space-between",
+                alignItems: "center",
               }}
             >
               <DropdownMenu advisor={advisor} />
               <Box>
-                <IconButton
+                {/* <IconButton
                   role="button"
                   aria-label="Add Favorite"
-                  sx={{ padding: '0px' }}
+                  sx={{ padding: "0px" }}
                 >
-                  <StarBorderRounded sx={{ color: '#212B36', margin: '8px' }} />
-                </IconButton>
+                  <StarBorderRounded sx={{ color: "#212B36", margin: "8px" }} />
+                </IconButton> */}
                 {selectedChannelId || chatResponses.length ? (
                   <IconButton
                     role="button"
                     aria-label="All Chats"
-                    sx={{ padding: '0px' }}
-                    onClick={() => router.push('/allchat')}
+                    sx={{ padding: "0px" }}
+                    onClick={() => router.push("/allchat")}
                   >
-                    <HistoryRounded sx={{ color: '#212B36', margin: '8px' }} />
+                    <HistoryRounded sx={{ color: "#212B36", margin: "8px" }} />
                   </IconButton>
                 ) : null}
-                <IconButton
+                {/* <IconButton
                   role="button"
                   aria-label="Data Source"
-                  sx={{ padding: '0px' }}
+                  sx={{ padding: "0px" }}
                   onClick={() => setOpenDataSource(true)}
                 >
                   <SettingsInputComponentRounded
-                    sx={{ color: '#212B36', margin: '8px' }}
+                    sx={{ color: "#212B36", margin: "8px" }}
                   />
-                </IconButton>
+                </IconButton> */}
               </Box>
             </Box>
           )}

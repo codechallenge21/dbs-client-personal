@@ -14,14 +14,11 @@ import {
   ArrowForwardIosRounded,
   ContentCopyRounded,
   Done as DoneIcon,
-  HistoryRounded,
   MicRounded,
   PermIdentityRounded,
   ReplayRounded,
-  SettingsInputComponentRounded,
-  StarBorderRounded,
   SyncRounded,
-  ThumbDownOffAltRounded,
+  ThumbDownOffAltRounded
 } from "@mui/icons-material";
 import {
   Box,
@@ -345,48 +342,6 @@ const ChannelSummary = () => {
                       },
                     }}
                   />
-                  <Tab
-                    label="家系圖"
-                    sx={{
-                      fontWeight: 400,
-                      fontSize: "14px",
-                      lineHeight: "22px",
-                      fontStyle: "normal",
-                      fontFamily: "var(--font-bold)",
-                      color: "var(--Text-Secondary, #637381)",
-                      "&.Mui-selected": {
-                        color: "var(--Primary-Black, #212B36)",
-                      },
-                    }}
-                  />
-                  <Tab
-                    label="問答語音錄音"
-                    sx={{
-                      fontWeight: 400,
-                      fontSize: "14px",
-                      lineHeight: "22px",
-                      fontStyle: "normal",
-                      fontFamily: "var(--font-bold)",
-                      color: "var(--Text-Secondary, #637381)",
-                      "&.Mui-selected": {
-                        color: "var(--Primary-Black, #212B36)",
-                      },
-                    }}
-                  />
-                  <Tab
-                    label="個別與實時錄音"
-                    sx={{
-                      fontWeight: 400,
-                      fontSize: "14px",
-                      lineHeight: "22px",
-                      fontStyle: "normal",
-                      fontFamily: "var(--font-bold)",
-                      color: "var(--Text-Secondary, #637381)",
-                      "&.Mui-selected": {
-                        color: "var(--Primary-Black, #212B36)",
-                      },
-                    }}
-                  />
                 </Tabs>
                 <Box
                   sx={{
@@ -448,17 +403,17 @@ const ChannelSummary = () => {
                     />
                   </Box>
                   <Box>
-                    <Tooltip title="收藏" placement="top" arrow>
+                    {/* <Tooltip title="收藏" placement="top" arrow>
                       <IconButton aria-label="Add Favorite">
                         <StarBorderRounded sx={{ color: "black" }} />
                       </IconButton>
-                    </Tooltip>
-                    <IconButton
+                    </Tooltip> */}
+                    {/* <IconButton
                       aria-label="Open Data Source"
                       onClick={() => setOpenDataSource(!openDataSource)}
                     >
                       <SettingsInputComponentRounded sx={{ color: "black" }} />
-                    </IconButton>
+                    </IconButton> */}
                   </Box>
                 </Box>
                 <Grid2 container sx={{ flex: 1, height: "100vh" }}>
@@ -496,8 +451,8 @@ const ChannelSummary = () => {
                             fontSize: "24px",
                             textAlign: "start",
                             fontStyle: "normal",
-                            lineHeight: "normal",
                             fontFamily: "var(--font-bold)",
+                            lineHeight: "normal",
                             color: "var(--Primary-Black, #212B36)",
                           }}
                           gutterBottom
@@ -693,6 +648,7 @@ const ChannelSummary = () => {
                           />
                           <Tab
                             label="問問AI"
+                            disabled
                             sx={{
                               fontWeight: 700,
                               fontSize: "14px",
@@ -703,10 +659,14 @@ const ChannelSummary = () => {
                               "&.Mui-selected": {
                                 color: "var(--Text-Primary, #212B36)",
                               },
+                              "&.Mui-disabled": {
+                                color: "rgba(99, 115, 129, 0.5)",
+                              },
                             }}
                           />
                           <Tab
                             label="相關資料"
+                            disabled
                             sx={{
                               fontWeight: 700,
                               fontSize: "14px",
@@ -716,6 +676,9 @@ const ChannelSummary = () => {
                               color: "var(--Text-Secondary, #637381)",
                               "&.Mui-selected": {
                                 color: "var(--Text-Primary, #212B36)",
+                              },
+                              "&.Mui-disabled": {
+                                color: "rgba(99, 115, 129, 0.5)",
                               },
                             }}
                           />
@@ -1473,15 +1436,15 @@ const ChannelSummary = () => {
               />
             </Box>
             <Box>
-              <IconButton aria-label="Add Favorite">
+              {/* <IconButton aria-label="Add Favorite">
                 <StarBorderRounded sx={{ color: "#212B36" }} />
-              </IconButton>
-              <IconButton aria-label="History">
+              </IconButton> */}
+              {/* <IconButton aria-label="History">
                 <HistoryRounded sx={{ color: "#212B36" }} />
-              </IconButton>
-              <IconButton aria-label="Open Data Source">
+              </IconButton> */}
+              {/* <IconButton aria-label="Open Data Source">
                 <SettingsInputComponentRounded sx={{ color: "#212B36" }} />
-              </IconButton>
+              </IconButton> */}
             </Box>
           </Box>
           <Box sx={{ padding: "16px" }}>
@@ -1635,6 +1598,7 @@ const ChannelSummary = () => {
               />
               <Tab
                 label="問問AI"
+                disabled
                 sx={{
                   fontWeight: 700,
                   fontSize: "14px",
@@ -1645,10 +1609,14 @@ const ChannelSummary = () => {
                   "&.Mui-selected": {
                     color: "var(--Text-Primary, #212B36)",
                   },
+                  "&.Mui-disabled": {
+                    color: "rgba(99, 115, 129, 0.5)",
+                  },
                 }}
               />
               <Tab
                 label="相關資料"
+                disabled
                 sx={{
                   fontWeight: 700,
                   fontSize: "14px",
@@ -1658,6 +1626,9 @@ const ChannelSummary = () => {
                   color: "var(--Text-Secondary, #637381)",
                   "&.Mui-selected": {
                     color: "var(--Text-Primary, #212B36)",
+                  },
+                  "&.Mui-disabled": {
+                    color: "rgba(99, 115, 129, 0.5)",
                   },
                 }}
               />
