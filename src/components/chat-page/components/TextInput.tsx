@@ -399,35 +399,6 @@ const TextInput: React.FC<TextInputProps> = ({
     }
   }, []);
 
-  // useEffect(() => {
-  //   // 添加自定義CSS到head
-  //   const style = document.createElement('style');
-  //   style.innerHTML = `
-  //     .textarea-autosize {
-  //       caret-color:rgb(0, 0, 0) !important;
-  //       caret-width: 2px;
-  //     }
-
-  //     @media screen and (max-width: 768px) {
-  //       .textarea-autosize {
-  //         font-size: 18px !important;
-  //       }
-  //     }
-
-  //     @media (forced-colors: active) {
-  //       .textarea-autosize {
-  //         caret-color: Highlight !important;
-  //       }
-  //     }
-  //   `;
-  //   document.head.appendChild(style);
-
-  //   // 清理函數
-  //   return () => {
-  //     document.head.removeChild(style);
-  //   };
-  // }, []);
-
   const handleListening = useCallback(() => {
     if (recognitionRef.current) {
       if (isListening) {
