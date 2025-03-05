@@ -65,7 +65,7 @@ const drawerItems = [
   {
     text: '活動公告',
     icon: <CampaignRounded sx={{ color: '#212B36' }} />,
-    route: '', //events,
+    route: '/events',
   },
   {
     text: '解決麻煩事',

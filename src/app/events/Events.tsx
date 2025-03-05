@@ -197,6 +197,10 @@ const Events = () => {
     };
   }, [scrollContainerRef.current, checkScrollPosition]); // Use .current as dependency
 
+  useEffect(() => {
+    setIsOpenDrawer(!isMobile);
+  }, [isMobile]);
+
   const toolItems = Array.from({ length: 13 });
   const focusItems = Array.from({ length: 10 });
 
@@ -279,7 +283,7 @@ const Events = () => {
             borderRadius: isMobile ? '0' : '8px',
             flexDirection: 'column',
             backgroundColor: 'white',
-            height: isMobile ? '100%' : 'calc(100vh - 32px)',
+            height: isMobile ? 'calc(100vh - 64px)' : 'calc(100vh - 32px)',
             padding: isMobile ? '16px' : '16px 32px',
             '@media (min-width: 600px)': {
               flex: '1 0 0',
@@ -378,7 +382,6 @@ const Events = () => {
                       },
                     },
                   }}
-                  onClick={() => setOpenEventDetails(true)}
                 >
                   <Image
                     src={boxImage || '/placeholder.svg'}
@@ -582,6 +585,7 @@ const Events = () => {
                         },
                       },
                     }}
+                    onClick={() => setOpenEventDetails(true)}
                   >
                     <Image
                       src={boxImage}
