@@ -13,7 +13,7 @@ import ExpandMoreSharpIcon from "@mui/icons-material/ExpandMoreSharp";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import ZoomInSharpIcon from "@mui/icons-material/ZoomInSharp";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
-import { Dialog, DialogContent, IconButton } from "@mui/material";
+import { Dialog, DialogContent, IconButton, Tooltip } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 
 interface MermaidChartProps {
@@ -134,25 +134,29 @@ export default function MermaidChart({ chart }: MermaidChartProps) {
               justifyContent: "flex-end", // Changed from center to flex-end to align buttons to the right
             }}
           >
-            <IconButton
-              onClick={() => {
-                navigator.clipboard
-                  .writeText(`\`\`\`mermaid\n${chart}\n\`\`\``)
-                  .then(() => {
-                    setMermaidCopied(true);
-                    setTimeout(() => setMermaidCopied(false), 1000);
-                  });
-              }}
-            >
-              {mermaidCopied ? (
-                <DoneRounded sx={{ color: "#4CAF50", fontSize: 20 }} /> // Changed color to #4CAF50
-              ) : (
-                <ContentCopyRounded sx={{ color: "black", fontSize: 20 }} />
-              )}
-            </IconButton>
-            <IconButton onClick={() => setIsDialogOpen(true)}>
-              <OpenInFullRounded sx={{ color: "black", fontSize: 20 }} />
-            </IconButton>
+            <Tooltip title="複製圖表程式碼" arrow placement="top">
+              <IconButton
+                onClick={() => {
+                  navigator.clipboard
+                    .writeText(`\`\`\`mermaid\n${chart}\n\`\`\``)
+                    .then(() => {
+                      setMermaidCopied(true);
+                      setTimeout(() => setMermaidCopied(false), 1000);
+                    });
+                }}
+              >
+                {mermaidCopied ? (
+                  <DoneRounded sx={{ color: "#4CAF50", fontSize: 20 }} /> // Changed color to #4CAF50
+                ) : (
+                  <ContentCopyRounded sx={{ color: "black", fontSize: 20 }} />
+                )}
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="全尺寸展開" arrow placement="top">
+              <IconButton onClick={() => setIsDialogOpen(true)}>
+                <OpenInFullRounded sx={{ color: "black", fontSize: 20 }} />
+              </IconButton>
+            </Tooltip>
           </div>
           <div
             style={{
@@ -168,60 +172,74 @@ export default function MermaidChart({ chart }: MermaidChartProps) {
             }}
           >
             <div style={{ gridArea: "up" }}>
-              <IconButton
-                sx={{ color: "black" }}
-                onClick={() => panZoomRef.current?.panBy({ x: 0, y: -20 })}
-              >
-                <ExpandLessSharpIcon />
-              </IconButton>
+              <Tooltip title="向上移動" arrow placement="top">
+                <IconButton
+                  sx={{ color: "black" }}
+                  onClick={() => panZoomRef.current?.panBy({ x: 0, y: -20 })}
+                >
+                  <ExpandLessSharpIcon />
+                </IconButton>
+              </Tooltip>
             </div>
             <div style={{ gridArea: "left" }}>
-              <IconButton
-                sx={{ color: "black" }}
-                onClick={() => panZoomRef.current?.panBy({ x: -20, y: 0 })}
-              >
-                <ChevronLeftSharpIcon />
-              </IconButton>
+              <Tooltip title="向左移動" arrow placement="left">
+                <IconButton
+                  sx={{ color: "black" }}
+                  onClick={() => panZoomRef.current?.panBy({ x: -20, y: 0 })}
+                >
+                  <ChevronLeftSharpIcon />
+                </IconButton>
+              </Tooltip>
             </div>
             <div style={{ gridArea: "center" }}>
-              <IconButton
-                sx={{ color: "black" }}
-                onClick={() => panZoomRef.current?.reset()}
-              >
-                <RefreshIcon />
-              </IconButton>
+              <Tooltip title="重置視圖" arrow placement="top">
+                <IconButton
+                  sx={{ color: "black" }}
+                  onClick={() => panZoomRef.current?.reset()}
+                >
+                  <RefreshIcon />
+                </IconButton>
+              </Tooltip>
             </div>
             <div style={{ gridArea: "right" }}>
-              <IconButton
-                sx={{ color: "black" }}
-                onClick={() => panZoomRef.current?.panBy({ x: 20, y: 0 })}
-              >
-                <ChevronRightSharpIcon />
-              </IconButton>
+              <Tooltip title="向右移動" arrow placement="right">
+                <IconButton
+                  sx={{ color: "black" }}
+                  onClick={() => panZoomRef.current?.panBy({ x: 20, y: 0 })}
+                >
+                  <ChevronRightSharpIcon />
+                </IconButton>
+              </Tooltip>
             </div>
             <div style={{ gridArea: "down" }}>
-              <IconButton
-                sx={{ color: "black" }}
-                onClick={() => panZoomRef.current?.panBy({ x: 0, y: 20 })}
-              >
-                <ExpandMoreSharpIcon />
-              </IconButton>
+              <Tooltip title="向下移動" arrow placement="bottom">
+                <IconButton
+                  sx={{ color: "black" }}
+                  onClick={() => panZoomRef.current?.panBy({ x: 0, y: 20 })}
+                >
+                  <ExpandMoreSharpIcon />
+                </IconButton>
+              </Tooltip>
             </div>
             <div style={{ gridArea: "zoomIn" }}>
-              <IconButton
-                sx={{ color: "black" }}
-                onClick={() => panZoomRef.current?.zoomIn()}
-              >
-                <ZoomInSharpIcon />
-              </IconButton>
+              <Tooltip title="放大" arrow placement="top-end">
+                <IconButton
+                  sx={{ color: "black" }}
+                  onClick={() => panZoomRef.current?.zoomIn()}
+                >
+                  <ZoomInSharpIcon />
+                </IconButton>
+              </Tooltip>
             </div>
             <div style={{ gridArea: "zoomOut" }}>
-              <IconButton
-                sx={{ color: "black" }}
-                onClick={() => panZoomRef.current?.zoomOut()}
-              >
-                <ZoomOutIcon />
-              </IconButton>
+              <Tooltip title="縮小" arrow placement="bottom-end">
+                <IconButton
+                  sx={{ color: "black" }}
+                  onClick={() => panZoomRef.current?.zoomOut()}
+                >
+                  <ZoomOutIcon />
+                </IconButton>
+              </Tooltip>
             </div>
           </div>
         </div>
@@ -248,17 +266,19 @@ export default function MermaidChart({ chart }: MermaidChartProps) {
           },
         }}
       >
-        <IconButton
-          onClick={() => setIsDialogOpen(false)}
-          style={{
-            position: "absolute",
-            top: 10,
-            right: 10,
-            zIndex: 2000,
-          }}
-        >
-          <CloseIcon />
-        </IconButton>
+        <Tooltip title="關閉" arrow placement="bottom">
+          <IconButton
+            onClick={() => setIsDialogOpen(false)}
+            style={{
+              position: "absolute",
+              top: 10,
+              right: 10,
+              zIndex: 2000,
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </Tooltip>
         <DialogContent style={{ padding: 0 }}>
           <div dangerouslySetInnerHTML={{ __html: svgContent }} />
         </DialogContent>
