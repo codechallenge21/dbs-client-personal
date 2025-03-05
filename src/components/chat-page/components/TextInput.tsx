@@ -548,15 +548,18 @@ const TextInput: React.FC<TextInputProps> = ({
               minRows={1}
               placeholder="傳訊息給智能顧問"
               style={{
-                width: '100%',
-                border: 'none',
-                resize: 'none',
-                outline: 'none',
-                fontSize: '16px',
-                color: '#212B36',
-                overflow: 'hidden',
-                borderRadius: '8px',
-                backgroundColor: '#F5F5F5',
+                width: "100%",
+                border: "none",
+                resize: "none",
+                outline: "none",
+                fontSize: "16px",
+                color: "#212B36",
+                overflow: "hidden",
+                borderRadius: "8px",
+                backgroundColor: "#F5F5F5",
+                caretColor: "#000000", // 設置游標顏色為藍色
+                caretShape: "block", // 部分瀏覽器支持，使游標呈現塊狀
+                padding: "8px", // 增加內邊距，增大互動區域
               }}
               className="textarea-autosize"
               value={userInputValue}
