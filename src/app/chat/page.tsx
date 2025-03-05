@@ -16,7 +16,7 @@ import ChannelContentContext from '@/context/ChannelContentContext';
 import { useSearchParams, useRouter } from 'next/navigation';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import apis from '@/utils/hooks/apis/apis';
-import DataSourceDialog from '@/components/chat-page/components/chatDataStore';
+import DataSourceDialog from '@/components/dialogs/ChatDataStore';
 import { useChatChannels } from '@/utils/hooks/useChatChannels';
 import LoginDialog from '@/components/dialogs/LoginDialog';
 import SignupDialog from '@/components/dialogs/SignupDialog';

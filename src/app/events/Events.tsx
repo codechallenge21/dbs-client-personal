@@ -20,7 +20,7 @@ import {
 import boxImage from '../../../public/assets/images/box.png';
 import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
 import SearchDialog from '@/components/dialogs/SearchDialog';
-import DataSourceDialog from '@/components/chat-page/components/chatDataStore';
+import EventDetailsDialog from '@/components/dialogs/EventDetailsDialog';
 
 const Events = () => {
   const theme = useTheme();
@@ -36,7 +36,7 @@ const Events = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [startScrollLeft, setStartScrollLeft] = useState(0);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [openDataSource, setOpenDataSource] = useState(false);
+  const [openEventDetails, setOpenEventDetails] = useState(false);
 
   // Check scroll position on mount and scroll events
   const checkScrollPosition = () => {
@@ -210,7 +210,7 @@ const Events = () => {
       <ToolbarDrawer
         open={isOpenDrawer}
         setIsOpenDrawer={setIsOpenDrawer}
-        openDataSource={openDataSource}
+        openDataSource={openEventDetails}
       >
         {isMobile && (
           <Box
@@ -378,7 +378,7 @@ const Events = () => {
                       },
                     },
                   }}
-                  onClick={() => setOpenDataSource(true)}
+                  onClick={() => setOpenEventDetails(true)}
                 >
                   <Image
                     src={boxImage || '/placeholder.svg'}
@@ -556,10 +556,10 @@ const Events = () => {
                 <Grid
                   size={{
                     xs: isBelow400px ? 12 : 6,
-                    sm: openDataSource ? 12 : 6,
-                    md: openDataSource ? 12 : 4,
-                    lg: openDataSource ? 4 : 3,
-                    xl: openDataSource ? 3 : 2.4,
+                    sm: openEventDetails ? 12 : 6,
+                    md: openEventDetails ? 12 : 4,
+                    lg: openEventDetails ? 4 : 3,
+                    xl: openEventDetails ? 3 : 2.4,
                   }}
                   key={index}
                 >
@@ -640,9 +640,9 @@ const Events = () => {
           </Container>
         </Box>
       </ToolbarDrawer>
-      <DataSourceDialog
-        open={openDataSource}
-        onClose={() => setOpenDataSource(false)}
+      <EventDetailsDialog
+        open={openEventDetails}
+        onClose={() => setOpenEventDetails(false)}
       />
     </Box>
   );
