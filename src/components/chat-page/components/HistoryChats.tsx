@@ -68,7 +68,7 @@ const HistoryChats: React.FC<HistoryChatsProps> = ({
               overflow: 'hidden',
               color: 'var(--Secondary-Dark-Gray, #4A4A4A)',
               textOverflow: 'ellipsis',
-              fontFamily: 'DFPHeiMedium-B5',
+              fontFamily: 'var(--font-medium)',
               fontSize: '12px',
               fontStyle: 'normal',
               fontWeight: 400,

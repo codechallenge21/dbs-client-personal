@@ -13,7 +13,7 @@ import { palette } from './palette';
 // ----------------------------------------------------------------------
 
 type Props = {
-  children: React.ReactNode;
+  readonly children: React.ReactNode;
 };
 
 import { useEffect, useState } from 'react';

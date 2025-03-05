@@ -236,7 +236,6 @@ const TextInput: React.FC<TextInputProps> = ({
       },
     ]);
 
-
     if (files.length > 0) {
       try {
         const controller = abortControllerRef.current;
@@ -506,7 +505,7 @@ const TextInput: React.FC<TextInputProps> = ({
                     sx={{
                       mt: 1,
                       fontSize: '14px',
-                      fontFamily: 'DFPHeiBold-B5',
+                      fontFamily: 'var(--font-bold)',
                       wordBreak: 'break-word',
                       textAlign: 'center',
                       '@media (max-width: 600px)': {
