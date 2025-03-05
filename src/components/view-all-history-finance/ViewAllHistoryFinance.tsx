@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import DeleteIcon from '@mui/icons-material/Delete';
+import StarRateRounded from '@mui/icons-material/StarRateRounded';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const selectButtonVariants = {
@@ -203,7 +204,8 @@ export default function FinanceSearchCombined() {
             '& .MuiOutlinedInput-root': {
               borderRadius: '8px',
               '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                borderColor: 'black',
+                borderColor: 'rgba(145, 158, 171, 0.20)',
+                minHeight: '48px',
               },
             },
           }}
@@ -243,13 +245,15 @@ export default function FinanceSearchCombined() {
                     fontStyle: 'normal',
                     fontWeight: 700,
                     lineHeight: 'normal',
+                    paddingLeft: '10px',
                     '& .highlight': {
                       color: 'error.main',
                       px: 0.5,
                     },
                   }}
                 >
-                  您目前有 <span>{filteredChannels.length ?? 0}</span> 個頻道
+                  目前有 <span>{filteredChannels.length ?? 0}</span> 個頻道與
+                  Allen 關聯
                 </Typography>
                 <AnimatePresence mode="wait">
                   <motion.div
@@ -289,7 +293,7 @@ export default function FinanceSearchCombined() {
                 maxheight: 'calc(100vh - 140px)',
                 overflowY: 'auto',
                 paddingRight: '8px',
-                paddingLeft: isMobile ? '0px' : '10px',
+                paddingLeft: '10px',
                 '&::-webkit-scrollbar': { width: '4px' },
                 '&::-webkit-scrollbar-thumb': {
                   backgroundColor: '#c1c1c1',
@@ -319,7 +323,8 @@ export default function FinanceSearchCombined() {
                         display: 'flex',
                         justifyContent: 'space-between',
                         alignItems: 'center',
-                        p: 2,
+                        padding: isMobile ? ' 8px 16px' : 2,
+                        height: isMobile ? '56px' : 'auto',
                         border: '1px solid var(--Secondary-Dark-Gray, #4A4A4A)',
                         borderRadius: 2,
                         position: 'relative',
@@ -364,13 +369,13 @@ export default function FinanceSearchCombined() {
                       <Box>
                         <Typography
                           sx={{
-                            color: '#000',
+                            color: '#900',
                             fontFamily: 'Open Sans',
                             fontSize: '14px',
                             fontStyle: 'normal',
                             fontWeight: 700,
                             lineHeight: 'normal',
-                            marginBottom: '10px',
+                            marginBottom: isMobile ? '0px' : '10px',
                             '.group:hover &': { color: '#990000' },
                           }}
                         >
@@ -395,20 +400,42 @@ export default function FinanceSearchCombined() {
                           {new Date(channel.date).toLocaleString()}
                         </Typography>
                       </Box>
-                      {isHoveredOrSelected && (
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 1,
+                        }}
+                      >
                         <IconButton
+                          aria-label="favorite"
                           size="small"
-                          sx={{ color: '#CC0000' }}
+                          sx={{ color: 'rgba(33, 43, 54, 1)' }}
                           onClick={(e) => {
                             e.stopPropagation();
-                            if (!channel.selected) {
-                              toggleChannel(channel.id);
-                            }
+                            // handle favorite logic here if needed
+                            console.log(`Favorited ${channel.id}`);
                           }}
                         >
-                          <DeleteIcon sx={{ width: '25px', height: '25px' }} />
+                          <StarRateRounded sx={{ width: 20, height: 20 }} />
                         </IconButton>
-                      )}
+                        {isHoveredOrSelected && (
+                          <IconButton
+                            size="small"
+                            sx={{ color: '#CC0000' }}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (!channel.selected) {
+                                toggleChannel(channel.id);
+                              }
+                            }}
+                          >
+                            <DeleteIcon
+                              sx={{ width: '20px', height: '20px' }}
+                            />
+                          </IconButton>
+                        )}
+                      </Box>
                     </Paper>
                   );
                 })}
@@ -538,7 +565,7 @@ export default function FinanceSearchCombined() {
                 maxheight: 'calc(100vh - 140px)',
                 overflowY: 'auto',
                 paddingRight: '8px',
-                paddingLeft: isMobile ? '0px' : '10px',
+                paddingLeft: '10px',
                 '&::-webkit-scrollbar': { width: '4px' },
                 '&::-webkit-scrollbar-thumb': {
                   backgroundColor: '#c1c1c1',
