@@ -81,6 +81,55 @@ const tableData = [
     填單時間: '2025/02/04',
     金額: 1000,
   },
+  {
+    id: 9,
+    帳務名稱: '薪水',
+    發生時間: '2025/01/04',
+    填單時間: '2025/02/04',
+    金額: 1000,
+  },
+  {
+    id: 10,
+    帳務名稱: '薪水',
+    發生時間: '2025/01/04',
+    填單時間: '2025/02/04',
+    金額: 1000,
+  },
+  {
+    id: 11,
+    帳務名稱: '薪水',
+    發生時間: '2025/01/04',
+    填單時間: '2025/02/04',
+    金額: 1000,
+  },
+  {
+    id: 12,
+    帳務名稱: '薪水',
+    發生時間: '2025/01/04',
+    填單時間: '2025/02/04',
+    金額: 1000,
+  },
+  {
+    id: 13,
+    帳務名稱: '薪水',
+    發生時間: '2025/01/04',
+    填單時間: '2025/02/04',
+    金額: 1000,
+  },
+  {
+    id: 14,
+    帳務名稱: '薪水',
+    發生時間: '2025/01/04',
+    填單時間: '2025/02/04',
+    金額: 1000,
+  },
+  {
+    id: 15,
+    帳務名稱: '薪水',
+    發生時間: '2025/01/04',
+    填單時間: '2025/02/04',
+    金額: 1000,
+  },
 ];
 
 const FinanceDetailInventorySheet = () => {
@@ -368,17 +417,21 @@ const FinanceDetailInventorySheet = () => {
               sx={{
                 overflowY: 'auto',
                 '&::-webkit-scrollbar': {
-                  width: '8px',
+                  width: '6px',
+                  height: '64px',
                 },
                 '&::-webkit-scrollbar-track': {
-                  borderRadius: '10px',
+                  opacity: '0.48',
+                  borderRadius: '12px',
                   background: '#f1f1f1',
                 },
                 '&::-webkit-scrollbar-thumb': {
-                  borderRadius: '10px',
+                  opacity: '0.48',
                   background: '#888',
+                  borderRadius: '12px',
                 },
                 '&::-webkit-scrollbar-thumb:hover': {
+                  opacity: '0.48',
                   background: '#555',
                 },
               }}
@@ -512,6 +565,124 @@ const FinanceDetailInventorySheet = () => {
             alignItems: 'flex-start',
           }}
         >
+          {/* {Header} */}
+          <Box
+            sx={{
+              gap: '10px',
+              display: 'flex',
+              alignSelf: 'stretch',
+              alignItems: 'flex-end',
+              flexDirection: 'column',
+              justifyContent: 'center',
+            }}
+          >
+            <Box
+              sx={{
+                gap: '4px',
+                display: 'flex',
+                paddingTop: '16px',
+                alignItems: 'center',
+                justifyContent: 'flex-end',
+              }}
+            >
+              {/* Input Box */}
+              <TextField
+                fullWidth
+                placeholder="搜尋頻道"
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    height: '36px',
+                    display: 'flex',
+                    '& fieldset': {
+                      borderRadius: '8px',
+                      border:
+                        '1px solid var(--input-Outline-Stoke-Default, rgba(145, 158, 171, 0.20))',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: 'black',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: 'black',
+                    },
+                    '& input': {
+                      fontWeight: 400,
+                      padding: '0 8px',
+                      fontSize: '14px',
+                      lineHeight: '24px',
+                      fontStyle: 'normal',
+                      fontFamily: 'DFPHeiBold-B5',
+                      color: 'var(--Secondary-Mid-Gray, #9B9B9B)',
+                    },
+                  },
+                }}
+                slotProps={{
+                  input: {
+                    startAdornment: (
+                      <InputAdornment sx={{ margin: '0px' }} position="start">
+                        <SearchRounded sx={{ color: '#9B9B9B' }} />
+                      </InputAdornment>
+                    ),
+                  },
+                }}
+              />
+
+              <IconButton
+                sx={{
+                  width: '36px',
+                  height: '36px',
+                  padding: '8px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <AssessmentRounded
+                  sx={{
+                    width: '24px',
+                    height: '24px',
+                    flexShrink: '0',
+                    color: '#212B36',
+                  }}
+                />
+              </IconButton>
+
+              <IconButton
+                role="button"
+                aria-label="Add Record"
+                sx={{
+                  gap: '8px',
+                  display: 'flex',
+                  padding: '6px 12px',
+                  borderRadius: '8px',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: 'var(--Secondary-, #5C443A)',
+                  '&:hover': {
+                    background: 'rgba(92, 68, 58, 0.8)',
+                  },
+                  '&:active': {
+                    background: 'rgba(92, 68, 58, 0.6)',
+                  },
+                }}
+                // onClick={() => setOpenFinanceDialog(true)}
+              >
+                <AddRounded sx={{ color: '#fff' }} />
+                <Typography
+                  sx={{
+                    fontWeight: 400,
+                    fontSize: '16px',
+                    lineHeight: '24px',
+                    textAlign: 'center',
+                    fontStyle: 'normal',
+                    fontFamily: 'DFPHeiBold-B5',
+                    color: 'var(--Primary-ContrastText, #FFF)',
+                  }}
+                >
+                  新增
+                </Typography>
+              </IconButton>
+            </Box>
+          </Box>
           {/* {Tabs Header} */}
           <Box
             sx={{
@@ -519,7 +690,6 @@ const FinanceDetailInventorySheet = () => {
               flex: '1 0 0',
               display: 'flex',
               alignSelf: 'stretch',
-              paddingBottom: '16px',
               flexDirection: 'column',
               alignItems: 'flex-start',
             }}
@@ -666,7 +836,34 @@ const FinanceDetailInventorySheet = () => {
             }}
           >
             {tabValue === 0 && (
-              <>
+              <Box
+                sx={{
+                  gap: '8px',
+                  width: '100%',
+                  display: 'flex',
+                  overflowY: 'auto',
+                  flexDirection: 'column',
+                  height: 'calc(100vh - 310px)',
+                  '&::-webkit-scrollbar': {
+                    width: '6px',
+                    height: '64px',
+                  },
+                  '&::-webkit-scrollbar-track': {
+                    opacity: '0.48',
+                    borderRadius: '12px',
+                    background: '#f1f1f1',
+                  },
+                  '&::-webkit-scrollbar-thumb': {
+                    opacity: '0.48',
+                    background: '#888',
+                    borderRadius: '12px',
+                  },
+                  '&::-webkit-scrollbar-thumb:hover': {
+                    opacity: '0.48',
+                    background: '#555',
+                  },
+                }}
+              >
                 {tableData.map((entry, index) => (
                   <Card
                     key={index}
@@ -774,7 +971,7 @@ const FinanceDetailInventorySheet = () => {
                     </Box>
                   </Card>
                 ))}
-              </>
+              </Box>
             )}
           </Box>
         </Box>
