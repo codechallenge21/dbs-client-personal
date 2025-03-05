@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useContext, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Box,
   TextField,
@@ -17,10 +17,6 @@ import {
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import DeleteIcon from '@mui/icons-material/Delete';
-import DeleteConfirmationModal from '../dialogs/DeleteConfirmationModal';
-import { OrganizationChannelData } from '@/interfaces/entities';
-import { useRouter } from 'next/navigation';
-import ChannelContentContext from '@/context/ChannelContentContext';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const selectButtonVariants = {
@@ -35,47 +31,55 @@ const selectAllVariants = {
   exit: { x: -100, opacity: 0 },
 };
 
+interface FinanceDetailSolutionHistoryData {
+  id: string;
+  date: string;
+  title: string;
+  selected: boolean;
+}
+
+const dummyData: FinanceDetailSolutionHistoryData[] = [
+  {
+    id: '1',
+    date: '02/05/2025',
+    title: 'Allen / Title1',
+    selected: false,
+  },
+  {
+    id: '2',
+    date: '02/05/2025',
+    title: 'Allen / Title2',
+    selected: false,
+  },
+  {
+    id: '3',
+    date: '02/05/2025',
+    title: 'Allen / Title3',
+    selected: false,
+  },
+  {
+    id: '4',
+    date: '02/05/2025',
+    title: 'Allen / Title',
+    selected: false,
+  },
+];
+
 export default function FinanceSearchCombined() {
-  const router = useRouter();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const { setSelectedChannel } = useContext(ChannelContentContext);
 
-  const [isV2, setIsV2] = useState(true);
-  const dummyData: OrganizationChannelData[] = [
-    {
-      organizationChannelId: '1',
-      organizationChannelTitle: 'Allen / Title1',
-      organizationChannelCreateDate: '日期',
-    },
-    {
-      organizationChannelId: '2',
-      organizationChannelTitle: 'Allen / Title2',
-      organizationChannelCreateDate: '日期',
-    },
-    {
-      organizationChannelId: '3',
-      organizationChannelTitle: 'Allen / Title3',
-      organizationChannelCreateDate: '日期',
-    },
-    {
-      organizationChannelId: '4',
-      organizationChannelTitle: 'Allen / Title',
-      organizationChannelCreateDate: '日期',
-    },
-  ];
-
-  const [channels, setChannels] = useState<OrganizationChannelData[]>([]);
-  const [hoveredChannelId, setHoveredChannelId] = useState<string | null>();
-  const [searchQuery, setSearchQuery] = useState('');
-  const [open, setOpen] = useState(false);
-  const [page, setPage] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
-  const [isFetching, setIsFetching] = useState(false);
-  const itemsPerPage = 10;
   const loadingRef = useRef(null);
   const scrollContainerRef = useRef(null);
+  const [isV2, setIsV2] = useState(true);
+  const [hasMore, setHasMore] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isFetching, setIsFetching] = useState(false);
   const observer = useRef<IntersectionObserver | null>(null);
+  const [channels, setChannels] = useState<FinanceDetailSolutionHistoryData[]>(
+    []
+  );
+  const [hoveredChannelId, setHoveredChannelId] = useState<string | null>();
 
   const handleMouseEnter = (id: string) => {
     setHoveredChannelId(id);
@@ -85,11 +89,6 @@ export default function FinanceSearchCombined() {
     setHoveredChannelId(null);
   };
 
-  const handleConfirmDelete = () => {
-    setChannels((prev) => prev.filter((ch) => !ch.selected));
-    setOpen(false);
-  };
-  const handleDelete = () => setOpen(true);
   const selectedChannels = channels.filter((ch) => ch.selected);
   const handleToggleV2 = () => setIsV2((prev) => !prev);
   const handleSelectAll = () =>
@@ -101,39 +100,25 @@ export default function FinanceSearchCombined() {
 
   const toggleChannel = (id: string) =>
     setChannels((prev) =>
-      prev.map((ch) =>
-        ch.organizationChannelId === id ? { ...ch, selected: !ch.selected } : ch
-      )
+      prev.map((ch) => (ch.id === id ? { ...ch, selected: !ch.selected } : ch))
     );
 
   const filteredChannels = channels.filter(
     (ch) =>
-      ch.organizationChannelTitle
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase()) ||
-      ch.organizationChannelCreateDate.includes(searchQuery)
+      ch.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      ch.date.includes(searchQuery)
   );
 
-  const moveToChannelDetail = (channel: OrganizationChannelData) => {
-    setSelectedChannel(channel);
-    const searchParams = new URLSearchParams({
-      organizationChannelId: channel.organizationChannelId,
-    });
-    router.push(`/chat?${searchParams.toString()}`);
-  };
-
   useEffect(() => {
-    if (page === 0) {
-      const formattedChannels = dummyData.map((chat) => ({
-        ...chat,
-        id: chat.organizationChannelId,
-        date: new Date(chat.organizationChannelCreateDate).toLocaleString(),
-        selected: false,
-      }));
-      setChannels(formattedChannels);
-      setHasMore(false);
-    }
-  }, [page]);
+    const formattedChannels = dummyData.map((chat) => ({
+      ...chat,
+      id: chat.id,
+      date: new Date(chat.date).toLocaleString(),
+      selected: false,
+    }));
+    setChannels(formattedChannels);
+    setHasMore(false);
+  }, []);
 
   const fetchMoreData = useCallback(async () => {
     if (isFetching || !hasMore) return;
@@ -322,15 +307,12 @@ export default function FinanceSearchCombined() {
               <Stack spacing={1} sx={{ width: '100%' }}>
                 {filteredChannels.map((channel) => {
                   const isHoveredOrSelected =
-                    hoveredChannelId === channel.organizationChannelId ||
-                    channel.selected;
+                    hoveredChannelId === channel.id || channel.selected;
                   return (
                     <Paper
                       className="group"
-                      key={channel.organizationChannelId}
-                      onMouseEnter={() =>
-                        handleMouseEnter(channel.organizationChannelId)
-                      }
+                      key={channel.id}
+                      onMouseEnter={() => handleMouseEnter(channel.id)}
                       onMouseLeave={handleMouseLeave}
                       elevation={0}
                       sx={{
@@ -347,9 +329,6 @@ export default function FinanceSearchCombined() {
                         '&:hover': {
                           bgcolor: 'rgba(255, 0, 0, 0.05)',
                         },
-                      }}
-                      onClick={() => {
-                        moveToChannelDetail(channel);
                       }}
                     >
                       {isHoveredOrSelected && (
@@ -369,7 +348,7 @@ export default function FinanceSearchCombined() {
                             checked={channel.selected || false}
                             onChange={(e) => {
                               e.stopPropagation();
-                              toggleChannel(channel.organizationChannelId);
+                              toggleChannel(channel.id);
                             }}
                             onClick={(e) => e.stopPropagation()}
                             sx={{
@@ -395,7 +374,7 @@ export default function FinanceSearchCombined() {
                             '.group:hover &': { color: '#990000' },
                           }}
                         >
-                          {channel.organizationChannelTitle}
+                          {channel.title}
                         </Typography>
                         <Typography
                           sx={{
@@ -413,9 +392,7 @@ export default function FinanceSearchCombined() {
                             lineHeight: 'normal',
                           }}
                         >
-                          {new Date(
-                            channel.organizationChannelCreateDate
-                          ).toLocaleString()}
+                          {new Date(channel.date).toLocaleString()}
                         </Typography>
                       </Box>
                       {isHoveredOrSelected && (
@@ -425,9 +402,8 @@ export default function FinanceSearchCombined() {
                           onClick={(e) => {
                             e.stopPropagation();
                             if (!channel.selected) {
-                              toggleChannel(channel.organizationChannelId);
+                              toggleChannel(channel.id);
                             }
-                            handleDelete();
                           }}
                         >
                           <DeleteIcon sx={{ width: '25px', height: '25px' }} />
@@ -538,7 +514,6 @@ export default function FinanceSearchCombined() {
                   aria-label="Delete"
                   variant="contained"
                   disabled={selectedChannels.length === 0}
-                  onClick={handleDelete}
                   sx={{
                     fontFamily: 'Open Sans',
                     fontSize: '14px',
@@ -581,7 +556,7 @@ export default function FinanceSearchCombined() {
               <Stack spacing={1} sx={{ width: '100%' }}>
                 {filteredChannels.map((channel) => (
                   <Paper
-                    key={channel.organizationChannelId}
+                    key={channel.id}
                     elevation={0}
                     sx={{
                       display: 'flex',
@@ -611,9 +586,7 @@ export default function FinanceSearchCombined() {
                     >
                       <Checkbox
                         checked={channel.selected}
-                        onChange={() =>
-                          toggleChannel(channel.organizationChannelId)
-                        }
+                        onChange={() => toggleChannel(channel.id)}
                         sx={{
                           color: 'var(--Primary-Black, #212B36)',
                           p: 0,
@@ -635,7 +608,7 @@ export default function FinanceSearchCombined() {
                           marginBottom: '10px',
                         }}
                       >
-                        {channel.organizationChannelTitle}
+                        {channel.title}
                       </Typography>
                       <Typography
                         sx={{
@@ -653,9 +626,7 @@ export default function FinanceSearchCombined() {
                           lineHeight: 'normal',
                         }}
                       >
-                        {new Date(
-                          channel.organizationChannelCreateDate
-                        ).toLocaleString()}
+                        {new Date(channel.date).toLocaleString()}
                       </Typography>
                     </Box>
                     <IconButton
@@ -665,9 +636,8 @@ export default function FinanceSearchCombined() {
                       }}
                       onClick={() => {
                         if (!channel.selected) {
-                          toggleChannel(channel.organizationChannelId);
+                          toggleChannel(channel.id);
                         }
-                        handleDelete();
                       }}
                     >
                       <DeleteIcon sx={{ width: '25px', height: '25px' }} />
@@ -690,12 +660,6 @@ export default function FinanceSearchCombined() {
             </Box>
           </>
         )}
-        <DeleteConfirmationModal
-          open={open}
-          onClose={() => setOpen(false)}
-          onDelete={handleConfirmDelete}
-          channelName={selectedChannels}
-        />
       </Box>
     </Box>
   );
