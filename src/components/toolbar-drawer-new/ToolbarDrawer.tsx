@@ -55,17 +55,17 @@ const drawerItems = [
         }}
       />
     ),
-    route: '/popular',
+    route: '', //popular
   },
   {
     text: '我的收藏',
     icon: <StarRounded sx={{ color: '#212B36' }} />,
-    route: '/favorite',
+    route: '', //favorite
   },
   {
     text: '活動公告',
     icon: <CampaignRounded sx={{ color: '#212B36' }} />,
-    route: '/events',
+    route: '', //events,
   },
   {
     text: '解決麻煩事',
@@ -80,12 +80,12 @@ const drawerItems = [
   {
     text: '財務快篩',
     icon: <PaidRounded sx={{ color: '#212B36' }} />,
-    route: '/financial-screening',
+    route: '', //financial-screening
   },
   {
     text: '知識庫',
     icon: <AutoStoriesRounded sx={{ color: '#212B36' }} />,
-    route: '/knowledge-base',
+    route: '', //knowledge-base
   },
 ];
 
@@ -428,8 +428,14 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                   },
                   cursor: 'pointer',
                   height: isExpanded || isMobile ? '48px' : 'auto',
+                  ...(item.route === '' && {
+                    pointerEvents: 'none',
+                    opacity: 0.5,
+                    cursor: 'not-allowed',
+                  }),
                 }}
                 onClick={() => {
+                  // if (!item.route) return;
                   if (index === 3) {
                     if (
                       selectedChannel ||
@@ -597,8 +603,10 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 lineHeight: 'normal',
                 height: '30px',
               }}
+              disabled={true}
+              title="Coming Soon"
             >
-              <EmojiObjectsRounded sx={{ color: 'white', fontSize: '18px' }} />
+              <EmojiObjectsRounded sx={{ color: '', fontSize: '18px' }} />
               許願池
             </Button>
             <Button
@@ -620,6 +628,8 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 lineHeight: 'normal',
                 height: '30px',
               }}
+              disabled={true}
+              title="Coming Soon"
             >
               諮詢師專區
             </Button>
