@@ -66,7 +66,7 @@ const DeleteDialog: React.FC<DeleteDialogProps> = ({
             fontWeight: '400',
             fontStyle: 'normal',
             lineHeight: 'normal',
-            fontFamily: 'DFPHeiBold-B5',
+            fontFamily: 'var(--font-bold)',
           }}
         >
           刪除紀錄
@@ -92,7 +92,7 @@ const DeleteDialog: React.FC<DeleteDialogProps> = ({
             lineHeight: '20px',
             fontStyle: 'normal',
             wordBreak: 'break-all',
-            fontFamily: 'DFPHeiMedium-B5',
+            fontFamily: 'var(--font-medium)',
           }}
         >
           {`您確定要刪除 "${deletableName}" 嗎？`}

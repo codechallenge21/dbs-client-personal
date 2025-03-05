@@ -54,7 +54,7 @@ export default function RenameDialog({
           alignItems: 'center',
           padding: '8px 11px 8px 24px',
           color: 'var(--Primary-Black, #212B36)',
-          fontFamily: 'DFPHeiBold-B5',
+          fontFamily: 'var(--font-bold)',
           fontSize: '24px',
           fontStyle: 'normal',
           fontWeight: 400,
@@ -94,7 +94,7 @@ export default function RenameDialog({
               sx: {
                 padding: '16px 14px',
                 color: 'var(--Text-Primary, #212B36)',
-                fontFamily: 'DFPHeiMedium-B5',
+                fontFamily: 'var(--font-medium)',
                 fontSize: '14px',
                 fontStyle: 'normal',
                 fontWeight: 400,
