@@ -80,3 +80,7 @@ export interface LogoutPayload {
   organizationUserAccount: string;
   organizationUserPassword: string;
 }
+
+export interface ForgotPasswordApiPayload {
+  organizationUserEmail: string;
+}
