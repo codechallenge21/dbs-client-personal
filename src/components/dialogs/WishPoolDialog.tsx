@@ -32,7 +32,7 @@ import { SnackbarContext } from '@/context/SnackbarContext';
 
 interface WishPoolDialogProps {
   open: boolean;
-  onClose: (event: React.MouseEvent) => void;
+  onClose: () => void;
 }
 
 const WishPoolDialog: React.FC<WishPoolDialogProps> = ({ open, onClose }) => {
@@ -532,9 +532,10 @@ const WishPoolDialog: React.FC<WishPoolDialogProps> = ({ open, onClose }) => {
                                 fontFamily: 'DFPHeiBold-B5',
                                 lineHeight: 'normal',
                               }}
-                              onClick={() =>
-                                showSnackbar('許願成功', 'success')
-                              }
+                              onClick={() => {
+                                showSnackbar('許願成功', 'success');
+                                onClose();
+                              }}
                             >
                               送出願望
                             </Button>
