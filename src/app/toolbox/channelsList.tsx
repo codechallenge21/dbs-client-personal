@@ -1,6 +1,7 @@
 "use client";
 import DeleteDialog from "@/components/dialogs/DeleteDialog";
 import EditDialog from "@/components/dialogs/EditDialog";
+import ForgetPasswordDialog from "@/components/dialogs/ForgetPasswordDialog";
 import LoginDialog from "@/components/dialogs/LoginDialog";
 import SignupDialog from "@/components/dialogs/SignupDialog";
 import EditableItem from "@/components/editable-item/EditableItem";
@@ -56,11 +57,8 @@ import React, {
   useEffect,
   useRef,
   useState,
-} from 'react';
-import UploadScreen from './UploadScreen';
-import CustomLoader from '@/components/loader/loader';
-import apiExports from '@/utils/hooks/apis/apis';
-import ForgetPasswordDialog from '@/components/dialogs/ForgetPasswordDialog';
+} from "react";
+import UploadScreen from "./UploadScreen";
 
 interface fileProps {
   organizationChannelTitle: string;

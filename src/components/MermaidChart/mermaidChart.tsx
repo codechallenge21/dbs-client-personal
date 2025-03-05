@@ -1,20 +1,20 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState } from 'react';
-import { Dialog, DialogContent, IconButton } from '@mui/material';
-import ZoomInSharpIcon from '@mui/icons-material/ZoomInSharp';
-import ZoomOutIcon from '@mui/icons-material/ZoomOut';
-import RefreshIcon from '@mui/icons-material/Refresh';
-import ChevronRightSharpIcon from '@mui/icons-material/ChevronRightSharp';
-import ChevronLeftSharpIcon from '@mui/icons-material/ChevronLeftSharp';
-import ExpandLessSharpIcon from '@mui/icons-material/ExpandLessSharp';
-import ExpandMoreSharpIcon from '@mui/icons-material/ExpandMoreSharp';
 import {
   ContentCopyRounded,
   DoneRounded,
   OpenInFullRounded,
-} from '@mui/icons-material';
-import CloseIcon from '@mui/icons-material/Close';
+} from "@mui/icons-material";
+import ChevronLeftSharpIcon from "@mui/icons-material/ChevronLeftSharp";
+import ChevronRightSharpIcon from "@mui/icons-material/ChevronRightSharp";
+import CloseIcon from "@mui/icons-material/Close";
+import ExpandLessSharpIcon from "@mui/icons-material/ExpandLessSharp";
+import ExpandMoreSharpIcon from "@mui/icons-material/ExpandMoreSharp";
+import RefreshIcon from "@mui/icons-material/Refresh";
+import ZoomInSharpIcon from "@mui/icons-material/ZoomInSharp";
+import ZoomOutIcon from "@mui/icons-material/ZoomOut";
+import { Dialog, DialogContent, IconButton } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
 
 interface MermaidChartProps {
   chart: string;
@@ -22,7 +22,7 @@ interface MermaidChartProps {
 
 export default function MermaidChart({ chart }: MermaidChartProps) {
   const [mermaidCopied, setMermaidCopied] = useState(false);
-  const [svgContent, setSvgContent] = useState('');
+  const [svgContent, setSvgContent] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const panZoomRef = useRef<any>(null);
@@ -35,8 +35,8 @@ export default function MermaidChart({ chart }: MermaidChartProps) {
 
     const loadLibrariesAndRenderChart = async () => {
       try {
-        const mermaid = (await import('mermaid')).default;
-        const svgPanZoom = (await import('svg-pan-zoom')).default;
+        const mermaid = (await import("mermaid")).default;
+        const svgPanZoom = (await import("svg-pan-zoom")).default;
 
         mermaid.initialize({ startOnLoad: false });
 
@@ -49,11 +49,11 @@ export default function MermaidChart({ chart }: MermaidChartProps) {
         if (isMounted && containerRef.current) {
           containerRef.current.innerHTML = svg;
 
-          const svgElement = containerRef.current.querySelector('svg');
+          const svgElement = containerRef.current.querySelector("svg");
           if (svgElement) {
-            svgElement.setAttribute('class', 'mermaid-svg');
-            svgElement.style.width = '100%';
-            svgElement.style.height = '100%';
+            svgElement.setAttribute("class", "mermaid-svg");
+            svgElement.style.width = "100%";
+            svgElement.style.height = "100%";
             panZoomRef.current = svgPanZoom(svgElement, {
               controlIconsEnabled: false,
               zoomScaleSensitivity: 0.2,
@@ -70,7 +70,7 @@ export default function MermaidChart({ chart }: MermaidChartProps) {
                 onTouchStart: function (event) {
                   if (
                     this.options &&
-                    typeof this.options.onTouchStart === 'function'
+                    typeof this.options.onTouchStart === "function"
                   ) {
                     this.options.onTouchStart(event);
                   }
@@ -86,7 +86,7 @@ export default function MermaidChart({ chart }: MermaidChartProps) {
           }
         }
       } catch (error) {
-        console.error('Error rendering Mermaid chart:', error);
+        console.error("Error rendering Mermaid chart:", error);
       }
     };
 
@@ -101,37 +101,37 @@ export default function MermaidChart({ chart }: MermaidChartProps) {
   }, [chart]);
 
   return (
-    <div style={{ position: 'relative', height: 'auto' }}>
-      <div style={{ width: 'auto', height: 'auto' }} ref={containerRef} />
+    <div style={{ position: "relative", height: "auto" }}>
+      <div style={{ width: "auto", height: "auto" }} ref={containerRef} />
 
       <div
         style={{
-          position: 'absolute',
+          position: "absolute",
           bottom: 20,
           right: 20,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '0.5rem',
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "0.5rem",
           zIndex: 1000,
         }}
       >
         <div
           style={{
-            gap: '0.5rem',
-            display: 'flex',
-            alignSelf: 'stretch',
-            alignItems: 'center',
-            flexDirection: 'column',
-            justifyContent: 'center',
+            gap: "0.5rem",
+            display: "flex",
+            alignSelf: "stretch",
+            alignItems: "center",
+            flexDirection: "column",
+            justifyContent: "center",
           }}
         >
           <div
             style={{
-              display: 'flex',
-              alignSelf: 'stretch',
-              alignItems: 'center',
-              justifyContent: 'center',
+              display: "flex",
+              alignSelf: "stretch",
+              alignItems: "center",
+              justifyContent: "flex-end", // Changed from center to flex-end to align buttons to the right
             }}
           >
             <IconButton
@@ -145,79 +145,79 @@ export default function MermaidChart({ chart }: MermaidChartProps) {
               }}
             >
               {mermaidCopied ? (
-                <DoneRounded sx={{ color: '#4CAF50' }} />
+                <DoneRounded sx={{ color: "#4CAF50", fontSize: 20 }} /> // Changed color to #4CAF50
               ) : (
-                <ContentCopyRounded sx={{ color: '#212B36' }} />
+                <ContentCopyRounded sx={{ color: "black", fontSize: 20 }} />
               )}
             </IconButton>
             <IconButton onClick={() => setIsDialogOpen(true)}>
-              <OpenInFullRounded sx={{ color: '#212B36' }} />
+              <OpenInFullRounded sx={{ color: "black", fontSize: 20 }} />
             </IconButton>
           </div>
           <div
             style={{
-              display: 'grid',
-              gridTemplateColumns: 'auto auto auto',
-              gridTemplateRows: 'auto auto auto',
+              display: "grid",
+              gridTemplateColumns: "auto auto auto",
+              gridTemplateRows: "auto auto auto",
               gridTemplateAreas: `
                 ". up zoomIn"
                 "left center right"
                 ". down zoomOut"
               `,
-              gap: '0.5rem',
+              gap: "0.5rem",
             }}
           >
-            <div style={{ gridArea: 'up' }}>
+            <div style={{ gridArea: "up" }}>
               <IconButton
-                sx={{ color: '#212B36' }}
+                sx={{ color: "black" }}
                 onClick={() => panZoomRef.current?.panBy({ x: 0, y: -20 })}
               >
                 <ExpandLessSharpIcon />
               </IconButton>
             </div>
-            <div style={{ gridArea: 'left' }}>
+            <div style={{ gridArea: "left" }}>
               <IconButton
-                sx={{ color: '#212B36' }}
+                sx={{ color: "black" }}
                 onClick={() => panZoomRef.current?.panBy({ x: -20, y: 0 })}
               >
                 <ChevronLeftSharpIcon />
               </IconButton>
             </div>
-            <div style={{ gridArea: 'center' }}>
+            <div style={{ gridArea: "center" }}>
               <IconButton
-                sx={{ color: '#212B36' }}
+                sx={{ color: "black" }}
                 onClick={() => panZoomRef.current?.reset()}
               >
                 <RefreshIcon />
               </IconButton>
             </div>
-            <div style={{ gridArea: 'right' }}>
+            <div style={{ gridArea: "right" }}>
               <IconButton
-                sx={{ color: '#212B36' }}
+                sx={{ color: "black" }}
                 onClick={() => panZoomRef.current?.panBy({ x: 20, y: 0 })}
               >
                 <ChevronRightSharpIcon />
               </IconButton>
             </div>
-            <div style={{ gridArea: 'down' }}>
+            <div style={{ gridArea: "down" }}>
               <IconButton
-                sx={{ color: '#212B36' }}
+                sx={{ color: "black" }}
                 onClick={() => panZoomRef.current?.panBy({ x: 0, y: 20 })}
               >
                 <ExpandMoreSharpIcon />
               </IconButton>
             </div>
-            <div style={{ gridArea: 'zoomIn' }}>
+            <div style={{ gridArea: "zoomIn" }}>
               <IconButton
-                sx={{ color: '#212B36' }}
+                sx={{ color: "black" }}
                 onClick={() => panZoomRef.current?.zoomIn()}
               >
                 <ZoomInSharpIcon />
               </IconButton>
             </div>
-            <div style={{ gridArea: 'zoomOut' }}>
+            <div style={{ gridArea: "zoomOut" }}>
               <IconButton
-                sx={{ color: '#212B36' }}
+                sx={{ color: "black" }}
                 onClick={() => panZoomRef.current?.zoomOut()}
               >
                 <ZoomOutIcon />
@@ -237,21 +237,21 @@ export default function MermaidChart({ chart }: MermaidChartProps) {
           paper: {
             style: {
               padding: 0,
-              width: '80%',
-              height: '50%',
-              margin: 'auto',
-              backgroundColor: '#fff',
+              width: "80%",
+              height: "50%",
+              margin: "auto",
+              backgroundColor: "#fff",
             },
           },
           backdrop: {
-            style: { backgroundColor: 'rgba(0,0,0,0.5)' },
+            style: { backgroundColor: "rgba(0,0,0,0.5)" },
           },
         }}
       >
         <IconButton
           onClick={() => setIsDialogOpen(false)}
           style={{
-            position: 'absolute',
+            position: "absolute",
             top: 10,
             right: 10,
             zIndex: 2000,
