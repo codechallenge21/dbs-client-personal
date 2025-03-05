@@ -383,6 +383,7 @@ const Events = () => {
                   <Image
                     src={boxImage || '/placeholder.svg'}
                     alt="Boxed Image"
+                    quality={100}
                     style={{
                       width: '100%',
                       objectFit: 'cover',
@@ -585,6 +586,7 @@ const Events = () => {
                     <Image
                       src={boxImage}
                       alt="Boxed Image"
+                      quality={100}
                       style={{
                         width: '100%',
                         height: '130px',
