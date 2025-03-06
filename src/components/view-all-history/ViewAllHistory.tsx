@@ -127,9 +127,10 @@ export default function ChannelSearchCombined() {
 
   useEffect(() => {
     if (chatsData && page === 0) {
+      // Fix: Ensure each channel has a unique ID
       const formattedChannels = chatsData.map((chat: OrganizationChannel) => ({
         ...chat,
-        id: chat.organizationChannelId,
+        id: chat.organizationChannelId, // Using the unique ID here
         date: new Date(chat.organizationChannelCreateDate).toLocaleString(),
         selected: false,
       }));
@@ -163,10 +164,12 @@ export default function ChannelSearchCombined() {
         );
 
         setChannels((prev) => {
+          // Get all existing IDs
           const existingIds = new Set(
             prev.map((ch) => ch.organizationChannelId)
           );
 
+          // Filter out any new channels that have duplicate IDs
           const uniqueNewChannels = newFormattedChannels.filter(
             (newCh) => !existingIds.has(newCh.organizationChannelId)
           );
