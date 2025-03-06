@@ -35,6 +35,23 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useContext, useEffect, useState } from 'react';
 import UserActionMenu from '../user-action-menu/UserActionMenu';
 
+const customScrollbarStyle = {
+  '&::-webkit-scrollbar': {
+    width: '4px',
+  },
+  '&::-webkit-scrollbar-thumb': {
+    backgroundColor: '#c1c1c1',
+    borderRadius: '4px',
+  },
+  '&::-webkit-scrollbar-thumb:hover': {
+    backgroundColor: '#a8a8a8',
+  },
+  '&::-webkit-scrollbar-track': {
+    backgroundColor: '#f1f1f1',
+    borderRadius: '4px',
+  },
+};
+
 interface ToolbarDrawerProps {
   open: boolean;
   openDataSource?: boolean;
@@ -116,6 +133,8 @@ const MainBox = styled('div', {
       },
     },
   ],
+  ...customScrollbarStyle,
+  overflow: 'auto',
 }));
 
 const drawerWidth = 240;
@@ -132,6 +151,7 @@ const openedMixin = (theme: Theme): CSSObject => ({
     duration: theme.transitions.duration.enteringScreen,
   }),
   overflowX: 'hidden',
+  ...customScrollbarStyle,
 });
 
 const closedMixin = (theme: Theme): CSSObject => ({
@@ -144,6 +164,7 @@ const closedMixin = (theme: Theme): CSSObject => ({
   [theme.breakpoints.up('sm')]: {
     width: `calc(${theme.spacing(8)} + 1px)`,
   },
+  ...customScrollbarStyle,
 });
 
 const CustomDrawer = styled(MuiDrawer, {
@@ -158,14 +179,20 @@ const CustomDrawer = styled(MuiDrawer, {
       props: ({ open }) => open,
       style: {
         ...openedMixin(theme),
-        '& .MuiDrawer-paper': openedMixin(theme),
+        '& .MuiDrawer-paper': {
+          ...openedMixin(theme),
+          ...customScrollbarStyle,
+        },
       },
     },
     {
       props: ({ open }) => !open,
       style: {
         ...closedMixin(theme),
-        '& .MuiDrawer-paper': closedMixin(theme),
+        '& .MuiDrawer-paper': {
+          ...closedMixin(theme),
+          ...customScrollbarStyle,
+        },
       },
     },
   ],
@@ -264,9 +291,17 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
+        overflow: 'hidden',
       }}
     >
-      <List sx={{ padding: '0 8px', flexGrow: 1 }}>
+      <List
+        sx={{
+          padding: '0 8px',
+          flexGrow: 1,
+          overflowY: 'auto',
+          ...customScrollbarStyle,
+        }}
+      >
         <ListItem
           sx={{
             display: 'flex',
@@ -295,7 +330,15 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 alt="logo"
                 style={{ width: '110px' }}
               />
-              <span style={{ fontSize: '14px', marginLeft: '1px', paddingBottom: '12px' }}>財務健檢網</span>
+              <span
+                style={{
+                  fontSize: '14px',
+                  marginLeft: '1px',
+                  paddingBottom: '12px',
+                }}
+              >
+                財務健檢網
+              </span>
             </Typography>
           )}
           {!isExpanded && !isMobile && (
@@ -315,7 +358,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               onClick={() => router.push('/chat')}
             >
               <img src="/assets/images/logocollapse.png" alt="logo" />
-              </Typography>
+            </Typography>
           )}
           <IconButton
             role="button"
@@ -413,6 +456,8 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               alignItems: 'flex-start',
               justifyContent: 'flex-end',
               marginTop: '8px',
+              overflowY: 'auto',
+              ...customScrollbarStyle,
             }}
           >
             {drawerItems.map((item, index) => (
@@ -777,10 +822,11 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
           sx={{
             flexShrink: 0,
             '& .MuiDrawer-paper': {
-              width: isExpanded || isMobile ? drawerWidth : 56, // Adjust drawer width
+              width: isExpanded || isMobile ? drawerWidth : 56,
               height: 'calc(100vh - 32px)',
               margin: '16px',
               borderRadius: '8px',
+              ...customScrollbarStyle,
             },
           }}
           onClose={() => setIsOpenDrawer(!open)}
@@ -799,6 +845,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               width: isExpanded || isMobile ? drawerWidth : 72,
               height: '100%',
               borderRadius: '0 8px 8px 0',
+              ...customScrollbarStyle,
             },
             pointerEvents: !open ? 'none' : 'auto',
           }}
@@ -818,6 +865,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
           transition: 'margin-left 0.3s',
           marginLeft:
             isExpanded && !isMobile ? '255px' : isMobile ? '0' : '75px',
+          ...customScrollbarStyle,
         }}
       >
         {children}
