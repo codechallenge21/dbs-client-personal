@@ -263,7 +263,7 @@ const WishPoolDialog: React.FC<WishPoolDialogProps> = ({ open, onClose }) => {
                     {showDummyResponse && (
                       <Box
                         sx={{
-                          gap: isMobile ? '24px' : '20px',
+                          gap: isMobile ? '6px' : '2px',
                           display: 'flex',
                           flexDirection: 'column',
                         }}
@@ -309,11 +309,10 @@ const WishPoolDialog: React.FC<WishPoolDialogProps> = ({ open, onClose }) => {
                           {/* {Card Container Box} */}
                           <Box
                             sx={{
+                              paddingBottom: '18px',
                               gap: '12px',
                               display: 'flex',
                               overflowX: 'auto',
-                              height: '100px',
-                              overflowY: 'hidden',
                               msOverflowStyle: 'none',
                               scrollbarWidth: 'none',
                               '&::-webkit-scrollbar': {
@@ -331,6 +330,10 @@ const WishPoolDialog: React.FC<WishPoolDialogProps> = ({ open, onClose }) => {
                                     height: '100px',
                                     borderRadius: '8px',
                                     flexShrink: 0,
+                                    '&:hover': {
+                                      boxShadow:
+                                        '0px 12px 24px -4px rgba(17, 68, 85, 0.12), 0px 0px 2px 0px rgba(17, 68, 85, 0.12)',
+                                    },
                                   }}
                                 >
                                   <CardContent
@@ -338,7 +341,6 @@ const WishPoolDialog: React.FC<WishPoolDialogProps> = ({ open, onClose }) => {
                                       gap: '8px',
                                       width: '181px',
                                       display: 'flex',
-                                      height: '100px',
                                       padding: '16px',
                                       borderRadius: '8px',
                                       flexDirection: 'column',
@@ -362,13 +364,11 @@ const WishPoolDialog: React.FC<WishPoolDialogProps> = ({ open, onClose }) => {
                                     >
                                       {item}
                                     </Typography>
-                                    <Button
+                                    <Box
                                       sx={{
                                         gap: '8px',
-                                        width: '149px',
-                                        height: '24px',
-                                        padding: '0px',
-                                        justifyContent: 'flex-start',
+                                        alignItems: 'center',
+                                        display: 'flex',
                                       }}
                                     >
                                       <PublicRounded
@@ -386,7 +386,7 @@ const WishPoolDialog: React.FC<WishPoolDialogProps> = ({ open, onClose }) => {
                                       >
                                         URL
                                       </Typography>
-                                    </Button>
+                                    </Box>
                                   </CardContent>
                                 </Card>
                               )
@@ -443,32 +443,28 @@ const WishPoolDialog: React.FC<WishPoolDialogProps> = ({ open, onClose }) => {
                                 回覆
                               </Typography>
                             </Box>
-                            <Box
+                            <Button
                               sx={{
                                 gap: '8px',
                                 display: 'flex',
+                                alignItems: 'center',
                                 paddingTop: '6px',
                                 paddingLeft: '8px',
                                 borderRadius: '8px',
                                 paddingRight: '8px',
                                 paddingBottom: '6px',
                               }}
+                              onClick={() => {
+                                showSnackbar('複製成功', 'success');
+                              }}
                             >
-                              <IconButton
+                              <ContentCopyRounded
                                 sx={{
-                                  width: '24px',
-                                  height: '24px',
-                                  padding: '0px',
+                                  width: '20px',
+                                  height: '20px',
+                                  color: '#212B36',
                                 }}
-                              >
-                                <ContentCopyRounded
-                                  sx={{
-                                    width: '20px',
-                                    height: '20px',
-                                    color: '#212B36',
-                                  }}
-                                />
-                              </IconButton>
+                              />
                               <Typography
                                 sx={{
                                   width: '28px',
@@ -483,7 +479,7 @@ const WishPoolDialog: React.FC<WishPoolDialogProps> = ({ open, onClose }) => {
                               >
                                 複製
                               </Typography>
-                            </Box>
+                            </Button>
                           </Box>
                           {/* {Description} */}
                           <Typography
