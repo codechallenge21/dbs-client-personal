@@ -295,7 +295,15 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 alt="logo"
                 style={{ width: '110px' }}
               />
-              <span style={{ fontSize: '14px', marginLeft: '1px', paddingBottom: '12px' }}>財務健檢網</span>
+              <span
+                style={{
+                  fontSize: '14px',
+                  marginLeft: '1px',
+                  paddingBottom: '12px',
+                }}
+              >
+                財務健檢網
+              </span>
             </Typography>
           )}
           {!isExpanded && !isMobile && (
@@ -315,7 +323,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               onClick={() => router.push('/chat')}
             >
               <img src="/assets/images/logocollapse.png" alt="logo" />
-              </Typography>
+            </Typography>
           )}
           <IconButton
             aria-label="Expand/Collapse"
@@ -602,10 +610,8 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 lineHeight: 'normal',
                 height: '30px',
               }}
-              disabled={true}
-              title="Coming Soon"
             >
-              <EmojiObjectsRounded sx={{ color: '', fontSize: '18px' }} />
+              <EmojiObjectsRounded sx={{ color: 'white', fontSize: '18px' }} />
               許願池
             </Button>
             <Button
@@ -626,8 +632,6 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 lineHeight: 'normal',
                 height: '30px',
               }}
-              disabled={true}
-              title="Coming Soon"
             >
               諮詢師專區
             </Button>
