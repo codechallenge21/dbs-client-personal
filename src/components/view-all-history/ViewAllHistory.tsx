@@ -162,7 +162,18 @@ export default function ChannelSearchCombined() {
           })
         );
 
-        setChannels((prev) => [...prev, ...newFormattedChannels]);
+        setChannels((prev) => {
+          const existingIds = new Set(
+            prev.map((ch) => ch.organizationChannelId)
+          );
+
+          const uniqueNewChannels = newFormattedChannels.filter(
+            (newCh) => !existingIds.has(newCh.organizationChannelId)
+          );
+
+          return [...prev, ...uniqueNewChannels];
+        });
+
         setHasMore(newChannelsData.length >= itemsPerPage);
       } else {
         setHasMore(false);
@@ -181,14 +192,6 @@ export default function ChannelSearchCombined() {
 
     observer.current = new IntersectionObserver(
       (entries) => {
-        console.log(
-          'isTrue',
-          entries[0]?.isIntersecting,
-          hasMore,
-          !isFetching,
-          `hello ${searchQuery}`,
-          !searchQuery.trim()
-        );
         if (
           entries[0]?.isIntersecting &&
           hasMore &&
@@ -368,7 +371,8 @@ export default function ChannelSearchCombined() {
                   return (
                     <Paper
                       className="group"
-                      key={channel.organizationChannelId}
+                      // Fix: Using the organizationChannelId as the key, which should be unique
+                      key={`view1-${channel.organizationChannelId}`}
                       onMouseEnter={() =>
                         handleMouseEnter(channel.organizationChannelId)
                       }
@@ -640,7 +644,8 @@ export default function ChannelSearchCombined() {
               <Stack spacing={1} sx={{ width: '100%' }}>
                 {filteredChannels.map((channel) => (
                   <Paper
-                    key={channel.organizationChannelId}
+                    // Fix: Using the organizationChannelId with a prefix to make keys unique across different views
+                    key={`view2-${channel.organizationChannelId}`}
                     elevation={0}
                     sx={{
                       display: 'flex',
