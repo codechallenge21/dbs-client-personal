@@ -23,12 +23,12 @@ import {
   ArrowDropDown,
   CheckCircleRounded,
   MenuRounded,
-  MicRounded,
+  // MicRounded,
   PendingActionsRounded,
   RotateRightRounded,
-  SearchRounded,
-  StarBorderRounded,
-  StarRounded,
+  // SearchRounded,
+  // StarBorderRounded,
+  // StarRounded,
   UploadRounded,
 } from "@mui/icons-material";
 import {
@@ -88,7 +88,7 @@ const ChannelsList = () => {
     isMobile ? false : true
   );
   const [openUpload, setOpenUpload] = React.useState(false);
-  const [favoriteChannels, setFavoriteChannels] = useState<{
+  const [, setFavoriteChannels] = useState<{
     [key: number]: boolean;
   }>({});
   const [uploadingFile, setUploadingFile] = useState<fileProps>();
@@ -436,7 +436,7 @@ const ChannelsList = () => {
                     },
                   }}
                 />
-                <Tab
+                {/* <Tab
                   disableRipple
                   label="家系圖"
                   disabled
@@ -461,8 +461,8 @@ const ChannelsList = () => {
                       color: "var(--Text-Secondary, #212B36)",
                     },
                   }}
-                />
-                <Tab
+                /> */}
+                {/* <Tab
                   disableRipple
                   disabled
                   label="問答語音錄音"
@@ -487,8 +487,8 @@ const ChannelsList = () => {
                       color: "var(--Text-Secondary, #212B36)",
                     },
                   }}
-                />
-                <Tab
+                /> */}
+                {/* <Tab
                   disableRipple
                   label="個別與實時錄音"
                   disabled
@@ -513,7 +513,7 @@ const ChannelsList = () => {
                       color: "var(--Text-Secondary, #212B36)",
                     },
                   }}
-                />
+                /> */}
               </Tabs>
               <Box
                 sx={{
@@ -566,7 +566,7 @@ const ChannelsList = () => {
                       flexWrap: "wrap",
                     }}
                   >
-                    <IconButton
+                    {/* <IconButton
                       aria-label="search"
                       sx={{
                         padding: "8px",
@@ -577,8 +577,8 @@ const ChannelsList = () => {
                       }}
                     >
                       <SearchRounded />
-                    </IconButton>
-                    <IconButton
+                    </IconButton> */}
+                    {/* <IconButton
                       aria-label="Start Recording"
                       sx={{
                         gap: "8px",
@@ -594,7 +594,7 @@ const ChannelsList = () => {
                     >
                       <MicRounded sx={{ color: "#5C443A" }} />
                       <Typography>開始錄音</Typography>
-                    </IconButton>
+                    </IconButton> */}
                     <IconButton
                       aria-label="Upload File"
                       sx={{
@@ -884,7 +884,7 @@ const ChannelsList = () => {
                                   height: "51px !important",
                                 }}
                               >
-                                <IconButton
+                                {/* <IconButton
                                   role="button"
                                   aria-label="favorite"
                                   sx={{ padding: "0px" }}
@@ -894,7 +894,7 @@ const ChannelsList = () => {
                                       sx={{ color: "black" }}
                                     />
                                   }
-                                </IconButton>
+                                </IconButton> */}
                               </TableCell>
                               <TableCell
                                 sx={{
@@ -1062,7 +1062,7 @@ const ChannelsList = () => {
                                 handleToggle(index);
                               }}
                             >
-                              <IconButton
+                              {/* <IconButton
                                 role="button"
                                 aria-label="favorite"
                                 sx={{ padding: "0px" }}
@@ -1072,7 +1072,7 @@ const ChannelsList = () => {
                                 ) : (
                                   <StarBorderRounded sx={{ color: "black" }} />
                                 )}
-                              </IconButton>
+                              </IconButton> */}
                             </TableCell>
                             <TableCell
                               sx={{
@@ -1238,7 +1238,7 @@ const ChannelsList = () => {
                     padding: "12px 0px",
                   }}
                 />
-                <Tab
+                {/* <Tab
                   label="家系圖"
                   disabled
                   sx={{
@@ -1254,8 +1254,8 @@ const ChannelsList = () => {
                     padding: "12px 0px",
                     minWidth: "auto",
                   }}
-                />
-                <Tab
+                /> */}
+                {/* <Tab
                   label="問答語音錄音"
                   disabled
                   sx={{
@@ -1271,8 +1271,8 @@ const ChannelsList = () => {
                     padding: "12px 0px",
                     minWidth: "auto",
                   }}
-                />
-                <Tab
+                /> */}
+                {/* <Tab
                   label="個別與實時錄音"
                   disabled
                   sx={{
@@ -1288,7 +1288,7 @@ const ChannelsList = () => {
                     padding: "12px 0px",
                     minWidth: "auto",
                   }}
-                />
+                /> */}
               </Tabs>
             </Box>
             <Box
@@ -1325,10 +1325,10 @@ const ChannelsList = () => {
                   justifyContent: "flex-end",
                 }}
               >
-                <IconButton role="button" aria-label="search">
+                {/* <IconButton role="button" aria-label="search">
                   <SearchRounded sx={{ color: "#212B36" }} />
-                </IconButton>
-                <Button
+                </IconButton> */}
+                {/* <Button
                   role="button"
                   aria-label="Start Recording"
                   disabled
@@ -1360,7 +1360,7 @@ const ChannelsList = () => {
                   >
                     開始錄音
                   </Typography>
-                </Button>
+                </Button> */}
                 <Button
                   role="button"
                   aria-label="Upload File"
@@ -1513,7 +1513,7 @@ const ChannelsList = () => {
                                   alignItems: "center",
                                 }}
                               >
-                                <IconButton
+                                {/* <IconButton
                                   role="button"
                                   aria-label="favorite"
                                   sx={{ padding: "0px", marginRight: "8px" }}
@@ -1523,7 +1523,7 @@ const ChannelsList = () => {
                                       sx={{ color: "black" }}
                                     />
                                   }
-                                </IconButton>
+                                </IconButton> */}
                                 <Typography
                                   sx={{
                                     fontWeight: 400,
@@ -1657,7 +1657,7 @@ const ChannelsList = () => {
                                 alignItems: "center",
                               }}
                             >
-                              <IconButton
+                              {/* <IconButton
                                 role="button"
                                 aria-label="favorite"
                                 onClick={(e) => {
@@ -1671,7 +1671,7 @@ const ChannelsList = () => {
                                 ) : (
                                   <StarBorderRounded sx={{ color: "black" }} />
                                 )}
-                              </IconButton>
+                              </IconButton> */}
                               <Typography
                                 sx={{
                                   fontWeight: 400,
