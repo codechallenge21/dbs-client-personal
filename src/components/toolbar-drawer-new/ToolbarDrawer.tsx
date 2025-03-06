@@ -298,6 +298,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
         sx={{
           padding: '0 8px',
           flexGrow: 1,
+          overflowX: 'hidden !important',
           overflowY: 'auto',
           ...customScrollbarStyle,
         }}
@@ -310,6 +311,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             alignItems: isExpanded || isMobile ? 'center' : 'stretch',
             justifyContent: isExpanded || isMobile ? 'space-between' : 'center',
             gap: isExpanded || isMobile ? '0' : '8px',
+            overflowX: 'hidden !important',
           }}
         >
           {(isExpanded || isMobile) && (
@@ -456,7 +458,6 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               alignItems: 'flex-start',
               justifyContent: 'flex-end',
               marginTop: '8px',
-              overflowY: 'auto',
               ...customScrollbarStyle,
             }}
           >
