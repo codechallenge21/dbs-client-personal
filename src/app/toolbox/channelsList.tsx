@@ -5,7 +5,6 @@ import ForgetPasswordDialog from "@/components/dialogs/ForgetPasswordDialog";
 import LoginDialog from "@/components/dialogs/LoginDialog";
 import SignupDialog from "@/components/dialogs/SignupDialog";
 import EditableItem from "@/components/editable-item/EditableItem";
-import CustomLoader from "@/components/loader/loader";
 import ToolbarDrawer from "@/components/toolbar-drawer-new/ToolbarDrawer";
 import UploadDialog, {
   FILE_CONFIG,
@@ -832,9 +831,6 @@ const ChannelsList = () => {
                                     alignItems: "center",
                                   }}
                                 >
-                                  {(isCreating || isLoadingChannels) && (
-                                    <CustomLoader />
-                                  )}
                                   <span
                                     style={{
                                       fontFamily: "var(--font-bold)",
@@ -1546,9 +1542,6 @@ const ChannelsList = () => {
                                   alignItems: "center",
                                 }}
                               >
-                                {(isCreating || isLoadingChannels) && (
-                                  <CustomLoader />
-                                )}
                                 <span
                                   style={{
                                     fontFamily: "var(--font-bold)",
