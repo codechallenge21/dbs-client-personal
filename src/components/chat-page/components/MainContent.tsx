@@ -92,6 +92,8 @@ const MainContent: React.FC<MainContentProps> = ({ chatsData }) => {
           pb: "16px",
           justifyContent: isMobile ? "flex-end" : "center",
           marginTop: "56px",
+          width: "100%",
+          borderLeft: "1px solid #F5F5F5",
         }}
       >
         <Box
@@ -102,6 +104,7 @@ const MainContent: React.FC<MainContentProps> = ({ chatsData }) => {
             overflow: "hidden",
             display: "flex",
             flexDirection: "column",
+            paddingX: { xs: "16px", md: "24px" },
           }}
         >
           <Box
@@ -128,11 +131,7 @@ const MainContent: React.FC<MainContentProps> = ({ chatsData }) => {
               isInteractingInChat={isInteractingInChat}
             />
           </Box>
-          <Box
-            sx={{
-              px: "16px",
-            }}
-          >
+          <Box>
             <TextInput
               from={"mainContent"}
               submitUserInputs={submitUserInputs}
@@ -146,15 +145,14 @@ const MainContent: React.FC<MainContentProps> = ({ chatsData }) => {
 
   const paddingTop = (() => {
     if (isMobile) {
-      return chatsData && chatsData.length > 0 ? "50vh" : "10vh";
+      return chatsData && chatsData.length > 0 ? "40vh" : "10vh";
     }
-    return chatsData && chatsData.length > 0 ? "20vh" : "0vh";
+    return chatsData && chatsData.length > 0 ? "15vh" : "0vh";
   })();
 
   return (
     <Box
       sx={{
-        px: "16px",
         display: "flex",
         width: "100%",
         textAlign: "center",
@@ -165,7 +163,8 @@ const MainContent: React.FC<MainContentProps> = ({ chatsData }) => {
         overflow: "auto",
         justifyContent: "center",
         pt: paddingTop,
-        mt: "10px",
+        borderLeft: "1px solid #F5F5F5",
+        px: { xs: "16px", md: "24px" },
       }}
     >
       <Typography
@@ -194,6 +193,7 @@ const MainContent: React.FC<MainContentProps> = ({ chatsData }) => {
           gap: "16px",
           flexWrap: "wrap",
           maxWidth: "760px",
+          width: "100%",
         }}
       >
         {/* {SuggestionsData.map((suggestion) => (
