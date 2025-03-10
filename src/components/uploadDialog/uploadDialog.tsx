@@ -1,21 +1,21 @@
 'use client';
 
+import { SnackbarContext } from '@/context/SnackbarContext';
+import { useRequireAuth } from '@/utils/hooks/useRequireAuth';
+import { CloseRounded, UploadRounded } from '@mui/icons-material';
 import {
+  Box,
+  Button,
   Dialog,
   DialogContent,
   DialogTitle,
-  Button,
   IconButton,
-  Box,
   Typography,
-  useTheme,
   useMediaQuery,
+  useTheme,
 } from '@mui/material';
+import { useContext, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { useRef, useContext } from 'react';
-import { CloseRounded, UploadRounded } from '@mui/icons-material';
-import { SnackbarContext } from '@/context/SnackbarContext';
-import { useRequireAuth } from '@/utils/hooks/useRequireAuth';
 
 // File Upload Configuration
 export const FILE_CONFIG = {
@@ -28,6 +28,7 @@ export const FILE_CONFIG = {
     'audio/webm',
     'audio/x-m4a',
     'audio/vnd.dlna.adts', // 'audio/aac',
+    'audio/amr',
     'video/mp4',
   ] as const,
   allowedExtensions: [
@@ -39,16 +40,17 @@ export const FILE_CONFIG = {
     '.wav',
     '.aac',
     '.webm',
+    '.amr',
   ] as const,
   errorMessages: {
     invalidFormat:
-      '不支援的檔案格式，請選擇 mp3, mp4, mpeg, mpga, m4a, wav, aac 或 webm 格式',
+      '不支援的檔案格式，請選擇 mp3, mp4, mpeg, mpga, m4a, wav, aac, webm 或 amr 格式',
     sizeExceeded: '檔案大小超過 200MB 限制',
     uploadFailed: '上傳失敗',
   },
   supportedFormats: {
-    mobile: '支援檔案格式：mp3, mp4, mpeg, mpga, m4a, wav, aac, webm',
-    desktop: '支援檔案格式：mp3, mp4, mpeg, mpga, m4a, wav, aac, webm',
+    mobile: '支援檔案格式：mp3, mp4, mpeg, mpga, m4a, wav, aac, webm, amr',
+    desktop: '支援檔案格式：mp3, mp4, mpeg, mpga, m4a, wav, aac, webm, amr',
   },
 } as const;
 

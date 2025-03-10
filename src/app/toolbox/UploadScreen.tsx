@@ -1,17 +1,17 @@
 'use client';
+import { SnackbarContext } from '@/context/SnackbarContext';
+import { useRequireAuth } from '@/utils/hooks/useRequireAuth';
 import { UploadRounded } from '@mui/icons-material';
 import {
   Box,
   Button,
+  Container,
   Typography,
   useMediaQuery,
   useTheme,
-  Container,
 } from '@mui/material';
-import React, { useRef, useContext } from 'react';
+import React, { useContext, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { SnackbarContext } from '@/context/SnackbarContext';
-import { useRequireAuth } from '@/utils/hooks/useRequireAuth';
 
 interface UploadScreenProps {
   handleUploadFile: (
@@ -40,6 +40,7 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ handleUploadFile }) => {
       'audio/webm',
       'audio/x-m4a',
       'audio/vnd.dlna.adts',
+      'audio/amr',
       'video/mp4',
     ],
     allowedExtensions: [
@@ -51,16 +52,17 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ handleUploadFile }) => {
       '.mpeg',
       '.mpga',
       '.webm',
+      '.amr',
     ],
     errorMessages: {
       invalidFormat:
-        '不支援的檔案格式，請選擇 mp3, mp4, mpeg, mpga, m4a, wav, aac 或 webm 格式',
+        '不支援的檔案格式，請選擇 mp3, mp4, mpeg, mpga, m4a, wav, aac, webm 或 amr 格式',
       sizeExceeded: '檔案大小超過 200MB 限制',
       uploadFailed: '上傳失敗',
     },
     supportedFormats: {
-      mobile: '支援檔案格式： mp3, mp4, mpeg, mpga, m4a, wav, aac, webm',
-      desktop: '支援檔案格式： mp3, mp4, mpeg, mpga, m4a, wav, aac, webm',
+      mobile: '支援檔案格式： mp3, mp4, mpeg, mpga, m4a, wav, aac, webm, amr',
+      desktop: '支援檔案格式： mp3, mp4, mpeg, mpga, m4a, wav, aac, webm, amr',
     },
   };
 
