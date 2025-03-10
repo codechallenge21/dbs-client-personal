@@ -194,6 +194,7 @@ const LoginDialog = ({
           >
             還沒有帳戶嗎?{' '}
             <button
+              type="button"
               onClick={handleRegisterClick}
               style={{
                 color: '#C00',
@@ -350,6 +351,7 @@ const LoginDialog = ({
             }}
           />
           <Typography
+            type="button"
             component={'button'}
             onClick={handleForgetPasswordClick}
             sx={{

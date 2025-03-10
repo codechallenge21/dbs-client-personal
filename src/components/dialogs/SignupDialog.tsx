@@ -220,6 +220,7 @@ const SignupDialog: React.FC<SignupDialogProps> = ({
         >
           已經擁有帳戶?{' '}
           <button
+            type="button"
             onClick={handleLoginClick}
             style={{
               color: '#C00',
