@@ -821,9 +821,6 @@ const ChannelsList = () => {
                                     alignItems: 'center',
                                   }}
                                 >
-                                  {(isCreating || isLoadingChannels) && (
-                                    <CustomLoader />
-                                  )}
                                   <span
                                     style={{
                                       fontFamily: 'var(--font-bold)',
@@ -1522,9 +1519,6 @@ const ChannelsList = () => {
                                   alignItems: 'center',
                                 }}
                               >
-                                {(isCreating || isLoadingChannels) && (
-                                  <CustomLoader />
-                                )}
                                 <span
                                   style={{
                                     fontFamily: 'var(--font-bold)',
