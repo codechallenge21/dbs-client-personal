@@ -36,7 +36,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useContext, useEffect, useState } from 'react';
 import UserActionMenu from '../user-action-menu/UserActionMenu';
 
-const customScrollbarStyle = {
+export const customScrollbarStyle = {
   '&::-webkit-scrollbar': {
     width: '4px',
   },
@@ -746,7 +746,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               </Tooltip>
             ) : (
               <>
-                <Tooltip title={loginName || "使用者"} placement="right" arrow>
+                <Tooltip title={loginName || '使用者'} placement="right" arrow>
                   <IconButton
                     role="button"
                     aria-label="Logout"
@@ -805,7 +805,9 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                   },
                 }}
               >
-                <EmojiObjectsRounded sx={{ color: 'white', fontSize: '20px' }} />
+                <EmojiObjectsRounded
+                  sx={{ color: 'white', fontSize: '20px' }}
+                />
               </IconButton>
             </Tooltip>
             <Tooltip title="諮詢師專區" placement="right" arrow>

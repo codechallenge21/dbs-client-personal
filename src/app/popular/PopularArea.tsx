@@ -1,4 +1,6 @@
-import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
+import ToolbarDrawer, {
+  customScrollbarStyle,
+} from '@/components/toolbar-drawer-new/ToolbarDrawer';
 import {
   ArrowForwardIosRounded,
   DownloadRounded,
@@ -195,20 +197,7 @@ export default function PopularArea() {
             '@media (min-width: 600px)': {
               flex: '1 0 0',
             },
-            '&::-webkit-scrollbar': {
-              width: '6px',
-            },
-            '&::-webkit-scrollbar-track': {
-              borderRadius: '10px',
-              background: '#f1f1f1',
-            },
-            '&::-webkit-scrollbar-thumb': {
-              borderRadius: '10px',
-              background: '#888',
-            },
-            '&::-webkit-scrollbar-thumb:hover': {
-              background: '#555',
-            },
+            ...customScrollbarStyle,
           }}
         >
           <Box
