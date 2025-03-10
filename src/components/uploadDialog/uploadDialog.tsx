@@ -80,11 +80,19 @@ export default function UploadDialog({
 
   const validateFile = async (file: File) => {
     try {
-      if (
-        !FILE_CONFIG.allowedFormats.includes(
-          file.type as (typeof FILE_CONFIG.allowedFormats)[number]
-        )
-      ) {
+      // Check if the file extension matches any of our allowed extensions
+      const fileExtension = file.name.toLowerCase().split('.').pop();
+      const isValidExtension = FILE_CONFIG.allowedExtensions.some(ext => 
+        ext.toLowerCase() === `.${fileExtension}`
+      );
+      
+      // Check for valid MIME type
+      const isValidMimeType = FILE_CONFIG.allowedFormats.includes(
+        file.type as (typeof FILE_CONFIG.allowedFormats)[number]
+      );
+      
+      // Accept if either the extension or MIME type is valid
+      if (!isValidExtension && !isValidMimeType) {
         showSnackbar(FILE_CONFIG.errorMessages.invalidFormat, 'error');
         return;
       }
