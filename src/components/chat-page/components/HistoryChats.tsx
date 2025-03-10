@@ -165,6 +165,7 @@ const HistoryChats: React.FC<HistoryChatsProps> = ({
               sx={{
                 display: 'flex',
                 alignItems: 'center',
+                justifyContent: 'center', 
               }}
             >
               <IconButton size="small" sx={{ padding: '8px' }}>
@@ -181,7 +182,6 @@ const HistoryChats: React.FC<HistoryChatsProps> = ({
                   size="small"
                   sx={{
                     color: '#CC0000',
-                    transform: 'translateX(10px)',
                     padding: '8px',
                   }}
                   onClick={(e) => {
