@@ -1,7 +1,9 @@
 import type { NextConfig } from "next";
 
 const isProd = process.env.NODE_ENV === "production";
-const domains = process.env.IMAGE_DOMAINS ? process.env.IMAGE_DOMAINS.split(",") : [];
+const domains = process.env.IMAGE_DOMAINS
+  ? process.env.IMAGE_DOMAINS.split(",")
+  : [];
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -10,6 +12,11 @@ const nextConfig: NextConfig = {
   },
   images: {
     domains: [...domains, "icons.iconarchive.com"],
+  },
+  i18n: {
+    locales: ['zh-TW'],
+    defaultLocale: 'zh-TW',
+    localeDetection: false
   },
 };
 
@@ -33,10 +40,29 @@ const dev = {
         source: "/api/:path*",
         headers: [
           { key: "Access-Control-Allow-Origin", value: "*" },
-          { key: "Access-Control-Allow-Methods", value: "GET,POST,PUT,DELETE,OPTIONS" },
-          { key: "Access-Control-Allow-Headers", value: "Content-Type, Authorization" },
+          {
+            key: "Access-Control-Allow-Methods",
+            value: "GET,POST,PUT,DELETE,OPTIONS",
+          },
+          {
+            key: "Access-Control-Allow-Headers",
+            value: "Content-Type, Authorization",
+          },
         ],
       },
+      {
+        source: "/:path*",
+        headers: [
+          {
+            key: "Content-Language",
+            value: "zh-TW"
+          },
+          {
+            key: "X-Frame-Options",
+            value: "DENY"
+          },
+        ],
+      }
     ];
   },
   ...nextConfig,

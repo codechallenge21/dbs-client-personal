@@ -1,4 +1,7 @@
+import FontLoader from '@/components/font-loader';
 import ChannelContextProvider from '@/context/ChannelContextProvider';
+import { LoginProvider } from '@/context/LoginContext';
+import { SnackbarProvider } from '@/context/SnackbarContext';
 import ThemeProvider from '@/theme';
 import {
   Geist,
@@ -7,11 +10,8 @@ import {
   Open_Sans,
   Public_Sans,
 } from 'next/font/google';
-import './globals.css';
-import { SnackbarProvider } from '@/context/SnackbarContext';
-import { LoginProvider } from '@/context/LoginContext';
 import DynaFontScript from '../assets/font/DynaFontScript';
-import FontLoader from '@/components/font-loader';
+import './globals.css';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -48,9 +48,11 @@ const interFont = Inter({
 });
 
 export const metadata = {
-  title: '好理家在-財務健檢網｜好好理財，家就會在',
-  description: '好理家在-財務健檢網官方網站',
-  keywords: 'react,material,kit,application,dashboard,admin,template',
+  title: '好理家在-財務健檢網｜好好理財，家才會在',
+  description:
+    '探索好理家在-財務健檢網！AI驅動的家庭財務管理平台，整合社工經驗，提供財務健檢、風險評估與社福資源。立即體驗智能理財，守護您的家！',
+  keywords:
+    '家庭財務管理,財務健檢,好好理財,社工財務輔導,AI財務分析,社福資源整合,財務快篩工具,家系圖自動生成',
   manifest: '/manifest.json',
   icons: [
     {
@@ -83,9 +85,12 @@ type Props = {
 
 export default function RootLayout({ children }: Props) {
   return (
-    <html lang="en">
+    <html lang="zh-TW">
       <head>
         <DynaFontScript />
+        <meta httpEquiv="Content-Language" content="zh-TW" />
+        <meta name="google" content="notranslate" />
+        <meta property="og:locale" content="zh_TW" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${publicSansFont.variable} ${openSansFont.variable} ${interFont.variable}`}
