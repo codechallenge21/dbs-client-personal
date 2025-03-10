@@ -77,7 +77,7 @@ const HistoryChats: React.FC<HistoryChatsProps> = ({
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              p: 2,
+              p: '16px 8px 16px 16px',
               height: '84px', // Fixed height to prevent shift
               border: '1px solid var(--Secondary-Dark-Gray, #4A4A4A)',
               borderRadius: 2,
@@ -165,7 +165,7 @@ const HistoryChats: React.FC<HistoryChatsProps> = ({
               sx={{
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center', 
+                justifyContent: 'center',
               }}
             >
               <IconButton size="small" sx={{ padding: '8px' }}>
