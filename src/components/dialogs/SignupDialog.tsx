@@ -20,6 +20,7 @@ import {
 import Image from 'next/image';
 import React, { useContext, useState } from 'react';
 import GoogleIcon from '../../assets/google.png';
+import { customScrollbarStyle } from '../toolbar-drawer-new/ToolbarDrawer';
 
 interface SignupDialogProps {
   open: boolean;
@@ -118,23 +119,10 @@ const SignupDialog: React.FC<SignupDialogProps> = ({
             paddingBottom: '24px',
             transform: 'translate(-50%, -50%)',
             overflow: 'hidden',
-            '&::-webkit-scrollbar': {
-              width: '8px',
-            },
             '@media (orientation: landscape)': {
               overflow: 'auto',
             },
-            '&::-webkit-scrollbar-track': {
-              borderRadius: '10px',
-              background: '#f1f1f1',
-            },
-            '&::-webkit-scrollbar-thumb': {
-              borderRadius: '10px',
-              background: '#888',
-            },
-            '&::-webkit-scrollbar-thumb:hover': {
-              background: '#555',
-            },
+            ...customScrollbarStyle,
           },
         },
       }}
