@@ -17,7 +17,6 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import apis from '@/utils/hooks/apis/apis';
 import DataSourceDialog from '@/components/chat-page/components/chatDataStore';
-import { useChatChannels } from '@/utils/hooks/useChatChannels';
 import LoginDialog from '@/components/dialogs/LoginDialog';
 import SignupDialog from '@/components/dialogs/SignupDialog';
 import { useLoginContext } from '@/context/LoginContext';
@@ -51,13 +50,20 @@ function ClientContent() {
   } = useContext(ChannelContentContext);
 
   const { excute: getChannelDetail } = useAxiosApi(apis.getChannelDetail);
+  const { excute: getChannels, data: chatsData } = useAxiosApi(
+    apis.getChannels
+  );
+
+  useEffect(() => {
+    getChannels({
+      organizationId: 'yMJHyi6R1CB9whpdNvtA',
+    });
+  }, [getChannels]);
 
   const [openDataSource, setOpenDataSource] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenDrawer, setIsOpenDrawer] = useState(!isMobile);
-  const { data: chatsData } = useChatChannels({
-    organizationId: 'yMJHyi6R1CB9whpdNvtA',
-  });
+
 
   const handleClose = useCallback(() => setIsOpen(false), []);
   const handleConfirm = useCallback(() => setIsOpen(false), []);
