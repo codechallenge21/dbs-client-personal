@@ -72,7 +72,7 @@ const drawerItems = [
         }}
       />
     ),
-    route: '/popular', //popular
+    route: '', //popular
   },
   {
     text: '我的收藏',
