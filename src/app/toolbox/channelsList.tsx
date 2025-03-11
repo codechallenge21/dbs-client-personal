@@ -14,6 +14,7 @@ import UploadDialog, {
 import { useLoginContext } from "@/context/LoginContext";
 import { SnackbarContext } from "@/context/SnackbarContext";
 import { OrganizationChannel } from "@/interfaces/entities";
+import { formatDate } from "@/utils/formatDate";
 import {
   default as apiExports,
   default as apis,
@@ -1043,9 +1044,9 @@ const ChannelsList = () => {
                                   color: "var(--Text-Primary, #212B36)",
                                 }}
                               >
-                                {new Date(
-                                  channel.organizationChannelCreateDate
-                                ).toLocaleString()}
+                                {channel.organizationChannelCreateDate 
+                                  ? formatDate(new Date(channel.organizationChannelCreateDate))
+                                  : ''}
                               </Typography>
                             </TableCell>
                             <TableCell
@@ -1673,9 +1674,9 @@ const ChannelsList = () => {
                                   color: "var(--Primary-Black, #212B36)",
                                 }}
                               >
-                                {new Date(
-                                  channel.organizationChannelCreateDate
-                                ).toLocaleString()}
+                                {channel.organizationChannelCreateDate 
+                                  ? formatDate(new Date(channel.organizationChannelCreateDate))
+                                  : ''}
                               </Typography>
                             </Box>
                             <Box
