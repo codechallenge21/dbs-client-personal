@@ -88,10 +88,26 @@ const EditableItem: React.FC<{
   return (
     <>
       <IconButton
+        disableRipple
+        disableFocusRipple
         aria-label="Menu"
         onClick={(event) => {
           event.stopPropagation();
           handleMenuOpen(event, index);
+        }}
+        sx={{
+          padding: '0px',
+          '&:focus-visible': {
+            backgroundColor: 'rgba(204, 0, 0, 0.08)',
+            border: 'rgba(145, 158, 171, 0.4)',
+            borderStyle: 'solid',
+          },
+          '&:hover': {
+            backgroundColor: 'transparent !important',
+          },
+          '&:active': {
+            backgroundColor: 'transparent !important',
+          },
         }}
       >
         {isChannelSummary ? (

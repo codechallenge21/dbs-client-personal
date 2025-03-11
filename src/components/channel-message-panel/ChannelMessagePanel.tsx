@@ -208,13 +208,28 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                     arrow
                   >
                     <IconButton
+                      disableRipple
+                      disableFocusRipple
                       aria-label="copy"
                       sx={{
                         display: 'flex',
                         alignItems: 'center',
                         gap: 0.5,
                         cursor: 'pointer',
-                        padding: 0,
+                        padding: 1,
+                        color: '#212B36',
+                        fontSize: 20,
+                        '&:focus-visible': {
+                          backgroundColor: 'rgba(204, 0, 0, 0.08)',
+                          border: 'rgba(145, 158, 171, 0.4)',
+                          borderStyle: 'solid',
+                        },
+                        '&:hover': {
+                          backgroundColor: 'transparent !important',
+                        },
+                        '&:active': {
+                          backgroundColor: 'transparent !important',
+                        },
                       }}
                       onClick={() =>
                         copyPrompt(
@@ -225,10 +240,10 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                     >
                       {copiedMessageId ===
                       message.organizationChannelMessageId ? (
-                        <DoneIcon sx={{ color: '#212B36' }} />
+                        <DoneIcon sx={{ color: 'rgb(33, 43, 54)' }} />
                       ) : (
                         <ContentCopyRounded
-                          sx={{ color: '#212B36', fontSize: 20 }}
+                          sx={{ color: 'rgb(33, 43, 54)', fontSize: 20 }}
                         />
                       )}
                     </IconButton>
@@ -249,7 +264,28 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                   }}
                 >
                   <Tooltip title="回應良好" placement="top" arrow>
-                    <IconButton aria-label="Like">
+                    <IconButton
+                      aria-label="Like"
+                      disableRipple
+                      disableFocusRipple
+                      sx={{
+                        '&:focus-visible': {
+                          backgroundColor: 'rgba(204, 0, 0, 0.08)',
+                          border: 'rgba(145, 158, 171, 0.4)',
+                          borderStyle: 'solid',
+                        },
+                        '&:hover': {
+                          backgroundColor: 'transparent !important',
+                        },
+                        '&:active': {
+                          backgroundColor: 'transparent !important',
+                        },
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();                        }
+                      }}
+                    >
                       <ThumbDownOffAltRounded
                         sx={{
                           color: 'black',
@@ -260,7 +296,29 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                     </IconButton>
                   </Tooltip>
                   <Tooltip title="回應不佳" placement="top" arrow>
-                    <IconButton aria-label="Dislike">
+                    <IconButton
+                      aria-label="Dislike"
+                      disableRipple
+                      disableFocusRipple
+                      sx={{
+                        '&:focus-visible': {
+                          backgroundColor: 'rgba(204, 0, 0, 0.08)',
+                          border: 'rgba(145, 158, 171, 0.4)',
+                          borderStyle: 'solid',
+                        },
+                        '&:hover': {
+                          backgroundColor: 'transparent !important',
+                        },
+                        '&:active': {
+                          backgroundColor: 'transparent !important',
+                        },
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                        }
+                      }}
+                    >
                       <ThumbDownOffAltRounded
                         sx={{ color: 'black', fontSize: 20 }}
                       />

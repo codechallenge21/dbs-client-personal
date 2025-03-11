@@ -56,6 +56,20 @@ const ViewChats: React.FC<ViewChatsProps> = ({ onClick }) => {
             textDecoration: 'underline',
             textUnderlineOffset: '2px',
           },
+          '&:focus-visible': {
+            backgroundColor: 'rgba(204, 0, 0, 0.08)', // #CC0000 with 8% opacity
+            border: '2px solid rgba(145, 158, 171, 0.4)',
+            outline: 'none',
+            borderRadius: '5px',
+          },
+        }}
+        tabIndex={0}
+        role="button"
+        aria-label="View all chats"
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            onClick();
+          }
         }}
       >
         查看全部
