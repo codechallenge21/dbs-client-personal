@@ -1,5 +1,6 @@
 'use client';
 import { SnackbarContext } from '@/context/SnackbarContext';
+import { formatDate } from '@/utils/formatDate';
 import { useRequireAuth } from '@/utils/hooks/useRequireAuth';
 import { UploadRounded } from '@mui/icons-material';
 import {
@@ -90,19 +91,8 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ handleUploadFile }) => {
         return;
       }
 
-      // Generate current timestamp
-      const now = new Date();
-      const formattedDate = `${now.getDate().toString().padStart(2, '0')}/${(
-        now.getMonth() + 1
-      )
-        .toString()
-        .padStart(2, '0')}/${now.getFullYear()}, ${now
-        .getHours()
-        .toString()
-        .padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now
-        .getSeconds()
-        .toString()
-        .padStart(2, '0')} ${now.getHours() >= 12 ? 'pm' : 'am'}`;
+      // Use the formatDate utility function for consistent date formatting
+      const formattedDate = formatDate();
 
       // Create header info with filename as name and current timestamp
       const fileInfo = {
