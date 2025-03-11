@@ -584,7 +584,7 @@ export default function ChannelSearchCombined() {
                         cursor: 'pointer',
                         '&:hover': { bgcolor: 'rgba(204, 0, 0, 0.1)' },
                         '&active:focus': {
-                          outline: '2px solid #',
+                          outline: '2px solid rgba(145, 158, 171, 0.4)',
                           outlineOffset: '2px',
                         },
                       }}
