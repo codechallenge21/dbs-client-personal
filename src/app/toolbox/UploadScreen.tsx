@@ -1,17 +1,18 @@
 'use client';
+import { SnackbarContext } from '@/context/SnackbarContext';
+import { formatDate } from '@/utils/formatDate';
+import { useRequireAuth } from '@/utils/hooks/useRequireAuth';
 import { UploadRounded } from '@mui/icons-material';
 import {
   Box,
   Button,
+  Container,
   Typography,
   useMediaQuery,
   useTheme,
-  Container,
 } from '@mui/material';
-import React, { useRef, useContext } from 'react';
+import React, { useContext, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { SnackbarContext } from '@/context/SnackbarContext';
-import { useRequireAuth } from '@/utils/hooks/useRequireAuth';
 
 interface UploadScreenProps {
   handleUploadFile: (
@@ -40,6 +41,7 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ handleUploadFile }) => {
       'audio/webm',
       'audio/x-m4a',
       'audio/vnd.dlna.adts',
+      'audio/amr',
       'video/mp4',
     ],
     allowedExtensions: [
@@ -51,26 +53,35 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ handleUploadFile }) => {
       '.mpeg',
       '.mpga',
       '.webm',
+      '.amr',
     ],
     errorMessages: {
       invalidFormat:
-        '不支援的檔案格式，請選擇 mp3, mp4, mpeg, mpga, m4a, wav, aac 或 webm 格式',
+        '不支援的檔案格式，請選擇 mp3, mp4, mpeg, mpga, m4a, wav, aac, webm 或 amr 格式',
       sizeExceeded: '檔案大小超過 200MB 限制',
       uploadFailed: '上傳失敗',
     },
     supportedFormats: {
-      mobile: '支援檔案格式： mp3, mp4, mpeg, mpga, m4a, wav, aac, webm',
-      desktop: '支援檔案格式： mp3, mp4, mpeg, mpga, m4a, wav, aac, webm',
+      mobile: '支援檔案格式： mp3, mp4, mpeg, mpga, m4a, wav, aac, webm, amr',
+      desktop: '支援檔案格式： mp3, mp4, mpeg, mpga, m4a, wav, aac, webm, amr',
     },
   };
 
   const validateFile = async (file: File) => {
     try {
-      if (
-        !FILE_CONFIG.allowedFormats.includes(
-          file.type as (typeof FILE_CONFIG.allowedFormats)[number]
-        )
-      ) {
+      // Check if the file extension matches any of our allowed extensions
+      const fileExtension = file.name.toLowerCase().split('.').pop();
+      const isValidExtension = FILE_CONFIG.allowedExtensions.some(ext => 
+        ext.toLowerCase() === `.${fileExtension}`
+      );
+      
+      // Check for valid MIME type
+      const isValidMimeType = FILE_CONFIG.allowedFormats.includes(
+        file.type as (typeof FILE_CONFIG.allowedFormats)[number]
+      );
+      
+      // Accept if either the extension or MIME type is valid
+      if (!isValidExtension && !isValidMimeType) {
         showSnackbar(FILE_CONFIG.errorMessages.invalidFormat, 'error');
         return;
       }
@@ -80,19 +91,8 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ handleUploadFile }) => {
         return;
       }
 
-      // Generate current timestamp
-      const now = new Date();
-      const formattedDate = `${now.getDate().toString().padStart(2, '0')}/${(
-        now.getMonth() + 1
-      )
-        .toString()
-        .padStart(2, '0')}/${now.getFullYear()}, ${now
-        .getHours()
-        .toString()
-        .padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now
-        .getSeconds()
-        .toString()
-        .padStart(2, '0')} ${now.getHours() >= 12 ? 'pm' : 'am'}`;
+      // Use the formatDate utility function for consistent date formatting
+      const formattedDate = formatDate();
 
       // Create header info with filename as name and current timestamp
       const fileInfo = {

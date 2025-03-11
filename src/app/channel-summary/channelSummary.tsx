@@ -40,6 +40,7 @@ import {
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useCallback, useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
+import { customScrollbarStyle } from '@/components/toolbar-drawer-new/ToolbarDrawer';
 
 function TabPanel(props: {
   readonly value: number;
@@ -421,21 +422,8 @@ const ChannelSummary = () => {
                     size={{ xs: 5 }}
                     sx={{
                       overflowY: 'auto',
+                      ...customScrollbarStyle,
                       height: 'calc(100vh - 200px)',
-                      '&::-webkit-scrollbar': {
-                        width: '8px',
-                      },
-                      '&::-webkit-scrollbar-track': {
-                        borderRadius: '10px',
-                        background: '#f1f1f1',
-                      },
-                      '&::-webkit-scrollbar-thumb': {
-                        borderRadius: '10px',
-                        background: '#888',
-                      },
-                      '&::-webkit-scrollbar-thumb:hover': {
-                        background: '#555',
-                      },
                     }}
                   >
                     <Item>
@@ -558,20 +546,7 @@ const ChannelSummary = () => {
                     sx={{
                       overflowY: 'auto',
                       height: 'calc(100vh - 200px)',
-                      '&::-webkit-scrollbar': {
-                        width: '8px',
-                      },
-                      '&::-webkit-scrollbar-track': {
-                        borderRadius: '10px',
-                        background: '#f1f1f1',
-                      },
-                      '&::-webkit-scrollbar-thumb': {
-                        borderRadius: '10px',
-                        background: '#888',
-                      },
-                      '&::-webkit-scrollbar-thumb:hover': {
-                        background: '#555',
-                      },
+                      ...customScrollbarStyle,
                     }}
                   >
                     <Item>
@@ -1039,12 +1014,7 @@ const ChannelSummary = () => {
                                   display: 'flex',
                                   flexDirection: 'row',
                                   overflowX: 'auto',
-                                  '&::-webkit-scrollbar': {
-                                    height: '8px',
-                                  },
-                                  '&::-webkit-scrollbar-thumb': {
-                                    backgroundColor: 'transparent',
-                                  },
+                                  ...customScrollbarStyle,
                                 }}
                               >
                                 {dataRow1.map((item, index) => (
@@ -1152,12 +1122,7 @@ const ChannelSummary = () => {
                                   display: 'flex',
                                   flexDirection: 'row',
                                   overflowX: 'auto',
-                                  '&::-webkit-scrollbar': {
-                                    height: '8px',
-                                  },
-                                  '&::-webkit-scrollbar-thumb': {
-                                    backgroundColor: 'transparent',
-                                  },
+                                  ...customScrollbarStyle,
                                 }}
                               >
                                 {dataRow2.map((item, index) => (
@@ -1265,12 +1230,7 @@ const ChannelSummary = () => {
                                   display: 'flex',
                                   flexDirection: 'row',
                                   overflowX: 'auto',
-                                  '&::-webkit-scrollbar': {
-                                    height: '8px',
-                                  },
-                                  '&::-webkit-scrollbar-thumb': {
-                                    backgroundColor: 'transparent',
-                                  },
+                                  ...customScrollbarStyle,
                                 }}
                               >
                                 {dataRow3.map((item, index) => (
@@ -1946,12 +1906,7 @@ const ChannelSummary = () => {
                       display: 'flex',
                       flexDirection: 'row',
                       overflowX: 'auto',
-                      '&::-webkit-scrollbar': {
-                        height: '8px',
-                      },
-                      '&::-webkit-scrollbar-thumb': {
-                        backgroundColor: 'transparent',
-                      },
+                      ...customScrollbarStyle,
                     }}
                   >
                     {dataRow1.map((item, index) => (
@@ -2057,12 +2012,7 @@ const ChannelSummary = () => {
                       display: 'flex',
                       flexDirection: 'row',
                       overflowX: 'auto',
-                      '&::-webkit-scrollbar': {
-                        height: '8px',
-                      },
-                      '&::-webkit-scrollbar-thumb': {
-                        backgroundColor: 'transparent',
-                      },
+                      ...customScrollbarStyle,
                     }}
                   >
                     {dataRow2.map((item, index) => (
@@ -2168,12 +2118,7 @@ const ChannelSummary = () => {
                       display: 'flex',
                       flexDirection: 'row',
                       overflowX: 'auto',
-                      '&::-webkit-scrollbar': {
-                        height: '8px',
-                      },
-                      '&::-webkit-scrollbar-thumb': {
-                        backgroundColor: 'transparent',
-                      },
+                      ...customScrollbarStyle,
                     }}
                   >
                     {dataRow3.map((item, index) => (

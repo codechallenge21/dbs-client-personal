@@ -22,6 +22,7 @@ import {
   Button,
   IconButton,
   List,
+  Tooltip,
   Typography,
   useMediaQuery,
   useTheme,
@@ -35,6 +36,23 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useContext, useEffect, useState } from 'react';
 import UserActionMenu from '../user-action-menu/UserActionMenu';
 import WishPoolDialog from '@/components/dialogs/WishPoolDialog';
+
+export const customScrollbarStyle = {
+  '&::-webkit-scrollbar': {
+    width: '4px',
+  },
+  '&::-webkit-scrollbar-thumb': {
+    backgroundColor: '#c1c1c1',
+    borderRadius: '4px',
+  },
+  '&::-webkit-scrollbar-thumb:hover': {
+    backgroundColor: '#a8a8a8',
+  },
+  '&::-webkit-scrollbar-track': {
+    backgroundColor: '#f1f1f1',
+    borderRadius: '4px',
+  },
+};
 
 interface ToolbarDrawerProps {
   open: boolean;
@@ -117,6 +135,8 @@ const MainBox = styled('div', {
       },
     },
   ],
+  ...customScrollbarStyle,
+  overflow: 'auto',
 }));
 
 const drawerWidth = 240;
@@ -133,6 +153,7 @@ const openedMixin = (theme: Theme): CSSObject => ({
     duration: theme.transitions.duration.enteringScreen,
   }),
   overflowX: 'hidden',
+  ...customScrollbarStyle,
 });
 
 const closedMixin = (theme: Theme): CSSObject => ({
@@ -145,6 +166,7 @@ const closedMixin = (theme: Theme): CSSObject => ({
   [theme.breakpoints.up('sm')]: {
     width: `calc(${theme.spacing(8)} + 1px)`,
   },
+  ...customScrollbarStyle,
 });
 
 const CustomDrawer = styled(MuiDrawer, {
@@ -159,14 +181,20 @@ const CustomDrawer = styled(MuiDrawer, {
       props: ({ open }) => open,
       style: {
         ...openedMixin(theme),
-        '& .MuiDrawer-paper': openedMixin(theme),
+        '& .MuiDrawer-paper': {
+          ...openedMixin(theme),
+          ...customScrollbarStyle,
+        },
       },
     },
     {
       props: ({ open }) => !open,
       style: {
         ...closedMixin(theme),
-        '& .MuiDrawer-paper': closedMixin(theme),
+        '& .MuiDrawer-paper': {
+          ...closedMixin(theme),
+          ...customScrollbarStyle,
+        },
       },
     },
   ],
@@ -267,9 +295,18 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
+        overflow: 'hidden',
       }}
     >
-      <List sx={{ padding: '0 8px', flexGrow: 1 }}>
+      <List
+        sx={{
+          padding: '0 8px',
+          flexGrow: 1,
+          overflowX: 'hidden !important',
+          overflowY: 'auto',
+          ...customScrollbarStyle,
+        }}
+      >
         <ListItem
           sx={{
             display: 'flex',
@@ -278,6 +315,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             alignItems: isExpanded || isMobile ? 'center' : 'stretch',
             justifyContent: isExpanded || isMobile ? 'space-between' : 'center',
             gap: isExpanded || isMobile ? '0' : '8px',
+            overflowX: 'hidden !important',
           }}
         >
           {(isExpanded || isMobile) && (
@@ -329,6 +367,8 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             </Typography>
           )}
           <IconButton
+            disableRipple
+            disableFocusRipple
             role="button"
             aria-label="Expand/Collapse"
             onClick={() => {
@@ -341,8 +381,21 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             }}
             sx={{
               color: '#212B36',
-              padding: '8px',
+              padding: '3px',
               transform: !isExpanded && !isMobile ? 'rotate(180deg)' : 'none',
+              '&:hover': {
+                backgroundColor: 'transparent !important',
+              },
+              '&:active': {
+                backgroundColor: 'transparent !important',
+              },
+              '&:focus-visible': {
+                backgroundColor: 'rgba(245, 12, 12, 0.08)!important',
+                border: '2px solid var(--Primary-Black, #919EAB)',
+              },
+              '&:focus-visible:hover': {
+                backgroundColor: 'rgba(219, 20, 20, 0.08)!important',
+              },
             }}
           >
             <MenuOpenRounded />
@@ -358,6 +411,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             }}
           >
             <Button
+              disableRipple
               role="button"
               aria-label="New Chat"
               sx={{
@@ -370,6 +424,14 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 justifyContent: 'center',
                 border: '1px solid var(--Primary-Black, #212B36)',
                 color: 'var(--Primary-Black, #212B36)',
+                '&:focus-visible': {
+                  outlineOffset: '2px',
+                  backgroundColor: 'rgba(204, 0, 0, 0.08)',
+                  border: '2px solid var(--Primary-Black,#919EAB)',
+                },
+                '&:focus-visible:hover': {
+                  backgroundColor: 'rgba(204, 0, 0, 0.08)',
+                },
               }}
               onClick={() => {
                 resetChat();
@@ -394,24 +456,26 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
         )}
 
         {!isExpanded && !isMobile && (
-          <IconButton
-            role="button"
-            aria-label="New Chat"
-            sx={{
-              padding: '8px',
-              display: 'flex',
-              alignItems: 'center',
-              borderRadius: '50px',
-              justifyContent: 'center',
-              border: '1px solid var(--Primary-Black, #212B36)',
-              mt: '8px',
-            }}
-            onClick={() => {
-              resetChat();
-            }}
-          >
-            <AddRounded sx={{ color: '#212B36', fontSize: '20px' }} />
-          </IconButton>
+          <Tooltip title="AI問答" placement="right" arrow>
+            <IconButton
+              role="button"
+              aria-label="New Chat"
+              sx={{
+                padding: '8px',
+                display: 'flex',
+                alignItems: 'center',
+                borderRadius: '50px',
+                justifyContent: 'center',
+                border: '1px solid var(--Primary-Black, #212B36)',
+                mt: '8px',
+              }}
+              onClick={() => {
+                resetChat();
+              }}
+            >
+              <AddRounded sx={{ color: '#212B36', fontSize: '20px' }} />
+            </IconButton>
+          </Tooltip>
         )}
 
         <ListItem sx={{ padding: '0px' }}>
@@ -424,11 +488,14 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               alignItems: 'flex-start',
               justifyContent: 'flex-end',
               marginTop: '8px',
+              ...customScrollbarStyle,
             }}
           >
             {drawerItems.map((item, index) => (
               <ListItem
                 key={index}
+                tabIndex={item.route !== '' ? 0 : -1}
+                aria-label={item.text}
                 sx={{
                   padding: '8px',
                   borderRadius: '8px',
@@ -437,7 +504,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                     (pathname === '/' && item.route === '/chat') ||
                     (pathname === '/channel-summary' &&
                       item.route === '/toolbox')
-                      ? 'var(--Action-Selected, rgba(204, 0, 0, 0.20))'
+                      ? 'var(--Action-Selected, rgba(204, 0, 0, 0.20)) !important'
                       : 'transparent',
                   '&:hover': {
                     backgroundColor: '#FBEDED',
@@ -449,9 +516,16 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                     opacity: 0.5,
                     cursor: 'not-allowed',
                   }),
+                  '&:focus-visible': {
+                    outline: '2px solid rgba(145,158,171,0.4)',
+                    outlineOffset: '2px',
+                    backgroundColor: 'rgba(204, 0, 0, 0.08)',
+                  },
+                  '&:focus-visible:hover': {
+                    backgroundColor: 'rgba(204, 0, 0, 0.08)',
+                  },
                 }}
                 onClick={() => {
-                  // if (!item.route) return;
                   if (index === 3) {
                     if (
                       selectedChannel ||
@@ -471,31 +545,68 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                   }
                   router.push(item.route);
                 }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    if (index === 3) {
+                      if (
+                        selectedChannel ||
+                        selectedChannelId ||
+                        isInteractingInChat
+                      ) {
+                        if (
+                          pathname === '/chat' &&
+                          !searchParams.has('organizationChannelId')
+                        ) {
+                          window.location.reload();
+                        } else {
+                          router.push('/chat');
+                        }
+                        return;
+                      }
+                    }
+                    router.push(item.route);
+                  }
+                }}
               >
-                <Typography
-                  sx={{
-                    display: 'flex',
-                    fontWeight: 400,
-                    fontSize: '16px',
-                    alignItems: 'center',
-                    color: index === 0 ? '#CC0000' : '#212B36',
-                    fontFamily: 'var(--font-bold)',
-                  }}
-                >
-                  <span
-                    style={{
+                {!isExpanded && !isMobile ? (
+                  <Tooltip title={item.text} placement="right" arrow>
+                    <Typography
+                      sx={{
+                        display: 'flex',
+                        fontWeight: 400,
+                        fontSize: '16px',
+                        alignItems: 'center',
+                        color: index === 0 ? '#CC0000' : '#212B36',
+                        fontFamily: 'var(--font-bold)',
+                      }}
+                    >
+                      <span style={{ display: 'flex', alignItems: 'center' }}>
+                        {item.icon}
+                      </span>
+                    </Typography>
+                  </Tooltip>
+                ) : (
+                  <Typography
+                    sx={{
                       display: 'flex',
+                      fontWeight: 400,
+                      fontSize: '16px',
                       alignItems: 'center',
+                      color: index === 0 ? '#CC0000' : '#212B36',
+                      fontFamily: 'var(--font-bold)',
                     }}
                   >
-                    {item.icon}
-                  </span>
-                  {(isExpanded || isMobile) && (
-                    <span style={{ marginLeft: index === 0 ? '0px' : '8px' }}>
-                      {item.text}
+                    <span style={{ display: 'flex', alignItems: 'center' }}>
+                      {item.icon}
                     </span>
-                  )}
-                </Typography>
+                    {(isExpanded || isMobile) && (
+                      <span style={{ marginLeft: index === 0 ? '0px' : '8px' }}>
+                        {item.text}
+                      </span>
+                    )}
+                  </Typography>
+                )}
               </ListItem>
             ))}
           </List>
@@ -528,6 +639,20 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                     alignItems: 'center',
                     gap: '8px',
                     alignSelf: 'stretch',
+                    '&:focus-visible': {
+                      outline: '2px solid rgba(145,158,171,0.4)',
+                      outlineOffset: '2px',
+                      backgroundColor: 'rgba(204, 0, 0, 0.08) !important',
+                      '&:hover': {
+                        backgroundColor: 'rgba(204, 0, 0, 0.08) !important',
+                      },
+                    },
+                    '&:active:focus-visible': {
+                      backgroundColor: 'transparent !important',
+                    },
+                    '&:hover': {
+                      backgroundColor: 'transparent !important',
+                    },
                   }}
                 >
                   <Box
@@ -535,7 +660,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                       display: 'flex',
                       alignItems: 'center',
                       gap: '8px',
-                      flex: 1, // makes the left group take available space
+                      flex: 1,
                     }}
                   >
                     <PermIdentityRounded sx={{ color: '#212B36' }} />
@@ -568,7 +693,10 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                   anchorEl={anchorEl}
                   onClose={handleClose}
                   anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                  transformOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                  transformOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                  }}
                   isExpanded={isExpanded}
                 />
               </>
@@ -655,38 +783,13 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
         {!isExpanded && !isMobile && (
           <>
             {!isLogin ? (
-              <IconButton
-                role="button"
-                aria-label="Login"
-                onClick={() => {
-                  if (setIsLoginOpen) setIsLoginOpen(true);
-                }}
-                sx={{
-                  width: '36px',
-                  height: '36px',
-                  padding: '8px',
-                  display: 'flex',
-                  borderRadius: '50px',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  border: '2px solid var(--Primary-Black, #212B36)',
-                  background: 'var(--Primary-White, #FFF)',
-                  '&:hover': {
-                    background: 'rgba(92, 68, 58, 0.8)',
-                  },
-                  '&:active': {
-                    background: 'rgba(92, 68, 58, 0.6)',
-                  },
-                }}
-              >
-                <LoginRounded sx={{ color: '#212B36', fontSize: '20px' }} />
-              </IconButton>
-            ) : (
-              <>
+              <Tooltip title="登入" placement="right" arrow>
                 <IconButton
                   role="button"
-                  aria-label="Logout"
-                  onClick={handleMenuOpen}
+                  aria-label="Login"
+                  onClick={() => {
+                    if (setIsLoginOpen) setIsLoginOpen(true);
+                  }}
                   sx={{
                     width: '36px',
                     height: '36px',
@@ -695,7 +798,8 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                     borderRadius: '50px',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    background: 'var(--Secondary-, #5C443A)',
+                    border: '2px solid var(--Primary-Black, #212B36)',
+                    background: 'var(--Primary-White, #FFF)',
                     '&:hover': {
                       background: 'rgba(92, 68, 58, 0.8)',
                     },
@@ -704,10 +808,38 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                     },
                   }}
                 >
-                  <PermIdentityRounded
-                    sx={{ color: 'white', fontSize: '20px' }}
-                  />
+                  <LoginRounded sx={{ color: '#212B36', fontSize: '20px' }} />
                 </IconButton>
+              </Tooltip>
+            ) : (
+              <>
+                <Tooltip title={loginName || '使用者'} placement="right" arrow>
+                  <IconButton
+                    role="button"
+                    aria-label="Logout"
+                    onClick={handleMenuOpen}
+                    sx={{
+                      width: '36px',
+                      height: '36px',
+                      padding: '8px',
+                      display: 'flex',
+                      borderRadius: '50px',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      background: 'var(--Secondary-, #5C443A)',
+                      '&:hover': {
+                        background: 'rgba(92, 68, 58, 0.8)',
+                      },
+                      '&:active': {
+                        background: 'rgba(92, 68, 58, 0.6)',
+                      },
+                    }}
+                  >
+                    <PermIdentityRounded
+                      sx={{ color: 'white', fontSize: '20px' }}
+                    />
+                  </IconButton>
+                </Tooltip>
                 <UserActionMenu
                   email={loginName}
                   handleLogout={handleLogout}
@@ -719,62 +851,68 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 />
               </>
             )}
-            <IconButton
-              role="button"
-              aria-label="Wsihing Pool"
-              sx={{
-                width: '36px',
-                height: '36px',
-                padding: '8px',
-                display: 'flex',
-                borderRadius: '50px',
-                alignItems: 'center',
-                justifyContent: 'center',
-                background: 'var(--Secondary-, #5C443A)',
-                '&:hover': {
-                  background: 'rgba(92, 68, 58, 0.8)',
-                },
-                '&:active': {
-                  background: 'rgba(92, 68, 58, 0.6)',
-                },
-              }}
-            >
-              <EmojiObjectsRounded sx={{ color: 'white', fontSize: '20px' }} />
-            </IconButton>
-            <IconButton
-              role="button"
-              aria-label="Consultant Area"
-              sx={{
-                width: '36px',
-                height: '36px',
-                padding: '8px',
-                display: 'flex',
-                borderRadius: '50px',
-                alignItems: 'center',
-                justifyContent: 'center',
-                background: 'var(--Secondary-, #5C443A)',
-                '&:hover': {
-                  background: 'rgba(92, 68, 58, 0.8)',
-                },
-                '&:active': {
-                  background: 'rgba(92, 68, 58, 0.6)',
-                },
-              }}
-            >
-              <Typography
+            <Tooltip title="許願池" placement="right" arrow>
+              <IconButton
+                role="button"
+                aria-label="Wsihing Pool"
                 sx={{
-                  fontWeight: 600,
-                  fontSize: '16px',
-                  fontFamily: 'Inter',
-                  fontStyle: 'normal',
-                  lineHeight: 'normal',
-                  color:
-                    'var(--Components-Button-Contained-Inherit-Text, #FFF)',
+                  width: '36px',
+                  height: '36px',
+                  padding: '8px',
+                  display: 'flex',
+                  borderRadius: '50px',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: 'var(--Secondary-, #5C443A)',
+                  '&:hover': {
+                    background: 'rgba(92, 68, 58, 0.8)',
+                  },
+                  '&:active': {
+                    background: 'rgba(92, 68, 58, 0.6)',
+                  },
                 }}
               >
-                諮
-              </Typography>
-            </IconButton>
+                <EmojiObjectsRounded
+                  sx={{ color: 'white', fontSize: '20px' }}
+                />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="諮詢師專區" placement="right" arrow>
+              <IconButton
+                role="button"
+                aria-label="Consultant Area"
+                sx={{
+                  width: '36px',
+                  height: '36px',
+                  padding: '8px',
+                  display: 'flex',
+                  borderRadius: '50px',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: 'var(--Secondary-, #5C443A)',
+                  '&:hover': {
+                    background: 'rgba(92, 68, 58, 0.8)',
+                  },
+                  '&:active': {
+                    background: 'rgba(92, 68, 58, 0.6)',
+                  },
+                }}
+              >
+                <Typography
+                  sx={{
+                    fontWeight: 600,
+                    fontSize: '16px',
+                    fontFamily: 'Inter',
+                    fontStyle: 'normal',
+                    lineHeight: 'normal',
+                    color:
+                      'var(--Components-Button-Contained-Inherit-Text, #FFF)',
+                  }}
+                >
+                  諮
+                </Typography>
+              </IconButton>
+            </Tooltip>
           </>
         )}
       </Box>
@@ -789,10 +927,11 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
           sx={{
             flexShrink: 0,
             '& .MuiDrawer-paper': {
-              width: isExpanded || isMobile ? drawerWidth : 56, // Adjust drawer width
+              width: isExpanded || isMobile ? drawerWidth : 56,
               height: 'calc(100vh - 32px)',
               margin: '16px',
               borderRadius: '8px',
+              ...customScrollbarStyle,
             },
           }}
           onClose={() => setIsOpenDrawer(!open)}
@@ -811,6 +950,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               width: isExpanded || isMobile ? drawerWidth : 72,
               height: '100%',
               borderRadius: '0 8px 8px 0',
+              ...customScrollbarStyle,
             },
             pointerEvents: !open ? 'none' : 'auto',
           }}
@@ -830,6 +970,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
           transition: 'margin-left 0.3s',
           marginLeft:
             isExpanded && !isMobile ? '255px' : isMobile ? '0' : '75px',
+          ...customScrollbarStyle,
         }}
       >
         {children}

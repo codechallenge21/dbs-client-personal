@@ -22,9 +22,10 @@ import {
   useTheme,
 } from '@mui/material';
 import Image from 'next/image';
-import React, { type FC, useState } from 'react';
+import React, { type FC, useEffect, useRef, useState } from 'react';
 import MermaidMarkdown from '../MermaidChart/Mermaidmarkdown';
 import CustomLoader from '../loader/loader';
+import { customScrollbarStyle } from '../toolbar-drawer-new/ToolbarDrawer';
 
 export interface ChannelMessagePanelProps {
   channel?: OrganizationChannel;
@@ -41,6 +42,22 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
   const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const loaderRef = useRef<HTMLDivElement>(null);
+
+  // Automatically scroll to the bottom
+  const scrollToBottom = () => {
+    if (loaderRef.current) {
+      loaderRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  // Scroll to the bottom when the chat content changes or the interaction state changes
+  useEffect(() => {
+    scrollToBottom();
+  }, [chatResponses, isInteractingInChat]);
 
   const copyPrompt = (text: string, messageId: string) => {
     navigator.clipboard.writeText(text).then(
@@ -100,21 +117,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
           overflowY: 'auto',
           overflowX: 'hidden', // prevent horizontal scroll
           height: '100%',
-          // ChatGPT-like scrollbar styling for Webkit browsers
-          '&::-webkit-scrollbar': {
-            width: '30px', // Increased scrollbar width
-          },
-          '&::-webkit-scrollbar-track': {
-            background: '#f1f1f1',
-            borderRadius: '3px',
-          },
-          '&::-webkit-scrollbar-thumb': {
-            backgroundColor: '#888',
-            borderRadius: '3px',
-          },
-          '&::-webkit-scrollbar-thumb:hover': {
-            backgroundColor: '#555',
-          },
+          ...customScrollbarStyle,
           // Firefox scrollbar styling
           scrollbarWidth: 'thick', // Increased scrollbar width
           scrollbarColor: '#888 #f1f1f1',
@@ -463,9 +466,11 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
             </Box>
           </React.Fragment>
         ))}
+        <div ref={messagesEndRef} /> {/* End of messages marker */}
       </Box>
       {isInteractingInChat && (
         <Box
+          ref={loaderRef}
           sx={{
             ml: '30px',
             display: 'flex',

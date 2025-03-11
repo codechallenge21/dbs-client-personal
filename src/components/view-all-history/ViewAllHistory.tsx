@@ -26,6 +26,7 @@ import {
 import { useRouter } from 'next/navigation';
 import ChannelContentContext from '@/context/ChannelContentContext';
 import { motion, AnimatePresence } from 'framer-motion';
+import { customScrollbarStyle } from '../toolbar-drawer-new/ToolbarDrawer';
 
 // Updated motion variants:
 // They start at x:0 (their original position) and when exiting, slide out.
@@ -127,9 +128,10 @@ export default function ChannelSearchCombined() {
 
   useEffect(() => {
     if (chatsData && page === 0) {
+      // Fix: Ensure each channel has a unique ID
       const formattedChannels = chatsData.map((chat: OrganizationChannel) => ({
         ...chat,
-        id: chat.organizationChannelId,
+        id: chat.organizationChannelId, // Using the unique ID here
         date: new Date(chat.organizationChannelCreateDate).toLocaleString(),
         selected: false,
       }));
@@ -162,7 +164,20 @@ export default function ChannelSearchCombined() {
           })
         );
 
-        setChannels((prev) => [...prev, ...newFormattedChannels]);
+        setChannels((prev) => {
+          // Get all existing IDs
+          const existingIds = new Set(
+            prev.map((ch) => ch.organizationChannelId)
+          );
+
+          // Filter out any new channels that have duplicate IDs
+          const uniqueNewChannels = newFormattedChannels.filter(
+            (newCh) => !existingIds.has(newCh.organizationChannelId)
+          );
+
+          return [...prev, ...uniqueNewChannels];
+        });
+
         setHasMore(newChannelsData.length >= itemsPerPage);
       } else {
         setHasMore(false);
@@ -181,14 +196,6 @@ export default function ChannelSearchCombined() {
 
     observer.current = new IntersectionObserver(
       (entries) => {
-        console.log(
-          'isTrue',
-          entries[0]?.isIntersecting,
-          hasMore,
-          !isFetching,
-          `hello ${searchQuery}`,
-          !searchQuery.trim()
-        );
         if (
           entries[0]?.isIntersecting &&
           hasMore &&
@@ -346,18 +353,7 @@ export default function ChannelSearchCombined() {
                 overflowY: 'auto',
                 paddingRight: '8px',
                 paddingLeft: isMobile ? '0px' : '10px',
-                '&::-webkit-scrollbar': { width: '4px' },
-                '&::-webkit-scrollbar-thumb': {
-                  backgroundColor: '#c1c1c1',
-                  borderRadius: '4px',
-                },
-                '&::-webkit-scrollbar-thumb:hover': {
-                  backgroundColor: '#a8a8a8',
-                },
-                '&::-webkit-scrollbar-track': {
-                  backgroundColor: '#f1f1f1',
-                  borderRadius: '4px',
-                },
+                ...customScrollbarStyle,
               }}
             >
               <Stack spacing={1} sx={{ width: '100%' }}>
@@ -368,7 +364,8 @@ export default function ChannelSearchCombined() {
                   return (
                     <Paper
                       className="group"
-                      key={channel.organizationChannelId}
+                      // Fix: Using the organizationChannelId as the key, which should be unique
+                      key={`view1-${channel.organizationChannelId}`}
                       onMouseEnter={() =>
                         handleMouseEnter(channel.organizationChannelId)
                       }
@@ -623,24 +620,14 @@ export default function ChannelSearchCombined() {
                 overflowY: 'auto',
                 paddingRight: '8px',
                 paddingLeft: isMobile ? '0px' : '10px',
-                '&::-webkit-scrollbar': { width: '4px' },
-                '&::-webkit-scrollbar-thumb': {
-                  backgroundColor: '#c1c1c1',
-                  borderRadius: '4px',
-                },
-                '&::-webkit-scrollbar-thumb:hover': {
-                  backgroundColor: '#a8a8a8',
-                },
-                '&::-webkit-scrollbar-track': {
-                  backgroundColor: '#f1f1f1',
-                  borderRadius: '4px',
-                },
+                ...customScrollbarStyle,
               }}
             >
               <Stack spacing={1} sx={{ width: '100%' }}>
                 {filteredChannels.map((channel) => (
                   <Paper
-                    key={channel.organizationChannelId}
+                    // Fix: Using the organizationChannelId with a prefix to make keys unique across different views
+                    key={`view2-${channel.organizationChannelId}`}
                     elevation={0}
                     sx={{
                       display: 'flex',

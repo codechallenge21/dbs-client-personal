@@ -5,14 +5,16 @@ import ForgetPasswordDialog from "@/components/dialogs/ForgetPasswordDialog";
 import LoginDialog from "@/components/dialogs/LoginDialog";
 import SignupDialog from "@/components/dialogs/SignupDialog";
 import EditableItem from "@/components/editable-item/EditableItem";
-import CustomLoader from "@/components/loader/loader";
-import ToolbarDrawer from "@/components/toolbar-drawer-new/ToolbarDrawer";
+import ToolbarDrawer, {
+  customScrollbarStyle,
+} from "@/components/toolbar-drawer-new/ToolbarDrawer";
 import UploadDialog, {
   FILE_CONFIG,
 } from "@/components/uploadDialog/uploadDialog";
 import { useLoginContext } from "@/context/LoginContext";
 import { SnackbarContext } from "@/context/SnackbarContext";
 import { OrganizationChannel } from "@/interfaces/entities";
+import { formatDate } from "@/utils/formatDate";
 import {
   default as apiExports,
   default as apis,
@@ -641,20 +643,7 @@ const ChannelsList = () => {
                     sx={{
                       maxHeight: "calc(100vh - 180px)",
                       overflow: "auto",
-                      "&::-webkit-scrollbar": {
-                        width: "8px",
-                      },
-                      "&::-webkit-scrollbar-track": {
-                        borderRadius: "10px",
-                        background: "#f1f1f1",
-                      },
-                      "&::-webkit-scrollbar-thumb": {
-                        borderRadius: "10px",
-                        background: "#888",
-                      },
-                      "&::-webkit-scrollbar-thumb:hover": {
-                        background: "#555",
-                      },
+                      ...customScrollbarStyle,
                     }}
                   >
                     <Table stickyHeader>
@@ -832,9 +821,6 @@ const ChannelsList = () => {
                                     alignItems: "center",
                                   }}
                                 >
-                                  {(isCreating || isLoadingChannels) && (
-                                    <CustomLoader />
-                                  )}
                                   <span
                                     style={{
                                       fontFamily: "var(--font-bold)",
@@ -914,6 +900,14 @@ const ChannelsList = () => {
                           <TableRow
                             key={index}
                             onClick={() => handleRowClick(channel)}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" || e.key === " ") {
+                                e.preventDefault();
+                                handleRowClick(channel);
+                              }
+                            }}
+                            tabIndex={0}
+                            role="button"
                             sx={{
                               cursor:
                                 channel.organizationChannelTranscriptList[0]
@@ -925,6 +919,12 @@ const ChannelsList = () => {
                               borderBottom:
                                 "1px dashed var(--Components-Divider, rgba(145, 158, 171, 0.20))",
                               background: "var(--Background-Paper, #FFF)",
+                              "&:focus": {
+                                backgroundColor: "rgba(0, 0, 0, 0.04)", // Add button click effect
+                              },
+                              "&:active": {
+                                backgroundColor: "rgba(0, 0, 0, 0.08)", // Add button click effect
+                              },
                             }}
                           >
                             <TableCell
@@ -1044,9 +1044,9 @@ const ChannelsList = () => {
                                   color: "var(--Text-Primary, #212B36)",
                                 }}
                               >
-                                {new Date(
-                                  channel.organizationChannelCreateDate
-                                ).toLocaleString()}
+                                {channel.organizationChannelCreateDate 
+                                  ? formatDate(new Date(channel.organizationChannelCreateDate))
+                                  : ''}
                               </Typography>
                             </TableCell>
                             <TableCell
@@ -1084,6 +1084,11 @@ const ChannelsList = () => {
                               }}
                               onClick={(e) => {
                                 e.stopPropagation();
+                              }}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter" || e.key === " ") {
+                                  e.stopPropagation();
+                                }
                               }}
                             >
                               <EditableItem
@@ -1419,20 +1424,7 @@ const ChannelsList = () => {
                     width: "100%",
                     maxHeight: "calc(100vh - 230px)",
                     overflow: "auto",
-                    "&::-webkit-scrollbar": {
-                      width: "8px",
-                    },
-                    "&::-webkit-scrollbar-track": {
-                      borderRadius: "10px",
-                      background: "#f1f1f1",
-                    },
-                    "&::-webkit-scrollbar-thumb": {
-                      borderRadius: "10px",
-                      background: "#888",
-                    },
-                    "&::-webkit-scrollbar-thumb:hover": {
-                      background: "#555",
-                    },
+                    ...customScrollbarStyle,
                   }}
                 >
                   <Box
@@ -1546,9 +1538,6 @@ const ChannelsList = () => {
                                   alignItems: "center",
                                 }}
                               >
-                                {(isCreating || isLoadingChannels) && (
-                                  <CustomLoader />
-                                )}
                                 <span
                                   style={{
                                     fontFamily: "var(--font-bold)",
@@ -1685,9 +1674,9 @@ const ChannelsList = () => {
                                   color: "var(--Primary-Black, #212B36)",
                                 }}
                               >
-                                {new Date(
-                                  channel.organizationChannelCreateDate
-                                ).toLocaleString()}
+                                {channel.organizationChannelCreateDate 
+                                  ? formatDate(new Date(channel.organizationChannelCreateDate))
+                                  : ''}
                               </Typography>
                             </Box>
                             <Box
