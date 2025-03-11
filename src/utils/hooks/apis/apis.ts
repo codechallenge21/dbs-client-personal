@@ -57,17 +57,6 @@ const apis = {
       `/organizations/${organizationId}/channels/${organizationChannelId}`
     );
   },
-  getChannels: (payload?: GetChannelsApiPayload) => {
-    const { organizationId } = payload || {};
-    return fetcher.get<OrganizationChannel[] | undefined>(
-      `/organizations/${organizationId}/channels`,
-      {
-        params: {
-          organizationChannelType: 'CHAT',
-        },
-      }
-    );
-  },
   ApiRegenerateSummary: (payload?: GetChannelDetailApiPayload) => {
     if (!payload) {
       throw new Error('Payload is undefined');
