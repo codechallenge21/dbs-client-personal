@@ -899,6 +899,14 @@ const ChannelsList = () => {
                           <TableRow
                             key={index}
                             onClick={() => handleRowClick(channel)}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" || e.key === " ") {
+                                e.preventDefault();
+                                handleRowClick(channel);
+                              }
+                            }}
+                            tabIndex={0}
+                            role="button"
                             sx={{
                               cursor:
                                 channel.organizationChannelTranscriptList[0]
@@ -910,6 +918,12 @@ const ChannelsList = () => {
                               borderBottom:
                                 "1px dashed var(--Components-Divider, rgba(145, 158, 171, 0.20))",
                               background: "var(--Background-Paper, #FFF)",
+                              "&:focus": {
+                                backgroundColor: "rgba(0, 0, 0, 0.04)", // Add button click effect
+                              },
+                              "&:active": {
+                                backgroundColor: "rgba(0, 0, 0, 0.08)", // Add button click effect
+                              },
                             }}
                           >
                             <TableCell
@@ -1069,6 +1083,11 @@ const ChannelsList = () => {
                               }}
                               onClick={(e) => {
                                 e.stopPropagation();
+                              }}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter" || e.key === " ") {
+                                  e.stopPropagation();
+                                }
                               }}
                             >
                               <EditableItem
