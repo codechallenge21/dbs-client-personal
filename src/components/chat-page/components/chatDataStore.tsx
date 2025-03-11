@@ -20,6 +20,7 @@ import {
   PictureAsPdfRounded,
   ArticleRounded,
 } from '@mui/icons-material';
+import { customScrollbarStyle } from '@/components/toolbar-drawer-new/ToolbarDrawer';
 
 interface DataSourceDialogFile {
   name: string;
@@ -199,13 +200,7 @@ export default function DataSourceDialog({
           width: '100%',
           height: '100%',
           overflowY: 'auto',
-          '&::-webkit-scrollbar': {
-            width: '4px',
-          },
-          '&::-webkit-scrollbar-thumb': {
-            backgroundColor: 'rgba(0,0,0,0.2)',
-            borderRadius: '8px',
-          },
+          ...customScrollbarStyle,
         }}
       >
         <Typography

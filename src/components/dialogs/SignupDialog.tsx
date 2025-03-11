@@ -20,6 +20,7 @@ import {
 import Image from 'next/image';
 import React, { useContext, useState } from 'react';
 import GoogleIcon from '../../assets/google.png';
+import { customScrollbarStyle } from '../toolbar-drawer-new/ToolbarDrawer';
 
 interface SignupDialogProps {
   open: boolean;
@@ -118,23 +119,10 @@ const SignupDialog: React.FC<SignupDialogProps> = ({
             paddingBottom: '24px',
             transform: 'translate(-50%, -50%)',
             overflow: 'hidden',
-            '&::-webkit-scrollbar': {
-              width: '8px',
-            },
             '@media (orientation: landscape)': {
               overflow: 'auto',
             },
-            '&::-webkit-scrollbar-track': {
-              borderRadius: '10px',
-              background: '#f1f1f1',
-            },
-            '&::-webkit-scrollbar-thumb': {
-              borderRadius: '10px',
-              background: '#888',
-            },
-            '&::-webkit-scrollbar-thumb:hover': {
-              background: '#555',
-            },
+            ...customScrollbarStyle,
           },
         },
       }}
@@ -219,16 +207,19 @@ const SignupDialog: React.FC<SignupDialogProps> = ({
           }}
         >
           已經擁有帳戶?{' '}
-          <span
+          <button
+            type="button"
             onClick={handleLoginClick}
             style={{
               color: '#C00',
+              border: 'none',
               cursor: 'pointer',
+              background: 'transparent',
               fontFamily: 'var(--font-bold)',
             }}
           >
             登入
-          </span>
+          </button>
         </Typography>
       </Box>
       <Box
@@ -584,12 +575,14 @@ const SignupDialog: React.FC<SignupDialogProps> = ({
         }}
       >
         <Typography
-          component="span"
+          component="button"
           color="#06C"
           sx={{
             fontFamily: 'var(--font-medium)',
             fontSize: '14px',
             cursor: 'pointer',
+            border: 'none',
+            background: 'transparent',
           }}
           onClick={() => {
             window.open(
@@ -602,12 +595,14 @@ const SignupDialog: React.FC<SignupDialogProps> = ({
         </Typography>
         |
         <Typography
-          component="span"
+          component="button"
           color="#06C"
           sx={{
+            border: 'none',
             fontFamily: 'var(--font-medium)',
             fontSize: '14px',
             cursor: 'pointer',
+            background: 'transparent',
           }}
           onClick={() => {
             window.open(
@@ -620,12 +615,14 @@ const SignupDialog: React.FC<SignupDialogProps> = ({
         </Typography>
         |
         <Typography
-          component="span"
+          component="button"
           color="#06C"
           sx={{
             fontFamily: 'var(--font-medium)',
             fontSize: '14px',
             cursor: 'pointer',
+            border: 'none',
+            background: 'transparent',
           }}
           onClick={() => {
             window.open(

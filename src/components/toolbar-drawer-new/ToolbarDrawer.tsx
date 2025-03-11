@@ -36,7 +36,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useContext, useEffect, useState } from 'react';
 import UserActionMenu from '../user-action-menu/UserActionMenu';
 
-const customScrollbarStyle = {
+export const customScrollbarStyle = {
   '&::-webkit-scrollbar': {
     width: '4px',
   },
