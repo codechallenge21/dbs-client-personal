@@ -22,6 +22,7 @@ import {
   Button,
   IconButton,
   List,
+  Tooltip,
   Typography,
   useMediaQuery,
   useTheme,
@@ -35,7 +36,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useContext, useEffect, useState } from 'react';
 import UserActionMenu from '../user-action-menu/UserActionMenu';
 
-const customScrollbarStyle = {
+export const customScrollbarStyle = {
   '&::-webkit-scrollbar': {
     width: '4px',
   },
@@ -428,24 +429,26 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
         )}
 
         {!isExpanded && !isMobile && (
-          <IconButton
-            role="button"
-            aria-label="New Chat"
-            sx={{
-              padding: '8px',
-              display: 'flex',
-              alignItems: 'center',
-              borderRadius: '50px',
-              justifyContent: 'center',
-              border: '1px solid var(--Primary-Black, #212B36)',
-              mt: '8px',
-            }}
-            onClick={() => {
-              resetChat();
-            }}
-          >
-            <AddRounded sx={{ color: '#212B36', fontSize: '20px' }} />
-          </IconButton>
+          <Tooltip title="AI問答" placement="right" arrow>
+            <IconButton
+              role="button"
+              aria-label="New Chat"
+              sx={{
+                padding: '8px',
+                display: 'flex',
+                alignItems: 'center',
+                borderRadius: '50px',
+                justifyContent: 'center',
+                border: '1px solid var(--Primary-Black, #212B36)',
+                mt: '8px',
+              }}
+              onClick={() => {
+                resetChat();
+              }}
+            >
+              <AddRounded sx={{ color: '#212B36', fontSize: '20px' }} />
+            </IconButton>
+          </Tooltip>
         )}
 
         <ListItem sx={{ padding: '0px' }}>
@@ -507,30 +510,54 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                   router.push(item.route);
                 }}
               >
-                <Typography
-                  sx={{
-                    display: 'flex',
-                    fontWeight: 400,
-                    fontSize: '16px',
-                    alignItems: 'center',
-                    color: index === 0 ? '#CC0000' : '#212B36',
-                    fontFamily: 'var(--font-bold)',
-                  }}
-                >
-                  <span
-                    style={{
+                {!isExpanded && !isMobile ? (
+                  <Tooltip title={item.text} placement="right" arrow>
+                    <Typography
+                      sx={{
+                        display: 'flex',
+                        fontWeight: 400,
+                        fontSize: '16px',
+                        alignItems: 'center',
+                        color: index === 0 ? '#CC0000' : '#212B36',
+                        fontFamily: 'var(--font-bold)',
+                      }}
+                    >
+                      <span
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                        }}
+                      >
+                        {item.icon}
+                      </span>
+                    </Typography>
+                  </Tooltip>
+                ) : (
+                  <Typography
+                    sx={{
                       display: 'flex',
+                      fontWeight: 400,
+                      fontSize: '16px',
                       alignItems: 'center',
+                      color: index === 0 ? '#CC0000' : '#212B36',
+                      fontFamily: 'var(--font-bold)',
                     }}
                   >
-                    {item.icon}
-                  </span>
-                  {(isExpanded || isMobile) && (
-                    <span style={{ marginLeft: index === 0 ? '0px' : '8px' }}>
-                      {item.text}
+                    <span
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                      }}
+                    >
+                      {item.icon}
                     </span>
-                  )}
-                </Typography>
+                    {(isExpanded || isMobile) && (
+                      <span style={{ marginLeft: index === 0 ? '0px' : '8px' }}>
+                        {item.text}
+                      </span>
+                    )}
+                  </Typography>
+                )}
               </ListItem>
             ))}
           </List>
@@ -689,38 +716,13 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
         {!isExpanded && !isMobile && (
           <>
             {!isLogin ? (
-              <IconButton
-                role="button"
-                aria-label="Login"
-                onClick={() => {
-                  if (setIsLoginOpen) setIsLoginOpen(true);
-                }}
-                sx={{
-                  width: '36px',
-                  height: '36px',
-                  padding: '8px',
-                  display: 'flex',
-                  borderRadius: '50px',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  border: '2px solid var(--Primary-Black, #212B36)',
-                  background: 'var(--Primary-White, #FFF)',
-                  '&:hover': {
-                    background: 'rgba(92, 68, 58, 0.8)',
-                  },
-                  '&:active': {
-                    background: 'rgba(92, 68, 58, 0.6)',
-                  },
-                }}
-              >
-                <LoginRounded sx={{ color: '#212B36', fontSize: '20px' }} />
-              </IconButton>
-            ) : (
-              <>
+              <Tooltip title="登入" placement="right" arrow>
                 <IconButton
                   role="button"
-                  aria-label="Logout"
-                  onClick={handleMenuOpen}
+                  aria-label="Login"
+                  onClick={() => {
+                    if (setIsLoginOpen) setIsLoginOpen(true);
+                  }}
                   sx={{
                     width: '36px',
                     height: '36px',
@@ -729,7 +731,8 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                     borderRadius: '50px',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    background: 'var(--Secondary-, #5C443A)',
+                    border: '2px solid var(--Primary-Black, #212B36)',
+                    background: 'var(--Primary-White, #FFF)',
                     '&:hover': {
                       background: 'rgba(92, 68, 58, 0.8)',
                     },
@@ -738,10 +741,38 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                     },
                   }}
                 >
-                  <PermIdentityRounded
-                    sx={{ color: 'white', fontSize: '20px' }}
-                  />
+                  <LoginRounded sx={{ color: '#212B36', fontSize: '20px' }} />
                 </IconButton>
+              </Tooltip>
+            ) : (
+              <>
+                <Tooltip title={loginName || '使用者'} placement="right" arrow>
+                  <IconButton
+                    role="button"
+                    aria-label="Logout"
+                    onClick={handleMenuOpen}
+                    sx={{
+                      width: '36px',
+                      height: '36px',
+                      padding: '8px',
+                      display: 'flex',
+                      borderRadius: '50px',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      background: 'var(--Secondary-, #5C443A)',
+                      '&:hover': {
+                        background: 'rgba(92, 68, 58, 0.8)',
+                      },
+                      '&:active': {
+                        background: 'rgba(92, 68, 58, 0.6)',
+                      },
+                    }}
+                  >
+                    <PermIdentityRounded
+                      sx={{ color: 'white', fontSize: '20px' }}
+                    />
+                  </IconButton>
+                </Tooltip>
                 <UserActionMenu
                   email={loginName}
                   handleLogout={handleLogout}
@@ -753,62 +784,68 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 />
               </>
             )}
-            <IconButton
-              role="button"
-              aria-label="Wsihing Pool"
-              sx={{
-                width: '36px',
-                height: '36px',
-                padding: '8px',
-                display: 'flex',
-                borderRadius: '50px',
-                alignItems: 'center',
-                justifyContent: 'center',
-                background: 'var(--Secondary-, #5C443A)',
-                '&:hover': {
-                  background: 'rgba(92, 68, 58, 0.8)',
-                },
-                '&:active': {
-                  background: 'rgba(92, 68, 58, 0.6)',
-                },
-              }}
-            >
-              <EmojiObjectsRounded sx={{ color: 'white', fontSize: '20px' }} />
-            </IconButton>
-            <IconButton
-              role="button"
-              aria-label="Consultant Area"
-              sx={{
-                width: '36px',
-                height: '36px',
-                padding: '8px',
-                display: 'flex',
-                borderRadius: '50px',
-                alignItems: 'center',
-                justifyContent: 'center',
-                background: 'var(--Secondary-, #5C443A)',
-                '&:hover': {
-                  background: 'rgba(92, 68, 58, 0.8)',
-                },
-                '&:active': {
-                  background: 'rgba(92, 68, 58, 0.6)',
-                },
-              }}
-            >
-              <Typography
+            <Tooltip title="許願池" placement="right" arrow>
+              <IconButton
+                role="button"
+                aria-label="Wsihing Pool"
                 sx={{
-                  fontWeight: 600,
-                  fontSize: '16px',
-                  fontFamily: 'Inter',
-                  fontStyle: 'normal',
-                  lineHeight: 'normal',
-                  color:
-                    'var(--Components-Button-Contained-Inherit-Text, #FFF)',
+                  width: '36px',
+                  height: '36px',
+                  padding: '8px',
+                  display: 'flex',
+                  borderRadius: '50px',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: 'var(--Secondary-, #5C443A)',
+                  '&:hover': {
+                    background: 'rgba(92, 68, 58, 0.8)',
+                  },
+                  '&:active': {
+                    background: 'rgba(92, 68, 58, 0.6)',
+                  },
                 }}
               >
-                諮
-              </Typography>
-            </IconButton>
+                <EmojiObjectsRounded
+                  sx={{ color: 'white', fontSize: '20px' }}
+                />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="諮詢師專區" placement="right" arrow>
+              <IconButton
+                role="button"
+                aria-label="Consultant Area"
+                sx={{
+                  width: '36px',
+                  height: '36px',
+                  padding: '8px',
+                  display: 'flex',
+                  borderRadius: '50px',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: 'var(--Secondary-, #5C443A)',
+                  '&:hover': {
+                    background: 'rgba(92, 68, 58, 0.8)',
+                  },
+                  '&:active': {
+                    background: 'rgba(92, 68, 58, 0.6)',
+                  },
+                }}
+              >
+                <Typography
+                  sx={{
+                    fontWeight: 600,
+                    fontSize: '16px',
+                    fontFamily: 'Inter',
+                    fontStyle: 'normal',
+                    lineHeight: 'normal',
+                    color:
+                      'var(--Components-Button-Contained-Inherit-Text, #FFF)',
+                  }}
+                >
+                  諮
+                </Typography>
+              </IconButton>
+            </Tooltip>
           </>
         )}
       </Box>

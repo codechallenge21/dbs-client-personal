@@ -25,6 +25,7 @@ import Image from 'next/image';
 import React, { type FC, useEffect, useRef, useState } from 'react';
 import MermaidMarkdown from '../MermaidChart/Mermaidmarkdown';
 import CustomLoader from '../loader/loader';
+import { customScrollbarStyle } from '../toolbar-drawer-new/ToolbarDrawer';
 
 export interface ChannelMessagePanelProps {
   channel?: OrganizationChannel;
@@ -116,21 +117,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
           overflowY: 'auto',
           overflowX: 'hidden', // prevent horizontal scroll
           height: '100%',
-          // ChatGPT-like scrollbar styling for Webkit browsers
-          '&::-webkit-scrollbar': {
-            width: '30px', // Increased scrollbar width
-          },
-          '&::-webkit-scrollbar-track': {
-            background: '#f1f1f1',
-            borderRadius: '3px',
-          },
-          '&::-webkit-scrollbar-thumb': {
-            backgroundColor: '#888',
-            borderRadius: '3px',
-          },
-          '&::-webkit-scrollbar-thumb:hover': {
-            backgroundColor: '#555',
-          },
+          ...customScrollbarStyle,
           // Firefox scrollbar styling
           scrollbarWidth: 'thick', // Increased scrollbar width
           scrollbarColor: '#888 #f1f1f1',

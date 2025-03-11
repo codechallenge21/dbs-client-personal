@@ -5,8 +5,9 @@ import ForgetPasswordDialog from "@/components/dialogs/ForgetPasswordDialog";
 import LoginDialog from "@/components/dialogs/LoginDialog";
 import SignupDialog from "@/components/dialogs/SignupDialog";
 import EditableItem from "@/components/editable-item/EditableItem";
-import CustomLoader from "@/components/loader/loader";
-import ToolbarDrawer from "@/components/toolbar-drawer-new/ToolbarDrawer";
+import ToolbarDrawer, {
+  customScrollbarStyle,
+} from "@/components/toolbar-drawer-new/ToolbarDrawer";
 import UploadDialog, {
   FILE_CONFIG,
 } from "@/components/uploadDialog/uploadDialog";
@@ -641,20 +642,7 @@ const ChannelsList = () => {
                     sx={{
                       maxHeight: "calc(100vh - 180px)",
                       overflow: "auto",
-                      "&::-webkit-scrollbar": {
-                        width: "8px",
-                      },
-                      "&::-webkit-scrollbar-track": {
-                        borderRadius: "10px",
-                        background: "#f1f1f1",
-                      },
-                      "&::-webkit-scrollbar-thumb": {
-                        borderRadius: "10px",
-                        background: "#888",
-                      },
-                      "&::-webkit-scrollbar-thumb:hover": {
-                        background: "#555",
-                      },
+                      ...customScrollbarStyle,
                     }}
                   >
                     <Table stickyHeader>
@@ -832,9 +820,6 @@ const ChannelsList = () => {
                                     alignItems: "center",
                                   }}
                                 >
-                                  {(isCreating || isLoadingChannels) && (
-                                    <CustomLoader />
-                                  )}
                                   <span
                                     style={{
                                       fontFamily: "var(--font-bold)",
@@ -1419,20 +1404,7 @@ const ChannelsList = () => {
                     width: "100%",
                     maxHeight: "calc(100vh - 230px)",
                     overflow: "auto",
-                    "&::-webkit-scrollbar": {
-                      width: "8px",
-                    },
-                    "&::-webkit-scrollbar-track": {
-                      borderRadius: "10px",
-                      background: "#f1f1f1",
-                    },
-                    "&::-webkit-scrollbar-thumb": {
-                      borderRadius: "10px",
-                      background: "#888",
-                    },
-                    "&::-webkit-scrollbar-thumb:hover": {
-                      background: "#555",
-                    },
+                    ...customScrollbarStyle,
                   }}
                 >
                   <Box
@@ -1546,9 +1518,6 @@ const ChannelsList = () => {
                                   alignItems: "center",
                                 }}
                               >
-                                {(isCreating || isLoadingChannels) && (
-                                  <CustomLoader />
-                                )}
                                 <span
                                   style={{
                                     fontFamily: "var(--font-bold)",
