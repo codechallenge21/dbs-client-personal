@@ -193,16 +193,19 @@ const LoginDialog = ({
             }}
           >
             還沒有帳戶嗎?{' '}
-            <span
+            <button
+              type="button"
               onClick={handleRegisterClick}
               style={{
                 color: '#C00',
+                border: 'none',
                 cursor: 'pointer',
+                background: 'transparent',
                 fontFamily: 'var(--font-bold)',
               }}
             >
               註冊
-            </span>
+            </button>
           </Typography>
         </Box>
         <Box
@@ -348,6 +351,8 @@ const LoginDialog = ({
             }}
           />
           <Typography
+            type="button"
+            component={'button'}
             onClick={handleForgetPasswordClick}
             sx={{
               color: 'var(--Primary-DBS-Red, #C00)',
@@ -362,6 +367,8 @@ const LoginDialog = ({
               minHeight: '24px',
               textAlign: 'right',
               marginTop: '-12px',
+              border: 'none',
+              background: 'transparent',
             }}
           >
             忘記密碼?
