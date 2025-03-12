@@ -207,16 +207,19 @@ const SignupDialog: React.FC<SignupDialogProps> = ({
           }}
         >
           已經擁有帳戶?{' '}
-          <span
+          <button
+            type="button"
             onClick={handleLoginClick}
             style={{
               color: '#C00',
+              border: 'none',
               cursor: 'pointer',
+              background: 'transparent',
               fontFamily: 'var(--font-bold)',
             }}
           >
             登入
-          </span>
+          </button>
         </Typography>
       </Box>
       <Box
@@ -572,12 +575,14 @@ const SignupDialog: React.FC<SignupDialogProps> = ({
         }}
       >
         <Typography
-          component="span"
+          component="button"
           color="#06C"
           sx={{
             fontFamily: 'var(--font-medium)',
             fontSize: '14px',
             cursor: 'pointer',
+            border: 'none',
+            background: 'transparent',
           }}
           onClick={() => {
             window.open(
@@ -590,12 +595,14 @@ const SignupDialog: React.FC<SignupDialogProps> = ({
         </Typography>
         |
         <Typography
-          component="span"
+          component="button"
           color="#06C"
           sx={{
+            border: 'none',
             fontFamily: 'var(--font-medium)',
             fontSize: '14px',
             cursor: 'pointer',
+            background: 'transparent',
           }}
           onClick={() => {
             window.open(
@@ -608,12 +615,14 @@ const SignupDialog: React.FC<SignupDialogProps> = ({
         </Typography>
         |
         <Typography
-          component="span"
+          component="button"
           color="#06C"
           sx={{
             fontFamily: 'var(--font-medium)',
             fontSize: '14px',
             cursor: 'pointer',
+            border: 'none',
+            background: 'transparent',
           }}
           onClick={() => {
             window.open(

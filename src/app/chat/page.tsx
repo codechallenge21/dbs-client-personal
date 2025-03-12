@@ -16,7 +16,7 @@ import ChannelContentContext from '@/context/ChannelContentContext';
 import { useSearchParams, useRouter } from 'next/navigation';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import apis from '@/utils/hooks/apis/apis';
-import DataSourceDialog from '@/components/chat-page/components/chatDataStore';
+import DataSourceDialog from '@/components/dialogs/ChatDataStore';
 import { useChatChannels } from '@/utils/hooks/useChatChannels';
 import LoginDialog from '@/components/dialogs/LoginDialog';
 import SignupDialog from '@/components/dialogs/SignupDialog';
@@ -55,9 +55,25 @@ function ClientContent() {
   const [openDataSource, setOpenDataSource] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenDrawer, setIsOpenDrawer] = useState(!isMobile);
-  const { data: chatsData } = useChatChannels({
-    organizationId: 'yMJHyi6R1CB9whpdNvtA',
-  });
+  const { data: chatsData } = useChatChannels(
+    {
+      organizationId: 'yMJHyi6R1CB9whpdNvtA',
+    },
+    undefined,
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      // Custom SWR configuration to handle errors
+      onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
+        if (error?.status === 401) {
+          return;
+        }
+
+        // For other errors, use the default retry behavior but limit attempts
+        if (retryCount >= 3) return;
+      },
+    }
+  );
 
   const handleClose = useCallback(() => setIsOpen(false), []);
   const handleConfirm = useCallback(() => setIsOpen(false), []);

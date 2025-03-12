@@ -1,5 +1,5 @@
 'use client';
-import DataSourceDialog from '@/components/chat-page/components/chatDataStore';
+import DataSourceDialog from '@/components/dialogs/ChatDataStore';
 import DeleteDialog from '@/components/dialogs/DeleteDialog';
 import EditDialog from '@/components/dialogs/EditDialog';
 import EditableItem from '@/components/editable-item/EditableItem';
