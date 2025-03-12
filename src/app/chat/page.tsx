@@ -55,9 +55,25 @@ function ClientContent() {
   const [openDataSource, setOpenDataSource] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenDrawer, setIsOpenDrawer] = useState(!isMobile);
-  const { data: chatsData } = useChatChannels({
-    organizationId: 'yMJHyi6R1CB9whpdNvtA',
-  });
+  const { data: chatsData } = useChatChannels(
+    {
+      organizationId: 'yMJHyi6R1CB9whpdNvtA',
+    },
+    undefined,
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      // Custom SWR configuration to handle errors
+      onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
+        if (error?.status === 401) {
+          return;
+        }
+
+        // For other errors, use the default retry behavior but limit attempts
+        if (retryCount >= 3) return;
+      },
+    }
+  );
 
   const handleClose = useCallback(() => setIsOpen(false), []);
   const handleConfirm = useCallback(() => setIsOpen(false), []);
