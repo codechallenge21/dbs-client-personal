@@ -2,13 +2,15 @@ import {
   OrganizationChannel,
   OrganizationChannelChatInteractResponse,
   OrganizationChannelResponse,
-} from "@/interfaces/entities";
+} from '@/interfaces/entities';
 import {
+  addUserFeedbackApiPayload,
   ChatWithFilesPayload,
   DeleteChannelApiPayload,
   ForgotPasswordApiPayload,
   GetChannelDetailApiPayload,
   GetChannelsApiPayload,
+  getUserFeedbackApiPayload,
   LogApiPayload,
   LoginPayload,
   LogoutPayload,
@@ -17,19 +19,19 @@ import {
   UpdateChannelApiPayload,
   UploadFileApiPayload,
   VerifyAccountApiPayload,
-} from "@/interfaces/payloads";
-import axios, { AxiosRequestConfig } from "axios";
-import { fetcher, fetcherConfig, uploadFetcher } from "./fetchers";
+} from '@/interfaces/payloads';
+import axios, { AxiosRequestConfig } from 'axios';
+import { fetcher, fetcherConfig, uploadFetcher } from './fetchers';
 
 const tools = {
   /**
    * Log errors.
    */
-  createLog: (payload?: LogApiPayload) => fetcher.post("/logs", payload),
+  createLog: (payload?: LogApiPayload) => fetcher.post('/logs', payload),
 };
 
 const baseURL =
-  process.env.NODE_ENV === "production"
+  process.env.NODE_ENV === 'production'
     ? `${process.env.URL_FOR_NEXTJS_SERVER_SIDE_API}/api/v1/`
     : `${process.env.NEXT_PUBLIC_PROXY_URL}/api/v1/`;
 
@@ -50,7 +52,7 @@ const serverSide = {
 const apis = {
   getChannelDetail: (payload?: GetChannelDetailApiPayload) => {
     if (!payload) {
-      throw new Error("Payload is undefined");
+      throw new Error('Payload is undefined');
     }
     const { organizationId, organizationChannelId } = payload;
     return fetcher.get<OrganizationChannel>(
@@ -59,7 +61,7 @@ const apis = {
   },
   ApiRegenerateSummary: (payload?: GetChannelDetailApiPayload) => {
     if (!payload) {
-      throw new Error("Payload is undefined");
+      throw new Error('Payload is undefined');
     }
     const { organizationId, organizationChannelId } = payload;
     return fetcher.post<OrganizationChannel>(
@@ -74,7 +76,7 @@ const apis = {
 
     const formData = new FormData();
     if (file) {
-      formData.append("file", file);
+      formData.append('file', file);
     }
 
     return uploadFetcher.post<OrganizationChannelResponse>(
@@ -109,15 +111,15 @@ const apis = {
   },
   chatWithFiles: (payload?: ChatWithFilesPayload) => {
     if (!payload) {
-      return Promise.reject(new Error("Payload is required"));
+      return Promise.reject(new Error('Payload is required'));
     }
     const organizationId = payload.organizationId;
 
     const formData = new FormData();
-    formData.append("chatRequest", JSON.stringify(payload.chatRequest));
+    formData.append('chatRequest', JSON.stringify(payload.chatRequest));
     if (payload.files.length) {
       for (const file of payload.files) {
-        formData.append("files", file);
+        formData.append('files', file);
       }
     }
 
@@ -140,6 +142,35 @@ const apis = {
     const { organizationId, organizationChannelId } = payload || {};
     return fetcher.delete(
       `/organizations/${organizationId}/channels/${organizationChannelId}`
+    );
+  },
+  addUserFeedback: (payload?: addUserFeedbackApiPayload) => {
+    const {
+      organizationChannelFeedbackTarget,
+      organizationChannelFeedbackTargetId,
+      organizationChannelFeedbackType,
+      organizationChannelFeedbackNegativeCategory,
+      organizationChannelFeedbackComment,
+    } = payload || {};
+    return fetcher.post(
+      `/organizations/yMJHyi6R1CB9whpdNvtA/channel-feedbacks/submit`,
+      {
+        organizationChannelFeedbackTarget,
+        organizationChannelFeedbackType,
+        organizationChannelFeedbackNegativeCategory,
+        organizationChannelFeedbackComment,
+        organizationChannelFeedbackTargetId,
+      }
+    );
+  },
+  getUserFeedback: (payload?: getUserFeedbackApiPayload) => {
+    if (!payload) {
+      throw new Error('Payload is undefined');
+    }
+    const { messageId, organizationChannelId, organizationId } = payload || {};
+
+    return fetcher.get(
+      `/organizations/${organizationId}/channels/${organizationChannelId}/messages/${messageId}`
     );
   },
   registerUser: (payload?: RegisterUserApiPayload) => {

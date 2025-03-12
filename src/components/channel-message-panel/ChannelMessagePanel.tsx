@@ -11,6 +11,7 @@ import {
   LibraryBooksRounded,
   PermIdentityRounded,
   ThumbDownOffAltRounded,
+  ThumbUpAltRounded,
 } from '@mui/icons-material';
 import {
   Avatar,
@@ -25,6 +26,8 @@ import Image from 'next/image';
 import React, { type FC, useEffect, useRef, useState } from 'react';
 import MermaidMarkdown from '../MermaidChart/Mermaidmarkdown';
 import CustomLoader from '../loader/loader';
+import PositiveFeedbackModal from '../dialogs/PositiveFeedbackModal';
+import NegativeFeedbackModal from '../dialogs/NegativeFeedbackModal';
 
 export interface ChannelMessagePanelProps {
   channel?: OrganizationChannel;
@@ -43,6 +46,23 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
   const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const loaderRef = useRef<HTMLDivElement>(null);
+  const [openPositiveFeedbackModal, setOpenPositiveFeedbackModal] =
+    useState(false);
+  const [openNegativeFeedbackModal, setOpenNegativeFeedbackModal] =
+    useState(false);
+  const [userFeedback, setUserFeedback] = useState<string>('');
+
+  const handlePostiveModalOpen = () => {
+    setOpenPositiveFeedbackModal(true);
+  };
+  const handleNegativeModalOpen = () => {
+    setOpenNegativeFeedbackModal(true);
+  };
+
+  const handleClose = () => {
+    setOpenPositiveFeedbackModal(false);
+    setOpenNegativeFeedbackModal(false);
+  };
 
   // Automatically scroll to the bottom
   const scrollToBottom = () => {
@@ -252,34 +272,81 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                 chartData={message.organizationChannelMessageContent}
               />
               {message.organizationChannelMessageType === 'AI' && (
-                <Box
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'flex-end',
-                    gap: 0.5,
-                    mt: 2,
-                    ml: { xs: '-30px', sm: '-20px' },
-                  }}
-                >
-                  <Tooltip title="回應良好" placement="top" arrow>
-                    <IconButton aria-label="Like">
-                      <ThumbDownOffAltRounded
-                        sx={{
-                          color: 'black',
-                          transform: 'scale(-1, -1)',
-                          fontSize: 20,
-                        }}
-                      />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title="回應不佳" placement="top" arrow>
-                    <IconButton aria-label="Dislike">
-                      <ThumbDownOffAltRounded
-                        sx={{ color: 'black', fontSize: 20 }}
-                      />
-                    </IconButton>
-                  </Tooltip>
-                </Box>
+                <>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'flex-end',
+                      gap: 0.5,
+                      mt: 2,
+                      ml: { xs: '-30px', sm: '-20px' },
+                    }}
+                  >
+                    {!userFeedback ? (
+                      <>
+                        <Tooltip title="回應良好" placement="top" arrow>
+                          <IconButton
+                            aria-label="Like"
+                            onClick={handlePostiveModalOpen}
+                          >
+                            <ThumbDownOffAltRounded
+                              sx={{
+                                color: 'black',
+                                transform: 'scale(-1, -1)',
+                                fontSize: 20,
+                              }}
+                            />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="回應不佳" placement="top" arrow>
+                          <IconButton
+                            aria-label="Dislike"
+                            onClick={handleNegativeModalOpen}
+                          >
+                            <ThumbDownOffAltRounded
+                              sx={{ color: 'black', fontSize: 20 }}
+                            />
+                          </IconButton>
+                        </Tooltip>
+                      </>
+                    ) : userFeedback === 'POSITIVE' ? (
+                      <Tooltip title="回應良好" placement="top" arrow>
+                        <IconButton aria-label="Like">
+                          <ThumbUpAltRounded
+                            sx={{
+                              color: 'black',
+                              fontSize: 20,
+                            }}
+                          />
+                        </IconButton>
+                      </Tooltip>
+                    ) : (
+                      <Tooltip title="回應不佳" placement="top" arrow>
+                        <IconButton aria-label="Dislike">
+                          <ThumbUpAltRounded
+                            sx={{
+                              color: 'black',
+                              transform: 'scale(-1, -1)',
+                              fontSize: 20,
+                            }}
+                          />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                  </Box>
+                  <PositiveFeedbackModal
+                    open={openPositiveFeedbackModal}
+                    onClose={handleClose}
+                    setUserFeedback={setUserFeedback}
+                    userChatMessage={message}
+                  />
+                  <NegativeFeedbackModal
+                    open={openNegativeFeedbackModal}
+                    onClose={handleClose}
+                    setUserFeedback={setUserFeedback}
+                    userChatMessage={message}
+                  />
+                </>
               )}
             </Box>
           </Box>
@@ -447,15 +514,16 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                   chartData={message.organizationChannelMessageContent}
                 />
                 {message.organizationChannelMessageType === 'AI' && (
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'flex-end',
-                      gap: 1,
-                      mt: 2,
-                    }}
-                  >
-                    <Tooltip title="回應良好" placement="top" arrow>
+                  <>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        justifyContent: 'flex-end',
+                        gap: 1,
+                        mt: 2,
+                      }}
+                    >
+                      {/* <Tooltip title="回應良好" placement="top" arrow>
                       <IconButton aria-label="Like">
                         <ThumbDownOffAltRounded
                           sx={{
@@ -472,8 +540,72 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                           sx={{ color: 'black', fontSize: 20 }}
                         />
                       </IconButton>
-                    </Tooltip>
-                  </Box>
+                    </Tooltip> */}
+                      {!userFeedback ? (
+                        <>
+                          <Tooltip title="回應良好" placement="top" arrow>
+                            <IconButton
+                              aria-label="Like"
+                              onClick={handlePostiveModalOpen}
+                            >
+                              <ThumbDownOffAltRounded
+                                sx={{
+                                  color: 'black',
+                                  transform: 'scale(-1, -1)',
+                                  fontSize: 20,
+                                }}
+                              />
+                            </IconButton>
+                          </Tooltip>
+                          <Tooltip title="回應不佳" placement="top" arrow>
+                            <IconButton
+                              aria-label="Dislike"
+                              onClick={handleNegativeModalOpen}
+                            >
+                              <ThumbDownOffAltRounded
+                                sx={{ color: 'black', fontSize: 20 }}
+                              />
+                            </IconButton>
+                          </Tooltip>
+                        </>
+                      ) : userFeedback === 'POSITIVE' ? (
+                        <Tooltip title="回應良好" placement="top" arrow>
+                          <IconButton aria-label="Like">
+                            <ThumbUpAltRounded
+                              sx={{
+                                color: 'black',
+                                fontSize: 20,
+                              }}
+                            />
+                          </IconButton>
+                        </Tooltip>
+                      ) : (
+                        <Tooltip title="回應不佳" placement="top" arrow>
+                          <IconButton aria-label="Dislike">
+                            <ThumbUpAltRounded
+                              sx={{
+                                color: 'black',
+                                transform: 'scale(-1, -1)',
+                                fontSize: 20,
+                              }}
+                            />
+                          </IconButton>
+                        </Tooltip>
+                      )}
+                    </Box>
+                    <PositiveFeedbackModal
+                      open={openPositiveFeedbackModal}
+                      onClose={handleClose}
+                      setUserFeedback={setUserFeedback}
+                      userChatMessage={message}
+                    />
+                    <NegativeFeedbackModal
+                      open={openNegativeFeedbackModal}
+                      onClose={handleClose}
+                      setUserFeedback={setUserFeedback}
+                      userChatMessage={message}
+                    />
+                  </>
                 )}
               </Box>
             </Box>
