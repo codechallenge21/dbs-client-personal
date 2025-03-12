@@ -35,6 +35,7 @@ import { jwtDecode } from 'jwt-decode';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useContext, useEffect, useState } from 'react';
 import UserActionMenu from '../user-action-menu/UserActionMenu';
+import WishPoolDialog from '@/components/dialogs/WishPoolDialog';
 
 export const customScrollbarStyle = {
   '&::-webkit-scrollbar': {
@@ -82,7 +83,7 @@ const drawerItems = [
   {
     text: '活動公告',
     icon: <CampaignRounded sx={{ color: '#212B36' }} />,
-    route: '', //events,
+    route: '/events',
   },
   {
     text: '解決麻煩事',
@@ -211,11 +212,13 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
   const searchParams = useSearchParams();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
   const { excute: logout } = useAxiosApi(apis.logout);
 
   const [isClient, setIsClient] = useState(false);
   const [isExpanded, setIsExpanded] = useState(true); // Track expanded/collapsed state
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [isWishPoolDialogOpen, setIsWishPoolDialogOpen] = useState(false);
 
   const { selectedChannel, selectedChannelId, isInteractingInChat } =
     useContext(ChannelContentContext);
@@ -744,8 +747,9 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 lineHeight: 'normal',
                 height: '30px',
               }}
-              disabled={true}
-              title="Coming Soon"
+              onClick={() => {
+                setIsWishPoolDialogOpen(true);
+              }}
             >
               <EmojiObjectsRounded sx={{ color: '', fontSize: '18px' }} />
               許願池
@@ -960,7 +964,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
       <MainBox
         open={openDataSource}
         sx={{
-          marginRight: isMobile ? 0 : openDataSource ? '446px' : 0,
+          marginRight: isMobile ? 0 : openDataSource && !isTablet ? '446px' : 0,
           overflow: 'auto',
           marginBottom: '16px',
           transition: 'margin-left 0.3s',
@@ -971,6 +975,12 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
       >
         {children}
       </MainBox>
+      <WishPoolDialog
+        open={isWishPoolDialogOpen}
+        onClose={() => {
+          setIsWishPoolDialogOpen(false);
+        }}
+      />
     </Box>
   );
 };

@@ -6,15 +6,12 @@ import SwitchDialog from '../../components/dialogs/SwitchDialog';
 import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
 import { Box, useMediaQuery, useTheme, CircularProgress } from '@mui/material';
 
-
 export default function Home() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(
-    !isMobile
-  );
+  const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(!isMobile);
 
   const handleClose = () => setIsOpen(false);
 
@@ -43,9 +40,7 @@ export default function Home() {
           }}
         >
           <Header />
-          <Suspense fallback={<CircularProgress />}>
-            <ChannelSearch />
-          </Suspense>
+          <ChannelSearch />
           <SwitchDialog
             open={isOpen}
             onClose={handleClose}
