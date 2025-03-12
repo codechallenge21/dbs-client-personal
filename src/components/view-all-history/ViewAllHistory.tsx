@@ -26,6 +26,7 @@ import {
 import { useRouter } from 'next/navigation';
 import ChannelContentContext from '@/context/ChannelContentContext';
 import { motion, AnimatePresence } from 'framer-motion';
+import { customScrollbarStyle } from '../toolbar-drawer-new/ToolbarDrawer';
 
 // Updated motion variants:
 // They start at x:0 (their original position) and when exiting, slide out.
@@ -352,18 +353,7 @@ export default function ChannelSearchCombined() {
                 overflowY: 'auto',
                 paddingRight: '8px',
                 paddingLeft: isMobile ? '0px' : '10px',
-                '&::-webkit-scrollbar': { width: '4px' },
-                '&::-webkit-scrollbar-thumb': {
-                  backgroundColor: '#c1c1c1',
-                  borderRadius: '4px',
-                },
-                '&::-webkit-scrollbar-thumb:hover': {
-                  backgroundColor: '#a8a8a8',
-                },
-                '&::-webkit-scrollbar-track': {
-                  backgroundColor: '#f1f1f1',
-                  borderRadius: '4px',
-                },
+                ...customScrollbarStyle,
               }}
             >
               <Stack spacing={1} sx={{ width: '100%' }}>
@@ -630,18 +620,7 @@ export default function ChannelSearchCombined() {
                 overflowY: 'auto',
                 paddingRight: '8px',
                 paddingLeft: isMobile ? '0px' : '10px',
-                '&::-webkit-scrollbar': { width: '4px' },
-                '&::-webkit-scrollbar-thumb': {
-                  backgroundColor: '#c1c1c1',
-                  borderRadius: '4px',
-                },
-                '&::-webkit-scrollbar-thumb:hover': {
-                  backgroundColor: '#a8a8a8',
-                },
-                '&::-webkit-scrollbar-track': {
-                  backgroundColor: '#f1f1f1',
-                  borderRadius: '4px',
-                },
+                ...customScrollbarStyle,
               }}
             >
               <Stack spacing={1} sx={{ width: '100%' }}>
