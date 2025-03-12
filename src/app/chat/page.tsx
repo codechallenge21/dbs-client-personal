@@ -23,15 +23,7 @@ import SignupDialog from '@/components/dialogs/SignupDialog';
 import { useLoginContext } from '@/context/LoginContext';
 import ForgetPasswordDialog from '@/components/dialogs/ForgetPasswordDialog';
 
-export default function ChatHomePage() {
-  return (
-    <Suspense fallback={<CircularProgress />}>
-      <ClientContent />
-    </Suspense>
-  );
-}
-
-function ClientContent() {
+const HomePage = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const theme = useTheme();
@@ -137,60 +129,65 @@ function ClientContent() {
   }, [searchParams]);
 
   return (
-    <ToolbarDrawer
-      open={isOpenDrawer}
-      setIsOpenDrawer={setIsOpenDrawer}
-      openDataSource={openDataSource}
-      setIsLoginOpen={setIsLoginOpen}
-    >
-      <Box
-        sx={{
-          display: 'flex',
-          borderRadius: '8px',
-          flexDirection: 'column',
-          backgroundColor: '#FFF',
-          justifyContent: isMobile && chatsData?.length ? 'flex-end' : 'center',
-          height: isMobile ? '100vh' : 'calc(100vh - 32px)',
-        }}
-      >
-        <Header
-          isChat
-          open={isOpenDrawer}
-          advisor={advisorType}
-          openDataSource={openDataSource}
-          setIsOpenDrawer={setIsOpenDrawer}
-          setOpenDataSource={setOpenDataSource}
-        />
-        <MainContent chatsData={chatsData} />
-        <SwitchDialog
-          open={isOpen}
-          onClose={handleClose}
-          onConfirm={handleConfirm}
-        />
-        <DataSourceDialog
-          open={openDataSource}
-          onClose={() => setOpenDataSource(false)}
-        />
-      </Box>
-      <LoginDialog
-        open={isLoginOpen}
-        setIsSignupOpen={setIsSignupOpen}
-        onClose={handleLoginDialogClose}
-        onOpenForgetPassword={handleForgetPasswordOpen}
-      />
-      <SignupDialog
-        open={isSignupOpen}
+    <Suspense fallback={<CircularProgress />}>
+      <ToolbarDrawer
+        open={isOpenDrawer}
+        setIsOpenDrawer={setIsOpenDrawer}
+        openDataSource={openDataSource}
         setIsLoginOpen={setIsLoginOpen}
-        onClose={() => setIsSignupOpen(false)}
-      />
-      <ForgetPasswordDialog
-        open={isForgetPasswordOpen}
-        onClose={() => setIsForgetPasswordOpen(false)}
-        onBack={() => {
-          setIsForgetPasswordOpen(false);
-          setIsLoginOpen(true);
-        }}
-      />
-    </ToolbarDrawer>
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            borderRadius: '8px',
+            flexDirection: 'column',
+            backgroundColor: '#FFF',
+            justifyContent:
+              isMobile && chatsData?.length ? 'flex-end' : 'center',
+            height: isMobile ? '100vh' : 'calc(100vh - 32px)',
+          }}
+        >
+          <Header
+            isChat
+            open={isOpenDrawer}
+            advisor={advisorType}
+            openDataSource={openDataSource}
+            setIsOpenDrawer={setIsOpenDrawer}
+            setOpenDataSource={setOpenDataSource}
+          />
+          <MainContent chatsData={chatsData} />
+          <SwitchDialog
+            open={isOpen}
+            onClose={handleClose}
+            onConfirm={handleConfirm}
+          />
+          <DataSourceDialog
+            open={openDataSource}
+            onClose={() => setOpenDataSource(false)}
+          />
+        </Box>
+        <LoginDialog
+          open={isLoginOpen}
+          setIsSignupOpen={setIsSignupOpen}
+          onClose={handleLoginDialogClose}
+          onOpenForgetPassword={handleForgetPasswordOpen}
+        />
+        <SignupDialog
+          open={isSignupOpen}
+          setIsLoginOpen={setIsLoginOpen}
+          onClose={() => setIsSignupOpen(false)}
+        />
+        <ForgetPasswordDialog
+          open={isForgetPasswordOpen}
+          onClose={() => setIsForgetPasswordOpen(false)}
+          onBack={() => {
+            setIsForgetPasswordOpen(false);
+            setIsLoginOpen(true);
+          }}
+        />
+      </ToolbarDrawer>
+    </Suspense>
   );
-}
+};
+
+export default HomePage;
