@@ -59,7 +59,7 @@ export default function PositiveFeedbackModal({
         console.error('Failed to fetch channel details:', error);
       }
     },
-    []
+    [getUserFeedback, userChatMessage, onClose, showSnackbar, setUserFeedback]
   );
 
   const handleSubmit = () => {
