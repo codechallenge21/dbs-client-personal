@@ -5,7 +5,6 @@ import ForgetPasswordDialog from '@/components/dialogs/ForgetPasswordDialog';
 import LoginDialog from '@/components/dialogs/LoginDialog';
 import SignupDialog from '@/components/dialogs/SignupDialog';
 import EditableItem from '@/components/editable-item/EditableItem';
-import CustomLoader from '@/components/loader/loader';
 import ToolbarDrawer, {
   customScrollbarStyle,
 } from '@/components/toolbar-drawer-new/ToolbarDrawer';
