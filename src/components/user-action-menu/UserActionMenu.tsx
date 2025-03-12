@@ -1,6 +1,10 @@
 // import SettingsIcon from "@mui/icons-material/Settings";
 import { Box, Divider, Menu, MenuItem, Typography } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
+import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
+import PolicyRoundedIcon from '@mui/icons-material/PolicyRounded';
+import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 
 interface UserActionMenuProps {
   email: string;
@@ -27,7 +31,19 @@ export const UserActionMenu: React.FC<UserActionMenuProps> = ({
   transformOrigin,
   isExpanded,
 }) => {
-  return (
+
+  const [anchorElement, setAnchorElement] = useState<null | HTMLElement>(null);
+
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElement(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorElement(null);
+  };
+
+
+  return (<>
     <Menu
       anchorEl={anchorEl}
       open={Boolean(anchorEl)}
@@ -42,19 +58,13 @@ export const UserActionMenu: React.FC<UserActionMenuProps> = ({
         },
       }}
       MenuListProps={{
-        sx: { p: "10px" },
+        sx: { p: "4px" },
       }}
     >
-      <MenuItem onClick={onClose} sx={{ p: 0 }}>
+      <MenuItem onClick={onClose} sx={{ p: "8px" }}>
         <Typography
           variant="subtitle1"
           sx={{
-            display: "-webkit-box",
-            WebkitBoxOrient: "vertical",
-            WebkitLineClamp: 1,
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            alignSelf: "stretch",
             color: "var(--Primary-Black, #212B36)",
             fontFamily: "var(--font-bold)",
             fontSize: "16px",
@@ -66,17 +76,12 @@ export const UserActionMenu: React.FC<UserActionMenuProps> = ({
           {email}
         </Typography>
       </MenuItem>
-      <Divider sx={{ my: 1, color: "#F5F5F5" }} />
-      <MenuItem sx={{ p: "6px 8px" }}>
-        <Box sx={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          {/* <Typography
+      <Divider sx={{ my: 1, color: "#919EAB33" }} />
+      <MenuItem sx={{ p: "8px" }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: "16px", width: "100%" }}>
+          <SettingsRoundedIcon />
+          <Typography
             sx={{
-              display: "-webkit-box",
-              WebkitBoxOrient: "vertical",
-              WebkitLineClamp: 1,
-              flex: "1 0 0",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
               color: "var(--Primary-DBS-Red, #212B36)",
               fontFamily: "var(--font-bold)",
               fontSize: "16px",
@@ -85,33 +90,45 @@ export const UserActionMenu: React.FC<UserActionMenuProps> = ({
               lineHeight: "24px",
             }}
           >
-            設置
-          </Typography> */}
+            設定
+          </Typography>
+
         </Box>
       </MenuItem>
-      <MenuItem onClick={handleLogout} sx={{ p: "6px 8px" }}>
+      <MenuItem sx={{ p: "8px" }} onClick={handleMenuOpen}>
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: "16px", width: "100%" }}>
+            <PolicyRoundedIcon />
+            <Typography
+              sx={{
+                textOverflow: "ellipsis",
+                color: "var(--Primary-DBS-Red, #212B36)",
+                fontFamily: "var(--font-bold)",
+                fontSize: "16px",
+                fontStyle: "normal",
+                fontWeight: 400,
+                lineHeight: "24px",
+              }}
+            >
+              了解更多
+            </Typography>
+          </Box>
+          <ChevronRightRoundedIcon />
+        </Box>
+      </MenuItem>
+      <MenuItem onClick={handleLogout} sx={{ p: "8px" }}>
         <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-
-            width: "100%",
-          }}
+          sx={{ display: "flex", alignItems: "center", gap: "16px", width: "100%" }}
         >
+          <LogoutRoundedIcon style={{ color: "var(--Primary-DBS-Red, #C00)", }} />
           <Typography
             sx={{
-              display: "-webkit-box",
-              WebkitBoxOrient: "vertical",
-              WebkitLineClamp: 1,
-              flex: "1 0 0",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
               color: "var(--Primary-DBS-Red, #C00)",
               fontFamily: "var(--font-bold)",
               fontSize: "16px",
               fontStyle: "normal",
               fontWeight: 400,
-              lineHeight: "24px", // 150%
+              lineHeight: "24px",
             }}
           >
             登出
@@ -119,7 +136,77 @@ export const UserActionMenu: React.FC<UserActionMenuProps> = ({
         </Box>
       </MenuItem>
     </Menu>
-  );
+
+    {anchorElement &&
+      <Menu
+        anchorEl={anchorElement}
+        open={Boolean(anchorElement)}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: 'center', horizontal: 225 }}
+        transformOrigin={{
+          vertical: 'center',
+          horizontal: 'left',
+        }}
+        slotProps={{
+          paper: {
+            sx: {
+              width: anchorElement && isExpanded ? anchorElement.clientWidth : "226px",
+            },
+          },
+        }}
+        MenuListProps={{
+          sx: { p: "4px" },
+        }}
+      >
+        <MenuItem onClick={() => window.open("/policies?tab=termsOfUse", "_blank")} sx={{ p: "8px" }}>
+          <Typography
+            variant="subtitle1"
+            sx={{
+              color: "var(--Primary-Black, #212B36)",
+              fontFamily: "var(--font-bold)",
+              fontSize: "16px",
+              fontStyle: "normal",
+              fontWeight: 400,
+              lineHeight: "24px",
+            }}
+          >
+            服務條款
+          </Typography>
+        </MenuItem>
+        <MenuItem onClick={() => window.open("/policies?tab=privacyPolicy", "_blank")} sx={{ p: "8px" }}>
+          <Typography
+            variant="subtitle1"
+            sx={{
+              color: "var(--Primary-Black, #212B36)",
+              fontFamily: "var(--font-bold)",
+              fontSize: "16px",
+              fontStyle: "normal",
+              fontWeight: 400,
+              lineHeight: "24px",
+            }}
+          >
+            隱私政策
+          </Typography>
+        </MenuItem>
+        <MenuItem onClick={() => window.open("/policies?tab=cookiePolicy", "_blank")} sx={{ p: "8px" }}>
+          <Typography
+            variant="subtitle1"
+            sx={{
+              color: "var(--Primary-Black, #212B36)",
+              fontFamily: "var(--font-bold)",
+              fontSize: "16px",
+              fontStyle: "normal",
+              fontWeight: 400,
+              lineHeight: "24px",
+            }}
+          >
+            Cookies 政策
+          </Typography>
+        </MenuItem>
+
+      </Menu>
+    }
+  </>);
 };
 
 export default UserActionMenu;
