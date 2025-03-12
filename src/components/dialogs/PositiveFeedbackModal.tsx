@@ -69,6 +69,7 @@ export default function PositiveFeedbackModal({
         userChatMessage.organizationChannelMessageId,
       organizationChannelFeedbackType: 'POSITIVE',
       organizationChannelFeedbackComment: feedback,
+      organizationId: 'yMJHyi6R1CB9whpdNvtA',
     });
     fetchUserFeedback(organizationChannelId);
     setFeedback('');

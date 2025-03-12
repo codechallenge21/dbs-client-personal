@@ -69,7 +69,7 @@ export default function NegativeFeedbackModal({
         console.error('Failed to fetch channel details:', error);
       }
     },
-    []
+    [userChatMessage, getUserFeedback, setUserFeedback]
   );
 
   const handleSubmit = async () => {
@@ -79,6 +79,7 @@ export default function NegativeFeedbackModal({
         organizationChannelFeedbackTargetId:
           userChatMessage.organizationChannelMessageId,
         organizationChannelFeedbackType: 'NEGATIVE',
+        organizationId: 'yMJHyi6R1CB9whpdNvtA',
         organizationChannelFeedbackComment: feedbackText,
         organizationChannelFeedbackNegativeCategory: feedbackType,
       });

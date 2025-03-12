@@ -92,6 +92,7 @@ export interface getUserFeedbackApiPayload {
 }
 
 export interface addUserFeedbackApiPayload {
+  organizationId: string;
   organizationChannelFeedbackTarget: string;
   organizationChannelFeedbackTargetId: string;
   organizationChannelFeedbackType: string;

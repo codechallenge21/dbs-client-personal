@@ -146,6 +146,7 @@ const apis = {
   },
   addUserFeedback: (payload?: addUserFeedbackApiPayload) => {
     const {
+      organizationId,
       organizationChannelFeedbackTarget,
       organizationChannelFeedbackTargetId,
       organizationChannelFeedbackType,
@@ -153,7 +154,7 @@ const apis = {
       organizationChannelFeedbackComment,
     } = payload || {};
     return fetcher.post(
-      `/organizations/yMJHyi6R1CB9whpdNvtA/channel-feedbacks/submit`,
+      `/organizations/${organizationId}/channel-feedbacks/submit`,
       {
         organizationChannelFeedbackTarget,
         organizationChannelFeedbackType,
