@@ -9,12 +9,11 @@ import {
   Box,
   Button,
   Dialog,
-  DialogActions,
   DialogContent,
   DialogTitle,
   IconButton,
   TextField,
-  Typography,
+  Typography
 } from "@mui/material";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useContext, useState } from "react";
@@ -89,103 +88,108 @@ export default function PositiveFeedbackModal({
       open={open}
       onClose={onClose}
       fullWidth
-      maxWidth="xs"
-      sx={{
-        "& .MuiDialog-paper": {
+      maxWidth="sm"
+      PaperProps={{
+        sx: {
           borderRadius: "8px",
           boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
-          m: { xs: 2, sm: 4 },
         },
       }}
     >
       <DialogTitle
         sx={{
-          p: 2,
-          fontWeight: "bold",
-          fontSize: "18px",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
+          p: 2,
+          fontWeight: "bold",
         }}
       >
-        回饋
+        <Typography variant="h6" component="div" sx={{ fontWeight: "bold" }}>
+          回饋
+        </Typography>
         <IconButton
-          aria-label="close"
           onClick={onClose}
           sx={{
-            p: 0.5,
-            color: "text.secondary",
+            color: "black",
+            "&:hover": {
+              backgroundColor: "rgba(0, 0, 0, 0.04)",
+            },
           }}
         >
           <CloseIcon />
         </IconButton>
       </DialogTitle>
 
-      <DialogContent sx={{ p: 2, pt: 1 }}>
-        <Typography variant="body2" sx={{ mb: 1.5 }}>
-          請詳細說明：（選填）
-        </Typography>
+      <DialogContent sx={{ p: 2 }}>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+          <Box>
+            <Typography sx={{ mb: 1, fontSize: "0.9rem" }}>
+              請詳細說明：（選填）
+            </Typography>
+            <TextField
+              multiline
+              rows={4}
+              fullWidth
+              placeholder="您對這個回覆滿意嗎？請說明您的理由"
+              value={feedback}
+              onChange={(e) => setFeedback(e.target.value)}
+              variant="outlined"
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    borderColor: "rgba(0, 0, 0, 0.1)",
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "rgba(0, 0, 0, 0.2)",
+                  },
+                },
+              }}
+            />
+          </Box>
 
-        <TextField
-          multiline
-          rows={4}
-          fullWidth
-          placeholder="您對這個回覆滿意嗎？請說明您的理由"
-          value={feedback}
-          onChange={(e) => setFeedback(e.target.value)}
-          variant="outlined"
-          sx={{
-            mb: 2,
-            "& .MuiOutlinedInput-root": {
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "flex-start",
+              gap: 1,
+              backgroundColor: "rgba(0, 0, 0, 0.02)",
+              p: 1.5,
               borderRadius: "4px",
-            },
-          }}
-        />
-
-        <Box sx={{ display: "flex", alignItems: "flex-start", gap: 1 }}>
-          <InfoIcon
-            sx={{
-              color: "text.disabled",
-              fontSize: "20px",
-              mt: 0.3,
-            }}
-          />
-          <Typography
-            variant="caption"
-            sx={{
-              color: "text.secondary",
-              lineHeight: 1.3,
             }}
           >
-            提交此回饋將會把對話內容發送至好理家在團隊，以協助我們改進 AI
-            回應品質。
-            {/* <Typography component="span" sx={{ color: "#0066CC" }}>
-              了解更多 &gt;
-            </Typography> */}
-          </Typography>
+            <InfoIcon
+              sx={{ color: "rgba(0, 0, 0, 0.5)", fontSize: "1.2rem", mt: 0.2 }}
+            />
+            <Typography
+              sx={{ fontSize: "0.8rem", color: "rgba(0, 0, 0, 0.7)" }}
+            >
+              提交此回饋將會把對話內容發送至好理家在團隊，以協助我們改進 AI
+              回應品質。
+            </Typography>
+          </Box>
+        </Box>
+
+        <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
+          <Button
+            variant="contained"
+            onClick={handleSubmit}
+            sx={{
+              backgroundColor: "#6d4c41",
+              color: "white",
+              textTransform: "none",
+              "&:hover": {
+                backgroundColor: "#5d4037",
+              },
+              px: 3,
+              py: 1,
+              borderRadius: "4px",
+            }}
+          >
+            送出
+          </Button>
         </Box>
       </DialogContent>
-
-      <DialogActions sx={{ p: 2, pt: 0 }}>
-        <Button
-          variant="contained"
-          onClick={handleSubmit}
-          sx={{
-            bgcolor: "#6D4C41",
-            color: "white",
-            "&:hover": {
-              bgcolor: "#5D4037",
-            },
-            borderRadius: "4px",
-            px: 2,
-            py: 0.5,
-            textTransform: "none",
-            boxShadow: "none",
-          }}
-        >
-          送出
-        </Button>
-      </DialogActions>
     </Dialog>
   );
 }
