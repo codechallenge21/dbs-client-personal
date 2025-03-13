@@ -1,10 +1,19 @@
 'use client';
-import { useEffect, useState, Suspense } from 'react';
-import ChannelSearch from '../../components/view-all-history/ViewAllHistory';
+import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
+import { Box, CircularProgress, useMediaQuery, useTheme } from '@mui/material';
+import { Suspense, useEffect, useState } from 'react';
 import Header from '../../components/all-chat-header/Header';
 import SwitchDialog from '../../components/dialogs/SwitchDialog';
-import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
-import { Box, useMediaQuery, useTheme, CircularProgress } from '@mui/material';
+import ChannelSearch from '../../components/view-all-history/ViewAllHistory';
+
+// Create a client component that wraps the ChannelSearch component
+function ChannelSearchWrapper() {
+  return (
+    <Suspense fallback={<CircularProgress />}>
+      <ChannelSearch />
+    </Suspense>
+  );
+}
 
 export default function Home() {
   const theme = useTheme();
@@ -40,7 +49,7 @@ export default function Home() {
           }}
         >
           <Header />
-          <ChannelSearch />
+          <ChannelSearchWrapper />
           <SwitchDialog
             open={isOpen}
             onClose={handleClose}
