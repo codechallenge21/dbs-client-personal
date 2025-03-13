@@ -25,10 +25,10 @@ import {
 import Image from 'next/image';
 import React, { type FC, useEffect, useRef, useState } from 'react';
 import MermaidMarkdown from '../MermaidChart/Mermaidmarkdown';
+import NegativeFeedbackModal from '../dialogs/NegativeFeedbackModal';
+import PositiveFeedbackModal from '../dialogs/PositiveFeedbackModal';
 import CustomLoader from '../loader/loader';
 import { customScrollbarStyle } from '../toolbar-drawer-new/ToolbarDrawer';
-import PositiveFeedbackModal from '../dialogs/PositiveFeedbackModal';
-import NegativeFeedbackModal from '../dialogs/NegativeFeedbackModal';
 
 export interface ChannelMessagePanelProps {
   channel?: OrganizationChannel;
@@ -269,47 +269,36 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                       ml: { xs: '-30px', sm: '-20px' },
                     }}
                   >
-                    {!userFeedback ? (
-                      <>
-                        <Tooltip title="回應良好" placement="top" arrow>
-                          <IconButton
-                            aria-label="Like"
-                            onClick={handlePostiveModalOpen}
-                          >
-                            <ThumbDownOffAltRounded
-                              sx={{
-                                color: 'black',
-                                transform: 'scale(-1, -1)',
-                                fontSize: 20,
-                              }}
-                            />
-                          </IconButton>
-                        </Tooltip>
-                        <Tooltip title="回應不佳" placement="top" arrow>
-                          <IconButton
-                            aria-label="Dislike"
-                            onClick={handleNegativeModalOpen}
-                          >
-                            <ThumbDownOffAltRounded
-                              sx={{ color: 'black', fontSize: 20 }}
-                            />
-                          </IconButton>
-                        </Tooltip>
-                      </>
-                    ) : userFeedback === 'POSITIVE' ? (
-                      <Tooltip title="回應良好" placement="top" arrow>
-                        <IconButton aria-label="Like">
+                    {/* Modified logic: Always show both buttons, just use different styling based on feedback */}
+                    <Tooltip title="回應良好" placement="top" arrow>
+                      <IconButton
+                        aria-label="Like"
+                        onClick={handlePostiveModalOpen}
+                      >
+                        {userFeedback === 'POSITIVE' ? (
                           <ThumbUpAltRounded
                             sx={{
                               color: 'black',
                               fontSize: 20,
                             }}
                           />
-                        </IconButton>
-                      </Tooltip>
-                    ) : (
-                      <Tooltip title="回應不佳" placement="top" arrow>
-                        <IconButton aria-label="Dislike">
+                        ) : (
+                          <ThumbDownOffAltRounded
+                            sx={{
+                              color: 'black',
+                              transform: 'scale(-1, -1)',
+                              fontSize: 20,
+                            }}
+                          />
+                        )}
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="回應不佳" placement="top" arrow>
+                      <IconButton
+                        aria-label="Dislike"
+                        onClick={handleNegativeModalOpen}
+                      >
+                        {userFeedback === 'NEGATIVE' ? (
                           <ThumbUpAltRounded
                             sx={{
                               color: 'black',
@@ -317,9 +306,13 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                               fontSize: 20,
                             }}
                           />
-                        </IconButton>
-                      </Tooltip>
-                    )}
+                        ) : (
+                          <ThumbDownOffAltRounded
+                            sx={{ color: 'black', fontSize: 20 }}
+                          />
+                        )}
+                      </IconButton>
+                    </Tooltip>
                   </Box>
                   <PositiveFeedbackModal
                     open={openPositiveFeedbackModal}
@@ -510,65 +503,36 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                         mt: 2,
                       }}
                     >
-                      {/* <Tooltip title="回應良好" placement="top" arrow>
-                      <IconButton aria-label="Like">
-                        <ThumbDownOffAltRounded
-                          sx={{
-                            color: 'black',
-                            transform: 'scale(-1, -1)',
-                            fontSize: 20,
-                          }}
-                        />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="回應不佳" placement="top" arrow>
-                      <IconButton aria-label="Dislike">
-                        <ThumbDownOffAltRounded
-                          sx={{ color: 'black', fontSize: 20 }}
-                        />
-                      </IconButton>
-                    </Tooltip> */}
-                      {!userFeedback ? (
-                        <>
-                          <Tooltip title="回應良好" placement="top" arrow>
-                            <IconButton
-                              aria-label="Like"
-                              onClick={handlePostiveModalOpen}
-                            >
-                              <ThumbDownOffAltRounded
-                                sx={{
-                                  color: 'black',
-                                  transform: 'scale(-1, -1)',
-                                  fontSize: 20,
-                                }}
-                              />
-                            </IconButton>
-                          </Tooltip>
-                          <Tooltip title="回應不佳" placement="top" arrow>
-                            <IconButton
-                              aria-label="Dislike"
-                              onClick={handleNegativeModalOpen}
-                            >
-                              <ThumbDownOffAltRounded
-                                sx={{ color: 'black', fontSize: 20 }}
-                              />
-                            </IconButton>
-                          </Tooltip>
-                        </>
-                      ) : userFeedback === 'POSITIVE' ? (
-                        <Tooltip title="回應良好" placement="top" arrow>
-                          <IconButton aria-label="Like">
+                      {/* Modified logic: Always show both buttons, just use different styling based on feedback */}
+                      <Tooltip title="回應良好" placement="top" arrow>
+                        <IconButton
+                          aria-label="Like"
+                          onClick={handlePostiveModalOpen}
+                        >
+                          {userFeedback === 'POSITIVE' ? (
                             <ThumbUpAltRounded
                               sx={{
                                 color: 'black',
                                 fontSize: 20,
                               }}
                             />
-                          </IconButton>
-                        </Tooltip>
-                      ) : (
-                        <Tooltip title="回應不佳" placement="top" arrow>
-                          <IconButton aria-label="Dislike">
+                          ) : (
+                            <ThumbDownOffAltRounded
+                              sx={{
+                                color: 'black',
+                                transform: 'scale(-1, -1)',
+                                fontSize: 20,
+                              }}
+                            />
+                          )}
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="回應不佳" placement="top" arrow>
+                        <IconButton
+                          aria-label="Dislike"
+                          onClick={handleNegativeModalOpen}
+                        >
+                          {userFeedback === 'NEGATIVE' ? (
                             <ThumbUpAltRounded
                               sx={{
                                 color: 'black',
@@ -576,9 +540,13 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                                 fontSize: 20,
                               }}
                             />
-                          </IconButton>
-                        </Tooltip>
-                      )}
+                          ) : (
+                            <ThumbDownOffAltRounded
+                              sx={{ color: 'black', fontSize: 20 }}
+                            />
+                          )}
+                        </IconButton>
+                      </Tooltip>
                     </Box>
                     <PositiveFeedbackModal
                       open={openPositiveFeedbackModal}
