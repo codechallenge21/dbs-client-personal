@@ -143,6 +143,9 @@ export default function PositiveFeedbackModal({
                   "&:hover fieldset": {
                     borderColor: "rgba(0, 0, 0, 0.2)",
                   },
+                  "& .MuiInputBase-input::placeholder": {
+                    fontSize: "0.9rem",
+                  },
                 },
               }}
             />

@@ -197,7 +197,7 @@ export default function NegativeFeedbackModal({
                 renderValue={(selected) => {
                   if (selected.length === 0) {
                     return (
-                      <Typography sx={{ color: "text.secondary" }}>
+                      <Typography sx={{ color: "text.secondary", fontSize: "0.9rem" }}>
                         請選擇類型
                       </Typography>
                     );
@@ -236,6 +236,9 @@ export default function NegativeFeedbackModal({
                   },
                   "&:hover fieldset": {
                     borderColor: "rgba(0, 0, 0, 0.2)",
+                  },
+                  "& .MuiInputBase-input::placeholder": {
+                    fontSize: "0.9rem",
                   },
                 },
               }}
