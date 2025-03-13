@@ -61,6 +61,29 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
     useState(false);
   const { excute: submitFeedback } = useAxiosApi(apis.addUserFeedback);
 
+  // Initialize feedbackMap from channel messages when component loads
+  useEffect(() => {
+    if (channel?.organizationChannelMessageList) {
+      const newFeedbackMap: Record<string, string> = {};
+
+      channel.organizationChannelMessageList.forEach((message) => {
+        if (
+          message.organizationChannelMessageId &&
+          message.organizationChannelFeedbackList?.length
+        ) {
+          // Use the first feedback in the list to determine the status
+          const firstFeedback = message.organizationChannelFeedbackList[0];
+          if (firstFeedback?.organizationChannelFeedbackType) {
+            newFeedbackMap[message.organizationChannelMessageId] =
+              firstFeedback.organizationChannelFeedbackType;
+          }
+        }
+      });
+
+      setFeedbackMap((prev) => ({ ...prev, ...newFeedbackMap }));
+    }
+  }, [channel]);
+
   const handlePostiveModalOpen = (messageId: string) => {
     // If this message already has positive feedback, directly submit to cancel it
     if (feedbackMap[messageId] === "POSITIVE") {
