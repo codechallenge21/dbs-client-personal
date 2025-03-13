@@ -1,10 +1,16 @@
 'use client';
-import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
 import { Box, CircularProgress, useMediaQuery, useTheme } from '@mui/material';
+import dynamic from 'next/dynamic';
 import { Suspense, useEffect, useState } from 'react';
 import Header from '../../components/all-chat-header/Header';
 import SwitchDialog from '../../components/dialogs/SwitchDialog';
 import ChannelSearch from '../../components/view-all-history/ViewAllHistory';
+
+// Dynamically import ToolbarDrawer with SSR disabled to properly handle useSearchParams
+const ToolbarDrawer = dynamic(
+  () => import('@/components/toolbar-drawer-new/ToolbarDrawer'),
+  { ssr: false }
+);
 
 // Create a client component that wraps the ChannelSearch component
 function ChannelSearchWrapper() {
@@ -38,25 +44,27 @@ export default function Home() {
 
   return (
     <Suspense fallback={<CircularProgress />}>
-      <ToolbarDrawer open={isOpenDrawer} setIsOpenDrawer={toggleDrawer}>
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            height: isMobile ? '100vh' : 'calc(100vh - 32px)',
-            backgroundColor: '#FFFFFF',
-            borderRadius: '16px',
-          }}
-        >
-          <Header />
-          <ChannelSearchWrapper />
-          <SwitchDialog
-            open={isOpen}
-            onClose={handleClose}
-            onConfirm={handleConfirm}
-          />
-        </Box>
-      </ToolbarDrawer>
+      <Suspense fallback={<CircularProgress />}>
+        <ToolbarDrawer open={isOpenDrawer} setIsOpenDrawer={toggleDrawer}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              height: isMobile ? '100vh' : 'calc(100vh - 32px)',
+              backgroundColor: '#FFFFFF',
+              borderRadius: '16px',
+            }}
+          >
+            <Header />
+            <ChannelSearchWrapper />
+            <SwitchDialog
+              open={isOpen}
+              onClose={handleClose}
+              onConfirm={handleConfirm}
+            />
+          </Box>
+        </ToolbarDrawer>
+      </Suspense>
     </Suspense>
   );
 }
