@@ -1,6 +1,5 @@
 'use client';
-
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Stack from '@mui/material/Stack';
 import {
@@ -71,7 +70,7 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const Policies = function () {
+const PoliciesContent = function () {
   const router = useRouter();
   const searchParams = useSearchParams();
   const classes = useStyles();
@@ -161,7 +160,7 @@ const Policies = function () {
               justifyContent={isDownSm ? 'center' : 'flex-start'}
             >
               <Image
-                src="/assets/images/logo.png"
+                src="/assets/images/DBS_logo.svg"
                 alt="InfoCenter's logo"
                 width={200}
                 height={52}
@@ -202,6 +201,14 @@ const Policies = function () {
         </Container>
       </Box>
     </Box>
+  );
+};
+
+const Policies = function () {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <PoliciesContent />
+    </Suspense>
   );
 };
 
