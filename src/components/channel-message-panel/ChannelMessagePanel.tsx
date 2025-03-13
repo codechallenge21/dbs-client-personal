@@ -47,22 +47,34 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
   const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const loaderRef = useRef<HTMLDivElement>(null);
-  const [openPositiveFeedbackModal, setOpenPositiveFeedbackModal] =
-    useState(false);
-  const [openNegativeFeedbackModal, setOpenNegativeFeedbackModal] =
-    useState(false);
-  const [userFeedback, setUserFeedback] = useState<string>('');
+  
+  // Track which message has modals open and its feedback status
+  const [activeMessageId, setActiveMessageId] = useState<string | null>(null);
+  const [feedbackMap, setFeedbackMap] = useState<Record<string, string>>({});
+  const [openPositiveFeedbackModal, setOpenPositiveFeedbackModal] = useState(false);
+  const [openNegativeFeedbackModal, setOpenNegativeFeedbackModal] = useState(false);
 
-  const handlePostiveModalOpen = () => {
+  const handlePostiveModalOpen = (messageId: string) => {
+    setActiveMessageId(messageId);
     setOpenPositiveFeedbackModal(true);
   };
-  const handleNegativeModalOpen = () => {
+  
+  const handleNegativeModalOpen = (messageId: string) => {
+    setActiveMessageId(messageId);
     setOpenNegativeFeedbackModal(true);
   };
 
   const handleClose = () => {
     setOpenPositiveFeedbackModal(false);
     setOpenNegativeFeedbackModal(false);
+    setActiveMessageId(null);
+  };
+  
+  const updateMessageFeedback = (messageId: string, feedbackType: string) => {
+    setFeedbackMap(prev => ({
+      ...prev,
+      [messageId]: feedbackType
+    }));
   };
 
   // Automatically scroll to the bottom
@@ -143,7 +155,12 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
           scrollbarColor: '#888 #f1f1f1',
         }}
       >
-        {sortedData?.map((message, messageIndex) => (
+        {sortedData?.map((message, messageIndex) => {
+          // Get the feedback for this specific message
+          const messageFeedback = message.organizationChannelMessageId ? 
+            feedbackMap[message.organizationChannelMessageId] : undefined;
+          
+          return (
           <Box
             key={`channelMessage-${messageIndex}`}
             sx={{
@@ -258,7 +275,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
               <MermaidMarkdown
                 chartData={message.organizationChannelMessageContent}
               />
-              {message.organizationChannelMessageType === 'AI' && (
+              {message.organizationChannelMessageType === 'AI' && message.organizationChannelMessageId && (
                 <>
                   <Box
                     sx={{
@@ -269,13 +286,13 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                       ml: { xs: '-30px', sm: '-20px' },
                     }}
                   >
-                    {/* Modified logic: Always show both buttons, just use different styling based on feedback */}
+                    {/* Modified logic: Use messageFeedback specific to this message */}
                     <Tooltip title="回應良好" placement="top" arrow>
                       <IconButton
                         aria-label="Like"
-                        onClick={handlePostiveModalOpen}
+                        onClick={() => handlePostiveModalOpen(message.organizationChannelMessageId!)}
                       >
-                        {userFeedback === 'POSITIVE' ? (
+                        {messageFeedback === 'POSITIVE' ? (
                           <ThumbUpAltRounded
                             sx={{
                               color: 'black',
@@ -296,9 +313,9 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                     <Tooltip title="回應不佳" placement="top" arrow>
                       <IconButton
                         aria-label="Dislike"
-                        onClick={handleNegativeModalOpen}
+                        onClick={() => handleNegativeModalOpen(message.organizationChannelMessageId!)}
                       >
-                        {userFeedback === 'NEGATIVE' ? (
+                        {messageFeedback === 'NEGATIVE' ? (
                           <ThumbUpAltRounded
                             sx={{
                               color: 'black',
@@ -314,24 +331,32 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                       </IconButton>
                     </Tooltip>
                   </Box>
-                  <PositiveFeedbackModal
-                    open={openPositiveFeedbackModal}
-                    onClose={handleClose}
-                    setUserFeedback={setUserFeedback}
-                    userChatMessage={message}
-                  />
-                  <NegativeFeedbackModal
-                    open={openNegativeFeedbackModal}
-                    onClose={handleClose}
-                    setUserFeedback={setUserFeedback}
-                    userChatMessage={message}
-                  />
+                  {activeMessageId === message.organizationChannelMessageId && (
+                    <>
+                      <PositiveFeedbackModal
+                        open={openPositiveFeedbackModal}
+                        onClose={handleClose}
+                        setUserFeedback={() => updateMessageFeedback(message.organizationChannelMessageId!, 'POSITIVE')}
+                        userChatMessage={message}
+                      />
+                      <NegativeFeedbackModal
+                        open={openNegativeFeedbackModal}
+                        onClose={handleClose}
+                        setUserFeedback={() => updateMessageFeedback(message.organizationChannelMessageId!, 'NEGATIVE')}
+                        userChatMessage={message}
+                      />
+                    </>
+                  )}
                 </>
               )}
             </Box>
           </Box>
-        ))}
-        {chatResponses?.map((message, messageIndex) => (
+        )})}
+        {chatResponses?.map((message, messageIndex) => {
+          const messageId = message.organizationChannelMessageId || `temp-${messageIndex}`;
+          const messageFeedback = feedbackMap[messageId];
+          
+          return (
           <React.Fragment key={`chatResponse-${messageIndex}`}>
             {(message.organizationChannelFiles?.length ?? 0) > 0 && (
               <Box
@@ -402,8 +427,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                 </Box>
                 <Tooltip
                   title={
-                    copiedMessageId ===
-                    message.organizationChannelMessageContent
+                    copiedMessageId === messageId
                       ? '已複製'
                       : '複製'
                   }
@@ -422,12 +446,11 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                     onClick={() =>
                       copyPrompt(
                         message.organizationChannelMessageContent,
-                        message.organizationChannelMessageContent
+                        messageId
                       )
                     }
                   >
-                    {copiedMessageId ===
-                    message.organizationChannelMessageContent ? (
+                    {copiedMessageId === messageId ? (
                       <DoneIcon sx={{ color: '#212B36' }} />
                     ) : (
                       <ContentCopyRounded
@@ -503,13 +526,13 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                         mt: 2,
                       }}
                     >
-                      {/* Modified logic: Always show both buttons, just use different styling based on feedback */}
+                      {/* Modified logic: Use feedbackMap for this specific message */}
                       <Tooltip title="回應良好" placement="top" arrow>
                         <IconButton
                           aria-label="Like"
-                          onClick={handlePostiveModalOpen}
+                          onClick={() => handlePostiveModalOpen(messageId)}
                         >
-                          {userFeedback === 'POSITIVE' ? (
+                          {messageFeedback === 'POSITIVE' ? (
                             <ThumbUpAltRounded
                               sx={{
                                 color: 'black',
@@ -530,9 +553,9 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                       <Tooltip title="回應不佳" placement="top" arrow>
                         <IconButton
                           aria-label="Dislike"
-                          onClick={handleNegativeModalOpen}
+                          onClick={() => handleNegativeModalOpen(messageId)}
                         >
-                          {userFeedback === 'NEGATIVE' ? (
+                          {messageFeedback === 'NEGATIVE' ? (
                             <ThumbUpAltRounded
                               sx={{
                                 color: 'black',
@@ -548,24 +571,28 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                         </IconButton>
                       </Tooltip>
                     </Box>
-                    <PositiveFeedbackModal
-                      open={openPositiveFeedbackModal}
-                      onClose={handleClose}
-                      setUserFeedback={setUserFeedback}
-                      userChatMessage={message}
-                    />
-                    <NegativeFeedbackModal
-                      open={openNegativeFeedbackModal}
-                      onClose={handleClose}
-                      setUserFeedback={setUserFeedback}
-                      userChatMessage={message}
-                    />
+                    {activeMessageId === messageId && (
+                      <>
+                        <PositiveFeedbackModal
+                          open={openPositiveFeedbackModal}
+                          onClose={handleClose}
+                          setUserFeedback={() => updateMessageFeedback(messageId, 'POSITIVE')}
+                          userChatMessage={message}
+                        />
+                        <NegativeFeedbackModal
+                          open={openNegativeFeedbackModal}
+                          onClose={handleClose}
+                          setUserFeedback={() => updateMessageFeedback(messageId, 'NEGATIVE')}
+                          userChatMessage={message}
+                        />
+                      </>
+                    )}
                   </>
                 )}
               </Box>
             </Box>
           </React.Fragment>
-        ))}
+        )})}
         <div ref={messagesEndRef} /> {/* End of messages marker */}
       </Box>
       {isInteractingInChat && (
