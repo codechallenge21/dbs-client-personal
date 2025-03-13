@@ -102,12 +102,11 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
         return newMap;
       });
 
-      // Submit the cancellation to the server
+      // Submit the feedback to the server - always use the same type as the button clicked
       await submitFeedback({
         organizationChannelFeedbackTarget: "AI_RESPONSE",
         organizationChannelFeedbackTargetId: messageId,
-        organizationChannelFeedbackType:
-          feedbackType === "POSITIVE" ? "NEGATIVE" : "POSITIVE", // Submit opposite type to cancel
+        organizationChannelFeedbackType: feedbackType, // Always submit the same type
         organizationChannelFeedbackComment: "",
         organizationId: "yMJHyi6R1CB9whpdNvtA",
       });
