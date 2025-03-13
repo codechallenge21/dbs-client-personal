@@ -1,6 +1,10 @@
-'use client';
+"use client";
 
-import { useCallback, useContext, useState } from 'react';
+import { SnackbarContext } from "@/context/SnackbarContext";
+import apis from "@/utils/hooks/apis/apis";
+import useAxiosApi from "@eGroupAI/hooks/apis/useAxiosApi";
+import CloseIcon from "@mui/icons-material/Close";
+import InfoIcon from "@mui/icons-material/Info";
 import {
   Box,
   Button,
@@ -11,13 +15,9 @@ import {
   IconButton,
   TextField,
   Typography,
-} from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import InfoIcon from '@mui/icons-material/Info';
-import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
-import apis from '@/utils/hooks/apis/apis';
-import { useSearchParams } from 'next/navigation';
-import { SnackbarContext } from '@/context/SnackbarContext';
+} from "@mui/material";
+import { useSearchParams } from "next/navigation";
+import { useCallback, useContext, useState } from "react";
 
 interface PositiveFeedbackModalProps {
   open: boolean;
@@ -32,10 +32,10 @@ export default function PositiveFeedbackModal({
   userChatMessage,
   setUserFeedback,
 }: PositiveFeedbackModalProps) {
-  const [feedback, setFeedback] = useState('');
+  const [feedback, setFeedback] = useState("");
   const searchParams = useSearchParams();
   const { showSnackbar } = useContext(SnackbarContext);
-  const organizationChannelId = searchParams.get('organizationChannelId') ?? '';
+  const organizationChannelId = searchParams.get("organizationChannelId") ?? "";
   const { excute: submitUserInputs } = useAxiosApi(apis.addUserFeedback);
   const { excute: getUserFeedback } = useAxiosApi(apis.getUserFeedback);
 
@@ -43,20 +43,20 @@ export default function PositiveFeedbackModal({
     async (organizationChannelId: string) => {
       try {
         const res = await getUserFeedback({
-          organizationId: 'yMJHyi6R1CB9whpdNvtA',
+          organizationId: "yMJHyi6R1CB9whpdNvtA",
           organizationChannelId,
           messageId: userChatMessage.organizationChannelMessageId,
         });
-        console.log('res for positive feedback', res.data);
+        console.log("res for positive feedback", res.data);
         setUserFeedback(
           // res.data?.organizationChannelFeedbackList
           //   ?.organizationChannelFeedbackType
-          'POSITIVE'
+          "POSITIVE"
         );
         onClose();
-        showSnackbar('反饋提交成功', 'success');
+        showSnackbar("感謝您的回饋"!, "success");
       } catch (error) {
-        console.error('Failed to fetch channel details:', error);
+        console.error("Failed to fetch channel details:", error);
       }
     },
     [getUserFeedback, userChatMessage, onClose, showSnackbar, setUserFeedback]
@@ -65,21 +65,21 @@ export default function PositiveFeedbackModal({
   const handleSubmit = () => {
     if (userChatMessage) {
       submitUserInputs({
-        organizationChannelFeedbackTarget: 'AI_RESPONSE',
+        organizationChannelFeedbackTarget: "AI_RESPONSE",
         organizationChannelFeedbackTargetId:
           userChatMessage.organizationChannelMessageId,
-        organizationChannelFeedbackType: 'POSITIVE',
+        organizationChannelFeedbackType: "POSITIVE",
         organizationChannelFeedbackComment: feedback,
-        organizationId: 'yMJHyi6R1CB9whpdNvtA',
+        organizationId: "yMJHyi6R1CB9whpdNvtA",
       });
 
       fetchUserFeedback(organizationChannelId);
-      setFeedback('');
+      setFeedback("");
     } else {
-      setUserFeedback('POSITIVE');
+      setUserFeedback("POSITIVE");
       onClose();
-      setFeedback('');
-      showSnackbar('反饋提交成功', 'success');
+      setFeedback("");
+      showSnackbar("感謝您的回饋!", "success");
       return;
     }
   };
@@ -91,9 +91,9 @@ export default function PositiveFeedbackModal({
       fullWidth
       maxWidth="xs"
       sx={{
-        '& .MuiDialog-paper': {
-          borderRadius: '8px',
-          boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)',
+        "& .MuiDialog-paper": {
+          borderRadius: "8px",
+          boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
           m: { xs: 2, sm: 4 },
         },
       }}
@@ -101,11 +101,11 @@ export default function PositiveFeedbackModal({
       <DialogTitle
         sx={{
           p: 2,
-          fontWeight: 'bold',
-          fontSize: '18px',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
+          fontWeight: "bold",
+          fontSize: "18px",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
         }}
       >
         回饋
@@ -114,7 +114,7 @@ export default function PositiveFeedbackModal({
           onClick={onClose}
           sx={{
             p: 0.5,
-            color: 'text.secondary',
+            color: "text.secondary",
           }}
         >
           <CloseIcon />
@@ -136,29 +136,29 @@ export default function PositiveFeedbackModal({
           variant="outlined"
           sx={{
             mb: 2,
-            '& .MuiOutlinedInput-root': {
-              borderRadius: '4px',
+            "& .MuiOutlinedInput-root": {
+              borderRadius: "4px",
             },
           }}
         />
 
-        <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
+        <Box sx={{ display: "flex", alignItems: "flex-start", gap: 1 }}>
           <InfoIcon
             sx={{
-              color: 'text.disabled',
-              fontSize: '20px',
+              color: "text.disabled",
+              fontSize: "20px",
               mt: 0.3,
             }}
           />
           <Typography
             variant="caption"
             sx={{
-              color: 'text.secondary',
+              color: "text.secondary",
               lineHeight: 1.3,
             }}
           >
             提交此報告將把整個對話發送給eGroup，以便未來改進我們的模型。
-            <Typography component="span" sx={{ color: '#0066CC' }}>
+            <Typography component="span" sx={{ color: "#0066CC" }}>
               了解更多 &gt;
             </Typography>
           </Typography>
@@ -170,16 +170,16 @@ export default function PositiveFeedbackModal({
           variant="contained"
           onClick={handleSubmit}
           sx={{
-            bgcolor: '#6D4C41',
-            color: 'white',
-            '&:hover': {
-              bgcolor: '#5D4037',
+            bgcolor: "#6D4C41",
+            color: "white",
+            "&:hover": {
+              bgcolor: "#5D4037",
             },
-            borderRadius: '4px',
+            borderRadius: "4px",
             px: 2,
             py: 0.5,
-            textTransform: 'none',
-            boxShadow: 'none',
+            textTransform: "none",
+            boxShadow: "none",
           }}
         >
           傳送
