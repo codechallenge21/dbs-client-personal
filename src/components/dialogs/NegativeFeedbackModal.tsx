@@ -1,27 +1,27 @@
 'use client';
 
-import type React from 'react';
-import { useCallback, useState, useContext } from 'react';
+import { SnackbarContext } from '@/context/SnackbarContext';
+import apis from '@/utils/hooks/apis/apis';
+import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
+import CloseIcon from '@mui/icons-material/Close';
+import InfoIcon from '@mui/icons-material/Info';
 import {
   Box,
   Button,
   Dialog,
   DialogContent,
   DialogTitle,
+  FormControl,
   IconButton,
   MenuItem,
   Select,
   TextField,
   Typography,
-  FormControl,
   type SelectChangeEvent,
 } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import InfoIcon from '@mui/icons-material/Info';
-import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
-import apis from '@/utils/hooks/apis/apis';
 import { useSearchParams } from 'next/navigation';
-import { SnackbarContext } from '@/context/SnackbarContext';
+import type React from 'react';
+import { useCallback, useContext, useState } from 'react';
 
 interface NegativeFeedbackModalProps {
   open: boolean;
@@ -65,6 +65,8 @@ export default function NegativeFeedbackModal({
           // res.data.organizationChannelFeedbackType
           'NEGATIVE'
         );
+        onClose();
+        showSnackbar('感謝您的回饋!', 'success');
       } catch (error) {
         console.error('Failed to fetch channel details:', error);
       }
