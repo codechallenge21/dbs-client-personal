@@ -4,11 +4,13 @@ import {
   OrganizationChannelResponse,
 } from '@/interfaces/entities';
 import {
+  addUserFeedbackApiPayload,
   ChatWithFilesPayload,
   DeleteChannelApiPayload,
   ForgotPasswordApiPayload,
   GetChannelDetailApiPayload,
   GetChannelsApiPayload,
+  getUserFeedbackApiPayload,
   LogApiPayload,
   LoginPayload,
   LogoutPayload,
@@ -140,6 +142,36 @@ const apis = {
     const { organizationId, organizationChannelId } = payload || {};
     return fetcher.delete(
       `/organizations/${organizationId}/channels/${organizationChannelId}`
+    );
+  },
+  addUserFeedback: (payload?: addUserFeedbackApiPayload) => {
+    const {
+      organizationId,
+      organizationChannelFeedbackTarget,
+      organizationChannelFeedbackTargetId,
+      organizationChannelFeedbackType,
+      organizationChannelFeedbackNegativeCategory,
+      organizationChannelFeedbackComment,
+    } = payload || {};
+    return fetcher.post(
+      `/organizations/${organizationId}/channel-feedbacks/submit`,
+      {
+        organizationChannelFeedbackTarget,
+        organizationChannelFeedbackType,
+        organizationChannelFeedbackNegativeCategory,
+        organizationChannelFeedbackComment,
+        organizationChannelFeedbackTargetId,
+      }
+    );
+  },
+  getUserFeedback: (payload?: getUserFeedbackApiPayload) => {
+    if (!payload) {
+      throw new Error('Payload is undefined');
+    }
+    const { messageId, organizationChannelId, organizationId } = payload || {};
+
+    return fetcher.get(
+      `/organizations/${organizationId}/channels/${organizationChannelId}/messages/${messageId}`
     );
   },
   registerUser: (payload?: RegisterUserApiPayload) => {

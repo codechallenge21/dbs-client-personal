@@ -84,3 +84,18 @@ export interface LogoutPayload {
 export interface ForgotPasswordApiPayload {
   organizationUserEmail: string;
 }
+
+export interface getUserFeedbackApiPayload {
+  messageId: string;
+  organizationChannelId: string;
+  organizationId: string;
+}
+
+export interface addUserFeedbackApiPayload {
+  organizationId: string;
+  organizationChannelFeedbackTarget: string;
+  organizationChannelFeedbackTargetId: string;
+  organizationChannelFeedbackType: string;
+  organizationChannelFeedbackNegativeCategory?: string;
+  organizationChannelFeedbackComment: string;
+}
