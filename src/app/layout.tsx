@@ -1,4 +1,5 @@
 import FontLoader from "@/components/font-loader";
+import TokenValidator from "@/components/TokenValidator";
 import ChannelContextProvider from "@/context/ChannelContextProvider";
 import { LoginProvider } from "@/context/LoginContext";
 import { SnackbarProvider } from "@/context/SnackbarContext";
@@ -10,6 +11,7 @@ import {
   Open_Sans,
   Public_Sans,
 } from "next/font/google";
+import { Suspense } from "react";
 import DynaFontScript from "../assets/font/DynaFontScript";
 import "./globals.css";
 
@@ -101,6 +103,9 @@ export default function RootLayout({ children }: Props) {
             <LoginProvider>
               <ChannelContextProvider>
                 <FontLoader />
+                <Suspense fallback={null}>
+                  <TokenValidator />
+                </Suspense>
                 {children}
               </ChannelContextProvider>
             </LoginProvider>
