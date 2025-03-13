@@ -25,12 +25,8 @@ import {
   ArrowDropDown,
   CheckCircleRounded,
   MenuRounded,
-  // MicRounded,
   PendingActionsRounded,
   RotateRightRounded,
-  // SearchRounded,
-  // StarBorderRounded,
-  // StarRounded,
   UploadRounded,
 } from '@mui/icons-material';
 import {
@@ -91,11 +87,10 @@ const ChannelsList = () => {
   const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(
     isMobile ? false : true
   );
-  const [openUpload, setOpenUpload] = React.useState(false);
-  const [, setFavoriteChannels] = useState<{
-    [key: number]: boolean;
-  }>({});
-  const [uploadingFile, setUploadingFile] = useState<fileProps>();
+  const [openUpload, setOpenUpload] = useState(false);
+  const [, setFavoriteChannels] = useState<{ [key: number]: boolean }>({});
+  // Changed from a single file to an array to support multiple file uploads
+  const [uploadingFiles, setUploadingFiles] = useState<fileProps[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
   const [channelList, setChannelList] = useState<OrganizationChannel[]>([]);
@@ -118,14 +113,10 @@ const ChannelsList = () => {
     {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
-      // Custom SWR configuration to handle errors
       onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
         if (error?.status === 401) {
-          // showSnackbar('認證已失效，請重新登入', 'error');
-          setHasMore(false); // Stop infinite scroll attempts
+          setHasMore(false);
         }
-
-        // For other errors, use the default retry behavior but limit attempts
         if (retryCount >= 3) return;
       },
     }
@@ -170,7 +161,7 @@ const ChannelsList = () => {
       setIsDeleteDialogOpen(false);
       handleCloseToolsMenu();
       deleteChannel({
-        organizationId: 'yMJHyi6R1CB9whpdNvtA',
+        organizationId: 'yMJHyi6R1CB9whpdA',
         organizationChannelId: channelToDeleteId,
       })
         .then(() => {
@@ -251,7 +242,7 @@ const ChannelsList = () => {
       channel.organizationChannelTranscriptList[0]
         ?.organizationChannelTranscriptStatus === 'COMPLETE'
     ) {
-      if (handleShowDetail) handleShowDetail(channel);
+      handleShowDetail(channel);
     }
   };
 
@@ -268,12 +259,12 @@ const ChannelsList = () => {
     }));
   };
 
+  // Updated upload handler to support multiple file uploads.
   const handleUploadFile = async (file: File, fileInfo: fileProps) => {
     try {
-      setUploadingFile(fileInfo);
-      const createdChannelRes = await createChannelByAudio({
-        file,
-      });
+      setUploadingFiles((prev) => [...prev, fileInfo]);
+
+      const createdChannelRes = await createChannelByAudio({ file });
       const channelResponse = await getChannelDetail({
         organizationId: 'yMJHyi6R1CB9whpdNvtA',
         organizationChannelId: createdChannelRes.data.organizationChannelId,
@@ -283,7 +274,14 @@ const ChannelsList = () => {
         channelResponse.data,
         ...prevChannelList,
       ]);
-      setUploadingFile(undefined);
+
+      setUploadingFiles((prev) =>
+        prev.filter(
+          (upload) =>
+            upload.organizationChannelTitle !==
+            fileInfo.organizationChannelTitle
+        )
+      );
     } catch (err) {
       showSnackbar(FILE_CONFIG.errorMessages.uploadFailed, 'error');
       console.error(err);
@@ -299,7 +297,6 @@ const ChannelsList = () => {
     setIsOpenDrawer(!isMobile);
   }, [isMobile]);
 
-  // Initialize channelList with channelsData
   useEffect(() => {
     if (
       channelsData &&
@@ -311,9 +308,8 @@ const ChannelsList = () => {
         setHasMore(false);
       }
     }
-  }, [channelsData, currentPageRef.current]);
+  }, [channelsData]);
 
-  // Fetch more data when scrolled to the bottom
   const fetchMoreData = useCallback(async () => {
     if (isFetching || !hasMore) return;
     setIsFetching(true);
@@ -322,7 +318,6 @@ const ChannelsList = () => {
       const nextPage = currentPageRef.current + itemsPerPage;
       currentPageRef.current = nextPage;
 
-      // Use the updated page value in the API call
       setTimeout(async () => {
         const response = await mutateAudioChannels();
         const newChannels = response?.data || [];
@@ -340,16 +335,13 @@ const ChannelsList = () => {
     } finally {
       setIsFetching(false);
     }
-  }, [isFetching, hasMore, currentPageRef.current, mutateAudioChannels]);
+  }, [isFetching, hasMore, mutateAudioChannels]);
 
-  // Setup Intersection Observer for infinite scrolling
   useEffect(() => {
     if (!loadingElementVisible || !hasMore) return;
 
-    // Clear any existing observer
     if (observer.current && loadingRef.current && scrollContainerRef.current) {
       observer.current.unobserve(loadingRef.current);
-      observer.current.unobserve(scrollContainerRef.current);
       observer.current = null;
     }
 
@@ -372,22 +364,16 @@ const ChannelsList = () => {
         observer.current = null;
       }
     };
-  }, [loadingElementVisible]);
+  }, [loadingElementVisible, hasMore, isFetching, fetchMoreData]);
 
-  // Define the keyframe for rotation
   const rotateAnimation = keyframes`
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-`;
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  `;
 
-  // Create a styled SVG component that applies the rotation animation
   const LoaderSvg = styled('svg')({
     animation: `${rotateAnimation} 1s linear infinite`,
-    transformOrigin: 'center', // Ensure the rotation occurs around the center
+    transformOrigin: 'center',
   });
 
   return (
@@ -425,10 +411,7 @@ const ChannelsList = () => {
                   },
                 }}
                 TabIndicatorProps={{
-                  style: {
-                    height: '3px',
-                    backgroundColor: '#212B36',
-                  },
+                  style: { height: '3px', backgroundColor: '#212B36' },
                 }}
               >
                 <Tab
@@ -569,18 +552,17 @@ const ChannelsList = () => {
                       lineHeight: 'normal',
                       fontFamily: 'var(--font-bold)',
                       color: 'var(--Primary-Black, #212B36)',
-                      textAlign: 'left', // Always left-aligned
+                      textAlign: 'left',
                     }}
                     gutterBottom
                   >
                     智能語音轉文字
                   </Typography>
-
                   <Box
                     sx={{
                       display: 'flex',
-                      width: { xs: '100%', md: 'auto' }, // Full width on small screens, auto on big screens
-                      justifyContent: { xs: 'flex-start', md: 'flex-end' }, // Left-align when wrapped, right-align on big screens
+                      width: { xs: '100%', md: 'auto' },
+                      justifyContent: { xs: 'flex-start', md: 'flex-end' },
                       alignItems: 'center',
                       gap: '16px',
                       flexWrap: 'wrap',
@@ -625,12 +607,8 @@ const ChannelsList = () => {
                         alignItems: 'center',
                         justifyContent: 'center',
                         background: 'var(--Secondary-, #5C443A)',
-                        '&:hover': {
-                          background: 'rgba(92, 68, 58, 0.8)',
-                        },
-                        '&:active': {
-                          background: 'rgba(92, 68, 58, 0.6)',
-                        },
+                        '&:hover': { background: 'rgba(92, 68, 58, 0.8)' },
+                        '&:active': { background: 'rgba(92, 68, 58, 0.6)' },
                       }}
                       onClick={() => setOpenUpload(true)}
                     >
@@ -642,20 +620,19 @@ const ChannelsList = () => {
                 {isLoadingChannels &&
                 channelList?.length === 0 &&
                 currentPageRef.current === 0 &&
-                !uploadingFile &&
-                !(isCreating || isSingleChannelLoading) ? (
+                uploadingFiles.length === 0 &&
+                !(isCreating || isLoadingChannels || isSingleChannelLoading) ? (
                   <Box
                     sx={{
                       top: '50%',
                       left: '50%',
-                      display: 'flex',
                       position: 'absolute',
                       transform: 'translate(-50%, -50%)',
                     }}
                   >
                     <CircularProgress color="primary" />
                   </Box>
-                ) : channelList?.length > 0 || uploadingFile ? (
+                ) : channelList?.length > 0 || uploadingFiles.length > 0 ? (
                   <TableContainer
                     ref={scrollContainerRef}
                     sx={{
@@ -782,18 +759,18 @@ const ChannelsList = () => {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {uploadingFile &&
+                        {uploadingFiles.length > 0 &&
                           (isCreating ||
                             isLoadingChannels ||
-                            isSingleChannelLoading) && (
+                            isSingleChannelLoading) &&
+                          uploadingFiles.map((file, index) => (
                             <TableRow
-                              key={0}
+                              key={`uploading-${index}`}
                               sx={{
-                                cursor: 'default',
-                                height: '56px !important',
+                                height: '56px',
                                 borderBottom:
-                                  '1px dashed var(--Components-Divider, rgba(145, 158, 171, 0.20))',
-                                background: 'var(--Background-Paper, #FFF)',
+                                  '1px dashed rgba(145, 158, 171, 0.20)',
+                                background: '#FFF',
                               }}
                             >
                               <TableCell
@@ -822,7 +799,7 @@ const ChannelsList = () => {
                                     color: 'var(--Text-Primary, #212B36)',
                                   }}
                                 >
-                                  {uploadingFile?.organizationChannelTitle}
+                                  {file.organizationChannelTitle}
                                 </Typography>
                               </TableCell>
                               <TableCell
@@ -916,7 +893,7 @@ const ChannelsList = () => {
                                     color: 'var(--Text-Primary, #212B36)',
                                   }}
                                 >
-                                  {uploadingFile.organizationChannelCreateDate}
+                                  {file.organizationChannelCreateDate}
                                 </Typography>
                               </TableCell>
                               <TableCell
@@ -953,7 +930,7 @@ const ChannelsList = () => {
                                 }}
                               ></TableCell>
                             </TableRow>
-                          )}
+                          ))}
                         {channelList?.map((channel, index) => (
                           <TableRow
                             key={index}
@@ -1183,7 +1160,6 @@ const ChannelsList = () => {
                           <TableRow
                             ref={(el) => {
                               loadingRef.current = el;
-                              // Update state when the ref is attached to a DOM element
                               setLoadingElementVisible(!!el);
                             }}
                           >
@@ -1204,7 +1180,7 @@ const ChannelsList = () => {
                 ) : (
                   channelsData?.length === 0 &&
                   channelList?.length === 0 &&
-                  !uploadingFile &&
+                  uploadingFiles.length === 0 &&
                   !(
                     isCreating ||
                     isLoadingChannels ||
@@ -1253,7 +1229,6 @@ const ChannelsList = () => {
                     flex: '1 0 0',
                     height: '40px',
                     display: 'flex',
-                    minHeight: '32px',
                     alignItems: 'center',
                     padding: '8px',
                     fontWeight: 400,
@@ -1284,11 +1259,7 @@ const ChannelsList = () => {
                     overflowX: 'hidden',
                   },
                 }}
-                TabIndicatorProps={{
-                  style: {
-                    backgroundColor: '#212B36',
-                  },
-                }}
+                TabIndicatorProps={{ style: { backgroundColor: '#212B36' } }}
               >
                 <Tab
                   label="智能語音轉文字"
@@ -1296,12 +1267,9 @@ const ChannelsList = () => {
                     fontWeight: 400,
                     fontSize: '14px',
                     lineHeight: '22px',
-                    fontStyle: 'normal',
                     fontFamily: 'var(--font-bold)',
-                    color: 'var(--Text-Secondary, #637381))',
-                    '&.Mui-selected': {
-                      color: 'var(--Primary-Black, #212B36)',
-                    },
+                    color: 'var(--Text-Secondary, #637381)',
+                    '&.Mui-selected': { color: '#212B36' },
                     padding: '12px 0px',
                   }}
                 />
@@ -1386,8 +1354,6 @@ const ChannelsList = () => {
               </Typography>
               <Box
                 sx={{
-                  gap: '16px',
-                  width: '100%',
                   display: 'flex',
                   justifyContent: 'flex-end',
                 }}
@@ -1466,20 +1432,19 @@ const ChannelsList = () => {
               {isLoadingChannels &&
               channelList?.length === 0 &&
               currentPageRef.current === 0 &&
-              !uploadingFile &&
-              !(isCreating || isSingleChannelLoading) ? (
+              uploadingFiles.length === 0 &&
+              !(isCreating || isLoadingChannels || isSingleChannelLoading) ? (
                 <Box
                   sx={{
                     top: '50%',
                     left: '50%',
-                    display: 'flex',
                     position: 'absolute',
                     transform: 'translate(-50%, -50%)',
                   }}
                 >
                   <CircularProgress color="primary" />
                 </Box>
-              ) : channelList?.length > 0 || uploadingFile ? (
+              ) : channelList?.length > 0 || uploadingFiles.length > 0 ? (
                 <Box
                   ref={scrollContainerRef}
                   sx={{
@@ -1490,19 +1455,19 @@ const ChannelsList = () => {
                   }}
                 >
                   <Box
-                    // ref={scrollContainerRef}
                     sx={{
                       gap: '16px',
                       display: 'flex',
                       flexDirection: 'column',
                     }}
                   >
-                    {uploadingFile &&
+                    {uploadingFiles.length > 0 &&
                       (isCreating ||
                         isLoadingChannels ||
-                        isSingleChannelLoading) && (
+                        isSingleChannelLoading) &&
+                      uploadingFiles.map((file, index) => (
                         <Card
-                          key={0}
+                          key={`uploading-mobile-${index}`}
                           sx={{
                             mb: '16px',
                             height: '146px',
@@ -1521,19 +1486,16 @@ const ChannelsList = () => {
                         >
                           <CardContent
                             sx={{
-                              padding: 0,
-                              width: '100%',
-                              height: '100%',
                               display: 'flex',
                               flexDirection: 'column',
-                              paddingBottom: '0 !important',
                               justifyContent: 'space-between',
+                              height: '100%',
+                              padding: 0,
                             }}
                           >
                             <Box
                               sx={{
                                 mb: '8px',
-                                width: '100%',
                                 display: 'flex',
                                 alignItems: 'start',
                                 justifyContent: 'space-between',
@@ -1551,7 +1513,7 @@ const ChannelsList = () => {
                                   color: 'var(--Primary-Black, #212B36)',
                                 }}
                               >
-                                {uploadingFile?.organizationChannelTitle}
+                                {file.organizationChannelTitle}
                               </Typography>
                             </Box>
                             <Box
@@ -1591,7 +1553,7 @@ const ChannelsList = () => {
                                     color: 'var(--Primary-Black, #212B36)',
                                   }}
                                 >
-                                  {uploadingFile?.organizationChannelCreateDate}
+                                  {file?.organizationChannelCreateDate}
                                 </Typography>
                               </Box>
                               <Box
@@ -1620,7 +1582,7 @@ const ChannelsList = () => {
                             </Box>
                           </CardContent>
                         </Card>
-                      )}
+                      ))}
                     {channelList?.map((channel, index) => (
                       <Card
                         key={index}
@@ -1639,19 +1601,17 @@ const ChannelsList = () => {
                       >
                         <CardContent
                           sx={{
-                            padding: 0,
-                            width: '100%',
-                            height: '100%',
                             display: 'flex',
                             flexDirection: 'column',
                             paddingBottom: '0 !important',
                             justifyContent: 'space-between',
+                            height: '100%',
+                            padding: 0,
                           }}
                         >
                           <Box
                             sx={{
                               mb: '8px',
-                              width: '100%',
                               display: 'flex',
                               alignItems: 'center',
                               justifyContent: 'space-between',
@@ -1754,9 +1714,7 @@ const ChannelsList = () => {
                               {channel.organizationChannelTranscriptList[0]
                                 ?.organizationChannelTranscriptStatus ===
                               'COMPLETE' ? (
-                                <CheckCircleRounded
-                                  sx={{ color: ' #118D57' }}
-                                />
+                                <CheckCircleRounded sx={{ color: '#118D57' }} />
                               ) : channel.organizationChannelTranscriptList[0]
                                   ?.organizationChannelTranscriptStatus ===
                                 'PROCESSING' ? (
@@ -1829,7 +1787,7 @@ const ChannelsList = () => {
               ) : (
                 channelsData?.length === 0 &&
                 channelList?.length === 0 &&
-                !uploadingFile &&
+                uploadingFiles.length === 0 &&
                 !(
                   isCreating ||
                   isLoadingChannels ||
@@ -1840,6 +1798,7 @@ const ChannelsList = () => {
           </ToolbarDrawer>
         </>
       )}
+      {/* Dialogs */}
       <LoginDialog
         open={isLoginOpen}
         setIsSignupOpen={setIsSignupOpen}
@@ -1871,17 +1830,6 @@ const ChannelsList = () => {
         editableName={
           channelList?.[activeIndex!]?.organizationChannelTitle || ''
         }
-      />
-      <LoginDialog
-        open={isLoginOpen}
-        setIsSignupOpen={setIsSignupOpen}
-        onClose={handleLoginDialogClose}
-        onOpenForgetPassword={handleForgetPasswordOpen}
-      />
-      <SignupDialog
-        open={isSignupOpen}
-        setIsLoginOpen={setIsLoginOpen}
-        onClose={() => setIsSignupOpen(false)}
       />
       <ForgetPasswordDialog
         open={isForgetPasswordOpen}
