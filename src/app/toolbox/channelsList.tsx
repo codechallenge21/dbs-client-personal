@@ -308,7 +308,7 @@ const ChannelsList = () => {
         setHasMore(false);
       }
     }
-  }, [channelsData]);
+  }, [channelsData, currentPageRef.current]);
 
   const fetchMoreData = useCallback(async () => {
     if (isFetching || !hasMore) return;
