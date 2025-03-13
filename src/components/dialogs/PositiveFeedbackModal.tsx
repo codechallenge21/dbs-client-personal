@@ -157,10 +157,11 @@ export default function PositiveFeedbackModal({
               lineHeight: 1.3,
             }}
           >
-            提交此報告將把整個對話發送給eGroup，以便未來改進我們的模型。
-            <Typography component="span" sx={{ color: "#0066CC" }}>
+            提交此回饋將會把對話內容發送至好理家在團隊，以協助我們改進 AI
+            回應品質。
+            {/* <Typography component="span" sx={{ color: "#0066CC" }}>
               了解更多 &gt;
-            </Typography>
+            </Typography> */}
           </Typography>
         </Box>
       </DialogContent>
@@ -182,7 +183,7 @@ export default function PositiveFeedbackModal({
             boxShadow: "none",
           }}
         >
-          傳送
+          送出
         </Button>
       </DialogActions>
     </Dialog>
