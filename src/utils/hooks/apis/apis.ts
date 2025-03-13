@@ -48,6 +48,9 @@ const serverSide = {
 };
 
 const apis = {
+  getUserInfo: () => {
+    return fetcher.get('/organizations/yMJHyi6R1CB9whpdNvtA/users/info');
+  },
   getChannelDetail: (payload?: GetChannelDetailApiPayload) => {
     if (!payload) {
       throw new Error('Payload is undefined');

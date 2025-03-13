@@ -1,4 +1,5 @@
 import FontLoader from "@/components/font-loader";
+import TokenValidator from "@/components/TokenValidator";
 import ChannelContextProvider from "@/context/ChannelContextProvider";
 import { LoginProvider } from "@/context/LoginContext";
 import { SnackbarProvider } from "@/context/SnackbarContext";
@@ -101,6 +102,7 @@ export default function RootLayout({ children }: Props) {
             <LoginProvider>
               <ChannelContextProvider>
                 <FontLoader />
+                <TokenValidator />
                 {children}
               </ChannelContextProvider>
             </LoginProvider>
