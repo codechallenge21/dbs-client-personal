@@ -5,22 +5,22 @@ import { formatDate } from '@/utils/formatDate';
 import { useRequireAuth } from '@/utils/hooks/useRequireAuth';
 import { CloseRounded, UploadRounded } from '@mui/icons-material';
 import {
-    Box,
-    Button,
-    Dialog,
-    DialogContent,
-    DialogTitle,
-    IconButton,
-    Typography,
-    useMediaQuery,
-    useTheme,
+  Box,
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import { useContext, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 // File Upload Configuration
 export const FILE_CONFIG = {
-  maxSize: 200 * 1024 * 1024, // 200MB
+  maxSize: 300 * 1024 * 1024, // 300MB
   allowedFormats: [
     'audio/mpeg',
     'audio/mp4',
@@ -46,7 +46,7 @@ export const FILE_CONFIG = {
   errorMessages: {
     invalidFormat:
       '不支援的檔案格式，請選擇 mp3, mp4, mpeg, mpga, m4a, wav, aac, webm 或 amr 格式',
-    sizeExceeded: '檔案大小超過 200MB 限制',
+    sizeExceeded: '檔案大小超過 300MB 限制',
     uploadFailed: '上傳失敗',
   },
   supportedFormats: {
@@ -126,7 +126,7 @@ export default function UploadDialog({
   };
 
   const handleDropRejected = (fileRejections: any[]) => {
-    showSnackbar('檔案格式錯誤或檔案大小超過 200MB 限制', 'error');
+    showSnackbar('檔案格式錯誤或檔案大小超過 300MB 限制', 'error');
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
