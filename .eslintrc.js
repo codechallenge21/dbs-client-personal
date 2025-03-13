@@ -17,7 +17,8 @@ module.exports = {
     'prettier',
   ],
   parserOptions: {
-    project: './tsconfig.json',
+    project: ['./tsconfig.json'], // 若 tsconfig.json 不在根目錄，請調整此路徑
+    tsconfigRootDir: __dirname,
     ecmaVersion: 2020,
     sourceType: 'module',
     ecmaFeatures: {
