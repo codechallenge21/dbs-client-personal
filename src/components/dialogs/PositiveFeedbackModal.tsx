@@ -13,7 +13,7 @@ import {
   DialogTitle,
   IconButton,
   TextField,
-  Typography
+  Typography,
 } from "@mui/material";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useContext, useState } from "react";
@@ -41,12 +41,11 @@ export default function PositiveFeedbackModal({
   const fetchUserFeedback = useCallback(
     async (organizationChannelId: string) => {
       try {
-        const res = await getUserFeedback({
+        await getUserFeedback({
           organizationId: "yMJHyi6R1CB9whpdNvtA",
           organizationChannelId,
           messageId: userChatMessage.organizationChannelMessageId,
         });
-        console.log("res for positive feedback", res.data);
         setUserFeedback(
           // res.data?.organizationChannelFeedbackList
           //   ?.organizationChannelFeedbackType

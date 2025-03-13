@@ -86,12 +86,11 @@ export default function NegativeFeedbackModal({
   const fetchUserFeedback = useCallback(
     async (organizationChannelId: string) => {
       try {
-        const res = await getUserFeedback({
+        await getUserFeedback({
           organizationId: "yMJHyi6R1CB9whpdNvtA",
           organizationChannelId,
           messageId: userChatMessage.organizationChannelMessageId,
         });
-        console.log("res for nagative feedback", res.data);
         setUserFeedback(
           // res.data.organizationChannelFeedbackType
           "NEGATIVE"
@@ -121,7 +120,6 @@ export default function NegativeFeedbackModal({
         onClose();
       } catch (error) {
         showSnackbar("出了點問題", "error");
-        console.error("Error submitting feedback:", error);
       } finally {
         setFeedbackType("");
         setFeedbackText("");
@@ -197,7 +195,9 @@ export default function NegativeFeedbackModal({
                 renderValue={(selected) => {
                   if (selected.length === 0) {
                     return (
-                      <Typography sx={{ color: "text.secondary", fontSize: "0.9rem" }}>
+                      <Typography
+                        sx={{ color: "text.secondary", fontSize: "0.9rem" }}
+                      >
                         請選擇類型
                       </Typography>
                     );
