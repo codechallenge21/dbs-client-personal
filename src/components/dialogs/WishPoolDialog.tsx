@@ -24,11 +24,14 @@ import {
   SendRounded,
   ThumbUpOffAlt,
   StopCircleRounded,
+  ThumbUpAltRounded,
 } from '@mui/icons-material';
 import { useCallback, useContext, useState } from 'react';
 import { OrganizationChannelMessage } from '@/interfaces/entities';
 import CustomLoader from '../loader/loader';
 import { SnackbarContext } from '@/context/SnackbarContext';
+import PositiveFeedbackModal from './PositiveFeedbackModal';
+import NegativeFeedbackModal from './NegativeFeedbackModal';
 
 interface WishPoolDialogProps {
   open: boolean;
@@ -51,6 +54,23 @@ const WishPoolDialog: React.FC<WishPoolDialogProps> = ({ open, onClose }) => {
   const [isFetching, setIsFectching] = useState(false);
 
   const [showDummyResponse, setShowDummyResponse] = useState(false);
+  const [openPositiveFeedbackModal, setOpenPositiveFeedbackModal] =
+    useState(false);
+  const [openNegativeFeedbackModal, setOpenNegativeFeedbackModal] =
+    useState(false);
+  const [userFeedback, setUserFeedback] = useState<string>('');
+
+  const handlePostiveModalOpen = () => {
+    setOpenPositiveFeedbackModal(true);
+  };
+  const handleNegativeModalOpen = () => {
+    setOpenNegativeFeedbackModal(true);
+  };
+
+  const handleClose = () => {
+    setOpenPositiveFeedbackModal(false);
+    setOpenNegativeFeedbackModal(false);
+  };
 
   const handleOnChangeUserInput = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -537,32 +557,91 @@ const WishPoolDialog: React.FC<WishPoolDialogProps> = ({ open, onClose }) => {
                             </Button>
                           </Box>
                           {/* {Response Action Buttons Box} */}
-                          <Box
-                            sx={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'flex-end',
-                            }}
-                          >
-                            <IconButton>
-                              <ThumbUpOffAlt
-                                sx={{
-                                  width: '20px',
-                                  height: '20px',
-                                  color: '#212B36',
-                                }}
-                              />
-                            </IconButton>
-                            <IconButton>
-                              <ThumbDownOffAltRounded
-                                sx={{
-                                  width: '20px',
-                                  height: '20px',
-                                  color: '#212B36',
-                                }}
-                              />
-                            </IconButton>
-                          </Box>
+                          <>
+                            <Box
+                              sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'flex-end',
+                              }}
+                            >
+                              {/* <IconButton>
+                                <ThumbUpOffAlt
+                                  sx={{
+                                    width: '20px',
+                                    height: '20px',
+                                    color: '#212B36',
+                                  }}
+                                />
+                              </IconButton>
+                              <IconButton>
+                                <ThumbDownOffAltRounded
+                                  sx={{
+                                    width: '20px',
+                                    height: '20px',
+                                    color: '#212B36',
+                                  }}
+                                />
+                              </IconButton> */}
+                              {!userFeedback ? (
+                                <>
+                                  <IconButton
+                                    aria-label="Like"
+                                    onClick={handlePostiveModalOpen}
+                                  >
+                                    <ThumbUpOffAlt
+                                      sx={{
+                                        width: '20px',
+                                        height: '20px',
+                                        color: '#212B36',
+                                      }}
+                                    />
+                                  </IconButton>
+                                  <IconButton
+                                    aria-label="Dislike"
+                                    onClick={handleNegativeModalOpen}
+                                  >
+                                    <ThumbDownOffAltRounded
+                                      sx={{
+                                        width: '20px',
+                                        height: '20px',
+                                        color: '#212B36',
+                                      }}
+                                    />
+                                  </IconButton>
+                                </>
+                              ) : userFeedback === 'POSITIVE' ? (
+                                <IconButton aria-label="Like">
+                                  <ThumbUpAltRounded
+                                    sx={{
+                                      color: 'red',
+                                      fontSize: 20,
+                                    }}
+                                  />
+                                </IconButton>
+                              ) : (
+                                <IconButton aria-label="Dislike">
+                                  <ThumbUpAltRounded
+                                    sx={{
+                                      color: 'red',
+                                      transform: 'scale(-1, -1)',
+                                      fontSize: 20,
+                                    }}
+                                  />
+                                </IconButton>
+                              )}
+                            </Box>
+                            <PositiveFeedbackModal
+                              open={openPositiveFeedbackModal}
+                              onClose={handleClose}
+                              setUserFeedback={setUserFeedback}
+                            />
+                            <NegativeFeedbackModal
+                              open={openNegativeFeedbackModal}
+                              onClose={handleClose}
+                              setUserFeedback={setUserFeedback}
+                            />
+                          </>
                         </Box>
                       </Box>
                     )}

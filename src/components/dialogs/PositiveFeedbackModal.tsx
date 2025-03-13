@@ -22,7 +22,7 @@ import { SnackbarContext } from '@/context/SnackbarContext';
 interface PositiveFeedbackModalProps {
   open: boolean;
   onClose: () => void;
-  userChatMessage: any;
+  userChatMessage?: any;
   setUserFeedback: React.Dispatch<React.SetStateAction<string>>;
 }
 
@@ -63,16 +63,25 @@ export default function PositiveFeedbackModal({
   );
 
   const handleSubmit = () => {
-    submitUserInputs({
-      organizationChannelFeedbackTarget: 'AI_RESPONSE',
-      organizationChannelFeedbackTargetId:
-        userChatMessage.organizationChannelMessageId,
-      organizationChannelFeedbackType: 'POSITIVE',
-      organizationChannelFeedbackComment: feedback,
-      organizationId: 'yMJHyi6R1CB9whpdNvtA',
-    });
-    fetchUserFeedback(organizationChannelId);
-    setFeedback('');
+    if (userChatMessage) {
+      submitUserInputs({
+        organizationChannelFeedbackTarget: 'AI_RESPONSE',
+        organizationChannelFeedbackTargetId:
+          userChatMessage.organizationChannelMessageId,
+        organizationChannelFeedbackType: 'POSITIVE',
+        organizationChannelFeedbackComment: feedback,
+        organizationId: 'yMJHyi6R1CB9whpdNvtA',
+      });
+
+      fetchUserFeedback(organizationChannelId);
+      setFeedback('');
+    } else {
+      setUserFeedback('POSITIVE');
+      onClose();
+      setFeedback('');
+      showSnackbar('反饋提交成功', 'success');
+      return;
+    }
   };
 
   return (

@@ -26,7 +26,7 @@ import { SnackbarContext } from '@/context/SnackbarContext';
 interface NegativeFeedbackModalProps {
   open: boolean;
   onClose: () => void;
-  userChatMessage: any;
+  userChatMessage?: any;
   setUserFeedback: React.Dispatch<React.SetStateAction<string>>;
 }
 
@@ -73,22 +73,29 @@ export default function NegativeFeedbackModal({
   );
 
   const handleSubmit = async () => {
-    try {
-      await submitUserInputs({
-        organizationChannelFeedbackTarget: 'AI_RESPONSE',
-        organizationChannelFeedbackTargetId:
-          userChatMessage.organizationChannelMessageId,
-        organizationChannelFeedbackType: 'NEGATIVE',
-        organizationId: 'yMJHyi6R1CB9whpdNvtA',
-        organizationChannelFeedbackComment: feedbackText,
-        organizationChannelFeedbackNegativeCategory: feedbackType,
-      });
-      await fetchUserFeedback(organizationChannelId);
+    if (userChatMessage) {
+      try {
+        await submitUserInputs({
+          organizationChannelFeedbackTarget: 'AI_RESPONSE',
+          organizationChannelFeedbackTargetId:
+            userChatMessage.organizationChannelMessageId,
+          organizationChannelFeedbackType: 'NEGATIVE',
+          organizationId: 'yMJHyi6R1CB9whpdNvtA',
+          organizationChannelFeedbackComment: feedbackText,
+          organizationChannelFeedbackNegativeCategory: feedbackType,
+        });
+        await fetchUserFeedback(organizationChannelId);
+        onClose();
+      } catch (error) {
+        showSnackbar('出了點問題', 'error');
+        console.error('Error submitting feedback:', error);
+      } finally {
+        setFeedbackType('');
+        setFeedbackText('');
+      }
+    } else {
+      setUserFeedback('NEGATIVE');
       onClose();
-    } catch (error) {
-      showSnackbar('出了點問題', 'error');
-      console.error('Error submitting feedback:', error);
-    } finally {
       setFeedbackType('');
       setFeedbackText('');
     }
