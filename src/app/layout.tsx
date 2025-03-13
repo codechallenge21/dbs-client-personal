@@ -11,6 +11,7 @@ import {
   Open_Sans,
   Public_Sans,
 } from "next/font/google";
+import { Suspense } from "react";
 import DynaFontScript from "../assets/font/DynaFontScript";
 import "./globals.css";
 
@@ -102,7 +103,9 @@ export default function RootLayout({ children }: Props) {
             <LoginProvider>
               <ChannelContextProvider>
                 <FontLoader />
-                <TokenValidator />
+                <Suspense fallback={null}>
+                  <TokenValidator />
+                </Suspense>
                 {children}
               </ChannelContextProvider>
             </LoginProvider>
