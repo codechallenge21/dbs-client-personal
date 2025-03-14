@@ -1,7 +1,5 @@
 'use client';
-import React, { useEffect, useState, Suspense } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import Stack from '@mui/material/Stack';
+import ResponsiveTabs from '@/components/ResponsiveTabs';
 import {
   AppBar,
   Box,
@@ -12,8 +10,8 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
+import Stack from '@mui/material/Stack';
 import { makeStyles } from '@mui/styles';
-import Image from 'next/image';
 import {
   COOKIEPOLICY,
   COOKIEPOLICYTITLE,
@@ -22,7 +20,9 @@ import {
   TERMSOFUSE,
   TERMSOFUSETITLE,
 } from 'minimal/_mock/_policies';
-import ResponsiveTabs from '@/components/ResponsiveTabs';
+import Image from 'next/image';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useEffect, useState } from 'react';
 
 const useStyles = makeStyles(() => ({
   logoContainer: {
@@ -65,6 +65,13 @@ const useStyles = makeStyles(() => ({
     border: '1px solid #ccc',
     borderRadius: '16px',
     background: '#FFFFFF',
+  },
+  siteTitle: {
+    fontFamily: 'var(--font-medium)',
+    marginLeft: '16px',
+    fontWeight: 600,
+    color: '#333',
+    marginTop: '8px', // Added margin to move the text down
   },
 }));
 
@@ -119,7 +126,7 @@ const PoliciesContent = function () {
         <Typography
           variant="h3"
           className="fr-element fr-view"
-          sx={{ fontSize: '40px !important', mb: '32px' }}
+          sx={{ fontSize: '40px !important', mb: '32px',fontFamily: 'var(--font-bold)', }}
         >
           {policyTitle}
         </Typography>
@@ -138,12 +145,14 @@ const PoliciesContent = function () {
               fontWeight: 700,
               lineHeight: 1.5,
               margin: 0,
+              fontFamily: 'var(--font-bold)',
             },
             '& h2, & h2 > p, & h2 > span': {
               fontSize: '21px',
               fontWeight: 700,
               lineHeight: 1.5,
               margin: 0,
+              fontFamily: 'var(--font-bold)',
             },
             '& h1 strong, & h2 strong': {
               textShadow:
@@ -155,6 +164,7 @@ const PoliciesContent = function () {
                 fontWeight: 700,
                 lineHeight: 1.5,
                 margin: 0,
+                fontFamily: 'var(--font-bold)',
               },
             '& p': {
               fontSize: '16px',
@@ -216,6 +226,20 @@ const PoliciesContent = function () {
                   height: 'auto',
                 }}
               />
+              <Typography
+                variant="h5"
+                className={classes.siteTitle}
+                sx={{
+                  fontSize: { xs: '18px', sm: '20px', md: '24px' },
+                  display: 'flex',
+                  alignItems: 'center',
+                  position: 'relative',
+                  top: '2px',
+                  fontFamily: 'var(--font-bold)',
+                }}
+              >
+                財務健檢網
+              </Typography>
             </Stack>
           </Container>
         </AppBar>
