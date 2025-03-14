@@ -42,38 +42,6 @@ const MainContent: React.FC<MainContentProps> = ({ chatsData }) => {
     router.push(`/chat?${searchParams.toString()}`);
   };
 
-  // const SuggestionsData = [
-  //   {
-  //     id: 1,
-  //     title: "Know-it-all",
-  //     description: "Provides coping strategies and resource links.",
-  //   },
-  //   {
-  //     id: 2,
-  //     title: "Debt Case Consultant",
-  //     description:
-  //       "Offers debt management and repayment advice to help alleviate financial stress.",
-  //   },
-  //   {
-  //     id: 3,
-  //     title: "Accident Case Consultant",
-  //     description:
-  //       "Quickly provides emergency strategies and risk assessments.",
-  //   },
-  //   {
-  //     id: 4,
-  //     title: "Fraud Case Consultant",
-  //     description:
-  //       "Quickly identifies fraud risks, offering advice and follow-up action guidance.",
-  //   },
-  //   {
-  //     id: 5,
-  //     title: "Medical Case Consultant",
-  //     description:
-  //       "Provides you with medical case coping strategies and resource links.",
-  //   },
-  // ];
-
   const boxRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

@@ -1,26 +1,26 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
+import EventDetailsDialog from '@/components/dialogs/EventDetailsDialog';
+import SearchDialog from '@/components/dialogs/SearchDialog';
+import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
+import {
+  ArrowDropDownRounded,
+  ArrowForwardIosRounded,
+  MenuRounded,
+  SearchRounded,
+} from '@mui/icons-material';
 import {
   Box,
   Button,
-  useTheme,
-  Typography,
-  IconButton,
-  useMediaQuery,
   Container,
+  IconButton,
+  Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import Image from 'next/image';
-import {
-  MenuRounded,
-  SearchRounded,
-  ArrowDropDownRounded,
-  ArrowForwardIosRounded,
-} from '@mui/icons-material';
+import React, { useEffect, useRef, useState } from 'react';
 import boxImage from '../../../public/assets/images/box.png';
-import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
-import SearchDialog from '@/components/dialogs/SearchDialog';
-import EventDetailsDialog from '@/components/dialogs/EventDetailsDialog';
 
 const Events = () => {
   const theme = useTheme();
@@ -266,7 +266,7 @@ const Events = () => {
                   lineHeight: '16px',
                   letterSpacing: '0%',
                   textAlign: 'center',
-                  fontFamily: 'DFPHeiBold-B5',
+                  fontFamily: 'var(--font-bold)',
                 }}
               >
                 活動公告
@@ -327,7 +327,7 @@ const Events = () => {
                 sx={{
                   fontWeight: 600,
                   fontSize: '24px',
-                  fontFamily: 'Inter',
+                  fontFamily: 'var(--font-bold)',
                   fontStyle: 'normal',
                   lineHeight: 'normal',
                   color: 'var(--Primary-Black, #212B36)',
@@ -414,7 +414,7 @@ const Events = () => {
                         fontStyle: 'normal',
                         lineHeight: 'normal',
                         textOverflow: 'ellipsis',
-                        fontFamily: 'DFPHeiBold-B5',
+                        fontFamily: 'var(--font-bold)',
                         color: 'var(--Primary-Black, #212B36)',
                       }}
                     >
@@ -428,7 +428,7 @@ const Events = () => {
                         fontSize: '16px',
                         lineHeight: '24px',
                         fontStyle: 'normal',
-                        fontFamily: 'DFPHeiMedium-B5',
+                        fontFamily: 'var(--font-medium)',
                         color: 'var(--Text-, #454A4D)',
                       }}
                     >
@@ -521,7 +521,7 @@ const Events = () => {
                   fontWeight: 600,
                   fontSize: '24px',
                   fontStyle: 'normal',
-                  fontFamily: 'Inter',
+                  fontFamily: 'var(--font-bold)',
                   lineHeight: 'normal',
                   color: 'var(--Primary-Black, #212B36)',
                 }}
@@ -618,7 +618,7 @@ const Events = () => {
                           fontStyle: 'normal',
                           lineHeight: 'normal',
                           textOverflow: 'ellipsis',
-                          fontFamily: 'DFPHeiBold-B5',
+                          fontFamily: 'var(--font-bold)',
                           color: 'var(--Primary-Black, #212B36)',
                         }}
                       >
@@ -632,7 +632,7 @@ const Events = () => {
                           fontSize: '16px',
                           lineHeight: '24px',
                           fontStyle: 'normal',
-                          fontFamily: 'DFPHeiMedium-B5',
+                          fontFamily: 'var(--font-medium)',
                           color: 'var(--Text-, #454A4D)',
                         }}
                       >

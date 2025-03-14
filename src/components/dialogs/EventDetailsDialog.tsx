@@ -1,15 +1,14 @@
 'use client';
 
-import * as React from 'react';
+import { Close as CloseIcon } from '@mui/icons-material';
 import {
   Box,
   Drawer,
-  Typography,
   IconButton,
+  Typography,
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import { Close as CloseIcon } from '@mui/icons-material';
 import Image from 'next/image';
 import boxImage from '../../../public/assets/images/box.png';
 
@@ -68,7 +67,7 @@ export default function EventDetailsDialog({
           variant={isMobile ? 'subtitle1' : 'h6'}
           sx={{
             color: 'var(--Primary-Black, #212B36)',
-            fontFamily: 'DFPHeiBold-B5',
+            fontFamily: 'var(--font-bold)',
             fontSize: '24px',
           }}
         >
@@ -134,7 +133,7 @@ export default function EventDetailsDialog({
             sx={{
               whiteSpace: 'pre-line',
               color: '#212B36',
-              fontFamily: 'DFPHeiMedium-B5',
+              fontFamily: 'var(--font-medium)',
               fontSize: '16px',
               fontStyle: 'normal',
               fontWeight: 400,

@@ -108,7 +108,7 @@ export default function SearchDialog({ open, onClose }: SearchModalProps) {
           onChange={handleSearchChange}
           sx={{
             color: "#212B36",
-            fontFamily: "DFPHeiBold-B5",
+            fontFamily: 'var(--font-bold)',
             fontSize: "16px",
             fontStyle: "normal",
             fontWeight: 400,
@@ -176,7 +176,7 @@ export default function SearchDialog({ open, onClose }: SearchModalProps) {
                 overflow: "hidden",
                 color: "#212B36",
                 textOverflow: "ellipsis",
-                fontFamily: '"Public Sans"',
+                fontFamily: 'var(--font-bold)',
                 fontSize: "14px",
                 fontStyle: "normal",
                 fontWeight: 600,

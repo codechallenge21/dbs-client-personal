@@ -1,4 +1,5 @@
 'use client';
+import WishPoolDialog from '@/components/dialogs/WishPoolDialog';
 import ChannelContentContext from '@/context/ChannelContentContext';
 import apis from '@/utils/hooks/apis/apis';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
@@ -35,7 +36,6 @@ import { jwtDecode } from 'jwt-decode';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useContext, useEffect, useState } from 'react';
 import UserActionMenu from '../user-action-menu/UserActionMenu';
-import WishPoolDialog from '@/components/dialogs/WishPoolDialog';
 
 export const customScrollbarStyle = {
   '&::-webkit-scrollbar': {
@@ -98,7 +98,7 @@ const drawerItems = [
   {
     text: '財務快篩',
     icon: <PaidRounded sx={{ color: '#212B36' }} />,
-    route: '/finance',
+    route: '',// finance
   },
   {
     text: '知識庫',
@@ -441,7 +441,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               <Typography
                 sx={{
                   display: 'flex',
-                  fontFamily: 'Public Sans',
+                  fontFamily: 'var(--font-bold)',
                   fontSize: '13px',
                   fontStyle: 'normal',
                   fontWeight: 700,
@@ -718,7 +718,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                   justifyContent: 'center',
                   border: '2px solid var(--Primary-Black, #212B36)',
                   background: 'var(--Primary-White, #FFF)',
-                  fontFamily: 'Public Sans',
+                  fontFamily: 'var(--font-bold)',
                   fontSize: '15px',
                   fontWeight: 700,
                   lineHeight: 'normal',
@@ -741,7 +741,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 alignItems: 'center',
                 justifyContent: 'center',
                 background: 'var(--Secondary-, #5C443A)',
-                fontFamily: 'Public Sans',
+                fontFamily: 'var(--font-bold)',
                 fontSize: '13px',
                 fontWeight: 700,
                 lineHeight: 'normal',
@@ -767,7 +767,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 alignItems: 'center',
                 justifyContent: 'center',
                 background: 'var(--Secondary-, #5C443A)',
-                fontFamily: 'Public Sans',
+                fontFamily: 'var(--font-bold)',
                 fontSize: '13px',
                 fontWeight: 700,
                 lineHeight: 'normal',
@@ -902,7 +902,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                   sx={{
                     fontWeight: 600,
                     fontSize: '16px',
-                    fontFamily: 'Inter',
+                    fontFamily: 'var(--font-bold)',
                     fontStyle: 'normal',
                     lineHeight: 'normal',
                     color:
@@ -966,7 +966,6 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
         sx={{
           marginRight: isMobile ? 0 : openDataSource && !isTablet ? '446px' : 0,
           overflow: 'auto',
-          marginBottom: '16px',
           transition: 'margin-left 0.3s',
           marginLeft:
             isExpanded && !isMobile ? '255px' : isMobile ? '0' : '75px',

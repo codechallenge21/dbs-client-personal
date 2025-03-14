@@ -1,0 +1,22 @@
+{
+  "name": "好理家在-財務健檢網",
+  "short_name": "好理家在",
+  "description": "好理家在-財務健檢網｜好好理財，家才會在",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2065d1",
+  "icons": [
+    {
+      "src": "/favicon/favicon.svg",
+      "sizes": "32x32",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/favicon/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
