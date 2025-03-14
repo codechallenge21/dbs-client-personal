@@ -17,7 +17,6 @@ import {
   RegisterUserApiPayload,
   SubmitUserInputsApiPayload,
   UpdateChannelApiPayload,
-  UploadFileApiPayload,
   VerifyAccountApiPayload,
 } from '@/interfaces/payloads';
 import axios, { AxiosRequestConfig } from 'axios';
@@ -72,22 +71,16 @@ const apis = {
     );
   },
   createChannelByAudio: (
-    payload?: UploadFileApiPayload,
+    payload?: FormData,
     config?: AxiosRequestConfig<FormData>
   ) => {
-    const { file } = payload || {};
-
-    const formData = new FormData();
-    if (file) {
-      formData.append('file', file);
-    }
-
     return uploadFetcher.post<OrganizationChannelResponse>(
       `/organizations/yMJHyi6R1CB9whpdNvtA/channels/upload`,
-      formData,
+      payload,
       config
     );
   },
+
   submitUserInputs: (
     payload?: SubmitUserInputsApiPayload,
     config?: AxiosRequestConfig
