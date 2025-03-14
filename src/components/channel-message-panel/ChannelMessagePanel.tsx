@@ -51,6 +51,15 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const loaderRef = useRef<HTMLDivElement>(null);
   const { showSnackbar } = useContext(SnackbarContext);
+  const [channelDetail, setChannelDetail] = useState<
+    OrganizationChannel | undefined
+  >(channel);
+  const [sortedMessages, setSortedMessages] = useState<
+    OrganizationChannelMessage[]
+  >([]);
+
+  // API for fetching channel detail
+  const { excute: getChannelDetail } = useAxiosApi(apis.getChannelDetail);
 
   // Track which message has modals open and its feedback status
   const [activeMessageId, setActiveMessageId] = useState<string | null>(null);
@@ -61,12 +70,66 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
     useState(false);
   const { excute: submitFeedback } = useAxiosApi(apis.addUserFeedback);
 
+  // Fetch channel details when needed
+  useEffect(() => {
+    const fetchChannelDetail = async () => {
+      if (channel?.organizationChannelId) {
+        try {
+          const response = await getChannelDetail({
+            organizationId: 'yMJHyi6R1CB9whpdNvtA',
+            organizationChannelId: channel.organizationChannelId,
+          });
+          setChannelDetail(response.data);
+        } catch (error) {
+          console.error('Failed to fetch channel details:', error);
+        }
+      }
+    };
+
+    fetchChannelDetail();
+  }, [channel?.organizationChannelId, getChannelDetail]);
+
+  // Sort messages when channel detail changes
+  useEffect(() => {
+    if (
+      channelDetail &&
+      (channelDetail.organizationChannelMessageList ?? []).length > 0
+    ) {
+      const sorted = [...channelDetail.organizationChannelMessageList].sort(
+        (a, b) => {
+          const dateA = new Date(a.organizationChannelMessageCreateDate ?? '');
+          const dateB = new Date(b.organizationChannelMessageCreateDate ?? '');
+
+          if (dateA < dateB) return -1;
+          if (dateA > dateB) return 1;
+
+          // If the dates are the same, prioritize USER over AI
+          if (
+            a.organizationChannelMessageType === 'USER' &&
+            b.organizationChannelMessageType === 'AI'
+          )
+            return -1;
+          if (
+            a.organizationChannelMessageType === 'AI' &&
+            b.organizationChannelMessageType === 'USER'
+          )
+            return 1;
+
+          return 0;
+        }
+      );
+      setSortedMessages(sorted);
+    } else {
+      setSortedMessages([]);
+    }
+  }, [channelDetail]);
+
   // Initialize feedbackMap from channel messages when component loads
   useEffect(() => {
-    if (channel?.organizationChannelMessageList) {
+    if (channelDetail?.organizationChannelMessageList) {
       const newFeedbackMap: Record<string, string> = {};
 
-      channel.organizationChannelMessageList.forEach((message) => {
+      channelDetail.organizationChannelMessageList.forEach((message) => {
         if (
           message.organizationChannelMessageId &&
           message.organizationChannelFeedbackList?.length
@@ -82,7 +145,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
 
       setFeedbackMap((prev) => ({ ...prev, ...newFeedbackMap }));
     }
-  }, [channel]);
+  }, [channelDetail]);
 
   const handlePostiveModalOpen = (messageId: string) => {
     // If this message already has positive feedback, directly submit to cancel it
@@ -179,28 +242,6 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
     );
   };
 
-  const sortedData = channel?.organizationChannelMessageList?.sort((a, b) => {
-    const dateA = new Date(a.organizationChannelMessageCreateDate ?? '');
-    const dateB = new Date(b.organizationChannelMessageCreateDate ?? '');
-
-    if (dateA < dateB) return -1;
-    if (dateA > dateB) return 1;
-
-    // If the dates are the same, prioritize USER over AI
-    if (
-      a.organizationChannelMessageType === 'USER' &&
-      b.organizationChannelMessageType === 'AI'
-    )
-      return -1;
-    if (
-      a.organizationChannelMessageType === 'AI' &&
-      b.organizationChannelMessageType === 'USER'
-    )
-      return 1;
-
-    return 0;
-  });
-
   return (
     <Container
       maxWidth={false}
@@ -229,7 +270,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
           scrollbarColor: '#888 #f1f1f1',
         }}
       >
-        {sortedData?.map((message, messageIndex) => {
+        {sortedMessages.map((message, messageIndex) => {
           // Get the feedback for this specific message
           const messageFeedback = message.organizationChannelMessageId
             ? feedbackMap[message.organizationChannelMessageId]
