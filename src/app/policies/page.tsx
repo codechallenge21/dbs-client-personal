@@ -42,7 +42,6 @@ const useStyles = makeStyles(() => ({
   content: {
     height: 'calc(100vh - 80px)',
     overflowY: 'auto',
-    backgroundColor: '#f1f1f1',
     '&::-webkit-scrollbar': {
       width: '8px',
       height: '8px',
