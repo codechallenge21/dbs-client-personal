@@ -1,60 +1,60 @@
-import React, { forwardRef, useEffect, useState } from 'react';
+import { forwardRef, useEffect, useState } from "react";
 
-import { useTheme, makeStyles } from '@mui/styles';
 import {
-  Theme,
-  useMediaQuery,
-  Tooltip,
-  TabProps,
-  Tab,
-  MenuItem,
   Box,
-  InputLabel,
   FormControl,
-  SelectChangeEvent,
+  InputLabel,
+  MenuItem,
   Select,
+  SelectChangeEvent,
+  Tab,
+  TabProps,
   Tabs,
-} from '@mui/material';
+  Theme,
+  Tooltip,
+  useMediaQuery,
+} from "@mui/material";
+import { makeStyles, useTheme } from "@mui/styles";
 
-import useReduxDrawer from '@/utils/useReduxDrawer';
+import useReduxDrawer from "@/utils/useReduxDrawer";
 
 const useStyles = makeStyles((theme: Theme) => ({
   menu: {
-    position: 'absolute',
+    position: "absolute",
     zIndex: theme.zIndex.appBar - 100,
-    '& .MuiBackdrop-root, & .MuiModal-backdrop': {
-      zIndex: 'unset',
+    "& .MuiBackdrop-root, & .MuiModal-backdrop": {
+      zIndex: "unset",
     },
   },
   menuItem: {
-    width: '100%',
+    width: "100%",
     margin: 0,
     padding: 0,
-    textAlign: 'center',
-    fontSize: '14px',
-    lineHeight: '18px',
+    textAlign: "center",
+    fontSize: "14px",
+    lineHeight: "18px",
     fontWeight: 500,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   dropdownItem: {},
   customBadge: {
-    borderRadius: '6px',
-    fontSize: '12px',
-    padding: '2px 6px 2px 6px',
-    height: '24px',
-    backgroundColor: 'rgba(32, 101, 209, 0.16)',
-    color: 'rgba(29, 94, 198, 1)',
-    display: 'flex',
-    alignItems: 'center',
-    textAlign: 'center',
+    borderRadius: "6px",
+    fontSize: "12px",
+    padding: "2px 6px 2px 6px",
+    height: "24px",
+    backgroundColor: "rgba(32, 101, 209, 0.16)",
+    color: "rgba(29, 94, 198, 1)",
+    display: "flex",
+    alignItems: "center",
+    textAlign: "center",
   },
   truncate: {
-    maxWidth: '120px',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    display: 'inline-block',
-    verticalAlign: 'middle',
+    maxWidth: "120px",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    display: "inline-block",
+    verticalAlign: "middle",
   },
 }));
 
@@ -70,7 +70,7 @@ export interface ItemCount {
   count: number;
 }
 
-export interface ResponsiveTabsProps extends Omit<TabProps, 'onChange'> {
+export interface ResponsiveTabsProps extends Omit<TabProps, "onChange"> {
   tabName?: string;
   value?: string;
   tabData?: TabDataItem[];
@@ -84,20 +84,20 @@ export interface ResponsiveTabsProps extends Omit<TabProps, 'onChange'> {
 const ResponsiveTabs = forwardRef<HTMLDivElement, ResponsiveTabsProps>(
   (props, ref) => {
     const {
-      tabName = '清單',
-      value: valueData = '',
+      tabName = "條款與政策",
+      value: valueData = "",
       tabData = [],
       onChange,
       usedInDrawer = false,
       itemCounts,
       handleCloseDrawer,
-      id = 'demo-simple-select',
+      id = "demo-simple-select",
       ...other
     } = props;
 
     const theme = useTheme();
     const classes = useStyles();
-    const isDownSm = useMediaQuery((theme as Theme).breakpoints.down('sm'));
+    const isDownSm = useMediaQuery((theme as Theme).breakpoints.down("sm"));
     const { isOpen: isDrawerOpened } = useReduxDrawer();
     const [selectOpen, setSelectOpen] = useState(false);
     const [mounted, setMounted] = useState(false);
@@ -112,7 +112,7 @@ const ResponsiveTabs = forwardRef<HTMLDivElement, ResponsiveTabsProps>(
 
     useEffect(() => {
       return () => {
-        document.body.style.overflow = '';
+        document.body.style.overflow = "";
       };
     }, []);
 
@@ -165,7 +165,8 @@ const ResponsiveTabs = forwardRef<HTMLDivElement, ResponsiveTabsProps>(
                         (itemCount) => itemCount.id === el.id
                       )[0]?.count ?? 0}
                     </Box>
-                  ) : undefined}
+                  ) : undefined
+                }
                 iconPosition="end"
               />
             ))}
@@ -177,7 +178,7 @@ const ResponsiveTabs = forwardRef<HTMLDivElement, ResponsiveTabsProps>(
     return (
       <Box
         sx={{
-          marginTop: isDownSm ? '16px' : 0,
+          marginTop: isDownSm ? "16px" : 0,
           marginBottom: 0,
           minWidth: 120,
           padding: 2,
@@ -226,6 +227,6 @@ const ResponsiveTabs = forwardRef<HTMLDivElement, ResponsiveTabsProps>(
   }
 );
 
-ResponsiveTabs.displayName = 'ResponsiveTabs';
+ResponsiveTabs.displayName = "ResponsiveTabs";
 
 export default ResponsiveTabs;

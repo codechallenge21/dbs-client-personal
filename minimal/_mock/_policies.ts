@@ -1,4 +1,4 @@
-export const COOKIEPOLICYTITLE = `InfoCenter Cookie政策`;
+export const COOKIEPOLICYTITLE = `Cookie政策`;
 
 export const COOKIEPOLICY = `
   <p>
@@ -168,7 +168,7 @@ export const COOKIEPOLICY = `
   </p>
 `;
 
-export const TERMSOFUSETITLE = `InfoCenter 使用者條款`;
+export const TERMSOFUSETITLE = `服務條款`;
 
 export const TERMSOFUSE = `
   <p>
@@ -266,7 +266,7 @@ export const TERMSOFUSE = `
     </p>
 `;
 
-export const PRIVACYPOLICYTITLE = `InfoCenter 隱私權政策`;
+export const PRIVACYPOLICYTITLE = `隱私政策`;
 
 export const PRIVACYPOLICY = `
   <p>

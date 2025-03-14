@@ -1,10 +1,10 @@
 // import SettingsIcon from "@mui/icons-material/Settings";
+import ChevronRightRoundedIcon from "@mui/icons-material/ChevronRightRounded";
+import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
+import PolicyRoundedIcon from "@mui/icons-material/PolicyRounded";
+import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 import { Box, Divider, Menu, MenuItem, Typography } from "@mui/material";
 import React, { useState } from "react";
-import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
-import PolicyRoundedIcon from '@mui/icons-material/PolicyRounded';
-import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
-import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 
 interface UserActionMenuProps {
   email: string;
@@ -31,7 +31,6 @@ export const UserActionMenu: React.FC<UserActionMenuProps> = ({
   transformOrigin,
   isExpanded,
 }) => {
-
   const [anchorElement, setAnchorElement] = useState<null | HTMLElement>(null);
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -42,66 +41,53 @@ export const UserActionMenu: React.FC<UserActionMenuProps> = ({
     setAnchorElement(null);
   };
 
-
-  return (<>
-    <Menu
-      anchorEl={anchorEl}
-      open={Boolean(anchorEl)}
-      onClose={onClose}
-      anchorOrigin={anchorOrigin}
-      transformOrigin={transformOrigin}
-      slotProps={{
-        paper: {
-          sx: {
-            width: anchorEl && isExpanded ? anchorEl.clientWidth : "226px",
+  return (
+    <>
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={onClose}
+        anchorOrigin={anchorOrigin}
+        transformOrigin={transformOrigin}
+        slotProps={{
+          paper: {
+            sx: {
+              width: anchorEl && isExpanded ? anchorEl.clientWidth : "226px",
+            },
           },
-        },
-      }}
-      MenuListProps={{
-        sx: { p: "4px" },
-      }}
-    >
-      <MenuItem onClick={onClose} sx={{ p: "8px" }}>
-        <Typography
-          variant="subtitle1"
-          sx={{
-            color: "var(--Primary-Black, #212B36)",
-            fontFamily: "var(--font-bold)",
-            fontSize: "16px",
-            fontStyle: "normal",
-            fontWeight: 400,
-            lineHeight: "24px", // 150%
-          }}
-        >
-          {email}
-        </Typography>
-      </MenuItem>
-      <Divider sx={{ my: 1, color: "#919EAB33" }} />
-      <MenuItem sx={{ p: "8px" }}>
-        <Box sx={{ display: "flex", alignItems: "center", gap: "16px", width: "100%" }}>
-          <SettingsRoundedIcon />
+        }}
+        MenuListProps={{
+          sx: { p: "4px" },
+        }}
+      >
+        <MenuItem onClick={onClose} sx={{ p: "8px" }}>
           <Typography
+            variant="subtitle1"
             sx={{
-              color: "var(--Primary-DBS-Red, #212B36)",
+              color: "var(--Primary-Black, #212B36)",
               fontFamily: "var(--font-bold)",
               fontSize: "16px",
               fontStyle: "normal",
               fontWeight: 400,
-              lineHeight: "24px",
+              lineHeight: "24px", // 150%
             }}
           >
-            設定
+            {email}
           </Typography>
-
-        </Box>
-      </MenuItem>
-      <MenuItem sx={{ p: "8px" }} onClick={handleMenuOpen}>
-        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
-          <Box sx={{ display: "flex", alignItems: "center", gap: "16px", width: "100%" }}>
-            <PolicyRoundedIcon />
+        </MenuItem>
+        <Divider sx={{ my: 1, color: "#919EAB33" }} />
+        <MenuItem sx={{ p: "8px" }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: "16px",
+              width: "100%",
+            }}
+          >
+            <SettingsRoundedIcon />
             <Typography
               sx={{
-                textOverflow: "ellipsis",
                 color: "var(--Primary-DBS-Red, #212B36)",
                 fontFamily: "var(--font-bold)",
                 fontSize: "16px",
@@ -110,103 +96,155 @@ export const UserActionMenu: React.FC<UserActionMenuProps> = ({
                 lineHeight: "24px",
               }}
             >
-              了解更多
+              設定
             </Typography>
           </Box>
-          <ChevronRightRoundedIcon />
-        </Box>
-      </MenuItem>
-      <MenuItem onClick={handleLogout} sx={{ p: "8px" }}>
-        <Box
-          sx={{ display: "flex", alignItems: "center", gap: "16px", width: "100%" }}
-        >
-          <LogoutRoundedIcon style={{ color: "var(--Primary-DBS-Red, #C00)", }} />
-          <Typography
-            sx={{
-              color: "var(--Primary-DBS-Red, #C00)",
-              fontFamily: "var(--font-bold)",
-              fontSize: "16px",
-              fontStyle: "normal",
-              fontWeight: 400,
-              lineHeight: "24px",
-            }}
-          >
-            登出
-          </Typography>
-        </Box>
-      </MenuItem>
-    </Menu>
-
-    {anchorElement &&
-      <Menu
-        anchorEl={anchorElement}
-        open={Boolean(anchorElement)}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'center', horizontal: 225 }}
-        transformOrigin={{
-          vertical: 'center',
-          horizontal: 'left',
-        }}
-        slotProps={{
-          paper: {
-            sx: {
-              width: anchorElement && isExpanded ? anchorElement.clientWidth : "226px",
-            },
-          },
-        }}
-        MenuListProps={{
-          sx: { p: "4px" },
-        }}
-      >
-        <MenuItem onClick={() => window.open("/policies?tab=termsOfUse", "_blank")} sx={{ p: "8px" }}>
-          <Typography
-            variant="subtitle1"
-            sx={{
-              color: "var(--Primary-Black, #212B36)",
-              fontFamily: "var(--font-bold)",
-              fontSize: "16px",
-              fontStyle: "normal",
-              fontWeight: 400,
-              lineHeight: "24px",
-            }}
-          >
-            服務條款
-          </Typography>
         </MenuItem>
-        <MenuItem onClick={() => window.open("/policies?tab=privacyPolicy", "_blank")} sx={{ p: "8px" }}>
-          <Typography
-            variant="subtitle1"
+        <MenuItem sx={{ p: "8px" }} onClick={handleMenuOpen}>
+          <Box
             sx={{
-              color: "var(--Primary-Black, #212B36)",
-              fontFamily: "var(--font-bold)",
-              fontSize: "16px",
-              fontStyle: "normal",
-              fontWeight: 400,
-              lineHeight: "24px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              width: "100%",
             }}
           >
-            隱私政策
-          </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: "16px",
+                width: "100%",
+              }}
+            >
+              <PolicyRoundedIcon />
+              <Typography
+                sx={{
+                  textOverflow: "ellipsis",
+                  color: "var(--Primary-DBS-Red, #212B36)",
+                  fontFamily: "var(--font-bold)",
+                  fontSize: "16px",
+                  fontStyle: "normal",
+                  fontWeight: 400,
+                  lineHeight: "24px",
+                }}
+              >
+                了解更多
+              </Typography>
+            </Box>
+            <ChevronRightRoundedIcon />
+          </Box>
         </MenuItem>
-        <MenuItem onClick={() => window.open("/policies?tab=cookiePolicy", "_blank")} sx={{ p: "8px" }}>
-          <Typography
-            variant="subtitle1"
+        <MenuItem onClick={handleLogout} sx={{ p: "8px" }}>
+          <Box
             sx={{
-              color: "var(--Primary-Black, #212B36)",
-              fontFamily: "var(--font-bold)",
-              fontSize: "16px",
-              fontStyle: "normal",
-              fontWeight: 400,
-              lineHeight: "24px",
+              display: "flex",
+              alignItems: "center",
+              gap: "16px",
+              width: "100%",
             }}
           >
-            Cookies 政策
-          </Typography>
+            <LogoutRoundedIcon
+              style={{ color: "var(--Primary-DBS-Red, #C00)" }}
+            />
+            <Typography
+              sx={{
+                color: "var(--Primary-DBS-Red, #C00)",
+                fontFamily: "var(--font-bold)",
+                fontSize: "16px",
+                fontStyle: "normal",
+                fontWeight: 400,
+                lineHeight: "24px",
+              }}
+            >
+              登出
+            </Typography>
+          </Box>
         </MenuItem>
-
       </Menu>
-    }
-  </>);
+
+      {anchorElement && (
+        <Menu
+          anchorEl={anchorElement}
+          open={Boolean(anchorElement)}
+          onClose={handleClose}
+          anchorOrigin={{ vertical: "center", horizontal: 225 }}
+          transformOrigin={{
+            vertical: "center",
+            horizontal: "left",
+          }}
+          slotProps={{
+            paper: {
+              sx: {
+                width:
+                  anchorElement && isExpanded
+                    ? anchorElement.clientWidth
+                    : "226px",
+              },
+            },
+          }}
+          MenuListProps={{
+            sx: { p: "4px" },
+          }}
+        >
+          <MenuItem
+            onClick={() => window.open("/policies?tab=termsOfUse", "_blank")}
+            sx={{ p: "8px" }}
+          >
+            <Typography
+              variant="subtitle1"
+              sx={{
+                color: "var(--Primary-Black, #212B36)",
+                fontFamily: "var(--font-bold)",
+                fontSize: "16px",
+                fontStyle: "normal",
+                fontWeight: 400,
+                lineHeight: "24px",
+              }}
+            >
+              服務條款
+            </Typography>
+          </MenuItem>
+          <MenuItem
+            onClick={() => window.open("/policies?tab=privacyPolicy", "_blank")}
+            sx={{ p: "8px" }}
+          >
+            <Typography
+              variant="subtitle1"
+              sx={{
+                color: "var(--Primary-Black, #212B36)",
+                fontFamily: "var(--font-bold)",
+                fontSize: "16px",
+                fontStyle: "normal",
+                fontWeight: 400,
+                lineHeight: "24px",
+              }}
+            >
+              隱私政策
+            </Typography>
+          </MenuItem>
+          <MenuItem
+            onClick={() => window.open("/policies?tab=cookiePolicy", "_blank")}
+            sx={{ p: "8px" }}
+          >
+            <Typography
+              variant="subtitle1"
+              sx={{
+                color: "var(--Primary-Black, #212B36)",
+                fontFamily: "var(--font-bold)",
+                fontSize: "16px",
+                fontStyle: "normal",
+                fontWeight: 400,
+                lineHeight: "24px",
+              }}
+            >
+              Cookie 政策
+            </Typography>
+          </MenuItem>
+        </Menu>
+      )}
+    </>
+  );
 };
 
 export default UserActionMenu;
