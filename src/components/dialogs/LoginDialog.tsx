@@ -21,6 +21,7 @@ import {
 import Image from "next/image";
 import { useContext, useState } from "react";
 import GoogleIcon from "../../assets/google.png";
+import { customScrollbarStyle } from "../toolbar-drawer-new/ToolbarDrawer";
 
 const LoginDialog = ({
   open,
@@ -106,6 +107,7 @@ const LoginDialog = ({
               "@media (orientation: landscape)": {
                 overflow: "auto",
               },
+              ...customScrollbarStyle,
             },
           },
         }}
@@ -217,6 +219,7 @@ const LoginDialog = ({
             alignItems: "center",
             flexDirection: "column",
             justifyContent: "center",
+            ...customScrollbarStyle,
           }}
         >
           <TextField
