@@ -44,7 +44,7 @@ function NotFoundContent() {
           lineHeight: titleLineHeight,
           textAlign: "center",
           color: "#000000",
-          fontFamily: "DFPHeiUBold-B5",
+          fontFamily: "var(--font-bold)",
         }}
       >
         404

@@ -1,8 +1,8 @@
+import { CategoryCard } from "@/components/category-card";
+import data from "@/data/data.json";
+import { Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-import data from "@/data/data.json";
-import { CategoryCard } from "@/components/category-card";
-import { Typography } from "@mui/material";
 
 export default function HomeCategories() {
   const cards = data.home.category_section.cards;
@@ -38,7 +38,7 @@ export default function HomeCategories() {
             sx={{
               color: "#e4d9d7",
               fontWeight: "bold",
-              fontFamily: "Roboto Serif, Helvetica",
+              fontFamily: 'var(--font-bold)',
               mb: 4,
               textAlign: "left",
             }}

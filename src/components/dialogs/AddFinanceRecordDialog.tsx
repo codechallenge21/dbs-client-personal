@@ -1,23 +1,23 @@
 'use client';
-import {
-  Box,
-  Radio,
-  Dialog,
-  Button,
-  Checkbox,
-  // useTheme,
-  FormLabel,
-  TextField,
-  IconButton,
-  RadioGroup,
-  Typography,
-  DialogTitle,
-  FormControl,
-  // useMediaQuery,
-  DialogContent,
-  FormControlLabel,
-} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import {
+    Box,
+    Button,
+    Checkbox,
+    Dialog,
+    // useMediaQuery,
+    DialogContent,
+    DialogTitle,
+    FormControl,
+    FormControlLabel,
+    // useTheme,
+    FormLabel,
+    IconButton,
+    Radio,
+    RadioGroup,
+    TextField,
+    Typography,
+} from '@mui/material';
 
 interface AddFinanceRecordDialogProps {
   open: boolean;
@@ -70,7 +70,7 @@ export default function AddFinanceRecordDialog({
             fontSize: '32px',
             lineHeight: '48px',
             fontStyle: 'normal',
-            fontFamily: 'DFPHeiBold-B5',
+            fontFamily: 'var(--font-bold)',
             color: 'var(--Primary-Black, #212B36)',
           }}
         >
@@ -152,7 +152,7 @@ export default function AddFinanceRecordDialog({
                   fontSize: '14px',
                   lineHeight: '24px',
                   fontStyle: 'normal',
-                  fontFamily: 'DFPHeiBold-B5',
+                  fontFamily: 'var(--font-bold)',
                   color: 'var(--Secondary-Mid-Gray, #9B9B9B)',
                 },
               },

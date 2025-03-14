@@ -1,7 +1,7 @@
-import { Avatar, Box, Typography, IconButton, Stack } from '@mui/material';
-import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
-import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
+import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
+import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
+import { Avatar, Box, IconButton, Stack, Typography } from '@mui/material';
 
 type Comment = {
   user: string;
@@ -58,7 +58,7 @@ const SingleComment = ({ comment }: SingleCommentProps) => (
             overflow: 'hidden',
             color: '#E4DAD7',
             textOverflow: 'ellipsis',
-            fontFamily: 'Public Sans',
+            fontFamily: 'var(--font-bold)',
             fontSize: '13px',
             fontStyle: 'normal',
             fontWeight: 700,
@@ -77,7 +77,7 @@ const SingleComment = ({ comment }: SingleCommentProps) => (
             overflow: 'hidden',
             color: 'rgba(235, 213, 209, 0.62)',
             textOverflow: 'ellipsis',
-            fontFamily: 'Public Sans',
+            fontFamily: 'var(--font-bold)',
             fontSize: '13px',
             fontStyle: 'normal',
             fontWeight: 400,
@@ -95,7 +95,7 @@ const SingleComment = ({ comment }: SingleCommentProps) => (
       variant="body1"
       sx={{
         color: '#E4DAD7',
-        fontFamily: 'Public Sans',
+        fontFamily: 'var(--font-bold)',
         fontSize: '15px',
         fontStyle: 'normal',
         fontWeight: 400,

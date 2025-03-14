@@ -1,19 +1,19 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import {
-  Button,
-  Dialog,
-  useTheme,
-  TextField,
-  Typography,
-  IconButton,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
-  useMediaQuery,
-} from '@mui/material';
 import { CloseRounded } from '@mui/icons-material';
+import {
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+    TextField,
+    Typography,
+    useMediaQuery,
+    useTheme,
+} from '@mui/material';
+import React, { useEffect, useState } from 'react';
 
 interface EditDialogProps {
   open: boolean;
@@ -173,7 +173,7 @@ const EditDialog: React.FC<EditDialogProps> = ({
               textAlign: 'center',
               fontStyle: 'normal',
               lineHeight: 'normal',
-              fontFamily: 'Open Sans',
+              fontFamily: 'var(--font-bold)',
               color: 'var(--Error-ContrastText, #FFF)',
             }}
           >
