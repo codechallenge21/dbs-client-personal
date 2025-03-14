@@ -22,7 +22,6 @@ import {
   TERMSOFUSE,
   TERMSOFUSETITLE,
 } from 'minimal/_mock/_policies';
-import FroalaEditorView from '@/components/FroalaEditorView';
 import ResponsiveTabs from '@/components/ResponsiveTabs';
 
 const useStyles = makeStyles(() => ({
@@ -34,16 +33,16 @@ const useStyles = makeStyles(() => ({
       paddingLeft: '3px',
     },
   },
-  appBarWrapper:{
-    background: '#FFFFFF !important', 
-
+  appBarWrapper: {
+    background: '#FFFFFF !important',
   },
   divider: {
     marginBottom: '2rem',
   },
   content: {
-    height: 'calc(100vh - 100px)',
+    height: 'calc(100vh - 80px)',
     overflowY: 'auto',
+    backgroundColor: '#f1f1f1',
     '&::-webkit-scrollbar': {
       width: '8px',
       height: '8px',
@@ -66,8 +65,8 @@ const useStyles = makeStyles(() => ({
     padding: 0,
     border: '1px solid #ccc',
     borderRadius: '16px',
-    background: '#FFFFFF', 
-  }
+    background: '#FFFFFF',
+  },
 }));
 
 const PoliciesContent = function () {
@@ -90,7 +89,9 @@ const PoliciesContent = function () {
   const handleTabChange = (newValue: string) => {
     const params = new URLSearchParams(searchParams?.toString() || '');
     params.set('tab', newValue);
-    router.push(`${window.location.pathname}?${params.toString()}`, { scroll: false });
+    router.push(`${window.location.pathname}?${params.toString()}`, {
+      scroll: false,
+    });
     setCurrentTab(newValue);
   };
 
@@ -125,13 +126,54 @@ const PoliciesContent = function () {
         </Typography>
       </Grid>
       <Grid
-        className="froala-editor-view-text-indent"
         sx={{
           width: '100%',
           maxWidth: '745px',
         }}
       >
-        <FroalaEditorView model={policyContent} />
+        <Box
+          className="policy-content"
+          sx={{
+            '& h1, & h1 > p, & h1 > span': {
+              fontSize: '30px',
+              fontWeight: 700,
+              lineHeight: 1.5,
+              margin: 0,
+            },
+            '& h2, & h2 > p, & h2 > span': {
+              fontSize: '21px',
+              fontWeight: 700,
+              lineHeight: 1.5,
+              margin: 0,
+            },
+            '& h1 strong, & h2 strong': {
+              textShadow:
+                '0.5px 0.5px 0 rgba(0, 0, 0, 0.2), -0.5px -0.5px 0 rgba(0, 0, 0, 0.2), 0.5px -0.5px 0 rgba(0, 0, 0, 0.2), -0.5px 0.5px 0 rgba(0, 0, 0, 0.2)',
+            },
+            '& h3, & h3 > p, & h3 > span, & h4, & h4 > p, & h4 > span, & h5, & h5 > p, & h5 > span, & h6, & h6 > p, & h6 > span':
+              {
+                fontSize: '16px',
+                fontWeight: 700,
+                lineHeight: 1.5,
+                margin: 0,
+              },
+            '& p': {
+              fontSize: '16px',
+              lineHeight: 1.5,
+              margin: 0,
+            },
+            '& ul, & ol': {
+              paddingLeft: '1.5rem',
+            },
+            '& li': {
+              margin: '0',
+            },
+            '& strong': {
+              fontWeight: 700,
+            },
+          }}
+          dangerouslySetInnerHTML={{ __html: policyContent }}
+        />
       </Grid>
     </Box>
   );
@@ -151,6 +193,7 @@ const PoliciesContent = function () {
             transition: theme.transitions.create(['height'], {
               duration: theme.transitions.duration.shorter,
             }),
+            boxShadow: 'none',
           }}
         >
           <Container className={classes.logoContainer}>
@@ -158,17 +201,20 @@ const PoliciesContent = function () {
               direction="row"
               alignItems="center"
               justifyContent={isDownSm ? 'center' : 'flex-start'}
+              sx={{
+                paddingInline: '7px',
+              }}
             >
               <Image
                 src="/assets/images/DBS_logo.svg"
-                alt="InfoCenter's logo"
+                alt="DBS's logo"
                 width={200}
                 height={52}
                 priority
                 quality={100}
                 style={{
-                  width: '200px',
-                  height: 'auto'
+                  width: '160px',
+                  height: 'auto',
                 }}
               />
             </Stack>
