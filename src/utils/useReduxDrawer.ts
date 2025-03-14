@@ -13,10 +13,10 @@ export default function useReduxDrawer() {
   const drawerState: DrawerState = useSelector(
     (state: RootState) => state.drawer
   );
-  let isOpen;
+  let isOpen = false;
   Object.keys(drawerState).forEach((key) => {
     if (key !== 'isOpen') {
-      isOpen ||= drawerState[key];
+      isOpen ||= drawerState[key] ?? false;
     }
   });
 
@@ -53,7 +53,7 @@ export const useDrawerOutsideClick = (
       if (
         ref.current &&
         !ref.current.contains(target) &&
-        (!dropdown?.contains(target))
+        !dropdown?.contains(target)
       ) {
         closeDrawer(key);
       }
