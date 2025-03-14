@@ -1,28 +1,28 @@
-import React, { useState } from 'react';
 import {
-  Box,
-  Tab,
-  Tabs,
-  Card,
-  Table,
-  TableRow,
-  TableBody,
-  TableCell,
-  TableHead,
-  useTheme,
-  TextField,
-  IconButton,
-  Typography,
-  useMediaQuery,
-  TableContainer,
-  InputAdornment,
-} from '@mui/material';
-import {
-  AddRounded,
-  AssessmentRounded,
-  MoreVertRounded,
-  SearchRounded,
+    AddRounded,
+    AssessmentRounded,
+    MoreVertRounded,
+    SearchRounded,
 } from '@mui/icons-material';
+import {
+    Box,
+    Card,
+    IconButton,
+    InputAdornment,
+    Tab,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Tabs,
+    TextField,
+    Typography,
+    useMediaQuery,
+    useTheme,
+} from '@mui/material';
+import React, { useState } from 'react';
 
 const tableData = [
   {
@@ -201,7 +201,7 @@ const FinanceDetailInventorySheet = () => {
                       fontSize: '14px',
                       lineHeight: '24px',
                       fontStyle: 'normal',
-                      fontFamily: 'DFPHeiBold-B5',
+                      fontFamily: 'var(--font-bold)',
                       color: 'var(--Secondary-Mid-Gray, #9B9B9B)',
                     },
                   },
@@ -265,7 +265,7 @@ const FinanceDetailInventorySheet = () => {
                     lineHeight: '24px',
                     textAlign: 'center',
                     fontStyle: 'normal',
-                    fontFamily: 'DFPHeiBold-B5',
+                    fontFamily: 'var(--font-bold)',
                     color: 'var(--Primary-ContrastText, #FFF)',
                   }}
                 >
@@ -325,14 +325,14 @@ const FinanceDetailInventorySheet = () => {
                   fontWeight: 700,
                   fontStyle: 'normal',
                   lineHeight: 'normal',
-                  fontFamily: 'Open Sans',
+                  fontFamily: 'var(--font-bold)',
                   color: 'var(--Text-Secondary, #637381)',
                   '&.Mui-selected': {
                     fontWeight: 400,
                     fontSize: '14px',
                     lineHeight: '22px',
                     fontStyle: 'normal',
-                    fontFamily: 'DFPHeiBold-B5',
+                    fontFamily: 'var(--font-bold)',
                     color: 'var(--Text-Secondary, #212B36)',
                   },
                 }}
@@ -350,14 +350,14 @@ const FinanceDetailInventorySheet = () => {
                   fontWeight: 700,
                   fontStyle: 'normal',
                   lineHeight: 'normal',
-                  fontFamily: 'Open Sans',
+                  fontFamily: 'var(--font-bold)',
                   color: 'var(--Text-Secondary, #637381)',
                   '&.Mui-selected': {
                     fontWeight: 400,
                     fontSize: '14px',
                     lineHeight: '22px',
                     fontStyle: 'normal',
-                    fontFamily: 'DFPHeiBold-B5',
+                    fontFamily: 'var(--font-bold)',
                     color: 'var(--Text-Secondary, #212B36)',
                   },
                 }}
@@ -375,14 +375,14 @@ const FinanceDetailInventorySheet = () => {
                   fontWeight: 700,
                   fontStyle: 'normal',
                   lineHeight: 'normal',
-                  fontFamily: 'Open Sans',
+                  fontFamily: 'var(--font-bold)',
                   color: 'var(--Text-Secondary, #637381)',
                   '&.Mui-selected': {
                     fontWeight: 400,
                     fontSize: '14px',
                     lineHeight: '22px',
                     fontStyle: 'normal',
-                    fontFamily: 'DFPHeiBold-B5',
+                    fontFamily: 'var(--font-bold)',
                     color: 'var(--Text-Secondary, #212B36)',
                   },
                 }}
@@ -400,14 +400,14 @@ const FinanceDetailInventorySheet = () => {
                   fontWeight: 700,
                   fontStyle: 'normal',
                   lineHeight: 'normal',
-                  fontFamily: 'Open Sans',
+                  fontFamily: 'var(--font-bold)',
                   color: 'var(--Text-Secondary, #637381)',
                   '&.Mui-selected': {
                     fontWeight: 400,
                     fontSize: '14px',
                     lineHeight: '22px',
                     fontStyle: 'normal',
-                    fontFamily: 'DFPHeiBold-B5',
+                    fontFamily: 'var(--font-bold)',
                     color: 'var(--Text-Secondary, #212B36)',
                   },
                 }}
@@ -446,7 +446,7 @@ const FinanceDetailInventorySheet = () => {
                         lineHeight: '22px',
                         fontStyle: 'normal',
                         background: '#F5F5F5',
-                        fontFamily: 'Public Sans',
+                        fontFamily: 'var(--font-bold)',
                         color: 'var(--Text-Primary, #212B36)',
                       }}
                     >
@@ -459,7 +459,7 @@ const FinanceDetailInventorySheet = () => {
                         lineHeight: '22px',
                         fontStyle: 'normal',
                         background: '#F5F5F5',
-                        fontFamily: 'Public Sans',
+                        fontFamily: 'var(--font-bold)',
                         color: 'var(--Text-Primary, #212B36)',
                       }}
                     >
@@ -472,7 +472,7 @@ const FinanceDetailInventorySheet = () => {
                         lineHeight: '22px',
                         fontStyle: 'normal',
                         background: '#F5F5F5',
-                        fontFamily: 'Public Sans',
+                        fontFamily: 'var(--font-bold)',
                         color: 'var(--Text-Primary, #212B36)',
                       }}
                     >
@@ -485,7 +485,7 @@ const FinanceDetailInventorySheet = () => {
                         lineHeight: '22px',
                         fontStyle: 'normal',
                         background: '#F5F5F5',
-                        fontFamily: 'Public Sans',
+                        fontFamily: 'var(--font-bold)',
                         color: 'var(--Text-Primary, #212B36)',
                       }}
                     >
@@ -502,7 +502,7 @@ const FinanceDetailInventorySheet = () => {
                           fontSize: '14px',
                           lineHeight: '22px',
                           fontStyle: 'normal',
-                          fontFamily: 'Public Sans',
+                          fontFamily: 'var(--font-bold)',
                           color: 'var(--Text-Primary, #212B36)',
                         }}
                       >
@@ -514,7 +514,7 @@ const FinanceDetailInventorySheet = () => {
                           fontSize: '14px',
                           lineHeight: '22px',
                           fontStyle: 'normal',
-                          fontFamily: 'Public Sans',
+                          fontFamily: 'var(--font-bold)',
                           color: 'var(--Text-Primary, #212B36)',
                         }}
                       >
@@ -526,7 +526,7 @@ const FinanceDetailInventorySheet = () => {
                           fontSize: '14px',
                           lineHeight: '22px',
                           fontStyle: 'normal',
-                          fontFamily: 'Public Sans',
+                          fontFamily: 'var(--font-bold)',
                           color: 'var(--Text-Primary, #212B36)',
                         }}
                       >
@@ -538,7 +538,7 @@ const FinanceDetailInventorySheet = () => {
                           fontSize: '14px',
                           lineHeight: '22px',
                           fontStyle: 'normal',
-                          fontFamily: 'Public Sans',
+                          fontFamily: 'var(--font-bold)',
                           color: 'var(--Text-Primary, #212B36)',
                         }}
                       >
@@ -610,7 +610,7 @@ const FinanceDetailInventorySheet = () => {
                       fontSize: '14px',
                       lineHeight: '24px',
                       fontStyle: 'normal',
-                      fontFamily: 'DFPHeiBold-B5',
+                      fontFamily: 'var(--font-bold)',
                       color: 'var(--Secondary-Mid-Gray, #9B9B9B)',
                     },
                   },
@@ -674,7 +674,7 @@ const FinanceDetailInventorySheet = () => {
                     lineHeight: '24px',
                     textAlign: 'center',
                     fontStyle: 'normal',
-                    fontFamily: 'DFPHeiBold-B5',
+                    fontFamily: 'var(--font-bold)',
                     color: 'var(--Primary-ContrastText, #FFF)',
                   }}
                 >
@@ -732,14 +732,14 @@ const FinanceDetailInventorySheet = () => {
                   fontWeight: 700,
                   fontStyle: 'normal',
                   lineHeight: 'normal',
-                  fontFamily: 'Open Sans',
+                  fontFamily: 'var(--font-bold)',
                   color: 'var(--Text-Secondary, #637381)',
                   '&.Mui-selected': {
                     fontWeight: 400,
                     fontSize: '14px',
                     lineHeight: '22px',
                     fontStyle: 'normal',
-                    fontFamily: 'DFPHeiBold-B5',
+                    fontFamily: 'var(--font-bold)',
                     color: 'var(--Text-Secondary, #212B36)',
                   },
                 }}
@@ -758,14 +758,14 @@ const FinanceDetailInventorySheet = () => {
                   fontWeight: 700,
                   fontStyle: 'normal',
                   lineHeight: 'normal',
-                  fontFamily: 'Open Sans',
+                  fontFamily: 'var(--font-bold)',
                   color: 'var(--Text-Secondary, #637381)',
                   '&.Mui-selected': {
                     fontWeight: 400,
                     fontSize: '14px',
                     lineHeight: '22px',
                     fontStyle: 'normal',
-                    fontFamily: 'DFPHeiBold-B5',
+                    fontFamily: 'var(--font-bold)',
                     color: 'var(--Text-Secondary, #212B36)',
                   },
                 }}
@@ -784,14 +784,14 @@ const FinanceDetailInventorySheet = () => {
                   fontWeight: 700,
                   fontStyle: 'normal',
                   lineHeight: 'normal',
-                  fontFamily: 'Open Sans',
+                  fontFamily: 'var(--font-bold)',
                   color: 'var(--Text-Secondary, #637381)',
                   '&.Mui-selected': {
                     fontWeight: 400,
                     fontSize: '14px',
                     lineHeight: '22px',
                     fontStyle: 'normal',
-                    fontFamily: 'DFPHeiBold-B5',
+                    fontFamily: 'var(--font-bold)',
                     color: 'var(--Text-Secondary, #212B36)',
                   },
                 }}
@@ -810,14 +810,14 @@ const FinanceDetailInventorySheet = () => {
                   fontWeight: 700,
                   fontStyle: 'normal',
                   lineHeight: 'normal',
-                  fontFamily: 'Open Sans',
+                  fontFamily: 'var(--font-bold)',
                   color: 'var(--Text-Secondary, #637381)',
                   '&.Mui-selected': {
                     fontWeight: 400,
                     fontSize: '14px',
                     lineHeight: '22px',
                     fontStyle: 'normal',
-                    fontFamily: 'DFPHeiBold-B5',
+                    fontFamily: 'var(--font-bold)',
                     color: 'var(--Text-Secondary, #212B36)',
                   },
                 }}
@@ -898,7 +898,7 @@ const FinanceDetailInventorySheet = () => {
                           fontWeight: '400',
                           lineHeight: '36px',
                           fontStyle: 'normal',
-                          fontFamily: 'DFPHeiBold-B5',
+                          fontFamily: 'var(--font-bold)',
                         }}
                       >
                         薪水

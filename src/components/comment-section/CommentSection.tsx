@@ -1,5 +1,4 @@
-import React from 'react';
-import { Avatar, Box, Typography, TextField, Divider } from '@mui/material';
+import { Avatar, Box, Divider, TextField, Typography } from '@mui/material';
 import SingleComment from './SingleComment';
 
 export default function CommentSection() {
@@ -124,7 +123,7 @@ export default function CommentSection() {
             padding: '0',
             '& .MuiInputBase-input::placeholder': {
               color: 'rgba(235, 213, 209, 0.40)',
-              fontFamily: 'Public Sans',
+              fontFamily: 'var(--font-bold)',
               fontSize: '15px',
               fontStyle: 'normal',
               fontWeight: 400,

@@ -1,6 +1,6 @@
+import { ArrowOutwardRounded } from '@mui/icons-material';
 import { Box, Typography } from '@mui/material';
 import React from 'react';
-import { ArrowOutwardRounded } from '@mui/icons-material';
 
 interface SuggestionsProps {
   title: string;
@@ -16,7 +16,7 @@ const Suggestions: React.FC<SuggestionsProps> = ({ title }) => {
           alignItems: 'center',
           justifyContent: 'center',
           backgroundColor: 'var(--Primary-Black, #000)',
-          fontFamily: 'var(--font-public-sans)',
+          fontFamily: 'var(--font-bold)',
           fontSize: '13px',
           fontWeight: '700',
           lineHeight: '22px',

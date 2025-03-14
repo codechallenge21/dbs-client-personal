@@ -3,41 +3,41 @@ import AddFinanceRecordDialog from '@/components/dialogs/AddFinanceRecordDialog'
 import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
 import {
   AddRounded,
-  SearchRounded,
-  AttachMoneyRounded,
-  PercentRounded,
-  MoreVertRounded,
-  StarRounded,
-  StarBorderRounded,
-  MenuRounded,
   ArrowDropDownRounded,
+  AttachMoneyRounded,
   DeleteRounded,
+  MenuRounded,
+  MoreVertRounded,
+  PercentRounded,
+  SearchRounded,
+  StarBorderRounded,
+  StarRounded,
 } from '@mui/icons-material';
 import {
   Box,
-  Tab,
-  Tabs,
-  Table,
   Button,
-  Select,
-  useTheme,
-  TableRow,
-  MenuItem,
-  TableBody,
-  TableHead,
-  TableCell,
-  TextField,
-  IconButton,
-  InputLabel,
-  Typography,
-  FormControl,
-  useMediaQuery,
-  TableContainer,
-  InputAdornment,
-  Checkbox,
   Card,
   CardContent,
+  Checkbox,
+  FormControl,
+  IconButton,
+  InputAdornment,
+  InputLabel,
   Menu,
+  MenuItem,
+  Select,
+  Tab,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Tabs,
+  TextField,
+  Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
@@ -252,7 +252,7 @@ const FinanceScreen = () => {
                     fontSize: '32px',
                     fontStyle: 'normal',
                     lineHeight: 'normal',
-                    fontFamily: 'DFPHeiBold-B5',
+                    fontFamily: 'var(--font-bold)',
                     color: 'var(--Primary-Black, #212B36)',
                     textAlign: 'left',
                     flex: '1 1 auto',
@@ -295,7 +295,7 @@ const FinanceScreen = () => {
                           fontSize: '14px',
                           lineHeight: '24px',
                           fontStyle: 'normal',
-                          fontFamily: 'DFPHeiBold-B5',
+                          fontFamily: 'var(--font-bold)',
                           color: 'var(--Secondary-Mid-Gray, #9B9B9B)',
                         },
                       },
@@ -342,7 +342,7 @@ const FinanceScreen = () => {
                         lineHeight: '24px',
                         textAlign: 'center',
                         fontStyle: 'normal',
-                        fontFamily: 'DFPHeiBold-B5',
+                        fontFamily: 'var(--font-bold)',
                         color: 'var(--Primary-ContrastText, #FFF)',
                       }}
                     >
@@ -388,14 +388,14 @@ const FinanceScreen = () => {
                     fontWeight: 700,
                     fontStyle: 'normal',
                     lineHeight: 'normal',
-                    fontFamily: 'Open Sans',
+                    fontFamily: 'var(--font-bold)',
                     color: 'var(--Text-Secondary, #637381)',
                     '&.Mui-selected': {
                       fontWeight: 400,
                       fontSize: '14px',
                       lineHeight: '22px',
                       fontStyle: 'normal',
-                      fontFamily: 'DFPHeiBold-B5',
+                      fontFamily: 'var(--font-bold)',
                       color: 'var(--Text-Secondary, #212B36)',
                     },
                   }}
@@ -413,14 +413,14 @@ const FinanceScreen = () => {
                     fontWeight: 700,
                     fontStyle: 'normal',
                     lineHeight: 'normal',
-                    fontFamily: 'Open Sans',
+                    fontFamily: 'var(--font-bold)',
                     color: 'var(--Text-Secondary, #637381)',
                     '&.Mui-selected': {
                       fontWeight: 400,
                       fontSize: '14px',
                       lineHeight: '22px',
                       fontStyle: 'normal',
-                      fontFamily: 'DFPHeiBold-B5',
+                      fontFamily: 'var(--font-bold)',
                       color: 'var(--Text-Secondary, #212B36)',
                     },
                   }}
@@ -499,7 +499,7 @@ const FinanceScreen = () => {
                             fontStyle: 'normal',
                             alignItems: 'center',
                             background: '#F4F6F8',
-                            fontFamily: 'Public Sans',
+                            fontFamily: 'var(--font-bold)',
                             justifyContent: 'flex-start',
                             padding: '16px 0px 16px 16px',
                             color: 'var(--Text-Primary, #212B36)',
@@ -519,7 +519,7 @@ const FinanceScreen = () => {
                             fontStyle: 'normal',
                             alignItems: 'center',
                             background: '#F4F6F8',
-                            fontFamily: 'Public Sans',
+                            fontFamily: 'var(--font-bold)',
                             justifyContent: 'flex-start',
                             color: 'var(--Text-Primary, #212B36)',
                           }}
@@ -538,7 +538,7 @@ const FinanceScreen = () => {
                             fontStyle: 'normal',
                             alignItems: 'center',
                             background: '#F4F6F8',
-                            fontFamily: 'Public Sans',
+                            fontFamily: 'var(--font-bold)',
                             color: 'var(--Text-Primary, #212B36)',
                           }}
                         >
@@ -556,7 +556,7 @@ const FinanceScreen = () => {
                             fontStyle: 'normal',
                             alignItems: 'center',
                             background: '#F4F6F8',
-                            fontFamily: 'Public Sans',
+                            fontFamily: 'var(--font-bold)',
                             color: 'var(--Text-Primary, #212B36)',
                           }}
                         >
@@ -575,7 +575,7 @@ const FinanceScreen = () => {
                             padding: '16px 0px ',
                             alignItems: 'center',
                             background: '#F4F6F8',
-                            fontFamily: 'Public Sans',
+                            fontFamily: 'var(--font-bold)',
                             color: 'var(--Text-Primary, #212B36)',
                           }}
                         >
@@ -592,7 +592,7 @@ const FinanceScreen = () => {
                             fontStyle: 'normal',
                             padding: '16px 0px ',
                             background: '#F4F6F8',
-                            fontFamily: 'Public Sans',
+                            fontFamily: 'var(--font-bold)',
                             color: 'var(--Text-Primary, #212B36)',
                           }}
                         >
@@ -660,7 +660,7 @@ const FinanceScreen = () => {
                                 lineHeight: '24px',
                                 fontStyle: 'normal',
                                 alignItems: 'center',
-                                fontFamily: 'DFPHeiBold-B5',
+                                fontFamily: 'var(--font-bold)',
                                 justifyContent: 'flex-start',
                                 color: 'var(--Text-Primary, #212B36)',
                               }}
@@ -679,7 +679,7 @@ const FinanceScreen = () => {
                                 lineHeight: '24px',
                                 fontStyle: 'normal',
                                 alignItems: 'center',
-                                fontFamily: 'DFPHeiBold-B5',
+                                fontFamily: 'var(--font-bold)',
                                 justifyContent: 'flex-start',
                                 color: 'var(--Text-Primary, #212B36)',
                               }}
@@ -698,7 +698,7 @@ const FinanceScreen = () => {
                                 lineHeight: '24px',
                                 fontStyle: 'normal',
                                 alignItems: 'center',
-                                fontFamily: 'DFPHeiBold-B5',
+                                fontFamily: 'var(--font-bold)',
                                 justifyContent: 'flex-start',
                                 color: 'var(--Text-Primary, #212B36)',
                               }}
@@ -717,7 +717,7 @@ const FinanceScreen = () => {
                                 lineHeight: '24px',
                                 fontStyle: 'normal',
                                 alignItems: 'center',
-                                fontFamily: 'DFPHeiBold-B5',
+                                fontFamily: 'var(--font-bold)',
                                 justifyContent: 'flex-start',
                                 color: 'var(--Text-Primary, #212B36)',
                               }}
@@ -747,7 +747,7 @@ const FinanceScreen = () => {
                                 padding: '16px 0px',
                                 fontStyle: 'normal',
                                 alignItems: 'center',
-                                fontFamily: 'DFPHeiBold-B5',
+                                fontFamily: 'var(--font-bold)',
                                 justifyContent: 'flex-start',
                               }}
                               onClick={(e) => {
@@ -782,7 +782,7 @@ const FinanceScreen = () => {
                                 fontStyle: 'normal',
                                 padding: '16px 0px',
                                 alignItems: 'center',
-                                fontFamily: 'DFPHeiBold-B5',
+                                fontFamily: 'var(--font-bold)',
                                 justifyContent: 'flex-start',
                               }}
                             >
@@ -837,7 +837,7 @@ const FinanceScreen = () => {
                                     overflow: 'hidden',
                                     fontStyle: 'normal',
                                     textOverflow: 'ellipsis',
-                                    fontFamily: 'DFPHeiBold-B5',
+                                    fontFamily: 'var(--font-bold)',
                                     color: ' var(--Primary-Black, #212B36)',
                                   }}
                                 >
@@ -865,7 +865,7 @@ const FinanceScreen = () => {
                                     overflow: 'hidden',
                                     fontStyle: 'normal',
                                     textOverflow: 'ellipsis',
-                                    fontFamily: 'DFPHeiBold-B5',
+                                    fontFamily: 'var(--font-bold)',
                                     color: 'var(--Primary-DBS-Red, #C00)',
                                   }}
                                 >
@@ -976,7 +976,7 @@ const FinanceScreen = () => {
                               fontSize: '14px',
                               lineHeight: '22px',
                               fontStyle: 'normal',
-                              fontFamily: 'DFPHeiBold-B5',
+                              fontFamily: 'var(--font-bold)',
                               color: 'var(--Text-Disabled, #919EAB)',
                               '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button':
                                 {
@@ -1046,7 +1046,7 @@ const FinanceScreen = () => {
                               fontSize: '14px',
                               lineHeight: '22px',
                               fontStyle: 'normal',
-                              fontFamily: 'DFPHeiBold-B5',
+                              fontFamily: 'var(--font-bold)',
                               color: 'var(--Text-Disabled, #919EAB)',
                               '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button':
                                 {
@@ -1116,7 +1116,7 @@ const FinanceScreen = () => {
                               fontSize: '14px',
                               lineHeight: '22px',
                               fontStyle: 'normal',
-                              fontFamily: 'DFPHeiBold-B5',
+                              fontFamily: 'var(--font-bold)',
                               color: 'var(--Text-Disabled, #919EAB)',
                               '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button':
                                 {
@@ -1147,7 +1147,7 @@ const FinanceScreen = () => {
                                     fontSize: '14px',
                                     lineHeight: '22px',
                                     fontStyle: 'normal',
-                                    fontFamily: 'DFPHeiMedium-B5',
+                                    fontFamily: 'var(--font-medium)',
                                     color: 'var(--Text-Secondary, #637381)',
                                   }}
                                 >
@@ -1188,7 +1188,7 @@ const FinanceScreen = () => {
                             lineHeight: '24px',
                             fontStyle: 'normal',
                             textAlign: 'center',
-                            fontFamily: 'Public Sans',
+                            fontFamily: 'var(--font-bold)',
                             color: 'var(--Primary-Black, #212B36)',
                           }}
                         >
@@ -1215,7 +1215,7 @@ const FinanceScreen = () => {
                             lineHeight: '24px',
                             fontStyle: 'normal',
                             textAlign: 'center',
-                            fontFamily: 'Public Sans',
+                            fontFamily: 'var(--font-bold)',
                             color: 'var(--Primary-ContrastText, #FFF)',
                           }}
                         >
@@ -1256,7 +1256,7 @@ const FinanceScreen = () => {
                               lineHeight: '22px',
                               fontStyle: 'normal',
                               background: '#919EAB33',
-                              fontFamily: 'Public Sans',
+                              fontFamily: 'var(--font-bold)',
                               color: 'var(--Text-Primary, #212B36)',
                             }}
                           >
@@ -1269,7 +1269,7 @@ const FinanceScreen = () => {
                               lineHeight: '22px',
                               fontStyle: 'normal',
                               background: '#919EAB33',
-                              fontFamily: 'Public Sans',
+                              fontFamily: 'var(--font-bold)',
                               color: 'var(--Text-Primary, #212B36)',
                             }}
                           >
@@ -1282,7 +1282,7 @@ const FinanceScreen = () => {
                               lineHeight: '22px',
                               fontStyle: 'normal',
                               background: '#919EAB33',
-                              fontFamily: 'Public Sans',
+                              fontFamily: 'var(--font-bold)',
                               color: 'var(--Text-Primary, #212B36)',
                             }}
                           >
@@ -1295,7 +1295,7 @@ const FinanceScreen = () => {
                               lineHeight: '22px',
                               fontStyle: 'normal',
                               background: '#919EAB33',
-                              fontFamily: 'Public Sans',
+                              fontFamily: 'var(--font-bold)',
                               color: 'var(--Text-Primary, #212B36)',
                             }}
                           >
@@ -1308,7 +1308,7 @@ const FinanceScreen = () => {
                               lineHeight: '22px',
                               fontStyle: 'normal',
                               background: '#919EAB33',
-                              fontFamily: 'Public Sans',
+                              fontFamily: 'var(--font-bold)',
                               color: 'var(--Text-Primary, #212B36)',
                             }}
                           >
@@ -1325,7 +1325,7 @@ const FinanceScreen = () => {
                                 fontSize: '14px',
                                 lineHeight: '22px',
                                 fontStyle: 'normal',
-                                fontFamily: 'Public Sans',
+                                fontFamily: 'var(--font-bold)',
                                 color: 'var(--Text-Primary, #212B36)',
                               }}
                             >
@@ -1337,7 +1337,7 @@ const FinanceScreen = () => {
                                 fontSize: '14px',
                                 lineHeight: '22px',
                                 fontStyle: 'normal',
-                                fontFamily: 'Public Sans',
+                                fontFamily: 'var(--font-bold)',
                                 color: 'var(--Text-Primary, #212B36)',
                               }}
                             >
@@ -1349,7 +1349,7 @@ const FinanceScreen = () => {
                                 fontSize: '14px',
                                 lineHeight: '22px',
                                 fontStyle: 'normal',
-                                fontFamily: 'Public Sans',
+                                fontFamily: 'var(--font-bold)',
                                 color: 'var(--Text-Primary, #212B36)',
                               }}
                             >
@@ -1361,7 +1361,7 @@ const FinanceScreen = () => {
                                 fontSize: '14px',
                                 lineHeight: '22px',
                                 fontStyle: 'normal',
-                                fontFamily: 'Public Sans',
+                                fontFamily: 'var(--font-bold)',
                                 color: 'var(--Text-Primary, #212B36)',
                               }}
                             >
@@ -1373,7 +1373,7 @@ const FinanceScreen = () => {
                                 fontSize: '14px',
                                 lineHeight: '22px',
                                 fontStyle: 'normal',
-                                fontFamily: 'Public Sans',
+                                fontFamily: 'var(--font-bold)',
                                 color: 'var(--Text-Primary, #212B36)',
                               }}
                             >
@@ -1457,7 +1457,7 @@ const FinanceScreen = () => {
                     lineHeight: '24px',
                     textAlign: 'center',
                     fontStyle: 'normal',
-                    fontFamily: 'DFPHeiBold-B5',
+                    fontFamily: 'var(--font-bold)',
                     color: 'var(--Text-Primary, #212B36)',
                   }}
                 >
@@ -1512,7 +1512,7 @@ const FinanceScreen = () => {
                           fontSize: '14px',
                           lineHeight: '24px',
                           fontStyle: 'normal',
-                          fontFamily: 'DFPHeiBold-B5',
+                          fontFamily: 'var(--font-bold)',
                           color: 'var(--Secondary-Mid-Gray, #9B9B9B)',
                         },
                       },
@@ -1558,7 +1558,7 @@ const FinanceScreen = () => {
                         lineHeight: '24px',
                         textAlign: 'center',
                         fontStyle: 'normal',
-                        fontFamily: 'DFPHeiBold-B5',
+                        fontFamily: 'var(--font-bold)',
                         color: 'var(--Primary-ContrastText, #FFF)',
                       }}
                     >
@@ -1605,14 +1605,14 @@ const FinanceScreen = () => {
                     fontWeight: 700,
                     fontStyle: 'normal',
                     lineHeight: 'normal',
-                    fontFamily: 'Open Sans',
+                    fontFamily: 'var(--font-bold)',
                     color: 'var(--Text-Secondary, #637381)',
                     '&.Mui-selected': {
                       fontWeight: 400,
                       fontSize: '14px',
                       lineHeight: '22px',
                       fontStyle: 'normal',
-                      fontFamily: 'DFPHeiBold-B5',
+                      fontFamily: 'var(--font-bold)',
                       color: 'var(--Text-Secondary, #212B36)',
                     },
                   }}
@@ -1630,14 +1630,14 @@ const FinanceScreen = () => {
                     fontWeight: 700,
                     fontStyle: 'normal',
                     lineHeight: 'normal',
-                    fontFamily: 'Open Sans',
+                    fontFamily: 'var(--font-bold)',
                     color: 'var(--Text-Secondary, #637381)',
                     '&.Mui-selected': {
                       fontWeight: 400,
                       fontSize: '14px',
                       lineHeight: '22px',
                       fontStyle: 'normal',
-                      fontFamily: 'DFPHeiBold-B5',
+                      fontFamily: 'var(--font-bold)',
                       color: 'var(--Text-Secondary, #212B36)',
                     },
                   }}
@@ -1715,7 +1715,7 @@ const FinanceScreen = () => {
                               fontSize: '24px',
                               lineHeight: '36px',
                               fontStyle: 'normal',
-                              fontFamily: 'DFPHeiBold-B5',
+                              fontFamily: 'var(--font-bold)',
                             }}
                           >
                             {rowData.name}
@@ -1753,7 +1753,7 @@ const FinanceScreen = () => {
                               fontSize: '16px',
                               lineHeight: '24px',
                               fontStyle: 'normal',
-                              fontFamily: 'DFPHeiMedium-B5',
+                              fontFamily: 'var(--font-medium)',
                               color: 'var(--Primary-Blue, #06C)',
                             }}
                           >
@@ -1768,7 +1768,7 @@ const FinanceScreen = () => {
                               fontStyle: 'normal',
                               whiteSpace: 'nowrap',
                               textOverflow: 'ellipsis',
-                              fontFamily: 'DFPHeiBold-B5',
+                              fontFamily: 'var(--font-bold)',
                               color: 'var(--Primary-Black, #212B36)',
                             }}
                           >
@@ -1792,7 +1792,7 @@ const FinanceScreen = () => {
                               fontSize: '16px',
                               lineHeight: '24px',
                               fontStyle: 'normal',
-                              fontFamily: 'DFPHeiMedium-B5',
+                              fontFamily: 'var(--font-medium)',
                               color: 'var(--Primary-Blue, #06C)',
                             }}
                           >
@@ -1807,7 +1807,7 @@ const FinanceScreen = () => {
                               fontStyle: 'normal',
                               whiteSpace: 'nowrap',
                               textOverflow: 'ellipsis',
-                              fontFamily: 'DFPHeiBold-B5',
+                              fontFamily: 'var(--font-bold)',
                               color: 'var(--Primary-Black, #212B36)',
                             }}
                           >
@@ -1829,7 +1829,7 @@ const FinanceScreen = () => {
                               fontSize: '16px',
                               lineHeight: '24px',
                               fontStyle: 'normal',
-                              fontFamily: 'DFPHeiMedium-B5',
+                              fontFamily: 'var(--font-medium)',
                               color: 'var(--Primary-Blue, #06C)',
                             }}
                           >
@@ -1846,7 +1846,7 @@ const FinanceScreen = () => {
                               whiteSpace: 'nowrap',
                               alignSelf: 'stretch',
                               textOverflow: 'ellipsis',
-                              fontFamily: 'Public Sans',
+                              fontFamily: 'var(--font-bold)',
                               color:
                                 rowData.risk.includes('非常高') ||
                                 rowData.risk.includes('高')
@@ -1980,7 +1980,7 @@ const FinanceScreen = () => {
                             fontSize: '14px',
                             lineHeight: '22px',
                             fontStyle: 'normal',
-                            fontFamily: 'DFPHeiBold-B5',
+                            fontFamily: 'var(--font-bold)',
                             color: 'var(--Text-Disabled, #919EAB)',
                             '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button':
                               {
@@ -2050,7 +2050,7 @@ const FinanceScreen = () => {
                             fontSize: '14px',
                             lineHeight: '22px',
                             fontStyle: 'normal',
-                            fontFamily: 'DFPHeiBold-B5',
+                            fontFamily: 'var(--font-bold)',
                             color: 'var(--Text-Disabled, #919EAB)',
                             '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button':
                               {
@@ -2120,7 +2120,7 @@ const FinanceScreen = () => {
                             fontSize: '14px',
                             lineHeight: '22px',
                             fontStyle: 'normal',
-                            fontFamily: 'DFPHeiBold-B5',
+                            fontFamily: 'var(--font-bold)',
                             color: 'var(--Text-Disabled, #919EAB)',
                             '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button':
                               {
@@ -2151,7 +2151,7 @@ const FinanceScreen = () => {
                                   fontSize: '14px',
                                   lineHeight: '22px',
                                   fontStyle: 'normal',
-                                  fontFamily: 'DFPHeiMedium-B5',
+                                  fontFamily: 'var(--font-medium)',
                                   color: 'var(--Text-Secondary, #637381)',
                                 }}
                               >
@@ -2191,7 +2191,7 @@ const FinanceScreen = () => {
                           lineHeight: '24px',
                           fontStyle: 'normal',
                           textAlign: 'center',
-                          fontFamily: 'Public Sans',
+                          fontFamily: 'var(--font-bold)',
                           color: 'var(--Primary-Black, #212B36)',
                         }}
                       >
@@ -2218,7 +2218,7 @@ const FinanceScreen = () => {
                           lineHeight: '24px',
                           fontStyle: 'normal',
                           textAlign: 'center',
-                          fontFamily: 'Public Sans',
+                          fontFamily: 'var(--font-bold)',
                           color: 'var(--Primary-ContrastText, #FFF)',
                         }}
                       >
@@ -2238,7 +2238,7 @@ const FinanceScreen = () => {
                               lineHeight: '22px',
                               fontStyle: 'normal',
                               background: '#919EAB33',
-                              fontFamily: 'Public Sans',
+                              fontFamily: 'var(--font-bold)',
                               color: 'var(--Text-Primary, #212B36)',
                             }}
                           >
@@ -2251,7 +2251,7 @@ const FinanceScreen = () => {
                               lineHeight: '22px',
                               fontStyle: 'normal',
                               background: '#919EAB33',
-                              fontFamily: 'Public Sans',
+                              fontFamily: 'var(--font-bold)',
                               color: 'var(--Text-Primary, #212B36)',
                             }}
                           >
@@ -2264,7 +2264,7 @@ const FinanceScreen = () => {
                               lineHeight: '22px',
                               fontStyle: 'normal',
                               background: '#919EAB33',
-                              fontFamily: 'Public Sans',
+                              fontFamily: 'var(--font-bold)',
                               color: 'var(--Text-Primary, #212B36)',
                             }}
                           >
@@ -2277,7 +2277,7 @@ const FinanceScreen = () => {
                               lineHeight: '22px',
                               fontStyle: 'normal',
                               background: '#919EAB33',
-                              fontFamily: 'Public Sans',
+                              fontFamily: 'var(--font-bold)',
                               color: 'var(--Text-Primary, #212B36)',
                             }}
                           >
@@ -2290,7 +2290,7 @@ const FinanceScreen = () => {
                               lineHeight: '22px',
                               fontStyle: 'normal',
                               background: '#919EAB33',
-                              fontFamily: 'Public Sans',
+                              fontFamily: 'var(--font-bold)',
                               color: 'var(--Text-Primary, #212B36)',
                             }}
                           >
@@ -2307,7 +2307,7 @@ const FinanceScreen = () => {
                                 fontSize: '14px',
                                 lineHeight: '22px',
                                 fontStyle: 'normal',
-                                fontFamily: 'Public Sans',
+                                fontFamily: 'var(--font-bold)',
                                 color: 'var(--Text-Primary, #212B36)',
                               }}
                             >
@@ -2319,7 +2319,7 @@ const FinanceScreen = () => {
                                 fontSize: '14px',
                                 lineHeight: '22px',
                                 fontStyle: 'normal',
-                                fontFamily: 'Public Sans',
+                                fontFamily: 'var(--font-bold)',
                                 color: 'var(--Text-Primary, #212B36)',
                               }}
                             >
@@ -2331,7 +2331,7 @@ const FinanceScreen = () => {
                                 fontSize: '14px',
                                 lineHeight: '22px',
                                 fontStyle: 'normal',
-                                fontFamily: 'Public Sans',
+                                fontFamily: 'var(--font-bold)',
                                 color: 'var(--Text-Primary, #212B36)',
                               }}
                             >
@@ -2343,7 +2343,7 @@ const FinanceScreen = () => {
                                 fontSize: '14px',
                                 lineHeight: '22px',
                                 fontStyle: 'normal',
-                                fontFamily: 'Public Sans',
+                                fontFamily: 'var(--font-bold)',
                                 color: 'var(--Text-Primary, #212B36)',
                               }}
                             >
@@ -2355,7 +2355,7 @@ const FinanceScreen = () => {
                                 fontSize: '14px',
                                 lineHeight: '22px',
                                 fontStyle: 'normal',
-                                fontFamily: 'Public Sans',
+                                fontFamily: 'var(--font-bold)',
                                 color: 'var(--Text-Primary, #212B36)',
                               }}
                             >
@@ -2423,7 +2423,7 @@ const FinanceScreen = () => {
               overflow: 'hidden',
               fontStyle: 'normal',
               textOverflow: 'ellipsis',
-              fontFamily: 'DFPHeiBold-B5',
+              fontFamily: 'var(--font-bold)',
               color: ' var(--Primary-Black, #212B36)',
             }}
           >
@@ -2451,7 +2451,7 @@ const FinanceScreen = () => {
               overflow: 'hidden',
               fontStyle: 'normal',
               textOverflow: 'ellipsis',
-              fontFamily: 'DFPHeiBold-B5',
+              fontFamily: 'var(--font-bold)',
               color: 'var(--Primary-DBS-Red, #C00)',
             }}
           >

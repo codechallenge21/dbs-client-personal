@@ -1,31 +1,31 @@
 'use client';
 
+import FinanceDetailFamilyTree from '@/components/finance-detail-family-tree/FinanceDetailFamilyTree';
+import FinanceDetailInfo from '@/components/finance-detail-info/FinanceDetailInfo';
+import FinanceDetailInventorySheet from '@/components/finance-detail-inventory-sheet/FinanceDetailInventorySheet';
+import FinanceDetailSolutionHistory from '@/components/finance-detail-solution-history/FinanceDetailSolutionHistory';
+import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
+import {
+    ArrowBackIosNewRounded,
+    ArrowDropDownRounded,
+    MenuRounded,
+    SettingsInputComponentRounded,
+    StarBorderRounded,
+    StarRounded,
+} from '@mui/icons-material';
+import {
+    Box,
+    Button,
+    IconButton,
+    Tab,
+    Tabs,
+    Typography,
+    useMediaQuery,
+    useTheme,
+} from '@mui/material';
+import { useRouter } from 'next/navigation';
 import type React from 'react';
 import { useState } from 'react';
-import {
-  Box,
-  Tab,
-  Tabs,
-  Button,
-  useTheme,
-  Typography,
-  IconButton,
-  useMediaQuery,
-} from '@mui/material';
-import {
-  StarRounded,
-  MenuRounded,
-  StarBorderRounded,
-  ArrowDropDownRounded,
-  ArrowBackIosNewRounded,
-  SettingsInputComponentRounded,
-} from '@mui/icons-material';
-import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
-import FinanceDetailInfo from '@/components/finance-detail-info/FinanceDetailInfo';
-import FinanceDetailFamilyTree from '@/components/finance-detail-family-tree/FinanceDetailFamilyTree';
-import FinanceDetailInventorySheet from '@/components/finance-detail-inventory-sheet/FinanceDetailInventorySheet';
-import { useRouter } from 'next/navigation';
-import FinanceDetailSolutionHistory from '@/components/finance-detail-solution-history/FinanceDetailSolutionHistory';
 
 function TabPanel(props: {
   value: number;
@@ -135,7 +135,7 @@ export default function FinanceDetailScreen() {
                     lineHeight: '24px',
                     textAlign: 'center',
                     fontStyle: 'normal',
-                    fontFamily: 'DFPHeiBold-B5',
+                    fontFamily: 'var(--font-bold)',
                     color: 'var(--Text-Primary, #212B36)',
                   }}
                 >
@@ -186,7 +186,7 @@ export default function FinanceDetailScreen() {
                     textAlign: 'center',
                     fontStyle: 'normal',
                     textTransform: 'none',
-                    fontFamily: 'DFPHeiBold-B5',
+                    fontFamily: 'var(--font-bold)',
                     color: 'var(--Text-Primary, #212B36)',
                   }}
                 >
@@ -221,7 +221,7 @@ export default function FinanceDetailScreen() {
                     lineHeight: '24px',
                     fontStyle: 'normal',
                     textAlign: 'center',
-                    fontFamily: 'DFPHeiBold-B5',
+                    fontFamily: 'var(--font-bold)',
                     color: 'var(--Text-Primary, #212B36)',
                   }}
                 >
@@ -295,14 +295,14 @@ export default function FinanceDetailScreen() {
                 fontWeight: 700,
                 fontStyle: 'normal',
                 lineHeight: 'normal',
-                fontFamily: 'Open Sans',
+                fontFamily: 'var(--font-bold)',
                 color: 'var(--Text-Secondary, #637381)',
                 '&.Mui-selected': {
                   fontWeight: 400,
                   fontSize: '14px',
                   lineHeight: '22px',
                   fontStyle: 'normal',
-                  fontFamily: 'DFPHeiBold-B5',
+                  fontFamily: 'var(--font-bold)',
                   color: 'var(--Text-Secondary, #212B36)',
                 },
               }}
@@ -320,14 +320,14 @@ export default function FinanceDetailScreen() {
                 fontWeight: 700,
                 fontStyle: 'normal',
                 lineHeight: 'normal',
-                fontFamily: 'Open Sans',
+                fontFamily: 'var(--font-bold)',
                 color: 'var(--Text-Secondary, #637381)',
                 '&.Mui-selected': {
                   fontWeight: 400,
                   fontSize: '14px',
                   lineHeight: '22px',
                   fontStyle: 'normal',
-                  fontFamily: 'DFPHeiBold-B5',
+                  fontFamily: 'var(--font-bold)',
                   color: 'var(--Text-Secondary, #212B36)',
                 },
               }}
@@ -345,14 +345,14 @@ export default function FinanceDetailScreen() {
                 fontWeight: 700,
                 fontStyle: 'normal',
                 lineHeight: 'normal',
-                fontFamily: 'Open Sans',
+                fontFamily: 'var(--font-bold)',
                 color: 'var(--Text-Secondary, #637381)',
                 '&.Mui-selected': {
                   fontWeight: 400,
                   fontSize: '14px',
                   lineHeight: '22px',
                   fontStyle: 'normal',
-                  fontFamily: 'DFPHeiBold-B5',
+                  fontFamily: 'var(--font-bold)',
                   color: 'var(--Text-Secondary, #212B36)',
                 },
               }}
@@ -370,14 +370,14 @@ export default function FinanceDetailScreen() {
                 fontWeight: 700,
                 fontStyle: 'normal',
                 lineHeight: 'normal',
-                fontFamily: 'Open Sans',
+                fontFamily: 'var(--font-bold)',
                 color: 'var(--Text-Secondary, #637381)',
                 '&.Mui-selected': {
                   fontWeight: 400,
                   fontSize: '14px',
                   lineHeight: '22px',
                   fontStyle: 'normal',
-                  fontFamily: 'DFPHeiBold-B5',
+                  fontFamily: 'var(--font-bold)',
                   color: 'var(--Text-Secondary, #212B36)',
                 },
               }}
