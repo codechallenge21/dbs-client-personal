@@ -32,7 +32,7 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ handleUploadFile }) => {
   const { showSnackbar } = useContext(SnackbarContext);
 
   const FILE_CONFIG = {
-    maxSize: 200 * 1024 * 1024, // 200MB
+    maxSize: 300 * 1024 * 1024, // 300MB
     allowedFormats: [
       'audio/mpeg',
       'audio/mp4',
@@ -58,7 +58,7 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ handleUploadFile }) => {
     errorMessages: {
       invalidFormat:
         '不支援的檔案格式，請選擇 mp3, mp4, mpeg, mpga, m4a, wav, aac, webm 或 amr 格式',
-      sizeExceeded: '檔案大小超過 200MB 限制',
+      sizeExceeded: '檔案大小超過 300MB 限制',
       uploadFailed: '上傳失敗',
     },
     supportedFormats: {
@@ -137,7 +137,7 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ handleUploadFile }) => {
   };
 
   const handleDropRejected = () => {
-    showSnackbar('檔案格式錯誤或檔案大小超過 200MB 限制', 'error');
+    showSnackbar('檔案格式錯誤或檔案大小超過 300MB 限制', 'error');
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({

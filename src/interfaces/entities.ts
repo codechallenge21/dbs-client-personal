@@ -37,6 +37,16 @@ export interface FileListType {
   preview: string | null;
 }
 
+export interface OrganizationChannelFeedback {
+  organizationChannelFeedbackId: string;
+  organizationChannelFeedbackType: 'POSITIVE' | 'NEGATIVE';
+  organizationChannelFeedbackTarget: string;
+  organizationChannelFeedbackTargetId: string;
+  organizationChannelFeedbackNegativeCategory?: string;
+  organizationChannelFeedbackComment?: string;
+  organizationChannelFeedbackCreateDate: string;
+}
+
 export interface OrganizationChannelMessage {
   organizationChannelMessageId?: string;
   organizationChannelMessageType: 'AI' | 'USER';
@@ -45,6 +55,7 @@ export interface OrganizationChannelMessage {
   organizationChannelMessageTokenCount?: number;
   organizationChannelMessageCreateDate?: string;
   organizationChannelFiles?: FileListType[];
+  organizationChannelFeedbackList?: OrganizationChannelFeedback[];
 }
 
 export interface OrganizationChannelFile {
