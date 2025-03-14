@@ -97,7 +97,7 @@ const LoginDialog = ({
               left: "50%",
               margin: "0px",
               width: isMobile ? "324px" : "600px",
-              height: isMobile ? "540px" : "532px",
+              height: isMobile ? "580px" : "580px",
               borderRadius: "8px",
               position: "absolute",
               paddingBottom: "24px",
@@ -446,6 +446,76 @@ const LoginDialog = ({
             </Typography>
           </Button>
         </Box>
+        <Typography
+          variant="body2"
+          sx={{
+            fontFamily: "var(--font-medium)",
+            fontSize: "14px",
+            justifyContent: "center",
+            textAlign: "center",
+            mt: "16px"
+          }}
+        >
+          <Typography
+            component="button"
+            color="#06C"
+            sx={{
+              fontFamily: "var(--font-medium)",
+              fontSize: "14px",
+              cursor: "pointer",
+              border: "none",
+              background: "transparent",
+            }}
+            onClick={() => {
+              window.open(
+                "https://www.egroup-infocenter.com/policies?tab=termsOfUse",
+                "_blank"
+              );
+            }}
+          >
+            《服務條款》{" "}
+          </Typography>
+          |
+          <Typography
+            component="button"
+            color="#06C"
+            sx={{
+              border: "none",
+              fontFamily: "var(--font-medium)",
+              fontSize: "14px",
+              cursor: "pointer",
+              background: "transparent",
+            }}
+            onClick={() => {
+              window.open(
+                "https://www.egroup-infocenter.com/policies?tab=privacyPolicy",
+                "_blank"
+              );
+            }}
+          >
+            《隱私政策》
+          </Typography>
+          |
+          <Typography
+            component="button"
+            color="#06C"
+            sx={{
+              fontFamily: "var(--font-medium)",
+              fontSize: "14px",
+              cursor: "pointer",
+              border: "none",
+              background: "transparent",
+            }}
+            onClick={() => {
+              window.open(
+                "https://www.egroup-infocenter.com/policies?tab=cookiePolicy",
+                "_blank"
+              );
+            }}
+          >
+            《Cookie 政策》
+          </Typography>
+        </Typography>
       </Dialog>
     </>
   );
