@@ -355,7 +355,7 @@ const ChannelSummaryContent = () => {
                         fontSize: '16px',
                         overflow: 'hidden',
                         fontStyle: 'normal',
-                        fontFamily: 'Inter',
+                        fontFamily: 'var(--font-bold)',
                         lineHeight: 'normal',
                         textOverflow: 'ellipsis',
                         color: 'var(--Text-Primary, #212B36)',

@@ -21,6 +21,7 @@ import {
   TERMSOFUSETITLE,
 } from 'minimal/_mock/_policies';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
 
@@ -170,15 +171,19 @@ const PoliciesContent = function () {
               fontSize: '16px',
               lineHeight: 1.5,
               margin: 0,
+              fontFamily: 'var(--font-bold)',
             },
             '& ul, & ol': {
               paddingLeft: '1.5rem',
+              fontFamily: 'var(--font-bold)',
             },
             '& li': {
               margin: '0',
+              fontFamily: 'var(--font-bold)',
             },
             '& strong': {
               fontWeight: 700,
+              fontFamily: 'var(--font-bold)',
             },
           }}
           dangerouslySetInnerHTML={{ __html: policyContent }}
@@ -214,18 +219,20 @@ const PoliciesContent = function () {
                 paddingInline: '7px',
               }}
             >
-              <Image
-                src="/assets/images/DBS_logo.svg"
-                alt="DBS's logo"
-                width={200}
-                height={52}
-                priority
-                quality={100}
-                style={{
-                  width: '160px',
-                  height: 'auto',
-                }}
-              />
+              <Link href="/" passHref style={{ display: 'block', cursor: 'pointer' }}>
+                <Image
+                  src="/assets/images/DBS_logo.svg"
+                  alt="DBS's logo"
+                  width={200}
+                  height={52}
+                  priority
+                  quality={100}
+                  style={{
+                    width: '160px',
+                    height: 'auto',
+                  }}
+                />
+              </Link>
               <Typography
                 variant="h5"
                 className={classes.siteTitle}
@@ -234,8 +241,8 @@ const PoliciesContent = function () {
                   display: 'flex',
                   alignItems: 'center',
                   position: 'relative',
-                  top: '2px',
-                  fontFamily: 'var(--font-bold)',
+                  top: '0px',
+                  fontFamily: 'var(--font-medium)',
                 }}
               >
                 財務健檢網
