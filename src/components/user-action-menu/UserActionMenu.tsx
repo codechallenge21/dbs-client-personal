@@ -2,7 +2,6 @@
 import ChevronRightRoundedIcon from "@mui/icons-material/ChevronRightRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import PolicyRoundedIcon from "@mui/icons-material/PolicyRounded";
-import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 import { Box, Divider, Menu, MenuItem, Typography } from "@mui/material";
 import React, { useState } from "react";
 
@@ -76,7 +75,7 @@ export const UserActionMenu: React.FC<UserActionMenuProps> = ({
           </Typography>
         </MenuItem>
         <Divider sx={{ my: 1, color: "#919EAB33" }} />
-        <MenuItem sx={{ p: "8px" }}>
+        {/* <MenuItem sx={{ p: "8px" }}>
           <Box
             sx={{
               display: "flex",
@@ -99,7 +98,7 @@ export const UserActionMenu: React.FC<UserActionMenuProps> = ({
               設定
             </Typography>
           </Box>
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem sx={{ p: "8px" }} onClick={handleMenuOpen}>
           <Box
             sx={{

@@ -34,9 +34,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     fontSize: "14px",
     lineHeight: "18px",
     fontWeight: 500,
+    fontFamily: 'var(--font-bold)',
     justifyContent: "center",
   },
-  dropdownItem: {},
+  dropdownItem: {
+    fontFamily: 'var(--font-bold)',
+  },
   customBadge: {
     borderRadius: "6px",
     fontSize: "12px",
@@ -55,6 +58,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     textOverflow: "ellipsis",
     display: "inline-block",
     verticalAlign: "middle",
+    fontFamily: 'var(--font-bold)',
   },
 }));
 
@@ -168,6 +172,7 @@ const ResponsiveTabs = forwardRef<HTMLDivElement, ResponsiveTabsProps>(
                   ) : undefined
                 }
                 iconPosition="end"
+                sx={{ fontFamily: 'var(--font-bold)' }}
               />
             ))}
           </Tabs>
@@ -187,7 +192,7 @@ const ResponsiveTabs = forwardRef<HTMLDivElement, ResponsiveTabsProps>(
         ref={ref}
       >
         <FormControl fullWidth>
-          <InputLabel id={`${id}-label`}>{tabName}</InputLabel>
+          <InputLabel id={`${id}-label`} sx={{ fontFamily: 'var(--font-bold)' }}>{tabName}</InputLabel>
           <Select
             open={selectOpen}
             onClose={handleSelectClose}
@@ -198,6 +203,7 @@ const ResponsiveTabs = forwardRef<HTMLDivElement, ResponsiveTabsProps>(
             value={valueData}
             label={tabName}
             onChange={handleChange}
+            sx={{ fontFamily: 'var(--font-bold)' }}
             MenuProps={{
               PaperProps: {
                 onClick: (e) => e.stopPropagation(),
@@ -216,6 +222,7 @@ const ResponsiveTabs = forwardRef<HTMLDivElement, ResponsiveTabsProps>(
                 className={classes.dropdownItem}
                 id={usedInDrawer ? `${el.id}-sidebar` : el.id}
                 data-tid={el.testId}
+                sx={{ fontFamily: 'var(--font-bold)' }}
               >
                 {el.label}
               </MenuItem>

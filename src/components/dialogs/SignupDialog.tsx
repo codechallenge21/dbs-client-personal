@@ -7,15 +7,15 @@ import apis from '@/utils/hooks/apis/apis';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import { CloseRounded } from '@mui/icons-material';
 import {
-  Box,
-  Button,
-  Dialog,
-  IconButton,
-  InputAdornment,
-  TextField,
-  Typography,
-  useMediaQuery,
-  useTheme,
+    Box,
+    Button,
+    Dialog,
+    IconButton,
+    InputAdornment,
+    TextField,
+    Typography,
+    useMediaQuery,
+    useTheme,
 } from '@mui/material';
 import Image from 'next/image';
 import React, { useContext, useState } from 'react';
@@ -522,7 +522,7 @@ const SignupDialog: React.FC<SignupDialogProps> = ({
               textAlign: 'center',
               fontStyle: 'normal',
               lineHeight: 'normal',
-              fontFamily: 'Open Sans',
+              fontFamily: 'var(--font-bold)',
               color: 'var(--Error-ContrastText, #FFF)',
             }}
           >

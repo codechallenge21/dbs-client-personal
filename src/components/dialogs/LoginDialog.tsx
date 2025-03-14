@@ -406,7 +406,7 @@ const LoginDialog = ({
                   textAlign: "center",
                   fontStyle: "normal",
                   lineHeight: "normal",
-                  fontFamily: "Open Sans",
+                  fontFamily: 'var(--font-bold)',
                   color: "var(--Error-ContrastText, #FFF)",
                   justifyContent: "center",
                   alignItems: "center",

@@ -1,37 +1,37 @@
-import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
-  Button,
-  IconButton,
-  TextField,
-  InputAdornment,
-  Dialog,
-  useTheme,
-  useMediaQuery,
-  DialogContent,
-} from '@mui/material';
-import {
-  MicRounded,
-  CloseRounded,
-  PublicRounded,
-  SearchRounded,
-  PermIdentityRounded,
-  ThumbDownOffAltRounded,
-  LibraryBooksRounded,
-  ContentCopyRounded,
-  SendRounded,
-  ThumbUpOffAlt,
-  StopCircleRounded,
-  ThumbUpAltRounded,
-} from '@mui/icons-material';
-import { useCallback, useContext, useState } from 'react';
-import { OrganizationChannelMessage } from '@/interfaces/entities';
-import CustomLoader from '../loader/loader';
 import { SnackbarContext } from '@/context/SnackbarContext';
-import PositiveFeedbackModal from './PositiveFeedbackModal';
+import { OrganizationChannelMessage } from '@/interfaces/entities';
+import {
+    CloseRounded,
+    ContentCopyRounded,
+    LibraryBooksRounded,
+    MicRounded,
+    PermIdentityRounded,
+    PublicRounded,
+    SearchRounded,
+    SendRounded,
+    StopCircleRounded,
+    ThumbDownOffAltRounded,
+    ThumbUpAltRounded,
+    ThumbUpOffAlt,
+} from '@mui/icons-material';
+import {
+    Box,
+    Button,
+    Card,
+    CardContent,
+    Dialog,
+    DialogContent,
+    IconButton,
+    InputAdornment,
+    TextField,
+    Typography,
+    useMediaQuery,
+    useTheme,
+} from '@mui/material';
+import { useCallback, useContext, useState } from 'react';
+import CustomLoader from '../loader/loader';
 import NegativeFeedbackModal from './NegativeFeedbackModal';
+import PositiveFeedbackModal from './PositiveFeedbackModal';
 
 interface WishPoolDialogProps {
   open: boolean;
@@ -153,7 +153,7 @@ const WishPoolDialog: React.FC<WishPoolDialogProps> = ({ open, onClose }) => {
                 color: '#212B36',
                 lineHeight: '32px',
                 letterSpacing: '0%',
-                fontFamily: 'DFPHeiBold-B5',
+                fontFamily: 'var(--font-bold)',
               }}
             >
               許願池
@@ -256,7 +256,7 @@ const WishPoolDialog: React.FC<WishPoolDialogProps> = ({ open, onClose }) => {
                             fontSize: '16px',
                             lineHeight: '16px',
                             letterSpacing: '0%',
-                            fontFamily: 'DFPHeiBold-B5',
+                            fontFamily: 'var(--font-bold)',
                             wordBreak: 'break-word',
                           }}
                         >
@@ -319,7 +319,7 @@ const WishPoolDialog: React.FC<WishPoolDialogProps> = ({ open, onClose }) => {
                                 fontSize: '24px',
                                 lineHeight: '24px',
                                 letterSpacing: '0%',
-                                fontFamily: 'DFPHeiBold-B5',
+                                fontFamily: 'var(--font-bold)',
                               }}
                             >
                               你可能在找
@@ -379,7 +379,7 @@ const WishPoolDialog: React.FC<WishPoolDialogProps> = ({ open, onClose }) => {
                                         color: '#212B36',
                                         lineHeight: '24px',
                                         letterSpacing: '0%',
-                                        fontFamily: 'DFPHeiBold-B5',
+                                        fontFamily: 'var(--font-bold)',
                                       }}
                                     >
                                       {item}
@@ -401,7 +401,7 @@ const WishPoolDialog: React.FC<WishPoolDialogProps> = ({ open, onClose }) => {
                                           color: '#CC0000',
                                           lineHeight: '24px',
                                           letterSpacing: '0%',
-                                          fontFamily: 'DFPHeiBold-B5',
+                                          fontFamily: 'var(--font-bold)',
                                         }}
                                       >
                                         URL
@@ -457,7 +457,7 @@ const WishPoolDialog: React.FC<WishPoolDialogProps> = ({ open, onClose }) => {
                                   color: '#212B36',
                                   lineHeight: '24px',
                                   letterSpacing: '0%',
-                                  fontFamily: 'DFPHeiBold-B5',
+                                  fontFamily: 'var(--font-bold)',
                                 }}
                               >
                                 回覆
@@ -494,7 +494,7 @@ const WishPoolDialog: React.FC<WishPoolDialogProps> = ({ open, onClose }) => {
                                   lineHeight: '24px',
                                   textAlign: 'center',
                                   letterSpacing: '0px',
-                                  fontFamily: 'Public Sans',
+                                  fontFamily: 'var(--font-bold)',
                                 }}
                               >
                                 複製
@@ -509,7 +509,7 @@ const WishPoolDialog: React.FC<WishPoolDialogProps> = ({ open, onClose }) => {
                               color: '#212B36',
                               lineHeight: '27px',
                               letterSpacing: '0%',
-                              fontFamily: 'DFPHeiBold-B5',
+                              fontFamily: 'var(--font-bold)',
                             }}
                           >
                             上面的內容是關於＂協助個案進行財務狀況分析＂你可能在找的內容，希望有幫到你。
@@ -528,7 +528,7 @@ const WishPoolDialog: React.FC<WishPoolDialogProps> = ({ open, onClose }) => {
                                 color: '#212B36',
                                 lineHeight: '27px',
                                 letterSpacing: '0%',
-                                fontFamily: 'DFPHeiBold-B5',
+                                fontFamily: 'var(--font-bold)',
                               }}
                             >
                               沒有你想要的內容?
@@ -545,7 +545,7 @@ const WishPoolDialog: React.FC<WishPoolDialogProps> = ({ open, onClose }) => {
                                 background: '#5C443A',
                                 fontWeight: 600,
                                 fontSize: '16px',
-                                fontFamily: 'DFPHeiBold-B5',
+                                fontFamily: 'var(--font-bold)',
                                 lineHeight: 'normal',
                               }}
                               onClick={() => {
@@ -666,7 +666,7 @@ const WishPoolDialog: React.FC<WishPoolDialogProps> = ({ open, onClose }) => {
                       alignSelf: 'stretch',
                       color: '#000',
                       textAlign: 'center',
-                      fontFamily: 'DFPHeiBold-B5',
+                      fontFamily: 'var(--font-bold)',
                       fontSize: 32,
                       fontStyle: 'normal',
                       fontWeight: 400,

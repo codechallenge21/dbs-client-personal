@@ -1029,7 +1029,7 @@ const ChannelSummaryContent = () => {
                                             fontWeight: 600,
                                             fontSize: '24px',
                                             textAlign: 'start',
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'var(--font-bold)',
                                             fontStyle: 'normal',
                                             lineHeight: 'normal',
                                             color:
@@ -1059,7 +1059,7 @@ const ChannelSummaryContent = () => {
                                           overflow: 'hidden',
                                           fontStyle: 'normal',
                                           lineHeight: 'normal',
-                                          fontFamily: 'Open Sans',
+                                          fontFamily: 'var(--font-bold)',
                                           textOverflow: 'ellipsis',
                                           color:
                                             'var(--Primary-Black, #212B36)',
@@ -1137,7 +1137,7 @@ const ChannelSummaryContent = () => {
                                             fontWeight: 600,
                                             fontSize: '24px',
                                             textAlign: 'start',
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'var(--font-bold)',
                                             fontStyle: 'normal',
                                             lineHeight: 'normal',
                                             color:
@@ -1167,7 +1167,7 @@ const ChannelSummaryContent = () => {
                                           overflow: 'hidden',
                                           fontStyle: 'normal',
                                           lineHeight: 'normal',
-                                          fontFamily: 'Open Sans',
+                                          fontFamily: 'var(--font-bold)',
                                           textOverflow: 'ellipsis',
                                           color:
                                             'var(--Primary-Black, #212B36)',
@@ -1245,7 +1245,7 @@ const ChannelSummaryContent = () => {
                                             fontWeight: 600,
                                             fontSize: '24px',
                                             textAlign: 'start',
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'var(--font-bold)',
                                             fontStyle: 'normal',
                                             lineHeight: 'normal',
                                             color:
@@ -1275,7 +1275,7 @@ const ChannelSummaryContent = () => {
                                           overflow: 'hidden',
                                           fontStyle: 'normal',
                                           lineHeight: 'normal',
-                                          fontFamily: 'Open Sans',
+                                          fontFamily: 'var(--font-bold)',
                                           textOverflow: 'ellipsis',
                                           color:
                                             'var(--Primary-Black, #212B36)',
@@ -1342,7 +1342,7 @@ const ChannelSummaryContent = () => {
                   fontWeight: 600,
                   fontSize: '16px',
                   overflow: 'hidden',
-                  fontFamily: 'Inter',
+                  fontFamily: 'var(--font-bold)',
                   fontStyle: 'normal',
                   lineHeight: 'normal',
                   textOverflow: 'ellipsis',
@@ -1526,7 +1526,7 @@ const ChannelSummaryContent = () => {
                   fontSize: '14px',
                   fontStyle: 'normal',
                   lineHeight: 'normal',
-                  fontFamily: 'Open Sans',
+                  fontFamily: 'var(--font-bold)',
                   color: 'var(--Text-Secondary, #637381)',
                   '&.Mui-selected': {
                     color: 'var(--Text-Primary, #212B36)',
@@ -1541,7 +1541,7 @@ const ChannelSummaryContent = () => {
                   fontSize: '14px',
                   fontStyle: 'normal',
                   lineHeight: 'normal',
-                  fontFamily: 'Open Sans',
+                  fontFamily: 'var(--font-bold)',
                   color: 'var(--Text-Secondary, #637381)',
                   '&.Mui-selected': {
                     color: 'var(--Text-Primary, #212B36)',
@@ -1559,7 +1559,7 @@ const ChannelSummaryContent = () => {
                   fontSize: '14px',
                   fontStyle: 'normal',
                   lineHeight: 'normal',
-                  fontFamily: 'Open Sans',
+                  fontFamily: 'var(--font-bold)',
                   color: 'var(--Text-Secondary, #637381)',
                   '&.Mui-selected': {
                     color: 'var(--Text-Primary, #212B36)',
@@ -1915,7 +1915,7 @@ const ChannelSummaryContent = () => {
                                 fontWeight: 600,
                                 fontSize: '24px',
                                 textAlign: 'start',
-                                fontFamily: 'Inter',
+                                fontFamily: 'var(--font-bold)',
                                 fontStyle: 'normal',
                                 lineHeight: 'normal',
                                 color: 'var(--Primary-Black, #212B36)',
@@ -1944,7 +1944,7 @@ const ChannelSummaryContent = () => {
                               overflow: 'hidden',
                               fontStyle: 'normal',
                               lineHeight: 'normal',
-                              fontFamily: 'Open Sans',
+                              fontFamily: 'var(--font-bold)',
                               textOverflow: 'ellipsis',
                               color: 'var(--Primary-Black, #212B36)',
                             }}
@@ -2021,7 +2021,7 @@ const ChannelSummaryContent = () => {
                                 fontWeight: 600,
                                 fontSize: '24px',
                                 textAlign: 'start',
-                                fontFamily: 'Inter',
+                                fontFamily: 'var(--font-bold)',
                                 fontStyle: 'normal',
                                 lineHeight: 'normal',
                                 color: 'var(--Primary-Black, #212B36)',
@@ -2050,7 +2050,7 @@ const ChannelSummaryContent = () => {
                               overflow: 'hidden',
                               fontStyle: 'normal',
                               lineHeight: 'normal',
-                              fontFamily: 'Open Sans',
+                              fontFamily: 'var(--font-bold)',
                               textOverflow: 'ellipsis',
                               color: 'var(--Primary-Black, #212B36)',
                             }}
@@ -2127,7 +2127,7 @@ const ChannelSummaryContent = () => {
                                 fontWeight: 600,
                                 fontSize: '24px',
                                 textAlign: 'start',
-                                fontFamily: 'Inter',
+                                fontFamily: 'var(--font-bold)',
                                 fontStyle: 'normal',
                                 lineHeight: 'normal',
                                 color: 'var(--Primary-Black, #212B36)',
@@ -2156,7 +2156,7 @@ const ChannelSummaryContent = () => {
                               overflow: 'hidden',
                               fontStyle: 'normal',
                               lineHeight: 'normal',
-                              fontFamily: 'Open Sans',
+                              fontFamily: 'var(--font-bold)',
                               textOverflow: 'ellipsis',
                               color: 'var(--Primary-Black, #212B36)',
                             }}

@@ -1,24 +1,24 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
-import {
-  Box,
-  TextField,
-  Typography,
-  Paper,
-  Stack,
-  Button,
-  Checkbox,
-  IconButton,
-  InputAdornment,
-  useMediaQuery,
-  useTheme,
-  CircularProgress,
-} from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
 import DeleteIcon from '@mui/icons-material/Delete';
+import SearchIcon from '@mui/icons-material/Search';
 import StarRateRounded from '@mui/icons-material/StarRateRounded';
-import { motion, AnimatePresence } from 'framer-motion';
+import {
+    Box,
+    Button,
+    Checkbox,
+    CircularProgress,
+    IconButton,
+    InputAdornment,
+    Paper,
+    Stack,
+    TextField,
+    Typography,
+    useMediaQuery,
+    useTheme,
+} from '@mui/material';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 const selectButtonVariants = {
   initial: { x: 500, opacity: 1 },
@@ -240,7 +240,7 @@ export default function FinanceSearchCombined() {
                 <Typography
                   sx={{
                     color: 'var(--Primary-Black, #212B36)',
-                    fontFamily: 'Open Sans',
+                    fontFamily: 'var(--font-bold)',
                     fontSize: '14px',
                     fontStyle: 'normal',
                     fontWeight: 700,
@@ -270,7 +270,7 @@ export default function FinanceSearchCombined() {
                       onClick={handleToggleV2}
                       sx={{
                         color: 'primary.main',
-                        fontFamily: 'Open Sans',
+                        fontFamily: 'var(--font-bold)',
                         fontSize: '14px',
                         fontStyle: 'normal',
                         fontWeight: 700,
@@ -370,7 +370,7 @@ export default function FinanceSearchCombined() {
                         <Typography
                           sx={{
                             color: '#900',
-                            fontFamily: 'Open Sans',
+                            fontFamily: 'var(--font-bold)',
                             fontSize: '14px',
                             fontStyle: 'normal',
                             fontWeight: 700,
@@ -390,7 +390,7 @@ export default function FinanceSearchCombined() {
                             overflow: 'hidden',
                             color: 'text.secondary',
                             textOverflow: 'ellipsis',
-                            fontFamily: 'Open Sans',
+                            fontFamily: 'var(--font-bold)',
                             fontSize: '12px',
                             fontStyle: 'normal',
                             fontWeight: 400,
@@ -477,7 +477,7 @@ export default function FinanceSearchCombined() {
                 <Typography
                   sx={{
                     color: '#CC0000',
-                    fontFamily: 'Open Sans',
+                    fontFamily: 'var(--font-bold)',
                     fontSize: '14px',
                     fontStyle: 'normal',
                     fontWeight: 700,
@@ -505,7 +505,7 @@ export default function FinanceSearchCombined() {
                       onClick={handleSelectAll}
                       sx={{
                         color: '#CC0000',
-                        fontFamily: 'Open Sans',
+                        fontFamily: 'var(--font-bold)',
                         fontSize: '14px',
                         fontStyle: 'normal',
                         fontWeight: 700,
@@ -523,7 +523,7 @@ export default function FinanceSearchCombined() {
                   aria-label="Cancel"
                   variant="outlined"
                   sx={{
-                    fontFamily: 'Open Sans',
+                    fontFamily: 'var(--font-bold)',
                     fontSize: '14px',
                     fontStyle: 'normal',
                     fontWeight: 700,
@@ -542,7 +542,7 @@ export default function FinanceSearchCombined() {
                   variant="contained"
                   disabled={selectedChannels.length === 0}
                   sx={{
-                    fontFamily: 'Open Sans',
+                    fontFamily: 'var(--font-bold)',
                     fontSize: '14px',
                     fontStyle: 'normal',
                     fontWeight: 700,
@@ -627,7 +627,7 @@ export default function FinanceSearchCombined() {
                       <Typography
                         sx={{
                           color: '#990000',
-                          fontFamily: 'Open Sans',
+                          fontFamily: 'var(--font-bold)',
                           fontSize: '14px',
                           fontStyle: 'normal',
                           fontWeight: 700,
@@ -646,7 +646,7 @@ export default function FinanceSearchCombined() {
                           overflow: 'hidden',
                           color: 'var(--Secondary-Dark-Gray, #4A4A4A)',
                           textOverflow: 'ellipsis',
-                          fontFamily: 'DFPHeiMedium-B5',
+                          fontFamily: 'var(--font-medium)',
                           fontSize: '12px',
                           fontStyle: 'normal',
                           fontWeight: 400,
