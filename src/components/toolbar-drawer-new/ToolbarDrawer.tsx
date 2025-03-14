@@ -98,7 +98,7 @@ const drawerItems = [
   {
     text: '財務快篩',
     icon: <PaidRounded sx={{ color: '#212B36' }} />,
-    route: '', //financial-screening
+    route: '/finance',
   },
   {
     text: '知識庫',
