@@ -967,7 +967,6 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
           marginRight: isMobile ? 0 : openDataSource && !isTablet ? '446px' : 0,
           overflow: 'auto',
           transition: 'margin-left 0.3s',
-          borderTop: '1px solid transparent',
           marginLeft:
             isExpanded && !isMobile ? '255px' : isMobile ? '0' : '75px',
           ...customScrollbarStyle,

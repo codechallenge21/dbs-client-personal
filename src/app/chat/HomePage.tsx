@@ -30,7 +30,6 @@ const HomePage = () => {
   const {
     selectedChannel,
     setSelectedChannelId,
-    chatResponses,
     advisorType,
     setSelectedChannel,
     setChatResponses,
@@ -134,12 +133,10 @@ const HomePage = () => {
         sx={{
           display: 'flex',
           borderRadius: '8px',
-          marginTop:
-            chatResponses.length > 0 || selectedChannel ? '16px !important' : 0,
           flexDirection: 'column',
           backgroundColor: '#FFF',
           justifyContent: isMobile && chatsData?.length ? 'flex-end' : 'center',
-          height: isMobile ? '100vh' : '96.5vh',
+          height: isMobile ? '100vh' : 'calc(100vh - 32px)',
         }}
       >
         <Header
