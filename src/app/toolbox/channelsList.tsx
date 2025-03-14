@@ -260,26 +260,62 @@ const ChannelsList = () => {
   };
 
   // Updated upload handler to support multiple file uploads.
-  const handleUploadFile = async (file: File, fileInfo: fileProps) => {
+  const handleUploadFiles = async (files: File[], filesInfo: fileProps[]) => {
     try {
-      setUploadingFiles((prev) => [...prev, fileInfo]);
+      // Mark all files as currently uploading
+      setUploadingFiles((prev) => [...prev, ...filesInfo]);
 
-      const createdChannelRes = await createChannelByAudio({ file });
-      const channelResponse = await getChannelDetail({
-        organizationId: 'yMJHyi6R1CB9whpdNvtA',
-        organizationChannelId: createdChannelRes.data.organizationChannelId,
+      // For each file, create a new FormData and call the API concurrently
+      const uploadPromises = files.map((file, index) => {
+        const formData = new FormData();
+        formData.append('file', file); // Use 'file' as the key for individual file upload
+        return createChannelByAudio(formData)
+          .then((response) => ({ response, index }))
+          .catch((error) => {
+            console.error('Upload failed for file:', file.name, error);
+            return null;
+          });
       });
 
-      setChannelList((prevChannelList) => [
-        channelResponse.data,
-        ...prevChannelList,
-      ]);
+      const uploadResults = await Promise.all(uploadPromises);
+      // Filter out any failed uploads
+      const successfulUploads = uploadResults.filter(
+        (result): result is { response: any; index: number } => result !== null
+      );
 
+      // For each successful upload, get channel details
+      const channelDetailsPromises = successfulUploads.map(
+        ({ response, index }) => {
+          const channels = Array.isArray(response.data)
+            ? response.data
+            : [response.data];
+          return Promise.all(
+            channels.map((channel: any) =>
+              getChannelDetail({
+                organizationId: 'yMJHyi6R1CB9whpdNvtA',
+                organizationChannelId: channel.organizationChannelId,
+              })
+            )
+          ).then((detailsArray) => ({ details: detailsArray, index }));
+        }
+      );
+
+      const detailsResults = await Promise.all(channelDetailsPromises);
+      // Flatten the retrieved channels and update channelList
+      const newChannels = detailsResults.flatMap(({ details }) =>
+        details.map((res) => res.data)
+      );
+      setChannelList((prevChannelList) => [...newChannels, ...prevChannelList]);
+
+      // Remove the files that were successfully uploaded from the uploading state
       setUploadingFiles((prev) =>
         prev.filter(
           (upload) =>
-            upload.organizationChannelTitle !==
-            fileInfo.organizationChannelTitle
+            !successfulUploads.some(
+              (_, idx) =>
+                filesInfo[idx]?.organizationChannelTitle ===
+                upload.organizationChannelTitle
+            )
         )
       );
     } catch (err) {
@@ -1185,7 +1221,7 @@ const ChannelsList = () => {
                     isCreating ||
                     isLoadingChannels ||
                     isSingleChannelLoading
-                  ) && <UploadScreen handleUploadFile={handleUploadFile} />
+                  ) && <UploadScreen handleUploadFiles={handleUploadFiles} />
                 )}
               </Box>
             </>
@@ -1792,7 +1828,7 @@ const ChannelsList = () => {
                   isCreating ||
                   isLoadingChannels ||
                   isSingleChannelLoading
-                ) && <UploadScreen handleUploadFile={handleUploadFile} />
+                ) && <UploadScreen handleUploadFiles={handleUploadFiles} />
               )}
             </Box>
           </ToolbarDrawer>
@@ -1813,7 +1849,7 @@ const ChannelsList = () => {
       <UploadDialog
         open={openUpload}
         onClose={handleCloseUploadDialog}
-        handleUploadFile={handleUploadFile}
+        handleUploadFiles={handleUploadFiles}
       />
       <DeleteDialog
         open={isDeleteDialogOpen}
