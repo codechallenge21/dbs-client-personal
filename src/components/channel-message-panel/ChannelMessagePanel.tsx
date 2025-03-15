@@ -349,7 +349,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                       }}
                     >
                       <LibraryBooksRounded sx={{ fontSize: 20 }} />
-                      回覆
+                      <span style={{ fontFamily: 'var(--font-bold)' }}>回覆</span>
                     </Box>
                     <Tooltip
                       title={
@@ -390,6 +390,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                 )}
                 <MermaidMarkdown
                   chartData={message.organizationChannelMessageContent}
+                  customStyle={{ fontFamily: 'var(--font-bold)' }}
                 />
                 {message.organizationChannelMessageType === 'AI' &&
                   message.organizationChannelMessageId && (
@@ -576,7 +577,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                     }}
                   >
                     <LibraryBooksRounded sx={{ fontSize: 20 }} />
-                    回覆
+                    <span style={{ fontFamily: 'var(--font-bold)' }}>回覆</span>
                   </Box>
                   <Tooltip
                     title={copiedMessageId === messageId ? '已複製' : '複製'}
@@ -666,6 +667,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                 >
                   <MermaidMarkdown
                     chartData={message.organizationChannelMessageContent}
+                    customStyle={{ fontFamily: 'var(--font-bold)' }}
                   />
                   {message.organizationChannelMessageType === 'AI' && (
                     <>

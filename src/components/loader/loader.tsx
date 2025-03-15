@@ -36,6 +36,13 @@ const AnimatedDots = styled('span')({
   },
 });
 
+// Create a styled typography component with the correct font family
+const StyledTypography = styled(Typography)({
+  fontFamily: 'var(--font-medium)',
+  fontSize: '14px',
+  color: '#212B36',
+});
+
 export default function CustomLoader() {
   return (
     <Box
@@ -90,15 +97,9 @@ export default function CustomLoader() {
           </clipPath>
         </defs>
       </LoaderSvg>
-      <Typography
-        sx={{
-          fontFamily: 'var(--font-medium)',
-          fontSize: '14px',
-          color: '#212B36',
-        }}
-      >
+      <StyledTypography>
         AI思考中<AnimatedDots />
-      </Typography>
+      </StyledTypography>
     </Box>
   );
 }
