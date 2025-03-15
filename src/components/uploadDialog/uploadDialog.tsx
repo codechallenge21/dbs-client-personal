@@ -212,6 +212,7 @@ export default function UploadDialog({
             width: isMobile ? '324px' : '780px',
             height: isMobile ? '448px' : '581px',
             m: 0,
+            fontFamily: 'var(--font-bold)',
           },
         }}
       >
@@ -254,6 +255,7 @@ export default function UploadDialog({
             padding: isMobile ? '20px' : '160px 0px 80px 0px',
             border: '2px dashed #2196f3',
             ...(isDragActive && { backgroundColor: '#e0f7fa' }),
+            fontFamily: 'var(--font-bold)',
           }}
           {...getRootProps()}
         >
