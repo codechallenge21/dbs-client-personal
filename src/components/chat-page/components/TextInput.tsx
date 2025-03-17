@@ -544,6 +544,7 @@ const TextInput: React.FC<TextInputProps> = ({
                 caretColor: '#000000', // 設置游標顏色為藍色
                 caretShape: 'block', // 部分瀏覽器支持，使游標呈現塊狀
                 padding: '8px', // 增加內邊距，增大互動區域
+                fontFamily: 'var(--font-bold)',
               }}
               className="textarea-autosize"
               value={userInputValue}

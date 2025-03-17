@@ -406,7 +406,7 @@ const LoginDialog = ({
                   textAlign: "center",
                   fontStyle: "normal",
                   lineHeight: "normal",
-                  fontFamily: "Open Sans",
+                  fontFamily: "var(--font-bold)",
                   color: "var(--Error-ContrastText, #FFF)",
                   justifyContent: "center",
                   alignItems: "center",
@@ -456,7 +456,7 @@ const LoginDialog = ({
             fontSize: "14px",
             justifyContent: "center",
             textAlign: "center",
-            mt: "16px"
+            mt: "16px",
           }}
         >
           <Typography
@@ -470,10 +470,7 @@ const LoginDialog = ({
               background: "transparent",
             }}
             onClick={() => {
-              window.open(
-                "https://www.egroup-infocenter.com/policies?tab=termsOfUse",
-                "_blank"
-              );
+              window.open("/policies?tab=termsOfUse", "_blank");
             }}
           >
             《服務條款》{" "}
@@ -490,10 +487,7 @@ const LoginDialog = ({
               background: "transparent",
             }}
             onClick={() => {
-              window.open(
-                "https://www.egroup-infocenter.com/policies?tab=privacyPolicy",
-                "_blank"
-              );
+              window.open("/policies?tab=privacyPolicy", "_blank");
             }}
           >
             《隱私政策》
@@ -510,10 +504,7 @@ const LoginDialog = ({
               background: "transparent",
             }}
             onClick={() => {
-              window.open(
-                "https://www.egroup-infocenter.com/policies?tab=cookiePolicy",
-                "_blank"
-              );
+              window.open("/policies?tab=cookiePolicy", "_blank");
             }}
           >
             《Cookie 政策》

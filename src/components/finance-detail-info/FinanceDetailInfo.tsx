@@ -1,17 +1,16 @@
 'use client';
 
-import type React from 'react';
+import { EditRounded, GppMaybeRounded, HelpRounded } from '@mui/icons-material';
 import {
-  Box,
-  Card,
-  Button,
-  useTheme,
-  Typography,
-  IconButton,
-  CardContent,
-  useMediaQuery,
+    Box,
+    Button,
+    Card,
+    CardContent,
+    IconButton,
+    Typography,
+    useMediaQuery,
+    useTheme,
 } from '@mui/material';
-import { HelpRounded, EditRounded, GppMaybeRounded } from '@mui/icons-material';
 
 interface AssessmentItem {
   question: string;
@@ -153,7 +152,7 @@ const FinanceDetailInfo = () => {
                         fontStyle: 'normal',
                         display: '-webkit-box',
                         textOverflow: 'ellipsis',
-                        fontFamily: 'DFPHeiBold-B5',
+                        fontFamily: 'var(--font-bold)',
                         WebkitBoxOrient: 'vertical',
                         color: 'var(--Primary-Black, #212B36)',
                       }}
@@ -166,7 +165,7 @@ const FinanceDetailInfo = () => {
                         fontSize: '14px',
                         lineHeight: '24px',
                         fontStyle: 'normal',
-                        fontFamily: 'DFPHeiBold-B5',
+                        fontFamily: 'var(--font-bold)',
                         color: 'var(--Primary-DBS-Red, #C00)',
                       }}
                     >
@@ -206,7 +205,7 @@ const FinanceDetailInfo = () => {
                       lineHeight: '48px',
                       fontStyle: 'normal',
                       alignSelf: 'stretch',
-                      fontFamily: 'DFPHeiBold-B5',
+                      fontFamily: 'var(--font-bold)',
                       color: 'var(--Primary-DBS-Red, #C00)',
                     }}
                   >
@@ -232,7 +231,7 @@ const FinanceDetailInfo = () => {
                     fontWeight: '400',
                     lineHeight: '24px',
                     fontStyle: 'normal',
-                    fontFamily: 'DFPHeiMedium-B5',
+                    fontFamily: 'var(--font-medium)',
                   }}
                 >
                   評分依據：
@@ -286,7 +285,7 @@ const FinanceDetailInfo = () => {
                               fontWeight: '400',
                               lineHeight: '24px',
                               fontStyle: 'normal',
-                              fontFamily: 'DFPHeiMedium-B5',
+                              fontFamily: 'var(--font-medium)',
                               color: 'var(--Primary-Black, #212B36)',
                             }}
                           >
@@ -338,7 +337,7 @@ const FinanceDetailInfo = () => {
                                 fontStyle: 'normal',
                                 fontWeight: '400',
                                 lineHeight: '22px',
-                                fontFamily: 'DFPHeiMedium-B5',
+                                fontFamily: 'var(--font-medium)',
                                 color:
                                   item.riskLevel === 'high'
                                     ? '#FFF'
@@ -372,7 +371,7 @@ const FinanceDetailInfo = () => {
                             fontStyle: 'normal',
                             alignSelf: 'stretch',
                             textOverflow: 'ellipsis',
-                            fontFamily: 'DFPHeiBold-B5',
+                            fontFamily: 'var(--font-bold)',
                             color: 'var(--Primary-Black, #212B36)',
                           }}
                         >
@@ -489,7 +488,7 @@ const FinanceDetailInfo = () => {
                           fontStyle: 'normal',
                           display: '-webkit-box',
                           textOverflow: 'ellipsis',
-                          fontFamily: 'DFPHeiBold-B5',
+                          fontFamily: 'var(--font-bold)',
                           WebkitBoxOrient: 'vertical',
                           color: 'var(--Primary-Black, #212B36)',
                         }}
@@ -502,7 +501,7 @@ const FinanceDetailInfo = () => {
                           fontSize: '14px',
                           lineHeight: '24px',
                           fontStyle: 'normal',
-                          fontFamily: 'DFPHeiBold-B5',
+                          fontFamily: 'var(--font-bold)',
                           color: 'var(--Primary-DBS-Red, #C00)',
                         }}
                       >
@@ -517,7 +516,7 @@ const FinanceDetailInfo = () => {
                       fontWeight: '400',
                       lineHeight: '48px',
                       fontStyle: 'normal',
-                      fontFamily: 'DFPHeiBold-B5',
+                      fontFamily: 'var(--font-bold)',
                       color: 'var(--Primary-DBS-Red, #C00)',
                     }}
                   >
@@ -556,7 +555,7 @@ const FinanceDetailInfo = () => {
                         lineHeight: '24px',
                         fontStyle: 'normal',
                         textAlign: 'center',
-                        fontFamily: 'Public Sans',
+                        fontFamily: 'var(--font-bold)',
                         color: 'var(--Primary-ContrastText, #FFF)',
                       }}
                     >
@@ -582,7 +581,7 @@ const FinanceDetailInfo = () => {
                     fontWeight: '400',
                     lineHeight: '24px',
                     fontStyle: 'normal',
-                    fontFamily: 'DFPHeiMedium-B5',
+                    fontFamily: 'var(--font-medium)',
                   }}
                 >
                   評分依據：
@@ -635,7 +634,7 @@ const FinanceDetailInfo = () => {
                               fontWeight: '400',
                               lineHeight: '24px',
                               fontStyle: 'normal',
-                              fontFamily: 'DFPHeiMedium-B5',
+                              fontFamily: 'var(--font-medium)',
                               color: 'var(--Primary-Black, #212B36)',
                             }}
                           >
@@ -687,7 +686,7 @@ const FinanceDetailInfo = () => {
                                 fontStyle: 'normal',
                                 fontWeight: '400',
                                 lineHeight: '22px',
-                                fontFamily: 'DFPHeiMedium-B5',
+                                fontFamily: 'var(--font-medium)',
                                 color:
                                   item.riskLevel === 'high'
                                     ? '#FFF'
@@ -721,7 +720,7 @@ const FinanceDetailInfo = () => {
                             fontStyle: 'normal',
                             alignSelf: 'stretch',
                             textOverflow: 'ellipsis',
-                            fontFamily: 'DFPHeiBold-B5',
+                            fontFamily: 'var(--font-bold)',
                             color: 'var(--Primary-Black, #212B36)',
                           }}
                         >

@@ -1,20 +1,20 @@
 'use client';
 
-import type React from 'react';
-import { useState, useContext } from 'react';
-import {
-  Box,
-  Button,
-  Dialog,
-  IconButton,
-  TextField,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from '@mui/material';
-import { CloseRounded, ArrowBackIos } from '@mui/icons-material';
 import { SnackbarContext } from '@/context/SnackbarContext';
 import apis from '@/utils/hooks/apis/apis';
+import { ArrowBackIos, CloseRounded } from '@mui/icons-material';
+import {
+    Box,
+    Button,
+    Dialog,
+    IconButton,
+    TextField,
+    Typography,
+    useMediaQuery,
+    useTheme,
+} from '@mui/material';
+import type React from 'react';
+import { useContext, useState } from 'react';
 
 interface ForgetPasswordDialogProps {
   open: boolean;
@@ -106,7 +106,7 @@ const ForgetPasswordDialog: React.FC<ForgetPasswordDialogProps> = ({
             fontSize: isMobile ? '24px' : '32px',
             fontStyle: 'normal',
             lineHeight: '48px',
-            fontFamily: 'DFPHeiBold-B5',
+            fontFamily: 'var(--font-bold)',
           }}
         >
           忘記密碼
@@ -122,7 +122,7 @@ const ForgetPasswordDialog: React.FC<ForgetPasswordDialogProps> = ({
           fontWeight: 400,
           fontSize: isMobile ? '12px' : '14px',
           color: '#212B36',
-          fontFamily: 'DFPHeiMedium-B5',
+          fontFamily: 'var(--font-medium)',
           fontStyle: 'normal',
           lineHeight: '22px',
           textAlign: 'center',
@@ -163,7 +163,7 @@ const ForgetPasswordDialog: React.FC<ForgetPasswordDialogProps> = ({
             '& .MuiInputBase-input::placeholder': {
               fontSize: '14px',
               color: '#919EAB',
-              fontFamily: 'DFPHeiBold-B5',
+              fontFamily: 'var(--font-bold)',
               fontStyle: 'normal',
               fontWeight: 400,
               lineHeight: '22px',
