@@ -74,6 +74,10 @@ type TextInputProps = {
   isInteracting: boolean;
   setIsLoginOpen?: (value: boolean) => void;
   from?: string;
+  files: { file: File; preview: string | null }[];
+  setFiles: React.Dispatch<
+    React.SetStateAction<{ file: File; preview: string | null }[]>
+  >;
 };
 
 interface ChatWithFilesPayload {
@@ -91,11 +95,31 @@ interface ChatWithFilesResponse {
   organizationChannelId: string;
 }
 
+export const MAX_FILES = 3;
+export const MAX_FILE_SIZE = 5 * 1024 * 1024;
+export const allowedExtensions = [
+  'pdf', // PDF
+  'ppt', // PowerPoint
+  'pptx', // PowerPoint (新格式)
+  'doc', // Word
+  'docx', // Word (新格式)
+  'xls', // Excel
+  'xlsx', // Excel (新格式)
+  'html', // HTML
+  'csv', // CSV
+  'json', // JSON
+  'xml', // XML
+  'zip', // ZIP
+  'txt', // Text
+];
+
 const TextInput: React.FC<TextInputProps> = ({
   submitUserInputs,
   isInteracting,
   setIsLoginOpen,
   from,
+  files,
+  setFiles,
 }) => {
   const { requireAuth } = useRequireAuth();
 
@@ -103,61 +127,40 @@ const TextInput: React.FC<TextInputProps> = ({
   const [isListening, setIsListening] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
-  const [files, setFiles] = useState<{ file: File; preview: string | null }[]>(
-    []
-  );
   const { showSnackbar } = useContext(SnackbarContext);
-
-  const MAX_FILES = 3;
-  const MAX_FILE_SIZE = 5 * 1024 * 1024;
-  const allowedExtensions = [
-    'pdf', // PDF
-    'ppt', // PowerPoint
-    'pptx', // PowerPoint (新格式)
-    'doc', // Word
-    'docx', // Word (新格式)
-    'xls', // Excel
-    'xlsx', // Excel (新格式)
-    'html', // HTML
-    'csv', // CSV
-    'json', // JSON
-    'xml', // XML
-    'zip', // ZIP
-    'txt', // Text
-  ];
 
   const { excute: chatWithFiles } = useAxiosApi<
     ChatWithFilesResponse,
     ChatWithFilesPayload
   >(apis.chatWithFiles);
 
-  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    const droppedFiles = Array.from(event.dataTransfer.files);
-    if (files.length + droppedFiles.length > MAX_FILES) {
-      showSnackbar(`您一次最多只能上傳 ${MAX_FILES} 個檔案。`, 'error');
-      return;
-    }
+  // const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+  //   event.preventDefault();
+  //   const droppedFiles = Array.from(event.dataTransfer.files);
+  //   if (files.length + droppedFiles.length > MAX_FILES) {
+  //     showSnackbar(`您一次最多只能上傳 ${MAX_FILES} 個檔案。`, 'error');
+  //     return;
+  //   }
 
-    for (const file of droppedFiles) {
-      const extension = file.name.split('.').pop()?.toLowerCase();
-      if (!allowedExtensions.includes(extension ?? '')) {
-        showSnackbar(`檔案格式不支援: ${file.name}`, 'error');
-        return;
-      }
-      if (file.size > MAX_FILE_SIZE) {
-        showSnackbar(`檔案 "${file.name}" 超過 5MB 的限制。`, 'error');
-        return;
-      }
-    }
+  //   for (const file of droppedFiles) {
+  //     const extension = file.name.split('.').pop()?.toLowerCase();
+  //     if (!allowedExtensions.includes(extension ?? '')) {
+  //       showSnackbar(`檔案格式不支援: ${file.name}`, 'error');
+  //       return;
+  //     }
+  //     if (file.size > MAX_FILE_SIZE) {
+  //       showSnackbar(`檔案 "${file.name}" 超過 5MB 的限制。`, 'error');
+  //       return;
+  //     }
+  //   }
 
-    const mappedFiles = droppedFiles.map((file) => ({ file, preview: null }));
-    setFiles((prev) => [...prev, ...mappedFiles]);
-  };
+  //   const mappedFiles = droppedFiles.map((file) => ({ file, preview: null }));
+  //   setFiles((prev) => [...prev, ...mappedFiles]);
+  // };
 
-  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-  };
+  // const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+  //   event.preventDefault();
+  // };
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -441,8 +444,8 @@ const TextInput: React.FC<TextInputProps> = ({
             pt: { xs: 2, md: 3 },
             ...customScrollbarStyle,
           }}
-          onDrop={handleDrop}
-          onDragOver={handleDragOver}
+          // onDrop={handleDrop}
+          // onDragOver={handleDragOver}
         >
           {files.length > 0 && (
             <Box
