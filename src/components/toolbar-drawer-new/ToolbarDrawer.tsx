@@ -741,7 +741,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 alignItems: 'center',
                 justifyContent: 'center',
                 background: 'var(--Secondary-, #5C443A)',
-                fontFamily: 'var(--font-bold)',
+                fontFamily: 'var(--font-light)',
                 fontSize: '13px',
                 fontWeight: 700,
                 lineHeight: 'normal',

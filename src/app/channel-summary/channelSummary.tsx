@@ -595,7 +595,7 @@ const ChannelSummaryContent = () => {
                               fontSize: '14px',
                               fontStyle: 'normal',
                               lineHeight: 'normal',
-                              fontFamily: 'var(--font-bold)',
+                              fontFamily: 'var(--font-medium)',
                               color: 'var(--Text-Secondary, #637381)',
                               '&.Mui-selected': {
                                 color: 'var(--Text-Primary, #212B36)',
@@ -610,7 +610,7 @@ const ChannelSummaryContent = () => {
                               fontSize: '14px',
                               fontStyle: 'normal',
                               lineHeight: 'normal',
-                              fontFamily: 'var(--font-bold)',
+                              fontFamily: 'var(--font-medium)',
                               color: 'var(--Text-Secondary, #637381)',
                               '&.Mui-selected': {
                                 color: 'var(--Text-Primary, #212B36)',
@@ -628,7 +628,7 @@ const ChannelSummaryContent = () => {
                               fontSize: '14px',
                               fontStyle: 'normal',
                               lineHeight: 'normal',
-                              fontFamily: 'var(--font-bold)',
+                              fontFamily: 'var(--font-medium)',
                               color: 'var(--Text-Secondary, #637381)',
                               '&.Mui-selected': {
                                 color: 'var(--Text-Primary, #212B36)',

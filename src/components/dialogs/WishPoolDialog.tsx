@@ -1,32 +1,32 @@
 import { SnackbarContext } from '@/context/SnackbarContext';
 import { OrganizationChannelMessage } from '@/interfaces/entities';
 import {
-    CloseRounded,
-    ContentCopyRounded,
-    LibraryBooksRounded,
-    MicRounded,
-    PermIdentityRounded,
-    PublicRounded,
-    SearchRounded,
-    SendRounded,
-    StopCircleRounded,
-    ThumbDownOffAltRounded,
-    ThumbUpAltRounded,
-    ThumbUpOffAlt,
+  CloseRounded,
+  ContentCopyRounded,
+  LibraryBooksRounded,
+  MicRounded,
+  PermIdentityRounded,
+  PublicRounded,
+  SearchRounded,
+  SendRounded,
+  StopCircleRounded,
+  ThumbDownOffAltRounded,
+  ThumbUpAltRounded,
+  ThumbUpOffAlt,
 } from '@mui/icons-material';
 import {
-    Box,
-    Button,
-    Card,
-    CardContent,
-    Dialog,
-    DialogContent,
-    IconButton,
-    InputAdornment,
-    TextField,
-    Typography,
-    useMediaQuery,
-    useTheme,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Dialog,
+  DialogContent,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import { useCallback, useContext, useState } from 'react';
 import CustomLoader from '../loader/loader';
@@ -153,7 +153,7 @@ const WishPoolDialog: React.FC<WishPoolDialogProps> = ({ open, onClose }) => {
                 color: '#212B36',
                 lineHeight: '32px',
                 letterSpacing: '0%',
-                fontFamily: 'var(--font-bold)',
+                fontFamily: 'var(--font-light)',
               }}
             >
               許願池
