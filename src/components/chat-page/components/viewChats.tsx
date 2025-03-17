@@ -21,7 +21,7 @@ const ViewChats: React.FC<ViewChatsProps> = ({ onClick }) => {
         padding: '2px',
         borderRadius: 1,
         color: 'var(--Text-Primary, #212B36)',
-        fontFamily: 'var(--font-light)',
+        fontFamily: 'var(--font-medium)',
         fontSize: '14px',
         fontStyle: 'normal',
         fontWeight: 700,

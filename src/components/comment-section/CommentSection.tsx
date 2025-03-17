@@ -79,7 +79,7 @@ export default function CommentSection() {
       <Typography
         sx={{
           color: "#E4DAD7",
-          fontFamily: " var(--font-light)",
+          fontFamily: " var(--font-medium)",
           fontSize: "20px",
           fontStyle: "normal",
           fontWeight: 700,

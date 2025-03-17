@@ -153,7 +153,7 @@ const WishPoolDialog: React.FC<WishPoolDialogProps> = ({ open, onClose }) => {
                 color: '#212B36',
                 lineHeight: '32px',
                 letterSpacing: '0%',
-                fontFamily: 'var(--font-light)',
+                fontFamily: 'var(--font-medium)',
               }}
             >
               許願池
