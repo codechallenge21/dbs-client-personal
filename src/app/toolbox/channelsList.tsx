@@ -25,12 +25,8 @@ import {
   ArrowDropDown,
   CheckCircleRounded,
   MenuRounded,
-  // MicRounded,
   PendingActionsRounded,
   RotateRightRounded,
-  // SearchRounded,
-  // StarBorderRounded,
-  // StarRounded,
   UploadRounded,
 } from '@mui/icons-material';
 import {
@@ -40,6 +36,7 @@ import {
   CardContent,
   CircularProgress,
   IconButton,
+  styled,
   Tab,
   Table,
   TableBody,
@@ -61,6 +58,7 @@ import React, {
   useState,
 } from 'react';
 import UploadScreen from './UploadScreen';
+import { keyframes } from '@emotion/react';
 
 interface fileProps {
   organizationChannelTitle: string;
@@ -89,11 +87,10 @@ const ChannelsList = () => {
   const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(
     isMobile ? false : true
   );
-  const [openUpload, setOpenUpload] = React.useState(false);
-  const [, setFavoriteChannels] = useState<{
-    [key: number]: boolean;
-  }>({});
-  const [uploadingFile, setUploadingFile] = useState<fileProps>();
+  const [openUpload, setOpenUpload] = useState(false);
+  const [, setFavoriteChannels] = useState<{ [key: number]: boolean }>({});
+  // Changed from a single file to an array to support multiple file uploads
+  const [uploadingFiles, setUploadingFiles] = useState<fileProps[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
   const [channelList, setChannelList] = useState<OrganizationChannel[]>([]);
@@ -116,14 +113,10 @@ const ChannelsList = () => {
     {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
-      // Custom SWR configuration to handle errors
       onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
         if (error?.status === 401) {
-          // showSnackbar('認證已失效，請重新登入', 'error');
-          setHasMore(false); // Stop infinite scroll attempts
+          setHasMore(false);
         }
-
-        // For other errors, use the default retry behavior but limit attempts
         if (retryCount >= 3) return;
       },
     }
@@ -168,7 +161,7 @@ const ChannelsList = () => {
       setIsDeleteDialogOpen(false);
       handleCloseToolsMenu();
       deleteChannel({
-        organizationId: 'yMJHyi6R1CB9whpdNvtA',
+        organizationId: 'yMJHyi6R1CB9whpdA',
         organizationChannelId: channelToDeleteId,
       })
         .then(() => {
@@ -249,7 +242,7 @@ const ChannelsList = () => {
       channel.organizationChannelTranscriptList[0]
         ?.organizationChannelTranscriptStatus === 'COMPLETE'
     ) {
-      if (handleShowDetail) handleShowDetail(channel);
+      handleShowDetail(channel);
     }
   };
 
@@ -266,22 +259,65 @@ const ChannelsList = () => {
     }));
   };
 
-  const handleUploadFile = async (file: File, fileInfo: fileProps) => {
+  // Updated upload handler to support multiple file uploads.
+  const handleUploadFiles = async (files: File[], filesInfo: fileProps[]) => {
     try {
-      setUploadingFile(fileInfo);
-      const createdChannelRes = await createChannelByAudio({
-        file,
-      });
-      const channelResponse = await getChannelDetail({
-        organizationId: 'yMJHyi6R1CB9whpdNvtA',
-        organizationChannelId: createdChannelRes.data.organizationChannelId,
+      // Mark all files as currently uploading
+      setUploadingFiles((prev) => [...prev, ...filesInfo]);
+
+      // For each file, create a new FormData and call the API concurrently
+      const uploadPromises = files.map((file, index) => {
+        const formData = new FormData();
+        formData.append('file', file); // Use 'file' as the key for individual file upload
+        return createChannelByAudio(formData)
+          .then((response) => ({ response, index }))
+          .catch((error) => {
+            console.error('Upload failed for file:', file.name, error);
+            return null;
+          });
       });
 
-      setChannelList((prevChannelList) => [
-        channelResponse.data,
-        ...prevChannelList,
-      ]);
-      setUploadingFile(undefined);
+      const uploadResults = await Promise.all(uploadPromises);
+      // Filter out any failed uploads
+      const successfulUploads = uploadResults.filter(
+        (result): result is { response: any; index: number } => result !== null
+      );
+
+      // For each successful upload, get channel details
+      const channelDetailsPromises = successfulUploads.map(
+        ({ response, index }) => {
+          const channels = Array.isArray(response.data)
+            ? response.data
+            : [response.data];
+          return Promise.all(
+            channels.map((channel: any) =>
+              getChannelDetail({
+                organizationId: 'yMJHyi6R1CB9whpdNvtA',
+                organizationChannelId: channel.organizationChannelId,
+              })
+            )
+          ).then((detailsArray) => ({ details: detailsArray, index }));
+        }
+      );
+
+      const detailsResults = await Promise.all(channelDetailsPromises);
+      // Flatten the retrieved channels and update channelList
+      const newChannels = detailsResults.flatMap(({ details }) =>
+        details.map((res) => res.data)
+      );
+      setChannelList((prevChannelList) => [...newChannels, ...prevChannelList]);
+
+      // Remove the files that were successfully uploaded from the uploading state
+      setUploadingFiles((prev) =>
+        prev.filter(
+          (upload) =>
+            !successfulUploads.some(
+              (_, idx) =>
+                filesInfo[idx]?.organizationChannelTitle ===
+                upload.organizationChannelTitle
+            )
+        )
+      );
     } catch (err) {
       showSnackbar(FILE_CONFIG.errorMessages.uploadFailed, 'error');
       console.error(err);
@@ -297,7 +333,6 @@ const ChannelsList = () => {
     setIsOpenDrawer(!isMobile);
   }, [isMobile]);
 
-  // Initialize channelList with channelsData
   useEffect(() => {
     if (
       channelsData &&
@@ -311,7 +346,6 @@ const ChannelsList = () => {
     }
   }, [channelsData, currentPageRef.current]);
 
-  // Fetch more data when scrolled to the bottom
   const fetchMoreData = useCallback(async () => {
     if (isFetching || !hasMore) return;
     setIsFetching(true);
@@ -320,7 +354,6 @@ const ChannelsList = () => {
       const nextPage = currentPageRef.current + itemsPerPage;
       currentPageRef.current = nextPage;
 
-      // Use the updated page value in the API call
       setTimeout(async () => {
         const response = await mutateAudioChannels();
         const newChannels = response?.data || [];
@@ -338,16 +371,13 @@ const ChannelsList = () => {
     } finally {
       setIsFetching(false);
     }
-  }, [isFetching, hasMore, currentPageRef.current, mutateAudioChannels]);
+  }, [isFetching, hasMore, mutateAudioChannels]);
 
-  // Setup Intersection Observer for infinite scrolling
   useEffect(() => {
     if (!loadingElementVisible || !hasMore) return;
 
-    // Clear any existing observer
     if (observer.current && loadingRef.current && scrollContainerRef.current) {
       observer.current.unobserve(loadingRef.current);
-      observer.current.unobserve(scrollContainerRef.current);
       observer.current = null;
     }
 
@@ -370,7 +400,17 @@ const ChannelsList = () => {
         observer.current = null;
       }
     };
-  }, [loadingElementVisible]);
+  }, [loadingElementVisible, hasMore, isFetching, fetchMoreData]);
+
+  const rotateAnimation = keyframes`
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  `;
+
+  const LoaderSvg = styled('svg')({
+    animation: `${rotateAnimation} 1s linear infinite`,
+    transformOrigin: 'center',
+  });
 
   return (
     <>
@@ -407,10 +447,7 @@ const ChannelsList = () => {
                   },
                 }}
                 TabIndicatorProps={{
-                  style: {
-                    height: '3px',
-                    backgroundColor: '#212B36',
-                  },
+                  style: { height: '3px', backgroundColor: '#212B36' },
                 }}
               >
                 <Tab
@@ -551,13 +588,12 @@ const ChannelsList = () => {
                       lineHeight: 'normal',
                       fontFamily: 'var(--font-bold)',
                       color: 'var(--Primary-Black, #212B36)',
-                      textAlign: 'left', // Always left-aligned
+                      textAlign: 'left',
                     }}
                     gutterBottom
                   >
                     智能語音轉文字
                   </Typography>
-
                   <Box
                     sx={{
                       display: 'flex',
@@ -624,8 +660,8 @@ const ChannelsList = () => {
                 {isLoadingChannels &&
                 channelList?.length === 0 &&
                 currentPageRef.current === 0 &&
-                !uploadingFile &&
-                !(isCreating || isSingleChannelLoading) ? (
+                uploadingFiles.length === 0 &&
+                !(isCreating || isLoadingChannels || isSingleChannelLoading) ? (
                   <Box
                     sx={{
                       top: '50%',
@@ -637,7 +673,7 @@ const ChannelsList = () => {
                   >
                     <CircularProgress color="primary" />
                   </Box>
-                ) : channelList?.length > 0 || uploadingFile ? (
+                ) : channelList?.length > 0 || uploadingFiles.length > 0 ? (
                   <TableContainer
                     ref={scrollContainerRef}
                     sx={{
@@ -764,12 +800,13 @@ const ChannelsList = () => {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {uploadingFile &&
+                        {uploadingFiles.length > 0 &&
                           (isCreating ||
                             isLoadingChannels ||
-                            isSingleChannelLoading) && (
+                            isSingleChannelLoading) &&
+                          uploadingFiles.map((file, index) => (
                             <TableRow
-                              key={0}
+                              key={`uploading-${index}`}
                               sx={{
                                 cursor: 'default',
                                 height: '56px !important',
@@ -804,7 +841,7 @@ const ChannelsList = () => {
                                     color: 'var(--Text-Primary, #212B36)',
                                   }}
                                 >
-                                  {uploadingFile?.organizationChannelTitle}
+                                  {file.organizationChannelTitle}
                                 </Typography>
                               </TableCell>
                               <TableCell
@@ -821,6 +858,46 @@ const ChannelsList = () => {
                                     alignItems: 'center',
                                   }}
                                 >
+                                  <LoaderSvg
+                                    width="20"
+                                    height="24"
+                                    viewBox="0 0 24 28"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                  >
+                                    <g
+                                      clipPath="url(#paint0_angular_351_18898_clip_path)"
+                                      data-figma-skip-parse="true"
+                                    >
+                                      <g transform="matrix(0 0.012 -0.012 0 12 12)">
+                                        <foreignObject
+                                          x="-1083.33"
+                                          y="-1083.33"
+                                          width="2166.67"
+                                          height="2166.67"
+                                        >
+                                          <div
+                                            style={{
+                                              background:
+                                                'conic-gradient(from 90deg,rgba(254, 254, 254, 0.9971) 0deg,rgba(255, 255, 255, 1) 0.257783deg,rgba(119, 187, 255, 1) 89.6679deg,rgba(0, 86, 173, 1) 184.883deg,rgba(0, 40, 80, 0) 270.195deg,rgba(254, 254, 254, 0.9971) 360deg)',
+                                              height: '100%',
+                                              width: '100%',
+                                              opacity: 1,
+                                            }}
+                                          />
+                                        </foreignObject>
+                                      </g>
+                                    </g>
+                                    <path
+                                      d="M12 24C9.62662 24 7.30655 23.2962 5.33316 21.9776C3.35977 20.6591 1.8217 18.7849 0.913445 16.5922C0.0051938 14.3995 -0.232446 11.9867 0.230577 9.65891C0.6936 7.33114 1.83649 5.19295 3.51472 3.51472C5.19295 1.83649 7.33115 0.693599 9.65892 0.230576C11.9867 -0.232446 14.3995 0.00519433 16.5922 0.913446C18.7849 1.8217 20.6591 3.35977 21.9776 5.33316C23.2962 7.30655 24 9.62663 24 12H21.6C21.6 10.1013 21.037 8.24524 19.9821 6.66653C18.9272 5.08781 17.4279 3.85736 15.6738 3.13076C13.9196 2.40416 11.9894 2.21404 10.1271 2.58446C8.26492 2.95488 6.55436 3.86919 5.21178 5.21177C3.86919 6.55436 2.95488 8.26491 2.58446 10.1271C2.21404 11.9893 2.40415 13.9196 3.13076 15.6738C3.85736 17.4279 5.08781 18.9272 6.66652 19.9821C8.24524 21.037 10.1013 21.6 12 21.6L12 24Z"
+                                      data-figma-gradient-fill='{"type":"GRADIENT_ANGULAR","stops":[{"color":{"r":1.0,"g":1.0,"b":1.0,"a":1.0},"position":0.00071606453275308013},{"color":{"r":0.46666666865348816,"g":0.73333370685577393,"b":1.0,"a":1.0},"position":0.24907758831977844},{"color":{"r":0.0,"g":0.33958333730697632,"b":0.67916667461395264,"a":1.0},"position":0.51356458663940430},{"color":{"r":0.0,"g":0.15833333134651184,"b":0.31666666269302368,"a":0.0},"position":0.75054049491882324}],"stopsVar":[{"color":{"r":1.0,"g":1.0,"b":1.0,"a":1.0},"position":0.00071606453275308013},{"color":{"r":0.46666666865348816,"g":0.73333370685577393,"b":1.0,"a":1.0},"position":0.24907758831977844},{"color":{"r":0.0,"g":0.33958333730697632,"b":0.67916667461395264,"a":1.0},"position":0.51356458663940430},{"color":{"r":0.0,"g":0.15833333134651184,"b":0.31666666269302368,"a":0.0},"position":0.75054049491882324}],"transform":{"m00":1.4695762231022014e-15,"m01":-24.0,"m02":24.0,"m10":24.0,"m11":1.4695762231022014e-15,"m12":-1.4695762231022014e-15},"opacity":1.0,"blendMode":"NORMAL","visible":true}'
+                                    />
+                                    <defs>
+                                      <clipPath id="paint0_angular_351_18898_clip_path">
+                                        <path d="M12 24C9.62662 24 7.30655 23.2962 5.33316 21.9776C3.35977 20.6591 1.8217 18.7849 0.913445 16.5922C0.0051938 14.3995 -0.232446 11.9867 0.230577 9.65891C0.6936 7.33114 1.83649 5.19295 3.51472 3.51472C5.19295 1.83649 7.33115 0.693599 9.65892 0.230576C11.9867 -0.232446 14.3995 0.00519433 16.5922 0.913446C18.7849 1.8217 20.6591 3.35977 21.9776 5.33316C23.2962 7.30655 24 9.62663 24 12H21.6C21.6 10.1013 21.037 8.24524 19.9821 6.66653C18.9272 5.08781 17.4279 3.85736 15.6738 3.13076C13.9196 2.40416 11.9894 2.21404 10.1271 2.58446C8.26492 2.95488 6.55436 3.86919 5.21178 5.21177C3.86919 6.55436 2.95488 8.26491 2.58446 10.1271C2.21404 11.9893 2.40415 13.9196 3.13076 15.6738C3.85736 17.4279 5.08781 18.9272 6.66652 19.9821C8.24524 21.037 10.1013 21.6 12 21.6L12 24Z" />
+                                      </clipPath>
+                                    </defs>
+                                  </LoaderSvg>
                                   <span
                                     style={{
                                       fontFamily: 'var(--font-bold)',
@@ -858,7 +935,7 @@ const ChannelsList = () => {
                                     color: 'var(--Text-Primary, #212B36)',
                                   }}
                                 >
-                                  {uploadingFile.organizationChannelCreateDate}
+                                  {file.organizationChannelCreateDate}
                                 </Typography>
                               </TableCell>
                               <TableCell
@@ -895,7 +972,7 @@ const ChannelsList = () => {
                                 }}
                               ></TableCell>
                             </TableRow>
-                          )}
+                          ))}
                         {channelList?.map((channel, index) => (
                           <TableRow
                             key={index}
@@ -1125,7 +1202,6 @@ const ChannelsList = () => {
                           <TableRow
                             ref={(el) => {
                               loadingRef.current = el;
-                              // Update state when the ref is attached to a DOM element
                               setLoadingElementVisible(!!el);
                             }}
                           >
@@ -1146,12 +1222,12 @@ const ChannelsList = () => {
                 ) : (
                   channelsData?.length === 0 &&
                   channelList?.length === 0 &&
-                  !uploadingFile &&
+                  uploadingFiles.length === 0 &&
                   !(
                     isCreating ||
                     isLoadingChannels ||
                     isSingleChannelLoading
-                  ) && <UploadScreen handleUploadFile={handleUploadFile} />
+                  ) && <UploadScreen handleUploadFiles={handleUploadFiles} />
                 )}
               </Box>
             </>
@@ -1231,6 +1307,7 @@ const ChannelsList = () => {
                     backgroundColor: '#212B36',
                   },
                 }}
+                TabIndicatorProps={{ style: { backgroundColor: '#212B36' } }}
               >
                 <Tab
                   label="智能語音轉文字"
@@ -1408,8 +1485,8 @@ const ChannelsList = () => {
               {isLoadingChannels &&
               channelList?.length === 0 &&
               currentPageRef.current === 0 &&
-              !uploadingFile &&
-              !(isCreating || isSingleChannelLoading) ? (
+              uploadingFiles.length === 0 &&
+              !(isCreating || isLoadingChannels || isSingleChannelLoading) ? (
                 <Box
                   sx={{
                     top: '50%',
@@ -1421,7 +1498,7 @@ const ChannelsList = () => {
                 >
                   <CircularProgress color="primary" />
                 </Box>
-              ) : channelList?.length > 0 || uploadingFile ? (
+              ) : channelList?.length > 0 || uploadingFiles.length > 0 ? (
                 <Box
                   ref={scrollContainerRef}
                   sx={{
@@ -1432,19 +1509,19 @@ const ChannelsList = () => {
                   }}
                 >
                   <Box
-                    // ref={scrollContainerRef}
                     sx={{
                       gap: '16px',
                       display: 'flex',
                       flexDirection: 'column',
                     }}
                   >
-                    {uploadingFile &&
+                    {uploadingFiles.length > 0 &&
                       (isCreating ||
                         isLoadingChannels ||
-                        isSingleChannelLoading) && (
+                        isSingleChannelLoading) &&
+                      uploadingFiles.map((file, index) => (
                         <Card
-                          key={0}
+                          key={`uploading-mobile-${index}`}
                           sx={{
                             mb: '16px',
                             height: '146px',
@@ -1463,6 +1540,10 @@ const ChannelsList = () => {
                         >
                           <CardContent
                             sx={{
+                              display: 'flex',
+                              flexDirection: 'column',
+                              justifyContent: 'space-between',
+                              height: '100%',
                               padding: 0,
                               width: '100%',
                               height: '100%',
@@ -1493,7 +1574,7 @@ const ChannelsList = () => {
                                   color: 'var(--Primary-Black, #212B36)',
                                 }}
                               >
-                                {uploadingFile?.organizationChannelTitle}
+                                {file.organizationChannelTitle}
                               </Typography>
                             </Box>
                             <Box
@@ -1533,7 +1614,7 @@ const ChannelsList = () => {
                                     color: 'var(--Primary-Black, #212B36)',
                                   }}
                                 >
-                                  {uploadingFile?.organizationChannelCreateDate}
+                                  {file?.organizationChannelCreateDate}
                                 </Typography>
                               </Box>
                               <Box
@@ -1562,7 +1643,7 @@ const ChannelsList = () => {
                             </Box>
                           </CardContent>
                         </Card>
-                      )}
+                      ))}
                     {channelList?.map((channel, index) => (
                       <Card
                         key={index}
@@ -1581,6 +1662,11 @@ const ChannelsList = () => {
                       >
                         <CardContent
                           sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            paddingBottom: '0 !important',
+                            justifyContent: 'space-between',
+                            height: '100%',
                             padding: 0,
                             width: '100%',
                             height: '100%',
@@ -1771,17 +1857,18 @@ const ChannelsList = () => {
               ) : (
                 channelsData?.length === 0 &&
                 channelList?.length === 0 &&
-                !uploadingFile &&
+                uploadingFiles.length === 0 &&
                 !(
                   isCreating ||
                   isLoadingChannels ||
                   isSingleChannelLoading
-                ) && <UploadScreen handleUploadFile={handleUploadFile} />
+                ) && <UploadScreen handleUploadFiles={handleUploadFiles} />
               )}
             </Box>
           </ToolbarDrawer>
         </>
       )}
+      {/* Dialogs */}
       <LoginDialog
         open={isLoginOpen}
         setIsSignupOpen={setIsSignupOpen}
@@ -1796,7 +1883,7 @@ const ChannelsList = () => {
       <UploadDialog
         open={openUpload}
         onClose={handleCloseUploadDialog}
-        handleUploadFile={handleUploadFile}
+        handleUploadFiles={handleUploadFiles}
       />
       <DeleteDialog
         open={isDeleteDialogOpen}
@@ -1813,17 +1900,6 @@ const ChannelsList = () => {
         editableName={
           channelList?.[activeIndex!]?.organizationChannelTitle || ''
         }
-      />
-      <LoginDialog
-        open={isLoginOpen}
-        setIsSignupOpen={setIsSignupOpen}
-        onClose={handleLoginDialogClose}
-        onOpenForgetPassword={handleForgetPasswordOpen}
-      />
-      <SignupDialog
-        open={isSignupOpen}
-        setIsLoginOpen={setIsLoginOpen}
-        onClose={() => setIsSignupOpen(false)}
       />
       <ForgetPasswordDialog
         open={isForgetPasswordOpen}

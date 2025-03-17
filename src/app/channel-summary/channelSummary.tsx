@@ -1,9 +1,9 @@
 'use client';
-import DataSourceDialog from '@/components/chat-page/components/chatDataStore';
+import DataSourceDialog from '@/components/dialogs/ChatDataStore';
 import DeleteDialog from '@/components/dialogs/DeleteDialog';
 import EditDialog from '@/components/dialogs/EditDialog';
 import EditableItem from '@/components/editable-item/EditableItem';
-import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
+import ToolbarDrawer, { customScrollbarStyle } from '@/components/toolbar-drawer-new/ToolbarDrawer';
 import { OrganizationChannel } from '@/interfaces/entities';
 import apis from '@/utils/hooks/apis/apis';
 import { useAudioChannel } from '@/utils/hooks/useAudioChannel';
@@ -38,9 +38,8 @@ import {
   useTheme,
 } from '@mui/material';
 import { useRouter, useSearchParams } from 'next/navigation';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { Suspense, useCallback, useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { customScrollbarStyle } from '@/components/toolbar-drawer-new/ToolbarDrawer';
 
 function TabPanel(props: {
   readonly value: number;
@@ -118,23 +117,20 @@ const dataRow3 = [
   },
 ];
 
-const ChannelSummary = () => {
+// Create a separate component that uses useSearchParams
+const ChannelSummaryContent = () => {
   const theme = useTheme();
   const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-
+  const searchParams = useSearchParams();
+  const organizationChannelId = searchParams.get('organizationChannelId') ?? '';
+  
   const [tabValue, setTabValue] = React.useState(0);
   const [selectedChannel, setSelectedChannel] =
     React.useState<OrganizationChannel | null>(null);
   const [openDataSource, setOpenDataSource] = useState(false);
   const [aIAnalysisTabValue, setAIAnalysisTabValue] = React.useState(0);
   const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(!isMobile);
-  /**
-   * @useSearchParams hook requires Suspense Boundary Component wrapping
-   * Reference: https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout
-   ** */
-  const searchParams = useSearchParams();
-  const organizationChannelId = searchParams.get('organizationChannelId') ?? '';
   const [copiedMessageId, setCopiedMessageId] = React.useState<string | null>(
     null
   );
@@ -305,19 +301,6 @@ const ChannelSummary = () => {
                   : '100%',
               }}
             >
-              {/* {isloadingChannelData ? (
-          <Box
-            sx={{
-              top: '50%',
-              left: '50%',
-              display: 'flex',
-              position: 'absolute',
-              transform: 'translate(-50%, -50%)',
-            }}
-          >
-            <CircularProgress color="primary" />
-          </Box>
-        ) : ( */}
               <>
                 <Tabs
                   value={tabValue}
@@ -372,7 +355,7 @@ const ChannelSummary = () => {
                         fontSize: '16px',
                         overflow: 'hidden',
                         fontStyle: 'normal',
-                        fontFamily: 'Inter',
+                        fontFamily: 'var(--font-bold)',
                         lineHeight: 'normal',
                         textOverflow: 'ellipsis',
                         color: 'var(--Text-Primary, #212B36)',
@@ -390,9 +373,7 @@ const ChannelSummary = () => {
                       setToolsAnchor={setToolsAnchor}
                       handleCloseToolsMenu={handleCloseToolsMenu}
                       handleOpenEditChannelDialog={handleOpenEditChannelDialog}
-                      handleDeleteChannelOpenConfirmDialog={
-                        handleDeleteChannelOpenConfirmDialog
-                      }
+                      handleDeleteChannelOpenConfirmDialog={handleDeleteChannelOpenConfirmDialog}
                       anchorOrigin={{
                         vertical: 'bottom',
                         horizontal: 'right',
@@ -681,8 +662,7 @@ const ChannelSummary = () => {
                                   selectedChannel
                                     ?.organizationChannelMessageList[
                                     selectedChannel
-                                      ?.organizationChannelMessageList.length -
-                                      1
+                                      ?.organizationChannelMessageList.length - 1
                                   ]?.organizationChannelMessageId
                                     ? '已複製'
                                     : '複製'
@@ -707,12 +687,11 @@ const ChannelSummary = () => {
                                     ]?.organizationChannelMessageId &&
                                     copyPrompt(
                                       selectedChannel
-                                        ?.organizationChannelMessageList[
+                                        ?.organizationChannelMessageList[                                                                                                                                                                       
                                         selectedChannel
                                           ?.organizationChannelMessageList
                                           .length - 1
-                                      ]?.organizationChannelMessageContent ??
-                                        '',
+                                      ]?.organizationChannelMessageContent ?? '',
                                       selectedChannel
                                         ?.organizationChannelMessageList[
                                         selectedChannel
@@ -726,8 +705,7 @@ const ChannelSummary = () => {
                                   selectedChannel
                                     ?.organizationChannelMessageList[
                                     selectedChannel
-                                      ?.organizationChannelMessageList.length -
-                                      1
+                                      ?.organizationChannelMessageList.length - 1
                                   ]?.organizationChannelMessageId ? (
                                     <DoneIcon sx={{ color: '#212B36' }} />
                                   ) : (
@@ -844,6 +822,7 @@ const ChannelSummary = () => {
                                 >
                                   <PermIdentityRounded
                                     sx={{
+
                                       width: '30px',
                                       height: '30px',
                                       color: 'white',
@@ -859,6 +838,7 @@ const ChannelSummary = () => {
                             </Box>
                             <Typography
                               sx={{
+
                                 mt: '10px',
                               }}
                             >
@@ -921,7 +901,7 @@ const ChannelSummary = () => {
                                   </IconButton>
                                 </Tooltip>
                                 {/* <IconButton aria-label="Pin">
-                                  <PushPinRounded sx={{ color: 'black' }} />
+                                  <PushPinRounded sx={{ color: "black" }} />
                                 </IconButton> */}
                               </Box>
                             </Box>
@@ -1049,7 +1029,7 @@ const ChannelSummary = () => {
                                             fontWeight: 600,
                                             fontSize: '24px',
                                             textAlign: 'start',
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'var(--font-bold)',
                                             fontStyle: 'normal',
                                             lineHeight: 'normal',
                                             color:
@@ -1079,7 +1059,7 @@ const ChannelSummary = () => {
                                           overflow: 'hidden',
                                           fontStyle: 'normal',
                                           lineHeight: 'normal',
-                                          fontFamily: 'Open Sans',
+                                          fontFamily: 'var(--font-bold)',
                                           textOverflow: 'ellipsis',
                                           color:
                                             'var(--Primary-Black, #212B36)',
@@ -1157,7 +1137,7 @@ const ChannelSummary = () => {
                                             fontWeight: 600,
                                             fontSize: '24px',
                                             textAlign: 'start',
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'var(--font-bold)',
                                             fontStyle: 'normal',
                                             lineHeight: 'normal',
                                             color:
@@ -1187,7 +1167,7 @@ const ChannelSummary = () => {
                                           overflow: 'hidden',
                                           fontStyle: 'normal',
                                           lineHeight: 'normal',
-                                          fontFamily: 'Open Sans',
+                                          fontFamily: 'var(--font-bold)',
                                           textOverflow: 'ellipsis',
                                           color:
                                             'var(--Primary-Black, #212B36)',
@@ -1265,7 +1245,7 @@ const ChannelSummary = () => {
                                             fontWeight: 600,
                                             fontSize: '24px',
                                             textAlign: 'start',
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'var(--font-bold)',
                                             fontStyle: 'normal',
                                             lineHeight: 'normal',
                                             color:
@@ -1295,7 +1275,7 @@ const ChannelSummary = () => {
                                           overflow: 'hidden',
                                           fontStyle: 'normal',
                                           lineHeight: 'normal',
-                                          fontFamily: 'Open Sans',
+                                          fontFamily: 'var(--font-bold)',
                                           textOverflow: 'ellipsis',
                                           color:
                                             'var(--Primary-Black, #212B36)',
@@ -1315,7 +1295,6 @@ const ChannelSummary = () => {
                   </Grid2>
                 </Grid2>
               </>
-              {/* )} */}
             </Box>
           </ToolbarDrawer>
         </Box>
@@ -1363,7 +1342,7 @@ const ChannelSummary = () => {
                   fontWeight: 600,
                   fontSize: '16px',
                   overflow: 'hidden',
-                  fontFamily: 'Inter',
+                  fontFamily: 'var(--font-bold)',
                   fontStyle: 'normal',
                   lineHeight: 'normal',
                   textOverflow: 'ellipsis',
@@ -1382,9 +1361,7 @@ const ChannelSummary = () => {
                 setToolsAnchor={setToolsAnchor}
                 handleCloseToolsMenu={handleCloseToolsMenu}
                 handleOpenEditChannelDialog={handleOpenEditChannelDialog}
-                handleDeleteChannelOpenConfirmDialog={
-                  handleDeleteChannelOpenConfirmDialog
-                }
+                handleDeleteChannelOpenConfirmDialog={handleDeleteChannelOpenConfirmDialog}
                 anchorOrigin={{
                   vertical: 'bottom',
                   horizontal: 'right',
@@ -1549,7 +1526,7 @@ const ChannelSummary = () => {
                   fontSize: '14px',
                   fontStyle: 'normal',
                   lineHeight: 'normal',
-                  fontFamily: 'Open Sans',
+                  fontFamily: 'var(--font-bold)',
                   color: 'var(--Text-Secondary, #637381)',
                   '&.Mui-selected': {
                     color: 'var(--Text-Primary, #212B36)',
@@ -1564,7 +1541,7 @@ const ChannelSummary = () => {
                   fontSize: '14px',
                   fontStyle: 'normal',
                   lineHeight: 'normal',
-                  fontFamily: 'Open Sans',
+                  fontFamily: 'var(--font-bold)',
                   color: 'var(--Text-Secondary, #637381)',
                   '&.Mui-selected': {
                     color: 'var(--Text-Primary, #212B36)',
@@ -1582,7 +1559,7 @@ const ChannelSummary = () => {
                   fontSize: '14px',
                   fontStyle: 'normal',
                   lineHeight: 'normal',
-                  fontFamily: 'Open Sans',
+                  fontFamily: 'var(--font-bold)',
                   color: 'var(--Text-Secondary, #637381)',
                   '&.Mui-selected': {
                     color: 'var(--Text-Primary, #212B36)',
@@ -1627,8 +1604,7 @@ const ChannelSummary = () => {
                     title={
                       copiedMessageId ===
                       selectedChannel?.organizationChannelMessageList[
-                        selectedChannel?.organizationChannelMessageList.length -
-                          1
+                        selectedChannel?.organizationChannelMessageList.length - 1
                       ]?.organizationChannelMessageId
                         ? 'Copied'
                         : 'Copy'
@@ -1661,8 +1637,7 @@ const ChannelSummary = () => {
                     >
                       {copiedMessageId ===
                       selectedChannel?.organizationChannelMessageList[
-                        selectedChannel?.organizationChannelMessageList.length -
-                          1
+                        selectedChannel?.organizationChannelMessageList.length - 1
                       ]?.organizationChannelMessageId ? (
                         <DoneIcon sx={{ color: '#212B36' }} />
                       ) : (
@@ -1696,8 +1671,7 @@ const ChannelSummary = () => {
                   <ReactMarkdown>
                     {
                       selectedChannel?.organizationChannelMessageList[
-                        selectedChannel?.organizationChannelMessageList.length -
-                          1
+                        selectedChannel?.organizationChannelMessageList.length - 1
                       ]?.organizationChannelMessageContent
                     }
                   </ReactMarkdown>
@@ -1941,7 +1915,7 @@ const ChannelSummary = () => {
                                 fontWeight: 600,
                                 fontSize: '24px',
                                 textAlign: 'start',
-                                fontFamily: 'Inter',
+                                fontFamily: 'var(--font-bold)',
                                 fontStyle: 'normal',
                                 lineHeight: 'normal',
                                 color: 'var(--Primary-Black, #212B36)',
@@ -1970,7 +1944,7 @@ const ChannelSummary = () => {
                               overflow: 'hidden',
                               fontStyle: 'normal',
                               lineHeight: 'normal',
-                              fontFamily: 'Open Sans',
+                              fontFamily: 'var(--font-bold)',
                               textOverflow: 'ellipsis',
                               color: 'var(--Primary-Black, #212B36)',
                             }}
@@ -2047,7 +2021,7 @@ const ChannelSummary = () => {
                                 fontWeight: 600,
                                 fontSize: '24px',
                                 textAlign: 'start',
-                                fontFamily: 'Inter',
+                                fontFamily: 'var(--font-bold)',
                                 fontStyle: 'normal',
                                 lineHeight: 'normal',
                                 color: 'var(--Primary-Black, #212B36)',
@@ -2076,7 +2050,7 @@ const ChannelSummary = () => {
                               overflow: 'hidden',
                               fontStyle: 'normal',
                               lineHeight: 'normal',
-                              fontFamily: 'Open Sans',
+                              fontFamily: 'var(--font-bold)',
                               textOverflow: 'ellipsis',
                               color: 'var(--Primary-Black, #212B36)',
                             }}
@@ -2153,7 +2127,7 @@ const ChannelSummary = () => {
                                 fontWeight: 600,
                                 fontSize: '24px',
                                 textAlign: 'start',
-                                fontFamily: 'Inter',
+                                fontFamily: 'var(--font-bold)',
                                 fontStyle: 'normal',
                                 lineHeight: 'normal',
                                 color: 'var(--Primary-Black, #212B36)',
@@ -2182,7 +2156,7 @@ const ChannelSummary = () => {
                               overflow: 'hidden',
                               fontStyle: 'normal',
                               lineHeight: 'normal',
-                              fontFamily: 'Open Sans',
+                              fontFamily: 'var(--font-bold)',
                               textOverflow: 'ellipsis',
                               color: 'var(--Primary-Black, #212B36)',
                             }}
@@ -2216,6 +2190,15 @@ const ChannelSummary = () => {
         editableName={selectedChannel?.organizationChannelTitle || ''}
       />
     </>
+  );
+};
+
+// Main component that wraps with Suspense
+const ChannelSummary = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ChannelSummaryContent />
+    </Suspense>
   );
 };
 

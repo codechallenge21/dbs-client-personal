@@ -2,9 +2,14 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import MermaidChart from '@/components/MermaidChart/mermaidChart';
 
-export default function MermaidMarkdown({ chartData }) {
+type MermaidMarkdownProps = {
+  chartData: string;
+  customStyle?: React.CSSProperties;
+};
+
+export default function MermaidMarkdown({ chartData, customStyle }: MermaidMarkdownProps) {
   return (
-    <div>
+    <div style={customStyle}>
       <ReactMarkdown
         components={{
           // Custom renderer for code blocks.

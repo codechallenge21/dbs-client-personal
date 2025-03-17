@@ -1,31 +1,31 @@
 'use client';
 
-import { useState, useEffect, useContext, useRef, useCallback } from 'react';
-import {
-  Box,
-  TextField,
-  Typography,
-  Paper,
-  Stack,
-  Button,
-  Checkbox,
-  IconButton,
-  InputAdornment,
-  useMediaQuery,
-  useTheme,
-  CircularProgress,
-} from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
-import DeleteIcon from '@mui/icons-material/Delete';
-import DeleteConfirmationModal from '../dialogs/DeleteConfirmationModal';
-import { useChatChannels } from '@/utils/hooks/useChatChannels';
-import {
-  OrganizationChannel,
-  OrganizationChannelData,
-} from '@/interfaces/entities';
-import { useRouter } from 'next/navigation';
 import ChannelContentContext from '@/context/ChannelContentContext';
-import { motion, AnimatePresence } from 'framer-motion';
+import {
+    OrganizationChannel,
+    OrganizationChannelData,
+} from '@/interfaces/entities';
+import { useChatChannels } from '@/utils/hooks/useChatChannels';
+import DeleteIcon from '@mui/icons-material/Delete';
+import SearchIcon from '@mui/icons-material/Search';
+import {
+    Box,
+    Button,
+    Checkbox,
+    CircularProgress,
+    IconButton,
+    InputAdornment,
+    Paper,
+    Stack,
+    TextField,
+    Typography,
+    useMediaQuery,
+    useTheme,
+} from '@mui/material';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import DeleteConfirmationModal from '../dialogs/DeleteConfirmationModal';
 import { customScrollbarStyle } from '../toolbar-drawer-new/ToolbarDrawer';
 
 // Updated motion variants:
@@ -299,7 +299,7 @@ export default function ChannelSearchCombined() {
                 <Typography
                   sx={{
                     color: 'var(--Primary-Black, #212B36)',
-                    fontFamily: 'Open Sans',
+                    fontFamily: 'var(--font-bold)',
                     fontSize: '14px',
                     fontStyle: 'normal',
                     fontWeight: 700,
@@ -328,7 +328,7 @@ export default function ChannelSearchCombined() {
                       onClick={handleToggleV2}
                       sx={{
                         color: 'primary.main',
-                        fontFamily: 'Open Sans',
+                        fontFamily: 'var(--font-bold)',
                         fontSize: '14px',
                         fontStyle: 'normal',
                         fontWeight: 700,
@@ -435,7 +435,7 @@ export default function ChannelSearchCombined() {
                         <Typography
                           sx={{
                             color: '#000',
-                            fontFamily: 'Open Sans',
+                            fontFamily: 'var(--font-bold)',
                             fontSize: '14px',
                             fontStyle: 'normal',
                             fontWeight: 700,
@@ -455,7 +455,7 @@ export default function ChannelSearchCombined() {
                             overflow: 'hidden',
                             color: 'text.secondary',
                             textOverflow: 'ellipsis',
-                            fontFamily: 'Open Sans',
+                            fontFamily: 'var(--font-bold)',
                             fontSize: '12px',
                             fontStyle: 'normal',
                             fontWeight: 400,
@@ -539,7 +539,7 @@ export default function ChannelSearchCombined() {
                 <Typography
                   sx={{
                     color: '#CC0000',
-                    fontFamily: 'Open Sans',
+                    fontFamily: 'var(--font-bold)',
                     fontSize: '14px',
                     fontStyle: 'normal',
                     fontWeight: 700,
@@ -575,7 +575,7 @@ export default function ChannelSearchCombined() {
                       }}
                       sx={{
                         color: '#CC0000',
-                        fontFamily: 'Open Sans',
+                        fontFamily: 'var(--font-bold)',
                         fontSize: '14px',
                         fontStyle: 'normal',
                         fontWeight: 700,
@@ -597,7 +597,7 @@ export default function ChannelSearchCombined() {
                   aria-label="Cancel"
                   variant="outlined"
                   sx={{
-                    fontFamily: 'Open Sans',
+                    fontFamily: 'var(--font-bold)',
                     fontSize: '14px',
                     fontStyle: 'normal',
                     fontWeight: 700,
@@ -617,7 +617,7 @@ export default function ChannelSearchCombined() {
                   disabled={selectedChannels.length === 0}
                   onClick={handleDelete}
                   sx={{
-                    fontFamily: 'Open Sans',
+                    fontFamily: 'var(--font-bold)',
                     fontSize: '14px',
                     fontStyle: 'normal',
                     fontWeight: 700,
@@ -700,7 +700,7 @@ export default function ChannelSearchCombined() {
                       <Typography
                         sx={{
                           color: '#990000',
-                          fontFamily: 'Open Sans',
+                          fontFamily: 'var(--font-bold)',
                           fontSize: '14px',
                           fontStyle: 'normal',
                           fontWeight: 700,

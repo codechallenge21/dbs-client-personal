@@ -2,10 +2,6 @@ import { AdvisorType } from '@/app/chat/types';
 import { Locale } from '@eGroupAI/typings/apis';
 import { Outcome } from '@eGroupAI/utils/getDeviceInfo';
 
-export interface UploadFileApiPayload {
-  file: File;
-}
-
 export type LogApiPayload = {
   function: string;
   browserDescription: string;
@@ -83,4 +79,19 @@ export interface LogoutPayload {
 
 export interface ForgotPasswordApiPayload {
   organizationUserEmail: string;
+}
+
+export interface getUserFeedbackApiPayload {
+  messageId: string;
+  organizationChannelId: string;
+  organizationId: string;
+}
+
+export interface addUserFeedbackApiPayload {
+  organizationId: string;
+  organizationChannelFeedbackTarget: string;
+  organizationChannelFeedbackTargetId: string;
+  organizationChannelFeedbackType: string;
+  organizationChannelFeedbackNegativeCategory?: string;
+  organizationChannelFeedbackComment: string;
 }

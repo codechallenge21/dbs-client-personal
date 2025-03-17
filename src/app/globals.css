@@ -63,8 +63,8 @@
 }
 
 .fallback-fonts-loaded {
-  --font-bold: "DFPHeiBold-B5", sans-serif;
-  --font-medium: "DFPHeiMedium-B5", sans-serif;
+  --font-bold: "DFT_B5", "DFPHeiBold-B5", sans-serif;
+  --font-medium: "DFT_B7", "DFPHeiMedium-B5", sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -79,7 +79,7 @@ body {
   margin: 0;
   color: var(--foreground);
   background: var(--background);
-  font-family: "Roboto", Arial, Helvetica, sans-serif;
+  font-family: var(--font-bold);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   width: 100%;

@@ -1,23 +1,23 @@
 'use client';
 
-import { useState, useEffect, useContext } from 'react';
-import {
-  Dialog,
-  TextField,
-  Button,
-  Typography,
-  IconButton,
-  Box,
-  useTheme,
-  useMediaQuery,
-} from '@mui/material';
-import ErrorIcon from '@mui/icons-material/Error';
-import { CloseRounded } from '@mui/icons-material';
-import { SnackbarContext } from '@/context/SnackbarContext';
-import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
-import apis from '@/utils/hooks/apis/apis';
-import { useRouter } from 'next/navigation';
 import { useLoginContext } from '@/context/LoginContext';
+import { SnackbarContext } from '@/context/SnackbarContext';
+import apis from '@/utils/hooks/apis/apis';
+import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
+import { CloseRounded } from '@mui/icons-material';
+import ErrorIcon from '@mui/icons-material/Error';
+import {
+    Box,
+    Button,
+    Dialog,
+    IconButton,
+    TextField,
+    Typography,
+    useMediaQuery,
+    useTheme,
+} from '@mui/material';
+import { useRouter } from 'next/navigation';
+import { useContext, useEffect, useState } from 'react';
 
 interface ResetPasswordDialogProps {
   token: string | null;
@@ -149,7 +149,7 @@ export default function ResetPasswordDialog({
               fontSize: isMobile ? '24px' : '32px',
               fontStyle: 'normal',
               lineHeight: isMobile ? '36px' : '48px',
-              fontFamily: 'DFPHeiBold-B5',
+              fontFamily: 'var(--font-bold)',
             }}
           >
             重設密碼

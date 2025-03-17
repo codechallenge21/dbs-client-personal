@@ -8,8 +8,10 @@ import {
   useTheme,
 } from "@mui/material";
 import Image from "next/image";
+import { Suspense } from "react";
 
-export default function NotFound() {
+// Create a client component for content that might use client hooks
+function NotFoundContent() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
@@ -42,7 +44,7 @@ export default function NotFound() {
           lineHeight: titleLineHeight,
           textAlign: "center",
           color: "#000000",
-          fontFamily: "DFPHeiUBold-B5",
+          fontFamily: "var(--font-bold)",
         }}
       >
         404
@@ -100,5 +102,14 @@ export default function NotFound() {
         回首頁
       </Button>
     </Box>
+  );
+}
+
+// Main NotFound component with proper Suspense implementation
+export default function NotFound() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <NotFoundContent />
+    </Suspense>
   );
 }

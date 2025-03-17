@@ -1,4 +1,5 @@
 'use client';
+import WishPoolDialog from '@/components/dialogs/WishPoolDialog';
 import ChannelContentContext from '@/context/ChannelContentContext';
 import apis from '@/utils/hooks/apis/apis';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
@@ -82,7 +83,7 @@ const drawerItems = [
   {
     text: '活動公告',
     icon: <CampaignRounded sx={{ color: '#212B36' }} />,
-    route: '', //events,
+    route: '/events',
   },
   {
     text: '解決麻煩事',
@@ -97,7 +98,7 @@ const drawerItems = [
   {
     text: '財務快篩',
     icon: <PaidRounded sx={{ color: '#212B36' }} />,
-    route: '', //financial-screening
+    route: '',// finance
   },
   {
     text: '知識庫',
@@ -211,11 +212,13 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
   const searchParams = useSearchParams();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
   const { excute: logout } = useAxiosApi(apis.logout);
 
   const [isClient, setIsClient] = useState(false);
   const [isExpanded, setIsExpanded] = useState(true); // Track expanded/collapsed state
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [isWishPoolDialogOpen, setIsWishPoolDialogOpen] = useState(false);
 
   const { selectedChannel, selectedChannelId, isInteractingInChat } =
     useContext(ChannelContentContext);
@@ -438,7 +441,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               <Typography
                 sx={{
                   display: 'flex',
-                  fontFamily: 'Public Sans',
+                  fontFamily: 'var(--font-bold)',
                   fontSize: '13px',
                   fontStyle: 'normal',
                   fontWeight: 700,
@@ -715,7 +718,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                   justifyContent: 'center',
                   border: '2px solid var(--Primary-Black, #212B36)',
                   background: 'var(--Primary-White, #FFF)',
-                  fontFamily: 'Public Sans',
+                  fontFamily: 'var(--font-bold)',
                   fontSize: '15px',
                   fontWeight: 700,
                   lineHeight: 'normal',
@@ -738,14 +741,15 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 alignItems: 'center',
                 justifyContent: 'center',
                 background: 'var(--Secondary-, #5C443A)',
-                fontFamily: 'Public Sans',
+                fontFamily: 'var(--font-bold)',
                 fontSize: '13px',
                 fontWeight: 700,
                 lineHeight: 'normal',
                 height: '30px',
               }}
-              disabled={true}
-              title="Coming Soon"
+              onClick={() => {
+                setIsWishPoolDialogOpen(true);
+              }}
             >
               <EmojiObjectsRounded sx={{ color: '', fontSize: '18px' }} />
               許願池
@@ -763,7 +767,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 alignItems: 'center',
                 justifyContent: 'center',
                 background: 'var(--Secondary-, #5C443A)',
-                fontFamily: 'Public Sans',
+                fontFamily: 'var(--font-bold)',
                 fontSize: '13px',
                 fontWeight: 700,
                 lineHeight: 'normal',
@@ -898,7 +902,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                   sx={{
                     fontWeight: 600,
                     fontSize: '16px',
-                    fontFamily: 'Inter',
+                    fontFamily: 'var(--font-bold)',
                     fontStyle: 'normal',
                     lineHeight: 'normal',
                     color:
@@ -960,9 +964,8 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
       <MainBox
         open={openDataSource}
         sx={{
-          marginRight: isMobile ? 0 : openDataSource ? '446px' : 0,
+          marginRight: isMobile ? 0 : openDataSource && !isTablet ? '446px' : 0,
           overflow: 'auto',
-          marginBottom: '16px',
           transition: 'margin-left 0.3s',
           marginLeft:
             isExpanded && !isMobile ? '255px' : isMobile ? '0' : '75px',
@@ -971,6 +974,12 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
       >
         {children}
       </MainBox>
+      <WishPoolDialog
+        open={isWishPoolDialogOpen}
+        onClose={() => {
+          setIsWishPoolDialogOpen(false);
+        }}
+      />
     </Box>
   );
 };

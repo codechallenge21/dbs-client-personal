@@ -14,17 +14,16 @@ import {
 import React, { useContext, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
 
-interface UploadScreenProps {
-  handleUploadFile: (
-    file: File,
-    fileInfo: {
-      organizationChannelTitle: string;
-      organizationChannelCreateDate: string;
-    }
-  ) => void;
+interface FileInfo {
+  organizationChannelTitle: string;
+  organizationChannelCreateDate: string;
 }
 
-const UploadScreen: React.FC<UploadScreenProps> = ({ handleUploadFile }) => {
+interface UploadScreenProps {
+  handleUploadFiles: (files: File[], filesInfo: FileInfo[]) => void;
+}
+
+const UploadScreen: React.FC<UploadScreenProps> = ({ handleUploadFiles }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -32,7 +31,8 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ handleUploadFile }) => {
   const { showSnackbar } = useContext(SnackbarContext);
 
   const FILE_CONFIG = {
-    maxSize: 200 * 1024 * 1024, // 200MB
+    maxSize: 300 * 1024 * 1024, // 300MB
+    maxFiles: 5,
     allowedFormats: [
       'audio/mpeg',
       'audio/mp4',
@@ -58,8 +58,9 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ handleUploadFile }) => {
     errorMessages: {
       invalidFormat:
         '不支援的檔案格式，請選擇 mp3, mp4, mpeg, mpga, m4a, wav, aac, webm 或 amr 格式',
-      sizeExceeded: '檔案大小超過 200MB 限制',
+      sizeExceeded: '檔案大小超過 300MB 限制',
       uploadFailed: '上傳失敗',
+      maxFilesExceeded: '最多只能上傳 5 個檔案',
     },
     supportedFormats: {
       mobile: '支援檔案格式： mp3, mp4, mpeg, mpga, m4a, wav, aac, webm, amr',
@@ -67,50 +68,75 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ handleUploadFile }) => {
     },
   };
 
-  const validateFile = async (file: File) => {
+  // Validate a single file and return its info if valid.
+  const validateFile = async (
+    file: File
+  ): Promise<{ file: File; fileInfo: FileInfo } | null> => {
     try {
-      // Check if the file extension matches any of our allowed extensions
       const fileExtension = file.name.toLowerCase().split('.').pop();
-      const isValidExtension = FILE_CONFIG.allowedExtensions.some(ext => 
-        ext.toLowerCase() === `.${fileExtension}`
+      const isValidExtension = FILE_CONFIG.allowedExtensions.some(
+        (ext) => ext.toLowerCase() === `.${fileExtension}`
       );
-      
-      // Check for valid MIME type
       const isValidMimeType = FILE_CONFIG.allowedFormats.includes(
         file.type as (typeof FILE_CONFIG.allowedFormats)[number]
       );
-      
-      // Accept if either the extension or MIME type is valid
+
       if (!isValidExtension && !isValidMimeType) {
         showSnackbar(FILE_CONFIG.errorMessages.invalidFormat, 'error');
-        return;
+        return null;
       }
 
       if (file.size > FILE_CONFIG.maxSize) {
         showSnackbar(FILE_CONFIG.errorMessages.sizeExceeded, 'error');
-        return;
+        return null;
       }
 
-      // Use the formatDate utility function for consistent date formatting
       const formattedDate = formatDate();
-
-      // Create header info with filename as name and current timestamp
-      const fileInfo = {
-        organizationChannelTitle: file.name.split('.')[0] || 'Unknown', // Remove file extension
+      const fileInfo: FileInfo = {
+        organizationChannelTitle: file.name.split('.')[0] || 'Unknown',
         organizationChannelCreateDate: formattedDate,
       };
-      handleUploadFile(file, fileInfo);
+      return { file, fileInfo };
     } catch (err) {
       showSnackbar(FILE_CONFIG.errorMessages.uploadFailed, 'error');
       console.error(err);
+      return null;
     }
   };
 
+  // Process an array of files, validate each and call the upload API once for valid files.
+  const processFiles = async (files: File[]) => {
+    // Validate file count before processing.
+    if (files.length > FILE_CONFIG.maxFiles) {
+      showSnackbar(FILE_CONFIG.errorMessages.maxFilesExceeded, 'error');
+      return;
+    }
+    const validationResults = await Promise.all(
+      files.map((file) => validateFile(file))
+    );
+    const validResults = validationResults.filter(
+      (result) => result !== null
+    ) as { file: File; fileInfo: FileInfo }[];
+
+    if (validResults.length === 0) return;
+
+    const filesToUpload = validResults.map((result) => result.file);
+    const filesInfoToUpload = validResults.map((result) => result.fileInfo);
+    handleUploadFiles(filesToUpload, filesInfoToUpload);
+  };
+
+  // Handle file input change.
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     if (!requireAuth()) return;
-    if (e.target.files && e.target.files.length > 0 && e.target.files[0]) {
-      validateFile(e.target.files[0]);
+    if (e.target.files && e.target.files.length > 0) {
+      const files = Array.from(e.target.files);
+      if (files.length > FILE_CONFIG.maxFiles) {
+        showSnackbar(FILE_CONFIG.errorMessages.maxFilesExceeded, 'error');
+        e.target.value = '';
+        return;
+      }
+      processFiles(files);
       e.target.value = '';
     }
   };
@@ -119,25 +145,30 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ handleUploadFile }) => {
     event.stopPropagation();
     if (!requireAuth()) return;
     if (
-      fileInputRef?.current &&
+      fileInputRef.current &&
       !fileInputRef.current.hasAttribute('data-clicked')
     ) {
       fileInputRef.current.setAttribute('data-clicked', 'true');
       fileInputRef.current.click();
       setTimeout(() => {
-        fileInputRef?.current?.removeAttribute('data-clicked');
+        fileInputRef.current?.removeAttribute('data-clicked');
       }, 1000);
     }
   };
 
+  // Handle files dropped via drag-and-drop.
   const handleDrop = (acceptedFiles: File[]) => {
-    if (acceptedFiles && acceptedFiles.length > 0 && acceptedFiles[0]) {
-      validateFile(acceptedFiles[0]);
+    if (acceptedFiles && acceptedFiles.length > 0) {
+      if (acceptedFiles.length > FILE_CONFIG.maxFiles) {
+        showSnackbar(FILE_CONFIG.errorMessages.maxFilesExceeded, 'error');
+        return;
+      }
+      processFiles(acceptedFiles);
     }
   };
 
   const handleDropRejected = () => {
-    showSnackbar('檔案格式錯誤或檔案大小超過 200MB 限制', 'error');
+    showSnackbar('檔案格式錯誤或檔案大小超過 300MB 限制', 'error');
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -145,6 +176,8 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ handleUploadFile }) => {
     onDropRejected: handleDropRejected,
     accept: { 'audio/*': FILE_CONFIG.allowedExtensions },
     maxSize: FILE_CONFIG.maxSize,
+    multiple: true,
+    maxFiles: FILE_CONFIG.maxFiles,
   });
 
   return (
@@ -183,8 +216,9 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ handleUploadFile }) => {
             height: '253px',
           }}
         >
+          {/* The dropzone input */}
           <input
-            {...getInputProps()}
+            {...getInputProps({ multiple: true })}
             onChange={handleFileUpload}
             ref={fileInputRef}
           />
@@ -236,8 +270,10 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ handleUploadFile }) => {
             startIcon={<UploadRounded />}
           >
             上傳檔案
+            {/* Secondary hidden file input for button clicks */}
             <input
               type="file"
+              multiple
               onChange={handleFileUpload}
               accept={FILE_CONFIG.allowedExtensions.join(',')}
               style={{ display: 'none' }}
