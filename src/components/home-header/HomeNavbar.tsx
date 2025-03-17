@@ -11,7 +11,6 @@ import {
   Typography,
 } from '@mui/material';
 import Image from 'next/image';
-import React from 'react';
 
 export const HomeNavBar = () => {
   return (
@@ -43,7 +42,7 @@ export const HomeNavBar = () => {
               <Typography
                 variant="h6"
                 sx={{
-                  fontFamily: "'Epilogue-Bold', Helvetica",
+                  fontFamily: 'var(--font-bold)',
                   fontWeight: 'bold',
                   color: '#ff5733',
                 }}

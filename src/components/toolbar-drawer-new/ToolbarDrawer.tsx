@@ -1,4 +1,5 @@
 'use client';
+import WishPoolDialog from '@/components/dialogs/WishPoolDialog';
 import ChannelContentContext from '@/context/ChannelContentContext';
 import apis from '@/utils/hooks/apis/apis';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
@@ -82,7 +83,7 @@ const drawerItems = [
   {
     text: '活動公告',
     icon: <CampaignRounded sx={{ color: '#212B36' }} />,
-    route: '', //events,
+    route: '/events',
   },
   {
     text: '解決麻煩事',
@@ -97,7 +98,7 @@ const drawerItems = [
   {
     text: '財務快篩',
     icon: <PaidRounded sx={{ color: '#212B36' }} />,
-    route: '', //financial-screening
+    route: '',// finance
   },
   {
     text: '知識庫',
@@ -211,11 +212,13 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
   const searchParams = useSearchParams();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
   const { excute: logout } = useAxiosApi(apis.logout);
 
   const [isClient, setIsClient] = useState(false);
   const [isExpanded, setIsExpanded] = useState(true); // Track expanded/collapsed state
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [isWishPoolDialogOpen, setIsWishPoolDialogOpen] = useState(false);
 
   const { selectedChannel, selectedChannelId, isInteractingInChat } =
     useContext(ChannelContentContext);
@@ -364,6 +367,8 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             </Typography>
           )}
           <IconButton
+            disableRipple
+            disableFocusRipple
             role="button"
             aria-label="Expand/Collapse"
             onClick={() => {
@@ -376,8 +381,21 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             }}
             sx={{
               color: '#212B36',
-              padding: '8px',
+              padding: '3px',
               transform: !isExpanded && !isMobile ? 'rotate(180deg)' : 'none',
+              '&:hover': {
+                backgroundColor: 'transparent !important',
+              },
+              '&:active': {
+                backgroundColor: 'transparent !important',
+              },
+              '&:focus-visible': {
+                backgroundColor: 'rgba(245, 12, 12, 0.08)!important',
+                border: '2px solid var(--Primary-Black, #919EAB)',
+              },
+              '&:focus-visible:hover': {
+                backgroundColor: 'rgba(219, 20, 20, 0.08)!important',
+              },
             }}
           >
             <MenuOpenRounded />
@@ -393,6 +411,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             }}
           >
             <Button
+              disableRipple
               role="button"
               aria-label="New Chat"
               sx={{
@@ -405,6 +424,14 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 justifyContent: 'center',
                 border: '1px solid var(--Primary-Black, #212B36)',
                 color: 'var(--Primary-Black, #212B36)',
+                '&:focus-visible': {
+                  outlineOffset: '2px',
+                  backgroundColor: 'rgba(204, 0, 0, 0.08)',
+                  border: '2px solid var(--Primary-Black,#919EAB)',
+                },
+                '&:focus-visible:hover': {
+                  backgroundColor: 'rgba(204, 0, 0, 0.08)',
+                },
               }}
               onClick={() => {
                 resetChat();
@@ -414,7 +441,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               <Typography
                 sx={{
                   display: 'flex',
-                  fontFamily: 'Public Sans',
+                  fontFamily: 'var(--font-bold)',
                   fontSize: '13px',
                   fontStyle: 'normal',
                   fontWeight: 700,
@@ -467,6 +494,8 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             {drawerItems.map((item, index) => (
               <ListItem
                 key={index}
+                tabIndex={item.route !== '' ? 0 : -1}
+                aria-label={item.text}
                 sx={{
                   padding: '8px',
                   borderRadius: '8px',
@@ -475,7 +504,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                     (pathname === '/' && item.route === '/chat') ||
                     (pathname === '/channel-summary' &&
                       item.route === '/toolbox')
-                      ? 'var(--Action-Selected, rgba(204, 0, 0, 0.20))'
+                      ? 'var(--Action-Selected, rgba(204, 0, 0, 0.20)) !important'
                       : 'transparent',
                   '&:hover': {
                     backgroundColor: '#FBEDED',
@@ -487,9 +516,16 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                     opacity: 0.5,
                     cursor: 'not-allowed',
                   }),
+                  '&:focus-visible': {
+                    outline: '2px solid rgba(145,158,171,0.4)',
+                    outlineOffset: '2px',
+                    backgroundColor: 'rgba(204, 0, 0, 0.08)',
+                  },
+                  '&:focus-visible:hover': {
+                    backgroundColor: 'rgba(204, 0, 0, 0.08)',
+                  },
                 }}
                 onClick={() => {
-                  // if (!item.route) return;
                   if (index === 3) {
                     if (
                       selectedChannel ||
@@ -509,6 +545,29 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                   }
                   router.push(item.route);
                 }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    if (index === 3) {
+                      if (
+                        selectedChannel ||
+                        selectedChannelId ||
+                        isInteractingInChat
+                      ) {
+                        if (
+                          pathname === '/chat' &&
+                          !searchParams.has('organizationChannelId')
+                        ) {
+                          window.location.reload();
+                        } else {
+                          router.push('/chat');
+                        }
+                        return;
+                      }
+                    }
+                    router.push(item.route);
+                  }
+                }}
               >
                 {!isExpanded && !isMobile ? (
                   <Tooltip title={item.text} placement="right" arrow>
@@ -522,12 +581,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                         fontFamily: 'var(--font-bold)',
                       }}
                     >
-                      <span
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                        }}
-                      >
+                      <span style={{ display: 'flex', alignItems: 'center' }}>
                         {item.icon}
                       </span>
                     </Typography>
@@ -543,12 +597,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                       fontFamily: 'var(--font-bold)',
                     }}
                   >
-                    <span
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                      }}
-                    >
+                    <span style={{ display: 'flex', alignItems: 'center' }}>
                       {item.icon}
                     </span>
                     {(isExpanded || isMobile) && (
@@ -590,6 +639,20 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                     alignItems: 'center',
                     gap: '8px',
                     alignSelf: 'stretch',
+                    '&:focus-visible': {
+                      outline: '2px solid rgba(145,158,171,0.4)',
+                      outlineOffset: '2px',
+                      backgroundColor: 'rgba(204, 0, 0, 0.08) !important',
+                      '&:hover': {
+                        backgroundColor: 'rgba(204, 0, 0, 0.08) !important',
+                      },
+                    },
+                    '&:active:focus-visible': {
+                      backgroundColor: 'transparent !important',
+                    },
+                    '&:hover': {
+                      backgroundColor: 'transparent !important',
+                    },
                   }}
                 >
                   <Box
@@ -597,7 +660,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                       display: 'flex',
                       alignItems: 'center',
                       gap: '8px',
-                      flex: 1, // makes the left group take available space
+                      flex: 1,
                     }}
                   >
                     <PermIdentityRounded sx={{ color: '#212B36' }} />
@@ -630,7 +693,10 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                   anchorEl={anchorEl}
                   onClose={handleClose}
                   anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                  transformOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                  transformOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                  }}
                   isExpanded={isExpanded}
                 />
               </>
@@ -652,7 +718,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                   justifyContent: 'center',
                   border: '2px solid var(--Primary-Black, #212B36)',
                   background: 'var(--Primary-White, #FFF)',
-                  fontFamily: 'Public Sans',
+                  fontFamily: 'var(--font-bold)',
                   fontSize: '15px',
                   fontWeight: 700,
                   lineHeight: 'normal',
@@ -675,14 +741,15 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 alignItems: 'center',
                 justifyContent: 'center',
                 background: 'var(--Secondary-, #5C443A)',
-                fontFamily: 'Public Sans',
+                fontFamily: 'var(--font-bold)',
                 fontSize: '13px',
                 fontWeight: 700,
                 lineHeight: 'normal',
                 height: '30px',
               }}
-              disabled={true}
-              title="Coming Soon"
+              onClick={() => {
+                setIsWishPoolDialogOpen(true);
+              }}
             >
               <EmojiObjectsRounded sx={{ color: '', fontSize: '18px' }} />
               許願池
@@ -700,7 +767,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 alignItems: 'center',
                 justifyContent: 'center',
                 background: 'var(--Secondary-, #5C443A)',
-                fontFamily: 'Public Sans',
+                fontFamily: 'var(--font-bold)',
                 fontSize: '13px',
                 fontWeight: 700,
                 lineHeight: 'normal',
@@ -835,7 +902,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                   sx={{
                     fontWeight: 600,
                     fontSize: '16px',
-                    fontFamily: 'Inter',
+                    fontFamily: 'var(--font-bold)',
                     fontStyle: 'normal',
                     lineHeight: 'normal',
                     color:
@@ -897,9 +964,8 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
       <MainBox
         open={openDataSource}
         sx={{
-          marginRight: isMobile ? 0 : openDataSource ? '446px' : 0,
+          marginRight: isMobile ? 0 : openDataSource && !isTablet ? '446px' : 0,
           overflow: 'auto',
-          marginBottom: '16px',
           transition: 'margin-left 0.3s',
           marginLeft:
             isExpanded && !isMobile ? '255px' : isMobile ? '0' : '75px',
@@ -908,6 +974,12 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
       >
         {children}
       </MainBox>
+      <WishPoolDialog
+        open={isWishPoolDialogOpen}
+        onClose={() => {
+          setIsWishPoolDialogOpen(false);
+        }}
+      />
     </Box>
   );
 };

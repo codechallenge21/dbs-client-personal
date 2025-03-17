@@ -26,7 +26,7 @@ export default function CategoryCard({ icon, title, link }: CategoryCardProps) {
         <Typography
           variant="h6"
           component="div"
-          fontFamily="'Roboto Serif', Helvetica"
+          fontFamily="var(--font-bold)"
           fontWeight="bold"
           color="#e4d9d7"
           textAlign="center"

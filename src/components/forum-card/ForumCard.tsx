@@ -1,7 +1,6 @@
-import React from "react";
-import { Typography, Box } from "@mui/material";
 import { ThumbUpAltOutlined } from "@mui/icons-material";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import { Box, Typography } from "@mui/material";
 
 export default function ForumCard() {
   return (
@@ -34,7 +33,7 @@ export default function ForumCard() {
             overflow: "hidden",
             color: "#E4DAD7",
             textOverflow: "ellipsis",
-            fontFamily: "Public Sans",
+            fontFamily: 'var(--font-bold)',
             fontSize: "17px",
             fontStyle: "normal",
             fontWeight: 700,
@@ -55,7 +54,7 @@ export default function ForumCard() {
             overflow: "hidden",
             color: "#E4DAD7",
             textOverflow: "ellipsis",
-            fontFamily: "Public Sans",
+            fontFamily: 'var(--font-bold)',
             fontSize: "15px",
             fontStyle: "normal",
             fontWeight: 400,
@@ -78,7 +77,7 @@ export default function ForumCard() {
               sx={{
                 color: "#FF5733",
                 fontWeight: 500,
-                fontFamily: "Public Sans",
+                fontFamily: 'var(--font-bold)',
                 lineHeight: "16px",
               }}
             >
