@@ -29,7 +29,8 @@
   font-family: "DFPHeiBold";
   font-weight: bold;
   font-style: normal;
-  src: local("DFPHeiBold"), url("DFPHeiBold.ttf") format("opentype");
+  src: local("DFPHeiBold"),
+    url("../../public/fonts/DFHeiBold.ttf") format("opentype");
   font-display: swap;
 }
 
