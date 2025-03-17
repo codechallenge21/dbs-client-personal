@@ -322,7 +322,7 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             <Typography
               sx={{
                 color: 'var(--Primary-Black, #212B36)',
-                fontFamily: 'var(--font-bold)',
+                fontFamily: 'var(--font-light)',
                 fontSize: '20px',
                 fontWeight: 800,
                 cursor: 'pointer',
