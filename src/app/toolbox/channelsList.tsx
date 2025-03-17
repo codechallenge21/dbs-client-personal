@@ -649,7 +649,7 @@ const ChannelsList = () => {
                       onClick={() => setOpenUpload(true)}
                     >
                       <UploadRounded sx={{ color: "#fff" }} />
-                      <Typography sx={{ color: "#fff" }}>上傳檔案</Typography>
+                      <Typography sx={{ color: "#fff",fontFamily: "var(--font-bold)" }}>上傳檔案</Typography>
                     </IconButton>
                   </Box>
                 </Box>
