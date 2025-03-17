@@ -1,32 +1,32 @@
-'use client';
+"use client";
 
-import ChannelContentContext from '@/context/ChannelContentContext';
+import ChannelContentContext from "@/context/ChannelContentContext";
 import {
-    OrganizationChannel,
-    OrganizationChannelData,
-} from '@/interfaces/entities';
-import { useChatChannels } from '@/utils/hooks/useChatChannels';
-import DeleteIcon from '@mui/icons-material/Delete';
-import SearchIcon from '@mui/icons-material/Search';
+  OrganizationChannel,
+  OrganizationChannelData,
+} from "@/interfaces/entities";
+import { useChatChannels } from "@/utils/hooks/useChatChannels";
+import DeleteIcon from "@mui/icons-material/Delete";
+import SearchIcon from "@mui/icons-material/Search";
 import {
-    Box,
-    Button,
-    Checkbox,
-    CircularProgress,
-    IconButton,
-    InputAdornment,
-    Paper,
-    Stack,
-    TextField,
-    Typography,
-    useMediaQuery,
-    useTheme,
-} from '@mui/material';
-import { AnimatePresence, motion } from 'framer-motion';
-import { useRouter } from 'next/navigation';
-import { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import DeleteConfirmationModal from '../dialogs/DeleteConfirmationModal';
-import { customScrollbarStyle } from '../toolbar-drawer-new/ToolbarDrawer';
+  Box,
+  Button,
+  Checkbox,
+  CircularProgress,
+  IconButton,
+  InputAdornment,
+  Paper,
+  Stack,
+  TextField,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
+import { AnimatePresence, motion } from "framer-motion";
+import { useRouter } from "next/navigation";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import DeleteConfirmationModal from "../dialogs/DeleteConfirmationModal";
+import { customScrollbarStyle } from "../toolbar-drawer-new/ToolbarDrawer";
 
 // Updated motion variants:
 // They start at x:0 (their original position) and when exiting, slide out.
@@ -45,14 +45,14 @@ const selectAllVariants = {
 export default function ChannelSearchCombined() {
   const router = useRouter();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const { setSelectedChannel } = useContext(ChannelContentContext);
 
   // isV2 controls which view is shown
   const [isV2, setIsV2] = useState(true);
   const [channels, setChannels] = useState<OrganizationChannelData[]>([]);
   const [hoveredChannelId, setHoveredChannelId] = useState<string | null>();
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [open, setOpen] = useState(false);
 
   // Infinite scroll states
@@ -66,7 +66,7 @@ export default function ChannelSearchCombined() {
 
   const { data: chatsData, mutate: mutateChatChannels } = useChatChannels(
     {
-      organizationId: 'yMJHyi6R1CB9whpdNvtA',
+      organizationId: "yMJHyi6R1CB9whpdNvtA",
     },
     {
       startIndex: page,
@@ -183,7 +183,7 @@ export default function ChannelSearchCombined() {
         setHasMore(false);
       }
     } catch (error) {
-      console.error('Error loading channels:', error);
+      console.error("Error loading channels:", error);
       setHasMore(false);
     } finally {
       setIsFetching(false);
@@ -226,29 +226,29 @@ export default function ChannelSearchCombined() {
     <Box
       className="checkbox-visible"
       sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        bgcolor: '#ffffff',
-        overflow: 'hidden',
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        bgcolor: "#ffffff",
+        overflow: "hidden",
       }}
     >
       <Box
         sx={{
-          width: '100%',
+          width: "100%",
           maxWidth: 800,
-          maxHeight: '90vh',
-          overflow: 'hidden',
-          bgcolor: 'background.paper',
+          maxHeight: "90vh",
+          overflow: "hidden",
+          bgcolor: "background.paper",
           borderRadius: 2,
-          p: isMobile ? '16px' : 3,
-          mx: isMobile ? '' : 2,
-          display: 'flex',
-          alignItems: 'flex-start',
-          position: 'relative',
-          gap: '16px',
-          alignSelf: 'stretch',
-          flexDirection: 'column',
+          p: isMobile ? "16px" : 3,
+          mx: isMobile ? "" : 2,
+          display: "flex",
+          alignItems: "flex-start",
+          position: "relative",
+          gap: "16px",
+          alignSelf: "stretch",
+          flexDirection: "column",
         }}
       >
         {/* Search Input */}
@@ -260,18 +260,19 @@ export default function ChannelSearchCombined() {
           onChange={(e) => setSearchQuery(e.target.value)}
           variant="outlined"
           sx={{
-            '& .MuiOutlinedInput-root': {
-              borderRadius: '8px',
-              '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                borderColor: 'black',
+            "& .MuiOutlinedInput-root": {
+              borderRadius: "8px",
+              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                borderColor: "black",
               },
+              fontFamily: "var(--font-medium)",
             },
           }}
           slotProps={{
             input: {
               startAdornment: (
                 <InputAdornment position="start">
-                  <SearchIcon sx={{ color: 'text.secondary' }} />
+                  <SearchIcon sx={{ color: "text.secondary" }} />
                 </InputAdornment>
               ),
             },
@@ -282,30 +283,30 @@ export default function ChannelSearchCombined() {
             {/* Selected Channels Count */}
             <Box
               sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                flexDirection: 'row',
-                width: '100%',
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                flexDirection: "row",
+                width: "100%",
               }}
             >
               <Box
                 sx={{
-                  display: 'flex',
-                  gap: '4px',
-                  alignItems: 'center',
+                  display: "flex",
+                  gap: "4px",
+                  alignItems: "center",
                 }}
               >
                 <Typography
                   sx={{
-                    color: 'var(--Primary-Black, #212B36)',
-                    fontFamily: 'var(--font-bold)',
-                    fontSize: '14px',
-                    fontStyle: 'normal',
+                    color: "var(--Primary-Black, #212B36)",
+                    fontFamily: "var(--font-medium)",
+                    fontSize: "14px",
+                    fontStyle: "normal",
                     fontWeight: 700,
-                    lineHeight: 'normal',
-                    '& .highlight': {
-                      color: 'error.main',
+                    lineHeight: "normal",
+                    "& .highlight": {
+                      color: "error.main",
                       px: 0.5,
                     },
                   }}
@@ -327,14 +328,14 @@ export default function ChannelSearchCombined() {
                       variant="text"
                       onClick={handleToggleV2}
                       sx={{
-                        color: 'primary.main',
-                        fontFamily: 'var(--font-bold)',
-                        fontSize: '14px',
-                        fontStyle: 'normal',
+                        color: "primary.main",
+                        fontFamily: "var(--font-medium)",
+                        fontSize: "14px",
+                        fontStyle: "normal",
                         fontWeight: 700,
-                        lineHeight: 'normal',
-                        minWidth: 'auto',
-                        borderRadius: '8px',
+                        lineHeight: "normal",
+                        minWidth: "auto",
+                        borderRadius: "8px",
                       }}
                       className="highlight"
                     >
@@ -348,15 +349,15 @@ export default function ChannelSearchCombined() {
             <Box
               ref={scrollContainerRef}
               sx={{
-                width: '100%',
-                maxheight: 'calc(100vh - 140px)', // Adjust based on your layout
-                overflowY: 'auto',
-                paddingRight: '8px',
-                paddingLeft: isMobile ? '0px' : '10px',
+                width: "100%",
+                maxheight: "calc(100vh - 140px)", // Adjust based on your layout
+                overflowY: "auto",
+                paddingRight: "8px",
+                paddingLeft: isMobile ? "0px" : "10px",
                 ...customScrollbarStyle,
               }}
             >
-              <Stack spacing={1} sx={{ width: '100%' }}>
+              <Stack spacing={1} sx={{ width: "100%" }}>
                 {filteredChannels.map((channel) => {
                   const isHoveredOrSelected =
                     hoveredChannelId === channel.organizationChannelId ||
@@ -372,18 +373,18 @@ export default function ChannelSearchCombined() {
                       onMouseLeave={handleMouseLeave}
                       elevation={0}
                       sx={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
                         p: 2,
-                        border: '1px solid var(--Secondary-Dark-Gray, #4A4A4A)',
+                        border: "1px solid var(--Secondary-Dark-Gray, #4A4A4A)",
                         borderRadius: 2,
-                        position: 'relative',
-                        gap: '16px',
-                        alignSelf: 'stretch',
-                        cursor: 'pointer',
-                        '&:hover': {
-                          bgcolor: 'rgba(255, 0, 0, 0.05)',
+                        position: "relative",
+                        gap: "16px",
+                        alignSelf: "stretch",
+                        cursor: "pointer",
+                        "&:hover": {
+                          bgcolor: "rgba(255, 0, 0, 0.05)",
                         },
                       }}
                       onClick={() => {
@@ -393,14 +394,14 @@ export default function ChannelSearchCombined() {
                       {isHoveredOrSelected && (
                         <Box
                           sx={{
-                            position: 'absolute',
-                            left: '-13px',
-                            top: '50%',
-                            transform: 'translateY(-50%)',
+                            position: "absolute",
+                            left: "-13px",
+                            top: "50%",
+                            transform: "translateY(-50%)",
                             zIndex: 2,
-                            pointerEvents: 'auto',
+                            pointerEvents: "auto",
                             p: 0,
-                            bgcolor: '#fff',
+                            bgcolor: "#fff",
                           }}
                         >
                           <Checkbox
@@ -411,10 +412,10 @@ export default function ChannelSearchCombined() {
                             }}
                             onClick={(e) => e.stopPropagation()}
                             sx={{
-                              color: 'var(--Primary-Black, #212B36)',
+                              color: "var(--Primary-Black, #212B36)",
                               p: 0,
-                              '&.Mui-checked': {
-                                color: 'var(--Primary-Black, #212B36)',
+                              "&.Mui-checked": {
+                                color: "var(--Primary-Black, #212B36)",
                               },
                             }}
                           />
@@ -423,32 +424,32 @@ export default function ChannelSearchCombined() {
                       <Box>
                         <Typography
                           sx={{
-                            color: '#000',
-                            fontFamily: 'var(--font-bold)',
-                            fontSize: '14px',
-                            fontStyle: 'normal',
+                            color: "#000",
+                            fontFamily: "var(--font-medium)",
+                            fontSize: "14px",
+                            fontStyle: "normal",
                             fontWeight: 700,
-                            lineHeight: 'normal',
-                            marginBottom: '10px',
-                            '.group:hover &': { color: '#990000' },
+                            lineHeight: "normal",
+                            marginBottom: "10px",
+                            ".group:hover &": { color: "#990000" },
                           }}
                         >
                           {channel.organizationChannelTitle}
                         </Typography>
                         <Typography
                           sx={{
-                            display: '-webkit-box',
-                            WebkitBoxOrient: 'vertical',
+                            display: "-webkit-box",
+                            WebkitBoxOrient: "vertical",
                             WebkitLineClamp: 1,
-                            alignSelf: 'stretch',
-                            overflow: 'hidden',
-                            color: 'text.secondary',
-                            textOverflow: 'ellipsis',
-                            fontFamily: 'var(--font-bold)',
-                            fontSize: '12px',
-                            fontStyle: 'normal',
+                            alignSelf: "stretch",
+                            overflow: "hidden",
+                            color: "text.secondary",
+                            textOverflow: "ellipsis",
+                            fontFamily: "var(--font-medium)",
+                            fontSize: "12px",
+                            fontStyle: "normal",
                             fontWeight: 400,
-                            lineHeight: 'normal',
+                            lineHeight: "normal",
                           }}
                         >
                           {new Date(
@@ -459,7 +460,7 @@ export default function ChannelSearchCombined() {
                       {isHoveredOrSelected && (
                         <IconButton
                           size="small"
-                          sx={{ color: '#CC0000' }}
+                          sx={{ color: "#CC0000" }}
                           onClick={(e) => {
                             e.stopPropagation();
                             if (!channel.selected) {
@@ -468,7 +469,7 @@ export default function ChannelSearchCombined() {
                             handleDelete();
                           }}
                         >
-                          <DeleteIcon sx={{ width: '25px', height: '25px' }} />
+                          <DeleteIcon sx={{ width: "25px", height: "25px" }} />
                         </IconButton>
                       )}
                     </Paper>
@@ -479,8 +480,8 @@ export default function ChannelSearchCombined() {
                   <Box
                     ref={loadingRef}
                     sx={{
-                      display: 'flex',
-                      justifyContent: 'center',
+                      display: "flex",
+                      justifyContent: "center",
                       p: 2,
                     }}
                   >
@@ -493,9 +494,9 @@ export default function ChannelSearchCombined() {
                   <Typography
                     variant="body2"
                     sx={{
-                      textAlign: 'center',
+                      textAlign: "center",
                       p: 2,
-                      color: 'gray',
+                      color: "gray",
                     }}
                   >
                     沒有更多頻道了
@@ -509,32 +510,32 @@ export default function ChannelSearchCombined() {
             {/* Action Bar with "全選", "取消", and "刪除" buttons */}
             <Box
               sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                flexDirection: 'row',
-                width: '100%',
-                py: '1px',
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                flexDirection: "row",
+                width: "100%",
+                py: "1px",
               }}
             >
               <Box
                 sx={{
-                  display: 'flex',
-                  gap: '4px',
-                  alignItems: 'center',
+                  display: "flex",
+                  gap: "4px",
+                  alignItems: "center",
                   py: 0.5,
                 }}
               >
                 <Typography
                   sx={{
-                    color: '#CC0000',
-                    fontFamily: 'var(--font-bold)',
-                    fontSize: '14px',
-                    fontStyle: 'normal',
+                    color: "#CC0000",
+                    fontFamily: "var(--font-bold)",
+                    fontSize: "14px",
+                    fontStyle: "normal",
                     fontWeight: 700,
-                    lineHeight: 'normal',
-                    '& .highlight': {
-                      color: 'error.main',
+                    lineHeight: "normal",
+                    "& .highlight": {
+                      color: "error.main",
                       px: 0.5,
                     },
                   }}
@@ -542,7 +543,7 @@ export default function ChannelSearchCombined() {
                   當前已選擇 <span>{selectedChannels.length}</span> 個頻道
                 </Typography>
               </Box>
-              <Stack direction="row" spacing={1} sx={{ width: 'auto' }}>
+              <Stack direction="row" spacing={1} sx={{ width: "auto" }}>
                 {/* Animate the "全選" box */}
                 <AnimatePresence mode="wait">
                   <motion.div
@@ -556,15 +557,15 @@ export default function ChannelSearchCombined() {
                     <Box
                       onClick={handleSelectAll}
                       sx={{
-                        color: '#CC0000',
-                        fontFamily: 'var(--font-bold)',
-                        fontSize: '14px',
-                        fontStyle: 'normal',
+                        color: "#CC0000",
+                        fontFamily: "var(--font-bold)",
+                        fontSize: "14px",
+                        fontStyle: "normal",
                         fontWeight: 700,
-                        borderRadius: '8px',
-                        padding: '4px 8px',
-                        cursor: 'pointer',
-                        '&:hover': { bgcolor: 'rgba(204, 0, 0, 0.1)' },
+                        borderRadius: "8px",
+                        padding: "4px 8px",
+                        cursor: "pointer",
+                        "&:hover": { bgcolor: "rgba(204, 0, 0, 0.1)" },
                       }}
                     >
                       全選
@@ -575,15 +576,15 @@ export default function ChannelSearchCombined() {
                   aria-label="Cancel"
                   variant="outlined"
                   sx={{
-                    fontFamily: 'var(--font-bold)',
-                    fontSize: '14px',
-                    fontStyle: 'normal',
+                    fontFamily: "var(--font-bold)",
+                    fontSize: "14px",
+                    fontStyle: "normal",
                     fontWeight: 700,
-                    lineHeight: 'normal',
-                    color: 'black',
-                    border: '1px solid var(--Primary-Black, #212B36)',
-                    borderRadius: '8px',
-                    padding: '4px 8px',
+                    lineHeight: "normal",
+                    color: "black",
+                    border: "1px solid var(--Primary-Black, #212B36)",
+                    borderRadius: "8px",
+                    padding: "4px 8px",
                   }}
                   onClick={handleCancelAll}
                 >
@@ -595,16 +596,16 @@ export default function ChannelSearchCombined() {
                   disabled={selectedChannels.length === 0}
                   onClick={handleDelete}
                   sx={{
-                    fontFamily: 'var(--font-bold)',
-                    fontSize: '14px',
-                    fontStyle: 'normal',
+                    fontFamily: "var(--font-bold)",
+                    fontSize: "14px",
+                    fontStyle: "normal",
                     fontWeight: 700,
-                    lineHeight: 'normal',
-                    bgcolor: 'red.500',
-                    color: '#ffffff',
-                    padding: '4px 8px',
-                    borderRadius: '8px',
-                    '&:hover': { bgcolor: 'grey.400' },
+                    lineHeight: "normal",
+                    bgcolor: "red.500",
+                    color: "#ffffff",
+                    padding: "4px 8px",
+                    borderRadius: "8px",
+                    "&:hover": { bgcolor: "grey.400" },
                   }}
                 >
                   刪除
@@ -615,44 +616,44 @@ export default function ChannelSearchCombined() {
             <Box
               ref={scrollContainerRef}
               sx={{
-                width: '100%',
-                maxheight: 'calc(100vh - 140px)', // Adjust based on your layout
-                overflowY: 'auto',
-                paddingRight: '8px',
-                paddingLeft: isMobile ? '0px' : '10px',
+                width: "100%",
+                maxheight: "calc(100vh - 140px)", // Adjust based on your layout
+                overflowY: "auto",
+                paddingRight: "8px",
+                paddingLeft: isMobile ? "0px" : "10px",
                 ...customScrollbarStyle,
               }}
             >
-              <Stack spacing={1} sx={{ width: '100%' }}>
+              <Stack spacing={1} sx={{ width: "100%" }}>
                 {filteredChannels.map((channel) => (
                   <Paper
                     // Fix: Using the organizationChannelId with a prefix to make keys unique across different views
                     key={`view2-${channel.organizationChannelId}`}
                     elevation={0}
                     sx={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
                       p: 2,
                       borderRadius: 2,
-                      bgcolor: 'rgba(255, 0, 0, 0.05)',
-                      position: 'relative',
-                      border: '1px solid var(--Secondary-Dark-Gray, #4A4A4A)',
-                      gap: '16px',
-                      alignSelf: 'stretch',
-                      cursor: 'pointer',
+                      bgcolor: "rgba(255, 0, 0, 0.05)",
+                      position: "relative",
+                      border: "1px solid var(--Secondary-Dark-Gray, #4A4A4A)",
+                      gap: "16px",
+                      alignSelf: "stretch",
+                      cursor: "pointer",
                     }}
                   >
                     <Box
                       sx={{
-                        position: 'absolute',
-                        left: '-13px',
-                        top: '50%',
-                        transform: 'translateY(-50%)',
+                        position: "absolute",
+                        left: "-13px",
+                        top: "50%",
+                        transform: "translateY(-50%)",
                         zIndex: 2,
-                        pointerEvents: 'auto',
+                        pointerEvents: "auto",
                         p: 0,
-                        bgcolor: '#fff',
+                        bgcolor: "#fff",
                       }}
                     >
                       <Checkbox
@@ -661,10 +662,10 @@ export default function ChannelSearchCombined() {
                           toggleChannel(channel.organizationChannelId)
                         }
                         sx={{
-                          color: 'var(--Primary-Black, #212B36)',
+                          color: "var(--Primary-Black, #212B36)",
                           p: 0,
-                          '&.Mui-checked': {
-                            color: 'var(--Primary-Black, #212B36)',
+                          "&.Mui-checked": {
+                            color: "var(--Primary-Black, #212B36)",
                           },
                         }}
                       />
@@ -672,31 +673,31 @@ export default function ChannelSearchCombined() {
                     <Box>
                       <Typography
                         sx={{
-                          color: '#990000',
-                          fontFamily: 'var(--font-bold)',
-                          fontSize: '14px',
-                          fontStyle: 'normal',
+                          color: "#990000",
+                          fontFamily: "var(--font-bold)",
+                          fontSize: "14px",
+                          fontStyle: "normal",
                           fontWeight: 700,
-                          lineHeight: 'normal',
-                          marginBottom: '10px',
+                          lineHeight: "normal",
+                          marginBottom: "10px",
                         }}
                       >
                         {channel.organizationChannelTitle}
                       </Typography>
                       <Typography
                         sx={{
-                          display: '-webkit-box',
-                          WebkitBoxOrient: 'vertical',
+                          display: "-webkit-box",
+                          WebkitBoxOrient: "vertical",
                           WebkitLineClamp: 1,
-                          alignSelf: 'stretch',
-                          overflow: 'hidden',
-                          color: 'var(--Secondary-Dark-Gray, #4A4A4A)',
-                          textOverflow: 'ellipsis',
-                          fontFamily: 'var(--font-medium)',
-                          fontSize: '12px',
-                          fontStyle: 'normal',
+                          alignSelf: "stretch",
+                          overflow: "hidden",
+                          color: "var(--Secondary-Dark-Gray, #4A4A4A)",
+                          textOverflow: "ellipsis",
+                          fontFamily: "var(--font-medium)",
+                          fontSize: "12px",
+                          fontStyle: "normal",
                           fontWeight: 400,
-                          lineHeight: 'normal',
+                          lineHeight: "normal",
                         }}
                       >
                         {new Date(
@@ -707,7 +708,7 @@ export default function ChannelSearchCombined() {
                     <IconButton
                       size="small"
                       sx={{
-                        color: '#CC0000',
+                        color: "#CC0000",
                       }}
                       onClick={() => {
                         if (!channel.selected) {
@@ -716,7 +717,7 @@ export default function ChannelSearchCombined() {
                         handleDelete();
                       }}
                     >
-                      <DeleteIcon sx={{ width: '25px', height: '25px' }} />
+                      <DeleteIcon sx={{ width: "25px", height: "25px" }} />
                     </IconButton>
                   </Paper>
                 ))}
@@ -726,8 +727,8 @@ export default function ChannelSearchCombined() {
                   <Box
                     ref={loadingRef}
                     sx={{
-                      display: 'flex',
-                      justifyContent: 'center',
+                      display: "flex",
+                      justifyContent: "center",
                       p: 2,
                     }}
                   >
@@ -740,9 +741,9 @@ export default function ChannelSearchCombined() {
                   <Typography
                     variant="body2"
                     sx={{
-                      textAlign: 'center',
+                      textAlign: "center",
                       p: 2,
-                      color: 'gray',
+                      color: "gray",
                     }}
                   >
                     沒有更多頻道了
