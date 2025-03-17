@@ -1,17 +1,20 @@
 /**
- * Font Loading Strategy:
- * 1. Primary fonts: DFT_B5 (bold) and DFT_B7 (medium)
- * 2. Fallback fonts: DFPHeiBold-B5 and DFPHeiMedium-B5
- * 3. Final fallback: system sans-serif
+ * Enhanced Font Loading Strategy:
+ * 1. Online DynaFonts (primary): DFT_B5, DFT_B7, DFT_B3, DFT_BC
+ * 2. Local fonts (fallback): DFHeiBold, DFHeiMedium, DFHeiLight, DFHeiUBold
  * 
- * CSS variables (--font-bold and --font-medium) are used throughout the app
- * to ensure consistent font application.
+ * Corrected mapping:
+ * - DFT_B7 corresponds to DFHeiBold.ttf (Bold)
+ * - DFT_B5 corresponds to DFHeiMedium.ttf (Medium)
+ * - DFT_B3 corresponds to DFHeiLight.ttf (Light)
+ * 
+ * CSS variables are used for consistent font application throughout the app.
  */
 
+/* DynaFont declarations (loaded via JS) */
 @font-face {
   font-family: "DFT_B5";
   src: local("DFT_B5");
-  font-weight: bold;
   font-style: normal;
   font-display: swap;
 }
@@ -19,32 +22,64 @@
 @font-face {
   font-family: "DFT_B7";
   src: local("DFT_B7");
-  font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 
-/* Fallback font declarations */
 @font-face {
-  font-family: "DFPHeiBold-B5";
-  font-weight: bold;
+  font-family: "DFT_B3";
+  src: local("DFT_B3");
   font-style: normal;
-  src: local("DFPHeiBold-B5"), url("DFPHeiBold-B5.ttf") format("opentype");
   font-display: swap;
 }
 
 @font-face {
-  font-family: "DFPHeiMedium-B5";
-  font-weight: 500;
+  font-family: "DFT_BC";
+  src: local("DFT_BC"); 
   font-style: normal;
-  src: local("DFPHeiMedium-B5");
+  font-display: swap;
+}
+
+/* Local font declarations (for fallback) */
+@font-face {
+  font-family: "DFHeiBold";
+  font-style: normal;
+  src: local("DFHeiBold"), url("/fonts/DFHeiBold.ttf") format("truetype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DFHeiMedium";
+  font-style: normal;
+  src: local("DFHeiMedium"), url("/fonts/DFHeiMedium.ttf") format("truetype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DFHeiLight";
+  font-style: normal;
+  src: local("DFHeiLight"), url("/fonts/DFHeiLight.ttf") format("truetype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DFHeiUBold";
+  font-style: normal;
+  src: local("DFHeiUBold"), url("/fonts/DFHeiUBold.ttf") format("truetype");
   font-display: swap;
 }
 
 /* Root variables for centralized font management */
 :root {
-  --font-bold: "DFT_B5", "DFPHeiBold-B5", sans-serif;
-  --font-medium: "DFT_B7", "DFPHeiMedium-B5", sans-serif;
+  /* Default font variables - will be overridden by font classes */
+  --font-bold: "DFT_B7", "DFHeiBold", sans-serif;
+  --font-medium: "DFT_B5", "DFHeiMedium", sans-serif;
+  --font-light: "DFT_B3", "DFHeiLight", sans-serif;
+  --font-ultra: "DFT_BC", "DFHeiUBold", sans-serif;
+  
+  /* System colors */
+  --background: #ffffff;
+  --foreground: #212B36;
 }
 
 /* Font utility classes */
@@ -56,15 +91,34 @@
   font-family: var(--font-medium);
 }
 
-/* Font states for loading scenarios */
-.primary-fonts-loaded {
-  --font-bold: "DFT_B5", "DFPHeiBold-B5", sans-serif;
-  --font-medium: "DFT_B7", "DFPHeiMedium-B5", sans-serif;
+.font-light {
+  font-family: var(--font-light);
 }
 
-.fallback-fonts-loaded {
-  --font-bold: "DFT_B5", "DFPHeiBold-B5", sans-serif;
-  --font-medium: "DFT_B7", "DFPHeiMedium-B5", sans-serif;
+.font-ultra {
+  font-family: var(--font-ultra);
+}
+
+/* Font loading state classes */
+.dyna-fonts-loaded {
+  --font-bold: "DFT_B7", "DFHeiBold", sans-serif;
+  --font-medium: "DFT_B5", "DFHeiMedium", sans-serif;
+  --font-light: "DFT_B3", "DFHeiLight", sans-serif;
+  --font-ultra: "DFT_BC", "DFHeiUBold", sans-serif;
+}
+
+.local-fonts-loaded {
+  --font-bold: "DFHeiBold", sans-serif;
+  --font-medium: "DFHeiMedium", sans-serif;
+  --font-light: "DFHeiLight", sans-serif;
+  --font-ultra: "DFHeiUBold", sans-serif;
+}
+
+.use-local-fonts {
+  --font-bold: "DFHeiBold", sans-serif;
+  --font-medium: "DFHeiMedium", sans-serif;
+  --font-light: "DFHeiLight", sans-serif;
+  --font-ultra: "DFHeiUBold", sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -79,7 +133,7 @@ body {
   margin: 0;
   color: var(--foreground);
   background: var(--background);
-  font-family: var(--font-bold);
+  font-family: var(--font-medium);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   width: 100%;
@@ -95,14 +149,6 @@ body {
 
 .checkbox-visible * {
   overflow: visible;
-}
-
-.font-light {
-  font-family: "DFT_B3", sans-serif;
-}
-
-.font-regular {
-  font-family: "DFT_BC", sans-serif;
 }
 
 a {
@@ -122,6 +168,7 @@ a {
   }
 }
 
+/* Existing animations and other styles */
 @keyframes micPulse {
   0% {
     transform: scale(1);

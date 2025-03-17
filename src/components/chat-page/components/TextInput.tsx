@@ -2,6 +2,7 @@ import docPreview from '@/assets/Images/Doc Icon.svg';
 import imagePreview from '@/assets/Images/Image Icon.svg';
 import pdfPreview from '@/assets/Images/Pdf Icon.svg';
 import txtPreview from '@/assets/Images/Txt Icon.svg';
+import { customScrollbarStyle } from '@/components/toolbar-drawer-new/ToolbarDrawer';
 import ChannelContentContext from '@/context/ChannelContentContext';
 import { SnackbarContext } from '@/context/SnackbarContext';
 import { SubmitUserInputsApiPayload } from '@/interfaces/payloads';
@@ -17,7 +18,6 @@ import axios, { AxiosRequestConfig } from 'axios';
 import Image from 'next/image';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import DropdownMenu from './DropdownMenu';
-import { customScrollbarStyle } from '@/components/toolbar-drawer-new/ToolbarDrawer';
 
 interface SpeechRecognition extends EventTarget {
   continuous: boolean;
@@ -541,7 +541,7 @@ const TextInput: React.FC<TextInputProps> = ({
                 caretColor: '#000000', // 設置游標顏色為藍色
                 caretShape: 'block', // 部分瀏覽器支持，使游標呈現塊狀
                 padding: '8px', // 增加內邊距，增大互動區域
-                fontFamily: 'var(--font-bold)',
+                fontFamily: 'var(--font-medium)',
               }}
               className="textarea-autosize"
               value={userInputValue}
