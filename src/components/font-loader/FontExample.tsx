@@ -1,8 +1,7 @@
 'use client';
 
-import { Box, Typography } from '@mui/material';
-import React from 'react';
 import fontService, { FontStyle } from '@/utils/font-service';
+import { Box, Typography } from '@mui/material';
 
 /**
  * Example component showing how to use the modular font system
