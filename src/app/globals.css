@@ -1,7 +1,7 @@
 /**
  * Font Loading Strategy:
  * 1. Primary fonts: DFT_B5 (bold) and DFT_B7 (medium)
- * 2. Fallback fonts: DFPHeiBold-B5 and DFPHeiMedium-B5
+ * 2. Fallback fonts: DFPHeiBold and DFHeiMedium
  * 3. Final fallback: system sans-serif
  * 
  * CSS variables (--font-bold and --font-medium) are used throughout the app
@@ -26,25 +26,25 @@
 
 /* Fallback font declarations */
 @font-face {
-  font-family: "DFPHeiBold-B5";
+  font-family: "DFPHeiBold";
   font-weight: bold;
   font-style: normal;
-  src: local("DFPHeiBold-B5"), url("DFPHeiBold-B5.ttf") format("opentype");
+  src: local("DFPHeiBold"), url("DFPHeiBold.ttf") format("opentype");
   font-display: swap;
 }
 
 @font-face {
-  font-family: "DFPHeiMedium-B5";
+  font-family: "DFHeiMedium";
   font-weight: 500;
   font-style: normal;
-  src: local("DFPHeiMedium-B5");
+  src: local("DFHeiMedium");
   font-display: swap;
 }
 
 /* Root variables for centralized font management */
 :root {
-  --font-bold: "DFT_B5", "DFPHeiBold-B5", sans-serif;
-  --font-medium: "DFT_B7", "DFPHeiMedium-B5", sans-serif;
+  --font-bold: "DFT_B5", "DFPHeiBold", sans-serif;
+  --font-medium: "DFT_B7", "DFHeiMedium", sans-serif;
 }
 
 /* Font utility classes */
@@ -58,13 +58,13 @@
 
 /* Font states for loading scenarios */
 .primary-fonts-loaded {
-  --font-bold: "DFT_B5", "DFPHeiBold-B5", sans-serif;
-  --font-medium: "DFT_B7", "DFPHeiMedium-B5", sans-serif;
+  --font-bold: "DFT_B5", "DFPHeiBold", sans-serif;
+  --font-medium: "DFT_B7", "DFHeiMedium", sans-serif;
 }
 
 .fallback-fonts-loaded {
-  --font-bold: "DFT_B5", "DFPHeiBold-B5", sans-serif;
-  --font-medium: "DFT_B7", "DFPHeiMedium-B5", sans-serif;
+  --font-bold: "DFT_B5", "DFPHeiBold", sans-serif;
+  --font-medium: "DFT_B7", "DFHeiMedium", sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {

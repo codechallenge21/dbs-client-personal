@@ -1,5 +1,5 @@
-'use client';
-import { useEffect } from 'react';
+"use client";
+import { useEffect } from "react";
 
 const FontLoader = () => {
   useEffect(() => {
@@ -8,11 +8,11 @@ const FontLoader = () => {
 
       // Create a function to check if a font is loaded
       const isFontLoaded = (fontName: string) => {
-        const testString = 'a';
-        const testSize = '72px';
+        const testString = "a";
+        const testSize = "72px";
         const testFont = `${testSize} ${fontName}, monospace`;
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d')!;
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d")!;
 
         context.font = `${testSize} monospace`;
         const monoWidth = context.measureText(testString).width;
@@ -25,17 +25,17 @@ const FontLoader = () => {
 
       // Check if primary fonts are available
       const isPrimaryFontsAvailable =
-        isFontLoaded('DFT_B5') && isFontLoaded('DFT_B7');
+        isFontLoaded("DFT_B5") && isFontLoaded("DFT_B7");
 
       // Check if fallback fonts are available
       const isFallbackFontsAvailable =
-        isFontLoaded('DFPHeiBold-B5') && isFontLoaded('DFPHeiMedium-B5');
+        isFontLoaded("DFPHeiBold") && isFontLoaded("DFHeiMedium");
 
       // Apply appropriate class to document root
       if (isPrimaryFontsAvailable) {
-        documentElement.classList.add('primary-fonts-loaded');
+        documentElement.classList.add("primary-fonts-loaded");
       } else if (isFallbackFontsAvailable) {
-        documentElement.classList.add('fallback-fonts-loaded');
+        documentElement.classList.add("fallback-fonts-loaded");
       }
     };
 
@@ -43,10 +43,10 @@ const FontLoader = () => {
     checkFontAvailability();
 
     // Also check when fonts might finish loading
-    window.addEventListener('load', checkFontAvailability);
+    window.addEventListener("load", checkFontAvailability);
 
     return () => {
-      window.removeEventListener('load', checkFontAvailability);
+      window.removeEventListener("load", checkFontAvailability);
     };
   }, []);
 
