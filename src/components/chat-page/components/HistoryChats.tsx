@@ -1,9 +1,9 @@
-import React from 'react';
-import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
 import {
   OrganizationChannel,
   OrganizationChannelData,
 } from '@/interfaces/entities';
+import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
+import React from 'react';
 
 interface HistoryChatsProps {
   chats: OrganizationChannel[];
@@ -58,10 +58,9 @@ const HistoryChats: React.FC<HistoryChatsProps> = ({
         >
           <Typography
             sx={{
-              fontFamily: 'var(--font-open-sans)',
+              fontFamily: 'var(--font-medium)',
               fontSize: '14px',
               fontStyle: 'normal',
-              fontWeight: 700,
               lineHeight: 'normal',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
@@ -78,7 +77,6 @@ const HistoryChats: React.FC<HistoryChatsProps> = ({
               fontFamily: 'var(--font-medium)',
               fontSize: '12px',
               fontStyle: 'normal',
-              fontWeight: 400,
               lineHeight: 'normal',
               display: '-webkit-box',
               WebkitBoxOrient: 'vertical',

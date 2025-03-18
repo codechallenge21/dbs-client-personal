@@ -21,6 +21,7 @@ import {
 } from '@/utils/hooks/apis/apis';
 import { useAudioChannels } from '@/utils/hooks/useAudioChannels';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
+import { keyframes } from '@emotion/react';
 import {
   ArrowDropDown,
   CheckCircleRounded,
@@ -58,7 +59,6 @@ import React, {
   useState,
 } from 'react';
 import UploadScreen from './UploadScreen';
-import { keyframes } from '@emotion/react';
 
 interface fileProps {
   organizationChannelTitle: string;
@@ -597,8 +597,8 @@ const ChannelsList = () => {
                   <Box
                     sx={{
                       display: 'flex',
-                      width: { xs: '100%', md: 'auto' }, // Full width on small screens, auto on big screens
-                      justifyContent: { xs: 'flex-start', md: 'flex-end' }, // Left-align when wrapped, right-align on big screens
+                      width: { xs: '100%', md: 'auto' },
+                      justifyContent: { xs: 'flex-start', md: 'flex-end' },
                       alignItems: 'center',
                       gap: '16px',
                       flexWrap: 'wrap',
@@ -643,17 +643,17 @@ const ChannelsList = () => {
                         alignItems: 'center',
                         justifyContent: 'center',
                         background: 'var(--Secondary-, #5C443A)',
-                        '&:hover': {
-                          background: 'rgba(92, 68, 58, 0.8)',
-                        },
-                        '&:active': {
-                          background: 'rgba(92, 68, 58, 0.6)',
-                        },
+                        '&:hover': { background: 'rgba(92, 68, 58, 0.8)' },
+                        '&:active': { background: 'rgba(92, 68, 58, 0.6)' },
                       }}
                       onClick={() => setOpenUpload(true)}
                     >
                       <UploadRounded sx={{ color: '#fff' }} />
-                      <Typography sx={{ color: '#fff' }}>上傳檔案</Typography>
+                      <Typography
+                        sx={{ color: '#fff', fontFamily: 'var(--font-bold)' }}
+                      >
+                        上傳檔案
+                      </Typography>
                     </IconButton>
                   </Box>
                 </Box>
@@ -1302,11 +1302,6 @@ const ChannelsList = () => {
                     overflowX: 'hidden',
                   },
                 }}
-                TabIndicatorProps={{
-                  style: {
-                    backgroundColor: '#212B36',
-                  },
-                }}
                 TabIndicatorProps={{ style: { backgroundColor: '#212B36' } }}
               >
                 <Tab
@@ -1315,12 +1310,9 @@ const ChannelsList = () => {
                     fontWeight: 400,
                     fontSize: '14px',
                     lineHeight: '22px',
-                    fontStyle: 'normal',
                     fontFamily: 'var(--font-bold)',
-                    color: 'var(--Text-Secondary, #637381))',
-                    '&.Mui-selected': {
-                      color: 'var(--Primary-Black, #212B36)',
-                    },
+                    color: 'var(--Text-Secondary, #637381)',
+                    '&.Mui-selected': { color: '#212B36' },
                     padding: '12px 0px',
                   }}
                 />
@@ -1474,8 +1466,8 @@ const ChannelsList = () => {
                       lineHeight: '24px',
                       textAlign: 'center',
                       fontStyle: 'normal',
-                      fontFamily: 'var(--font-bold)',
                       color: '#FFF',
+                      fontFamily: 'var(--font-medium)',
                     }}
                   >
                     上傳檔案
@@ -1489,11 +1481,11 @@ const ChannelsList = () => {
               !(isCreating || isLoadingChannels || isSingleChannelLoading) ? (
                 <Box
                   sx={{
-                    top: '50%',
-                    left: '50%',
+                    top: "50%",
+                    left: "50%",
                     display: 'flex',
-                    position: 'absolute',
-                    transform: 'translate(-50%, -50%)',
+                    position: "absolute",
+                    transform: "translate(-50%, -50%)",
                   }}
                 >
                   <CircularProgress color="primary" />
@@ -1540,17 +1532,13 @@ const ChannelsList = () => {
                         >
                           <CardContent
                             sx={{
-                              display: 'flex',
-                              flexDirection: 'column',
-                              justifyContent: 'space-between',
-                              height: '100%',
+                              display: "flex",
+                              flexDirection: "column",
+                              justifyContent: "space-between",
+                              height: "100%",
                               padding: 0,
                               width: '100%',
-                              height: '100%',
-                              display: 'flex',
-                              flexDirection: 'column',
                               paddingBottom: '0 !important',
-                              justifyContent: 'space-between',
                             }}
                           >
                             <Box
@@ -1662,18 +1650,13 @@ const ChannelsList = () => {
                       >
                         <CardContent
                           sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            paddingBottom: '0 !important',
-                            justifyContent: 'space-between',
-                            height: '100%',
+                            display: "flex",
+                            flexDirection: "column",
+                            paddingBottom: "0 !important",
+                            justifyContent: "space-between",
+                            height: "100%",
                             padding: 0,
                             width: '100%',
-                            height: '100%',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            paddingBottom: '0 !important',
-                            justifyContent: 'space-between',
                           }}
                         >
                           <Box
@@ -1782,9 +1765,7 @@ const ChannelsList = () => {
                               {channel.organizationChannelTranscriptList[0]
                                 ?.organizationChannelTranscriptStatus ===
                               'COMPLETE' ? (
-                                <CheckCircleRounded
-                                  sx={{ color: ' #118D57' }}
-                                />
+                                <CheckCircleRounded sx={{ color: '#118D57' }} />
                               ) : channel.organizationChannelTranscriptList[0]
                                   ?.organizationChannelTranscriptStatus ===
                                 'PROCESSING' ? (
