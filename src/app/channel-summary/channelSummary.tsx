@@ -3,7 +3,9 @@ import DataSourceDialog from '@/components/dialogs/ChatDataStore';
 import DeleteDialog from '@/components/dialogs/DeleteDialog';
 import EditDialog from '@/components/dialogs/EditDialog';
 import EditableItem from '@/components/editable-item/EditableItem';
-import ToolbarDrawer, { customScrollbarStyle } from '@/components/toolbar-drawer-new/ToolbarDrawer';
+import ToolbarDrawer, {
+  customScrollbarStyle,
+} from '@/components/toolbar-drawer-new/ToolbarDrawer';
 import { OrganizationChannel } from '@/interfaces/entities';
 import apis from '@/utils/hooks/apis/apis';
 import { useAudioChannel } from '@/utils/hooks/useAudioChannel';
@@ -124,7 +126,7 @@ const ChannelSummaryContent = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const searchParams = useSearchParams();
   const organizationChannelId = searchParams.get('organizationChannelId') ?? '';
-  
+
   const [tabValue, setTabValue] = React.useState(0);
   const [selectedChannel, setSelectedChannel] =
     React.useState<OrganizationChannel | null>(null);
@@ -373,7 +375,9 @@ const ChannelSummaryContent = () => {
                       setToolsAnchor={setToolsAnchor}
                       handleCloseToolsMenu={handleCloseToolsMenu}
                       handleOpenEditChannelDialog={handleOpenEditChannelDialog}
-                      handleDeleteChannelOpenConfirmDialog={handleDeleteChannelOpenConfirmDialog}
+                      handleDeleteChannelOpenConfirmDialog={
+                        handleDeleteChannelOpenConfirmDialog
+                      }
                       anchorOrigin={{
                         vertical: 'bottom',
                         horizontal: 'right',
@@ -512,13 +516,24 @@ const ChannelSummaryContent = () => {
                             </Tooltip>
                           </Box>
                         </Box>
-                        <ReactMarkdown>
-                          {
-                            selectedChannel
-                              ?.organizationChannelTranscriptList[0]
-                              ?.organizationChannelTranscriptContent
-                          }
-                        </ReactMarkdown>
+                        <Box
+                          sx={{
+                            fontSize: '16px',
+                            fontWeight: '400',
+                            lineHeight: '24px',
+                            fontStyle: 'normal',
+                            fontFamily: 'DFPHeiMedium-B5',
+                            color: 'var(--Primary-Black, #212B36)',
+                          }}
+                        >
+                          <ReactMarkdown>
+                            {
+                              selectedChannel
+                                ?.organizationChannelTranscriptList[0]
+                                ?.organizationChannelTranscriptContent
+                            }
+                          </ReactMarkdown>
+                        </Box>
                       </Paper>
                     </Item>
                   </Grid2>
@@ -662,7 +677,8 @@ const ChannelSummaryContent = () => {
                                   selectedChannel
                                     ?.organizationChannelMessageList[
                                     selectedChannel
-                                      ?.organizationChannelMessageList.length - 1
+                                      ?.organizationChannelMessageList.length -
+                                      1
                                   ]?.organizationChannelMessageId
                                     ? '已複製'
                                     : '複製'
@@ -687,11 +703,12 @@ const ChannelSummaryContent = () => {
                                     ]?.organizationChannelMessageId &&
                                     copyPrompt(
                                       selectedChannel
-                                        ?.organizationChannelMessageList[                                                                                                                                                                       
+                                        ?.organizationChannelMessageList[
                                         selectedChannel
                                           ?.organizationChannelMessageList
                                           .length - 1
-                                      ]?.organizationChannelMessageContent ?? '',
+                                      ]?.organizationChannelMessageContent ??
+                                        '',
                                       selectedChannel
                                         ?.organizationChannelMessageList[
                                         selectedChannel
@@ -705,7 +722,8 @@ const ChannelSummaryContent = () => {
                                   selectedChannel
                                     ?.organizationChannelMessageList[
                                     selectedChannel
-                                      ?.organizationChannelMessageList.length - 1
+                                      ?.organizationChannelMessageList.length -
+                                      1
                                   ]?.organizationChannelMessageId ? (
                                     <DoneIcon sx={{ color: '#212B36' }} />
                                   ) : (
@@ -775,14 +793,25 @@ const ChannelSummaryContent = () => {
                               </Tooltip>
                             </Box>
                           </Box>
-                          <ReactMarkdown>
-                            {
-                              selectedChannel?.organizationChannelMessageList[
-                                selectedChannel?.organizationChannelMessageList
-                                  .length - 1
-                              ]?.organizationChannelMessageContent
-                            }
-                          </ReactMarkdown>
+                          <Box
+                            sx={{
+                              fontSize: '16px',
+                              fontWeight: '400',
+                              lineHeight: '24px',
+                              fontStyle: 'normal',
+                              fontFamily: 'DFPHeiMedium-B5',
+                              color: 'var(--Primary-Black, #212B36)',
+                            }}
+                          >
+                            <ReactMarkdown>
+                              {
+                                selectedChannel?.organizationChannelMessageList[
+                                  selectedChannel
+                                    ?.organizationChannelMessageList.length - 1
+                                ]?.organizationChannelMessageContent
+                              }
+                            </ReactMarkdown>
+                          </Box>
                         </TabPanel>
                         <TabPanel value={aIAnalysisTabValue} index={1}>
                           <Box
@@ -822,7 +851,6 @@ const ChannelSummaryContent = () => {
                                 >
                                   <PermIdentityRounded
                                     sx={{
-
                                       width: '30px',
                                       height: '30px',
                                       color: 'white',
@@ -838,7 +866,6 @@ const ChannelSummaryContent = () => {
                             </Box>
                             <Typography
                               sx={{
-
                                 mt: '10px',
                               }}
                             >
@@ -1361,7 +1388,9 @@ const ChannelSummaryContent = () => {
                 setToolsAnchor={setToolsAnchor}
                 handleCloseToolsMenu={handleCloseToolsMenu}
                 handleOpenEditChannelDialog={handleOpenEditChannelDialog}
-                handleDeleteChannelOpenConfirmDialog={handleDeleteChannelOpenConfirmDialog}
+                handleDeleteChannelOpenConfirmDialog={
+                  handleDeleteChannelOpenConfirmDialog
+                }
                 anchorOrigin={{
                   vertical: 'bottom',
                   horizontal: 'right',
@@ -1461,12 +1490,23 @@ const ChannelSummaryContent = () => {
                 </Tooltip>
               </Box>
             </Box>
-            <ReactMarkdown>
-              {
-                selectedChannel?.organizationChannelTranscriptList[0]
-                  ?.organizationChannelTranscriptContent
-              }
-            </ReactMarkdown>
+            <Box
+              sx={{
+                fontSize: '16px',
+                fontWeight: '400',
+                lineHeight: '24px',
+                fontStyle: 'normal',
+                fontFamily: 'DFPHeiMedium-B5',
+                color: 'var(--Primary-Black, #212B36)',
+              }}
+            >
+              <ReactMarkdown>
+                {
+                  selectedChannel?.organizationChannelTranscriptList[0]
+                    ?.organizationChannelTranscriptContent
+                }
+              </ReactMarkdown>
+            </Box>
           </Box>
           <Box sx={{ padding: '16px' }}>
             <Box
@@ -1604,7 +1644,8 @@ const ChannelSummaryContent = () => {
                     title={
                       copiedMessageId ===
                       selectedChannel?.organizationChannelMessageList[
-                        selectedChannel?.organizationChannelMessageList.length - 1
+                        selectedChannel?.organizationChannelMessageList.length -
+                          1
                       ]?.organizationChannelMessageId
                         ? 'Copied'
                         : 'Copy'
@@ -1637,7 +1678,8 @@ const ChannelSummaryContent = () => {
                     >
                       {copiedMessageId ===
                       selectedChannel?.organizationChannelMessageList[
-                        selectedChannel?.organizationChannelMessageList.length - 1
+                        selectedChannel?.organizationChannelMessageList.length -
+                          1
                       ]?.organizationChannelMessageId ? (
                         <DoneIcon sx={{ color: '#212B36' }} />
                       ) : (
@@ -1667,11 +1709,22 @@ const ChannelSummaryContent = () => {
                 </Box>
               </Box>
               {isMobile && (
-                <Box sx={{ padding: '16px' }}>
+                <Box
+                  sx={{
+                    padding: '16px',
+                    fontSize: '16px',
+                    fontWeight: '400',
+                    lineHeight: '24px',
+                    fontStyle: 'normal',
+                    fontFamily: 'DFPHeiMedium-B5',
+                    color: 'var(--Primary-Black, #212B36)',
+                  }}
+                >
                   <ReactMarkdown>
                     {
                       selectedChannel?.organizationChannelMessageList[
-                        selectedChannel?.organizationChannelMessageList.length - 1
+                        selectedChannel?.organizationChannelMessageList.length -
+                          1
                       ]?.organizationChannelMessageContent
                     }
                   </ReactMarkdown>
