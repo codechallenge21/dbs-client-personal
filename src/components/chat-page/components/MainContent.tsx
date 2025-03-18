@@ -7,12 +7,18 @@ import apis from '@/utils/hooks/apis/apis';
 import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
 import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { useRouter } from 'next/navigation';
-import { useContext, useEffect, useRef } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import ChannelMessagePanel from '../../channel-message-panel/ChannelMessagePanel';
 import HistoryChats from './HistoryChats';
-import TextInput from './TextInput';
+import TextInput, {
+  MAX_FILES,
+  MAX_FILE_SIZE,
+  allowedExtensions,
+} from './TextInput';
 import ViewChats from './viewChats';
 import { customScrollbarStyle } from '@/components/toolbar-drawer-new/ToolbarDrawer';
+import { useDropzone } from 'react-dropzone';
+import { SnackbarContext } from '@/context/SnackbarContext';
 
 interface MainContentProps {
   chatsData?: OrganizationChannel[];
@@ -29,6 +35,9 @@ const MainContent: React.FC<MainContentProps> = ({ chatsData }) => {
     setSelectedChannel,
     isInteractingInChat,
   } = useContext(ChannelContentContext);
+  const [files, setFiles] = useState<{ file: File; preview: string | null }[]>(
+    []
+  );
   const { excute: submitUserInputs, isLoading: isInteracting } = useAxiosApi(
     apis.submitUserInputs
   );
@@ -43,6 +52,51 @@ const MainContent: React.FC<MainContentProps> = ({ chatsData }) => {
   };
 
   const boxRef = useRef<HTMLDivElement>(null);
+
+  const { showSnackbar } = useContext(SnackbarContext);
+
+  const handleDrop = (acceptedFiles: File[]) => {
+    if (acceptedFiles && acceptedFiles.length > 0 && acceptedFiles[0]) {
+      if (files.length + acceptedFiles.length > MAX_FILES) {
+        showSnackbar(`您一次最多只能上傳 ${MAX_FILES} 個檔案。`, 'error');
+        return;
+      }
+
+      for (const file of acceptedFiles) {
+        const extension = file.name.split('.').pop()?.toLowerCase();
+        if (!allowedExtensions.includes(extension ?? '')) {
+          showSnackbar(`檔案格式不支援: ${file.name}`, 'error');
+          return;
+        }
+        if (file.size > MAX_FILE_SIZE) {
+          showSnackbar(`檔案 "${file.name}" 超過 5MB 的限制。`, 'error');
+          return;
+        }
+      }
+
+      const mappedFiles = acceptedFiles.map((file) => ({
+        file,
+        preview: null,
+      }));
+      setFiles((prev) => [...prev, ...mappedFiles]);
+    }
+  };
+
+  const handleDropRejected = (fileRejections: any[]) => {
+    showSnackbar('檔案格式錯誤或檔案大小超過 300MB 限制', 'error');
+  };
+
+  const allowedExtensionsObj = allowedExtensions.reduce((acc, ext) => {
+    acc[`.${ext}`] = [];
+    return acc;
+  }, {} as { [key: string]: string[] });
+
+  const { getRootProps, isDragActive } = useDropzone({
+    onDrop: handleDrop,
+    onDropRejected: handleDropRejected,
+    accept: allowedExtensionsObj,
+    maxSize: MAX_FILE_SIZE,
+  });
 
   useEffect(() => {
     if (boxRef.current) {
@@ -94,6 +148,8 @@ const MainContent: React.FC<MainContentProps> = ({ chatsData }) => {
               from={'mainContent'}
               submitUserInputs={submitUserInputs}
               isInteracting={isInteracting}
+              files={files}
+              setFiles={setFiles}
             />
           </Box>
         </Box>
@@ -123,7 +179,9 @@ const MainContent: React.FC<MainContentProps> = ({ chatsData }) => {
         pt: paddingTop,
         borderLeft: '1px solid #F5F5F5',
         px: { xs: '16px', md: '24px' },
+        ...(isDragActive && { backgroundColor: '#e0f7fa' }),
       }}
+      {...getRootProps()}
     >
       <Typography
         sx={{
@@ -134,6 +192,7 @@ const MainContent: React.FC<MainContentProps> = ({ chatsData }) => {
           overflow: 'visible',
           fontFamily: 'var(--font-bold)',
           textAlign: 'center',
+          ...(isDragActive && { color: '#9e9e9e' }),
         }}
       >
         嗨！我能為您做些什麼？
@@ -141,6 +200,8 @@ const MainContent: React.FC<MainContentProps> = ({ chatsData }) => {
       <TextInput
         submitUserInputs={submitUserInputs}
         isInteracting={isInteracting}
+        files={files}
+        setFiles={setFiles}
       />
       <Box
         sx={{

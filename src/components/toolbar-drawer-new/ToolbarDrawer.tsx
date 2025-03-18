@@ -322,9 +322,8 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             <Typography
               sx={{
                 color: 'var(--Primary-Black, #212B36)',
-                fontFamily: 'var(--font-bold)',
+                fontFamily: 'var(--font-medium)',
                 fontSize: '20px',
-                fontWeight: 800,
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'flex-end',
@@ -741,9 +740,8 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 alignItems: 'center',
                 justifyContent: 'center',
                 background: 'var(--Secondary-, #5C443A)',
-                fontFamily: 'var(--font-bold)',
+                fontFamily: 'var(--font-medium)',
                 fontSize: '13px',
-                fontWeight: 700,
                 lineHeight: 'normal',
                 height: '30px',
               }}
