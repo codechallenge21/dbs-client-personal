@@ -1,7 +1,7 @@
-import React from 'react';
-import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
+import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
+import React from 'react';
 
 interface ViewChatsProps {
   onClick: () => void;
@@ -21,7 +21,7 @@ const ViewChats: React.FC<ViewChatsProps> = ({ onClick }) => {
         padding: '2px',
         borderRadius: 1,
         color: 'var(--Text-Primary, #212B36)',
-        fontFamily: 'var(--font-open-sans)',
+        fontFamily: 'var(--font-medium)',
         fontSize: '14px',
         fontStyle: 'normal',
         fontWeight: 700,
@@ -56,6 +56,20 @@ const ViewChats: React.FC<ViewChatsProps> = ({ onClick }) => {
             textDecoration: 'underline',
             textUnderlineOffset: '2px',
           },
+          '&:focus-visible': {
+            backgroundColor: 'rgba(204, 0, 0, 0.08)', // #CC0000 with 8% opacity
+            border: '2px solid rgba(145, 158, 171, 0.4)',
+            outline: 'none',
+            borderRadius: '5px',
+          },
+        }}
+        tabIndex={0}
+        role="button"
+        aria-label="View all chats"
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            onClick();
+          }
         }}
       >
         查看全部

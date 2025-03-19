@@ -1,23 +1,25 @@
-import ToolbarDrawer from '@/components/toolbar-drawer-new/ToolbarDrawer';
+import ToolbarDrawer, {
+    customScrollbarStyle,
+} from '@/components/toolbar-drawer-new/ToolbarDrawer';
 import {
-  ArrowForwardIosRounded,
-  DownloadRounded,
-  MenuRounded,
-  WorkRounded,
+    ArrowForwardIosRounded,
+    DownloadRounded,
+    MenuRounded,
+    WorkRounded,
 } from '@mui/icons-material';
 import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Grid2,
-  IconButton,
-  List,
-  ListItem,
-  ListItemText,
-  Typography,
-  useMediaQuery,
-  useTheme,
+    Box,
+    Button,
+    Card,
+    CardContent,
+    Grid2,
+    IconButton,
+    List,
+    ListItem,
+    ListItemText,
+    Typography,
+    useMediaQuery,
+    useTheme,
 } from '@mui/material';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
@@ -195,20 +197,7 @@ export default function PopularArea() {
             '@media (min-width: 600px)': {
               flex: '1 0 0',
             },
-            '&::-webkit-scrollbar': {
-              width: '6px',
-            },
-            '&::-webkit-scrollbar-track': {
-              borderRadius: '10px',
-              background: '#f1f1f1',
-            },
-            '&::-webkit-scrollbar-thumb': {
-              borderRadius: '10px',
-              background: '#888',
-            },
-            '&::-webkit-scrollbar-thumb:hover': {
-              background: '#555',
-            },
+            ...customScrollbarStyle,
           }}
         >
           <Box
@@ -856,7 +845,7 @@ export default function PopularArea() {
                             sx={{
                               fontWeight: 600,
                               fontSize: '24px',
-                              fontFamily: 'Inter',
+                              fontFamily: 'var(--font-bold)',
                               fontStyle: 'normal',
                               lineHeight: 'normal',
                               color: 'var(--Primary-Black, #212B36)',
@@ -886,7 +875,7 @@ export default function PopularArea() {
                           fontStyle: 'normal',
                           lineHeight: 'normal',
                           whiteSpace: 'nowrap',
-                          fontFamily: 'Open Sans',
+                          fontFamily: 'var(--font-bold)',
                           textOverflow: 'ellipsis',
                           color: 'var(--Primary-Black, #212B36)',
                         }}
@@ -1131,7 +1120,7 @@ export default function PopularArea() {
                         lineHeight: '24px',
                         textAlign: 'center',
                         fontStyle: 'normal',
-                        fontFamily: 'Public Sans',
+                        fontFamily: 'var(--font-bold)',
                         color: 'var(--Primary-DBS-Red, #C00)',
                       }}
                     >
