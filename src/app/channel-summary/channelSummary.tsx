@@ -20,6 +20,7 @@ import {
   PermIdentityRounded,
   ReplayRounded,
   SyncRounded,
+  ThumbDownAltRounded,
   ThumbDownOffAltRounded,
   ThumbUpAltRounded,
 } from '@mui/icons-material';
@@ -148,7 +149,8 @@ const ChannelSummaryContent = () => {
     useState(false);
   const [openNegativeFeedbackModal, setOpenNegativeFeedbackModal] =
     useState(false);
-  const [activeMessageId, setActiveMessageId] = useState<string | null>(null);
+  const [activeTargetId, setActiveTargetId] = useState<string | null>(null);
+  const [feedbackTarget, setFeedbackTarget] = useState<string>('');
   const { excute: submitFeedback } = useAxiosApi(apis.addUserFeedback);
   const { excute: deleteChannel } = useAxiosApi(apis.deleteChannel);
   const { excute: ApiRegenerateSummary, isLoading } = useAxiosApi(
@@ -294,45 +296,50 @@ const ChannelSummaryContent = () => {
     setAIAnalysisTabValue(newValue);
   };
 
-  const handlePostiveModalOpen = (messageId: string) => {
+  const handlePostiveModalOpen = (targetId: string, feedbackTarget: string) => {
     // If this message already has positive feedback, directly submit to cancel it
-    if (feedbackMap[messageId] === 'POSITIVE') {
-      handleDirectFeedbackToggle(messageId, 'POSITIVE');
+    if (feedbackMap[targetId] === 'POSITIVE') {
+      handleDirectFeedbackToggle(targetId, 'POSITIVE');
       return;
     }
 
-    setActiveMessageId(messageId);
+    setActiveTargetId(targetId);
+    setFeedbackTarget(feedbackTarget);
     setOpenPositiveFeedbackModal(true);
   };
 
-  const handleNegativeModalOpen = (messageId: string) => {
+  const handleNegativeModalOpen = (
+    targetId: string,
+    feedbackTarget: string
+  ) => {
     // If this message already has negative feedback, directly submit to cancel it
-    if (feedbackMap[messageId] === 'NEGATIVE') {
-      handleDirectFeedbackToggle(messageId, 'NEGATIVE');
+    if (feedbackMap[targetId] === 'NEGATIVE') {
+      handleDirectFeedbackToggle(targetId, 'NEGATIVE');
       return;
     }
 
-    setActiveMessageId(messageId);
+    setActiveTargetId(targetId);
+    setFeedbackTarget(feedbackTarget);
     setOpenNegativeFeedbackModal(true);
   };
 
   const handleDirectFeedbackToggle = async (
-    messageId: string,
+    targetId: string,
     feedbackType: string
   ) => {
     try {
       // Remove the feedback from our local state first for immediate UI response
       setFeedbackMap((prev) => {
         const newMap = { ...prev };
-        delete newMap[messageId];
+        delete newMap[targetId];
         return newMap;
       });
 
       // Submit the feedback to the server - always use the same type as the button clicked
       await submitFeedback({
-        organizationChannelFeedbackTarget: 'AI_RESPONSE',
-        organizationChannelFeedbackTargetId: messageId,
-        organizationChannelFeedbackType: feedbackType, // Always submit the same type
+        organizationChannelFeedbackTarget: feedbackTarget,
+        organizationChannelFeedbackTargetId: targetId,
+        organizationChannelFeedbackType: feedbackType,
         organizationChannelFeedbackComment: '',
         organizationId: 'yMJHyi6R1CB9whpdNvtA',
       });
@@ -341,7 +348,7 @@ const ChannelSummaryContent = () => {
       // Restore the previous feedback state if the request failed
       setFeedbackMap((prev) => ({
         ...prev,
-        [messageId]: feedbackType,
+        [targetId]: feedbackType,
       }));
       // showSnackbar('取消失敗', 'error');
     }
@@ -578,7 +585,8 @@ const ChannelSummaryContent = () => {
                                   handlePostiveModalOpen(
                                     selectedChannel
                                       ?.organizationChannelTranscriptList[0]
-                                      ?.organizationChannelTranscriptId ?? ''
+                                      ?.organizationChannelTranscriptId ?? '',
+                                    'TRANSCRIPT'
                                   )
                                 }
                               >
@@ -588,14 +596,17 @@ const ChannelSummaryContent = () => {
                                     ?.organizationChannelTranscriptId ?? ''
                                 ] === 'POSITIVE' ? (
                                   <ThumbUpAltRounded
-                                    sx={{ color: 'black', fontSize: 20 }}
+                                    sx={{
+                                      fontSize: 20,
+                                      color: 'black',
+                                    }}
                                   />
                                 ) : (
                                   <ThumbDownOffAltRounded
                                     sx={{
+                                      fontSize: 20,
                                       color: 'black',
                                       transform: 'scale(-1, -1)',
-                                      fontSize: 20,
                                     }}
                                   />
                                 )}
@@ -608,7 +619,8 @@ const ChannelSummaryContent = () => {
                                   handleNegativeModalOpen(
                                     selectedChannel
                                       ?.organizationChannelTranscriptList[0]
-                                      ?.organizationChannelTranscriptId ?? ''
+                                      ?.organizationChannelTranscriptId ?? '',
+                                    'TRANSCRIPT'
                                   )
                                 }
                               >
@@ -617,7 +629,7 @@ const ChannelSummaryContent = () => {
                                     ?.organizationChannelTranscriptList[0]
                                     ?.organizationChannelTranscriptId ?? ''
                                 ] === 'NEGATIVE' ? (
-                                  <ThumbUpAltRounded
+                                  <ThumbDownAltRounded
                                     sx={{ color: 'black', fontSize: 20 }}
                                   />
                                 ) : (
@@ -853,7 +865,8 @@ const ChannelSummaryContent = () => {
                                     handlePostiveModalOpen(
                                       selectedChannel
                                         ?.organizationChannelMessageList[0]
-                                        ?.organizationChannelMessageId ?? ''
+                                        ?.organizationChannelMessageId ?? '',
+                                      'AI_RESPONSE'
                                     )
                                   }
                                 >
@@ -863,14 +876,17 @@ const ChannelSummaryContent = () => {
                                       ?.organizationChannelMessageId ?? ''
                                   ] === 'POSITIVE' ? (
                                     <ThumbUpAltRounded
-                                      sx={{ color: 'black', fontSize: 20 }}
+                                      sx={{
+                                        fontSize: 20,
+                                        color: 'black',
+                                      }}
                                     />
                                   ) : (
                                     <ThumbDownOffAltRounded
                                       sx={{
+                                        fontSize: 20,
                                         color: 'black',
                                         transform: 'scale(-1, -1)',
-                                        fontSize: 20,
                                       }}
                                     />
                                   )}
@@ -883,7 +899,8 @@ const ChannelSummaryContent = () => {
                                     handleNegativeModalOpen(
                                       selectedChannel
                                         ?.organizationChannelMessageList[0]
-                                        ?.organizationChannelMessageId ?? ''
+                                        ?.organizationChannelMessageId ?? '',
+                                      'AI_RESPONSE'
                                     )
                                   }
                                 >
@@ -892,7 +909,7 @@ const ChannelSummaryContent = () => {
                                       ?.organizationChannelMessageList[0]
                                       ?.organizationChannelMessageId ?? ''
                                   ] === 'NEGATIVE' ? (
-                                    <ThumbUpAltRounded
+                                    <ThumbDownAltRounded
                                       sx={{ color: 'black', fontSize: 20 }}
                                     />
                                   ) : (
@@ -1063,13 +1080,13 @@ const ChannelSummaryContent = () => {
                                 <Tooltip title="回應良好" placement="top" arrow>
                                   <IconButton
                                     aria-label="Like"
-                                    onClick={() =>
-                                      handlePostiveModalOpen(
-                                        selectedChannel
-                                          ?.organizationChannelMessageList[0]
-                                          ?.organizationChannelMessageId ?? ''
-                                      )
-                                    }
+                                    // onClick={() =>
+                                    //   handlePostiveModalOpen(
+                                    //     selectedChannel
+                                    //       ?.organizationChannelMessageList[0]
+                                    //       ?.organizationChannelMessageId ?? ''
+                                    //   )
+                                    // }
                                   >
                                     {feedbackMap[
                                       selectedChannel
@@ -1077,7 +1094,11 @@ const ChannelSummaryContent = () => {
                                         ?.organizationChannelMessageId ?? ''
                                     ] === 'POSITIVE' ? (
                                       <ThumbUpAltRounded
-                                        sx={{ color: 'black', fontSize: 20 }}
+                                        sx={{
+                                          color: 'black',
+                                          fontSize: 20,
+                                          transform: 'scale(-1, -1)',
+                                        }}
                                       />
                                     ) : (
                                       <ThumbDownOffAltRounded
@@ -1093,13 +1114,13 @@ const ChannelSummaryContent = () => {
                                 <Tooltip title="回應不佳" placement="top" arrow>
                                   <IconButton
                                     aria-label="Dislike"
-                                    onClick={() =>
-                                      handleNegativeModalOpen(
-                                        selectedChannel
-                                          ?.organizationChannelMessageList[0]
-                                          ?.organizationChannelMessageId ?? ''
-                                      )
-                                    }
+                                    // onClick={() =>
+                                    //   handleNegativeModalOpen(
+                                    //     selectedChannel
+                                    //       ?.organizationChannelMessageList[0]
+                                    //       ?.organizationChannelMessageId ?? ''
+                                    //   )
+                                    // }
                                   >
                                     {feedbackMap[
                                       selectedChannel
@@ -1665,7 +1686,8 @@ const ChannelSummaryContent = () => {
                     onClick={() =>
                       handlePostiveModalOpen(
                         selectedChannel?.organizationChannelTranscriptList[0]
-                          ?.organizationChannelTranscriptId ?? ''
+                          ?.organizationChannelTranscriptId ?? '',
+                        'TRANSCRIPT'
                       )
                     }
                   >
@@ -1674,14 +1696,17 @@ const ChannelSummaryContent = () => {
                         ?.organizationChannelTranscriptId ?? ''
                     ] === 'POSITIVE' ? (
                       <ThumbUpAltRounded
-                        sx={{ color: 'black', fontSize: 20 }}
+                        sx={{
+                          fontSize: 20,
+                          color: 'black',
+                        }}
                       />
                     ) : (
                       <ThumbDownOffAltRounded
                         sx={{
+                          fontSize: 20,
                           color: 'black',
                           transform: 'scale(-1, -1)',
-                          fontSize: 20,
                         }}
                       />
                     )}
@@ -1693,7 +1718,8 @@ const ChannelSummaryContent = () => {
                     onClick={() =>
                       handleNegativeModalOpen(
                         selectedChannel?.organizationChannelTranscriptList[0]
-                          ?.organizationChannelTranscriptId ?? ''
+                          ?.organizationChannelTranscriptId ?? '',
+                        'TRANSCRIPT'
                       )
                     }
                   >
@@ -1701,7 +1727,7 @@ const ChannelSummaryContent = () => {
                       selectedChannel?.organizationChannelTranscriptList[0]
                         ?.organizationChannelTranscriptId ?? ''
                     ] === 'NEGATIVE' ? (
-                      <ThumbUpAltRounded
+                      <ThumbDownAltRounded
                         sx={{ color: 'black', fontSize: 20 }}
                       />
                     ) : (
@@ -1918,7 +1944,8 @@ const ChannelSummaryContent = () => {
                       onClick={() =>
                         handlePostiveModalOpen(
                           selectedChannel?.organizationChannelMessageList[0]
-                            ?.organizationChannelMessageId ?? ''
+                            ?.organizationChannelMessageId ?? '',
+                          'AI_RESPONSE'
                         )
                       }
                     >
@@ -1927,14 +1954,17 @@ const ChannelSummaryContent = () => {
                           ?.organizationChannelMessageId ?? ''
                       ] === 'POSITIVE' ? (
                         <ThumbUpAltRounded
-                          sx={{ color: 'black', fontSize: 20 }}
+                          sx={{
+                            fontSize: 20,
+                            color: 'black',
+                          }}
                         />
                       ) : (
                         <ThumbDownOffAltRounded
                           sx={{
+                            fontSize: 20,
                             color: 'black',
                             transform: 'scale(-1, -1)',
-                            fontSize: 20,
                           }}
                         />
                       )}
@@ -1946,7 +1976,8 @@ const ChannelSummaryContent = () => {
                       onClick={() =>
                         handleNegativeModalOpen(
                           selectedChannel?.organizationChannelMessageList[0]
-                            ?.organizationChannelMessageId ?? ''
+                            ?.organizationChannelMessageId ?? '',
+                          'AI_RESPONSE'
                         )
                       }
                     >
@@ -1954,7 +1985,7 @@ const ChannelSummaryContent = () => {
                         selectedChannel?.organizationChannelMessageList[0]
                           ?.organizationChannelMessageId ?? ''
                       ] === 'NEGATIVE' ? (
-                        <ThumbUpAltRounded
+                        <ThumbDownAltRounded
                           sx={{ color: 'black', fontSize: 20 }}
                         />
                       ) : (
@@ -2124,19 +2155,23 @@ const ChannelSummaryContent = () => {
                     <Tooltip title="回應良好" placement="top" arrow>
                       <IconButton
                         aria-label="Like"
-                        onClick={() =>
-                          handlePostiveModalOpen(
-                            selectedChannel?.organizationChannelMessageList[0]
-                              ?.organizationChannelMessageId ?? ''
-                          )
-                        }
+                        // onClick={() =>
+                        //   handlePostiveModalOpen(
+                        //     selectedChannel?.organizationChannelMessageList[0]
+                        //       ?.organizationChannelMessageId ?? ''
+                        //   )
+                        // }
                       >
                         {feedbackMap[
                           selectedChannel?.organizationChannelMessageList[0]
                             ?.organizationChannelMessageId ?? ''
                         ] === 'POSITIVE' ? (
                           <ThumbUpAltRounded
-                            sx={{ color: 'black', fontSize: 20 }}
+                            sx={{
+                              color: 'black',
+                              fontSize: 20,
+                              transform: 'scale(-1, -1)',
+                            }}
                           />
                         ) : (
                           <ThumbDownOffAltRounded
@@ -2152,12 +2187,12 @@ const ChannelSummaryContent = () => {
                     <Tooltip title="回應不佳" placement="top" arrow>
                       <IconButton
                         aria-label="Dislike"
-                        onClick={() =>
-                          handleNegativeModalOpen(
-                            selectedChannel?.organizationChannelMessageList[0]
-                              ?.organizationChannelMessageId ?? ''
-                          )
-                        }
+                        // onClick={() =>
+                        //   handleNegativeModalOpen(
+                        //     selectedChannel?.organizationChannelMessageList[0]
+                        //       ?.organizationChannelMessageId ?? ''
+                        //   )
+                        // }
                       >
                         {feedbackMap[
                           selectedChannel?.organizationChannelMessageList[0]
@@ -2578,7 +2613,7 @@ const ChannelSummaryContent = () => {
         onConfirm={handleEditChannelConfirm}
         editableName={selectedChannel?.organizationChannelTitle || ''}
       />
-      {activeMessageId ===
+      {activeTargetId ===
         selectedChannel?.organizationChannelTranscriptList[0]
           ?.organizationChannelTranscriptId && (
         <>
@@ -2613,7 +2648,7 @@ const ChannelSummaryContent = () => {
         </>
       )}
 
-      {activeMessageId ===
+      {activeTargetId ===
         selectedChannel?.organizationChannelMessageList[0]
           ?.organizationChannelMessageId && (
         <>
