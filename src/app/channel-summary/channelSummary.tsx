@@ -45,7 +45,6 @@ import React, { Suspense, useCallback, useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import PositiveFeedbackModal from '@/components/dialogs/PositiveFeedbackModal';
 import NegativeFeedbackModal from '@/components/dialogs/NegativeFeedbackModal';
-// import { showSnackbar } from '@/context/SnackbarContext';
 
 function TabPanel(props: {
   readonly value: number;
