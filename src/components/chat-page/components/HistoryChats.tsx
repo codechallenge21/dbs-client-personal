@@ -13,8 +13,6 @@ import {
   OrganizationChannel,
   OrganizationChannelData,
 } from '@/interfaces/entities';
-import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
-import React from 'react';
 
 interface HistoryChatsProps {
   chats: OrganizationChannel[];

@@ -372,6 +372,9 @@ export default function ChannelSearchCombined() {
                       }
                       onMouseLeave={handleMouseLeave}
                       elevation={0}
+                      tabIndex={0}
+                      role="button"
+                      aria-label={`View details for ${channel.organizationChannelTitle}`}
                       sx={{
                         display: "flex",
                         justifyContent: "space-between",
@@ -379,16 +382,24 @@ export default function ChannelSearchCombined() {
                         p: 2,
                         border: "1px solid var(--Secondary-Dark-Gray, #4A4A4A)",
                         borderRadius: 2,
-                        position: "relative",
-                        gap: "16px",
-                        alignSelf: "stretch",
-                        cursor: "pointer",
-                        "&:hover": {
-                          bgcolor: "rgba(255, 0, 0, 0.05)",
+                        position: 'relative',
+                        gap: '16px',
+                        alignSelf: 'stretch',
+                        cursor: 'pointer',
+                        '&:hover': {
+                          bgcolor: 'rgba(255, 0, 0, 0.05)',
+                        },
+                        '&:focus-visible': {
+                          outline: 'none',
+                          backgroundColor: 'rgba(204, 0, 0, 0.08)',
+                          border: '2px solid rgba(145, 158, 171, 0.4)',
                         },
                       }}
-                      onClick={() => {
-                        moveToChannelDetail(channel);
+                      onClick={() => moveToChannelDetail(channel)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          moveToChannelDetail(channel);
+                        }
                       }}
                     >
                       {isHoveredOrSelected && (
@@ -555,7 +566,14 @@ export default function ChannelSearchCombined() {
                     transition={{ duration: 0.3 }}
                   >
                     <Box
+                      tabIndex={0}
+                      role="button"
                       onClick={handleSelectAll}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          handleSelectAll();
+                        }
+                      }}
                       sx={{
                         color: "#CC0000",
                         fontFamily: "var(--font-bold)",
@@ -566,6 +584,10 @@ export default function ChannelSearchCombined() {
                         padding: "4px 8px",
                         cursor: "pointer",
                         "&:hover": { bgcolor: "rgba(204, 0, 0, 0.1)" },
+                        '&active:focus': {
+                          outline: '2px solid rgba(145, 158, 171, 0.4)',
+                          outlineOffset: '2px',
+                        },
                       }}
                     >
                       全選
@@ -661,6 +683,11 @@ export default function ChannelSearchCombined() {
                         onChange={() =>
                           toggleChannel(channel.organizationChannelId)
                         }
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            toggleChannel(channel.organizationChannelId);
+                          }
+                        }}
                         sx={{
                           color: "var(--Primary-Black, #212B36)",
                           p: 0,
