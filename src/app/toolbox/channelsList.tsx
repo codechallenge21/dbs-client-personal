@@ -50,7 +50,6 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import { useRouter } from 'next/navigation';
 import React, {
   useCallback,
   useContext,
@@ -67,7 +66,6 @@ interface fileProps {
 
 const ChannelsList = () => {
   const theme = useTheme();
-  const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const { excute: createChannelByAudio, isLoading: isCreating } = useAxiosApi(
     apiExports.createChannelByAudio
@@ -247,8 +245,10 @@ const ChannelsList = () => {
   };
 
   const handleShowDetail = (channel: OrganizationChannel) => {
-    router.push(
-      `/channel-summary?organizationChannelId=${channel?.organizationChannelId}`
+    // Use window.open instead of router.push to open in a new tab
+    window.open(
+      `/channel-summary?organizationChannelId=${channel?.organizationChannelId}`,
+      '_blank'
     );
   };
 
@@ -963,7 +963,7 @@ const ChannelsList = () => {
                                 sx={{
                                   width: '7%',
                                   border: 'none',
-                                  padding: '0px 18px 0px 0px',
+                                  padding: '0px 18px 0px',
                                   textAlign: 'center',
                                   height: '51px !important',
                                 }}
