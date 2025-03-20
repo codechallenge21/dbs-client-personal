@@ -525,13 +525,18 @@ const FavoriteFinancialScreening = () => {
                       setToolsAnchor={setToolsAnchor}
                       handleCloseToolsMenu={handleCloseToolsMenu}
                       handleOpenEditChannelDialog={handleOpenEditChannelDialog}
-                      handleDeleteChannelOpenConfirmDialog={handleDeleteChannelOpenConfirmDialog} anchorOrigin={{
+                      handleDeleteChannelOpenConfirmDialog={
+                        handleDeleteChannelOpenConfirmDialog
+                      }
+                      anchorOrigin={{
                         vertical: 'center',
-                        horizontal: 'center'
-                      }} transformOrigin={{
+                        horizontal: 'center',
+                      }}
+                      transformOrigin={{
                         vertical: 'center',
-                        horizontal: 'center'
-                      }}                    />
+                        horizontal: 'center',
+                      }}
+                    />
                   </TableCell>
                 </TableRow>
               ))}
@@ -651,13 +656,18 @@ const FavoriteFinancialScreening = () => {
                     setToolsAnchor={setToolsAnchor}
                     handleCloseToolsMenu={handleCloseToolsMenu}
                     handleOpenEditChannelDialog={handleOpenEditChannelDialog}
-                    handleDeleteChannelOpenConfirmDialog={handleDeleteChannelOpenConfirmDialog} anchorOrigin={{
+                    handleDeleteChannelOpenConfirmDialog={
+                      handleDeleteChannelOpenConfirmDialog
+                    }
+                    anchorOrigin={{
                       vertical: 'center',
-                      horizontal: 'center'
-                    }} transformOrigin={{
+                      horizontal: 'center',
+                    }}
+                    transformOrigin={{
                       vertical: 'center',
-                      horizontal: 'center'
-                    }}                  />
+                      horizontal: 'center',
+                    }}
+                  />
                 </Box>
                 <Box
                   sx={{
@@ -770,9 +780,19 @@ const FavoriteFinancialScreening = () => {
         </Box>
       )}
 
-      <UploadDialog open={openUpload} onClose={handleCloseUploadDialog} handleUploadFile={function (file: File, fileInfo: { organizationChannelTitle: string; organizationChannelCreateDate: string; }): void {
-        throw new Error('Function not implemented.');
-      } } />
+      <UploadDialog
+        open={openUpload}
+        onClose={handleCloseUploadDialog}
+        handleUploadFiles={function (
+          files: File[],
+          filesInfo: {
+            organizationChannelTitle: string;
+            organizationChannelCreateDate: string;
+          }[]
+        ): void {
+          throw new Error('Function not implemented.');
+        }}
+      />
       <DeleteDialog
         open={isDeleteDialogOpen}
         onClose={handleCloseDeleteDialog}

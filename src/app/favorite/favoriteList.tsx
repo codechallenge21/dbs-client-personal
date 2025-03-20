@@ -394,12 +394,12 @@ const FavouriteList = () => {
         <UploadDialog
           open={openUpload}
           onClose={handleCloseUploadDialog}
-          handleUploadFile={function (
-            file: File,
-            fileInfo: {
+          handleUploadFiles={function (
+            files: File[],
+            filesInfo: {
               organizationChannelTitle: string;
               organizationChannelCreateDate: string;
-            }
+            }[]
           ): void {
             throw new Error('Function not implemented.');
           }}
