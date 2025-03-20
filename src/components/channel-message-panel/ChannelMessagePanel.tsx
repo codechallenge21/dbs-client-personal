@@ -249,6 +249,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
         display: 'flex',
         marginTop: isMobile ? '16px' : '0px',
         mb: '16px',
+        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
       }}

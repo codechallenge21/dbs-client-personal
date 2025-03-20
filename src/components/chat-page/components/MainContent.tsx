@@ -10,8 +10,7 @@ import { useRouter } from 'next/navigation';
 import { useContext, useEffect, useRef, useState } from 'react';
 import ChannelMessagePanel from '../../channel-message-panel/ChannelMessagePanel';
 import HistoryChats from './HistoryChats';
-import {
-  TextInput,
+import TextInput, {
   MAX_FILES,
   MAX_FILE_SIZE,
   allowedExtensions,
@@ -20,7 +19,6 @@ import ViewChats from './viewChats';
 import { customScrollbarStyle } from '@/components/toolbar-drawer-new/ToolbarDrawer';
 import { useDropzone } from 'react-dropzone';
 import { SnackbarContext } from '@/context/SnackbarContext';
-import { AxiosRequestConfig } from 'axios';
 
 interface MainContentProps {
   chatsData?: OrganizationChannel[];
@@ -149,8 +147,9 @@ const MainContent: React.FC<MainContentProps> = ({ chatsData }) => {
           <Box>
             <TextInput
               from={'mainContent'}
+              chatWithFiles={chatWithFiles}
               submitUserInputs={submitUserInputs}
-              isInteracting={isInteracting}
+              isInteracting={isInteracting || isInteractingwithfile}
               files={files}
               setFiles={setFiles}
             />
@@ -203,7 +202,7 @@ const MainContent: React.FC<MainContentProps> = ({ chatsData }) => {
       <TextInput
         chatWithFiles={chatWithFiles}
         submitUserInputs={submitUserInputs}
-        isInteracting={isInteracting}
+        isInteracting={isInteracting || isInteractingwithfile}
         files={files}
         setFiles={setFiles}
       />
