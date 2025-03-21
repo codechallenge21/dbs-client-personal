@@ -36,13 +36,13 @@ import { customScrollbarStyle } from '../toolbar-drawer-new/ToolbarDrawer';
 export interface ChannelMessagePanelProps {
   channel?: OrganizationChannel;
   chatResponses: OrganizationChannelMessage[];
-  isInteractingInChat: boolean;
+  isInteracting?: boolean;
 }
 
 const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
   channel,
   chatResponses,
-  isInteractingInChat,
+  isInteracting,
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -226,7 +226,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
   // Scroll to the bottom when the chat content changes or the interaction state changes
   useEffect(() => {
     scrollToBottom();
-  }, [chatResponses, isInteractingInChat]);
+  }, [chatResponses, isInteracting]);
 
   const copyPrompt = (text: string, messageId: string) => {
     navigator.clipboard.writeText(text).then(
@@ -249,9 +249,9 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
         display: 'flex',
         marginTop: isMobile ? '16px' : '0px',
         mb: '16px',
+        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        flexDirection: 'column',
       }}
     >
       <Box
@@ -768,7 +768,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
         })}
         <div ref={messagesEndRef} /> {/* End of messages marker */}
       </Box>
-      {isInteractingInChat && (
+      {isInteracting && (
         <Box
           ref={loaderRef}
           sx={{

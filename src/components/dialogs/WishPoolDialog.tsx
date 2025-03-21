@@ -551,6 +551,7 @@ const WishPoolDialog: React.FC<WishPoolDialogProps> = ({ open, onClose }) => {
                               onClick={() => {
                                 showSnackbar('許願成功', 'success');
                                 onClose();
+                                setChatResponses([])
                               }}
                             >
                               送出願望

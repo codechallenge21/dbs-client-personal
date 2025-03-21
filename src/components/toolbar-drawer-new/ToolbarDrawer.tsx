@@ -627,7 +627,6 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
             {isLogin ? (
               <>
                 <Button
-                  role="button"
                   aria-label="Logout"
                   onClick={handleMenuOpen}
                   sx={{
@@ -701,7 +700,6 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               </>
             ) : (
               <Button
-                role="button"
                 aria-label="Logout"
                 onClick={() => {
                   if (setIsLoginOpen) setIsLoginOpen(true);
@@ -728,7 +726,6 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
               </Button>
             )}
             <Button
-              role="button"
               aria-label="Wishing Pool"
               sx={{
                 gap: '8px',
@@ -749,11 +746,10 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 setIsWishPoolDialogOpen(true);
               }}
             >
-              <EmojiObjectsRounded sx={{ color: '', fontSize: '18px' }} />
+              <EmojiObjectsRounded sx={{ color: 'white', fontSize: '18px' }} />
               許願池
             </Button>
             <Button
-              role="button"
               aria-label="Consultant Area"
               sx={{
                 gap: '8px',
@@ -771,8 +767,6 @@ const ToolbarDrawer: React.FC<ToolbarDrawerProps> = ({
                 lineHeight: 'normal',
                 height: '30px',
               }}
-              disabled={true}
-              title="Coming Soon"
             >
               諮詢師專區
             </Button>

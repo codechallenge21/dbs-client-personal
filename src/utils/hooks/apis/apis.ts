@@ -87,25 +87,32 @@ const apis = {
   ) => {
     const { organizationId, organizationChannelId, query, advisorType } =
       payload || {};
-    const url = `/organizations/${organizationId}/channels/chat`;
-
-    const dataWithoutChannel = { query, advisorType };
-    const dataWithChannel = { organizationChannelId, query, advisorType };
 
     if (!organizationChannelId) {
       return fetcher.post<OrganizationChannelChatInteractResponse>(
-        url,
-        dataWithoutChannel,
-        config
+        `/organizations/${organizationId}/channels/chat`,
+        {
+          query,
+          advisorType,
+        },
+        config // Pass the entire config object
       );
     }
+
     return fetcher.post<OrganizationChannelChatInteractResponse>(
-      url,
-      dataWithChannel,
-      config
+      `/organizations/${organizationId}/channels/chat`,
+      {
+        organizationChannelId,
+        query,
+        advisorType,
+      },
+      config // Pass the entire config object
     );
   },
-  chatWithFiles: (payload?: ChatWithFilesPayload) => {
+  chatWithFiles: (
+    payload?: ChatWithFilesPayload,
+    config?: AxiosRequestConfig // Use AxiosRequestConfig instead of { signal?: AbortSignal }
+  ) => {
     if (!payload) {
       return Promise.reject(new Error('Payload is required'));
     }
@@ -121,7 +128,8 @@ const apis = {
 
     return fetcher.post(
       `/organizations/${organizationId}/channels/chat-with-files`,
-      formData
+      formData,
+      config // Pass the AxiosRequestConfig containing the AbortSignal
     );
   },
   updateChannelDetail: (payload?: UpdateChannelApiPayload) => {

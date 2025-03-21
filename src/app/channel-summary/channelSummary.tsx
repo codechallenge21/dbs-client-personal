@@ -524,10 +524,6 @@ const ChannelSummaryContent = () => {
                             fontStyle: 'normal',
                             fontFamily: 'DFPHeiMedium-B5',
                             color: 'var(--Primary-Black, #212B36)',
-                            '& p': { // Add styling for paragraph elements inside ReactMarkdown
-                              whiteSpace: 'pre-wrap', // This preserves line breaks
-                              marginBottom: '1em', // Adds spacing between paragraphs
-                            },
                           }}
                         >
                           <ReactMarkdown>
@@ -805,10 +801,6 @@ const ChannelSummaryContent = () => {
                               fontStyle: 'normal',
                               fontFamily: 'DFPHeiMedium-B5',
                               color: 'var(--Primary-Black, #212B36)',
-                              '& p': {
-                                whiteSpace: 'pre-wrap',
-                                marginBottom: '1em',
-                              },
                             }}
                           >
                             <ReactMarkdown>
@@ -1506,10 +1498,6 @@ const ChannelSummaryContent = () => {
                 fontStyle: 'normal',
                 fontFamily: 'DFPHeiMedium-B5',
                 color: 'var(--Primary-Black, #212B36)',
-                '& p': {
-                  whiteSpace: 'pre-wrap',
-                  marginBottom: '1em',
-                },
               }}
             >
               <ReactMarkdown>
@@ -1730,10 +1718,6 @@ const ChannelSummaryContent = () => {
                     fontStyle: 'normal',
                     fontFamily: 'DFPHeiMedium-B5',
                     color: 'var(--Primary-Black, #212B36)',
-                    '& p': {
-                      whiteSpace: 'pre-wrap',
-                      marginBottom: '1em',
-                    },
                   }}
                 >
                   <ReactMarkdown>
