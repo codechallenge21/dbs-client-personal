@@ -127,7 +127,9 @@ const dataRow3 = [
 const ChannelSummaryContent = () => {
   const theme = useTheme();
   const router = useRouter();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobileQuery = useMediaQuery(theme.breakpoints.down('sm'));
+  const [isMobile, setIsMobile] = useState(false);
+  const [isOpenDrawer, setIsOpenDrawer] = useState(true);
   const searchParams = useSearchParams();
   const organizationChannelId = searchParams.get('organizationChannelId') ?? '';
 
@@ -136,7 +138,6 @@ const ChannelSummaryContent = () => {
     React.useState<OrganizationChannel | null>(null);
   const [openDataSource, setOpenDataSource] = useState(false);
   const [aIAnalysisTabValue, setAIAnalysisTabValue] = React.useState(0);
-  const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(!isMobile);
   const [copiedMessageId, setCopiedMessageId] = React.useState<string | null>(
     null
   );
@@ -156,6 +157,11 @@ const ChannelSummaryContent = () => {
   const { excute: ApiRegenerateSummary, isLoading } = useAxiosApi(
     apis.ApiRegenerateSummary
   );
+
+  useEffect(() => {
+    setIsMobile(isMobileQuery);
+    setIsOpenDrawer(!isMobileQuery);
+  }, [isMobileQuery]);
 
   const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
@@ -649,7 +655,8 @@ const ChannelSummaryContent = () => {
                             fontStyle: 'normal',
                             fontFamily: 'DFPHeiMedium-B5',
                             color: 'var(--Primary-Black, #212B36)',
-                            '& p': { // Add styling for paragraph elements inside ReactMarkdown
+                            '& p': {
+                              // Add styling for paragraph elements inside ReactMarkdown
                               whiteSpace: 'pre-wrap', // This preserves line breaks
                               marginBottom: '1em', // Adds spacing between paragraphs
                             },

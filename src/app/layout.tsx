@@ -9,7 +9,7 @@ import { Suspense } from 'react';
 import DynaFontScript from '../assets/font/DynaFontScript';
 import './globals.css';
 import { metadata } from './metadata';
-
+import ClientOnlyCircularProgress from '@/components/ClientOnlyCircularProgress/ClientOnlyCircularProgress';
 
 export { metadata };
 
@@ -26,16 +26,14 @@ export default function RootLayout({ children }: Props) {
         <meta name="google" content="notranslate" />
         <meta property="og:locale" content="zh_TW" />
       </head>
-      <body
-        style={{ visibility: 'visible' }}
-      >
+      <body style={{ visibility: 'visible' }}>
         <ReduxProvider>
           <ThemeProvider>
             <SnackbarProvider>
               <LoginProvider>
                 <ChannelContextProvider>
                   <FontLoader />
-                  <Suspense fallback={null}>
+                  <Suspense fallback={<ClientOnlyCircularProgress />}>
                     <TokenValidator />
                   </Suspense>
                   {children}
