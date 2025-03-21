@@ -78,7 +78,7 @@ const drawerItems = [
   {
     text: '我的收藏',
     icon: <StarRounded sx={{ color: '#212B36' }} />,
-    route: '', //favorite
+    route: '/favorite',
   },
   {
     text: '活動公告',
