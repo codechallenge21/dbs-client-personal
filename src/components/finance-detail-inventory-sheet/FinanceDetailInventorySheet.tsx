@@ -1,26 +1,26 @@
 import {
-    AddRounded,
-    AssessmentRounded,
-    MoreVertRounded,
-    SearchRounded,
+  AddRounded,
+  AssessmentRounded,
+  MoreVertRounded,
+  SearchRounded,
 } from '@mui/icons-material';
 import {
-    Box,
-    Card,
-    IconButton,
-    InputAdornment,
-    Tab,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Tabs,
-    TextField,
-    Typography,
-    useMediaQuery,
-    useTheme,
+  Box,
+  Card,
+  IconButton,
+  InputAdornment,
+  Tab,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Tabs,
+  TextField,
+  Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import React, { useState } from 'react';
 
@@ -709,12 +709,10 @@ const FinanceDetailInventorySheet = () => {
                   gap: '40px',
                 },
               }}
-              slotProps={{
-                indicator: {
-                  sx: {
-                    height: '3px',
-                    backgroundColor: '#212B36',
-                  },
+              TabIndicatorProps={{
+                sx: {
+                  height: '3px',
+                  backgroundColor: '#212B36',
                 },
               }}
             >

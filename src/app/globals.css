@@ -230,7 +230,6 @@ a {
     opacity: 1;
   }
 }
-
 @keyframes interactingButton {
   0% {
     background-color: rgba(0, 102, 204, 0.1);
@@ -245,7 +244,6 @@ a {
     box-shadow: 0 0 10px rgba(0, 102, 204, 0.2);
   }
 }
-
 .interacting {
   animation: interactingButton 1s infinite;
   border-radius: 50%;
@@ -254,7 +252,6 @@ a {
   align-items: center;
   justify-content: center;
 }
-
 .interactingIcon {
   animation: interactingAnimation 1s infinite;
 }
