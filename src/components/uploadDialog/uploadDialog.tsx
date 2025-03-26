@@ -277,6 +277,24 @@ export default function UploadDialog({
                 : '請將音訊檔案拖曳到這裡上傳'}
             </Typography>
           )}
+          
+          {/* Audio quality notice with emojis */}
+          <Typography
+            sx={{
+              color: '#CC0000',
+              fontFamily: 'var(--font-medium)',
+              fontSize: isMobile ? '14px' : '16px',
+              fontStyle: 'normal',
+              fontWeight: 400,
+              lineHeight: 'normal',
+              mb: isMobile ? '16px' : '24px',
+              textAlign: 'center',
+              maxWidth: isMobile ? '280px' : '500px',
+            }}
+          >
+            ☝️ 為了提高語音轉文字的準確度，請確保音檔清晰 ☝️
+          </Typography>
+          
           <Button
             role="button"
             aria-label="Upload File"
