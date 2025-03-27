@@ -389,7 +389,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                   </Box>
                 )}
                 <MermaidMarkdown
-                  chartData={message.organizationChannelMessageContent}
+                  chartData={message.organizationChannelMessageContent?.replace(/```markdown/g, "```")}
                   customStyle={{ fontFamily: 'var(--font-medium)' }}
                 />
                 {message.organizationChannelMessageType === 'AI' &&
@@ -666,7 +666,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                   }}
                 >
                   <MermaidMarkdown
-                    chartData={message.organizationChannelMessageContent}
+                    chartData={message.organizationChannelMessageContent?.replace(/```markdown/g, "```")}
                     customStyle={{ fontFamily: 'var(--font-medium)' }}
                   />
                   {message.organizationChannelMessageType === 'AI' && (
