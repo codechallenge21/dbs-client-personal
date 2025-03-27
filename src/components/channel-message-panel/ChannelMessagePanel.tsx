@@ -389,7 +389,7 @@ const ChannelMessagePanel: FC<ChannelMessagePanelProps> = ({
                   </Box>
                 )}
                 <MermaidMarkdown
-                  chartData={message.organizationChannelMessageContent?.replace(/```markdown/g, "```")}
+                  chartData={message.organizationChannelMessageContent?.replace(/```(?:markdown|md)/g, "```")}
                   customStyle={{ fontFamily: 'var(--font-medium)' }}
                 />
                 {message.organizationChannelMessageType === 'AI' &&
