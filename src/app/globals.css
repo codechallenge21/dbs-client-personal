@@ -35,7 +35,7 @@
 
 @font-face {
   font-family: "DFT_BC";
-  src: local("DFT_BC"); 
+  src: local("DFT_BC");
   font-style: normal;
   font-display: swap;
 }
@@ -76,7 +76,7 @@
   --font-medium: "DFT_B5", "DFHeiMedium", sans-serif;
   --font-light: "DFT_B3", "DFHeiLight", sans-serif;
   --font-ultra: "DFT_BC", "DFHeiUBold", sans-serif;
-  
+
   /* System colors */
   --background: #ffffff;
   --foreground: #212B36;
@@ -143,7 +143,6 @@ body {
 
 * {
   box-sizing: border-box;
-  padding: 0;
   margin: 0;
 }
 
@@ -174,10 +173,12 @@ a {
     transform: scale(1);
     opacity: 1;
   }
+
   50% {
     transform: scale(1.2);
     opacity: 0.8;
   }
+
   100% {
     transform: scale(1);
     opacity: 1;
@@ -189,10 +190,12 @@ a {
     background-color: rgba(255, 0, 0, 0.1);
     box-shadow: 0 0 10px rgba(255, 0, 0, 0.2);
   }
+
   50% {
     background-color: rgba(255, 0, 0, 0.3);
     box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
   }
+
   100% {
     background-color: rgba(255, 0, 0, 0.1);
     box-shadow: 0 0 10px rgba(255, 0, 0, 0.2);
@@ -221,29 +224,35 @@ a {
     transform: scale(1);
     opacity: 1;
   }
+
   50% {
     transform: scale(1.2);
     opacity: 0.8;
   }
+
   100% {
     transform: scale(1);
     opacity: 1;
   }
 }
+
 @keyframes interactingButton {
   0% {
     background-color: rgba(0, 102, 204, 0.1);
     box-shadow: 0 0 10px rgba(0, 102, 204, 0.2);
   }
+
   50% {
     background-color: rgba(0, 102, 204, 0.3);
     box-shadow: 0 0 20px rgba(0, 102, 204, 0.4);
   }
+
   100% {
     background-color: rgba(0, 102, 204, 0.1);
     box-shadow: 0 0 10px rgba(0, 102, 204, 0.2);
   }
 }
+
 .interacting {
   animation: interactingButton 1s infinite;
   border-radius: 50%;
@@ -252,6 +261,12 @@ a {
   align-items: center;
   justify-content: center;
 }
+
 .interactingIcon {
   animation: interactingAnimation 1s infinite;
+}
+
+/* app/layout.tsx body */
+.visible-body {
+  visibility: visible;
 }

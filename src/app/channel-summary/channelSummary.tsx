@@ -42,10 +42,11 @@ import {
   Typography,
   useMediaQuery,
   useTheme,
-} from '@mui/material';
-import { useRouter, useSearchParams } from 'next/navigation';
-import React, { Suspense, useCallback, useEffect, useState } from 'react';
-import ReactMarkdown from 'react-markdown';
+} from "@mui/material";
+import { useRouter, useSearchParams } from "next/navigation";
+import React, { Suspense, useCallback, useEffect, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 function TabPanel(props: {
   readonly value: number;
@@ -700,11 +701,13 @@ const ChannelSummaryContent = () => {
                             color: "var(--Primary-Black, #212B36)",
                           }}
                         >
-                          <ReactMarkdown>
+                          <ReactMarkdown remarkPlugins={[remarkGfm]}>
                             {
                               selectedChannel
                                 ?.organizationChannelTranscriptList[0]
                                 ?.organizationChannelTranscriptContent
+                                ?.replace(/^```markdown/, "")
+                                ?.replace(/```$/, "")
                             }
                           </ReactMarkdown>
                         </Box>
@@ -1020,12 +1023,13 @@ const ChannelSummaryContent = () => {
                               color: "var(--Primary-Black, #212B36)",
                             }}
                           >
-                            <ReactMarkdown>
+                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
                               {
-                                selectedChannel?.organizationChannelMessageList[
-                                  selectedChannel
-                                    ?.organizationChannelMessageList.length - 1
-                                ]?.organizationChannelMessageContent
+                              selectedChannel?.organizationChannelMessageList[
+                                selectedChannel
+                                ?.organizationChannelMessageList.length - 1
+                              ]?.organizationChannelMessageContent?.replace(/^```markdown/, "")
+                                ?.replace(/```$/, "")
                               }
                             </ReactMarkdown>
                           </Box>
@@ -1798,10 +1802,11 @@ const ChannelSummaryContent = () => {
                 color: "var(--Primary-Black, #212B36)",
               }}
             >
-              <ReactMarkdown>
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
                 {
                   selectedChannel?.organizationChannelTranscriptList[0]
-                    ?.organizationChannelTranscriptContent
+                    ?.organizationChannelTranscriptContent?.replace(/^```markdown/, "")
+                    ?.replace(/```$/, "")
                 }
               </ReactMarkdown>
             </Box>
@@ -2096,12 +2101,14 @@ const ChannelSummaryContent = () => {
                     color: "var(--Primary-Black, #212B36)",
                   }}
                 >
-                  <ReactMarkdown>
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
                     {
                       selectedChannel?.organizationChannelMessageList[
                         selectedChannel?.organizationChannelMessageList.length -
                           1
                       ]?.organizationChannelMessageContent
+                      ?.replace(/^```markdown/, "")
+                      ?.replace(/```$/, "")
                     }
                   </ReactMarkdown>
                 </Box>

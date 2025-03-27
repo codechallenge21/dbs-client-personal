@@ -26,7 +26,7 @@ export default function RootLayout({ children }: Props) {
         <meta name="google" content="notranslate" />
         <meta property="og:locale" content="zh_TW" />
       </head>
-      <body style={{ visibility: 'visible' }}>
+      <body className="visible-body" suppressHydrationWarning={true}>
         <ReduxProvider>
           <ThemeProvider>
             <SnackbarProvider>
