@@ -85,6 +85,7 @@ export interface getUserFeedbackApiPayload {
   messageId: string;
   organizationChannelId: string;
   organizationId: string;
+  feedbackType: 'messages' | 'transcripts';
 }
 
 export interface addUserFeedbackApiPayload {
