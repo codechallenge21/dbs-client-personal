@@ -2,6 +2,8 @@
 import DataSourceDialog from "@/components/dialogs/ChatDataStore";
 import DeleteDialog from "@/components/dialogs/DeleteDialog";
 import EditDialog from "@/components/dialogs/EditDialog";
+import NegativeFeedbackModal from '@/components/dialogs/NegativeFeedbackModal';
+import PositiveFeedbackModal from '@/components/dialogs/PositiveFeedbackModal';
 import EditableItem from "@/components/editable-item/EditableItem";
 import ToolbarDrawer, {
   customScrollbarStyle,
@@ -20,7 +22,9 @@ import {
   PermIdentityRounded,
   ReplayRounded,
   SyncRounded,
+  ThumbDownAltRounded,
   ThumbDownOffAltRounded,
+  ThumbUpAltRounded,
 } from "@mui/icons-material";
 import {
   Box,
@@ -124,7 +128,9 @@ const dataRow3 = [
 const ChannelSummaryContent = () => {
   const theme = useTheme();
   const router = useRouter();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobileQuery = useMediaQuery(theme.breakpoints.down('sm'));
+  const [isMobile, setIsMobile] = useState(false);
+  const [isOpenDrawer, setIsOpenDrawer] = useState(true);
   const searchParams = useSearchParams();
   const organizationChannelId = searchParams.get("organizationChannelId") ?? "";
 
@@ -133,7 +139,6 @@ const ChannelSummaryContent = () => {
     React.useState<OrganizationChannel | null>(null);
   const [openDataSource, setOpenDataSource] = useState(false);
   const [aIAnalysisTabValue, setAIAnalysisTabValue] = React.useState(0);
-  const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(!isMobile);
   const [copiedMessageId, setCopiedMessageId] = React.useState<string | null>(
     null
   );
@@ -141,13 +146,31 @@ const ChannelSummaryContent = () => {
   const [toolsAnchor, setToolsAnchor] = useState<null | HTMLElement>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState<boolean>(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
+  const [feedbackMap, setFeedbackMap] = useState<Record<string, string>>({});
+  const [openPositiveFeedbackModal, setOpenPositiveFeedbackModal] =
+    useState(false);
+  const [openNegativeFeedbackModal, setOpenNegativeFeedbackModal] =
+    useState(false);
+  const [activeTargetId, setActiveTargetId] = useState<string | null>(null);
+  const [feedbackTarget, setFeedbackTarget] = useState<string>('');
+  const { excute: submitFeedback } = useAxiosApi(apis.addUserFeedback);
   const { excute: deleteChannel } = useAxiosApi(apis.deleteChannel);
   const { excute: ApiRegenerateSummary, isLoading } = useAxiosApi(
     apis.ApiRegenerateSummary
   );
 
+  useEffect(() => {
+    setIsMobile(isMobileQuery);
+    setIsOpenDrawer(!isMobileQuery);
+  }, [isMobileQuery]);
+
   const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
+  };
+
+  const handleClose = () => {
+    setOpenPositiveFeedbackModal(false);
+    setOpenNegativeFeedbackModal(false);
   };
 
   const {
@@ -269,6 +292,49 @@ const ChannelSummaryContent = () => {
     updateChannelData();
   }, [channel, mutateChannel]);
 
+  // Initialize feedbackMap from channel messages when component loads
+  useEffect(() => {
+    if (channel) {
+      const newFeedbackMap: Record<string, string> = {};
+
+      // Process transcript feedback if exists
+      if (channel.organizationChannelTranscriptList?.length) {
+        channel.organizationChannelTranscriptList.forEach((transcript) => {
+          if (
+            transcript.organizationChannelTranscriptId &&
+            transcript.organizationChannelFeedbackList?.length
+          ) {
+            // Use the first feedback in the list to determine the status
+            const firstFeedback = transcript.organizationChannelFeedbackList[0];
+            if (firstFeedback?.organizationChannelFeedbackType) {
+              newFeedbackMap[transcript.organizationChannelTranscriptId] =
+                firstFeedback.organizationChannelFeedbackType;
+            }
+          }
+        });
+      }
+
+      // Process message feedback if exists
+      if (channel.organizationChannelMessageList?.length) {
+        channel.organizationChannelMessageList.forEach((message) => {
+          if (
+            message.organizationChannelMessageId &&
+            message.organizationChannelFeedbackList?.length
+          ) {
+            // Use the first feedback in the list to determine the status
+            const firstFeedback = message.organizationChannelFeedbackList[0];
+            if (firstFeedback?.organizationChannelFeedbackType) {
+              newFeedbackMap[message.organizationChannelMessageId] =
+                firstFeedback.organizationChannelFeedbackType;
+            }
+          }
+        });
+      }
+
+      setFeedbackMap((prev) => ({ ...prev, ...newFeedbackMap }));
+    }
+  }, [channel]);
+
   const handleBackButtonClick = () => {
     router.push("/toolbox");
   };
@@ -278,6 +344,71 @@ const ChannelSummaryContent = () => {
     newValue: number
   ) => {
     setAIAnalysisTabValue(newValue);
+  };
+
+  const handlePostiveModalOpen = (targetId: string, feedbackTarget: string) => {
+    // If this message already has positive feedback, directly submit to cancel it
+    if (feedbackMap[targetId] === 'POSITIVE') {
+      handleDirectFeedbackToggle(targetId, 'POSITIVE');
+      return;
+    }
+
+    setActiveTargetId(targetId);
+    setFeedbackTarget(feedbackTarget);
+    setOpenPositiveFeedbackModal(true);
+  };
+
+  const handleNegativeModalOpen = (
+    targetId: string,
+    feedbackTarget: string
+  ) => {
+    // If this message already has negative feedback, directly submit to cancel it
+    if (feedbackMap[targetId] === 'NEGATIVE') {
+      handleDirectFeedbackToggle(targetId, 'NEGATIVE');
+      return;
+    }
+
+    setActiveTargetId(targetId);
+    setFeedbackTarget(feedbackTarget);
+    setOpenNegativeFeedbackModal(true);
+  };
+
+  const handleDirectFeedbackToggle = async (
+    targetId: string,
+    feedbackType: string
+  ) => {
+    try {
+      // Remove the feedback from our local state first for immediate UI response
+      setFeedbackMap((prev) => {
+        const newMap = { ...prev };
+        delete newMap[targetId];
+        return newMap;
+      });
+
+      // Submit the feedback to the server - always use the same type as the button clicked
+      await submitFeedback({
+        organizationChannelFeedbackTarget: feedbackTarget,
+        organizationChannelFeedbackTargetId: targetId,
+        organizationChannelFeedbackType: feedbackType,
+        organizationChannelFeedbackComment: '',
+        organizationId: 'yMJHyi6R1CB9whpdNvtA',
+      });
+    } catch (error) {
+      console.error('Failed to toggle feedback:', error);
+      // Restore the previous feedback state if the request failed
+      setFeedbackMap((prev) => ({
+        ...prev,
+        [targetId]: feedbackType,
+      }));
+      // showSnackbar('取消失敗', 'error');
+    }
+  };
+
+  const updateMessageFeedback = (messageId: string, feedbackType: string) => {
+    setFeedbackMap((prev) => ({
+      ...prev,
+      [messageId]: feedbackType,
+    }));
   };
 
   return (
@@ -498,21 +629,64 @@ const ChannelSummaryContent = () => {
                               </IconButton>
                             </Tooltip>
                             <Tooltip title="回應良好" placement="top" arrow>
-                              <IconButton aria-label="Like">
-                                <ThumbDownOffAltRounded
-                                  sx={{
-                                    color: "black",
-                                    transform: "scale(-1, -1)",
-                                    fontSize: 20,
-                                  }}
-                                />
+                              <IconButton
+                                aria-label="Like"
+                                onClick={() =>
+                                  handlePostiveModalOpen(
+                                    selectedChannel
+                                      ?.organizationChannelTranscriptList[0]
+                                      ?.organizationChannelTranscriptId ?? '',
+                                    'TRANSCRIPT'
+                                  )
+                                }
+                              >
+                                {feedbackMap[
+                                  selectedChannel
+                                    ?.organizationChannelTranscriptList[0]
+                                    ?.organizationChannelTranscriptId ?? ''
+                                ] === 'POSITIVE' ? (
+                                  <ThumbUpAltRounded
+                                    sx={{
+                                      fontSize: 20,
+                                      color: 'black',
+                                    }}
+                                  />
+                                ) : (
+                                  <ThumbDownOffAltRounded
+                                    sx={{
+                                      fontSize: 20,
+                                      color: 'black',
+                                      transform: 'scale(-1, -1)',
+                                    }}
+                                  />
+                                )}
                               </IconButton>
                             </Tooltip>
                             <Tooltip title="回應不佳" placement="top" arrow>
-                              <IconButton aria-label="Dislike">
-                                <ThumbDownOffAltRounded
-                                  sx={{ color: "black", fontSize: 20 }}
-                                />
+                              <IconButton
+                                aria-label="Dislike"
+                                onClick={() =>
+                                  handleNegativeModalOpen(
+                                    selectedChannel
+                                      ?.organizationChannelTranscriptList[0]
+                                      ?.organizationChannelTranscriptId ?? '',
+                                    'TRANSCRIPT'
+                                  )
+                                }
+                              >
+                                {feedbackMap[
+                                  selectedChannel
+                                    ?.organizationChannelTranscriptList[0]
+                                    ?.organizationChannelTranscriptId ?? ''
+                                ] === 'NEGATIVE' ? (
+                                  <ThumbDownAltRounded
+                                    sx={{ color: 'black', fontSize: 20 }}
+                                  />
+                                ) : (
+                                  <ThumbDownOffAltRounded
+                                    sx={{ color: 'black', fontSize: 20 }}
+                                  />
+                                )}
                               </IconButton>
                             </Tooltip>
                           </Box>
@@ -737,21 +911,64 @@ const ChannelSummaryContent = () => {
                                 </IconButton>
                               </Tooltip>
                               <Tooltip title="回應良好" placement="top" arrow>
-                                <IconButton aria-label="Like">
-                                  <ThumbDownOffAltRounded
-                                    sx={{
-                                      color: "black",
-                                      transform: "scale(-1, -1)",
-                                      fontSize: 20,
-                                    }}
-                                  />
+                                <IconButton
+                                  aria-label="Like"
+                                  onClick={() =>
+                                    handlePostiveModalOpen(
+                                      selectedChannel
+                                        ?.organizationChannelMessageList[0]
+                                        ?.organizationChannelMessageId ?? '',
+                                      'AI_RESPONSE'
+                                    )
+                                  }
+                                >
+                                  {feedbackMap[
+                                    selectedChannel
+                                      ?.organizationChannelMessageList[0]
+                                      ?.organizationChannelMessageId ?? ''
+                                  ] === 'POSITIVE' ? (
+                                    <ThumbUpAltRounded
+                                      sx={{
+                                        fontSize: 20,
+                                        color: 'black',
+                                      }}
+                                    />
+                                  ) : (
+                                    <ThumbDownOffAltRounded
+                                      sx={{
+                                        fontSize: 20,
+                                        color: 'black',
+                                        transform: 'scale(-1, -1)',
+                                      }}
+                                    />
+                                  )}
                                 </IconButton>
                               </Tooltip>
                               <Tooltip title="回應不佳" placement="top" arrow>
-                                <IconButton aria-label="Dislike">
-                                  <ThumbDownOffAltRounded
-                                    sx={{ color: "black", fontSize: 20 }}
-                                  />
+                                <IconButton
+                                  aria-label="Dislike"
+                                  onClick={() =>
+                                    handleNegativeModalOpen(
+                                      selectedChannel
+                                        ?.organizationChannelMessageList[0]
+                                        ?.organizationChannelMessageId ?? '',
+                                      'AI_RESPONSE'
+                                    )
+                                  }
+                                >
+                                  {feedbackMap[
+                                    selectedChannel
+                                      ?.organizationChannelMessageList[0]
+                                      ?.organizationChannelMessageId ?? ''
+                                  ] === 'NEGATIVE' ? (
+                                    <ThumbDownAltRounded
+                                      sx={{ color: 'black', fontSize: 20 }}
+                                    />
+                                  ) : (
+                                    <ThumbDownOffAltRounded
+                                      sx={{ color: 'black', fontSize: 20 }}
+                                    />
+                                  )}
                                 </IconButton>
                               </Tooltip>
                               <Tooltip title="重新產生" placement="top" arrow>
@@ -914,21 +1131,63 @@ const ChannelSummaryContent = () => {
                                   </IconButton>
                                 </Tooltip>
                                 <Tooltip title="回應良好" placement="top" arrow>
-                                  <IconButton aria-label="Like">
-                                    <ThumbDownOffAltRounded
-                                      sx={{
-                                        color: "black",
-                                        transform: "scale(-1, -1)",
-                                        fontSize: 20,
-                                      }}
-                                    />
+                                  <IconButton
+                                    aria-label="Like"
+                                    // onClick={() =>
+                                    //   handlePostiveModalOpen(
+                                    //     selectedChannel
+                                    //       ?.organizationChannelMessageList[0]
+                                    //       ?.organizationChannelMessageId ?? ''
+                                    //   )
+                                    // }
+                                  >
+                                    {feedbackMap[
+                                      selectedChannel
+                                        ?.organizationChannelMessageList[0]
+                                        ?.organizationChannelMessageId ?? ''
+                                    ] === 'POSITIVE' ? (
+                                      <ThumbUpAltRounded
+                                        sx={{
+                                          color: 'black',
+                                          fontSize: 20,
+                                          transform: 'scale(-1, -1)',
+                                        }}
+                                      />
+                                    ) : (
+                                      <ThumbDownOffAltRounded
+                                        sx={{
+                                          color: 'black',
+                                          transform: 'scale(-1, -1)',
+                                          fontSize: 20,
+                                        }}
+                                      />
+                                    )}
                                   </IconButton>
                                 </Tooltip>
                                 <Tooltip title="回應不佳" placement="top" arrow>
-                                  <IconButton aria-label="Dislike">
-                                    <ThumbDownOffAltRounded
-                                      sx={{ color: "black", fontSize: 20 }}
-                                    />
+                                  <IconButton
+                                    aria-label="Dislike"
+                                    // onClick={() =>
+                                    //   handleNegativeModalOpen(
+                                    //     selectedChannel
+                                    //       ?.organizationChannelMessageList[0]
+                                    //       ?.organizationChannelMessageId ?? ''
+                                    //   )
+                                    // }
+                                  >
+                                    {feedbackMap[
+                                      selectedChannel
+                                        ?.organizationChannelMessageList[0]
+                                        ?.organizationChannelMessageId ?? ''
+                                    ] === 'NEGATIVE' ? (
+                                      <ThumbUpAltRounded
+                                        sx={{ color: 'black', fontSize: 20 }}
+                                      />
+                                    ) : (
+                                      <ThumbDownOffAltRounded
+                                        sx={{ color: 'black', fontSize: 20 }}
+                                      />
+                                    )}
                                   </IconButton>
                                 </Tooltip>
                                 {/* <IconButton aria-label="Pin">
@@ -1475,21 +1734,60 @@ const ChannelSummaryContent = () => {
                   </IconButton>
                 </Tooltip>
                 <Tooltip title="回應良好" placement="top" arrow>
-                  <IconButton aria-label="Like">
-                    <ThumbDownOffAltRounded
-                      sx={{
-                        color: "black",
-                        transform: "scale(-1, -1)",
-                        fontSize: 20,
-                      }}
-                    />
+                  <IconButton
+                    aria-label="Like"
+                    onClick={() =>
+                      handlePostiveModalOpen(
+                        selectedChannel?.organizationChannelTranscriptList[0]
+                          ?.organizationChannelTranscriptId ?? '',
+                        'TRANSCRIPT'
+                      )
+                    }
+                  >
+                    {feedbackMap[
+                      selectedChannel?.organizationChannelTranscriptList[0]
+                        ?.organizationChannelTranscriptId ?? ''
+                    ] === 'POSITIVE' ? (
+                      <ThumbUpAltRounded
+                        sx={{
+                          fontSize: 20,
+                          color: 'black',
+                        }}
+                      />
+                    ) : (
+                      <ThumbDownOffAltRounded
+                        sx={{
+                          fontSize: 20,
+                          color: 'black',
+                          transform: 'scale(-1, -1)',
+                        }}
+                      />
+                    )}
                   </IconButton>
                 </Tooltip>
                 <Tooltip title="回應不佳" placement="top" arrow>
-                  <IconButton aria-label="Dislike">
-                    <ThumbDownOffAltRounded
-                      sx={{ color: "black", fontSize: 20 }}
-                    />
+                  <IconButton
+                    aria-label="Dislike"
+                    onClick={() =>
+                      handleNegativeModalOpen(
+                        selectedChannel?.organizationChannelTranscriptList[0]
+                          ?.organizationChannelTranscriptId ?? '',
+                        'TRANSCRIPT'
+                      )
+                    }
+                  >
+                    {feedbackMap[
+                      selectedChannel?.organizationChannelTranscriptList[0]
+                        ?.organizationChannelTranscriptId ?? ''
+                    ] === 'NEGATIVE' ? (
+                      <ThumbDownAltRounded
+                        sx={{ color: 'black', fontSize: 20 }}
+                      />
+                    ) : (
+                      <ThumbDownOffAltRounded
+                        sx={{ color: 'black', fontSize: 20 }}
+                      />
+                    )}
                   </IconButton>
                 </Tooltip>
               </Box>
@@ -1694,23 +1992,101 @@ const ChannelSummaryContent = () => {
                       )}
                     </IconButton>
                   </Tooltip>
-                  <IconButton aria-label="Like">
-                    <ThumbDownOffAltRounded
-                      sx={{
-                        color: "black",
-                        transform: "scale(-1, -1)",
-                        fontSize: 20,
+                  <Tooltip title="回應良好" placement="top" arrow>
+                    <IconButton
+                      aria-label="Like"
+                      onClick={() =>
+                        handlePostiveModalOpen(
+                          selectedChannel?.organizationChannelMessageList[0]
+                            ?.organizationChannelMessageId ?? '',
+                          'AI_RESPONSE'
+                        )
+                      }
+                    >
+                      {feedbackMap[
+                        selectedChannel?.organizationChannelMessageList[0]
+                          ?.organizationChannelMessageId ?? ''
+                      ] === 'POSITIVE' ? (
+                        <ThumbUpAltRounded
+                          sx={{
+                            fontSize: 20,
+                            color: 'black',
+                          }}
+                        />
+                      ) : (
+                        <ThumbDownOffAltRounded
+                          sx={{
+                            fontSize: 20,
+                            color: 'black',
+                            transform: 'scale(-1, -1)',
+                          }}
+                        />
+                      )}
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="回應不佳" placement="top" arrow>
+                    <IconButton
+                      aria-label="Dislike"
+                      onClick={() =>
+                        handleNegativeModalOpen(
+                          selectedChannel?.organizationChannelMessageList[0]
+                            ?.organizationChannelMessageId ?? '',
+                          'AI_RESPONSE'
+                        )
+                      }
+                    >
+                      {feedbackMap[
+                        selectedChannel?.organizationChannelMessageList[0]
+                          ?.organizationChannelMessageId ?? ''
+                      ] === 'NEGATIVE' ? (
+                        <ThumbDownAltRounded
+                          sx={{ color: 'black', fontSize: 20 }}
+                        />
+                      ) : (
+                        <ThumbDownOffAltRounded
+                          sx={{ color: 'black', fontSize: 20 }}
+                        />
+                      )}
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="重新產生" placement="top" arrow>
+                    <IconButton
+                      aria-label="Regenerate"
+                      onClick={async () => {
+                        if (!isLoading) {
+                          await ApiRegenerateSummary({
+                            organizationId: 'yMJHyi6R1CB9whpdNvtA',
+                            organizationChannelId,
+                          });
+                          mutateChannel();
+                        }
                       }}
-                    />
-                  </IconButton>
-                  <IconButton aria-label="Dislike">
-                    <ThumbDownOffAltRounded
-                      sx={{ color: "black", fontSize: 20 }}
-                    />
-                  </IconButton>
-                  <IconButton aria-label="Regenerate">
-                    <SyncRounded sx={{ color: "black", fontSize: 20 }} />
-                  </IconButton>
+                      sx={{
+                        borderRadius: '50%',
+                        padding: 1,
+                        transition: 'all 0.3s ease',
+                        '&:hover': {
+                          backgroundColor: '#e0e0e0',
+                          transform: 'scale(1.1)',
+                        },
+                      }}
+                    >
+                      {isLoading ? (
+                        <SyncRounded
+                          sx={{
+                            color: 'black',
+                            '@keyframes spin': {
+                              '0%': { transform: 'rotate(0deg)' },
+                              '100%': { transform: 'rotate(360deg)' },
+                            },
+                            animation: 'spin 1s linear infinite',
+                          }}
+                        />
+                      ) : (
+                        <SyncRounded sx={{ color: 'black' }} />
+                      )}
+                    </IconButton>
+                  </Tooltip>
                 </Box>
               </Box>
               {isMobile && (
@@ -1825,25 +2201,69 @@ const ChannelSummaryContent = () => {
                       justifyContent: "space-between",
                     }}
                   >
-                    <IconButton aria-label="Copy">
-                      <ContentCopyRounded
-                        sx={{ color: "#212B36", fontSize: 20 }}
-                      />
-                    </IconButton>
-                    <IconButton aria-label="Like">
-                      <ThumbDownOffAltRounded
-                        sx={{
-                          color: "black",
-                          transform: "scale(-1, -1)",
-                          fontSize: 20,
-                        }}
-                      />
-                    </IconButton>
-                    <IconButton aria-label="Dislike">
-                      <ThumbDownOffAltRounded
-                        sx={{ color: "black", fontSize: 20 }}
-                      />
-                    </IconButton>
+                    <Tooltip title="複製" placement="top" arrow>
+                      <IconButton aria-label="Copy">
+                        <ContentCopyRounded
+                          sx={{ color: '#212B36', fontSize: 20 }}
+                        />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="回應良好" placement="top" arrow>
+                      <IconButton
+                        aria-label="Like"
+                        // onClick={() =>
+                        //   handlePostiveModalOpen(
+                        //     selectedChannel?.organizationChannelMessageList[0]
+                        //       ?.organizationChannelMessageId ?? ''
+                        //   )
+                        // }
+                      >
+                        {feedbackMap[
+                          selectedChannel?.organizationChannelMessageList[0]
+                            ?.organizationChannelMessageId ?? ''
+                        ] === 'POSITIVE' ? (
+                          <ThumbUpAltRounded
+                            sx={{
+                              color: 'black',
+                              fontSize: 20,
+                              transform: 'scale(-1, -1)',
+                            }}
+                          />
+                        ) : (
+                          <ThumbDownOffAltRounded
+                            sx={{
+                              color: 'black',
+                              transform: 'scale(-1, -1)',
+                              fontSize: 20,
+                            }}
+                          />
+                        )}
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="回應不佳" placement="top" arrow>
+                      <IconButton
+                        aria-label="Dislike"
+                        // onClick={() =>
+                        //   handleNegativeModalOpen(
+                        //     selectedChannel?.organizationChannelMessageList[0]
+                        //       ?.organizationChannelMessageId ?? ''
+                        //   )
+                        // }
+                      >
+                        {feedbackMap[
+                          selectedChannel?.organizationChannelMessageList[0]
+                            ?.organizationChannelMessageId ?? ''
+                        ] === 'NEGATIVE' ? (
+                          <ThumbUpAltRounded
+                            sx={{ color: 'black', fontSize: 20 }}
+                          />
+                        ) : (
+                          <ThumbDownOffAltRounded
+                            sx={{ color: 'black', fontSize: 20 }}
+                          />
+                        )}
+                      </IconButton>
+                    </Tooltip>
                     {/* <IconButton aria-label="Pin">
                       <PushPinRounded sx={{ color: "black" }} />
                     </IconButton> */}
@@ -2247,8 +2667,73 @@ const ChannelSummaryContent = () => {
         open={isEditDialogOpen}
         onClose={handleCloseEditDialog}
         onConfirm={handleEditChannelConfirm}
-        editableName={selectedChannel?.organizationChannelTitle || ""}
+        editableName={selectedChannel?.organizationChannelTitle || ''}
       />
+      {activeTargetId ===
+        selectedChannel?.organizationChannelTranscriptList[0]
+          ?.organizationChannelTranscriptId && (
+        <>
+          <PositiveFeedbackModal
+            open={openPositiveFeedbackModal}
+            onClose={handleClose}
+            setUserFeedback={() =>
+              updateMessageFeedback(
+                selectedChannel?.organizationChannelTranscriptList[0]
+                  ?.organizationChannelTranscriptId ?? '',
+                'POSITIVE'
+              )
+            }
+            userChatMessage={
+              selectedChannel?.organizationChannelTranscriptList[0]
+            }
+          />
+          <NegativeFeedbackModal
+            open={openNegativeFeedbackModal}
+            onClose={handleClose}
+            setUserFeedback={() =>
+              updateMessageFeedback(
+                selectedChannel?.organizationChannelTranscriptList[0]
+                  ?.organizationChannelTranscriptId ?? '',
+                'NEGATIVE'
+              )
+            }
+            userChatMessage={
+              selectedChannel?.organizationChannelTranscriptList[0]
+            }
+          />
+        </>
+      )}
+
+      {activeTargetId ===
+        selectedChannel?.organizationChannelMessageList[0]
+          ?.organizationChannelMessageId && (
+        <>
+          <PositiveFeedbackModal
+            open={openPositiveFeedbackModal}
+            onClose={handleClose}
+            setUserFeedback={() =>
+              updateMessageFeedback(
+                selectedChannel?.organizationChannelMessageList[0]
+                  ?.organizationChannelMessageId ?? '',
+                'POSITIVE'
+              )
+            }
+            userChatMessage={selectedChannel?.organizationChannelMessageList[0]}
+          />
+          <NegativeFeedbackModal
+            open={openNegativeFeedbackModal}
+            onClose={handleClose}
+            setUserFeedback={() =>
+              updateMessageFeedback(
+                selectedChannel?.organizationChannelMessageList[0]
+                  ?.organizationChannelMessageId ?? '',
+                'NEGATIVE'
+              )
+            }
+            userChatMessage={selectedChannel?.organizationChannelMessageList[0]}
+          />
+        </>
+      )}
     </>
   );
 };

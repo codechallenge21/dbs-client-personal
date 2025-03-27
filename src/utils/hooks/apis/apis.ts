@@ -172,10 +172,11 @@ const apis = {
     if (!payload) {
       throw new Error('Payload is undefined');
     }
-    const { messageId, organizationChannelId, organizationId } = payload || {};
+    const { messageId, organizationChannelId, organizationId, feedbackType } =
+      payload || {};
 
     return fetcher.get(
-      `/organizations/${organizationId}/channels/${organizationChannelId}/messages/${messageId}`
+      `/organizations/${organizationId}/channels/${organizationChannelId}/${feedbackType}/${messageId}`
     );
   },
   registerUser: (payload?: RegisterUserApiPayload) => {

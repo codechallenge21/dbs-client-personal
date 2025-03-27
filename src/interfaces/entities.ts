@@ -76,6 +76,7 @@ export interface OrganizationChannelTranscript {
 
   organizationChannelTranscriptContent: string;
   organizationChannelTranscriptStatus: 'COMPLETE';
+  organizationChannelFeedbackList?: OrganizationChannelFeedback[];
 }
 
 export type OrganizationChannelTypes = 'CHAT' | 'MEETING';

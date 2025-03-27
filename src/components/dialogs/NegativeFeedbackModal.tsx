@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { SnackbarContext } from "@/context/SnackbarContext";
-import apis from "@/utils/hooks/apis/apis";
-import useAxiosApi from "@eGroupAI/hooks/apis/useAxiosApi";
-import CloseIcon from "@mui/icons-material/Close";
-import InfoIcon from "@mui/icons-material/Info";
+import { SnackbarContext } from '@/context/SnackbarContext';
+import apis from '@/utils/hooks/apis/apis';
+import useAxiosApi from '@eGroupAI/hooks/apis/useAxiosApi';
+import CloseIcon from '@mui/icons-material/Close';
+import InfoIcon from '@mui/icons-material/Info';
 import {
   Box,
   Button,
@@ -18,20 +18,20 @@ import {
   TextField,
   Typography,
   type SelectChangeEvent,
-} from "@mui/material";
-import { useSearchParams } from "next/navigation";
-import type React from "react";
-import { useCallback, useContext, useState } from "react";
+} from '@mui/material';
+import { useSearchParams } from 'next/navigation';
+import type React from 'react';
+import { useCallback, useContext, useState } from 'react';
 
 // 定義負面回饋類別的列舉項
 enum ORGANIZATION_CHANNEL_FEEDBACK_NEGATIVE_CATEGORY_ {
-  INTERFACE_ISSUE = "INTERFACE_ISSUE",
-  HARMFUL_CONTENT = "HARMFUL_CONTENT",
-  OVER_REFUSAL = "OVER_REFUSAL",
-  NOT_FULLY_MEET_REQUIREMENT = "NOT_FULLY_MEET_REQUIREMENT",
-  FACTUAL_INACCURACY = "FACTUAL_INACCURACY",
-  INCOMPLETE_ANSWER = "INCOMPLETE_ANSWER",
-  OTHER = "OTHER",
+  INTERFACE_ISSUE = 'INTERFACE_ISSUE',
+  HARMFUL_CONTENT = 'HARMFUL_CONTENT',
+  OVER_REFUSAL = 'OVER_REFUSAL',
+  NOT_FULLY_MEET_REQUIREMENT = 'NOT_FULLY_MEET_REQUIREMENT',
+  FACTUAL_INACCURACY = 'FACTUAL_INACCURACY',
+  INCOMPLETE_ANSWER = 'INCOMPLETE_ANSWER',
+  OTHER = 'OTHER',
 }
 
 // 定義每個負面回饋類別對應的繁體中文標籤
@@ -40,18 +40,18 @@ const negativeFeedbackCategoryLabels: Record<
   string
 > = {
   [ORGANIZATION_CHANNEL_FEEDBACK_NEGATIVE_CATEGORY_.INTERFACE_ISSUE]:
-    "操作介面問題",
+    '操作介面問題',
   [ORGANIZATION_CHANNEL_FEEDBACK_NEGATIVE_CATEGORY_.HARMFUL_CONTENT]:
-    "包含有害或不當內容",
+    '包含有害或不當內容',
   [ORGANIZATION_CHANNEL_FEEDBACK_NEGATIVE_CATEGORY_.OVER_REFUSAL]:
-    "過度拒絕回答問題",
+    '過度拒絕回答問題',
   [ORGANIZATION_CHANNEL_FEEDBACK_NEGATIVE_CATEGORY_.NOT_FULLY_MEET_REQUIREMENT]:
-    "未能完全滿足需求",
+    '未能完全滿足需求',
   [ORGANIZATION_CHANNEL_FEEDBACK_NEGATIVE_CATEGORY_.FACTUAL_INACCURACY]:
-    "資訊或事實不準確",
+    '資訊或事實不準確',
   [ORGANIZATION_CHANNEL_FEEDBACK_NEGATIVE_CATEGORY_.INCOMPLETE_ANSWER]:
-    "回答內容不完整",
-  [ORGANIZATION_CHANNEL_FEEDBACK_NEGATIVE_CATEGORY_.OTHER]: "其他問題",
+    '回答內容不完整',
+  [ORGANIZATION_CHANNEL_FEEDBACK_NEGATIVE_CATEGORY_.OTHER]: '其他問題',
 };
 
 interface NegativeFeedbackModalProps {
@@ -67,11 +67,11 @@ export default function NegativeFeedbackModal({
   userChatMessage,
   setUserFeedback,
 }: NegativeFeedbackModalProps) {
-  const [feedbackType, setFeedbackType] = useState("");
-  const [feedbackText, setFeedbackText] = useState("");
+  const [feedbackType, setFeedbackType] = useState('');
+  const [feedbackText, setFeedbackText] = useState('');
   const searchParams = useSearchParams();
   const { showSnackbar } = useContext(SnackbarContext);
-  const organizationChannelId = searchParams.get("organizationChannelId") ?? "";
+  const organizationChannelId = searchParams.get('organizationChannelId') ?? '';
   const { excute: submitUserInputs } = useAxiosApi(apis.addUserFeedback);
   const { excute: getUserFeedback } = useAxiosApi(apis.getUserFeedback);
 
@@ -87,18 +87,23 @@ export default function NegativeFeedbackModal({
     async (organizationChannelId: string) => {
       try {
         await getUserFeedback({
-          organizationId: "yMJHyi6R1CB9whpdNvtA",
+          organizationId: 'yMJHyi6R1CB9whpdNvtA',
           organizationChannelId,
-          messageId: userChatMessage.organizationChannelMessageId,
+          messageId:
+            userChatMessage.organizationChannelMessageId ||
+            userChatMessage.organizationChannelTranscriptId,
+          feedbackType: userChatMessage.organizationChannelTranscriptId
+            ? 'transcripts'
+            : 'messages',
         });
         setUserFeedback(
           // res.data.organizationChannelFeedbackType
-          "NEGATIVE"
+          'NEGATIVE'
         );
         onClose();
-        showSnackbar("感謝您的回饋!", "success");
+        showSnackbar('感謝您的回饋!', 'success');
       } catch (error) {
-        console.error("Failed to fetch channel details:", error);
+        console.error('Failed to fetch channel details:', error);
       }
     },
     [userChatMessage, getUserFeedback, setUserFeedback]
@@ -108,27 +113,31 @@ export default function NegativeFeedbackModal({
     if (userChatMessage) {
       try {
         await submitUserInputs({
-          organizationChannelFeedbackTarget: "AI_RESPONSE",
+          organizationChannelFeedbackTarget:
+            userChatMessage.organizationChannelTranscriptId
+              ? 'TRANSCRIPT'
+              : 'AI_RESPONSE',
           organizationChannelFeedbackTargetId:
-            userChatMessage.organizationChannelMessageId,
-          organizationChannelFeedbackType: "NEGATIVE",
-          organizationId: "yMJHyi6R1CB9whpdNvtA",
+            userChatMessage.organizationChannelMessageId ||
+            userChatMessage.organizationChannelTranscriptId,
+          organizationChannelFeedbackType: 'NEGATIVE',
+          organizationId: 'yMJHyi6R1CB9whpdNvtA',
           organizationChannelFeedbackComment: feedbackText,
           organizationChannelFeedbackNegativeCategory: feedbackType,
         });
         await fetchUserFeedback(organizationChannelId);
         onClose();
       } catch (error) {
-        showSnackbar("出了點問題", "error");
+        showSnackbar('出了點問題', 'error');
       } finally {
-        setFeedbackType("");
-        setFeedbackText("");
+        setFeedbackType('');
+        setFeedbackText('');
       }
     } else {
-      setUserFeedback("NEGATIVE");
+      setUserFeedback('NEGATIVE');
       onClose();
-      setFeedbackType("");
-      setFeedbackText("");
+      setFeedbackType('');
+      setFeedbackText('');
     }
   };
 
@@ -145,29 +154,29 @@ export default function NegativeFeedbackModal({
       maxWidth="sm"
       PaperProps={{
         sx: {
-          borderRadius: "8px",
-          boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
+          borderRadius: '8px',
+          boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)',
         },
       }}
     >
       <DialogTitle
         sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
           p: 2,
-          fontWeight: "bold",
+          fontWeight: 'bold',
         }}
       >
-        <Typography variant="h6" component="div" sx={{ fontWeight: "bold" }}>
+        <Typography variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
           回饋
         </Typography>
         <IconButton
           onClick={onClose}
           sx={{
-            color: "black",
-            "&:hover": {
-              backgroundColor: "rgba(0, 0, 0, 0.04)",
+            color: 'black',
+            '&:hover': {
+              backgroundColor: 'rgba(0, 0, 0, 0.04)',
             },
           }}
         >
@@ -176,9 +185,9 @@ export default function NegativeFeedbackModal({
       </DialogTitle>
 
       <DialogContent sx={{ p: 2 }}>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           <Box>
-            <Typography sx={{ mb: 1, fontSize: "0.9rem" }}>
+            <Typography sx={{ mb: 1, fontSize: '0.9rem' }}>
               您希望回饋的問題類型？（選填）
             </Typography>
             <FormControl fullWidth>
@@ -187,16 +196,16 @@ export default function NegativeFeedbackModal({
                 onChange={handleTypeChange}
                 displayEmpty
                 sx={{
-                  borderRadius: "4px",
-                  "& .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "rgba(0, 0, 0, 0.1)",
+                  borderRadius: '4px',
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    borderColor: 'rgba(0, 0, 0, 0.1)',
                   },
                 }}
                 renderValue={(selected) => {
                   if (selected.length === 0) {
                     return (
                       <Typography
-                        sx={{ color: "text.secondary", fontSize: "0.9rem" }}
+                        sx={{ color: 'text.secondary', fontSize: '0.9rem' }}
                       >
                         請選擇類型
                       </Typography>
@@ -219,7 +228,7 @@ export default function NegativeFeedbackModal({
           </Box>
 
           <Box>
-            <Typography sx={{ mb: 1, fontSize: "0.9rem" }}>
+            <Typography sx={{ mb: 1, fontSize: '0.9rem' }}>
               請詳細說明：（選填）
             </Typography>
             <TextField
@@ -230,15 +239,15 @@ export default function NegativeFeedbackModal({
               value={feedbackText}
               onChange={handleTextChange}
               sx={{
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderColor: "rgba(0, 0, 0, 0.1)",
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                    borderColor: 'rgba(0, 0, 0, 0.1)',
                   },
-                  "&:hover fieldset": {
-                    borderColor: "rgba(0, 0, 0, 0.2)",
+                  '&:hover fieldset': {
+                    borderColor: 'rgba(0, 0, 0, 0.2)',
                   },
-                  "& .MuiInputBase-input::placeholder": {
-                    fontSize: "0.9rem",
+                  '& .MuiInputBase-input::placeholder': {
+                    fontSize: '0.9rem',
                   },
                 },
               }}
@@ -247,19 +256,19 @@ export default function NegativeFeedbackModal({
 
           <Box
             sx={{
-              display: "flex",
-              alignItems: "flex-start",
+              display: 'flex',
+              alignItems: 'flex-start',
               gap: 1,
-              backgroundColor: "rgba(0, 0, 0, 0.02)",
+              backgroundColor: 'rgba(0, 0, 0, 0.02)',
               p: 1.5,
-              borderRadius: "4px",
+              borderRadius: '4px',
             }}
           >
             <InfoIcon
-              sx={{ color: "rgba(0, 0, 0, 0.5)", fontSize: "1.2rem", mt: 0.2 }}
+              sx={{ color: 'rgba(0, 0, 0, 0.5)', fontSize: '1.2rem', mt: 0.2 }}
             />
             <Typography
-              sx={{ fontSize: "0.8rem", color: "rgba(0, 0, 0, 0.7)" }}
+              sx={{ fontSize: '0.8rem', color: 'rgba(0, 0, 0, 0.7)' }}
             >
               提交此回饋將會把對話內容發送至好理家在團隊，以協助我們改進 AI
               回應品質。
@@ -280,20 +289,20 @@ export default function NegativeFeedbackModal({
           </Box>
         </Box>
 
-        <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
           <Button
             variant="contained"
             onClick={handleSubmit}
             sx={{
-              backgroundColor: "#6d4c41",
-              color: "white",
-              textTransform: "none",
-              "&:hover": {
-                backgroundColor: "#5d4037",
+              backgroundColor: '#6d4c41',
+              color: 'white',
+              textTransform: 'none',
+              '&:hover': {
+                backgroundColor: '#5d4037',
               },
               px: 3,
               py: 1,
-              borderRadius: "4px",
+              borderRadius: '4px',
             }}
           >
             傳送
