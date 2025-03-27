@@ -2,6 +2,8 @@
 import DataSourceDialog from "@/components/dialogs/ChatDataStore";
 import DeleteDialog from "@/components/dialogs/DeleteDialog";
 import EditDialog from "@/components/dialogs/EditDialog";
+import NegativeFeedbackModal from '@/components/dialogs/NegativeFeedbackModal';
+import PositiveFeedbackModal from '@/components/dialogs/PositiveFeedbackModal';
 import EditableItem from "@/components/editable-item/EditableItem";
 import ToolbarDrawer, {
   customScrollbarStyle,
@@ -44,8 +46,6 @@ import {
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { Suspense, useCallback, useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-import PositiveFeedbackModal from '@/components/dialogs/PositiveFeedbackModal';
-import NegativeFeedbackModal from '@/components/dialogs/NegativeFeedbackModal';
 
 function TabPanel(props: {
   readonly value: number;
@@ -290,6 +290,49 @@ const ChannelSummaryContent = () => {
     };
     updateChannelData();
   }, [channel, mutateChannel]);
+
+  // Initialize feedbackMap from channel messages when component loads
+  useEffect(() => {
+    if (channel) {
+      const newFeedbackMap: Record<string, string> = {};
+
+      // Process transcript feedback if exists
+      if (channel.organizationChannelTranscriptList?.length) {
+        channel.organizationChannelTranscriptList.forEach((transcript) => {
+          if (
+            transcript.organizationChannelTranscriptId &&
+            transcript.organizationChannelFeedbackList?.length
+          ) {
+            // Use the first feedback in the list to determine the status
+            const firstFeedback = transcript.organizationChannelFeedbackList[0];
+            if (firstFeedback?.organizationChannelFeedbackType) {
+              newFeedbackMap[transcript.organizationChannelTranscriptId] =
+                firstFeedback.organizationChannelFeedbackType;
+            }
+          }
+        });
+      }
+
+      // Process message feedback if exists
+      if (channel.organizationChannelMessageList?.length) {
+        channel.organizationChannelMessageList.forEach((message) => {
+          if (
+            message.organizationChannelMessageId &&
+            message.organizationChannelFeedbackList?.length
+          ) {
+            // Use the first feedback in the list to determine the status
+            const firstFeedback = message.organizationChannelFeedbackList[0];
+            if (firstFeedback?.organizationChannelFeedbackType) {
+              newFeedbackMap[message.organizationChannelMessageId] =
+                firstFeedback.organizationChannelFeedbackType;
+            }
+          }
+        });
+      }
+
+      setFeedbackMap((prev) => ({ ...prev, ...newFeedbackMap }));
+    }
+  }, [channel]);
 
   const handleBackButtonClick = () => {
     router.push("/toolbox");
