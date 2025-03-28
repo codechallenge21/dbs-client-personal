@@ -361,16 +361,32 @@ export default function FinanceScreeningTest() {
             sx={{ mb: 2, bgcolor: "background.paper" }}
           />
         ) : (
-          <TextField
-            fullWidth
-            multiline
-            rows={8}
-            value={customPrompt}
-            onChange={(e) => setCustomPrompt(e.target.value)}
-            placeholder="請輸入自訂提示詞..."
-            variant="outlined"
-            sx={{ mb: 2 }}
-          />
+          <Box sx={{ position: "relative" }}>
+            <TextField
+              fullWidth
+              multiline
+              rows={8}
+              value={customPrompt}
+              onChange={(e) => setCustomPrompt(e.target.value)}
+              placeholder="請輸入自訂提示詞..."
+              variant="outlined"
+              sx={{ mb: 2 }}
+            />
+            <Button
+              variant="outlined"
+              size="small"
+              onClick={() => setCustomPrompt(DEFAULT_PROMPT)}
+              sx={{
+                position: "absolute",
+                right: "10px",
+                top: "10px",
+                fontSize: "0.75rem",
+                py: 0.5,
+              }}
+            >
+              載入預設提示詞
+            </Button>
+          </Box>
         )}
       </Box>
 
