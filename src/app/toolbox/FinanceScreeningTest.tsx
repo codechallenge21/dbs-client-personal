@@ -1,5 +1,7 @@
 "use client";
 import DownloadIcon from "@mui/icons-material/Download";
+import MicRoundedIcon from "@mui/icons-material/MicRounded";
+import StopCircleRounded from "@mui/icons-material/StopCircleRounded";
 import {
   Box,
   Button,
@@ -8,6 +10,7 @@ import {
   CircularProgress,
   Container,
   FormControlLabel,
+  IconButton,
   Radio,
   RadioGroup,
   Tab,
@@ -17,8 +20,50 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import TextScanningEffect from "../../components/loading/TextScanningEffect";
+
+// Speech Recognition interfaces
+interface SpeechRecognition extends EventTarget {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  start(): void;
+  stop(): void;
+  onresult:
+    | ((this: SpeechRecognition, ev: SpeechRecognitionEvent) => void)
+    | null;
+  onerror:
+    | ((this: SpeechRecognition, ev: SpeechRecognitionErrorEvent) => void)
+    | null;
+  onend: ((this: SpeechRecognition, ev: Event) => void) | null;
+}
+
+interface SpeechRecognitionEvent extends Event {
+  results: SpeechRecognitionResultList;
+}
+
+interface SpeechRecognitionResultList {
+  length: number;
+  item(index: number): SpeechRecognitionResult;
+  [index: number]: SpeechRecognitionResult;
+}
+
+interface SpeechRecognitionResult {
+  length: number;
+  isFinal: boolean;
+  item(index: number): SpeechRecognitionAlternative;
+  [index: number]: SpeechRecognitionAlternative;
+}
+
+interface SpeechRecognitionAlternative {
+  transcript: string;
+  confidence: number;
+}
+
+interface SpeechRecognitionErrorEvent extends Event {
+  error: string;
+}
 
 // Default prompt template for the financial risk assessment
 const DEFAULT_PROMPT = `你是一位專業的財務風險分析專家，現在需要嚴格基於用戶提供的財務文本資料和知識圖譜，
@@ -87,6 +132,11 @@ export default function FinanceScreeningTest() {
   } | null>(null);
   const [apiError, setApiError] = useState<string | null>(null);
 
+  // Voice input state
+  const [isListening, setIsListening] = useState(false);
+  const [speechError, setSpeechError] = useState<string | null>(null);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
+
   // Calculate total risk score
   const calculateRiskScore = () => {
     if (!assessmentResult) return { score: 0, level: "" };
@@ -146,6 +196,61 @@ export default function FinanceScreeningTest() {
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue);
   };
+
+  // Initialize speech recognition
+  useEffect(() => {
+    if ("webkitSpeechRecognition" in window) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const SpeechRecognition = (window as any).webkitSpeechRecognition;
+      recognitionRef.current = new SpeechRecognition();
+      if (recognitionRef.current) {
+        recognitionRef.current.continuous = true;
+        recognitionRef.current.interimResults = true;
+        recognitionRef.current.lang = "zh-TW";
+
+        recognitionRef.current.onresult = (event: SpeechRecognitionEvent) => {
+          const finalTranscript = Array.from(event.results)
+            .map((result) => result[0]?.transcript)
+            .join("");
+          setQueryText(finalTranscript);
+        };
+
+        recognitionRef.current.onerror = (
+          event: SpeechRecognitionErrorEvent
+        ) => {
+          setSpeechError(event.error);
+          setIsListening(false);
+        };
+
+        recognitionRef.current.onend = () => {
+          setIsListening(false);
+        };
+      }
+    } else {
+      setSpeechError("您的瀏覽器不支援語音辨識功能");
+    }
+
+    // Cleanup
+    return () => {
+      if (recognitionRef.current && isListening) {
+        recognitionRef.current.stop();
+      }
+    };
+  }, []);
+
+  // Handle voice input
+  const handleListening = useCallback(() => {
+    if (recognitionRef.current) {
+      if (isListening) {
+        recognitionRef.current.stop();
+        setIsListening(false);
+      } else {
+        recognitionRef.current.start();
+        setIsListening(true);
+        setSpeechError(null);
+      }
+    }
+  }, [isListening]);
 
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
@@ -264,8 +369,14 @@ export default function FinanceScreeningTest() {
           輸入文字資訊
         </Typography>
         <Typography variant="body2" sx={{ mb: 1 }}>
-          請使用工具箱中的語音轉文字工具，將逐字稿複製到輸入框中進行測試。
+          請使用工具箱中的語音轉文字工具，將逐字稿複製到輸入框中進行測試，或點擊下方麥克風圖示直接開始語音輸入。
         </Typography>
+
+        {speechError && (
+          <Typography color="error" variant="body2" sx={{ mb: 1 }}>
+            語音辨識錯誤: {speechError}
+          </Typography>
+        )}
 
         {isLoading ? (
           // 當正在加載時，顯示文字掃描效果
@@ -279,18 +390,40 @@ export default function FinanceScreeningTest() {
             <TextScanningEffect text={queryText} isScanning={true} />
           </Box>
         ) : (
-          <TextField
-            fullWidth
-            multiline
-            rows={10}
-            value={queryText}
-            onChange={(e) => setQueryText(e.target.value)}
-            placeholder="請輸入或貼上文字資訊..."
-            variant="outlined"
-            sx={{ mb: 3 }}
-            error={Boolean(apiError)}
-            helperText={apiError}
-          />
+          <Box sx={{ position: "relative" }}>
+            <TextField
+              fullWidth
+              multiline
+              rows={10}
+              value={queryText}
+              onChange={(e) => setQueryText(e.target.value)}
+              placeholder="請輸入或貼上文字資訊..."
+              variant="outlined"
+              sx={{ mb: 3 }}
+              error={Boolean(apiError)}
+              helperText={apiError}
+            />
+            <IconButton
+              aria-label="語音輸入"
+              onClick={handleListening}
+              className={isListening ? "mic-listening" : ""}
+              sx={{
+                position: "absolute",
+                bottom: "20px",
+                right: "16px",
+                backgroundColor: isListening ? "#0066CC" : "transparent",
+                "&:hover": {
+                  backgroundColor: isListening ? "#004c99" : "rgba(0,0,0,0.04)",
+                },
+              }}
+            >
+              {isListening ? (
+                <StopCircleRounded sx={{ color: "white" }} />
+              ) : (
+                <MicRoundedIcon sx={{ color: "black" }} />
+              )}
+            </IconButton>
+          </Box>
         )}
       </Box>
 
@@ -513,6 +646,25 @@ export default function FinanceScreeningTest() {
           {activeTab === 1 && renderAssessmentResult()}
         </CardContent>
       </Card>
+
+      {/* Add some CSS for the microphone button animation */}
+      <style jsx global>{`
+        .mic-listening {
+          animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+          0% {
+            transform: scale(1);
+          }
+          50% {
+            transform: scale(1.1);
+          }
+          100% {
+            transform: scale(1);
+          }
+        }
+      `}</style>
     </Container>
   );
 }
