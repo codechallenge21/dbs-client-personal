@@ -663,8 +663,8 @@ export default function FinanceScreeningTest() {
             onChange={handleTabChange}
             variant={isMobile ? "fullWidth" : "standard"}
           >
-            <Tab label="輸入區" />
-            <Tab label="結果呈現區" disabled={!assessmentResult} />
+            <Tab label="輸入資料" />
+            <Tab label="快篩結果" disabled={!assessmentResult} />
           </Tabs>
         </Box>
 

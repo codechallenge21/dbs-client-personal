@@ -50,6 +50,7 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
+import { useRouter, useSearchParams } from 'next/navigation';
 import React, {
   useCallback,
   useContext,
@@ -77,7 +78,27 @@ const ChannelsList = () => {
   const { excute: getChannelDetail, isLoading: isSingleChannelLoading } =
     useAxiosApi(apis.getChannelDetail);
 
-  const [tabValue, setTabValue] = useState(0);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  
+  // Tab name mapping
+  const TAB_NAMES = {
+    'voice-to-text': 0,
+    'finance-screening': 1
+  };
+  
+  // Get tab value from URL or default to 0
+  const getTabFromUrl = () => {
+    const tabParam = searchParams.get('tab');
+    if (tabParam) {
+      return TAB_NAMES[tabParam as keyof typeof TAB_NAMES] !== undefined 
+        ? TAB_NAMES[tabParam as keyof typeof TAB_NAMES]
+        : 0;
+    }
+    return 0;
+  };
+
+  const [tabValue, setTabValue] = useState(getTabFromUrl());
   const [loadingElementVisible, setLoadingElementVisible] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [toolsAnchor, setToolsAnchor] = useState<null | HTMLElement>(null);
@@ -88,7 +109,6 @@ const ChannelsList = () => {
   );
   const [openUpload, setOpenUpload] = useState(false);
   const [, setFavoriteChannels] = useState<{ [key: number]: boolean }>({});
-  // Changed from a single file to an array to support multiple file uploads
   const [uploadingFiles, setUploadingFiles] = useState<fileProps[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
@@ -234,6 +254,10 @@ const ChannelsList = () => {
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
+    const tabName = Object.keys(TAB_NAMES).find(
+      (key) => TAB_NAMES[key as keyof typeof TAB_NAMES] === newValue
+    );
+    router.push(`?tab=${tabName}`);
   };
 
   const handleRowClick = (channel: OrganizationChannel) => {
@@ -246,7 +270,6 @@ const ChannelsList = () => {
   };
 
   const handleShowDetail = (channel: OrganizationChannel) => {
-    // Use window.open instead of router.push to open in a new tab
     window.open(
       `/channel-summary?organizationChannelId=${channel?.organizationChannelId}`,
       '_blank'
@@ -260,16 +283,13 @@ const ChannelsList = () => {
     }));
   };
 
-  // Updated upload handler to support multiple file uploads.
   const handleUploadFiles = async (files: File[], filesInfo: fileProps[]) => {
     try {
-      // Mark all files as currently uploading
       setUploadingFiles((prev) => [...prev, ...filesInfo]);
 
-      // For each file, create a new FormData and call the API concurrently
       const uploadPromises = files.map((file, index) => {
         const formData = new FormData();
-        formData.append('file', file); // Use 'file' as the key for individual file upload
+        formData.append('file', file);
         return createChannelByAudio(formData)
           .then((response) => ({ response, index }))
           .catch((error) => {
@@ -279,12 +299,10 @@ const ChannelsList = () => {
       });
 
       const uploadResults = await Promise.all(uploadPromises);
-      // Filter out any failed uploads
       const successfulUploads = uploadResults.filter(
         (result): result is { response: any; index: number } => result !== null
       );
 
-      // For each successful upload, get channel details
       const channelDetailsPromises = successfulUploads.map(
         ({ response, index }) => {
           const channels = Array.isArray(response.data)
@@ -302,13 +320,11 @@ const ChannelsList = () => {
       );
 
       const detailsResults = await Promise.all(channelDetailsPromises);
-      // Flatten the retrieved channels and update channelList
       const newChannels = detailsResults.flatMap(({ details }) =>
         details.map((res) => res.data)
       );
       setChannelList((prevChannelList) => [...newChannels, ...prevChannelList]);
 
-      // Remove the files that were successfully uploaded from the uploading state
       setUploadingFiles((prev) =>
         prev.filter(
           (upload) =>
@@ -526,7 +542,7 @@ const ChannelsList = () => {
                         justifyContent: 'space-between',
                         width: '100%',
                         alignItems: 'center',
-                        flexWrap: 'wrap', // Allows wrapping when screen is small
+                        flexWrap: 'wrap',
                         gap: '16px',
                       }}
                     >
@@ -911,10 +927,10 @@ const ChannelsList = () => {
                                     '1px dashed var(--Components-Divider, rgba(145, 158, 171, 0.20))',
                                   background: 'var(--Background-Paper, #FFF)',
                                   '&:focus': {
-                                    backgroundColor: 'rgba(0, 0, 0, 0.04)', // Add button click effect
+                                    backgroundColor: 'rgba(0, 0, 0, 0.04)',
                                   },
                                   '&:active': {
-                                    backgroundColor: 'rgba(0, 0, 0, 0.08)', // Add button click effect
+                                    backgroundColor: 'rgba(0, 0, 0, 0.08)',
                                   },
                                 }}
                               >
