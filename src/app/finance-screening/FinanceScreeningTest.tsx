@@ -394,13 +394,21 @@ export default function FinanceScreeningTest() {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
+    <Container maxWidth="lg" sx={{ py: 4, maxHeight: '100%', overflow: 'visible' }}>
       <Typography variant={isMobile ? "h5" : "h4"} component="h1" gutterBottom sx={{ textAlign: 'center', mb: 4 }}>
         財務風險快篩系統
       </Typography>
       
       <Card sx={{ mb: 4 }}>
-        <CardContent sx={{ padding: isMobile ? 2 : 3 }}>
+        <CardContent sx={{ 
+          padding: isMobile ? 2 : 3,
+          maxHeight: isMobile ? undefined : '75vh', 
+          overflowY: 'auto',
+          '&::-webkit-scrollbar': { width: '8px' },
+          '&::-webkit-scrollbar-track': { borderRadius: '10px', background: '#f1f1f1' },
+          '&::-webkit-scrollbar-thumb': { borderRadius: '10px', background: '#888' },
+          '&::-webkit-scrollbar-thumb:hover': { background: '#555' },
+        }}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
             <Tabs value={activeTab} onChange={handleTabChange} variant={isMobile ? "fullWidth" : "standard"}>
               <Tab label="輸入區" />
