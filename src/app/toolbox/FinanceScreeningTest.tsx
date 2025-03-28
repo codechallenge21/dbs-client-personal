@@ -506,6 +506,9 @@ export default function FinanceScreeningTest() {
     const riskInfo = calculateRiskScore();
     const groupedItems = groupAssessmentItems();
 
+    // Calculate percentage with 2 decimal places
+    const scorePercentage = ((riskInfo.score / 45) * 100).toFixed(2);
+
     return (
       <Box>
         <Box sx={{ mb: 4, textAlign: "center" }}>
@@ -517,7 +520,7 @@ export default function FinanceScreeningTest() {
             color={riskInfo.color}
             fontWeight="bold"
           >
-            {riskInfo.level} ({riskInfo.score} 分)
+            {riskInfo.level} ({riskInfo.score}/45 分 · {scorePercentage}%)
           </Typography>
 
           {riskInfo.level === "低度財務風險" && (
