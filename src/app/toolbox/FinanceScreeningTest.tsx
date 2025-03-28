@@ -434,12 +434,13 @@ export default function FinanceScreeningTest() {
               className={isListening ? "mic-listening" : ""}
               sx={{
                 position: "absolute",
-                bottom: "20px",
-                right: "16px",
+                bottom: "8px",
+                right: "12px",
                 backgroundColor: isListening ? "#0066CC" : "transparent",
                 "&:hover": {
                   backgroundColor: isListening ? "#004c99" : "rgba(0,0,0,0.04)",
                 },
+                zIndex: 1,
               }}
             >
               {isListening ? (
