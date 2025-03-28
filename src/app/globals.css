@@ -129,7 +129,7 @@
 }
 
 body {
-  overflow: auto; /* 從 hidden 改為 auto，允許頁面滾動 */
+  overflow: hidden;
   margin: 0;
   color: var(--foreground);
   background: var(--background);
