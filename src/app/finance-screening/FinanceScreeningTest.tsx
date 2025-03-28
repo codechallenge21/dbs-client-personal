@@ -1,21 +1,21 @@
 'use client';
 import DownloadIcon from '@mui/icons-material/Download';
 import {
-    Box,
-    Button,
-    Card,
-    CardContent,
-    CircularProgress,
-    Container,
-    FormControlLabel,
-    Radio,
-    RadioGroup,
-    Tab,
-    Tabs,
-    TextField,
-    Typography,
-    useMediaQuery,
-    useTheme,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CircularProgress,
+  Container,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  Tab,
+  Tabs,
+  TextField,
+  Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import React, { useState } from 'react';
 
@@ -31,7 +31,7 @@ const DEFAULT_PROMPT = `你是一位專業的財務風險分析專家，現在�
 『下次會議請確認此資訊』。`;
 
 // API URL
-const API_URL = '/api/ai/test-financial-assessment';
+const API_URL = '/api/v1/ai/test-financial-assessment';
 
 // Interface for the API response
 interface FinancialAssessmentResponse {
@@ -394,28 +394,20 @@ export default function FinanceScreeningTest() {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4, maxHeight: '100%', overflow: 'visible' }}>
+    <Container maxWidth="lg" sx={{ py: 4 }}>
       <Typography variant={isMobile ? "h5" : "h4"} component="h1" gutterBottom sx={{ textAlign: 'center', mb: 4 }}>
         財務風險快篩系統
       </Typography>
       
-      <Card sx={{ mb: 4 }}>
-        <CardContent sx={{ 
-          padding: isMobile ? 2 : 3,
-          maxHeight: isMobile ? undefined : '75vh', 
-          overflowY: 'auto',
-          '&::-webkit-scrollbar': { width: '8px' },
-          '&::-webkit-scrollbar-track': { borderRadius: '10px', background: '#f1f1f1' },
-          '&::-webkit-scrollbar-thumb': { borderRadius: '10px', background: '#888' },
-          '&::-webkit-scrollbar-thumb:hover': { background: '#555' },
-        }}>
-          <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
-            <Tabs value={activeTab} onChange={handleTabChange} variant={isMobile ? "fullWidth" : "standard"}>
-              <Tab label="輸入區" />
-              <Tab label="結果呈現區" disabled={!assessmentResult} />
-            </Tabs>
-          </Box>
-          
+      <Card>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <Tabs value={activeTab} onChange={handleTabChange} variant={isMobile ? "fullWidth" : "standard"}>
+            <Tab label="輸入區" />
+            <Tab label="結果呈現區" disabled={!assessmentResult} />
+          </Tabs>
+        </Box>
+        
+        <CardContent sx={{ padding: isMobile ? 2 : 3 }}>
           {activeTab === 0 && renderInputForm()}
           {activeTab === 1 && renderAssessmentResult()}
         </CardContent>
