@@ -137,6 +137,10 @@ export default function FinanceScreeningTest() {
   const [speechError, setSpeechError] = useState<string | null>(null);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
 
+  // Input validation state
+  const [inputError, setInputError] = useState<string | null>(null);
+  const MIN_TEXT_LENGTH = 100;
+
   // Calculate total risk score
   const calculateRiskScore = () => {
     if (!assessmentResult) return { score: 0, level: "" };
@@ -257,6 +261,12 @@ export default function FinanceScreeningTest() {
     e.preventDefault();
     setIsLoading(true);
     setApiError(null);
+
+    if (queryText.trim().length < MIN_TEXT_LENGTH) {
+      setInputError(`輸入文字需至少 ${MIN_TEXT_LENGTH} 字`);
+      setIsLoading(false);
+      return;
+    }
 
     const prompt = promptType === "default" ? DEFAULT_PROMPT : customPrompt;
     const payload = { prompt, query: queryText };
@@ -396,12 +406,27 @@ export default function FinanceScreeningTest() {
               multiline
               rows={10}
               value={queryText}
-              onChange={(e) => setQueryText(e.target.value)}
+              onChange={(e) => {
+                setQueryText(e.target.value);
+                // Clear error when user starts typing more text
+                if (e.target.value.length >= MIN_TEXT_LENGTH && inputError) {
+                  setInputError(null);
+                }
+              }}
               placeholder="請輸入或貼上文字資訊..."
               variant="outlined"
               sx={{ mb: 3 }}
-              error={Boolean(apiError)}
-              helperText={apiError}
+              error={Boolean(apiError || inputError)}
+              helperText={
+                apiError || inputError || 
+                `目前字數：${queryText.length}/${MIN_TEXT_LENGTH} (最少需要${MIN_TEXT_LENGTH}字)`
+              }
+              FormHelperTextProps={{
+                sx: {
+                  color: queryText.length >= MIN_TEXT_LENGTH ? 'success.main' : 'text.secondary',
+                  fontWeight: queryText.length >= MIN_TEXT_LENGTH ? 500 : 400,
+                }
+              }}
             />
             <IconButton
               aria-label="語音輸入"
@@ -433,7 +458,7 @@ export default function FinanceScreeningTest() {
           variant="contained"
           color="primary"
           size="large"
-          disabled={isLoading || !queryText.trim()}
+          disabled={isLoading || !queryText.trim() || queryText.length < MIN_TEXT_LENGTH}
           sx={{
             minWidth: isMobile ? "100%" : "200px",
             background: "var(--Secondary-, #5C443A)",
@@ -448,7 +473,9 @@ export default function FinanceScreeningTest() {
               AI 分析中...
             </>
           ) : (
-            "開始財務風險評估"
+            queryText.length < MIN_TEXT_LENGTH 
+              ? `文字至少需要 ${MIN_TEXT_LENGTH} 字`
+              : "開始財務風險評估"
           )}
         </Button>
       </Box>
