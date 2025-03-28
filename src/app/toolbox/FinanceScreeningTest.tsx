@@ -11,6 +11,7 @@ import {
   Container,
   FormControlLabel,
   IconButton,
+  LinearProgress,
   Radio,
   RadioGroup,
   Tab,
@@ -505,49 +506,150 @@ export default function FinanceScreeningTest() {
 
     const riskInfo = calculateRiskScore();
     const groupedItems = groupAssessmentItems();
-
+    
     // Calculate percentage with 2 decimal places
     const scorePercentage = ((riskInfo.score / 45) * 100).toFixed(2);
+    // Calculate score for gauge visualization (0-100)
+    const gaugeValue = parseFloat(scorePercentage);
+    
+    // Define color ranges for the gauge
+    const getLevelColor = () => {
+      if (gaugeValue < 50) return { main: "#118D57", light: "rgba(17, 141, 87, 0.12)" }; // 低風險
+      if (gaugeValue < 75) return { main: "#FFAB00", light: "rgba(255, 171, 0, 0.12)" }; // 中風險
+      return { main: "#C00", light: "rgba(204, 0, 0, 0.12)" }; // 高風險
+    };
+
+    const levelColor = getLevelColor();
+    const riskDescription = {
+      "低度財務風險": "短期內無財務壓力，長期財務狀況良好",
+      "中度財務風險": "需靠周轉維持生活，有一定財務壓力",
+      "高度財務風險": "財務狀況可能危及生存、居住安全、家庭和諧或個人健康",
+    };
 
     return (
       <Box>
-        <Box sx={{ mb: 4, textAlign: "center" }}>
-          <Typography variant={isMobile ? "h5" : "h4"} sx={{ mb: 1 }}>
-            總體財務風險評估
-          </Typography>
-          <Typography
-            variant={isMobile ? "h4" : "h3"}
-            color={riskInfo.color}
-            fontWeight="bold"
+        <Box 
+          sx={{ 
+            mb: 4, 
+            textAlign: "center",
+            display: 'flex',
+            flexDirection: isMobile ? 'column' : 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: 4,
+            p: 3,
+            borderRadius: 2,
+            bgcolor: 'background.paper',
+            boxShadow: '0 2px 10px rgba(0,0,0,0.08)'
+          }}
+        >
+          {/* 環形進度條區域 */}
+          <Box 
+            sx={{
+              position: 'relative', 
+              width: isMobile ? '220px' : '280px',
+              height: isMobile ? '220px' : '280px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
           >
-            {riskInfo.level} ({riskInfo.score}/45 分 · {scorePercentage}%)
-          </Typography>
+            {/* 背景圓環 */}
+            <Box
+              sx={{
+                position: 'absolute',
+                width: '100%',
+                height: '100%',
+              }}
+            >
+              <CircularProgress
+                variant="determinate"
+                value={100}
+                size={isMobile ? 220 : 280}
+                thickness={4}
+                sx={{ color: 'rgba(0, 0, 0, 0.05)' }}
+              />
+            </Box>
+            
+            {/* 進度圓環 */}
+            <Box
+              sx={{
+                position: 'absolute',
+                width: '100%',
+                height: '100%',
+              }}
+            >
+              <CircularProgress
+                variant="determinate"
+                value={gaugeValue}
+                size={isMobile ? 220 : 280}
+                thickness={4}
+                sx={{ color: levelColor.main }}
+              />
+            </Box>
+            
+            {/* 內部背景圓形 */}
+            <Box
+              sx={{
+                position: 'absolute',
+                width: isMobile ? '180px' : '230px',
+                height: isMobile ? '180px' : '230px',
+                borderRadius: '50%',
+                bgcolor: levelColor.light,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Typography variant="h3" fontSize={isMobile ? 36 : 48} fontWeight="bold" color={levelColor.main}>
+                {scorePercentage}%
+              </Typography>
+              <Typography variant="h6" color={levelColor.main} sx={{ mt: 1 }}>
+                {riskInfo.score}/45 分
+              </Typography>
+              <Typography variant="h6" color={levelColor.main} fontWeight="bold" sx={{ mt: 1 }}>
+                {riskInfo.level}
+              </Typography>
+            </Box>
+          </Box>
 
-          {riskInfo.level === "低度財務風險" && (
-            <Typography variant="body1" sx={{ mt: 1 }}>
-              短期內無財務壓力，長期財務狀況良好
+          {/* 風險評估描述區域 */}
+          <Box sx={{ maxWidth: '500px', textAlign: isMobile ? 'center' : 'left' }}>
+            <Typography variant={isMobile ? "h5" : "h4"} sx={{ mb: 2, fontWeight: 'bold' }}>
+              總體財務風險評估結果
             </Typography>
-          )}
-
-          {riskInfo.level === "中度財務風險" && (
-            <Typography variant="body1" sx={{ mt: 1 }}>
-              需靠周轉維持生活，有一定財務壓力
+            
+            <Typography variant="h6" sx={{ mb: 2, color: levelColor.main, fontWeight: 'bold' }}>
+              {riskInfo.level}
             </Typography>
-          )}
-
-          {riskInfo.level === "高度財務風險" && (
-            <Typography variant="body1" sx={{ mt: 1 }}>
-              財務狀況可能危及生存、居住安全、家庭和諧或個人健康
+            
+            <Typography variant="body1" sx={{ mb: 2 }}>
+              {riskDescription[riskInfo.level as keyof typeof riskDescription]}
             </Typography>
-          )}
+            
+            {/* <Box sx={{ 
+              p: 2, 
+              mt: 2, 
+              borderRadius: 1,
+              bgcolor: levelColor.light,
+              border: `1px solid ${levelColor.main}`
+            }}>
+              <Typography variant="body2" fontWeight="medium">
+                {riskInfo.level === "低度財務風險" && "建議：可以考慮開始進行投資規劃，提升資產收益。"}
+                {riskInfo.level === "中度財務風險" && "建議：檢視支出結構，控制非必要花費，增加收入來源。"}
+                {riskInfo.level === "高度財務風險" && "建議：尋求財務顧問協助制定債務減免計劃，重整財務狀況。"}
+              </Typography>
+            </Box> */}
+          </Box>
         </Box>
 
         {Object.entries(groupedItems).map(([groupName, items]) => (
-          <Card key={groupName} sx={{ mb: 3 }}>
+          <Card key={groupName} sx={{ mb: 3, boxShadow: '0 2px 8px rgba(0,0,0,0.06)', borderRadius: 2 }}>
             <CardContent sx={{ padding: isMobile ? 2 : 3 }}>
               <Typography
                 variant={isMobile ? "h6" : "h5"}
-                sx={{ mb: 2, borderBottom: "1px solid", pb: 1 }}
+                sx={{ mb: 2, borderBottom: "1px solid", pb: 1, fontWeight: 'bold' }}
               >
                 {groupName}
               </Typography>
@@ -559,7 +661,7 @@ export default function FinanceScreeningTest() {
                 >
                   <Typography
                     variant={isMobile ? "subtitle1" : "h6"}
-                    sx={{ mb: 1 }}
+                    sx={{ mb: 1, fontWeight: 'bold' }}
                   >
                     {item.organizationColumn.columnName}
                   </Typography>
@@ -573,37 +675,43 @@ export default function FinanceScreeningTest() {
                         (a, b) =>
                           a.organizationOptionValue - b.organizationOptionValue
                       )
-                      .map((option) => (
-                        <FormControlLabel
-                          key={option.organizationOptionId}
-                          value={option.organizationOptionId}
-                          control={
-                            <Radio
-                              checked={
-                                option.organizationOptionId ===
-                                item.familyfinhealthOptionId
-                              }
-                            />
-                          }
-                          label={option.organizationOptionName}
-                          disabled
-                          sx={{
-                            ...(option.organizationOptionId ===
-                              item.familyfinhealthOptionId && {
-                              fontWeight: "bold",
-                              color: "primary.main",
-                            }),
-                          }}
-                        />
-                      ))}
+                      .map((option) => {
+                        const isSelected = option.organizationOptionId === item.familyfinhealthOptionId;
+                        return (
+                          <FormControlLabel
+                            key={option.organizationOptionId}
+                            value={option.organizationOptionId}
+                            control={
+                              <Radio
+                                checked={isSelected}
+                                sx={isSelected ? {
+                                  color: levelColor.main,
+                                  '&.Mui-checked': {
+                                    color: levelColor.main,
+                                  }
+                                } : {}}
+                              />
+                            }
+                            label={option.organizationOptionName}
+                            disabled
+                            sx={{
+                              ...(isSelected && {
+                                fontWeight: "bold",
+                                color: levelColor.main,
+                              }),
+                            }}
+                          />
+                        );
+                      })}
                   </RadioGroup>
 
                   <Box
                     sx={{
                       ml: isMobile ? 1 : 2,
-                      p: isMobile ? 1 : 2,
+                      p: isMobile ? 1.5 : 2,
                       bgcolor: "background.paper",
                       borderRadius: 1,
+                      border: '1px solid rgba(0,0,0,0.08)'
                     }}
                   >
                     <Typography variant="subtitle2" gutterBottom>
@@ -612,14 +720,34 @@ export default function FinanceScreeningTest() {
                     <Typography variant="body2" paragraph>
                       {item.familyfinhealthCaseSurveyResponseReasoning}
                     </Typography>
-                    <Typography variant="subtitle2">
-                      信賴度:{" "}
-                      {(
-                        item.familyfinhealthCaseSurveyResponseConfidenceScore *
-                        100
-                      ).toFixed(0)}
-                      %
-                    </Typography>
+                    
+                    <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
+                      <Typography variant="subtitle2" mr={1}>
+                        信賴度:
+                      </Typography>
+                      <Box sx={{ position: 'relative', width: '100%', mr: 2 }}>
+                        <LinearProgress 
+                          variant="determinate" 
+                          value={item.familyfinhealthCaseSurveyResponseConfidenceScore * 100} 
+                          sx={{ 
+                            height: 10, 
+                            borderRadius: 5,
+                            bgcolor: 'rgba(0,0,0,0.05)',
+                            '& .MuiLinearProgress-bar': {
+                              borderRadius: 5,
+                              bgcolor: item.familyfinhealthCaseSurveyResponseConfidenceScore > 0.7 
+                                ? '#118D57' 
+                                : item.familyfinhealthCaseSurveyResponseConfidenceScore > 0.4 
+                                ? '#FFAB00' 
+                                : '#C00'
+                            }
+                          }} 
+                        />
+                      </Box>
+                      <Typography variant="body2" fontWeight="bold">
+                        {(item.familyfinhealthCaseSurveyResponseConfidenceScore * 100).toFixed(0)}%
+                      </Typography>
+                    </Box>
                   </Box>
                 </Box>
               ))}
