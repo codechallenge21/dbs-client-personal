@@ -18,6 +18,7 @@ import {
   useTheme,
 } from '@mui/material';
 import React, { useState } from 'react';
+import TextScanningEffect from '../../components/loading/TextScanningEffect';
 
 // Default prompt template for the financial risk assessment
 const DEFAULT_PROMPT = `你是一位專業的財務風險分析專家，現在需要嚴格基於用戶提供的財務文本資料和知識圖譜，
@@ -239,18 +240,29 @@ export default function FinanceScreeningTest() {
         <Typography variant="body2" sx={{ mb: 1 }}>
           請使用工具箱中的語音轉文字工具，將逐字稿複製到輸入框中進行測試。
         </Typography>
-        <TextField
-          fullWidth
-          multiline
-          rows={10}
-          value={queryText}
-          onChange={(e) => setQueryText(e.target.value)}
-          placeholder="請輸入或貼上文字資訊..."
-          variant="outlined"
-          sx={{ mb: 3 }}
-          error={Boolean(apiError)}
-          helperText={apiError}
-        />
+
+        {isLoading ? (
+          // 當正在加載時，顯示文字掃描效果
+          <Box sx={{ mb: 3 }}>
+            <Typography variant="subtitle2" sx={{ mb: 1, color: 'primary.main' }}>
+              AI 正在進行財務風險評估...
+            </Typography>
+            <TextScanningEffect text={queryText} isScanning={true} />
+          </Box>
+        ) : (
+          <TextField
+            fullWidth
+            multiline
+            rows={10}
+            value={queryText}
+            onChange={(e) => setQueryText(e.target.value)}
+            placeholder="請輸入或貼上文字資訊..."
+            variant="outlined"
+            sx={{ mb: 3 }}
+            error={Boolean(apiError)}
+            helperText={apiError}
+          />
+        )}
       </Box>
       
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
