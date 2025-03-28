@@ -1,3 +1,4 @@
+import ClientOnlyCircularProgress from '@/components/ClientOnlyCircularProgress/ClientOnlyCircularProgress';
 import FontLoader from '@/components/font-loader';
 import { ReduxProvider } from '@/components/providers/ReduxProvider';
 import TokenValidator from '@/components/TokenValidator';
@@ -9,7 +10,6 @@ import { Suspense } from 'react';
 import DynaFontScript from '../assets/font/DynaFontScript';
 import './globals.css';
 import { metadata } from './metadata';
-import ClientOnlyCircularProgress from '@/components/ClientOnlyCircularProgress/ClientOnlyCircularProgress';
 
 export { metadata };
 
@@ -35,8 +35,8 @@ export default function RootLayout({ children }: Props) {
                   <FontLoader />
                   <Suspense fallback={<ClientOnlyCircularProgress />}>
                     <TokenValidator />
+                    {children}
                   </Suspense>
-                  {children}
                 </ChannelContextProvider>
               </LoginProvider>
             </SnackbarProvider>
