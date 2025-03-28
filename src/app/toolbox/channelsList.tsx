@@ -57,7 +57,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import FinanceScreeningTest from '../finance-screening/FinanceScreeningTest';
+import FinanceScreeningTest from './FinanceScreeningTest';
 import UploadScreen from './UploadScreen';
 
 interface fileProps {
