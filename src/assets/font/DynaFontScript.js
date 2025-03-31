@@ -12,7 +12,7 @@ export default function DynaFontScript() {
             `,
         }}
       />
-      <script src="https://dfo.dynacw.com.tw/DynaJSFont/DynaFont_FOUT.js" />
+      <script src='https://dfo.dynacw.com.tw/DynaJSFont/DynaFont_FOUT.js'></script>
     </>
   );
 }

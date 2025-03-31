@@ -16,18 +16,11 @@ type Props = {
   readonly children: React.ReactNode;
 };
 
-import { useEffect, useState } from 'react';
-
 export default function ThemeProvider({ children }: Props) {
-  const [theme, setTheme] = useState(createTheme());
-
-  useEffect(() => {
-    const baseOption = {
-      palette: palette('light'),
-    };
-
-    setTheme(createTheme(baseOption as ThemeOptions));
-  }, []);
+  // Create the theme once with the palette options directly
+  const theme = createTheme({
+    palette: palette('light'),
+  } as ThemeOptions);
 
   return (
     <MuiThemeProvider theme={theme}>
